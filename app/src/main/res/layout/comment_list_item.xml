@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+   >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/relativeLayout">
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Мельник Василь"
+            android:id="@+id/user_name_textView"
+            android:layout_weight="0.08"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/img_user_avatar"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp" />
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:id="@+id/img_user_avatar"
+            android:src="@drawable/ic_launcher"
+            android:cropToPadding="false"
+            android:scaleType="fitStart"
+            android:layout_weight="0.34"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="sdfsdf sdf sd safasfasdas dasdf afs dfsa fsaf "
+            android:id="@+id/user_comment_text"
+            android:layout_below="@+id/user_name_textView"
+            android:layout_toRightOf="@+id/img_user_avatar"
+            android:layout_marginLeft="5dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="8 лис 2014 в 22:16"
+            android:id="@+id/text_date_of_comment"
+            android:textColor="#78000000"
+            android:layout_below="@+id/user_comment_text"
+            android:layout_alignLeft="@+id/user_comment_text"
+            android:layout_alignStart="@+id/user_comment_text" />
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/image_like_or_not_like"
+            android:layout_alignBottom="@+id/img_user_avatar"
+            android:layout_alignRight="@+id/user_comment_text"
+            android:layout_alignEnd="@+id/user_comment_text" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

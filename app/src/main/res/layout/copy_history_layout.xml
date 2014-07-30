@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="@drawable/post_divider"
+    android:background="#ffffffff">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:dividerPadding="5dp"
+        android:showDividers="middle"
+        android:divider="@drawable/copy_history_divider"
+        android:layout_toEndOf="@+id/leftLine"
+        android:layout_toRightOf="@+id/leftLine"
+        android:visibility="visible"
+        android:id="@+id/linearLayout">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="#ffffffff"
+            android:visibility="visible"
+            android:padding="5dp" >
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:id="@+id/img_copy_history_logo"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/txt_copy_history_title"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/img_copy_history_logo"
+                android:layout_toEndOf="@+id/img_copy_history_logo"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:singleLine="true"
+                android:textColor="#ff4c4c4c" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/txt_copy_history_date"
+                android:layout_below="@+id/txt_copy_history_title"
+                android:layout_alignLeft="@+id/txt_copy_history_title"
+                android:layout_alignStart="@+id/txt_copy_history_title"
+                android:textColor="#ff717171" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/copyHistorySignedLayout"
+            android:background="#d5902fa7"></RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/copyHistoryTextLayout"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/copyHistoryAttachmentsLayout"
+            android:orientation="vertical"
+            android:visibility="gone" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/copyHistoryMediaLayout"
+                android:background="#ffffffff"
+                android:padding="5dp" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/copyHistoryAudioLayout"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/copyHistoryDocumentLayout"
+                android:orientation="vertical" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/copyHistoryAlbumLayout"
+                android:orientation="vertical"
+                android:showDividers="middle"
+                android:divider="@drawable/copy_history_divider"
+                android:dividerPadding="5dp"
+                android:padding="5dp" />
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/copyHistoryWikiPageLayout"
+                android:visibility="gone"></RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/copyHistoryLinkLayout"
+                android:visibility="gone"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="#ffffffff"
+            android:visibility="gone"
+            android:id="@+id/copyHistoryGeoLayout"></RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="4dp"
+        android:layout_height="fill_parent"
+        android:id="@+id/leftLine"
+        android:layout_marginLeft="5dp"
+        android:visibility="visible"
+        android:layout_marginTop="5dp"
+        android:layout_alignBottom="@+id/linearLayout"></RelativeLayout>
+
+</RelativeLayout>

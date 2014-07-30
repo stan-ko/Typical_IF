@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Типовий Франківськ</string>
+    <string name="menu_group_title_tf">Типовий Франківськ</string>
+    <string name="menu_group_title_tz">Типове Зізнання</string>
+    <string name="menu_group_title_fb">Франківська Барахолка</string>
+    <string name="menu_group_title_fn">Франківські Новини</string>
+    <string name="menu_group_title_events">Зустрічі Франківська</string>
+    <string name="title_login">Залогінитись</string>
+    <string name="title_logout">Розлогінитись</string>
+    <string name="look_wall">Стіна</string>
+    <string name="look_albums">Альбоми</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+
+
+    <string name="key_owner_id">owner_id</string>
+    <string name="key_domain">domain</string>
+    <string name="key_offset">offset</string>
+    <string name="key_count">count</string>
+    <string name="key_filter">filter</string>
+    <string name="value_filter">all</string>
+    <string name="key_extended">extended</string>
+
+    <string name="date_today">Сьогодні о</string>
+    <string name="date_yesterday">Вчора о</string>
+
+    <string name="doc_type_animation">Анімація</string>
+    <string name="doc_type_document">Документ</string>
+    <string name="doc_type_image">Зображення</string>
+    <string name="size_in_b">байт</string>
+    <string name="size_in_kb">кілобайт</string>
+    <string name="size_in_mb">мегабайт</string>
+    <string name="size_in_gb">гігабайт</string>
+    <string name="size_in_tb">терабайт</string>
+
+    <string name="wiki_page">Вікі-сторінка</string>
+
+    <string name="browser_chooser">Оберіть браузер</string>
+    <string name="downloader_chooser">Оберіть завантажувач</string>
+    <string name="viewer_chooser">Оберіть переглядач</string>
+
+    <string name="show_all_text">Показати повністю...</string>
+
+    <string name="exit_toast">Нажміть ще раз, щоб вийти.</string>
+</resources>

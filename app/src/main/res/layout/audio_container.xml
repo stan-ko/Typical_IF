@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="60dp"
+    android:paddingLeft="5dp"
+    android:paddingTop="5dp"
+    android:paddingRight="5dp"
+    android:background="#ffffffff">
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/cb_audio_play_or_stop"
+        android:button="@drawable/play_or_stop_audio_selector"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:singleLine="false"
+        android:checked="false"
+        android:layout_above="@+id/txt_audio_duration" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/progress_audio"
+        android:layout_below="@+id/cb_audio_play_or_stop"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:visibility="visible"
+        android:layout_toLeftOf="@+id/txt_audio_duration"
+        android:layout_toStartOf="@+id/textView111"
+        android:layout_marginRight="5dp"
+        android:indeterminate="false"
+        android:max="100"
+        android:progress="50"
+        android:layout_marginTop="3dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/txt_audio_duration"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentBottom="true"
+        android:gravity="right" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_audio_artist"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/cb_audio_play_or_stop"
+        android:layout_toEndOf="@+id/play_or_stop_audio"
+        android:textStyle="bold"
+        android:layout_marginLeft="5dp"
+        android:singleLine="true"
+        android:paddingRight="5dp"
+        android:layout_marginTop="-4dp"
+        android:layout_alignRight="@+id/progress_audio"
+        android:layout_alignEnd="@+id/progress_audio"
+        android:layout_marginRight="50dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_audio_title"
+        android:layout_toEndOf="@+id/play_or_stop_audio"
+        android:layout_below="@+id/txt_audio_artist"
+        android:layout_toRightOf="@+id/cb_audio_play_or_stop"
+        android:singleLine="true"
+        android:layout_marginLeft="5dp"
+        android:layout_alignRight="@+id/progress_audio"
+        android:layout_alignEnd="@+id/progress_audio"
+        android:layout_marginRight="50dp" />
+</RelativeLayout>

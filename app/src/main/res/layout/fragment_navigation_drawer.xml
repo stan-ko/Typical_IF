@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="90dp"
+        android:id="@+id/copyHistoryLayout"
+        android:background="#ffffffff">
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/photo1"
+            android:src="@drawable/old_logo"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Типовий\nМобільний\nФранківськ"
+            android:id="@+id/navigation_drawer_title"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/photo1"
+            android:layout_toEndOf="@+id/photo1"
+            android:layout_marginLeft="10dp"
+            android:textColor="#ff4a4a4a"
+            android:textSize="17dp" />
+    </RelativeLayout>
+
+    <typical_if.android.AnimatedExpandableListView
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        android:background="#cccc"
+        tools:context=".NavigationDrawerFragment"
+        android:id="@+id/navigation_drawer_exp_list"
+        android:layout_below="@+id/copyHistoryLayout" />
+
+</RelativeLayout>
+

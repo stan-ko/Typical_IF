@@ -1,7 +1,0 @@
-$git clone <git@github.com:Typical_IF>
-$cd Typical_IF
-$mkdir folder
-$cp ~/file1 file
-$git add
-$git commit -m "загрузили файлы в репозиторий"
-$git push

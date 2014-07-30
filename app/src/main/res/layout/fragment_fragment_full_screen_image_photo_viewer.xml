@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+        <typical_if.android.TouchImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/full_screen_photo"
+            android:layout_gravity="center_horizontal|top"
+            android:src="@drawable/abc_ab_bottom_solid_dark_holo"
+            android:scaleType="centerCrop" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Like"
+            android:id="@+id/like_photo"
+            android:layout_gravity="left|bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Comment"
+            android:id="@+id/comment_photo"
+            android:layout_gravity="right|bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:id="@+id/image_not_liked"
+            android:layout_gravity="left|bottom"
+
+            android:layout_alignBottom="@+id/count_of_likes"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:id="@+id/image_comment"
+            android:layout_gravity="left|bottom"
+            android:src="@drawable/ic_photoview_comment"
+            android:layout_above="@+id/comment_photo"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:id="@+id/count_of_comments"
+            android:textColor="#ffffffff"
+            android:textSize="35dp"
+            android:layout_alignBottom="@+id/image_not_liked"
+            android:layout_toLeftOf="@+id/image_comment" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:id="@+id/count_of_likes"
+            android:textColor="#ffffffff"
+            android:textSize="35dp"
+            android:layout_alignTop="@+id/image_comment"
+            android:layout_toRightOf="@+id/image_not_liked" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/photoHeader"
+            android:textColor="#ffeaeaea"
+            android:textSize="20dp"
+            android:layout_above="@+id/count_of_likes"
+            android:layout_centerHorizontal="true"
+            android:text="8 лис 2014 в 22:16" />
+
+        <CheckBox
+            android:id="@+id/liked_or_not_liked_checkbox"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:button="@drawable/like_or_not_liked_selector"
+            android:layout_above="@+id/photoHeader"
+            android:layout_alignRight="@+id/image_not_liked"
+            android:layout_alignEnd="@+id/image_not_liked"
+            android:clickable="false"
+            android:enabled="false"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

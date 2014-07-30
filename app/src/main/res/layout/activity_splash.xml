@@ -1,0 +1,33 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="typical_if.android.activity.SplashActivity"
+    android:background="#ffffffff">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/splash_logo"
+        android:src="@drawable/old_logo"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Типовий\nМобільний\nФранківськ"
+        android:id="@+id/splash_title"
+        android:gravity="center"
+        android:textColor="#ff606060"
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>
