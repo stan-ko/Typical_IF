@@ -44,7 +44,7 @@
                     android:layout_width="90dp"
                     android:layout_height="22dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/textView2"
+                    android:id="@+id/slash_between_numbers"
                     android:background="#ff404040"
                     android:gravity="bottom|right"
                     android:textColor="#ffffffff"
