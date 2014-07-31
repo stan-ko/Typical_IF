@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -38,6 +39,7 @@ import com.vk.sdk.api.model.VKApiLink;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPhotoAlbum;
 import com.vk.sdk.api.model.VKApiPlace;
+import com.vk.sdk.api.model.VKApiPoll;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKApiWikiPage;
@@ -57,6 +59,7 @@ import java.util.regex.Pattern;
 
 import typical_if.android.MyApplication;
 import typical_if.android.R;
+import typical_if.android.TextProgressBar;
 import typical_if.android.VKHelper;
 import typical_if.android.model.Wall.Group;
 import typical_if.android.model.Wall.Profile;
@@ -96,6 +99,10 @@ public class WallAdapter extends BaseAdapter {
     private static String show_all_text;
     private static String show_min_text;
 
+    private static String poll_anonymous;
+    private static String poll_not_anonymous;
+    private static Drawable votesBarDrawable;
+
     private static Context context;
     private static Resources resources;
 
@@ -128,6 +135,10 @@ public class WallAdapter extends BaseAdapter {
 
         this.show_all_text = resources.getString(R.string.show_all_text);
         this.show_min_text = resources.getString(R.string.show_min_text);
+
+        this.poll_anonymous = resources.getString(R.string.poll_anonymous);
+        this.poll_not_anonymous = resources.getString(R.string.poll_not_anonymous);
+        this.votesBarDrawable = resources.getDrawable(R.drawable.poll_progress_bar_style);
 
         this.postColor = postColor;
 
@@ -298,6 +309,7 @@ public class WallAdapter extends BaseAdapter {
         ArrayList<VKApiPhotoAlbum> albums = new ArrayList<VKApiPhotoAlbum>();
         VKApiWikiPage wikiPage = null;
         VKApiLink link = null;
+        VKApiPoll poll = null;
 
         parentLayout.setVisibility(View.VISIBLE);
 
@@ -314,6 +326,8 @@ public class WallAdapter extends BaseAdapter {
                 albums.add((VKApiPhotoAlbum) attachment);
             } else if (attachment.getType().equals(VKAttachments.TYPE_WIKI_PAGE)) {
                 wikiPage = (VKApiWikiPage) attachment;
+            } else if (attachment.getType().equals(VKAttachments.TYPE_POLL)) {
+                poll = (VKApiPoll) attachment;
             } else if (attachment.getType().equals(VKAttachments.TYPE_LINK)) {
                 link = (VKApiLink) attachment;
             }
@@ -325,6 +339,7 @@ public class WallAdapter extends BaseAdapter {
         LinearLayout albumLayout;
         RelativeLayout wikiPageLayout;
         RelativeLayout linkLayout;
+        RelativeLayout pollLayout;
 
         if (isCopyHistory) {
             mediaLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryMediaLayout);
@@ -333,6 +348,7 @@ public class WallAdapter extends BaseAdapter {
             albumLayout = (LinearLayout) parentLayout.findViewById(R.id.copyHistoryAlbumLayout);
             wikiPageLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryWikiPageLayout);
             linkLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryLinkLayout);
+            pollLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryPollLayout);
         } else {
             mediaLayout = viewHolder.postMediaLayout;
             audioLayout = viewHolder.postAudioLayout;
@@ -340,6 +356,7 @@ public class WallAdapter extends BaseAdapter {
             albumLayout = viewHolder.postAlbumLayout;
             wikiPageLayout = viewHolder.postWikiPageLayout;
             linkLayout = viewHolder.postLinkLayout;
+            pollLayout = viewHolder.postPollLayout;
         }
 
         if (photos != null && photos.size() != 0 || videos != null && videos.size() != 0) {
@@ -377,6 +394,46 @@ public class WallAdapter extends BaseAdapter {
         } else {
             linkLayout.setVisibility(View.GONE);
         }
+
+        if (poll != null) {
+            setPoll(pollLayout, poll);
+        } else {
+            pollLayout.setVisibility(View.GONE);
+        }
+    }
+
+    public void setPoll(RelativeLayout parent, VKApiPoll poll) {
+        ViewGroup pollContainer = getPreparedView(parent, R.layout.poll_container);
+
+        ((TextView) pollContainer.getChildAt(0)).setText(poll.question);
+
+        if (poll.anonymous == 0) {
+            ((TextView) pollContainer.getChildAt(1)).setText(poll_not_anonymous + " " + poll.votes);
+        } else {
+            ((TextView) pollContainer.getChildAt(1)).setText(poll_anonymous + " " + poll.votes);
+        }
+
+        LinearLayout pollAnswersContainer = (LinearLayout) pollContainer.getChildAt(2);
+
+        ViewGroup pollAnswer;
+        VKApiPoll.Answer answer;
+        TextProgressBar votesBar;
+
+        for (int i = 0; i < poll.answers.size(); i++) {
+            pollAnswer = getPreparedView(pollAnswersContainer, R.layout.poll_answer_container);
+            answer = poll.answers.get(i);
+
+            ((TextView) pollAnswer.getChildAt(0)).setText(answer.text);
+            ((TextView) pollAnswer.getChildAt(2)).setText(String.valueOf((int) answer.rate) + "%");
+
+            votesBar = (TextProgressBar) pollAnswer.getChildAt(1);
+            votesBar.setProgressDrawable(votesBarDrawable);
+            votesBar.setText(String.valueOf(answer.votes));
+            votesBar.setProgress((int) answer.rate);
+
+            pollAnswersContainer.addView(pollAnswer);
+        }
+        parent.addView(pollContainer);
     }
 
     public void setText(String text, RelativeLayout parent) {
@@ -1008,6 +1065,7 @@ public class WallAdapter extends BaseAdapter {
         private final RelativeLayout postWikiPageLayout;
         private final RelativeLayout postLinkLayout;
         private final RelativeLayout postSignedLayout;
+        private final RelativeLayout postPollLayout;
 
         private final TextView txt_post_date;
 
@@ -1028,6 +1086,7 @@ public class WallAdapter extends BaseAdapter {
             this.postWikiPageLayout = (RelativeLayout) convertView.findViewById(R.id.postWikiPageLayout);
             this.postLinkLayout = (RelativeLayout) convertView.findViewById(R.id.postLinkLayout);
             this.postSignedLayout = (RelativeLayout) convertView.findViewById(R.id.postSignedLayout);
+            this.postPollLayout = (RelativeLayout) convertView.findViewById(R.id.postPollLayout);
 
             this.txt_post_date = (TextView) convertView.findViewById(R.id.txt_post_date);
 

@@ -77,6 +77,8 @@ public class VKApiPoll extends VKAttachments.VKApiAttachment implements android.
      */
     public VKList<Answer> answers;
 
+
+
     public VKApiPoll(JSONObject from) throws JSONException
     {
         parse(from);

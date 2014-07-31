@@ -44,5 +44,8 @@
     <string name="show_all_text">Показати повністю...</string>
     <string name="show_min_text">Показати трішки...</string>
 
+    <string name="poll_anonymous">Анонімне голосування, голосів:</string>
+    <string name="poll_not_anonymous">Публічне голосування, голосів:</string>
+
     <string name="exit_toast">Нажміть ще раз, щоб вийти.</string>
 </resources>

@@ -12,26 +12,23 @@ import android.widget.ProgressBar;
  * Created by admin on 30.07.2014.
  */
 public class TextProgressBar extends ProgressBar {
-    private String text;
+    private String text = "";
     private Paint textPaint;
 
     public TextProgressBar(Context context) {
         super(context);
-        text = "HP";
         textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
     }
 
     public TextProgressBar(Context context, AttributeSet attrs) {
         super(context, attrs);
-        text = "HP";
         textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
     }
 
     public TextProgressBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        text = "HP";
         textPaint = new Paint();
         textPaint.setColor(Color.BLACK);
     }

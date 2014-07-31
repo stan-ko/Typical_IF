@@ -5,4 +5,7 @@
     <color name="vk_white">#fff</color>
     <color name="vk_smoke_white">#ddd</color>
     <color name="vk_light_color">#A7C2DF</color>
+    <color name="greenStart">#ff33dd44</color>
+    <color name="greenMid">#ff0A8815</color>
+    <color name="greenEnd">#ff1da130</color>
 </resources>
