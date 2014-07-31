@@ -419,7 +419,7 @@ public class WallAdapter extends BaseAdapter {
         VKApiPoll.Answer answer;
         TextProgressBar votesBar;
 
-        for (int i = 0; i < poll.answers.size(); i++) {
+        for (int i = 0; i < poll.answers.toArray()..size(); i++) {
             pollAnswer = getPreparedView(pollAnswersContainer, R.layout.poll_answer_container);
             answer = poll.answers.get(i);
 
