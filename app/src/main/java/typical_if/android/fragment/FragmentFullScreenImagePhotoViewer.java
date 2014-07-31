@@ -192,7 +192,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
                         comment.setAnimation(animFadeOutObjects);
                         likedOrNotLikedBox.setAnimation(animFadeOutObjects);
                         photoHeader.setAnimation(animFadeOutObjects);
-                        Toast.makeText(VKUIHelper.getApplicationContext(), "from 1.0 to 0.0", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VKUIHelper.getApplicationContext(),"from 1.0 to 0.0", Toast.LENGTH_SHORT).show();
 
                     }
                 }else{
@@ -203,7 +203,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
                         comment.setAnimation(animFadeInObjects);
                         likedOrNotLikedBox.setAnimation(animFadeOutObjects);
                         photoHeader.setAnimation(animFadeInObjects);
-                        Toast.makeText(VKUIHelper.getApplicationContext(), "from 0.0 to 1.0", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(VKUIHelper.getApplicationContext(),"from 0.0 to 1.0", Toast.LENGTH_SHORT).show();
 
 
                     }
