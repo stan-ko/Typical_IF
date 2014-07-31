@@ -121,6 +121,12 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/copyHistoryLinkLayout"
                 android:visibility="gone"/>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/copyHistoryPollLayout" />
         </LinearLayout>
 
         <RelativeLayout

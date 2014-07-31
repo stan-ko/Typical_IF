@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -14,11 +15,12 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -37,6 +39,7 @@ import com.vk.sdk.api.model.VKApiLink;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPhotoAlbum;
 import com.vk.sdk.api.model.VKApiPlace;
+import com.vk.sdk.api.model.VKApiPoll;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKApiWikiPage;
@@ -54,7 +57,9 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import typical_if.android.MyApplication;
 import typical_if.android.R;
+import typical_if.android.TextProgressBar;
 import typical_if.android.VKHelper;
 import typical_if.android.model.Wall.Group;
 import typical_if.android.model.Wall.Profile;
@@ -63,7 +68,7 @@ import typical_if.android.model.Wall.Wall;
 import static java.lang.String.format;
 import static java.lang.String.valueOf;
 
-public class WallAdapter extends BaseAdapter{
+public class WallAdapter extends BaseAdapter {
     private Wall wall;
     private VKPostArray posts;
     private LayoutInflater layoutInflater;
@@ -90,6 +95,13 @@ public class WallAdapter extends BaseAdapter{
     private static String browser_chooser;
     private static String downloader_chooser;
     private static String viewer_chooser;
+
+    private static String show_all_text;
+    private static String show_min_text;
+
+    private static String poll_anonymous;
+    private static String poll_not_anonymous;
+    private static Drawable votesBarDrawable;
 
     private static Context context;
     private static Resources resources;
@@ -120,6 +132,13 @@ public class WallAdapter extends BaseAdapter{
         this.browser_chooser = resources.getString(R.string.browser_chooser);
         this.downloader_chooser = resources.getString(R.string.downloader_chooser);
         this.viewer_chooser = resources.getString(R.string.viewer_chooser);
+
+        this.show_all_text = resources.getString(R.string.show_all_text);
+        this.show_min_text = resources.getString(R.string.show_min_text);
+
+        this.poll_anonymous = resources.getString(R.string.poll_anonymous);
+        this.poll_not_anonymous = resources.getString(R.string.poll_not_anonymous);
+        this.votesBarDrawable = resources.getDrawable(R.drawable.poll_progress_bar_style);
 
         this.postColor = postColor;
 
@@ -272,7 +291,7 @@ public class WallAdapter extends BaseAdapter{
         return convertView;
     }
 
-    private ViewGroup getPreparedView(ViewGroup parent, int layoutRes){
+    private ViewGroup getPreparedView(ViewGroup parent, int layoutRes) {
         parent.setVisibility(View.VISIBLE);
         parent.removeAllViews();
 
@@ -290,6 +309,7 @@ public class WallAdapter extends BaseAdapter{
         ArrayList<VKApiPhotoAlbum> albums = new ArrayList<VKApiPhotoAlbum>();
         VKApiWikiPage wikiPage = null;
         VKApiLink link = null;
+        VKApiPoll poll = null;
 
         parentLayout.setVisibility(View.VISIBLE);
 
@@ -306,6 +326,8 @@ public class WallAdapter extends BaseAdapter{
                 albums.add((VKApiPhotoAlbum) attachment);
             } else if (attachment.getType().equals(VKAttachments.TYPE_WIKI_PAGE)) {
                 wikiPage = (VKApiWikiPage) attachment;
+            } else if (attachment.getType().equals(VKAttachments.TYPE_POLL)) {
+                poll = (VKApiPoll) attachment;
             } else if (attachment.getType().equals(VKAttachments.TYPE_LINK)) {
                 link = (VKApiLink) attachment;
             }
@@ -317,6 +339,7 @@ public class WallAdapter extends BaseAdapter{
         LinearLayout albumLayout;
         RelativeLayout wikiPageLayout;
         RelativeLayout linkLayout;
+        RelativeLayout pollLayout;
 
         if (isCopyHistory) {
             mediaLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryMediaLayout);
@@ -325,6 +348,7 @@ public class WallAdapter extends BaseAdapter{
             albumLayout = (LinearLayout) parentLayout.findViewById(R.id.copyHistoryAlbumLayout);
             wikiPageLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryWikiPageLayout);
             linkLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryLinkLayout);
+            pollLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryPollLayout);
         } else {
             mediaLayout = viewHolder.postMediaLayout;
             audioLayout = viewHolder.postAudioLayout;
@@ -332,6 +356,7 @@ public class WallAdapter extends BaseAdapter{
             albumLayout = viewHolder.postAlbumLayout;
             wikiPageLayout = viewHolder.postWikiPageLayout;
             linkLayout = viewHolder.postLinkLayout;
+            pollLayout = viewHolder.postPollLayout;
         }
 
         if (photos != null && photos.size() != 0 || videos != null && videos.size() != 0) {
@@ -369,13 +394,53 @@ public class WallAdapter extends BaseAdapter{
         } else {
             linkLayout.setVisibility(View.GONE);
         }
+
+        if (poll != null) {
+            setPoll(pollLayout, poll);
+        } else {
+            pollLayout.setVisibility(View.GONE);
+        }
+    }
+
+    public void setPoll(RelativeLayout parent, VKApiPoll poll) {
+        ViewGroup pollContainer = getPreparedView(parent, R.layout.poll_container);
+
+        ((TextView) pollContainer.getChildAt(0)).setText(poll.question);
+
+        if (poll.anonymous == 0) {
+            ((TextView) pollContainer.getChildAt(1)).setText(poll_not_anonymous + " " + poll.votes);
+        } else {
+            ((TextView) pollContainer.getChildAt(1)).setText(poll_anonymous + " " + poll.votes);
+        }
+
+        LinearLayout pollAnswersContainer = (LinearLayout) pollContainer.getChildAt(2);
+
+        ViewGroup pollAnswer;
+        VKApiPoll.Answer answer;
+        TextProgressBar votesBar;
+
+        for (int i = 0; i < poll.answers.size(); i++) {
+            pollAnswer = getPreparedView(pollAnswersContainer, R.layout.poll_answer_container);
+            answer = poll.answers.get(i);
+
+            ((TextView) pollAnswer.getChildAt(0)).setText(answer.text);
+            ((TextView) pollAnswer.getChildAt(2)).setText(String.valueOf((int) answer.rate) + "%");
+
+            votesBar = (TextProgressBar) pollAnswer.getChildAt(1);
+            votesBar.setProgressDrawable(votesBarDrawable);
+            votesBar.setText(String.valueOf(answer.votes));
+            votesBar.setProgress((int) answer.rate);
+
+            pollAnswersContainer.addView(pollAnswer);
+        }
+        parent.addView(pollContainer);
     }
 
     public void setText(String text, RelativeLayout parent) {
         ViewGroup textContainer = getPreparedView(parent, R.layout.post_text_layout);
 
         final TextView mainText = ((TextView) textContainer.getChildAt(0));
-        final TextView showAll = ((TextView) textContainer.getChildAt(1));
+        final CheckBox showAll = ((CheckBox) textContainer.getChildAt(1));
 
         final Matcher matTags = Pattern.compile("#\\w+").matcher(text);
 
@@ -495,11 +560,21 @@ public class WallAdapter extends BaseAdapter{
         if (spannable.length() > 300) {
             showAll.setVisibility(View.VISIBLE);
             showAll.setBackgroundColor(Color.parseColor(postColor));
-            SpannableStringBuilder tempSpannable = spannable;
-            mainText.setText(tempSpannable.insert(297, "...").delete(300, tempSpannable.length()));
-            showAll.setOnClickListener(new View.OnClickListener() {
+            final SpannableStringBuilder originalSpannable = spannable;
+            final SpannableStringBuilder tempSpannable = new SpannableStringBuilder();
+            tempSpannable.append(spannable);
+            final SpannableStringBuilder tempModifySpannable = tempSpannable.insert(297, "...").delete(300, tempSpannable.length());
+            mainText.setText(tempModifySpannable);
+            showAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        showAll.setText(show_min_text);
+                        mainText.setText(originalSpannable);
+                    } else {
+                        showAll.setText(show_all_text);
+                        mainText.setText(tempModifySpannable);
+                    }
                 }
             });
         } else {
@@ -792,10 +867,9 @@ public class WallAdapter extends BaseAdapter{
                             img = (ImageView) view_i_j_k;
                             final int finalJ = photoPointer++;
                             if (photosCount == 1 && videos.size() == 0) {
-                                Display display = VKUIHelper.getTopActivity().getWindowManager().getDefaultDisplay();
-                                int newWidth = display.getWidth(); //this method should return the width of device screen.
-                                float scaleFactor = (float)newWidth/((float)photos.get(finalJ).width  + 60);
-                                int newHeight = (int)(photos.get(finalJ).height * scaleFactor);
+                                int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                                float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width + 60);
+                                int newHeight = (int) (photos.get(finalJ).height * scaleFactor);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
                                 img.setLayoutParams(params);
                             }
@@ -942,7 +1016,6 @@ public class WallAdapter extends BaseAdapter{
     }
 
 
-
     public static String readableFileSize(long size) {
         if (size <= 0) return "0";
         final String[] units = new String[]{size_in_b, size_in_kb, size_in_mb, size_in_gb, size_in_tb};
@@ -992,6 +1065,7 @@ public class WallAdapter extends BaseAdapter{
         private final RelativeLayout postWikiPageLayout;
         private final RelativeLayout postLinkLayout;
         private final RelativeLayout postSignedLayout;
+        private final RelativeLayout postPollLayout;
 
         private final TextView txt_post_date;
 
@@ -1012,6 +1086,7 @@ public class WallAdapter extends BaseAdapter{
             this.postWikiPageLayout = (RelativeLayout) convertView.findViewById(R.id.postWikiPageLayout);
             this.postLinkLayout = (RelativeLayout) convertView.findViewById(R.id.postLinkLayout);
             this.postSignedLayout = (RelativeLayout) convertView.findViewById(R.id.postSignedLayout);
+            this.postPollLayout = (RelativeLayout) convertView.findViewById(R.id.postPollLayout);
 
             this.txt_post_date = (TextView) convertView.findViewById(R.id.txt_post_date);
 

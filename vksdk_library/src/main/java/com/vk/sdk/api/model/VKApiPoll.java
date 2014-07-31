@@ -71,15 +71,17 @@ public class VKApiPoll extends VKAttachments.VKApiAttachment implements android.
      */
     public int answer_id;
 
+    public int anonymous;
     /**
      * Array of answers for this question.
      */
     public VKList<Answer> answers;
 
-	public VKApiPoll(JSONObject from) throws JSONException
-	{
-		parse(from);
-	}
+
+    public VKApiPoll(JSONObject from) throws JSONException
+    {
+        parse(from);
+    }
     /**
      * Fills a Poll instance from JSONObject.
      */
@@ -91,6 +93,7 @@ public class VKApiPoll extends VKAttachments.VKApiAttachment implements android.
         votes = source.optInt("votes");
         answer_id = source.optInt("answer_id");
         answers = new VKList<Answer>(source.optJSONArray("answers"), Answer.class);
+        anonymous = source.optInt("anonymous");
         return this;
     }
 

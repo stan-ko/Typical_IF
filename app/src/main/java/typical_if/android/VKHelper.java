@@ -18,18 +18,6 @@ import java.util.ArrayList;
  * Created by admin on 17.07.2014.
  */
 public class VKHelper {
-
-    public static VKParameters setParamsForGroupReguest(long gid, Resources resources){
-        VKParameters params = new VKParameters();
-        params.put(resources.getString(R.string.key_owner_id), gid);
-        params.put(resources.getString(R.string.key_domain), gid);
-        params.put(resources.getString(R.string.key_offset), 0);
-        params.put(resources.getString(R.string.key_count), 100);
-        params.put(resources.getString(R.string.key_filter), resources.getString(R.string.value_filter));
-        params.put(resources.getString(R.string.key_extended), 1);
-        return  params;
-    }
-
     public static void getAlbumList(long groupID, VKRequest.VKRequestListener listener){
         VKParameters params = new VKParameters();
         params.put("owner_id",groupID);
@@ -48,6 +36,14 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
+    public static void getPoll (long owner_id, long poll_id, VKRequest.VKRequestListener listener){
+        VKParameters params = new VKParameters();
+        params.put("owner_id",owner_id);
+        params.put("poll_id",poll_id);
+        final VKRequest request = new VKRequest("poll.getById",params);
+        request.executeWithListener(listener);
+    }
+
     public static void doGroupWallRequest(long gid, VKRequest.VKRequestListener vkRequestListener){
         VKParameters params = new VKParameters();
         Resources resources = VKUIHelper.getApplicationContext().getResources();
@@ -61,8 +57,7 @@ public class VKHelper {
         final VKRequest request = VKApi.wall().get(params);
         request.executeWithListener(vkRequestListener);
     }
-    public static void isLIked(String type, long owner_id, long item_id,
-                               VKRequest.VKRequestListener listener) {
+    public static void isLIked(String type, long owner_id, long item_id, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
         //params.put("user_id",user_id );
         params.put("type", type);
@@ -72,8 +67,7 @@ public class VKHelper {
         request.executeWithListener(listener);
 
     }
-    public static void setLike(String type, long owner_id, long item_id,
-                               VKRequest.VKRequestListener listener) {
+    public static void setLike(String type, long owner_id, long item_id, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("type", type);
         params.put("owner_id", owner_id);
@@ -83,8 +77,7 @@ public class VKHelper {
 
 
     }
-    public static void deleteLike(String type, long owner_id, long item_id,
-                                  VKRequest.VKRequestListener listener) {
+    public static void deleteLike(String type, long owner_id, long item_id, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("type", type);
         params.put("owner_id", owner_id);
@@ -92,8 +85,7 @@ public class VKHelper {
         final VKRequest request = new VKRequest("likes.delete", params);
         request.executeWithListener(listener);
     }
-    public static void createCommentForPhoto(long owner_id, long photo_id, String message, int from_group,
-                                             VKRequest.VKRequestListener listener) {
+    public static void createCommentForPhoto(long owner_id, long photo_id, String message, int from_group, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("owner_id", owner_id);
         params.put("photo_id", photo_id);
@@ -136,8 +128,7 @@ public class VKHelper {
         return array;
     }
 
-    public static void deleteCommentForPhoto(long owner_id, long comment_id,
-                                             VKRequest.VKRequestListener listener) {
+    public static void deleteCommentForPhoto(long owner_id, long comment_id, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("owner_id", owner_id);
         params.put("comment_id", comment_id);
@@ -145,8 +136,7 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void restoreCommentForPhoto(long owner_id, long comment_id,
-                                              VKRequest.VKRequestListener listener) {
+    public static void restoreCommentForPhoto(long owner_id, long comment_id, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("owner_id", owner_id);
         params.put("comment_id", comment_id);
@@ -154,8 +144,7 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void editCommentForPhoto(long owner_id, long comment_id, String message,
-                                           Void attachments, VKRequest.VKRequestListener listener) {
+    public static void editCommentForPhoto(long owner_id, long comment_id, String message, Void attachments, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("owner_id", owner_id);
         params.put("comment_id", comment_id);
@@ -166,7 +155,6 @@ public class VKHelper {
     }
 
     public static ArrayList<VKApiComment> getCommentsFromJSON(JSONArray arrayOfComments) {
-
         final ArrayList<VKApiComment> comments = new ArrayList<VKApiComment>();
         for (int i = 0; i < arrayOfComments.length(); i++) {
             VKApiComment comment1 = new VKApiComment();
