@@ -70,8 +70,7 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postMediaLayout"
-                    android:background="#ffffffff"
-                    android:padding="5dp" />
+                    android:background="#ffffffff" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"

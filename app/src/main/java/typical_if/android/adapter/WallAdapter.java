@@ -14,11 +14,12 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -54,6 +55,7 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import typical_if.android.MyApplication;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.model.Wall.Group;
@@ -63,7 +65,7 @@ import typical_if.android.model.Wall.Wall;
 import static java.lang.String.format;
 import static java.lang.String.valueOf;
 
-public class WallAdapter extends BaseAdapter{
+public class WallAdapter extends BaseAdapter {
     private Wall wall;
     private VKPostArray posts;
     private LayoutInflater layoutInflater;
@@ -90,6 +92,9 @@ public class WallAdapter extends BaseAdapter{
     private static String browser_chooser;
     private static String downloader_chooser;
     private static String viewer_chooser;
+
+    private static String show_all_text;
+    private static String show_min_text;
 
     private static Context context;
     private static Resources resources;
@@ -120,6 +125,9 @@ public class WallAdapter extends BaseAdapter{
         this.browser_chooser = resources.getString(R.string.browser_chooser);
         this.downloader_chooser = resources.getString(R.string.downloader_chooser);
         this.viewer_chooser = resources.getString(R.string.viewer_chooser);
+
+        this.show_all_text = resources.getString(R.string.show_all_text);
+        this.show_min_text = resources.getString(R.string.show_min_text);
 
         this.postColor = postColor;
 
@@ -272,7 +280,7 @@ public class WallAdapter extends BaseAdapter{
         return convertView;
     }
 
-    private ViewGroup getPreparedView(ViewGroup parent, int layoutRes){
+    private ViewGroup getPreparedView(ViewGroup parent, int layoutRes) {
         parent.setVisibility(View.VISIBLE);
         parent.removeAllViews();
 
@@ -375,7 +383,7 @@ public class WallAdapter extends BaseAdapter{
         ViewGroup textContainer = getPreparedView(parent, R.layout.post_text_layout);
 
         final TextView mainText = ((TextView) textContainer.getChildAt(0));
-        final TextView showAll = ((TextView) textContainer.getChildAt(1));
+        final CheckBox showAll = ((CheckBox) textContainer.getChildAt(1));
 
         final Matcher matTags = Pattern.compile("#\\w+").matcher(text);
 
@@ -495,11 +503,21 @@ public class WallAdapter extends BaseAdapter{
         if (spannable.length() > 300) {
             showAll.setVisibility(View.VISIBLE);
             showAll.setBackgroundColor(Color.parseColor(postColor));
-            SpannableStringBuilder tempSpannable = spannable;
-            mainText.setText(tempSpannable.insert(297, "...").delete(300, tempSpannable.length()));
-            showAll.setOnClickListener(new View.OnClickListener() {
+            final SpannableStringBuilder originalSpannable = spannable;
+            final SpannableStringBuilder tempSpannable = new SpannableStringBuilder();
+            tempSpannable.append(spannable);
+            final SpannableStringBuilder tempModifySpannable = tempSpannable.insert(297, "...").delete(300, tempSpannable.length());
+            mainText.setText(tempModifySpannable);
+            showAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onClick(View v) {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        showAll.setText(show_min_text);
+                        mainText.setText(originalSpannable);
+                    } else {
+                        showAll.setText(show_all_text);
+                        mainText.setText(tempModifySpannable);
+                    }
                 }
             });
         } else {
@@ -792,10 +810,9 @@ public class WallAdapter extends BaseAdapter{
                             img = (ImageView) view_i_j_k;
                             final int finalJ = photoPointer++;
                             if (photosCount == 1 && videos.size() == 0) {
-                                Display display = VKUIHelper.getTopActivity().getWindowManager().getDefaultDisplay();
-                                int newWidth = display.getWidth(); //this method should return the width of device screen.
-                                float scaleFactor = (float)newWidth/((float)photos.get(finalJ).width  + 60);
-                                int newHeight = (int)(photos.get(finalJ).height * scaleFactor);
+                                int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                                float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width + 60);
+                                int newHeight = (int) (photos.get(finalJ).height * scaleFactor);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
                                 img.setLayoutParams(params);
                             }
@@ -940,7 +957,6 @@ public class WallAdapter extends BaseAdapter{
         }
         parent.addView(mediaContainer);
     }
-
 
 
     public static String readableFileSize(long size) {
