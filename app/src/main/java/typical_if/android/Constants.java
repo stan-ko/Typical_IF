@@ -20,6 +20,7 @@ public class Constants {
             VKScope.FRIENDS,
             VKScope.DOCS
     };
+    // my coment
 
     //public static final long TF_ID = -36573302;
     public static final long TF_ID = -42709618;
