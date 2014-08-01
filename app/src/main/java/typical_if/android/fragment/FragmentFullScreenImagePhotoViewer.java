@@ -8,11 +8,18 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
@@ -39,19 +46,21 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
     private static final String FILTER = "likes";
     private static final String ARG_VK_USER_ID = "user_id";
     private static final String TYPE = "photo";
-    int isLiked ;
+
+    int isLiked;
     long user_id;
 
-    public static FragmentFullScreenImagePhotoViewer newInstance(ArrayList<Photo> photos, int currentposition,long vk_group_id,long vk_album_id ) {
+    public static FragmentFullScreenImagePhotoViewer newInstance(ArrayList<Photo> photos, int currentposition, long vk_group_id, long vk_album_id) {
 
         FragmentFullScreenImagePhotoViewer fragment = new FragmentFullScreenImagePhotoViewer();
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
         FragmentFullScreenImagePhotoViewer.photos = photos;
+
         FragmentFullScreenImagePhotoViewer.currentposition = currentposition;
         args.putLong(ARG_VK_GROUP_ID, vk_group_id);
-        args.putLong(ARG_VK_ALBUM_ID,vk_album_id);
+        args.putLong(ARG_VK_ALBUM_ID, vk_album_id);
         return fragment;
     }
 
@@ -71,36 +80,33 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final Bundle arguments = getArguments();
-        final Animation animTextViewUp ;
-        final Animation animTextViewDown ;
-        animTextViewUp= AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.move_up);
-        animTextViewDown=AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.move_down);
-        animTextViewUp.setAnimationListener(this);
-        animTextViewDown.setAnimationListener(this);
+//        final Animation animTextViewUp ;
+//        final Animation animTextViewDown ;
+//        animTextViewUp  =AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.move_up);
+//        animTextViewDown=AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.move_down);
+//        animTextViewUp.setAnimationListener(this);
+//        animTextViewDown.setAnimationListener(this);
 
-        final View rootView = inflater.inflate(R.layout.fragment_fullscreen_view, container, false);
-        final View second = inflater.inflate(R.layout.fragment_fragment_full_screen_image_photo_viewer, container, false);
-        //initAdapter(rootView, arguments);
+
+        final Animation animFadeInObjects;
+        final Animation animFadeOutObjects;
+        animFadeInObjects = AnimationUtils.loadAnimation(getActivity().getApplicationContext(),R.anim.fade_in);
+        animFadeOutObjects =AnimationUtils.loadAnimation(getActivity().getApplicationContext(),R.anim.fade_out);
+        animFadeInObjects.setAnimationListener(this);
+        animFadeOutObjects.setAnimationListener(this);
+
+
+        final View rootView = inflater.inflate(R.layout.fragment_fullscreen_list, container, false);
+
         FragmentManager manager = getFragmentManager();
         imagepager = (ViewPager) rootView.findViewById(R.id.pager);
+
         imagepager.setAdapter(new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, arguments.getLong(ARG_VK_GROUP_ID),
-                arguments.getLong(ARG_VK_ALBUM_ID), arguments.getLong(ARG_VK_USER_ID), manager));
+                arguments.getLong(ARG_VK_ALBUM_ID), arguments.getLong(ARG_VK_USER_ID), manager, rootView));
         imagepager.setCurrentItem(currentposition);
 
-        //imagepager = (ViewPager) getView().findViewById(R.id.pager);
-       // final ImageView fullScreenPhoto = (ImageView) rootView.findViewById(R.id.full_screen_photo);
-//        final Button like = (Button)rootView.findViewById(R.id.like_photo);
-//        final Button comment = (Button)rootView.findViewById(R.id.comment_photo);
-//        final TextView countLikes = (TextView)rootView.findViewById(R.id.count_of_likes);
-//        final TextView countComments = (TextView)rootView.findViewById(R.id.count_of_comments);
-//        final ImageView notLikedPhoto = (ImageView)rootView.findViewById(R.id.image_not_liked);
-//        final CheckBox likedOrNotLikedBox = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox));
-//        final TextView photoHeader = (TextView)rootView.findViewById(R.id.photoHeader);
-//        photoHeader.setText(photos.get(currentposition).text);
-//        countLikes.setText(String.valueOf(photos.get(currentposition).likes));
-//        countComments.setText(String.valueOf(photos.get(currentposition).comments));
         Log.d("Current VIEW", photos.get(imagepager.getCurrentItem()).text);
         VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
             @Override
@@ -115,73 +121,98 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
             }
         });
 
-
-//        VKHelper.isLIked(TYPE,photos.get(currentposition).owner_id,photos.get(currentposition).id,new VKRequest.VKRequestListener() {
-//            @Override
-//            public void onComplete(VKResponse response) {
-//                super.onComplete(response);
-//
-//                isLiked= (response.json.optJSONObject("response")).optInt("liked");
-//                if(isLiked==0){notLikedPhoto.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
-//                    likedOrNotLikedBox.setChecked(false);}
-//                if(isLiked==1){notLikedPhoto.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
-//                    likedOrNotLikedBox.setChecked(true);}
-//
-//                arguments.putInt("isLiked",isLiked);
-//
-//
-//            }
-//        });
-
-//        like.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (isLiked == 0) {
-//                    VKHelper.setLike(TYPE, photos.get(currentposition).owner_id, photos.get(currentposition).id, new VKRequest.VKRequestListener() {
-//                        @Override
-//                        public void onComplete(VKResponse response) {
-//                            super.onComplete(response);
-//                            notLikedPhoto.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
-//                            likedOrNotLikedBox.setChecked(true);
-//                            countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString())+1));
-//
-//                            Toast.makeText(getActivity().getApplicationContext(), "LIKED: " + isLiked, Toast.LENGTH_SHORT).show();
-//                            isLiked=1;
-//
-//                        }});
-//
-//                }if (isLiked==1){
-//                    VKHelper.deleteLike(TYPE, photos.get(currentposition).owner_id, photos.get(currentposition).id, new VKRequest.VKRequestListener() {
-//                        @Override
-//                        public void onComplete(VKResponse response) {
-//                            super.onComplete(response);
-//                            likedOrNotLikedBox.setChecked(false);
-//                            notLikedPhoto.setBackgroundResource((R.drawable.ic_post_btn_like_up));
-//                            countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString())-1));
-//                            isLiked=0;
-//
-//                            Toast.makeText(getActivity().getApplicationContext(), "LIKE DELETED", Toast.LENGTH_SHORT).show();
-//
-//                        }});
-//                }
-//            }});
+        final TextView countLikes = (TextView) rootView.findViewById(R.id.count_of_likes);
+        final TextView countComments = (TextView) rootView.findViewById(R.id.count_of_comments);
+        final ImageView like = (ImageView) rootView.findViewById(R.id.image_not_liked);
+        final ImageView comment = (ImageView) rootView.findViewById(R.id.image_comment);
+        final CheckBox likedOrNotLikedBox = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox));
+        final TextView photoHeader = (TextView) rootView.findViewById(R.id.photoHeader);
 
 
-//        comment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                // Toast.makeText(getActivity().getApplicationContext(), "You clicked comment", Toast.LENGTH_SHORT).show();
-//                Fragment fragment = FragmentPhotoCommentAndInfo.newInstance(arguments.getLong(ARG_VK_GROUP_ID),
-//                        arguments.getLong(ARG_VK_ALBUM_ID),
-//                        photos,arguments.getLong(ARG_VK_USER_ID),
-//                        arguments.getInt("isLiked"),currentposition);
-//                FragmentManager fragmentManager = getFragmentManager();
-//                fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-//            }
-//        });
+        imagepager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+//                like.setVisibility(View.VISIBLE);
+//                countLikes.setVisibility(View.VISIBLE);
+//                countComments.setVisibility(View.VISIBLE);
+//                comment.setVisibility(View.VISIBLE);
+//                likedOrNotLikedBox.setVisibility(View.VISIBLE);
+//                photoHeader.setVisibility(View.VISIBLE);
+//                like.setAnimation(animFadeInObjects);
+//                countLikes.setAnimation(animFadeInObjects);
+//                countComments.setAnimation(animFadeInObjects);
+//                comment.setAnimation(animFadeInObjects);
+//                likedOrNotLikedBox.setAnimation(animFadeOutObjects);
+//                photoHeader.setAnimation(animFadeInObjects);
+
+            }
+        });
+        imagepager.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
 
 
+//                like.setVisibility(View.INVISIBLE);
+//                countLikes.setVisibility(View.INVISIBLE);
+//                countComments.setVisibility(View.INVISIBLE);
+//                comment.setVisibility(View.INVISIBLE);
+//                likedOrNotLikedBox.setVisibility(View.INVISIBLE);
+//                photoHeader.setVisibility(View.INVISIBLE);
+//                like.setAnimation(animFadeOutObjects);
+//                countLikes.setAnimation(animFadeOutObjects);
+//                countComments.setAnimation(animFadeOutObjects);
+//                comment.setAnimation(animFadeOutObjects);
+//                likedOrNotLikedBox.setAnimation(animFadeOutObjects);
+//                photoHeader.setAnimation(animFadeOutObjects);
+                return false;
+            }
+
+        });
+        Button fade = ((Button) rootView.findViewById(R.id.button_fade));
+        fade.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickCounter++;
+                if(clickCounter%2==0) {
+                    {
+                        like.setAnimation(animFadeOutObjects);
+                        countLikes.setAnimation(animFadeOutObjects);
+                        countComments.setAnimation(animFadeOutObjects);
+                        comment.setAnimation(animFadeOutObjects);
+                        likedOrNotLikedBox.setAnimation(animFadeOutObjects);
+                        photoHeader.setAnimation(animFadeOutObjects);
+                        Toast.makeText(VKUIHelper.getApplicationContext(),"from 1.0 to 0.0", Toast.LENGTH_SHORT).show();
+
+                    }
+                }else{
+                    {
+                       like.setAnimation(animFadeInObjects);
+                        countLikes.setAnimation(animFadeInObjects);
+                        countComments.setAnimation(animFadeInObjects);
+                        comment.setAnimation(animFadeInObjects);
+                        likedOrNotLikedBox.setAnimation(animFadeOutObjects);
+                        photoHeader.setAnimation(animFadeInObjects);
+                        Toast.makeText(VKUIHelper.getApplicationContext(),"from 0.0 to 1.0", Toast.LENGTH_SHORT).show();
+
+
+                    }
+                }
+
+
+
+            }
+        });
 
 
         setRetainInstance(true);
@@ -190,6 +221,8 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
 
 
     }
+
+
 
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
@@ -258,4 +291,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
 //
 //            }
 //        });
+
+
+
 }

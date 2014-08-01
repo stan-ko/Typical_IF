@@ -23,10 +23,10 @@ public class Photo {
     public int height;
     public String text;
     public long date;
-    public boolean user_likes;
+    public int user_likes;
     public int likes;
     public int comments;
-    public boolean can_comment;
+    public int can_comment;
 
 
 
@@ -34,8 +34,8 @@ public class Photo {
 
     public Photo (long id,long owner_id, long album_id, String photo_75, String photo_130,
                   String photo_604, String photo_807, String photo_1280,String photo_2048,
-                  int width, int height,String text, long date, boolean user_likes,
-                  int likes, int comments, boolean can_comment){
+                  int width, int height,String text, long date, int user_likes,
+                  int likes, int comments, int can_comment){
 
         this.id=id;
         this.album_id=album_id;
@@ -93,10 +93,10 @@ public class Photo {
                 PhotoJSON.optInt(JSON_KEY_HEIGHT),
                 PhotoJSON.optString(JSON_KEY_TEXT),
                 PhotoJSON.optLong(JSON_KEY_DATE),
-                likes.optBoolean(JSON_KEY_USER_LIKES),
+                likes.optInt(JSON_KEY_USER_LIKES),
                 likes.optInt(JSON_KEY_LIKES),
                 comments.optInt(JSON_KEY_COMMENTS),
-                PhotoJSON.optBoolean(JSON_KEY_CAN_COMMENT));
+                PhotoJSON.optInt(JSON_KEY_CAN_COMMENT));
     }
 
     public static ArrayList<Photo> getPhotosFromJSONArray(JSONObject jsonArray) {
