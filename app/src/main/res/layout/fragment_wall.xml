@@ -8,10 +8,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listViewWall"
-        android:dividerHeight="10dp"
+        android:dividerHeight="2dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:background="#ffd6d6d6"
         android:divider="#ffd6d6d6" />
 

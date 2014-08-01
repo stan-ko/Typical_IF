@@ -36,11 +36,11 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void getPoll (long owner_id, long poll_id, VKRequest.VKRequestListener listener){
+    public static void getPoll (int owner_id, int poll_id, VKRequest.VKRequestListener listener){
         VKParameters params = new VKParameters();
-        params.put("owner_id",owner_id);
-        params.put("poll_id",poll_id);
-        final VKRequest request = new VKRequest("poll.getById",params);
+        params.put("owner_id", owner_id);
+        params.put("poll_id", poll_id);
+        final VKRequest request = new VKRequest("polls.getById",params);
         request.executeWithListener(listener);
     }
 

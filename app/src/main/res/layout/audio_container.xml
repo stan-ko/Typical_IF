@@ -3,10 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="60dp"
-    android:paddingLeft="5dp"
-    android:paddingTop="5dp"
-    android:paddingRight="5dp"
-    android:background="#ffffffff">
+    android:background="#ffffffff"
+    android:paddingTop="5dp">
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -30,7 +28,6 @@
         android:layout_alignParentStart="true"
         android:visibility="visible"
         android:layout_toLeftOf="@+id/txt_audio_duration"
-        android:layout_toStartOf="@+id/textView111"
         android:layout_marginRight="5dp"
         android:indeterminate="false"
         android:max="100"
@@ -53,7 +50,7 @@
         android:id="@+id/txt_audio_artist"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/cb_audio_play_or_stop"
-        android:layout_toEndOf="@+id/play_or_stop_audio"
+        android:layout_toEndOf="@+id/cb_audio_play_or_stop"
         android:textStyle="bold"
         android:layout_marginLeft="5dp"
         android:singleLine="true"
@@ -67,7 +64,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txt_audio_title"
-        android:layout_toEndOf="@+id/play_or_stop_audio"
+        android:layout_toEndOf="@+id/cb_audio_play_or_stop"
         android:layout_below="@+id/txt_audio_artist"
         android:layout_toRightOf="@+id/cb_audio_play_or_stop"
         android:singleLine="true"

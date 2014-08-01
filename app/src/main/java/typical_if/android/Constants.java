@@ -18,7 +18,13 @@ public class Constants {
             VKScope.NOTES,
             VKScope.OFFLINE,
             VKScope.FRIENDS,
-            VKScope.DOCS
+            VKScope.DOCS,
+            VKScope.STATS,
+            VKScope.STATUS,
+            VKScope.NOTIFY,
+            VKScope.ADS,
+            VKScope.MESSAGES,
+            VKScope.NOTIFICATIONS
     };
 
     //public static final long TF_ID = -36573302;

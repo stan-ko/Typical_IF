@@ -10,9 +10,6 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:dividerPadding="5dp"
-        android:showDividers="middle"
-        android:divider="@drawable/copy_history_divider"
         android:layout_toEndOf="@+id/leftLine"
         android:layout_toRightOf="@+id/leftLine"
         android:visibility="visible"
@@ -23,7 +20,7 @@
             android:layout_height="wrap_content"
             android:background="#ffffffff"
             android:visibility="visible"
-            android:padding="5dp" >
+            android:paddingTop="5dp">
 
             <ImageView
                 android:layout_width="60dp"
@@ -61,8 +58,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:id="@+id/copyHistorySignedLayout"
-            android:background="#d5902fa7"></RelativeLayout>
+            android:id="@+id/copyHistorySignedLayout"></RelativeLayout>
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -83,7 +79,8 @@
                 android:visibility="gone"
                 android:id="@+id/copyHistoryMediaLayout"
                 android:background="#ffffffff"
-                android:padding="5dp" />
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -144,7 +141,7 @@
         android:layout_height="fill_parent"
         android:id="@+id/leftLine"
         android:layout_marginLeft="5dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_marginTop="5dp"
         android:layout_alignBottom="@+id/linearLayout"></RelativeLayout>
 
