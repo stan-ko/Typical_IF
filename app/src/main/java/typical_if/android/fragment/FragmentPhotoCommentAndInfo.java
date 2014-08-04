@@ -157,7 +157,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         likePostPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (like_status == 0) {
+                if (like_status == 0){
                     likePostPhoto.setBackgroundColor(Color.WHITE);
                     likePostPhoto.setChecked(false);
                  //   likePostPhoto.setText(String.valueOf(photo.get(currentPosition).likes + 1));
