@@ -1,21 +1,27 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
+import android.content.*;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.twotoasters.jazzylistview.JazzyHelper;
 import com.twotoasters.jazzylistview.JazzyListView;
+import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import typical_if.android.Constants;
@@ -43,6 +49,11 @@ public class FragmentWall extends Fragment {
     Long gid;
     View rootView;
     Bundle arguments;
+    SharedPreferences sPref;
+    Activity a;
+    final String SAVED_TEXT="saved_text";
+    JSONObject jsonObj;
+    //Context c;
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -68,9 +79,10 @@ public class FragmentWall extends Fragment {
         postColor = getPostColor(gid);
 
         VKHelper.doGroupWallRequest(gid, new VKRequest.VKRequestListener() {
-            @Override
+            //@Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
+                saveJSON(response.json);
                 initGroupWall(response.json, inflater, gid);
                 spinnerLayout.setVisibility(View.GONE);
             }
@@ -78,11 +90,19 @@ public class FragmentWall extends Fragment {
             @Override
             public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
                 super.attemptFailed(request, attemptNumber, totalAttempts);
+
+                //if (totalAttempts ==3){
+                    initGroupWall(loadJSON(), inflater, gid);
+                    spinnerLayout.setVisibility(View.GONE);
+                //}
             }
 
             @Override
             public void onError(VKError error) {
                 super.onError(error);
+
+                initGroupWall(loadJSON(), inflater, gid);
+                spinnerLayout.setVisibility(View.GONE);
             }
 
             @Override
@@ -121,5 +141,29 @@ public class FragmentWall extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         //((MainActivity) activity).onSectionAttached(getArguments().getLong(ARG_VK_GROUP_ID));
+    }
+
+
+    void saveJSON(JSONObject jsonObject) {
+        sPref = VKUIHelper.getTopActivity().getPreferences(VKUIHelper.getTopActivity().MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+
+            String JsonString = jsonObject.toString();
+            ed.putString(SAVED_TEXT, JsonString);
+           // Log.d("/--------------jsonInString-------------------/",jsonObject.toString());
+            ed.commit();
+
+    }
+
+    JSONObject loadJSON() {
+        sPref = VKUIHelper.getTopActivity().getPreferences(VKUIHelper.getTopActivity().MODE_PRIVATE);
+        String savedText = sPref.getString(SAVED_TEXT, "");
+        try {
+            jsonObj = new JSONObject(savedText);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            //Log.d("/---------------------savedJson--------ERROR-----------/",savedText);
+        }
+        return jsonObj;
     }
 }
