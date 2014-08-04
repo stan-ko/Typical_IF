@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.api.model.VKApiComment;
 
@@ -27,6 +28,8 @@ public class CommentsListAdapter extends BaseAdapter {
     ArrayList<VKApiComment> commentList;
     ArrayList<Profile> profilesList;
     LayoutInflater layoutInflater;
+    private DisplayImageOptions options;
+
 
     String first_name = "";
     String last_name = "";
@@ -36,6 +39,13 @@ public class CommentsListAdapter extends BaseAdapter {
         this.commentList = commentList;
         this.profilesList = profilesList;
         layoutInflater = inflater;
+        this.options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.ic_stub) // TODO resource or drawable
+                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
+                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+                .build();
     }
 
     public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<Profile> profilesList, ListView listView) {

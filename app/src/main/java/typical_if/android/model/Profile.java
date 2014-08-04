@@ -18,6 +18,7 @@ public class Profile {
     public String  photo_50;
     public String  photo_100;
     public boolean online;
+    int reply_to_comment;
 
 
     public Profile(long id, String first_name, String last_name, int sex, String screen_name, String photo_50, String photo_100, boolean online){
@@ -26,7 +27,7 @@ public class Profile {
         this.last_name=last_name;
         this.sex=sex;
         this.screen_name=screen_name;
-        this.photo_50=photo_50;
+        this.photo_50= photo_50;
         this.photo_100=photo_100;
         this.online=online;
      }
