@@ -59,7 +59,6 @@ import java.util.regex.Pattern;
 
 import typical_if.android.MyApplication;
 import typical_if.android.R;
-import typical_if.android.TextProgressBar;
 import typical_if.android.VKHelper;
 import typical_if.android.model.Wall.Group;
 import typical_if.android.model.Wall.Profile;
@@ -184,8 +183,6 @@ public class WallAdapter extends BaseAdapter {
         viewHolder.txt_post_share.setText(valueOf(post.reposts_count));
 
         viewHolder.txt_post_date.setText(getFormattedDate(post.date));
-        viewHolder.postDateTitleLayout.setBackgroundColor(Color.parseColor(postColor));
-
 
         if (post.text.length() != 0) {
             setText(post.text, viewHolder.postTextLayout);
@@ -218,9 +215,9 @@ public class WallAdapter extends BaseAdapter {
             }
 
             ViewGroup copyHistoryContainer = getPreparedView(viewHolder.copyHistoryLayout, R.layout.copy_history_layout);
-            RelativeLayout leftLine = (RelativeLayout) copyHistoryContainer.findViewById(R.id.leftLine);
-            leftLine.setVisibility(View.VISIBLE);
-            leftLine.setBackgroundColor(Color.parseColor(postColor));
+            //RelativeLayout leftLine = (RelativeLayout) copyHistoryContainer.findViewById(R.id.leftLine);
+            //leftLine.setVisibility(View.VISIBLE);
+            //leftLine.setBackgroundColor(Color.parseColor(postColor));
 
             LinearLayout copyHistoryList = (LinearLayout) copyHistoryContainer.getChildAt(0);
             RelativeLayout copyHistoryLayout = (RelativeLayout) copyHistoryList.getChildAt(0);
@@ -339,7 +336,7 @@ public class WallAdapter extends BaseAdapter {
         LinearLayout albumLayout;
         RelativeLayout wikiPageLayout;
         RelativeLayout linkLayout;
-        RelativeLayout pollLayout;
+        final RelativeLayout pollLayout;
 
         if (isCopyHistory) {
             mediaLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryMediaLayout);
@@ -397,6 +394,16 @@ public class WallAdapter extends BaseAdapter {
 
         if (poll != null) {
             setPoll(pollLayout, poll);
+            /*
+            VKHelper.getPoll(poll.owner_id, poll.id, new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    Log.d(response.json.toString(), "");
+                    JSONObject object = response.json.optJSONObject("response");
+                    setPoll(pollLayout, new Poll().parse(object));
+                }
+            });*/
         } else {
             pollLayout.setVisibility(View.GONE);
         }
@@ -413,7 +420,8 @@ public class WallAdapter extends BaseAdapter {
             ((TextView) pollContainer.getChildAt(1)).setText(poll_anonymous + " " + poll.votes);
         }
 
-        LinearLayout pollAnswersContainer = (LinearLayout) pollContainer.getChildAt(2);
+        ((ImageView) pollContainer.getChildAt(2)).setBackgroundColor(Color.parseColor(postColor));
+        /*final LinearLayout pollAnswersContainer = (LinearLayout) pollContainer.getChildAt(2);
 
         ViewGroup pollAnswer;
         VKApiPoll.Answer answer;
@@ -432,7 +440,8 @@ public class WallAdapter extends BaseAdapter {
             votesBar.setProgress((int) answer.rate);
 
             pollAnswersContainer.addView(pollAnswer);
-        }
+        }*/
+
         parent.addView(pollContainer);
     }
 
@@ -569,8 +578,8 @@ public class WallAdapter extends BaseAdapter {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        showAll.setText(show_min_text);
                         mainText.setText(originalSpannable);
+                        showAll.setText(show_min_text);
                     } else {
                         showAll.setText(show_all_text);
                         mainText.setText(tempModifySpannable);
@@ -868,7 +877,7 @@ public class WallAdapter extends BaseAdapter {
                             final int finalJ = photoPointer++;
                             if (photosCount == 1 && videos.size() == 0) {
                                 int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
-                                float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width + 60);
+                                float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width + 30);
                                 int newHeight = (int) (photos.get(finalJ).height * scaleFactor);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
                                 img.setLayoutParams(params);
@@ -956,6 +965,7 @@ public class WallAdapter extends BaseAdapter {
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
+
                                             Toast.makeText(context, videos.get(finalJ).player, Toast.LENGTH_SHORT).show();
                                         }
                                     });
@@ -1053,7 +1063,6 @@ public class WallAdapter extends BaseAdapter {
     }
 
     private static class ViewHolder {
-        private final RelativeLayout postDateTitleLayout;
         private final RelativeLayout postTextLayout;
         private final RelativeLayout postMediaLayout;
         private final LinearLayout postAudioLayout;
@@ -1074,7 +1083,6 @@ public class WallAdapter extends BaseAdapter {
         private final TextView txt_post_comment;
 
         private ViewHolder(View convertView) {
-            this.postDateTitleLayout = (RelativeLayout) convertView.findViewById(R.id.postDateTitleLayout);
             this.postAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.postAttachmentsLayout);
             this.postTextLayout = (RelativeLayout) convertView.findViewById(R.id.postTextLayout);
             this.postMediaLayout = (RelativeLayout) convertView.findViewById(R.id.postMediaLayout);
