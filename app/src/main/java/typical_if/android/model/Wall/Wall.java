@@ -3,6 +3,8 @@ package typical_if.android.model.Wall;
 import android.util.Log;
 
 import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKPostArray;
 
 import org.json.JSONArray;
@@ -10,6 +12,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import typical_if.android.VKHelper;
 
 /**
  * extended by Miller on 16.07.2014.
@@ -19,6 +23,8 @@ public class Wall {
 
     public int count;
 
+
+    public boolean isFixedPost = false;
     public VKPostArray posts = new VKPostArray();
     public final ArrayList<Profile> profiles = new ArrayList<Profile>();
     public final ArrayList<Group> groups = new ArrayList<Group>();
@@ -38,13 +44,13 @@ public class Wall {
         wall.count = object.optInt(Wall.JSON_KEY_COUNT);
         Log.d(TAG, String.valueOf(wall.count));
         // items
-        VKPostArray posts = new VKPostArray();
+        final VKPostArray posts = new VKPostArray();
         try {
             posts.parse(jsonObject);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        wall.posts = posts;
+
         // groups
         final JSONArray groups = object.optJSONArray(Wall.JSON_KEY_GROUPS);
         Log.d(TAG, "Wall groups: " + groups.toString());
@@ -66,6 +72,41 @@ public class Wall {
         }
         wall.profile = getProfileFromJSON(profiles.optJSONObject(0));
 
+        VKHelper.getFixedPostId(wall.group.screen_name, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                JSONArray object = response.json.optJSONArray("response");
+                try {
+                    if (object.getJSONObject(0).has("fixed_post")) {
+                        int pid = object.getJSONObject(0).optInt("fixed_post");
+                        final String pidFull = "-" + wall.group.id + "_" + pid;
+                        VKHelper.getFixedPost(pidFull, new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(VKResponse response) {
+                                super.onComplete(response);
+                                Log.d(pidFull, "");
+                                final JSONObject object = response.json.optJSONObject(Wall.JSON_KEY_RESPONSE);
+                                final VKPostArray postsFixed = new VKPostArray();
+                                try {
+                                    postsFixed.parse(object);
+                                    if (postsFixed != null && postsFixed.size() != 0) {
+                                        posts.add(0, postsFixed.get(0));
+                                        wall.isFixedPost = true;
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        wall.posts = posts;
         return wall;
     }
 

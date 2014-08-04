@@ -180,8 +180,35 @@
                     android:id="@+id/txt_post_date"
                     android:textColor="#ff535353"
                     android:layout_centerVertical="true"
+                    android:singleLine="true"
+                    android:layout_toStartOf="@+id/img_fixed_post"
+                    android:layout_toEndOf="@+id/img_fixed_post"
+                    android:visibility="visible"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true" />
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/img_fixed_post" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_fixed_post"
+                    android:src="@android:drawable/ic_lock_lock"
+                    android:layout_alignBottom="@+id/txt_post_comment"
+                    android:layout_toLeftOf="@+id/img_post_comment"
+                    android:layout_toStartOf="@+id/img_post_comment"
+                    android:visibility="gone"
+                    android:layout_marginRight="10dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cb_post_repost"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toLeftOf="@+id/img_post_comment"
+                    android:layout_toStartOf="@+id/img_post_comment"
+                    android:checked="false"
+                    android:button="@drawable/repost_or_not_selector"
+                    android:visibility="gone" />
             </RelativeLayout>
 
         </LinearLayout>

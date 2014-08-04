@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -100,14 +99,17 @@ public class WallAdapter extends BaseAdapter {
 
     private static String poll_anonymous;
     private static String poll_not_anonymous;
-    private static Drawable votesBarDrawable;
+    private static String txt_dialog_comment;
 
     private static Context context;
     private static Resources resources;
 
     LayoutInflater inflater;
 
+
     public WallAdapter(Wall wall, LayoutInflater inflater, String postColor) {
+        notifyDataSetChanged();
+
         this.wall = wall;
         this.posts = wall.posts;
         this.layoutInflater = inflater;
@@ -137,14 +139,12 @@ public class WallAdapter extends BaseAdapter {
 
         this.poll_anonymous = resources.getString(R.string.poll_anonymous);
         this.poll_not_anonymous = resources.getString(R.string.poll_not_anonymous);
-        this.votesBarDrawable = resources.getDrawable(R.drawable.poll_progress_bar_style);
+        this.txt_dialog_comment = resources.getString(R.string.txt_dialog_comment);
 
         this.postColor = postColor;
 
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
-    private boolean mBusy;
 
     @Override
     public int getCount() {
@@ -163,8 +163,8 @@ public class WallAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final VKApiPost post = posts.get(position);
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
+
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.wall_lv_item, null);
             viewHolder = new ViewHolder(convertView);
@@ -173,9 +173,19 @@ public class WallAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        if (wall.isFixedPost && position == 0) {
+            viewHolder.img_fixed_post.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.img_fixed_post.setVisibility(View.GONE);
+        }
+
+
+        final VKApiPost post = posts.get(position);
+
         String copy_history_title = "";
         String copy_history_logo = "";
         String copy_history_name = "";
+
 
         viewHolder.txt_post_comment.setText(valueOf(post.comments_count));
         viewHolder.txt_post_like.setText(valueOf(post.likes_count));
@@ -183,6 +193,53 @@ public class WallAdapter extends BaseAdapter {
         viewHolder.txt_post_share.setText(valueOf(post.reposts_count));
 
         viewHolder.txt_post_date.setText(getFormattedDate(post.date));
+/*
+        if (post.user_reposted) {
+            viewHolder.cb_repost.setChecked(true);
+            viewHolder.cb_repost.setEnabled(false);
+        } else {
+            viewHolder.cb_repost.setChecked(false);
+            viewHolder.cb_repost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+                    View view = inflater.inflate(R.layout.txt_dialog_comment, null);
+                    dialog.setView(view);
+                    dialog.setTitle(txt_dialog_comment);
+
+                    final TextView text = (TextView) view.findViewById(R.id.txt_post_comment);
+
+                    dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final String pidFull = "wall-" + wall.group.id + "_" + post.id;
+                            VKHelper.doRepost(pidFull, (String) text.getText(), new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    super.onComplete(response);
+                                    JSONObject object = response.json.optJSONObject("response");
+                                    int isSuccessed = object.optInt("success");
+
+                                    if (isSuccessed == 1) {
+                                        Toast.makeText(context, "All is done", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            viewHolder.cb_repost.setChecked(true);
+                        }
+                    });
+
+                    dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.create();
+                }
+            });
+        }*/
 
         if (post.text.length() != 0) {
             setText(post.text, viewHolder.postTextLayout);
@@ -231,6 +288,7 @@ public class WallAdapter extends BaseAdapter {
             });
             ((TextView) copyHistoryLayout.getChildAt(1)).setText(copy_history_title);
             ((TextView) copyHistoryLayout.getChildAt(2)).setText(getFormattedDate(copyHistory.date));
+
 
             imageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)));
 
@@ -410,6 +468,7 @@ public class WallAdapter extends BaseAdapter {
     }
 
     public void setPoll(RelativeLayout parent, VKApiPoll poll) {
+
         ViewGroup pollContainer = getPreparedView(parent, R.layout.poll_container);
 
         ((TextView) pollContainer.getChildAt(0)).setText(poll.question);
@@ -421,26 +480,35 @@ public class WallAdapter extends BaseAdapter {
         }
 
         ((ImageView) pollContainer.getChildAt(2)).setBackgroundColor(Color.parseColor(postColor));
-        /*final LinearLayout pollAnswersContainer = (LinearLayout) pollContainer.getChildAt(2);
 
-        ViewGroup pollAnswer;
-        VKApiPoll.Answer answer;
-        TextProgressBar votesBar;
+//        Log.d("Size:", String.valueOf(poll.answers.size()));
+//        for (int i = 0; i < poll.answers.size(); i++) {
+//            Log.d("Text:", poll.answers.get(i).text);
+//            Log.d("Id:", String.valueOf(poll.answers.get(i).id));
+//            Log.d("Votes:", String.valueOf(poll.answers.get(i).votes));
+//            Log.d("Rate:", String.valueOf(poll.answers.get(i).rate));
+//        }
 
-        for (int i = 0; i < poll.answers.size(); i++) {
-            pollAnswer = getPreparedView(pollAnswersContainer, R.layout.poll_answer_container);
-            answer = poll.answers.get(i);
+       //final LinearLayout pollAnswersContainer = (LinearLayout) pollContainer.getChildAt(2);
 
-            ((TextView) pollAnswer.getChildAt(0)).setText(answer.text);
-            ((TextView) pollAnswer.getChildAt(2)).setText(String.valueOf((int) answer.rate) + "%");
-
-            votesBar = (TextProgressBar) pollAnswer.getChildAt(1);
-            votesBar.setProgressDrawable(votesBarDrawable);
-            votesBar.setText(String.valueOf(answer.votes));
-            votesBar.setProgress((int) answer.rate);
-
-            pollAnswersContainer.addView(pollAnswer);
-        }*/
+//        ViewGroup pollAnswer;
+//        VKApiPoll.Answer answer;
+//        TextProgressBar votesBar;
+//
+//        for (int i = 0; i < poll.answers.size(); i++) {
+//            pollAnswer = getPreparedView(pollAnswersContainer, R.layout.poll_answer_container);
+//            answer = poll.answers.get(i);
+//
+//            ((TextView) pollAnswer.getChildAt(0)).setText(answer.text);
+//            ((TextView) pollAnswer.getChildAt(2)).setText(String.valueOf((int) answer.rate) + "%");
+//
+//            votesBar = (TextProgressBar) pollAnswer.getChildAt(1);
+//            votesBar.setProgressDrawable(votesBarDrawable);
+//            votesBar.setText(String.valueOf(answer.votes));
+//            votesBar.setProgress((int) answer.rate);
+//
+//            pollAnswersContainer.addView(pollAnswer);
+//        }
 
         parent.addView(pollContainer);
     }
@@ -1082,6 +1150,9 @@ public class WallAdapter extends BaseAdapter {
         private final TextView txt_post_share;
         private final TextView txt_post_comment;
 
+        private final ImageView img_fixed_post;
+        private final CheckBox cb_repost;
+
         private ViewHolder(View convertView) {
             this.postAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.postAttachmentsLayout);
             this.postTextLayout = (RelativeLayout) convertView.findViewById(R.id.postTextLayout);
@@ -1101,6 +1172,9 @@ public class WallAdapter extends BaseAdapter {
             this.txt_post_like = (TextView) convertView.findViewById(R.id.txt_post_like);
             this.txt_post_share = (TextView) convertView.findViewById(R.id.txt_post_share);
             this.txt_post_comment = (TextView) convertView.findViewById(R.id.txt_post_comment);
+
+            this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
+            this.cb_repost = (CheckBox) convertView.findViewById(R.id.cb_post_repost);
         }
     }
 

@@ -47,5 +47,7 @@
     <string name="poll_anonymous">Анонімне голосування, голосів:</string>
     <string name="poll_not_anonymous">Публічне голосування, голосів:</string>
 
+    <string name="txt_dialog_comment">Ваш коментар...</string>
+
     <string name="exit_toast">Нажміть ще раз, щоб вийти.</string>
 </resources>

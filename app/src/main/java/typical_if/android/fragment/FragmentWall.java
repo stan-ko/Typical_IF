@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -34,7 +37,7 @@ import typical_if.android.model.Wall.Wall;
 public class FragmentWall extends Fragment {
 
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
-    private int mCurrentTransitionEffect = JazzyHelper.CARDS;
+    private int mCurrentTransitionEffect = JazzyHelper.TILT;
 
     JazzyListView wallListView;
     WallAdapter adapter;
@@ -97,11 +100,9 @@ public class FragmentWall extends Fragment {
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater, long gid){
         Wall wall = Wall.getGroupWallFromJSON(jsonObject, gid);
         adapter = new WallAdapter(wall, inflater, postColor);
-
         wallListView = (JazzyListView)rootView.findViewById(R.id.listViewWall);
         wallListView.setAdapter(adapter);
         wallListView.setTransitionEffect(mCurrentTransitionEffect);
-
         wallListView.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), true, true));
     };
 
