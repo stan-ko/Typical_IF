@@ -50,10 +50,8 @@ public class FragmentWall extends Fragment {
     View rootView;
     Bundle arguments;
     SharedPreferences sPref;
-    Activity a;
-    final String SAVED_TEXT="saved_text";
+    String SAVED_JSON="saved_text";
     JSONObject jsonObj;
-    //Context c;
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -82,7 +80,7 @@ public class FragmentWall extends Fragment {
             //@Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-                saveJSON(response.json);
+                saveJSON(response.json, gid);
                 initGroupWall(response.json, inflater, gid);
                 spinnerLayout.setVisibility(View.GONE);
             }
@@ -91,17 +89,17 @@ public class FragmentWall extends Fragment {
             public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
                 super.attemptFailed(request, attemptNumber, totalAttempts);
 
-                //if (totalAttempts ==3){
-                    initGroupWall(loadJSON(), inflater, gid);
+                if (gid == Constants.TF_ID){
+                    initGroupWall(loadJSON(gid), inflater, gid);
                     spinnerLayout.setVisibility(View.GONE);
-                //}
+                }
             }
 
             @Override
             public void onError(VKError error) {
                 super.onError(error);
 
-                initGroupWall(loadJSON(), inflater, gid);
+                initGroupWall(loadJSON(gid), inflater, gid);
                 spinnerLayout.setVisibility(View.GONE);
             }
 
@@ -116,13 +114,15 @@ public class FragmentWall extends Fragment {
 
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater, long gid){
         Wall wall = Wall.getGroupWallFromJSON(jsonObject, gid);
+        //wall.posts.parse()
         adapter = new WallAdapter(wall, inflater, postColor);
-
+//adapter.
         wallListView = (JazzyListView)rootView.findViewById(R.id.listViewWall);
         wallListView.setAdapter(adapter);
         wallListView.setTransitionEffect(mCurrentTransitionEffect);
 
         wallListView.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), true, true));
+        ImageLoader.getInstance().getDiskCache().toString();
     };
 
     public String getPostColor(long groupIndex) {
@@ -142,22 +142,20 @@ public class FragmentWall extends Fragment {
         super.onAttach(activity);
         //((MainActivity) activity).onSectionAttached(getArguments().getLong(ARG_VK_GROUP_ID));
     }
-
-
-    void saveJSON(JSONObject jsonObject) {
+    void saveJSON(JSONObject jsonObject, long gid) {
         sPref = VKUIHelper.getTopActivity().getPreferences(VKUIHelper.getTopActivity().MODE_PRIVATE);
         SharedPreferences.Editor ed = sPref.edit();
-
             String JsonString = jsonObject.toString();
-            ed.putString(SAVED_TEXT, JsonString);
+           SAVED_JSON=String.valueOf(gid);
+            ed.putString(SAVED_JSON, JsonString);
            // Log.d("/--------------jsonInString-------------------/",jsonObject.toString());
             ed.commit();
-
     }
 
-    JSONObject loadJSON() {
+    JSONObject loadJSON(long gid) {
         sPref = VKUIHelper.getTopActivity().getPreferences(VKUIHelper.getTopActivity().MODE_PRIVATE);
-        String savedText = sPref.getString(SAVED_TEXT, "");
+        SAVED_JSON = String.valueOf(gid);
+        String savedText = sPref.getString(SAVED_JSON, "");
         try {
             jsonObj = new JSONObject(savedText);
         } catch (JSONException e) {
