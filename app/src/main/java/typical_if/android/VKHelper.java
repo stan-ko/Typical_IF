@@ -1,8 +1,5 @@
 package typical_if.android;
 
-import android.content.res.Resources;
-
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
@@ -214,12 +211,7 @@ public class VKHelper {
 
     public static void doPlayerRequest(String videos, VKRequest.VKRequestListener vkRequestListener){
         VKParameters params = new VKParameters();
-        //params.put("owner_id", Constants.TF_ID);
         params.put("videos", videos);
-        //params.put("album_id", 0);
-        //params.put("width", 160);
-        //params.put("count", 1);
-        //params.put("offset", 0);
         params.put("extended", 1);
 
         final VKRequest request = new VKRequest("video.get", params);
