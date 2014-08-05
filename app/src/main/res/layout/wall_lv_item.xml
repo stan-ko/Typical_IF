@@ -182,11 +182,10 @@
                     android:layout_centerVertical="true"
                     android:singleLine="true"
                     android:layout_toStartOf="@+id/img_fixed_post"
-                    android:layout_toEndOf="@+id/img_fixed_post"
+                    android:layout_toEndOf="@+id/img_post_other"
                     android:visibility="visible"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_toLeftOf="@+id/img_fixed_post" />
+                    android:layout_toLeftOf="@+id/img_fixed_post"
+                    android:layout_toRightOf="@+id/img_post_other" />
 
                 <ImageView
                     android:layout_width="20dp"
@@ -209,6 +208,16 @@
                     android:checked="false"
                     android:button="@drawable/repost_or_not_selector"
                     android:visibility="gone" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_post_other"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:src="@drawable/abc_ic_menu_moreoverflow_normal_holo_light"
+                    android:layout_marginLeft="-8dp" />
             </RelativeLayout>
 
         </LinearLayout>

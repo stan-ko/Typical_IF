@@ -1,10 +1,13 @@
 package typical_if.android.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
+import android.text.ClipboardManager;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -101,6 +104,15 @@ public class WallAdapter extends BaseAdapter {
     private static String poll_not_anonymous;
     private static String txt_dialog_comment;
 
+    private static String post_report;
+    private static String post_copy_link;
+    private static String post_report_spam;
+    private static String post_report_offense;
+    private static String post_report_adult;
+    private static String post_report_drugs;
+    private static String post_report_porno;
+    private static String post_report_violence;
+    
     private static Context context;
     private static Resources resources;
 
@@ -140,6 +152,15 @@ public class WallAdapter extends BaseAdapter {
         this.poll_anonymous = resources.getString(R.string.poll_anonymous);
         this.poll_not_anonymous = resources.getString(R.string.poll_not_anonymous);
         this.txt_dialog_comment = resources.getString(R.string.txt_dialog_comment);
+
+        post_report = resources.getString(R.string.post_report);
+        post_copy_link = resources.getString(R.string.post_copy_link);
+        post_report_spam = resources.getString(R.string.post_report_spam);
+        post_report_offense = resources.getString(R.string.post_report_offense);
+        post_report_adult = resources.getString(R.string.post_report_adult);
+        post_report_drugs = resources.getString(R.string.post_report_drugs);
+        post_report_porno = resources.getString(R.string.post_report_porno);
+        post_report_violence = resources.getString(R.string.post_report_violence);
 
         this.postColor = postColor;
 
@@ -240,7 +261,74 @@ public class WallAdapter extends BaseAdapter {
                 }
             });
         }*/
+        
+        viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+                final String[] items = {post_report, post_copy_link};
 
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                final AlertDialog.Builder builderIn = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+                                builderIn.setTitle(post_report);
+                                final String[] items = {post_report_spam, post_report_offense, post_report_adult, post_report_drugs, post_report_porno, post_report_violence};
+
+                                builderIn.setItems(items, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        int reason = 0;
+                                        switch (which) {
+                                            case 0:
+                                                reason = 0;
+                                                break;
+                                            case 1:
+                                                reason = 6;
+                                                break;
+                                            case 2:
+                                                reason = 5;
+                                                break;
+                                            case 3:
+                                                reason = 4;
+                                                break;
+                                            case 4:
+                                                reason = 1;
+                                                break;
+                                            case 5:
+                                                reason = 3;
+                                                break;
+                                        }
+                                        VKHelper.doReportPost(wall.group.id, post.id, reason, new VKRequest.VKRequestListener() {
+                                            @Override
+                                            public void onComplete(VKResponse response) {
+                                                super.onComplete(response);
+                                                int isSuccessed = response.json.optInt("response");
+
+                                                if (isSuccessed == 1) {
+                                                    Toast.makeText(context, "Reported", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                                builderIn.show();
+                                break;
+
+                            case 1:
+                                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                                clipboard.setText("http://vk.com/wall-" + wall.group.id + "_" + post.id);
+                                break;
+                        }
+                    }
+                });
+
+                builder.show();
+            }
+        });
+        
         if (post.text.length() != 0) {
             setText(post.text, viewHolder.postTextLayout);
         } else {
@@ -1153,6 +1241,8 @@ public class WallAdapter extends BaseAdapter {
         private final ImageView img_fixed_post;
         private final CheckBox cb_repost;
 
+        private final ImageView img_post_other;
+
         private ViewHolder(View convertView) {
             this.postAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.postAttachmentsLayout);
             this.postTextLayout = (RelativeLayout) convertView.findViewById(R.id.postTextLayout);
@@ -1175,6 +1265,8 @@ public class WallAdapter extends BaseAdapter {
 
             this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
             this.cb_repost = (CheckBox) convertView.findViewById(R.id.cb_post_repost);
+
+            this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other);
         }
     }
 

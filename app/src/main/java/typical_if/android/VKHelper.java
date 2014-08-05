@@ -121,6 +121,16 @@ public class VKHelper {
         final VKRequest request = new VKRequest("wall.repost", params);
         request.executeWithListener(listener);
     }
+
+    public static void doReportPost(long oid, long pid, int reason, VKRequest.VKRequestListener listener) {
+        VKParameters params = new VKParameters();
+        params.put("owner_id", oid);
+        params.put("post_id", pid);
+        params.put("reason", reason);
+        final VKRequest request = new VKRequest("wall.reportPost", params);
+        request.executeWithListener(listener);
+    }
+
     public static void getCommentsForPhoto(long owner_id, long photo_id, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("owner_id", owner_id);

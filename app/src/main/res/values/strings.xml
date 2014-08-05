@@ -49,5 +49,14 @@
 
     <string name="txt_dialog_comment">Ваш коментар...</string>
 
+    <string name="post_report">Поскаржитись</string>
+    <string name="post_copy_link">Копіювати посилання</string>
+    <string name="post_report_spam">Спам</string>
+    <string name="post_report_offense">Образа</string>
+    <string name="post_report_adult">Матеріал для дорослих</string>
+    <string name="post_report_drugs">Пропаганда наркотиків</string>
+    <string name="post_report_porno">Дитяча порнографія</string>
+    <string name="post_report_violence">Насильство</string>
+
     <string name="exit_toast">Нажміть ще раз, щоб вийти.</string>
 </resources>
