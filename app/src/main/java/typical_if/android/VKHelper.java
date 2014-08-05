@@ -46,13 +46,20 @@ public class VKHelper {
 
     public static void doGroupWallRequest(long gid, VKRequest.VKRequestListener vkRequestListener){
         VKParameters params = new VKParameters();
-        Resources resources = VKUIHelper.getApplicationContext().getResources();
-        params.put(resources.getString(R.string.key_owner_id), gid);
-        params.put(resources.getString(R.string.key_domain), gid);
-        params.put(resources.getString(R.string.key_offset), 0);
-        params.put(resources.getString(R.string.key_count), 100);
-        params.put(resources.getString(R.string.key_filter), resources.getString(R.string.value_filter));
-        params.put(resources.getString(R.string.key_extended), 1);
+//        Resources resources = VKUIHelper.getApplicationContext().getResources();
+//        params.put(resources.getString(R.string.key_owner_id), gid);
+//        params.put(resources.getString(R.string.key_domain), gid);
+//        params.put(resources.getString(R.string.key_offset), 0);
+//        params.put(resources.getString(R.string.key_count), 100);
+//        params.put(resources.getString(R.string.key_filter), resources.getString(R.string.value_filter));
+//        params.put(resources.getString(R.string.key_extended), 1);
+
+        params.put("owner_id", gid);
+        params.put("domain", gid);
+        params.put("offset", 0);
+        params.put("count", 100);
+        params.put("filter", "all");
+        params.put("extended", 1);
 
         final VKRequest request = VKApi.wall().get(params);
         request.executeWithListener(vkRequestListener);
