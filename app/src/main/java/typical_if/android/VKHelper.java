@@ -85,11 +85,12 @@ public class VKHelper {
         final VKRequest request = new VKRequest("likes.delete", params);
         request.executeWithListener(listener);
     }
-    public static void createCommentForPhoto(long owner_id, long photo_id, String message, int from_group, VKRequest.VKRequestListener listener) {
+    public static void createCommentForPhoto(long owner_id, long photo_id, String message, int from_group, int reply_to_comment, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("owner_id", owner_id);
         params.put("photo_id", photo_id);
         params.put("message", message);
+        params.put("reply_to_comment",reply_to_comment);
 //        params.put("attachments",attachments);
         //  params.put("from_group",from_group);
         final VKRequest request = new VKRequest("photos.createComment", params);

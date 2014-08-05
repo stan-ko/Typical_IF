@@ -26,10 +26,9 @@ public class Constants {
             VKScope.MESSAGES,
             VKScope.NOTIFICATIONS
     };
-    // my coment
 
-    public static final long TF_ID = -36573302;
-    //public static final long TF_ID = -42709618;
+    //public static final long TF_ID = -36573302;
+    public static final long TF_ID = -42709618;
     public static final long TZ_ID = -26363301;
     public static final long FB_ID = -39253850;
     public static final long FN_ID = -38380107;

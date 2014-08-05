@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -27,7 +26,6 @@ import java.util.ArrayList;
 import typical_if.android.MyApplication;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
-import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.fragment.FragmentPhotoCommentAndInfo;
 import typical_if.android.model.Photo;
 
@@ -45,6 +43,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
     private static final String TYPE = "photo";
     private static long groupID;
     private static long albumID;
+    int like_status ;
     FragmentManager fragmentManager;
     int isLiked;
     Bundle arguments;
@@ -109,10 +108,12 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
 
         if (photos.get(position).user_likes == 0) {
+            like_status=0;
             like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
             likedOrNotLikedBox.setChecked(false);
         }
         if (photos.get(position).user_likes == 1) {
+            like_status=1;
             like.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
             likedOrNotLikedBox.setChecked(true);
         }
@@ -130,8 +131,10 @@ public class FullScreenImageAdapter extends PagerAdapter {
                             likedOrNotLikedBox.setChecked(true);
                             countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString()) + 1));
 
+
                             Toast.makeText(VKUIHelper.getApplicationContext(), "LIKED: ", Toast.LENGTH_SHORT).show();
                             photos.get(position).user_likes = 1;
+                            like_status=1;
 
                         }
                     });
@@ -146,6 +149,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
                             like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
                             countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString()) - 1));
                             photos.get(position).user_likes = 0;
+                            like_status=0;
 
                             Toast.makeText(VKUIHelper.getApplicationContext(), "LIKE DELETED", Toast.LENGTH_SHORT).show();
 
@@ -160,7 +164,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
             public void onClick(View v) {
                 Toast.makeText(VKUIHelper.getApplicationContext(), "position is: " + position, Toast.LENGTH_SHORT).show();
 
-                FragmentPhotoCommentAndInfo fragment = FragmentPhotoCommentAndInfo.newInstance(groupID, albumID, photos, user_id, arguments.getInt("isLiked"), position);
+                FragmentPhotoCommentAndInfo fragment = FragmentPhotoCommentAndInfo.newInstance(groupID, albumID, photos, user_id, arguments.getInt("isLiked"), position, like_status);
                 fragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
             }
         });

@@ -13,13 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
@@ -121,12 +115,12 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
             }
         });
 
-        final TextView countLikes = (TextView) rootView.findViewById(R.id.count_of_likes);
-        final TextView countComments = (TextView) rootView.findViewById(R.id.count_of_comments);
-        final ImageView like = (ImageView) rootView.findViewById(R.id.image_not_liked);
-        final ImageView comment = (ImageView) rootView.findViewById(R.id.image_comment);
-        final CheckBox likedOrNotLikedBox = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox));
-        final TextView photoHeader = (TextView) rootView.findViewById(R.id.photoHeader);
+//        final TextView countLikes = (TextView) rootView.findViewById(R.id.count_of_likes);
+//        final TextView countComments = (TextView) rootView.findViewById(R.id.count_of_comments);
+//        final ImageView like = (ImageView) rootView.findViewById(R.id.image_not_liked);
+//        final ImageView comment = (ImageView) rootView.findViewById(R.id.image_comment);
+//        final CheckBox likedOrNotLikedBox = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox));
+//        final TextView photoHeader = (TextView) rootView.findViewById(R.id.photoHeader);
 
 
         imagepager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -179,41 +173,60 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
             }
 
         });
-        Button fade = ((Button) rootView.findViewById(R.id.button_fade));
-        fade.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickCounter++;
-                if(clickCounter%2==0) {
-                    {
-                        like.setAnimation(animFadeOutObjects);
-                        countLikes.setAnimation(animFadeOutObjects);
-                        countComments.setAnimation(animFadeOutObjects);
-                        comment.setAnimation(animFadeOutObjects);
-                        likedOrNotLikedBox.setAnimation(animFadeOutObjects);
-                        photoHeader.setAnimation(animFadeOutObjects);
-                        Toast.makeText(VKUIHelper.getApplicationContext(),"from 1.0 to 0.0", Toast.LENGTH_SHORT).show();
-
-                    }
-                }else{
-                    {
-                       like.setAnimation(animFadeInObjects);
-                        countLikes.setAnimation(animFadeInObjects);
-                        countComments.setAnimation(animFadeInObjects);
-                        comment.setAnimation(animFadeInObjects);
-                        likedOrNotLikedBox.setAnimation(animFadeOutObjects);
-                        photoHeader.setAnimation(animFadeInObjects);
-                        Toast.makeText(VKUIHelper.getApplicationContext(),"from 0.0 to 1.0", Toast.LENGTH_SHORT).show();
-
-
-                    }
-                }
-
-
-
-            }
-        });
-
+//        Button fadein = ((Button) rootView.findViewById(R.id.button_fade_in));
+//        fadein.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                clickCounter++;
+////                if(clickCounter%2==0) {
+////                    {
+//                        like.setAnimation(animFadeOutObjects);
+//                        countLikes.setAnimation(animFadeOutObjects);
+//                        countComments.setAnimation(animFadeOutObjects);
+//                        comment.setAnimation(animFadeOutObjects);
+//                        likedOrNotLikedBox.setAnimation(animFadeOutObjects);
+//                        photoHeader.setAnimation(animFadeOutObjects);
+//                        Toast.makeText(VKUIHelper.getApplicationContext(),"from 1.0 to 0.0", Toast.LENGTH_SHORT).show();
+//
+//
+//
+//
+////                    }
+////                }else{
+////                    {
+////                       like.setAnimation(animFadeInObjects);
+////                        countLikes.setAnimation(animFadeInObjects);
+////                        countComments.setAnimation(animFadeInObjects);
+////                        comment.setAnimation(animFadeInObjects);
+////                        likedOrNotLikedBox.setAnimation(animFadeOutObjects);
+////                        photoHeader.setAnimation(animFadeInObjects);
+////                        Toast.makeText(VKUIHelper.getApplicationContext(),"from 0.0 to 1.0", Toast.LENGTH_SHORT).show();
+//
+//
+//                   // }
+//               // }
+//
+//
+//
+//            }
+//        });
+//
+//        Button fadeout = ((Button) rootView.findViewById(R.id.button_fade_out));
+//        fadeout.setOnClickListener(new View.OnClickListener() {
+//                                       @Override
+//                                       public void onClick(View v) {
+//
+//                                           like.setAnimation(animFadeInObjects);
+//                        countLikes.setAnimation(animFadeInObjects);
+//                        countComments.setAnimation(animFadeInObjects);
+//                        comment.setAnimation(animFadeInObjects);
+//                        likedOrNotLikedBox.setAnimation(animFadeOutObjects);
+//                        photoHeader.setAnimation(animFadeInObjects);
+//                        Toast.makeText(VKUIHelper.getApplicationContext(),"from 0.0 to 1.0", Toast.LENGTH_SHORT).show();
+//
+//                                       }
+//
+//                                   });
 
         setRetainInstance(true);
 

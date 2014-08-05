@@ -3,6 +3,7 @@ package typical_if.android;
 import android.app.Application;
 import android.util.DisplayMetrics;
 
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
@@ -41,6 +42,7 @@ public class MyApplication extends Application {
                         //.threadPriority(Thread.NORM_PRIORITY - 1) // default
                         //.tasksProcessingOrder(QueueProcessingType.FIFO) // default
                 .denyCacheImageMultipleSizesInMemory()
+               // .discCache(new FileCountLimitedDiscCache(cacheDir, new Md5FileNameGenerator(), 1000))
                         //.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
                         //.memoryCacheSize(2 * 1024 * 1024)
                         //.memoryCacheSizePercentage(13) // default

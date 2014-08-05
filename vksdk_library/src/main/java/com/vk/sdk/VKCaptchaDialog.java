@@ -117,11 +117,19 @@ public class VKCaptchaDialog {
         imageOperation.setHttpOperationListener(new VKHTTPOperationCompleteListener() {
             @Override
             public void onComplete(VKHttpOperation operation, byte[] response) {
+
                 Bitmap captchaImage = BitmapFactory.decodeByteArray(response, 0, response.length);
                 captchaImage = Bitmap.createScaledBitmap(captchaImage, (int) (captchaImage.getWidth() * mDensity), (int) (captchaImage.getHeight() * mDensity), true);
-                mCaptchaImage.setImageBitmap(captchaImage);
-                mCaptchaImage.setVisibility(View.VISIBLE);
-                mProgressBar.setVisibility(View.GONE);
+                final Bitmap captchaImage2=captchaImage;
+                VKUIHelper.getTopActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCaptchaImage.setImageBitmap(captchaImage2);
+                        mCaptchaImage.setVisibility(View.VISIBLE);
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                });
+
             }
 
             @Override
