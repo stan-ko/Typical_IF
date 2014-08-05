@@ -61,16 +61,6 @@ public class Wall {
             wall.groups.add(group);
         }
         wall.group = getGroupFromJSON(groups.optJSONObject(0));
-/*
-        VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                JSONArray arr = response.json.optJSONArray("response");
-                JSONObject jsonObject = arr.optJSONObject(0);
-                wall.profile.id = jsonObject.optLong("id");
-            }
-        });*/
 
         // profiles
         final JSONArray profiles = object.optJSONArray(Wall.JSON_KEY_PROFILES);
@@ -78,12 +68,8 @@ public class Wall {
         Profile profile;
         for (int i = 0; i < profiles.length(); i++) {
             profile = getProfileFromJSON(profiles.optJSONObject(i));
-            //if (profile.id == wall.profile.id) {
-                wall.profile = profile;
-            //}
             wall.profiles.add(profile);
         }
-        //wall.profile = getProfileFromJSON(profiles.optJSONObject(0));
 
         VKHelper.getFixedPostId(wall.group.screen_name, new VKRequest.VKRequestListener() {
             @Override
