@@ -51,10 +51,10 @@ public class CommentsListAdapter extends BaseAdapter {
         this.commentList.clear();
         this.commentList.addAll(commentList);
         this.notifyDataSetChanged();
-        scrollMyListViewToBottom(listView);
+        scrollListToBottom(listView);
     }
 
-    private void scrollMyListViewToBottom(final ListView myListView) {
+    private void scrollListToBottom(final ListView myListView) {
         myListView.post(new Runnable() {
             @Override
             public void run() {
@@ -64,13 +64,12 @@ public class CommentsListAdapter extends BaseAdapter {
         });
     }
 
-    public void UserIdentifier(VKApiComment comment) {
+    public void userIdentifier(VKApiComment comment) {
         for (int i = 0; i < profilesList.size(); i++) {
             if (comment.from_id == profilesList.get(i).id) {
                 first_name = profilesList.get(i).first_name;
                 last_name = profilesList.get(i).last_name;
                 url = profilesList.get(i).photo_100;
-
             }
         }
 
@@ -84,7 +83,7 @@ public class CommentsListAdapter extends BaseAdapter {
     }
 
 
-    public void HolderInitialize(ViewHolder viewHolder, VKApiComment comment) {
+    public void holderInitialize(ViewHolder viewHolder, VKApiComment comment) {
         ItemDataSetter.commentViewHolder = viewHolder;
         ItemDataSetter.postColor = postColor;
 
@@ -133,8 +132,8 @@ public class CommentsListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        UserIdentifier(comment);
-        HolderInitialize(viewHolder, comment);
+        userIdentifier(comment);
+        holderInitialize(viewHolder, comment);
         return convertView;
     }
 
@@ -156,7 +155,6 @@ public class CommentsListAdapter extends BaseAdapter {
 
         public ViewHolder(View convertView) {
             this.user_avatar = (ImageView) convertView.findViewById(R.id.img_user_avatar);
-
             this.user_name = (TextView) convertView.findViewById(R.id.user_name_textView);
             this.date_of_user_comment = (TextView) convertView.findViewById(R.id.text_date_of_comment);
 

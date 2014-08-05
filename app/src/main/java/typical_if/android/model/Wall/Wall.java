@@ -40,8 +40,8 @@ public class Wall {
 
     public static Wall getGroupWallFromJSON(final JSONObject jsonObject) {
         final Wall wall = new Wall();
-        final JSONObject object = jsonObject.optJSONObject(Wall.JSON_KEY_RESPONSE);
-        wall.count = object.optInt(Wall.JSON_KEY_COUNT);
+        final JSONObject object = jsonObject.optJSONObject(JSON_KEY_RESPONSE);
+        wall.count = object.optInt(JSON_KEY_COUNT);
         Log.d(TAG, String.valueOf(wall.count));
         // items
         final VKPostArray posts = new VKPostArray();
@@ -52,7 +52,7 @@ public class Wall {
         }
 
         // groups
-        final JSONArray groups = object.optJSONArray(Wall.JSON_KEY_GROUPS);
+        final JSONArray groups = object.optJSONArray(JSON_KEY_GROUPS);
         Log.d(TAG, "Wall groups: " + groups.toString());
         Group group;
         VKApi.users().get();
@@ -63,7 +63,7 @@ public class Wall {
         wall.group = getGroupFromJSON(groups.optJSONObject(0));
 
         // profiles
-        final JSONArray profiles = object.optJSONArray(Wall.JSON_KEY_PROFILES);
+        final JSONArray profiles = object.optJSONArray(JSON_KEY_PROFILES);
         Log.d(TAG, "Wall profiles: " + profiles.toString());
         Profile profile;
         for (int i = 0; i < profiles.length(); i++) {
@@ -85,7 +85,7 @@ public class Wall {
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
                                 Log.d(pidFull, "");
-                                final JSONObject object = response.json.optJSONObject(Wall.JSON_KEY_RESPONSE);
+                                final JSONObject object = response.json.optJSONObject(JSON_KEY_RESPONSE);
                                 final VKPostArray postsFixed = new VKPostArray();
                                 try {
                                     postsFixed.parse(object);

@@ -29,7 +29,6 @@ import typical_if.android.model.Wall.Wall;
 
 public class FragmentWall extends Fragment {
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
-    final String SAVED_TEXT = "saved_text";
 
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
     JazzyListView wallListView;
@@ -44,10 +43,6 @@ public class FragmentWall extends Fragment {
 
     Bundle arguments;
 
-    /**
-     * Returns a new instance of this fragment for the given section
-     * number.
-     */
     public static FragmentWall newInstance(long vkGroupId) {
         FragmentWall fragment = new FragmentWall();
         Bundle args = new Bundle();

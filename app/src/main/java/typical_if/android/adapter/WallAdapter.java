@@ -334,15 +334,14 @@ public class WallAdapter extends BaseAdapter {
         public final RelativeLayout postPollLayout;
 
         private final TextView txt_post_date;
-
         private final TextView txt_post_like;
         private final TextView txt_post_share;
         private final TextView txt_post_comment;
 
         private final ImageView img_fixed_post;
+        private final ImageView img_post_other;
         private final CheckBox cb_repost;
 
-        private final ImageView img_post_other;
 
         private ViewHolder(View convertView) {
             this.postAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.postAttachmentsLayout);
@@ -359,15 +358,14 @@ public class WallAdapter extends BaseAdapter {
             this.postPollLayout = (RelativeLayout) convertView.findViewById(R.id.postPollLayout);
 
             this.txt_post_date = (TextView) convertView.findViewById(R.id.txt_post_date);
-
             this.txt_post_like = (TextView) convertView.findViewById(R.id.txt_post_like);
             this.txt_post_share = (TextView) convertView.findViewById(R.id.txt_post_share);
             this.txt_post_comment = (TextView) convertView.findViewById(R.id.txt_post_comment);
 
             this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
-            this.cb_repost = (CheckBox) convertView.findViewById(R.id.cb_post_repost);
-
             this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other);
+
+            this.cb_repost = (CheckBox) convertView.findViewById(R.id.cb_post_repost);
         }
     }
 }
