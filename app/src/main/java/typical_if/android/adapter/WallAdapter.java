@@ -1,11 +1,13 @@
 package typical_if.android.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.text.ClipboardManager;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -100,14 +102,26 @@ public class WallAdapter extends BaseAdapter {
 
     private static String poll_anonymous;
     private static String poll_not_anonymous;
-    private static Drawable votesBarDrawable;
+    private static String txt_dialog_comment;
 
+    private static String post_report;
+    private static String post_copy_link;
+    private static String post_report_spam;
+    private static String post_report_offense;
+    private static String post_report_adult;
+    private static String post_report_drugs;
+    private static String post_report_porno;
+    private static String post_report_violence;
+    
     private static Context context;
     private static Resources resources;
 
     LayoutInflater inflater;
 
+
     public WallAdapter(Wall wall, LayoutInflater inflater, String postColor) {
+        notifyDataSetChanged();
+
         this.wall = wall;
         this.posts = wall.posts;
         this.layoutInflater = inflater;
@@ -137,14 +151,21 @@ public class WallAdapter extends BaseAdapter {
 
         this.poll_anonymous = resources.getString(R.string.poll_anonymous);
         this.poll_not_anonymous = resources.getString(R.string.poll_not_anonymous);
-        this.votesBarDrawable = resources.getDrawable(R.drawable.poll_progress_bar_style);
+        this.txt_dialog_comment = resources.getString(R.string.txt_dialog_comment);
+
+        post_report = resources.getString(R.string.post_report);
+        post_copy_link = resources.getString(R.string.post_copy_link);
+        post_report_spam = resources.getString(R.string.post_report_spam);
+        post_report_offense = resources.getString(R.string.post_report_offense);
+        post_report_adult = resources.getString(R.string.post_report_adult);
+        post_report_drugs = resources.getString(R.string.post_report_drugs);
+        post_report_porno = resources.getString(R.string.post_report_porno);
+        post_report_violence = resources.getString(R.string.post_report_violence);
 
         this.postColor = postColor;
 
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
-    private boolean mBusy;
 
     @Override
     public int getCount() {
@@ -163,8 +184,8 @@ public class WallAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final VKApiPost post = posts.get(position);
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
+
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.wall_lv_item, null);
             viewHolder = new ViewHolder(convertView);
@@ -173,9 +194,19 @@ public class WallAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        if (wall.isFixedPost && position == 0) {
+            viewHolder.img_fixed_post.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.img_fixed_post.setVisibility(View.GONE);
+        }
+
+
+        final VKApiPost post = posts.get(position);
+
         String copy_history_title = "";
         String copy_history_logo = "";
         String copy_history_name = "";
+
 
         viewHolder.txt_post_comment.setText(valueOf(post.comments_count));
         viewHolder.txt_post_like.setText(valueOf(post.likes_count));
@@ -183,7 +214,121 @@ public class WallAdapter extends BaseAdapter {
         viewHolder.txt_post_share.setText(valueOf(post.reposts_count));
 
         viewHolder.txt_post_date.setText(getFormattedDate(post.date));
+/*
+        if (post.user_reposted) {
+            viewHolder.cb_repost.setChecked(true);
+            viewHolder.cb_repost.setEnabled(false);
+        } else {
+            viewHolder.cb_repost.setChecked(false);
+            viewHolder.cb_repost.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+                    View view = inflater.inflate(R.layout.txt_dialog_comment, null);
+                    dialog.setView(view);
+                    dialog.setTitle(txt_dialog_comment);
 
+                    final TextView text = (TextView) view.findViewById(R.id.txt_post_comment);
+
+                    dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            final String pidFull = "wall-" + wall.group.id + "_" + post.id;
+                            VKHelper.doRepost(pidFull, (String) text.getText(), new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    super.onComplete(response);
+                                    JSONObject object = response.json.optJSONObject("response");
+                                    int isSuccessed = object.optInt("success");
+
+                                    if (isSuccessed == 1) {
+                                        Toast.makeText(context, "All is done", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                            viewHolder.cb_repost.setChecked(true);
+                        }
+                    });
+
+                    dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.create();
+                }
+            });
+        }*/
+        
+        viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AlertDialog.Builder builder = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+                final String[] items = {post_report, post_copy_link};
+
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which){
+                            case 0:
+                                final AlertDialog.Builder builderIn = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+                                builderIn.setTitle(post_report);
+                                final String[] items = {post_report_spam, post_report_offense, post_report_adult, post_report_drugs, post_report_porno, post_report_violence};
+
+                                builderIn.setItems(items, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        int reason = 0;
+                                        switch (which) {
+                                            case 0:
+                                                reason = 0;
+                                                break;
+                                            case 1:
+                                                reason = 6;
+                                                break;
+                                            case 2:
+                                                reason = 5;
+                                                break;
+                                            case 3:
+                                                reason = 4;
+                                                break;
+                                            case 4:
+                                                reason = 1;
+                                                break;
+                                            case 5:
+                                                reason = 3;
+                                                break;
+                                        }
+                                        VKHelper.doReportPost(wall.group.id, post.id, reason, new VKRequest.VKRequestListener() {
+                                            @Override
+                                            public void onComplete(VKResponse response) {
+                                                super.onComplete(response);
+                                                int isSuccessed = response.json.optInt("response");
+
+                                                if (isSuccessed == 1) {
+                                                    Toast.makeText(context, "Reported", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        });
+                                    }
+                                });
+                                builderIn.show();
+                                break;
+
+                            case 1:
+                                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                                clipboard.setText("http://vk.com/wall-" + wall.group.id + "_" + post.id);
+                                break;
+                        }
+                    }
+                });
+
+                builder.show();
+            }
+        });
+        
         if (post.text.length() != 0) {
             setText(post.text, viewHolder.postTextLayout);
         } else {
@@ -231,6 +376,7 @@ public class WallAdapter extends BaseAdapter {
             });
             ((TextView) copyHistoryLayout.getChildAt(1)).setText(copy_history_title);
             ((TextView) copyHistoryLayout.getChildAt(2)).setText(getFormattedDate(copyHistory.date));
+
 
             imageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)));
 
@@ -410,6 +556,7 @@ public class WallAdapter extends BaseAdapter {
     }
 
     public void setPoll(RelativeLayout parent, VKApiPoll poll) {
+
         ViewGroup pollContainer = getPreparedView(parent, R.layout.poll_container);
 
         ((TextView) pollContainer.getChildAt(0)).setText(poll.question);
@@ -421,26 +568,35 @@ public class WallAdapter extends BaseAdapter {
         }
 
         ((ImageView) pollContainer.getChildAt(2)).setBackgroundColor(Color.parseColor(postColor));
-        /*final LinearLayout pollAnswersContainer = (LinearLayout) pollContainer.getChildAt(2);
 
-        ViewGroup pollAnswer;
-        VKApiPoll.Answer answer;
-        TextProgressBar votesBar;
+//        Log.d("Size:", String.valueOf(poll.answers.size()));
+//        for (int i = 0; i < poll.answers.size(); i++) {
+//            Log.d("Text:", poll.answers.get(i).text);
+//            Log.d("Id:", String.valueOf(poll.answers.get(i).id));
+//            Log.d("Votes:", String.valueOf(poll.answers.get(i).votes));
+//            Log.d("Rate:", String.valueOf(poll.answers.get(i).rate));
+//        }
 
-        for (int i = 0; i < poll.answers.size(); i++) {
-            pollAnswer = getPreparedView(pollAnswersContainer, R.layout.poll_answer_container);
-            answer = poll.answers.get(i);
+       //final LinearLayout pollAnswersContainer = (LinearLayout) pollContainer.getChildAt(2);
 
-            ((TextView) pollAnswer.getChildAt(0)).setText(answer.text);
-            ((TextView) pollAnswer.getChildAt(2)).setText(String.valueOf((int) answer.rate) + "%");
-
-            votesBar = (TextProgressBar) pollAnswer.getChildAt(1);
-            votesBar.setProgressDrawable(votesBarDrawable);
-            votesBar.setText(String.valueOf(answer.votes));
-            votesBar.setProgress((int) answer.rate);
-
-            pollAnswersContainer.addView(pollAnswer);
-        }*/
+//        ViewGroup pollAnswer;
+//        VKApiPoll.Answer answer;
+//        TextProgressBar votesBar;
+//
+//        for (int i = 0; i < poll.answers.size(); i++) {
+//            pollAnswer = getPreparedView(pollAnswersContainer, R.layout.poll_answer_container);
+//            answer = poll.answers.get(i);
+//
+//            ((TextView) pollAnswer.getChildAt(0)).setText(answer.text);
+//            ((TextView) pollAnswer.getChildAt(2)).setText(String.valueOf((int) answer.rate) + "%");
+//
+//            votesBar = (TextProgressBar) pollAnswer.getChildAt(1);
+//            votesBar.setProgressDrawable(votesBarDrawable);
+//            votesBar.setText(String.valueOf(answer.votes));
+//            votesBar.setProgress((int) answer.rate);
+//
+//            pollAnswersContainer.addView(pollAnswer);
+//        }
 
         parent.addView(pollContainer);
     }
@@ -1082,6 +1238,11 @@ public class WallAdapter extends BaseAdapter {
         private final TextView txt_post_share;
         private final TextView txt_post_comment;
 
+        private final ImageView img_fixed_post;
+        private final CheckBox cb_repost;
+
+        private final ImageView img_post_other;
+
         private ViewHolder(View convertView) {
             this.postAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.postAttachmentsLayout);
             this.postTextLayout = (RelativeLayout) convertView.findViewById(R.id.postTextLayout);
@@ -1101,6 +1262,11 @@ public class WallAdapter extends BaseAdapter {
             this.txt_post_like = (TextView) convertView.findViewById(R.id.txt_post_like);
             this.txt_post_share = (TextView) convertView.findViewById(R.id.txt_post_share);
             this.txt_post_comment = (TextView) convertView.findViewById(R.id.txt_post_comment);
+
+            this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
+            this.cb_repost = (CheckBox) convertView.findViewById(R.id.cb_post_repost);
+
+            this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other);
         }
     }
 

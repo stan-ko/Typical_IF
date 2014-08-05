@@ -25,7 +25,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import typical_if.android.Constants;
-import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.WallAdapter;
@@ -50,10 +49,9 @@ public class FragmentWall extends Fragment {
     Long gid;
     View rootView;
     Bundle arguments;
-    final OfflineMode offlineMod= new OfflineMode();
-//    SharedPreferences sPref;
-//    String SAVED_JSON="saved_text";
-//    JSONObject jsonObj;
+    SharedPreferences sPref;
+    String SAVED_JSON="saved_text";
+    JSONObject jsonObj;
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -78,44 +76,47 @@ public class FragmentWall extends Fragment {
         gid = arguments.getLong(ARG_VK_GROUP_ID);
         postColor = getPostColor(gid);
 
-//        VKHelper.doGroupWallRequest(gid, new VKRequest.VKRequestListener() {
-//            @Override
-//            public void onComplete(VKResponse response) {
-//                super.onComplete(response);
-//                offlineMod.saveJSON(response.json, gid);
-//                initGroupWall(response.json, inflater, gid);
-//                spinnerLayout.setVisibility(View.GONE);
-//            }
-//
-//            @Override
-//            public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
-//                super.attemptFailed(request, attemptNumber, totalAttempts);
-//                    initGroupWall(offlineMod.loadJSON(gid), inflater, gid);
-//                    spinnerLayout.setVisibility(View.GONE);
-//            }
-//
-//            @Override
-//            public void onError(VKError error) {
-//                super.onError(error);
-//               initGroupWall(offlineMod.loadJSON(gid), inflater, gid);
-//              spinnerLayout.setVisibility(View.GONE);
-//            }
-//
-//            @Override
-//            public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
-//                super.onProgress(progressType, bytesLoaded, bytesTotal);
-//            }
-//        });
+        VKHelper.doGroupWallRequest(gid, new VKRequest.VKRequestListener() {
+            //@Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                saveJSON(response.json, gid);
+                initGroupWall(response.json, inflater, gid);
+                spinnerLayout.setVisibility(View.GONE);
+            }
 
-        initGroupWall(offlineMod.loadJSON(gid), inflater, gid);
-        spinnerLayout.setVisibility(View.GONE);
+            @Override
+            public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
+                super.attemptFailed(request, attemptNumber, totalAttempts);
+
+                if (gid == Constants.TF_ID){
+                    initGroupWall(loadJSON(gid), inflater, gid);
+                    spinnerLayout.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+
+                initGroupWall(loadJSON(gid), inflater, gid);
+                spinnerLayout.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
+                super.onProgress(progressType, bytesLoaded, bytesTotal);
+            }
+        });
 
         return rootView;
     }
 
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater, long gid){
-         Wall wall = Wall.getGroupWallFromJSON(jsonObject, gid);
+        Wall wall = Wall.getGroupWallFromJSON(jsonObject, gid);
+        //wall.posts.parse()
         adapter = new WallAdapter(wall, inflater, postColor);
+//adapter.
         wallListView = (JazzyListView)rootView.findViewById(R.id.listViewWall);
         wallListView.setAdapter(adapter);
         wallListView.setTransitionEffect(mCurrentTransitionEffect);
@@ -141,5 +142,26 @@ public class FragmentWall extends Fragment {
         super.onAttach(activity);
         //((MainActivity) activity).onSectionAttached(getArguments().getLong(ARG_VK_GROUP_ID));
     }
+    void saveJSON(JSONObject jsonObject, long gid) {
+        sPref = VKUIHelper.getTopActivity().getPreferences(VKUIHelper.getTopActivity().MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+            String JsonString = jsonObject.toString();
+           SAVED_JSON=String.valueOf(gid);
+            ed.putString(SAVED_JSON, JsonString);
+           // Log.d("/--------------jsonInString-------------------/",jsonObject.toString());
+            ed.commit();
+    }
 
+    JSONObject loadJSON(long gid) {
+        sPref = VKUIHelper.getTopActivity().getPreferences(VKUIHelper.getTopActivity().MODE_PRIVATE);
+        SAVED_JSON = String.valueOf(gid);
+        String savedText = sPref.getString(SAVED_JSON, "");
+        try {
+            jsonObj = new JSONObject(savedText);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            //Log.d("/---------------------savedJson--------ERROR-----------/",savedText);
+        }
+        return jsonObj;
+    }
 }

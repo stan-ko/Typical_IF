@@ -36,13 +36,13 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void getPoll (int owner_id, int poll_id, VKRequest.VKRequestListener listener){
-        VKParameters params = new VKParameters();
-        params.put("owner_id", owner_id);
-        params.put("poll_id", poll_id);
-        final VKRequest request = new VKRequest("polls.getById",params);
-        request.executeWithListener(listener);
-    }
+//    public static void getPoll (int owner_id, int poll_id, VKRequest.VKRequestListener listener){
+//        VKParameters params = new VKParameters();
+//        params.put("owner_id", owner_id);
+//        params.put("poll_id", poll_id);
+//        final VKRequest request = new VKRequest("polls.getById",params);
+//        request.executeWithListener(listener);
+//    }
 
     public static void doGroupWallRequest(long gid, VKRequest.VKRequestListener vkRequestListener){
         VKParameters params = new VKParameters();
@@ -104,6 +104,39 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
+    public static void getFixedPostId(String gid, VKRequest.VKRequestListener listener) {
+        VKParameters params = new VKParameters();
+        params.put("group_id", gid);
+        params.put("fields", "fixed_post");
+        final VKRequest request = new VKRequest("groups.getById", params);
+        request.executeWithListener(listener);
+    }
+
+    public static void getFixedPost(String pid, VKRequest.VKRequestListener listener) {
+        VKParameters params = new VKParameters();
+        params.put("posts", pid);
+        params.put("extended", 1);
+        params.put("copy_history_depth", 1);
+        final VKRequest request = new VKRequest("wall.getById", params);
+        request.executeWithListener(listener);
+    }
+
+    public static void doRepost(String pid, String message, VKRequest.VKRequestListener listener) {
+        VKParameters params = new VKParameters();
+        params.put("object", pid);
+        params.put("message", message);
+        final VKRequest request = new VKRequest("wall.repost", params);
+        request.executeWithListener(listener);
+    }
+
+    public static void doReportPost(long oid, long pid, int reason, VKRequest.VKRequestListener listener) {
+        VKParameters params = new VKParameters();
+        params.put("owner_id", oid);
+        params.put("post_id", pid);
+        params.put("reason", reason);
+        final VKRequest request = new VKRequest("wall.reportPost", params);
+        request.executeWithListener(listener);
+    }
 
     public static void getCommentsForPhoto(long owner_id, long photo_id, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
