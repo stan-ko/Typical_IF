@@ -4,16 +4,11 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
+import android.widget.AdapterView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
-import android.content.*;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
@@ -82,7 +77,6 @@ public class FragmentWall extends Fragment {
         postColor = getPostColor(gid);
 
         VKHelper.doGroupWallRequest(gid, new VKRequest.VKRequestListener() {
-            //@Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 saveJSON(response.json);
@@ -93,17 +87,13 @@ public class FragmentWall extends Fragment {
             @Override
             public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
                 super.attemptFailed(request, attemptNumber, totalAttempts);
-
-                //if (totalAttempts ==3){
                     initGroupWall(loadJSON(), inflater, gid);
                     spinnerLayout.setVisibility(View.GONE);
-                //}
             }
 
             @Override
             public void onError(VKError error) {
                 super.onError(error);
-
                 initGroupWall(loadJSON(), inflater, gid);
                 spinnerLayout.setVisibility(View.GONE);
             }
@@ -124,6 +114,13 @@ public class FragmentWall extends Fragment {
         wallListView.setAdapter(adapter);
         wallListView.setTransitionEffect(mCurrentTransitionEffect);
         wallListView.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), true, true));
+        wallListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                return true;
+            }
+        });
     };
 
     public String getPostColor(long groupIndex) {
