@@ -200,9 +200,9 @@ public class ItemDataSetter {
         ((TextView) pollContainer.getChildAt(0)).setText(poll.question);
 
         if (poll.anonymous == 0) {
-            ((TextView) pollContainer.getChildAt(1)).setText(Constants.poll_not_anonymous + " " + poll.votes);
+            ((TextView) pollContainer.getChildAt(1)).setText(Constants.POLL_NOT_ANONYMOUS + " " + poll.votes);
         } else {
-            ((TextView) pollContainer.getChildAt(1)).setText(Constants.poll_anonymous + " " + poll.votes);
+            ((TextView) pollContainer.getChildAt(1)).setText(Constants.POLL_ANONYMOUS + " " + poll.votes);
         }
         ((ImageView) pollContainer.getChildAt(2)).setBackgroundColor(Color.parseColor(postColor));
 
@@ -237,7 +237,7 @@ public class ItemDataSetter {
                 @Override
                 public void onClick(View textView) {
                     Uri uri = Uri.parse("http://vk.com/feed?q=%23" + temp.replaceFirst("#", "") + "&section=search");
-                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.viewer_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
@@ -300,7 +300,7 @@ public class ItemDataSetter {
                 @Override
                 public void onClick(View textView) {
                     Uri uri = Uri.parse(temp);
-                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.browser_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
@@ -322,7 +322,7 @@ public class ItemDataSetter {
                 @Override
                 public void onClick(View textView) {
                     Uri uri = Uri.parse("http://vk.com/" + replier[0]);
-                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.viewer_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
@@ -343,9 +343,9 @@ public class ItemDataSetter {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         mainText.setText(originalSpannable);
-                        showAll.setText(Constants.show_min_text);
+                        showAll.setText(Constants.SHOW_MIN_TEXT);
                     } else {
-                        showAll.setText(Constants.show_all_text);
+                        showAll.setText(Constants.SHOW_ALL_TEXT);
                         mainText.setText(tempModifySpannable);
                     }
                 }
@@ -380,7 +380,7 @@ public class ItemDataSetter {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse("http://vk.com/id" + valueOf(id));
-                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.viewer_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 
@@ -406,7 +406,7 @@ public class ItemDataSetter {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse(link.url);
-                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.browser_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 
@@ -445,7 +445,7 @@ public class ItemDataSetter {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse(wikiPage.source);
-                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.viewer_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 
@@ -511,7 +511,7 @@ public class ItemDataSetter {
             if (doc.isImage()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
-                size.setText(Constants.docTypeImage + " " + readableFileSize(doc.size));
+                size.setText(Constants.DOC_TYPE_IMAGE + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -521,7 +521,7 @@ public class ItemDataSetter {
             } else if (doc.isGif()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
-                size.setText(Constants.docTypeAnimation + " " + readableFileSize(doc.size));
+                size.setText(Constants.DOC_TYPE_ANIMATION + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -550,7 +550,7 @@ public class ItemDataSetter {
                     }
                 });
             } else {
-                image.setImageDrawable(Constants.resources.getDrawable(android.R.drawable.ic_menu_save));
+                image.setImageDrawable(Constants.RESOURCES.getDrawable(android.R.drawable.ic_menu_save));
                 image.setBackgroundColor(Color.parseColor(postColor));
                 image.setLayoutParams(new RelativeLayout.LayoutParams(setInDp(50), setInDp(50)));
 
@@ -561,12 +561,12 @@ public class ItemDataSetter {
                 RelativeLayout.LayoutParams paramsForSize = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 paramsForSize.setMargins(setInDp(55), setInDp(20), 0, 0);
                 size.setLayoutParams(paramsForSize);
-                size.setText(Constants.docTypeDocument + " " + readableFileSize(doc.size));
+                size.setText(Constants.DOC_TYPE_DOCUMENT + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Uri uri = Uri.parse(doc.url);
-                        context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.downloader_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.DOWNLOADER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                 });
             }
@@ -793,7 +793,7 @@ public class ItemDataSetter {
 
     public static String readableFileSize(long size) {
         if (size <= 0) return "0";
-        final String[] units = new String[]{Constants.size_in_b, Constants.size_in_kb, Constants.size_in_mb, Constants.size_in_gb, Constants.size_in_tb};
+        final String[] units = new String[]{Constants.SIZE_IN_B, Constants.SIZE_IN_KB, Constants.SIZE_IN_MB, Constants.SIZE_IN_GB, Constants.SIZE_IN_TB};
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
         return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
@@ -818,17 +818,17 @@ public class ItemDataSetter {
         now.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
 
         if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
-            return Constants.today + " " + DateFormat.format(Constants.timeFormatString, smsTime);
+            return Constants.TODAY + " " + DateFormat.format(Constants.TIME_FORMAT_STRING, smsTime);
         } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1) {
-            return Constants.yesterday + " " + DateFormat.format(Constants.timeFormatString, smsTime);
+            return Constants.YESTERDAY + " " + DateFormat.format(Constants.TIME_FORMAT_STRING, smsTime);
         } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
-            return DateFormat.format(Constants.dateTimeFormatString, smsTime).toString();
+            return DateFormat.format(Constants.DATE_TIME_FORMAT_STRING, smsTime).toString();
         } else
-            return DateFormat.format(Constants.otherFormatString, smsTime).toString();
+            return DateFormat.format(Constants.OTHER_FORMAT_STRING, smsTime).toString();
     }
 
     public static int setInDp(int dps) {
-        final float scale = Constants.resources.getDisplayMetrics().density;
+        final float scale = Constants.RESOURCES.getDisplayMetrics().density;
         return (int) (dps * scale + 0.5f);
     }
 

@@ -19,20 +19,15 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 
 import typical_if.android.Constants;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
-import typical_if.android.VKHelper;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentEventsList;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.fragment.FragmentPhotoCommentAndInfo;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
-import typical_if.android.fragment.FragmentPhotoList;
-import typical_if.android.fragment.FragmentUploadPhotoList;
 import typical_if.android.fragment.FragmentWall;
 import typical_if.android.fragment.NavigationDrawerFragment;
 
@@ -179,7 +174,7 @@ public class MainActivity extends ActionBarActivity implements
 
         @Override
         public void onTokenExpired(VKAccessToken expiredToken) {
-            VKSdk.authorize(Constants.sMyScope);
+            VKSdk.authorize(Constants.S_MY_SCOPE);
         }
 
         @Override
@@ -233,9 +228,9 @@ public class MainActivity extends ActionBarActivity implements
                     mNavigationDrawerFragment.refreshNavigationDrawer();
                 } else {
                     if (!VKSdk.wakeUpSession()) {
-                        VKSdk.authorize(Constants.sMyScope, true, true);
+                        VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
                     } else
-                        VKSdk.authorize(Constants.sMyScope, true, true);
+                        VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
                 }
                 break;
         }
