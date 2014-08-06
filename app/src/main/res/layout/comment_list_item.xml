@@ -4,54 +4,35 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1"
-   >
-
-    <TextView
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/user_name_textView"
-        android:layout_weight="0.08"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/img_user_avatar"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp"
-        android:paddingTop="10dp"
-        android:text="asd asd asd as dasd asd as" />
-
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:id="@+id/img_user_avatar"
-        android:src="@drawable/ic_launcher"
-        android:cropToPadding="false"
-        android:scaleType="fitStart"
-        android:layout_weight="0.34"
-        android:layout_marginLeft="15dp"
-        android:layout_alignTop="@+id/user_name_textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="9dp" />
+    android:padding="5dp"
+    android:id="@+id/commentParentLayout"
+    android:clickable="false"
+    android:descendantFocusability="blocksDescendants"
+    android:focusable="false"
+    android:focusableInTouchMode="false">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/img_user_avatar"
         android:id="@+id/commentTextLayout"
-        android:visibility="visible"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:visibility="gone"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_margin="5dp"></RelativeLayout>
+        android:layout_margin="5dp"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/commentAttachmentsLayout"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:orientation="vertical"
         android:visibility="gone"
-        android:background="@android:drawable/editbox_background_normal"
-        android:focusableInTouchMode="false"
         android:layout_toEndOf="@+id/img_user_avatar"
         android:layout_below="@+id/commentTextLayout"
         android:layout_alignParentLeft="true"
@@ -61,12 +42,18 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:id="@+id/commentMediaLayout"
             android:background="#ffffffff"
             android:paddingTop="5dp"
             android:paddingBottom="5dp" />
 
         <LinearLayout
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -74,6 +61,9 @@
             android:orientation="vertical" />
 
         <LinearLayout
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -86,6 +76,9 @@
             android:showDividers="middle" />
 
         <LinearLayout
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
@@ -93,21 +86,31 @@
             android:orientation="vertical" />
 
         <RelativeLayout
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/commentWikiPageLayout"
             android:visibility="gone" />
 
         <RelativeLayout
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
             android:id="@+id/commentLinkLayout" />
 
         <RelativeLayout
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/commentPollLayout"></RelativeLayout>
+            android:visibility="gone"
+            android:id="@+id/commentPollLayout" />
 
     </LinearLayout>
 
@@ -115,17 +118,43 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/text_date_of_comment"
-        android:textColor="#78000000"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/user_name_textView"
-        android:text="asdas dasd asd as das da"
-        android:layout_toRightOf="@+id/img_user_avatar" />
+        android:id="@+id/user_name_textView"
+        android:layout_weight="0.08"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/img_user_avatar"
+        android:text="asd asd asd as dasd asd as"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <ImageView
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:id="@+id/image_like_or_not_like"
-        android:layout_alignBottom="@+id/img_user_avatar" />
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/img_user_avatar"
+        android:src="@drawable/ic_launcher"
+        android:cropToPadding="false"
+        android:scaleType="fitStart"
+        android:layout_weight="0.34"
+        android:layout_alignTop="@+id/user_name_textView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="5dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/text_date_of_comment"
+        android:textColor="#78000000"
+        android:text="asdas dasd asd as das da"
+        android:layout_below="@+id/user_name_textView"
+        android:layout_toRightOf="@+id/img_user_avatar"
+        android:layout_toEndOf="@+id/img_user_avatar"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
 </RelativeLayout>

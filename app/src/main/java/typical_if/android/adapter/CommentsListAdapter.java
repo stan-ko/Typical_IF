@@ -46,7 +46,7 @@ public class CommentsListAdapter extends BaseAdapter {
         this.postColor = postColor;
     }
 
-    public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<Profile> profilesList, ListView listView) {
+    public void updateCommentList(ArrayList<VKApiComment> commentList, ArrayList<Profile> profilesList, ListView listView) {
         this.profilesList = profilesList;
         this.commentList.clear();
         this.commentList.addAll(commentList);
@@ -64,7 +64,7 @@ public class CommentsListAdapter extends BaseAdapter {
         });
     }
 
-    public void UserIdentifier(VKApiComment comment) {
+    public void userIdentifier(VKApiComment comment) {
         for (int i = 0; i < profilesList.size(); i++) {
             if (comment.from_id == profilesList.get(i).id) {
                 first_name = profilesList.get(i).first_name;
@@ -84,7 +84,7 @@ public class CommentsListAdapter extends BaseAdapter {
     }
 
 
-    public void HolderInitialize(ViewHolder viewHolder, VKApiComment comment) {
+    public void holderInitialize(ViewHolder viewHolder, VKApiComment comment) {
         ItemDataSetter.commentViewHolder = viewHolder;
         ItemDataSetter.postColor = postColor;
 
@@ -133,8 +133,8 @@ public class CommentsListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        UserIdentifier(comment);
-        HolderInitialize(viewHolder, comment);
+        userIdentifier(comment);
+        holderInitialize(viewHolder, comment);
         return convertView;
     }
 
@@ -153,6 +153,7 @@ public class CommentsListAdapter extends BaseAdapter {
         public final RelativeLayout commentWikiPageLayout;
         public final RelativeLayout commentLinkLayout;
         public final RelativeLayout commentPollLayout;
+        public final RelativeLayout commentParentLayout;
 
         public ViewHolder(View convertView) {
             this.user_avatar = (ImageView) convertView.findViewById(R.id.img_user_avatar);
@@ -169,6 +170,7 @@ public class CommentsListAdapter extends BaseAdapter {
             this.commentLinkLayout = (RelativeLayout) convertView.findViewById(R.id.commentLinkLayout);
             this.commentTextLayout = (RelativeLayout) convertView.findViewById(R.id.commentTextLayout);
             this.commentPollLayout = (RelativeLayout) convertView.findViewById(R.id.commentPollLayout);
+            this.commentParentLayout = (RelativeLayout) convertView.findViewById(R.id.commentParentLayout);
         }
     }
 }

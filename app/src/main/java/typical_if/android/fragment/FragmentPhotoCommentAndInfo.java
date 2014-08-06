@@ -14,6 +14,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -41,6 +42,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -131,7 +133,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
 
         final Button sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
         final ArrayList<Photo> photo = this.photo;
-        UpdateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
+        updateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
 
         gid = arguments.getLong(ARG_VK_GROUP_ID);
@@ -179,8 +181,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                message = commentMessage.getText().toString();
+                message = commentMessage.getText().toString() + ", @club26363301 (fromMobileIF)";
 
                 if (reply_to_comment == 0) {
 
@@ -191,7 +192,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                             super.onComplete(response);
                             Toast.makeText(getActivity().getApplicationContext(), "POSTED", Toast.LENGTH_SHORT).show();
                             commentMessage.setText("");
-                            UpdateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
+                            updateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
                         }
                     });
 
@@ -203,7 +204,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                             super.onComplete(response);
                             Toast.makeText(getActivity().getApplicationContext(), "POSTED", Toast.LENGTH_SHORT).show();
                             commentMessage.setText("");
-                            UpdateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
+                            updateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
                         }
                     });
 
@@ -212,8 +213,6 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
 
             }
         });
-
-        ImageView likedImage = ((ImageView) rootView.findViewById(R.id.image_like_or_not_like));
 
 //for(int i = 0 ; i < comments.size();i++){
 //    if (comments.get(i).user_likes==true){
@@ -247,7 +246,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     }
 
 
-    public void UpdateCommentList(long owner_id, final ListView listOfComments, final LayoutInflater inflater) {
+    public void updateCommentList(long owner_id, final ListView listOfComments, final LayoutInflater inflater) {
         VKHelper.getCommentsForPhoto(owner_id, photo.get(currentPosition).id, new VKRequest.VKRequestListener() {
 
             @Override
@@ -271,7 +270,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 if (position > 0) {
-                    showContextMenu(id, position - 1);
+                    showContextMenu(position - 1);
                 }
 
             }
@@ -279,19 +278,19 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     }
 
 
-    public void showContextMenu(long id, int position) {
+    public void showContextMenu(int position) {
         VKApiComment comment = comments.get(position);
         final long user_id = getArguments().getLong(ARG_VK_USER_ID);
-        if (comment.from_id == user_id) {
-            final CharSequence[] itemsForMe = {"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Видалити"};
-            onInitContextMenu(itemsForMe, position);
-        } else {
-            final CharSequence[] items = {"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Оцінили"};
-            onInitContextMenu(items, position);
 
+        CharSequence[] items;
+        Log.d("akuma", comment.from_id + "               " + user_id);
+        if (comment.from_id == user_id) {
+            items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Видалити"};
+        } else {
+            items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Оцінили"};
         }
 
-
+        onInitContextMenu(items, position);
     }
 
 
@@ -303,8 +302,6 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         comments = VKHelper.getCommentsFromJSON(arrayOfComments[0]);
         Collections.sort(comments);
         profiles = Profile.getProfilesFromJSONArray(arrayOfComments[1]);
-        //profile=profiles;
-
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -314,7 +311,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                     adapter = new CommentsListAdapter(comments, profiles, inflater, postColor);
                     listOfComments.setAdapter(adapter);
                 } else {
-                    adapter.UpdateCommentList(comments, profiles, listOfComments);
+                    adapter.updateCommentList(comments, profiles, listOfComments);
 
                 }
             }
@@ -329,27 +326,19 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
             public void onClick(DialogInterface dialog, int item) {
                 switch (item) {
                     case 0: {
-                        //onVkontakteBtnPressed();
                         Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).from_id + "");
                         getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                     break;
                     case 1: {
-                        //////////////////////////////////////////////////////////////////////
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
                                 reply_to_comment = comments.get(position).id;
                                 commentMessage.setText(Identify(comments, profiles) + ", ");
-
-
                             }
                         });
-
-
-                        ////////////////////////////////////////////////////////////////////
                     }
                     break;
                     case 2: {
@@ -358,9 +347,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                     }
                     break;
                     case 3: {
-                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
-                        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     }
                     break;
                     case 4: {
@@ -374,7 +361,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                                     e.printStackTrace();
                                 }
 
-                                UpdateCommentList(getArguments().getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
+                                updateCommentList(getArguments().getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
                             }
 
                             @Override
@@ -407,30 +394,6 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         alert = builder.create();
         alert.show();
     }
-
-
-//    public void ReplyToUser(int position,final Bundle arguments, final LayoutInflater inflater){
-//
-// message="test";
-//                VKHelper.createCommentForPhoto(arguments.getLong(ARG_VK_GROUP_ID),
-//                        photo.get(currentPosition).id,
-//                        "test", 0,
-//                        562650,
-//                        new VKRequest.VKRequestListener() {
-//
-//                    @Override
-//                    public void onComplete(VKResponse response) {
-//                        super.onComplete(response);
-//                        Toast.makeText(getActivity().getApplicationContext(), "POSTED", Toast.LENGTH_SHORT).show();
-//                      //  commentMessage.setText("");
-//                      //  UpdateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
-//                    }
-//
-//
-//                });
-//
-//
-//    }
 
     public String Identify(ArrayList<VKApiComment> commentsList, ArrayList<Profile> profilesList) {
         String name = "";
@@ -470,12 +433,6 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     }
 
 
-    private void onVkontakteBtnPressed() {
-        if (!shareViaIntent(SHARE_TYPE_VKONTAKTE))
-            shareViaSystemPrompt();
-        //ShareViaVK(); // т.е. если ВК не установлен то шарить через апи
-    }
-
     private static final String SHARE_TYPE_VKONTAKTE = "com.vkontakte.android";
 
     private boolean shareViaIntent(String type) {
@@ -509,12 +466,6 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         return found;
     }
 
-
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Activity activity) {

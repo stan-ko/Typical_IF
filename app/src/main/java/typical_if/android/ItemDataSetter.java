@@ -327,6 +327,28 @@ public class ItemDataSetter {
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
+        final Matcher matSite = Pattern.compile("@club26363301 \\(fromMobileIF\\)").matcher(text);
+
+        while (matSite.find()) {
+            start = stringB.indexOf(matSite.group());
+            end = start + matSite.group().length();
+
+            final String replier = "fromMobileIF";
+            stringB.replace(start, end, replier);
+            spannable.replace(start, end, replier);
+
+            end = start + replier.length();
+            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new NonUnderlinedClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    Uri uri = Uri.parse(replier);
+                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
         mainText.setText(spannable);
         mainText.setMovementMethod(LinkMovementMethod.getInstance());
 

@@ -3,8 +3,6 @@ package typical_if.android.model.Wall;
 import android.util.Log;
 
 import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKPostArray;
 
 import org.json.JSONArray;
@@ -12,8 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import typical_if.android.VKHelper;
 
 /**
  * extended by Miller on 16.07.2014.
@@ -50,6 +46,7 @@ public class Wall {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        wall.posts = posts;
 
         // groups
         final JSONArray groups = object.optJSONArray(Wall.JSON_KEY_GROUPS);
@@ -70,7 +67,7 @@ public class Wall {
             profile = getProfileFromJSON(profiles.optJSONObject(i));
             wall.profiles.add(profile);
         }
-
+/*
         VKHelper.getFixedPostId(wall.group.screen_name, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
@@ -102,9 +99,8 @@ public class Wall {
                     e.printStackTrace();
                 }
             }
-        });
+        });*/
 
-        wall.posts = posts;
         return wall;
     }
 

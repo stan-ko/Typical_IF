@@ -1,11 +1,8 @@
 package typical_if.android.adapter;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.text.ClipboardManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,19 +12,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKUIHelper;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKPostArray;
 
 import typical_if.android.Constants;
+import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
-import typical_if.android.VKHelper;
 import typical_if.android.model.Wall.Group;
 import typical_if.android.model.Wall.Profile;
 import typical_if.android.model.Wall.Wall;
@@ -76,17 +70,17 @@ public class WallAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (wall.isFixedPost && position == 0) {
-            viewHolder.img_fixed_post.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.img_fixed_post.setVisibility(View.GONE);
-        }
-
         ItemDataSetter.wallViewHolder = viewHolder;
         ItemDataSetter.postColor = postColor;
         ItemDataSetter.wall = wall;
 
         final VKApiPost post = posts.get(position);
+
+        if (post.is_pinned == 1) {
+            viewHolder.img_fixed_post.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.img_fixed_post.setVisibility(View.GONE);
+        }
 
         String copy_history_title = "";
         String copy_history_logo = "";
@@ -150,67 +144,7 @@ public class WallAdapter extends BaseAdapter {
         viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-                final String[] items = {Constants.POST_REPORT, Constants.POST_COPY_LINK};
-
-                builder.setItems(items, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                final AlertDialog.Builder builderIn = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-                                builderIn.setTitle(Constants.POST_REPORT);
-                                final String[] items = {Constants.POST_REPORT_SPAM, Constants.POST_REPORT_OFFENSE, Constants.POST_REPORT_ADULT, Constants.POST_REPORT_DRUGS, Constants.POST_REPORT_PORNO, Constants.POST_REPORT_VIOLENCE};
-
-                                builderIn.setItems(items, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        int reason = 0;
-                                        switch (which) {
-                                            case 0:
-                                                reason = 0;
-                                                break;
-                                            case 1:
-                                                reason = 6;
-                                                break;
-                                            case 2:
-                                                reason = 5;
-                                                break;
-                                            case 3:
-                                                reason = 4;
-                                                break;
-                                            case 4:
-                                                reason = 1;
-                                                break;
-                                            case 5:
-                                                reason = 3;
-                                                break;
-                                        }
-                                        VKHelper.doReportPost(wall.group.id, post.id, reason, new VKRequest.VKRequestListener() {
-                                            @Override
-                                            public void onComplete(VKResponse response) {
-                                                super.onComplete(response);
-                                                int isSuccessed = response.json.optInt("response");
-
-                                                if (isSuccessed == 1) {
-                                                    Toast.makeText(context, "Reported", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                                builderIn.show();
-                                break;
-
-                            case 1:
-                                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                                clipboard.setText("http://vk.com/wall-" + wall.group.id + "_" + post.id);
-                                break;
-                        }
-                    }
-                });
-
-                builder.show();
+                Dialogs.spamDialog(wall, post);
             }
         });
 
