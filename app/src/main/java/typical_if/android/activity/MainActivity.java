@@ -30,6 +30,7 @@ import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentEventsList;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.fragment.FragmentPhotoCommentAndInfo;
+import typical_if.android.fragment.FragmentPhotoFromCamera;
 import typical_if.android.fragment.FragmentPhotoList;
 import typical_if.android.fragment.FragmentUploadPhotoList;
 import typical_if.android.fragment.FragmentWall;
@@ -38,18 +39,19 @@ import typical_if.android.fragment.NavigationDrawerFragment;
 
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
-        FragmentPhotoList.OnFragmentInteractionListener,
         FragmentFullScreenImagePhotoViewer.OnFragmentInteractionListener,
-        FragmentUploadPhotoList.OnFragmentInteractionListener,
         FragmentPhotoCommentAndInfo.OnFragmentInteractionListener {
 
-    private CharSequence mTitle;
-    private Drawable mIcon;
 
-    private NavigationDrawerFragment mNavigationDrawerFragment;
-    private static String sTokenKey = "VK_ACCESS_TOKEN";
+    private Drawable mIcon;
+    private CharSequence mTitle;
     private long lastPressedTime;
+    private static Uri mImageCaptureUri;
     private static final int PERIOD = 2000;
+    private static final int PICK_FROM_CAMERA = 1;
+    private static String sTokenKey = "VK_ACCESS_TOKEN";
+    private NavigationDrawerFragment mNavigationDrawerFragment;
+
     final OfflineMode offlineMode = new OfflineMode();
 
     @Override
@@ -65,34 +67,34 @@ public class MainActivity extends ActionBarActivity implements
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
 
         //--------------------START------------- all Request from internet before start APP----------------------
-        VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                offlineMode.saveJSON(response.json, Constants.TF_ID);
-            }
-        });
-        VKHelper.doGroupWallRequest(Constants.TZ_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                offlineMode.saveJSON(response.json, Constants.TZ_ID);
-            }
-        });
-        VKHelper.doGroupWallRequest(Constants.FB_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                offlineMode.saveJSON(response.json, Constants.FB_ID);
-            }
-        });
-        VKHelper.doGroupWallRequest(Constants.FN_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                offlineMode.saveJSON(response.json, Constants.FN_ID);
-            }
-        });
+//        VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//                super.onComplete(response);
+//                offlineMode.saveJSON(response.json, Constants.TF_ID);
+//            }
+//        });
+//        VKHelper.doGroupWallRequest(Constants.TZ_ID, new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//                super.onComplete(response);
+//                offlineMode.saveJSON(response.json, Constants.TZ_ID);
+//            }
+//        });
+//        VKHelper.doGroupWallRequest(Constants.FB_ID, new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//                super.onComplete(response);
+//                offlineMode.saveJSON(response.json, Constants.FB_ID);
+//            }
+//        });
+//        VKHelper.doGroupWallRequest(Constants.FN_ID, new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//                super.onComplete(response);
+//                offlineMode.saveJSON(response.json, Constants.FN_ID);
+//            }
+//        });
         //-------------------------END-------- all Request from internet before start APP----------------------
 
     }
@@ -158,6 +160,15 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         VKUIHelper.onActivityResult(this, requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_FROM_CAMERA) {
+                mImageCaptureUri = data.getData();
+                FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance(mImageCaptureUri);
+                FragmentManager fragmentManagertwo = getSupportFragmentManager();
+                fragmentManagertwo.beginTransaction().replace(R.id.container, fragmentPhotoFromCamera).addToBackStack(null).commit();
+            }
+        }
     }
 
     private final VKSdkListener sdkListener = new VKSdkListener() {

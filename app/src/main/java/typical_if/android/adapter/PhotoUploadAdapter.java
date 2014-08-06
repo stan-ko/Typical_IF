@@ -1,5 +1,8 @@
 package typical_if.android.adapter;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,14 +10,18 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vk.sdk.VKUIHelper;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import typical_if.android.R;
+import typical_if.android.fragment.FragmentFullScreenViewFromPhone;
+import typical_if.android.fragment.FragmentPhotoFromCamera;
 import typical_if.android.model.UploadPhotos;
 
 ;
@@ -23,16 +30,19 @@ import typical_if.android.model.UploadPhotos;
  * Created by LJ on 25.07.2014.
  */
 public class PhotoUploadAdapter extends BaseAdapter {
+
     String titlename;
     LayoutInflater layoutInflater;
     final DisplayImageOptions options;
     ArrayList<UploadPhotos> uploadphotolist;
     ImageLoader imageLoader;
+    android.support.v4.app.FragmentManager manager;
 
-    public PhotoUploadAdapter(String titlename, LayoutInflater inflater, ArrayList uploadphotolist) {
+    public PhotoUploadAdapter(String titlename, LayoutInflater inflater, ArrayList<UploadPhotos> uploadphotolist, android.support.v4.app.FragmentManager fragmentManager) {
         this.titlename = titlename;
         this.layoutInflater = inflater;
-        this.uploadphotolist=uploadphotolist;
+        this.uploadphotolist = uploadphotolist;
+        this.manager = fragmentManager;
         this.options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.drawable.ic_stub) // TODO resource or drawable
                 .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
@@ -43,7 +53,6 @@ public class PhotoUploadAdapter extends BaseAdapter {
 //            .bitmapConfig(Bitmap.Config.ARGB_8888) // default
                 .build();
     }
-
 
 
     @Override
@@ -73,6 +82,7 @@ public class PhotoUploadAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
         File file = new File(uploadphotolist.get(position).photosrc);
         imageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), viewHolder.photo, options);
 
@@ -80,11 +90,10 @@ public class PhotoUploadAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 CheckBox cb = (CheckBox) v;
-                    uploadphotolist.get(position).ischecked = cb.isChecked();
-                if (cb.isChecked()==true) {
+                uploadphotolist.get(position).ischecked = cb.isChecked();
+                if (cb.isChecked() == true) {
                     viewHolder.background.setVisibility(View.VISIBLE);
-                }
-                else if (cb.isChecked()==false) {
+                } else if (cb.isChecked() == false) {
                     viewHolder.background.setVisibility(View.INVISIBLE);
                 }
             }
@@ -93,6 +102,14 @@ public class PhotoUploadAdapter extends BaseAdapter {
 
         UploadPhotos up = uploadphotolist.get(position);
         viewHolder.checkbox.setChecked(up.ischecked);
+
+        viewHolder.photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentFullScreenViewFromPhone fragmentFullScreenViewFromPhone = new FragmentFullScreenViewFromPhone().newInstance(position, uploadphotolist);
+                manager.beginTransaction().replace(R.id.container, fragmentFullScreenViewFromPhone).addToBackStack(null).commit();
+            }
+        });
 
         return convertView;
     }
