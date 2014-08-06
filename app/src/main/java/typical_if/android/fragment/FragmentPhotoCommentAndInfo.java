@@ -41,6 +41,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
@@ -77,7 +78,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     static int currentPosition;
     int reply_to_comment = 0;
     static int like_status;
-
+    long gid;
 
     public static FragmentPhotoCommentAndInfo newInstance(long vk_group_id, long vk_album_id,
                                                           ArrayList<Photo> photo, long vk_user_id,
@@ -133,7 +134,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         UpdateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
 
-
+        gid = arguments.getLong(ARG_VK_GROUP_ID);
 
 
 
@@ -309,7 +310,8 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
             @Override
             public void run() {
                 if (adapter == null) {
-                    adapter = new CommentsListAdapter(comments, profiles, inflater, null);
+                    String postColor = ItemDataSetter.getPostColor(gid);
+                    adapter = new CommentsListAdapter(comments, profiles, inflater, postColor);
                     listOfComments.setAdapter(adapter);
                 } else {
                     adapter.UpdateCommentList(comments, profiles, listOfComments);

@@ -61,16 +61,6 @@ public class Wall {
             wall.groups.add(group);
         }
         wall.group = getGroupFromJSON(groups.optJSONObject(0));
-/*
-        VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                JSONArray arr = response.json.optJSONArray("response");
-                JSONObject jsonObject = arr.optJSONObject(0);
-                wall.profile.id = jsonObject.optLong("id");
-            }
-        });*/
 
         // profiles
         final JSONArray profiles = object.optJSONArray(Wall.JSON_KEY_PROFILES);
@@ -78,12 +68,8 @@ public class Wall {
         Profile profile;
         for (int i = 0; i < profiles.length(); i++) {
             profile = getProfileFromJSON(profiles.optJSONObject(i));
-            //if (profile.id == wall.profile.id) {
-                wall.profile = profile;
-            //}
             wall.profiles.add(profile);
         }
-        //wall.profile = getProfileFromJSON(profiles.optJSONObject(0));
 
         VKHelper.getFixedPostId(wall.group.screen_name, new VKRequest.VKRequestListener() {
             @Override
@@ -98,13 +84,12 @@ public class Wall {
                             @Override
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
-                                Log.d(pidFull, "");
                                 final JSONObject object = response.json.optJSONObject(Wall.JSON_KEY_RESPONSE);
                                 final VKPostArray postsFixed = new VKPostArray();
                                 try {
                                     postsFixed.parse(object);
                                     if (postsFixed != null && postsFixed.size() != 0) {
-                                        posts.add(0, postsFixed.get(0));
+                                        //posts.add(0, postsFixed.get(0));
                                         wall.isFixedPost = true;
                                     }
                                 } catch (JSONException e) {
