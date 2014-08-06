@@ -154,8 +154,9 @@ public class FragmentPhotoList extends Fragment {
     }
 
     protected void handleResponse (VKResponse response, int columns, View view){
-        Log.d("-------------------yutyut------------->",response.json.toString()+"");
-        final ArrayList<Photo> photos = Photo.getPhotosFromJSONArray(response.json);
+   //     Log.d("-------------------yutyut------------->",response.json.toString()+"");
+         final ArrayList<Photo> photos = Photo.getPhotosFromJSONArray(response.json);
+
 
 
         try {
@@ -171,10 +172,9 @@ public class FragmentPhotoList extends Fragment {
         gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment fragment = null;
-                fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position,getArguments().getLong(ARG_VK_GROUP_ID),getArguments().getLong(ARG_VK_ALBUM_ID));
+                Fragment fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position ,getArguments().getLong(ARG_VK_GROUP_ID),getArguments().getLong(ARG_VK_ALBUM_ID));
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                fragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack("String").commit();
             }
         });
     }
@@ -208,15 +208,15 @@ public class FragmentPhotoList extends Fragment {
                             startActivityForResult(second, PICK_FROM_CAMERA);
 
 
-                            Log.d("URI -_---->>>>>>>>>>>>>>>", mImageCaptureUri.toString());
+                          //  Log.d("URI -_---->>>>>>>>>>>>>>>", mImageCaptureUri.toString());
                                 FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance(mImageCaptureUri);
                                 android.support.v4.app.FragmentManager fragmentManagers = getFragmentManager();
                                 fragmentManagers.beginTransaction().replace(R.id.container, fragmentPhotoFromCamera).addToBackStack("PhotoList").commit();
                         } catch(ActivityNotFoundException anfe){
                             //display an error message
                             String errorMessage = "Whoops - your device doesn't support capturing images!";
-                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
-                            toast.show();
+                         //   Toast toast = Toast.makeText(getActivity().getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
+                            //toast.show();
                         }
 
                         dialog.cancel();

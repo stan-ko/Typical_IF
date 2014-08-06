@@ -22,6 +22,7 @@ public class AlbumCoverAdapter extends BaseAdapter {
     LayoutInflater layoutInflater;
     final int imageHeight;
     ImageLoader imageLoader;
+   public static int _albumSize;
 
     public AlbumCoverAdapter(List<Album> list, LayoutInflater inflater) {
         albumList = list;
@@ -57,7 +58,7 @@ public class AlbumCoverAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Album album = albumList.get(position);
-
+        _albumSize= album.size;
 
         ViewHolder viewHolder;
         if (convertView == null) {
@@ -71,8 +72,10 @@ public class AlbumCoverAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+
         viewHolder.album_name.setText(album.title);
         viewHolder.photos_count.setText(album.size + "");
+
         String url = album.sizes.optJSONObject(2).optString("src");
         imageLoader.getInstance().displayImage(url, viewHolder.album_cover, options);
 
