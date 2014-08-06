@@ -3,6 +3,7 @@ package typical_if.android.fragment;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +13,7 @@ import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -38,6 +40,7 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import typical_if.android.MyApplication;
@@ -48,16 +51,15 @@ import typical_if.android.R;
  */
 public class FragmentPhotoFromCamera extends Fragment {
 
-    private static Uri uri;
-    private File file = null;
+    private static File file;
     private ImageView photofromcamera;
     private ImageLoader imageLoader;
     final int displayHeight = MyApplication.getDisplayHeight();
     final int displayWidth = MyApplication.getDisplayWidth();
 
-    public static FragmentPhotoFromCamera newInstance(Uri uri) {
+    public static FragmentPhotoFromCamera newInstance(File file) {
         FragmentPhotoFromCamera fragment = new FragmentPhotoFromCamera();
-        FragmentPhotoFromCamera.uri = uri;
+        FragmentPhotoFromCamera.file = file;
         return fragment;
     }
 
@@ -72,7 +74,7 @@ public class FragmentPhotoFromCamera extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_upload_photo_from_camera, container, false);
         setRetainInstance(true);
         photofromcamera = (ImageView) rootView.findViewById(R.id.image_from_photocamera);
-
+//
 //        Matrix matrix = photofromcamera.getImageMatrix();
 //        RotateAnimation animation = new RotateAnimation(0, 90,
 //                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -81,12 +83,15 @@ public class FragmentPhotoFromCamera extends Fragment {
 //        animation.setFillAfter(true);
 //        RectF drawableRect = new RectF(0, 0, 300, 300);
 //        RectF viewRect = new RectF(0, 0, displayWidth, displayHeight);
-//        matrix.setRectToRect(drawableRect, viewRect, Matrix.ScaleToFit.CENTER);
-//        matrix.postScale(photofromcamera.getWidth(), photofromcamera.getHeight());
+//        matrix.setRectToRect(drawableRect, viewRect, Matrix.ScaleToFit.FILL);
+//        matrix.postScale(displayWidth, displayHeight);
 //        photofromcamera.setAnimation(animation);
-//        imageLoader.getInstance().displayImage(String.valueOf(Uri.fromFile(file)), photofromcamera);
-        file = new File(getRealPathFromURI(uri));
-        photofromcamera.setImageBitmap(getRotatedBitmapByExif(file));
+//
+        //file = new File(getRealPathFromURI(uri));
+        //photofromcamera.setRotation(90);
+        //photofromcamera.setImageBitmap(getRotatedBitmapByExif(file));
+
+        imageLoader.getInstance().displayImage(String.valueOf(Uri.fromFile(file)), photofromcamera);
 
         return rootView;
     }
@@ -100,22 +105,8 @@ public class FragmentPhotoFromCamera extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         if (file.exists()) {
-            getActivity().getContentResolver().delete(uri, null, null);
+                file.delete();
         }
-    }
-
-    private String getRealPathFromURI(Uri contentURI) {
-        String result;
-        Cursor cursor = getActivity().getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) { // Source is Dropbox or other similar local file path
-            result = contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            result = cursor.getString(idx);
-            cursor.close();
-        }
-        return result;
     }
 
     @Override
