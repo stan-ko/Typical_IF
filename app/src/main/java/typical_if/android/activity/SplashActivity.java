@@ -7,16 +7,24 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+
 import java.util.Locale;
 
+import typical_if.android.Constants;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.VKHelper;
 
-public class SplashActivity extends Activity implements Animation.AnimationListener{
+public class SplashActivity extends Activity implements Animation.AnimationListener {
 
     Animation animMoveDown;
     Animation animFadeIn;
@@ -26,14 +34,15 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
     Locale locale;
     Configuration config;
+    final OfflineMode offlineMode = new OfflineMode();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        textView = (TextView)findViewById(R.id.splash_title);
-        imageView = (ImageView)findViewById(R.id.splash_logo);
+        textView = (TextView) findViewById(R.id.splash_title);
+        imageView = (ImageView) findViewById(R.id.splash_logo);
 
         animMoveDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_down);
         animMoveDown.setAnimationListener(this);
@@ -43,7 +52,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         animFadeIn.setAnimationListener(this);
         imageView.startAnimation(animFadeIn);
 
-        new Handler().postDelayed(new Runnable (){
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent i = new Intent(SplashActivity.this, MainActivity.class);
@@ -59,7 +68,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         config.locale = locale;
         getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
     }
-
 
 
     @Override

@@ -19,13 +19,18 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 
 import typical_if.android.Constants;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.VKHelper;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentEventsList;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.fragment.FragmentPhotoCommentAndInfo;
+import typical_if.android.fragment.FragmentPhotoFromCamera;
 import typical_if.android.fragment.FragmentPhotoList;
 import typical_if.android.fragment.FragmentUploadPhotoList;
 import typical_if.android.fragment.FragmentWall;
@@ -34,32 +39,64 @@ import typical_if.android.fragment.NavigationDrawerFragment;
 
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
-        FragmentPhotoList.OnFragmentInteractionListener,
         FragmentFullScreenImagePhotoViewer.OnFragmentInteractionListener,
-        FragmentUploadPhotoList.OnFragmentInteractionListener,
         FragmentPhotoCommentAndInfo.OnFragmentInteractionListener {
 
-    private CharSequence mTitle;
-    private Drawable mIcon;
 
-    private NavigationDrawerFragment mNavigationDrawerFragment;
-    private static String sTokenKey = "VK_ACCESS_TOKEN";
+    private Drawable mIcon;
+    private CharSequence mTitle;
     private long lastPressedTime;
+    private static Uri mImageCaptureUri;
     private static final int PERIOD = 2000;
+    private static final int PICK_FROM_CAMERA = 1;
+    private static String sTokenKey = "VK_ACCESS_TOKEN";
+    private NavigationDrawerFragment mNavigationDrawerFragment;
+
+    final OfflineMode offlineMode = new OfflineMode();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-        mNavigationDrawerFragment = (NavigationDrawerFragment)getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
+
+        //--------------------START------------- all Request from internet before start APP----------------------
+//        VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//                super.onComplete(response);
+//                offlineMode.saveJSON(response.json, Constants.TF_ID);
+//            }
+//        });
+//        VKHelper.doGroupWallRequest(Constants.TZ_ID, new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//                super.onComplete(response);
+//                offlineMode.saveJSON(response.json, Constants.TZ_ID);
+//            }
+//        });
+//        VKHelper.doGroupWallRequest(Constants.FB_ID, new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//                super.onComplete(response);
+//                offlineMode.saveJSON(response.json, Constants.FB_ID);
+//            }
+//        });
+//        VKHelper.doGroupWallRequest(Constants.FN_ID, new VKRequest.VKRequestListener() {
+//            @Override
+//            public void onComplete(VKResponse response) {
+//                super.onComplete(response);
+//                offlineMode.saveJSON(response.json, Constants.FN_ID);
+//            }
+//        });
+        //-------------------------END-------- all Request from internet before start APP----------------------
+
     }
 
     public long setGroupId(int clickedPosition) {
@@ -123,6 +160,15 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         VKUIHelper.onActivityResult(this, requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_FROM_CAMERA) {
+                mImageCaptureUri = data.getData();
+                FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance(mImageCaptureUri);
+                FragmentManager fragmentManagertwo = getSupportFragmentManager();
+                fragmentManagertwo.beginTransaction().replace(R.id.container, fragmentPhotoFromCamera).addToBackStack(null).commit();
+            }
+        }
     }
 
     private final VKSdkListener sdkListener = new VKSdkListener() {
@@ -182,10 +228,10 @@ public class MainActivity extends ActionBarActivity implements
                 fragment = FragmentEventsList.newInstance(vkGroupId);
                 break;
             case 5:
-                if (VKSdk.wakeUpSession() && VKSdk.isLoggedIn()){
+                if (VKSdk.wakeUpSession() && VKSdk.isLoggedIn()) {
                     VKSdk.logout();
                     mNavigationDrawerFragment.refreshNavigationDrawer();
-                }else{
+                } else {
                     if (!VKSdk.wakeUpSession()) {
                         VKSdk.authorize(Constants.sMyScope, true, true);
                     } else

@@ -1,1 +1,1 @@
-include ':vksdk_library', ':jazzy_lib', ':app'
+include ':vksdk_library',':jazzy_lib', ':app'

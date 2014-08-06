@@ -14,15 +14,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
 
-
-    <string name="key_owner_id">owner_id</string>
-    <string name="key_domain">domain</string>
-    <string name="key_offset">offset</string>
-    <string name="key_count">count</string>
-    <string name="key_filter">filter</string>
-    <string name="value_filter">all</string>
-    <string name="key_extended">extended</string>
-
     <string name="date_today">Сьогодні о</string>
     <string name="date_yesterday">Вчора о</string>
 
