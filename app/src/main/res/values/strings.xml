@@ -14,15 +14,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
 
-
-    <string name="key_owner_id">owner_id</string>
-    <string name="key_domain">domain</string>
-    <string name="key_offset">offset</string>
-    <string name="key_count">count</string>
-    <string name="key_filter">filter</string>
-    <string name="value_filter">all</string>
-    <string name="key_extended">extended</string>
-
     <string name="date_today">Сьогодні о</string>
     <string name="date_yesterday">Вчора о</string>
 
@@ -46,6 +37,17 @@
 
     <string name="poll_anonymous">Анонімне голосування, голосів:</string>
     <string name="poll_not_anonymous">Публічне голосування, голосів:</string>
+
+    <string name="txt_dialog_comment">Ваш коментар...</string>
+
+    <string name="post_report">Поскаржитись</string>
+    <string name="post_copy_link">Копіювати посилання</string>
+    <string name="post_report_spam">Спам</string>
+    <string name="post_report_offense">Образа</string>
+    <string name="post_report_adult">Матеріал для дорослих</string>
+    <string name="post_report_drugs">Пропаганда наркотиків</string>
+    <string name="post_report_porno">Дитяча порнографія</string>
+    <string name="post_report_violence">Насильство</string>
 
     <string name="exit_toast">Нажміть ще раз, щоб вийти.</string>
 </resources>

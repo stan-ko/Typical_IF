@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -29,25 +28,22 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import typical_if.android.MyApplication;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
-import typical_if.android.adapter.FullScreenImageAdapter;
 import typical_if.android.model.Photo;
 import typical_if.android.model.Profile;
 
@@ -103,7 +99,8 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         return fragment;
     }
 
-    public FragmentPhotoCommentAndInfo() {  }
+    public FragmentPhotoCommentAndInfo() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -113,14 +110,6 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
 
         }
     }
-
-
-    @Override
-    public void onResume() {
-        super.onResume(); VKUIHelper.onResume(getActivity());
-
-    }
-
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -137,91 +126,50 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
 
         ImageView headerView = (ImageView) listHeaderView.findViewById(R.id.list_header_image);
         listOfComments.addHeaderView(listHeaderView);
-       // ImageLoader.getInstance().displayImage(photo.get(currentPosition).photo_75, headerView);
-        loadImage(photo.get(currentPosition),headerView);
+        ImageLoader.getInstance().displayImage(photo.get(currentPosition).photo_1280, headerView);
 
         final Button sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
         final ArrayList<Photo> photo = this.photo;
-
+        UpdateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
 
 
 
 
 
-        UpdateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
+  final CheckBox likePostPhoto = ((CheckBox) rootView.findViewById(R.id.like_post_photo_checkbox));
 
-
-
-
-        final CheckBox likePostPhoto = ((CheckBox) rootView.findViewById(R.id.like_post_photo_checkbox));
-
-        likePostPhoto.setText(String.valueOf(photo.get(currentPosition).likes));
-
-        VKHelper.isLIked("photo",arguments.getLong(ARG_VK_GROUP_ID),photo.get(currentPosition).id,new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                JSONObject j = response.json.optJSONObject("response");
-                isLiked= j.optInt("liked");
-
-            }
-        });
-
-
-
-
-
-        if (isLiked == 0) {
-
+        if (like_status == 0) {
             likePostPhoto.setBackgroundColor(Color.WHITE);
-            likePostPhoto.setChecked(true);
-
+            likePostPhoto.setChecked(false);
+            //   likePostPhoto.setText(String.valueOf(photo.get(currentPosition).likes + 1));
             likePostPhoto.setTextColor(Color.GRAY);
         }
-        if (isLiked == 1) {
+        if (like_status == 1) {
             likePostPhoto.setBackgroundColor(Color.BLUE);
-            likePostPhoto.setChecked(false);
-
+            likePostPhoto.setChecked(true);
+            //  likePostPhoto.setText(String.valueOf(photo.get(currentPosition).likes - 1));
             likePostPhoto.setTextColor(Color.WHITE);
         }
 
 
 //        likePostPhoto.setText(photo.get(currentPosition).likes);
-        likePostPhoto.setOnClickListener
-                (new View.OnClickListener() {
+        likePostPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isLiked == 0){
-                    VKHelper.setLike("photo", photo.get(currentPosition).owner_id, photo.get(currentPosition).id, new VKRequest.VKRequestListener() {
-                                @Override
-                                public void onComplete(VKResponse response) {
-                                    super.onComplete(response);
-                                    {  likePostPhoto.setBackgroundColor(Color.BLUE);
-                                    likePostPhoto.setChecked(true);
-                                    likePostPhoto.setText(String.valueOf(Integer.parseInt(likePostPhoto.getText().toString()) + 1));
-                                    FullScreenImageAdapter.photos.get(currentPosition).likes+=1;
-                                    likePostPhoto.setTextColor(Color.WHITE);
-                                    FullScreenImageAdapter.static_like_status =1;}
-                                }
-                            });
-}
-                if (isLiked == 1) {
-                    VKHelper.deleteLike("photo", photo.get(currentPosition).owner_id, photo.get(currentPosition).id, new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(VKResponse response) {
-                           {  likePostPhoto.setBackgroundColor(Color.WHITE);
-                            likePostPhoto.setChecked(false);
-                            likePostPhoto.setText(String.valueOf(Integer.parseInt(likePostPhoto.getText().toString()) - 1));
-                            FullScreenImageAdapter.photos.get(currentPosition).likes-=1;
-                            likePostPhoto.setTextColor(Color.GRAY);
-                            FullScreenImageAdapter.static_like_status =0;}
-                        }
-                    });
-
-
-
-
+                if (like_status == 0){
+                    likePostPhoto.setBackgroundColor(Color.WHITE);
+                    likePostPhoto.setChecked(false);
+                 //   likePostPhoto.setText(String.valueOf(photo.get(currentPosition).likes + 1));
+                    likePostPhoto.setTextColor(Color.GRAY);
+                    like_status =1;
+                }
+                if (like_status == 1) {
+                    likePostPhoto.setBackgroundColor(Color.BLUE);
+                    likePostPhoto.setChecked(true);
+                  //  likePostPhoto.setText(String.valueOf(photo.get(currentPosition).likes - 1));
+                    likePostPhoto.setTextColor(Color.WHITE);
+                    like_status =0;
                 }
             }
         });
@@ -240,7 +188,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
-                          //  Toast.makeText(getActivity().getApplicationContext(), "POSTED", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity().getApplicationContext(), "POSTED", Toast.LENGTH_SHORT).show();
                             commentMessage.setText("");
                             UpdateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
                         }
@@ -252,7 +200,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
-                          //  Toast.makeText(getActivity().getApplicationContext(), "POSTED", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity().getApplicationContext(), "POSTED", Toast.LENGTH_SHORT).show();
                             commentMessage.setText("");
                             UpdateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
                         }
@@ -418,6 +366,11 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                             @Override
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
+                                try {
+                                    Toast.makeText(getActivity().getApplicationContext(), response.json.getBoolean("response") + "", Toast.LENGTH_LONG).show();
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
 
                                 UpdateCommentList(getArguments().getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
                             }
@@ -425,26 +378,26 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                             @Override
                             public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
                                 super.attemptFailed(request, attemptNumber, totalAttempts);
-                               // Toast.makeText(getActivity().getApplicationContext(), "attemptFailed", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity().getApplicationContext(), "attemptFailed", Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void onError(VKError error) {
                                 super.onError(error);
-                              //  Toast.makeText(getActivity().getApplicationContext(), "onError", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity().getApplicationContext(), "onError", Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
                                 super.onProgress(progressType, bytesLoaded, bytesTotal);
-                               // Toast.makeText(getActivity().getApplicationContext(), "onProgress", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity().getApplicationContext(), "onProgress", Toast.LENGTH_LONG).show();
                             }
                         });
                     }
                     break;
 
                     default:
-                      //  Toast.makeText(getActivity().getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity().getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -584,23 +537,5 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    public void loadImage(Photo photo, ImageView imageView) {
-        String url = null;
-        if (!TextUtils.isEmpty(photo.photo_2048) && displayHeight > 1199) {
-            url = photo.photo_2048;
-        } else if (!TextUtils.isEmpty(photo.photo_1280) && displayHeight > 799) {
-            url = photo.photo_1280;
-        } else if (!TextUtils.isEmpty(photo.photo_807) && displayHeight > 600) {
-            url = photo.photo_807;
-        } else if (!TextUtils.isEmpty(photo.photo_604)) {
-            url = photo.photo_604;
-        } else if (!TextUtils.isEmpty(photo.photo_130)) {
-            url = photo.photo_130;
-        } else if (!TextUtils.isEmpty(photo.photo_75)) {
-            url = photo.photo_75;
-        }
-        ImageLoader.getInstance().displayImage(url, imageView);
-    }
 
-    final int displayHeight = MyApplication.getDisplayHeight();
 }

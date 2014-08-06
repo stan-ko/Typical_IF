@@ -10,22 +10,23 @@
         android:id="@+id/txt_poll_title"
         android:textColor="#ff515151"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView" />
+        android:layout_toRightOf="@+id/img_fixed_post"
+        android:layout_toEndOf="@+id/img_fixed_post"
+        android:singleLine="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/txt_poll_votes"
-        android:layout_toEndOf="@+id/imageView"
-        android:layout_alignBottom="@+id/imageView"
-        android:layout_toRightOf="@+id/imageView" />
+        android:layout_toEndOf="@+id/img_fixed_post"
+        android:layout_alignBottom="@+id/img_fixed_post"
+        android:layout_toRightOf="@+id/img_fixed_post" />
 
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:id="@+id/imageView"
+        android:id="@+id/img_fixed_post"
         android:src="@android:drawable/ic_menu_sort_by_size"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"

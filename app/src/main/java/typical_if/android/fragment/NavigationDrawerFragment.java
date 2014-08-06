@@ -38,7 +38,6 @@ public class NavigationDrawerFragment extends Fragment {
      * Remember the position of the selected item.
      */
     private static final String STATE_SELECTED_GROUP_POSITION = "selected_navigation_drawer_group_position";
-
     private static final String STATE_SELECTED_CHILD_POSITION = "selected_navigation_drawer_child_position";
 
     /**
