@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import typical_if.android.R;
@@ -158,9 +160,21 @@ public class FragmentPhotoList extends Fragment {
                         dialog.cancel();
                         break;
                     case 1:
-                        Intent second = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        Uri newImageUri = null;
+                        File path = new File(Environment.getExternalStorageDirectory().getPath() + "/Images/");
+                        path.mkdirs();
+                        boolean setWritable = false;
+                        setWritable = path.setWritable(true, false);
+                        File file = new File(path, "Image_Story_" + System.currentTimeMillis() + ".jpg");
+                        newImageUri = Uri.fromFile(file);
+                        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, newImageUri);
+
+                        //Intent second = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         try {
-                            getActivity().startActivityForResult(second, PICK_FROM_CAMERA);
+                            //getActivity().startActivityForResult(intent, PICK_FROM_CAMERA);
+                            FragmentTakePicture fragmentTakePicture = new FragmentTakePicture();
+                            getFragmentManager().beginTransaction().replace(R.id.container, fragmentTakePicture).addToBackStack(null).commit();
                         } catch (ActivityNotFoundException e) {
                             String errorMessage = "Whoops - your device doesn't support capturing images!";
                             Toast toast = Toast.makeText(getActivity().getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
