@@ -4,7 +4,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <typical_if.android.TouchImageView
+    <typical_if.android.view.TouchImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/full_screen_photo_from_phone"

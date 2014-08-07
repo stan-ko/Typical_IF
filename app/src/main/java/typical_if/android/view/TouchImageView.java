@@ -1,4 +1,4 @@
-package typical_if.android;
+package typical_if.android.view;
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.PointF;

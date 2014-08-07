@@ -24,7 +24,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import typical_if.android.AnimatedExpandableListView;
+import typical_if.android.view.AnimatedExpandableListView;
 import typical_if.android.R;
 import typical_if.android.adapter.ExpandableListAdapter;
 

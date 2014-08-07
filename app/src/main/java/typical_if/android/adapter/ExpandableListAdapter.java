@@ -16,7 +16,7 @@ import com.vk.sdk.VKSdk;
 
 import java.util.List;
 
-import typical_if.android.AnimatedExpandableListView;
+import typical_if.android.view.AnimatedExpandableListView;
 import typical_if.android.R;
 
 public class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
