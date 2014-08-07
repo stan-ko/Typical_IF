@@ -1,6 +1,7 @@
 package typical_if.android.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -13,6 +14,11 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCaptchaDialog;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.VKSdkListener;
+import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -23,6 +29,7 @@ import typical_if.android.Constants;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.fragment.NavigationDrawerFragment;
 
 public class SplashActivity extends Activity implements Animation.AnimationListener {
 
@@ -34,8 +41,10 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
     Locale locale;
     Configuration config;
-    final OfflineMode offlineMode = new OfflineMode();
+    private static String sTokenKey = "VK_ACCESS_TOKEN";
 
+    //  final OfflineMode offlineMode = new OfflineMode();
+    private NavigationDrawerFragment mNavigationDrawerFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,8 +76,70 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         config = new Configuration();
         config.locale = locale;
         getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
-    }
 
+        VKUIHelper.onCreate(this);
+        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
+
+
+        //   --------------------START------------- all Request from internet before start APP----------------------
+        VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                OfflineMode.saveJSON(response.json, Constants.TF_ID);
+            }
+        });
+        VKHelper.doGroupWallRequest(Constants.TZ_ID, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                OfflineMode.saveJSON(response.json, Constants.TZ_ID);
+            }
+        });
+        VKHelper.doGroupWallRequest(Constants.FB_ID, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                OfflineMode.saveJSON(response.json, Constants.FB_ID);
+            }
+        });
+        VKHelper.doGroupWallRequest(Constants.FN_ID, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                OfflineMode.saveJSON(response.json, Constants.FN_ID);
+            }
+        });
+        //     -------------------------END-------- all Request from internet before start APP----------------------
+    }
+    private final VKSdkListener sdkListener = new VKSdkListener() {
+        @Override
+        public void onCaptchaError(VKError captchaError) {
+            new VKCaptchaDialog(captchaError).show();
+        }
+
+        @Override
+        public void onTokenExpired(VKAccessToken expiredToken) {
+            VKSdk.authorize(Constants.S_MY_SCOPE);
+        }
+
+        @Override
+        public void onAccessDenied(final VKError authorizationError) {
+            new AlertDialog.Builder(VKUIHelper.getTopActivity())
+                    .setMessage(authorizationError.toString())
+                    .show();
+        }
+
+        @Override
+        public void onReceiveNewToken(VKAccessToken newToken) {
+            mNavigationDrawerFragment.refreshNavigationDrawer();
+        }
+
+        @Override
+        public void onAcceptUserToken(VKAccessToken token) {
+            mNavigationDrawerFragment.refreshNavigationDrawer();
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -57,38 +57,6 @@ public class MainActivity extends ActionBarActivity implements
 
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
-
-        //--------------------START------------- all Request from internet before start APP----------------------
-//        VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
-//            @Override
-//            public void onComplete(VKResponse response) {
-//                super.onComplete(response);
-//                offlineMode.saveJSON(response.json, Constants.TF_ID);
-//            }
-//        });
-//        VKHelper.doGroupWallRequest(Constants.TZ_ID, new VKRequest.VKRequestListener() {
-//            @Override
-//            public void onComplete(VKResponse response) {
-//                super.onComplete(response);
-//                offlineMode.saveJSON(response.json, Constants.TZ_ID);
-//            }
-//        });
-//        VKHelper.doGroupWallRequest(Constants.FB_ID, new VKRequest.VKRequestListener() {
-//            @Override
-//            public void onComplete(VKResponse response) {
-//                super.onComplete(response);
-//                offlineMode.saveJSON(response.json, Constants.FB_ID);
-//            }
-//        });
-//        VKHelper.doGroupWallRequest(Constants.FN_ID, new VKRequest.VKRequestListener() {
-//            @Override
-//            public void onComplete(VKResponse response) {
-//                super.onComplete(response);
-//                offlineMode.saveJSON(response.json, Constants.FN_ID);
-//            }
-//        });
-        //-------------------------END-------- all Request from internet before start APP----------------------
-
     }
 
     public long setGroupId(int clickedPosition) {
