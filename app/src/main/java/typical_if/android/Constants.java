@@ -40,7 +40,7 @@ public class Constants {
 
     public static long USER_ID;
 
-    public static final Resources RESOURCES = VKUIHelper.getApplicationContext().getResources();
+    public static final Resources RESOURCES = MyApplication.getAppContext().getResources();
 
     public static final String TIME_FORMAT_STRING = "kk:mm";
     public static final String DATE_TIME_FORMAT_STRING = "d MMMM о kk:mm";

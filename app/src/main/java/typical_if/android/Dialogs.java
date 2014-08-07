@@ -14,10 +14,16 @@ import com.vk.sdk.api.VKResponse;
  * Created by admin on 06.08.2014.
  */
 public class Dialogs {
+
     public static void reportListDialog(final long gid, final long id) {
         final AlertDialog.Builder builderIn = new AlertDialog.Builder(VKUIHelper.getTopActivity());
         builderIn.setTitle(Constants.POST_REPORT);
-        final String[] items = {Constants.POST_REPORT_SPAM, Constants.POST_REPORT_OFFENSE, Constants.POST_REPORT_ADULT, Constants.POST_REPORT_DRUGS, Constants.POST_REPORT_PORNO, Constants.POST_REPORT_VIOLENCE};
+        final String[] items = {Constants.POST_REPORT_SPAM,
+                                Constants.POST_REPORT_OFFENSE,
+                                Constants.POST_REPORT_ADULT,
+                                Constants.POST_REPORT_DRUGS,
+                                Constants.POST_REPORT_PORNO,
+                                Constants.POST_REPORT_VIOLENCE};
 
         builderIn.setItems(items, new DialogInterface.OnClickListener() {
             @Override

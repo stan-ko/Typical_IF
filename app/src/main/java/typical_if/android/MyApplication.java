@@ -1,6 +1,7 @@
 package typical_if.android;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.DisplayMetrics;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -15,6 +16,11 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
  * Created by LJ on 14.07.2014.
  */
 public class MyApplication extends Application {
+
+    private static Context appContext;
+    public static Context getAppContext(){
+        return appContext;
+    }
 
     private static int displayHeight;
     private static int displayWidth;
@@ -31,12 +37,16 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        appContext = getApplicationContext();
+
         final DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
         displayHeight = displayMetrics.heightPixels;
         displayWidth = displayMetrics.widthPixels;
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .cacheOnDisc(true).cacheInMemory(true).resetViewBeforeLoading(true)
+                .cacheOnDisc(true)
+                .cacheInMemory(true)
+                .resetViewBeforeLoading(true)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .displayer(new FadeInBitmapDisplayer(300)).build();
 
@@ -56,9 +66,9 @@ public class MyApplication extends Application {
                         //.memoryCacheSizePercentage(13) // default
                         //.diskCache(new UnlimitedDiscCache(cacheDir)) // default
                 .denyCacheImageMultipleSizesInMemory()
-                .defaultDisplayImageOptions(defaultOptions)
+                //.defaultDisplayImageOptions(defaultOptions)
                 .memoryCache(new WeakMemoryCache())
-                .discCacheSize(100 * 1024 * 1024)
+                //.discCacheSize(100 * 1024 * 1024)
 
                         //.diskCacheSize(50 * 1024 * 1024)
                         //.diskCacheFileCount(100)

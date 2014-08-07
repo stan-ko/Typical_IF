@@ -840,9 +840,9 @@ public class ItemDataSetter {
         now.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
 
         if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
-            return Constants.TODAY + " " + DateFormat.format(Constants.TIME_FORMAT_STRING, smsTime);
+            return String.format(Constants.TODAY, DateFormat.format(Constants.TIME_FORMAT_STRING, smsTime));
         } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1) {
-            return Constants.YESTERDAY + " " + DateFormat.format(Constants.TIME_FORMAT_STRING, smsTime);
+            return String.format(Constants.YESTERDAY, DateFormat.format(Constants.TIME_FORMAT_STRING, smsTime));
         } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
             return DateFormat.format(Constants.DATE_TIME_FORMAT_STRING, smsTime).toString();
         } else
