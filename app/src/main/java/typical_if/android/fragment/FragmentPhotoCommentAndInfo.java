@@ -348,7 +348,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                     }
                     break;
                     case 4:
-                        Dialogs.reportListDialog(gid, comments.get(position).id);
+                        Dialogs.reportListDialog(getActivity(), gid, comments.get(position).id);
                         break;
                     case 5: {
                         VKHelper.deleteCommentForPhoto(getArguments().getLong(ARG_VK_GROUP_ID), comments.get(position).id, new VKRequest.VKRequestListener() {

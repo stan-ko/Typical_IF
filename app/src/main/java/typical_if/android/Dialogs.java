@@ -3,6 +3,7 @@ package typical_if.android;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.text.ClipboardManager;
 import android.widget.Toast;
 
@@ -15,15 +16,12 @@ import com.vk.sdk.api.VKResponse;
  */
 public class Dialogs {
 
-    public static void reportListDialog(final long gid, final long id) {
+    public static void reportListDialog(final Context context, final long gid, final long id) {
         final AlertDialog.Builder builderIn = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-        builderIn.setTitle(Constants.POST_REPORT);
-        final String[] items = {Constants.POST_REPORT_SPAM,
-                                Constants.POST_REPORT_OFFENSE,
-                                Constants.POST_REPORT_ADULT,
-                                Constants.POST_REPORT_DRUGS,
-                                Constants.POST_REPORT_PORNO,
-                                Constants.POST_REPORT_VIOLENCE};
+        builderIn.setTitle(R.string.post_report);
+        final Resources resources = context.getResources();
+
+        final String[] items = resources.getStringArray(R.array.post_report_types);
 
         builderIn.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -65,19 +63,21 @@ public class Dialogs {
         builderIn.show();
     }
 
-    public static void reportDialog(final long gid, final long id) {
+    public static void reportDialog(final Context context, final long gid, final long id) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-        final String[] items = {Constants.POST_REPORT, Constants.POST_COPY_LINK};
+        final Resources resources = context.getResources();
+
+        final String[] items = {resources.getString(R.string.post_report), resources.getString(R.string.post_copy_link)};
 
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        reportListDialog(gid, id);
+                        reportListDialog(context, gid, id);
                         break;
                     case 1:
-                        ClipboardManager clipboard = (ClipboardManager) VKUIHelper.getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipboardManager clipboard = (ClipboardManager) MyApplication.getAppContext().getSystemService(Context.CLIPBOARD_SERVICE);
                         clipboard.setText("http://vk.com/wall-" + gid + "_" + id);
                         break;
                 }

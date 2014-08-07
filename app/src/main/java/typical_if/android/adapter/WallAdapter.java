@@ -22,6 +22,7 @@ import com.vk.sdk.api.model.VKPostArray;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
+import typical_if.android.MyApplication;
 import typical_if.android.R;
 import typical_if.android.model.Wall.Group;
 import typical_if.android.model.Wall.Profile;
@@ -33,14 +34,14 @@ public class WallAdapter extends BaseAdapter {
     private Wall wall;
     private VKPostArray posts;
     private LayoutInflater layoutInflater;
-    private static Context context;
-    private static String postColor;
+    Context context = MyApplication.getAppContext();
+    private String postColor;
     final DisplayImageOptions options;
     public WallAdapter(Wall wall, LayoutInflater inflater, String postColor) {
         this.wall = wall;
         this.posts = wall.posts;
         this.layoutInflater = inflater;
-        this.context = VKUIHelper.getApplicationContext();
+        //this.context = VKUIHelper.getApplicationContext();
         this.postColor = postColor;
         this.options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.drawable.ic_stubif) // TODO resource or drawable
@@ -154,7 +155,7 @@ public class WallAdapter extends BaseAdapter {
         viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialogs.reportDialog(wall.group.id, post.id);
+                Dialogs.reportDialog(context, wall.group.id, post.id);
             }
         });
 
@@ -199,7 +200,7 @@ public class WallAdapter extends BaseAdapter {
             copyHistoryLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Uri uri = Uri.parse("http://vk.com/" + finalCopy_history_name);
+                    final Uri uri = Uri.parse("http://vk.com/" + finalCopy_history_name);
                     context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
