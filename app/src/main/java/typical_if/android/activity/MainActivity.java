@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -22,13 +21,11 @@ import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 
 import typical_if.android.Constants;
-import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentEventsList;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.fragment.FragmentPhotoCommentAndInfo;
-import typical_if.android.fragment.FragmentPhotoFromCamera;
 import typical_if.android.fragment.FragmentWall;
 import typical_if.android.fragment.NavigationDrawerFragment;
 
@@ -48,7 +45,6 @@ public class MainActivity extends ActionBarActivity implements
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    final OfflineMode offlineMode = new OfflineMode();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,15 +153,6 @@ public class MainActivity extends ActionBarActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         VKUIHelper.onActivityResult(this, requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-//        if (resultCode == RESULT_OK) {
-//            if (requestCode == PICK_FROM_CAMERA) {
-//                mImageCaptureUri = data.getData();
-//                Log.d("NTTTTTTT---------------------->>>", mImageCaptureUri.getPath().toString());
-//                FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance(mImageCaptureUri);
-//                FragmentManager fragmentManagertwo = getSupportFragmentManager();
-//                fragmentManagertwo.beginTransaction().replace(R.id.container, fragmentPhotoFromCamera).addToBackStack(null).commit();
-//            }
-//        }
     }
 
     private final VKSdkListener sdkListener = new VKSdkListener() {

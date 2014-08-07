@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.FullScreenImageAdapter;
@@ -76,13 +77,6 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final Bundle arguments = getArguments();
-//        final Animation animTextViewUp ;
-//        final Animation animTextViewDown ;
-//        animTextViewUp  =AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.move_up);
-//        animTextViewDown=AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.move_down);
-//        animTextViewUp.setAnimationListener(this);
-//        animTextViewDown.setAnimationListener(this);
-
 
         final Animation animFadeInObjects;
         final Animation animFadeOutObjects;
@@ -102,16 +96,14 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
         imagepager.setCurrentItem(currentposition);
 
         Log.d("Current VIEW", photos.get(imagepager.getCurrentItem()).text);
+
         VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-
                 JSONArray arr = response.json.optJSONArray("response");
                 JSONObject jsonObject = arr.optJSONObject(0);
-                user_id = jsonObject.optLong("id");
-                arguments.putLong(ARG_VK_USER_ID, user_id);
-
+                Constants.USER_ID = jsonObject.optLong("id");
             }
         });
 

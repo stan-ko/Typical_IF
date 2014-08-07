@@ -144,7 +144,7 @@ public class WallAdapter extends BaseAdapter {
         viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialogs.spamDialog(wall, post);
+                Dialogs.reportDialog(wall.group.id, post.id);
             }
         });
 

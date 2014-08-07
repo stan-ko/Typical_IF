@@ -38,6 +38,8 @@ public class Constants {
 
     public static final String APP_ID = "4456259";
 
+    public static long USER_ID;
+
     public static final Resources RESOURCES = VKUIHelper.getApplicationContext().getResources();
 
     public static final String TIME_FORMAT_STRING = "kk:mm";

@@ -43,6 +43,7 @@ import java.util.List;
 import java.util.Locale;
 
 import typical_if.android.Constants;
+import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -259,10 +260,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                         parseCommentList(response);
                     }
                 }).start();
-
-
             }
-
         });
 
 
@@ -280,14 +278,13 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
 
     public void showContextMenu(int position) {
         VKApiComment comment = comments.get(position);
-        final long user_id = getArguments().getLong(ARG_VK_USER_ID);
 
         CharSequence[] items;
-        Log.d("akuma", comment.from_id + "               " + user_id);
-        if (comment.from_id == user_id) {
-            items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Видалити"};
+        Log.d("akuma", comment.from_id + "               " + Constants.USER_ID);
+        if (comment.from_id == Constants.USER_ID) {
+            items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись", "Видалити"};
         } else {
-            items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Оцінили"};
+            items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись"};
         }
 
         onInitContextMenu(items, position);
@@ -350,7 +347,10 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                         Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
                     }
                     break;
-                    case 4: {
+                    case 4:
+                        Dialogs.reportListDialog(gid, comments.get(position).id);
+                        break;
+                    case 5: {
                         VKHelper.deleteCommentForPhoto(getArguments().getLong(ARG_VK_GROUP_ID), comments.get(position).id, new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(VKResponse response) {
