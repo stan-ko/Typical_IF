@@ -44,7 +44,7 @@ public class FragmentWall extends Fragment {
 
     String postColor;
     Long gid;
-    final OfflineMode offlineMode = new OfflineMode();
+   // final OfflineMode offlineMode = new OfflineMode();
 
     Bundle arguments;
 
@@ -68,7 +68,7 @@ public class FragmentWall extends Fragment {
         gid = arguments.getLong(ARG_VK_GROUP_ID);
         postColor = ItemDataSetter.getPostColor(gid);
 
-        initGroupWall(offlineMode.loadJSON(gid), inflater);
+        initGroupWall(OfflineMode.loadJSON(gid), inflater);
         spinnerLayout.setVisibility(View.GONE);
 
         return rootView;
