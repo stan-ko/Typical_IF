@@ -14,17 +14,9 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
-import typical_if.android.Constants;
 import typical_if.android.R;
-import typical_if.android.VKHelper;
 import typical_if.android.adapter.FullScreenImageAdapter;
 import typical_if.android.model.Photo;
 
@@ -96,16 +88,6 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
         imagepager.setCurrentItem(currentposition);
 
         Log.d("Current VIEW", photos.get(imagepager.getCurrentItem()).text);
-
-        VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                JSONArray arr = response.json.optJSONArray("response");
-                JSONObject jsonObject = arr.optJSONObject(0);
-                Constants.USER_ID = jsonObject.optLong("id");
-            }
-        });
 
 //        final TextView countLikes = (TextView) rootView.findViewById(R.id.count_of_likes);
 //        final TextView countComments = (TextView) rootView.findViewById(R.id.count_of_comments);
