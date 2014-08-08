@@ -29,7 +29,7 @@ public class PhotoListAdapter extends BaseAdapter {
         this.layoutInflater = inflater;
 
         this.options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.ic_stubif) // TODO resource or drawable
+                .showImageOnLoading(R.drawable.gray_icon) // TODO resource or drawable
                 .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
                 .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
                 .cacheInMemory(true)
@@ -67,7 +67,7 @@ public class PhotoListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        imageLoader.getInstance().displayImage(photo.photo_604, viewHolder.photo, options);
+        imageLoader.getInstance().displayImage(photo.photo_130, viewHolder.photo, options);
 
         return convertView;
     }

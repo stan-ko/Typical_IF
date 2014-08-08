@@ -3,6 +3,7 @@ package typical_if.android.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,9 +20,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.Toast;
 
+import com.nhaarman.listviewanimations.ArrayAdapter;
 import com.twotoasters.jazzylistview.JazzyGridView;
 import com.twotoasters.jazzylistview.JazzyHelper;
 import com.vk.sdk.api.VKError;
@@ -29,6 +34,7 @@ import com.vk.sdk.api.VKResponse;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -36,7 +42,9 @@ import typical_if.android.adapter.PhotoListAdapter;
 import typical_if.android.model.Photo;
 //import typical_if.android.model.UploadPhotos;
 
-public class FragmentPhotoList extends Fragment {
+public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollListener {
+
+    public ArrayList<Photo> photos2=new ArrayList<Photo>();
 
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
     private static final String ARG_VK_ALBUM_ID = "vk_album_id";
@@ -118,18 +126,21 @@ public class FragmentPhotoList extends Fragment {
     }
 
 
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-
+int columns;
     public void doRequest(final View view){
         final Bundle arguments = getArguments();
-        float scalefactor = getResources().getDisplayMetrics().density * 100;
+        float scalefactor = getResources().getDisplayMetrics().density * 50;
         int number = getActivity().getWindowManager().getDefaultDisplay().getWidth();
         final int columns = (int) ((float) number / (float) scalefactor);
-
+        this.columns=columns;
+        VKHelper.count=0;
         VKHelper.getPhotoList(arguments.getLong(ARG_VK_GROUP_ID), arguments.getLong(ARG_VK_ALBUM_ID), new VKRequest.VKRequestListener() {
+
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
@@ -153,30 +164,37 @@ public class FragmentPhotoList extends Fragment {
         });
     }
 
-    protected void handleResponse (VKResponse response, int columns, View view){
-   //     Log.d("-------------------yutyut------------->",response.json.toString()+"");
-         final ArrayList<Photo> photos = Photo.getPhotosFromJSONArray(response.json);
-
+    protected void handleResponse (VKResponse response, final int columns, View view) {
+        //     Log.d("-------------------yutyut------------->",response.json.toString()+"");
+        final ArrayList<Photo> photos = Photo.getPhotosFromJSONArray(response.json);
+        for(int i =0; i<photos.size();i++){
+          photos2.add(photos.get(i));
+            Log.d(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",photos2.size()+"");
+        }
 
 
         try {
-           gridOfPhotos = (JazzyGridView) view.findViewById(R.id.gridOfPhotos);
-           gridOfPhotos.setTransitionEffect(mCurrentTransitionEffect);
+            gridOfPhotos = (JazzyGridView) view.findViewById(R.id.gridOfPhotos);
+           // gridOfPhotos.setTransitionEffect(mCurrentTransitionEffect);
+        } catch (NullPointerException e) {
+            Log.d("Loadding failed", "Not complete");
         }
-        catch (NullPointerException e){
-            Log.d("Loadding failed", "Not complete");}
 
         gridOfPhotos.setNumColumns(columns);
-        final  PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos, getActivity().getLayoutInflater());
+        final PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
         gridOfPhotos.setAdapter(photoListAdapter);
+        gridOfPhotos.setOnScrollListener(this);
         gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position ,getArguments().getLong(ARG_VK_GROUP_ID),getArguments().getLong(ARG_VK_ALBUM_ID));
+                Fragment fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID));
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack("String").commit();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+                transaction.replace(R.id.container, fragment).addToBackStack("String").commit();
             }
         });
+
     }
 
     public Dialog addPhoto(){
@@ -242,105 +260,6 @@ public class FragmentPhotoList extends Fragment {
         }
     }
 
-//    private void doCrop() {
-//        final ArrayList<CropOption> cropOptions = new ArrayList<CropOption>();
-//        /**
-//         * Open image crop app by starting an intent
-//         * ‘com.android.camera.action.CROP‘.
-//         */
-//        Intent intent = new Intent("com.android.camera.action.CROP");
-//        intent.setType("image/*");
-//        /**
-//         * Check if there is image cropper app installed.
-//         */
-//        List<ResolveInfo> list = getPackageManager().queryIntentActivities(intent, 0);
-//        int size = list.size();
-//
-//        /**
-//         * If there is no image cropper app, display warning message
-//         */
-//        if (size == 0) {
-//            Toast.makeText(this, cropEmpty,
-//                    Toast.LENGTH_SHORT).show();
-//
-//            return;
-//        } else {
-//            /**
-//             * Specify the image path, crop dimension and scale
-//             */
-//            intent.setData(mImageCaptureUri);
-//            intent.putExtra("outputX", 200);
-//            intent.putExtra("outputY", 200);
-//            intent.putExtra("aspectX", 1);
-//            intent.putExtra("aspectY", 1);
-//            intent.putExtra("scale", true);
-//            intent.putExtra("return-data", true);
-//            /**
-//             * There is posibility when more than one image cropper app exist,
-//             * so we have to check for it first. If there is only one app, open
-//             * then app.
-//             */
-//            if (size == 1) {
-//                Intent i = new Intent(intent);
-//                ResolveInfo res = list.get(0);
-//                i.setComponent(new ComponentName(res.activityInfo.packageName,
-//                        res.activityInfo.name));
-//                startActivityForResult(i, CROP_FROM_CAMERA);
-//            } else {
-//                /**
-//                 * If there are several app exist, create a custom chooser to
-//                 * let user selects the app.
-//                 */
-//                for (ResolveInfo res : list) {
-//                    final CropOption co = new CropOption();
-//                    co.title = getPackageManager().getApplicationLabel(
-//                            res.activityInfo.applicationInfo);
-//                    co.icon = getPackageManager().getApplicationIcon(
-//                            res.activityInfo.applicationInfo);
-//                    co.appIntent = new Intent(intent);
-//                    co.appIntent
-//                            .setComponent(new ComponentName(
-//                                    res.activityInfo.packageName,
-//                                    res.activityInfo.name));
-//
-//                    cropOptions.add(co);
-//                }
-//                CropOptionAdapter adapter = new CropOptionAdapter(
-//                        getApplicationContext(), cropOptions);
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                builder.setTitle(openWith);
-//                builder.setAdapter(adapter,
-//                        new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int item) {
-//                                startActivityForResult(cropOptions.get(item).appIntent,CROP_FROM_CAMERA);
-//                            }
-//                        });
-//                builder.setNegativeButton(cancel, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//
-//                builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//                    @Override
-//                    public void onCancel(DialogInterface dialog) {
-//
-//                        if (mImageCaptureUri != null) {
-//                            getContentResolver().delete(mImageCaptureUri, null,
-//                                    null);
-//                            mImageCaptureUri = null;
-//                        }
-//                    }
-//                });
-//
-//                AlertDialog alert = builder.create();
-//
-//                alert.show();
-//            }
-//        }
-//    }
-
 
     private void performCrop(){
         try {
@@ -368,4 +287,71 @@ public class FragmentPhotoList extends Fragment {
         }
     }
 
-}
+
+    private final static int ITEMS_PPAGE = 20;
+
+    private ProgressDialog mDialog;
+    private ArrayList<HashMap<String, String>> mSongsList;
+
+    private static String IMAGE_POSITION;
+    private GridView mGridView;
+    //MainGridViewLazyAdapter mAdapter;
+    private ArrayAdapter<String> mAdapter;
+    private String cat_url;
+    private String artist_url;
+
+    private int mVisibleThreshold = 5;
+    private int mCurrentPage = 0;
+    private int mPreviousTotal = 0;
+    private boolean mLoading = true;
+    private boolean mLastPage = false;
+
+    private String mXml;
+
+    private int stop = 0;
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(final AbsListView view, int firstVisibleItem, final int visibleItemCount, int totalItemCount) {
+        if(firstVisibleItem + visibleItemCount >= totalItemCount){
+
+            VKHelper.getPhotoList(getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID), new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    handleResponse(response,columns, view );
+                    Log.d("----------------------------------------------------------------------------->",visibleItemCount+"");
+                }
+
+            });
+        }else {}
+    }
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

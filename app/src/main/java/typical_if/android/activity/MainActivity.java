@@ -99,12 +99,16 @@ public class MainActivity extends ActionBarActivity implements
 
     public long setGroupId(int clickedPosition) {
         if (clickedPosition == 0) {
+
             return Constants.TF_ID;
         } else if (clickedPosition == 1) {
+
             return Constants.TZ_ID;
         } else if (clickedPosition == 2) {
+
             return Constants.FB_ID;
         } else {
+
             return Constants.FN_ID;
         }
     }
@@ -204,10 +208,12 @@ public class MainActivity extends ActionBarActivity implements
             case 2:
             case 3:
                 vkGroupId = setGroupId(groupPosition);
+
                 onSectionAttached(groupPosition);
 
                 if (childPosition == 0) {
                     fragment = FragmentWall.newInstance(vkGroupId);
+
                 } else if (childPosition == 1) {
                     fragment = FragmentAlbumsList.newInstance(vkGroupId);
                 }

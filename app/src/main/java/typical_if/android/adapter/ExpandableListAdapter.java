@@ -84,7 +84,6 @@ public class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedEx
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.navigation_drawer_group_item, null);
         }
-
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.groupItem);
         lblListHeader.setTypeface(null, Typeface.BOLD);
 

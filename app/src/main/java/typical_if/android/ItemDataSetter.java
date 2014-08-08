@@ -281,7 +281,8 @@ public class ItemDataSetter {
                         .append("[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}")
                         .append("|[1-9][0-9]|[0-9])))")
                         .append("(?:\\:\\d{1,5})?)") // plus option port number
-                        .append("(\\/(?:(?:[a-zA-Z0-9\\;\\/\\?\\:\\@\\&\\=\\#\\~")  // plus option query params
+                        .append("(\\/(?:(?:" +
+                                "a-zA-Z0-9\\;\\/\\?\\:\\@\\&\\=\\#\\~")  // plus option query params
                         .append("\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?")
                         .append("(?:\\b|$)").toString()
         ).matcher(text);
@@ -550,7 +551,7 @@ public class ItemDataSetter {
                     }
                 });
             } else {
-                image.setImageDrawable(Constants.resources.getDrawable(android.R.drawable.ic_menu_save));
+                image.setImageDrawable(Constants.RESOURCES.getDrawable(android.R.drawable.ic_menu_save));
                 image.setBackgroundColor(Color.parseColor(postColor));
                 image.setLayoutParams(new RelativeLayout.LayoutParams(setInDp(50), setInDp(50)));
 
@@ -828,7 +829,7 @@ public class ItemDataSetter {
     }
 
     public static int setInDp(int dps) {
-        final float scale = Constants.resources.getDisplayMetrics().density;
+        final float scale = Constants.RESOURCES.getDisplayMetrics().density;
         return (int) (dps * scale + 0.5f);
     }
 

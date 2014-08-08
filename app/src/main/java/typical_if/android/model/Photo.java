@@ -1,6 +1,7 @@
 package typical_if.android.model;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class Photo {
     public long id ;
     public long album_id; //идентификатор альбома. Для служебных альбомов используются следующие идентификаторы:
     public long owner_id; //идентификатор владельца альбома
+    public long user_id;
     public String photo_75;
     public String photo_130;
     public String photo_604;
@@ -32,7 +34,7 @@ public class Photo {
 
 
 
-    public Photo (long id,long owner_id, long album_id, String photo_75, String photo_130,
+    public Photo (long id,long owner_id, long album_id, long user_id, String photo_75, String photo_130,
                   String photo_604, String photo_807, String photo_1280,String photo_2048,
                   int width, int height,String text, long date, int user_likes,
                   int likes, int comments, int can_comment){
@@ -40,6 +42,7 @@ public class Photo {
         this.id=id;
         this.album_id=album_id;
         this.owner_id=owner_id;
+        this.user_id=user_id;
         this.photo_75=photo_75;
         this.photo_130=photo_130;
         this.photo_604=photo_604;
@@ -59,6 +62,7 @@ public class Photo {
     public static final String JSON_KEY_ID = "id";
     public static final String JSON_KEY_OWNER_ID = "owner_id";
     public static final String JSON_KEY_ALBUM_ID = "album_id";
+    public static final String JSON_KEY_USER_ID = "user_id";
     public static final String JSON_KEY_PHOTO_75 = "photo_75";
     public static final String JSON_KEY_PHOTO_130= "photo_130";
     public static final String JSON_KEY_PHOTO_604 = "photo_604";
@@ -83,6 +87,7 @@ public class Photo {
         return new Photo(PhotoJSON.optLong(JSON_KEY_ID),
                 PhotoJSON.optLong(JSON_KEY_OWNER_ID),
                 PhotoJSON.optLong(JSON_KEY_ALBUM_ID),
+                PhotoJSON.optLong(JSON_KEY_USER_ID),
                 PhotoJSON.optString(JSON_KEY_PHOTO_75),
                 PhotoJSON.optString(JSON_KEY_PHOTO_130),
                 PhotoJSON.optString(JSON_KEY_PHOTO_604),
@@ -98,14 +103,15 @@ public class Photo {
                 comments.optInt(JSON_KEY_COMMENTS),
                 PhotoJSON.optInt(JSON_KEY_CAN_COMMENT));
     }
-
+public static int countOfPhotos;
     public static ArrayList<Photo> getPhotosFromJSONArray(JSONObject jsonArray) {
-       // Log.d("----------------------jsonArray---------->",jsonArray.toString()+"");
-        JSONObject object = jsonArray.optJSONObject("response");
+      JSONObject object = jsonArray.optJSONObject("response");
+        try {
+            countOfPhotos = object.getInt("count");
+        } catch (JSONException e) {}
         JSONArray array = object.optJSONArray("items");
         final ArrayList<Photo> photos = new ArrayList<Photo>();
-       // Log.d("------------------------array-------->",array.toString()+"");
-        for (int i=0; i<array.length(); i++){
+       for (int i=0; i<array.length(); i++){
          final Photo photo = getPhotoFromJSON(array.optJSONObject(i));
              photos.add(photo);
          }

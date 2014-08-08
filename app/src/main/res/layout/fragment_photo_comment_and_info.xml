@@ -19,7 +19,8 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:paddingTop="5dp"
-    android:layout_above="@+id/field_of_message_for_comment" />
+    android:layout_above="@+id/field_of_message_for_comment"
+    android:background="@drawable/image_header_state_selector" />
 
 
 
@@ -44,7 +45,8 @@
         android:layout_toLeftOf="@+id/buttonSendComment"
         android:layout_marginRight="2dp"
         android:hint="Ваше повідомлення"
-        android:paddingLeft="15dp" />
+        android:paddingLeft="15dp"
+        android:visibility="visible" />
 
     <Button
         android:layout_width="70dp"
@@ -56,6 +58,7 @@
         android:layout_alignParentEnd="true"
         android:background="@drawable/send_comment_button_shape"
         android:layout_marginBottom="2dp"
-        android:layout_marginRight="2dp" />
+        android:layout_marginRight="2dp"
+        android:visibility="visible" />
 
 </RelativeLayout>

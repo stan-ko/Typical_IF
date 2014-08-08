@@ -41,12 +41,13 @@ public class FullScreenImageAdapter extends PagerAdapter {
         this.arguments = arguments;
         this.fragmentManager = fragmentManager;
         this.options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.ic_stub) // TODO resource or drawable
+                //.showImageOnLoading(R.drawable.ic_stub) // TODO resource or drawable
                 .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
                 .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();
+
     }
 
     int realPosition;
@@ -70,8 +71,10 @@ public class FullScreenImageAdapter extends PagerAdapter {
         imageView = (ImageView) viewLayout.findViewById(R.id.full_screen_photo);
         ((ViewPager) container).addView(viewLayout);
       //  Log.d("Current VIEW", position + "");
-          loadImage(photos.get(position), imageView);///////////////////////////////////////////////////////////////////
-        //ImageLoader.getInstance().displayImage(photos.get(position).photo_75, imageView, options);
+
+
+        loadImage(position ,photos.get(position), imageView);///////////////////////////////////////////////////////////////////
+        //
         return viewLayout;
     }
 
@@ -82,8 +85,11 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
     }
 
-    public void loadImage(Photo photo, ImageView imageView) {
+    public void loadImage(int position,Photo photo, ImageView imageView) {
+        ImageLoader.getInstance().displayImage(photos.get(position).photo_75, imageView, options);
+
         String url = null;
+
         if (!TextUtils.isEmpty(photo.photo_2048) && displayHeight > 1199) {
             url = photo.photo_2048;
         } else if (!TextUtils.isEmpty(photo.photo_1280) && displayHeight > 799) {

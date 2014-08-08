@@ -151,7 +151,7 @@ public class WallAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-                final String[] items = {Constants.post_report, Constants.post_copy_link};
+                final String[] items = {Constants.POST_REPORT, Constants.POST_COPY_LINK};
 
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     @Override
@@ -159,8 +159,8 @@ public class WallAdapter extends BaseAdapter {
                         switch (which) {
                             case 0:
                                 final AlertDialog.Builder builderIn = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-                                builderIn.setTitle(Constants.post_report);
-                                final String[] items = {Constants.post_report_spam, Constants.post_report_offense, Constants.post_report_adult, Constants.post_report_drugs, Constants.post_report_porno, Constants.post_report_violence};
+                                builderIn.setTitle(Constants.POST_REPORT);
+                                final String[] items = {Constants.POST_REPORT_SPAM, Constants.POST_REPORT_OFFENSE, Constants.POST_REPORT_ADULT, Constants.POST_REPORT_DRUGS, Constants.POST_REPORT_PORNO, Constants.POST_REPORT_VIOLENCE};
 
                                 builderIn.setItems(items, new DialogInterface.OnClickListener() {
                                     @Override

@@ -7,7 +7,6 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -15,6 +14,7 @@ import java.util.ArrayList;
  * Created by admin on 17.07.2014.
  */
 public class VKHelper {
+    public static int count=0;
     public static void getAlbumList(long groupID, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("owner_id", groupID);
@@ -25,10 +25,34 @@ public class VKHelper {
     }
 
     public static void getPhotoList(long owner_id, long album_id, VKRequest.VKRequestListener listener) {
+
+
         VKParameters params = new VKParameters();
+
+        if(count==0){
+
         params.put("owner_id", owner_id);
         params.put("album_id", album_id);
+        params.put("rev",0);
         params.put("extended", 1);
+        params.put("offset",0);
+        params.put("count",200);
+        }
+
+else {
+
+            int offset =count*100 ;
+
+            params.put("owner_id", owner_id);
+            params.put("album_id", album_id);
+            params.put("rev",0);
+            params.put("extended", 1);
+            params.put("offset",String.valueOf(offset));
+            params.put("count",200);
+
+        }
+        count++;
+        count++;
         final VKRequest request = new VKRequest("photos.get", params);
         request.executeWithListener(listener);
     }
@@ -72,6 +96,17 @@ public class VKHelper {
         params.put("reply_to_comment", reply_to_comment);
         final VKRequest request = new VKRequest("photos.createComment", params);
         request.executeWithListener(listener);
+    }
+
+    public static void isLiked(String type, long owner_id, long item_id, VKRequest.VKRequestListener listener) {
+        VKParameters params = new VKParameters();
+        //params.put("user_id",user_id );
+        params.put("type", type);
+        params.put("owner_id", owner_id);
+        params.put("item_id", item_id);
+        final VKRequest request = new VKRequest("likes.isLiked", params);
+        request.executeWithListener(listener);
+
     }
 
     public static void getFixedPostId(String gid, VKRequest.VKRequestListener listener) {
@@ -166,6 +201,16 @@ public class VKHelper {
         final VKRequest request = new VKRequest("users.get", params);
         request.executeWithListener(listener);
     }
+
+    public static void getPostUserInfo(long user_id, String fields, VKRequest.VKRequestListener listener) {
+        VKParameters params = new VKParameters();
+        params.put("user_id",user_id);
+        params.put("fields",fields);
+        final VKRequest request = new VKRequest("users.get", params);
+        request.executeWithListener(listener);
+    }
+
+
 
     public static void doPlayerRequest(String videos, VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();

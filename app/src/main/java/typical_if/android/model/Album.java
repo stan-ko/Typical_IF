@@ -24,6 +24,7 @@ public class Album {
     public boolean coverUrlIsLoading; //— ссылка на изображение запрашивается
     public String coverUrl; //— ссылка на изображение обложки альбома
     public JSONArray sizes;
+    public ArrayList<Photo> photos;
 
     public Album(){}
     public Album(long id, String thumb_id, String owner_id, String title, String description, String created, String updated, int size, int can_upload, String privacy_view, String privacy_comment, String thumb_src, JSONArray sizes) {
