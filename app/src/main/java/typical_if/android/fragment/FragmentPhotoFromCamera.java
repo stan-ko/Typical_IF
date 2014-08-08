@@ -3,7 +3,9 @@ package typical_if.android.fragment;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -30,11 +32,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.koushikdutta.ion.bitmap.BitmapInfo;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
@@ -51,15 +56,15 @@ import typical_if.android.R;
  */
 public class FragmentPhotoFromCamera extends Fragment {
 
-    private static File file;
+    private static String path;
     private ImageView photofromcamera;
-    private ImageLoader imageLoader;
-    final int displayHeight = MyApplication.getDisplayHeight();
-    final int displayWidth = MyApplication.getDisplayWidth();
+    private int displayWidth = MyApplication.getDisplayWidth();
+    private int displayHeight = MyApplication.getDisplayHeight();
 
-    public static FragmentPhotoFromCamera newInstance(File file) {
+    public static FragmentPhotoFromCamera newInstance(String path) {
         FragmentPhotoFromCamera fragment = new FragmentPhotoFromCamera();
-        FragmentPhotoFromCamera.file = file;
+        FragmentPhotoFromCamera.path=path;
+
         return fragment;
     }
 
@@ -73,26 +78,9 @@ public class FragmentPhotoFromCamera extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_upload_photo_from_camera, container, false);
         setRetainInstance(true);
+        File imageFile = new File(path);
         photofromcamera = (ImageView) rootView.findViewById(R.id.image_from_photocamera);
-//
-//        Matrix matrix = photofromcamera.getImageMatrix();
-//        RotateAnimation animation = new RotateAnimation(0, 90,
-//                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-//        animation.setInterpolator(new LinearInterpolator());
-//        animation.setDuration(1);
-//        animation.setFillAfter(true);
-//        RectF drawableRect = new RectF(0, 0, 300, 300);
-//        RectF viewRect = new RectF(0, 0, displayWidth, displayHeight);
-//        matrix.setRectToRect(drawableRect, viewRect, Matrix.ScaleToFit.FILL);
-//        matrix.postScale(displayWidth, displayHeight);
-//        photofromcamera.setAnimation(animation);
-//
-        //file = new File(getRealPathFromURI(uri));
-        //photofromcamera.setRotation(90);
-        //photofromcamera.setImageBitmap(getRotatedBitmapByExif(file));
-
-        imageLoader.getInstance().displayImage(String.valueOf(Uri.fromFile(file)), photofromcamera);
-
+        photofromcamera.setImageBitmap(rotate(shrinkmethod(path, displayWidth, displayHeight), getCameraPhotoOrientation(getActivity().getApplicationContext(), Uri.fromFile(imageFile), path)));
         return rootView;
     }
 
@@ -104,124 +92,94 @@ public class FragmentPhotoFromCamera extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (file.exists()) {
-                file.delete();
-        }
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         inflater.inflate(R.menu.upload_captured_photo, menu);
-        MenuItem item =  menu.getItem(0);
+        MenuItem item =  menu.findItem(R.id.upload_captured_photo_to_album);
+        item.setEnabled(true);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                final VKRequest req = VKApi.uploadAlbumPhotoRequest(file, 123513499, 8686797);
+                final VKRequest req = VKApi.uploadAlbumPhotoRequest(new File(path), 123513499, 8686797);
                 req.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
+                        Log.d("MY response", response.responseString);
                     }
                 });
                 return true;
             }
         });
+        super.onCreateOptionsMenu(menu,inflater);
     }
 
-    public static Bitmap getRotatedBitmapByExif(File targetFile){
-        Bitmap bitmap = null;
-        // определяем необходимость поворота фотки
+
+    public static Bitmap rotate(Bitmap b, int degrees) {
+        if (degrees != 0 && b != null) {
+            Matrix m = new Matrix();
+
+            m.setRotate(degrees, (float) b.getWidth() / 2, (float) b.getHeight() / 2);
+            try {
+                Bitmap b2 = Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(), m, true);
+                if (b != b2) {
+                    b.recycle();
+                    b = b2;
+                }
+            } catch (OutOfMemoryError ex) {
+                throw ex;
+            }
+        }
+        return b;
+    }
+
+    public static int getCameraPhotoOrientation(Context context, Uri imageUri, String imagePath) {
+        int rotate = 0;
         try {
-            final Matrix matrix = new Matrix();
-
-            ExifInterface exifReader = new ExifInterface(targetFile.getAbsolutePath());
-
-            int orientation = exifReader.getAttributeInt(ExifInterface.TAG_ORIENTATION, 1);
-            boolean isRotationNeeded = false;
+            context.getContentResolver().notifyChange(imageUri, null);
+            File imageFile = new File(imagePath);
+            ExifInterface exif = new ExifInterface(imageFile.getAbsolutePath());
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
             switch (orientation) {
-                case ExifInterface.ORIENTATION_ROTATE_90:
-                    matrix.postRotate(90);
-                    isRotationNeeded = true;
-                    break;
-
-                case ExifInterface.ORIENTATION_ROTATE_180:
-                    matrix.postRotate(180);
-                    isRotationNeeded = true;
-                    break;
-
                 case ExifInterface.ORIENTATION_ROTATE_270:
-                    matrix.postRotate(270);
-                    isRotationNeeded = true;
+                    rotate = 270;
                     break;
-
-                default: // ExifInterface.ORIENTATION_NORMAL
-                    // Do nothing. The original image is fine.
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
                     break;
             }
-
-            BitmapFactory.Options bmfOtions = new BitmapFactory.Options();
-            bmfOtions.inPurgeable = true;
-
-            if (isRotationNeeded){
-                FileInputStream fileInputStream = null;
-                FileDescriptor fileDescriptor = null;
-                try {
-                    fileInputStream = new FileInputStream(targetFile);
-                    try {
-                        fileDescriptor = fileInputStream.getFD();
-                    } catch (IOException ignored) {}
-
-                    if (fileDescriptor != null)
-                        bitmap = BitmapFactory.decodeFileDescriptor(fileDescriptor, null, bmfOtions);
-                    else
-                        bitmap = BitmapFactory.decodeStream(fileInputStream, null, bmfOtions);
-                } catch (FileNotFoundException e){}
-                finally {
-                    if (fileInputStream != null)
-                        try {
-                            fileInputStream.close();
-                        } catch (IOException e) {}
-                }
-                if (bitmap!=null)
-                    bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-            }
-            else {
-                FileInputStream fileInputStream = null;
-                FileDescriptor fileDescriptor = null;
-                try {
-                    fileInputStream = new FileInputStream(targetFile);
-                    try {
-                        fileDescriptor = fileInputStream.getFD();
-                    } catch (IOException ignored) {}
-
-                    if (fileDescriptor != null)
-                        bitmap =  BitmapFactory.decodeFileDescriptor(fileDescriptor, null, bmfOtions);
-                    else
-                        bitmap = BitmapFactory.decodeStream(fileInputStream, null, bmfOtions);
-                } catch (FileNotFoundException e){}
-                finally {
-                    if (fileInputStream != null)
-                        try {
-                            fileInputStream.close();
-                        } catch (IOException e) {}
-                }
-            }
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-//        catch (IOException e) {
-//            Log.e("ImageUtils", e);
-//        }
-//        catch (Exception e) {
-//            // like there is no EXIF support?
-//            Log.e("ImageUtils", e);
-//        }
-        catch (Throwable e) {
-            // Out of stupid vedroid's memory
-            Log.e("ImageUtils", e.toString());
-        }
+        return rotate;
+    }
 
-        return bitmap;
+    Bitmap shrinkmethod(String file,int width,int height){
+        BitmapFactory.Options bitopt=new BitmapFactory.Options();
+        bitopt.inJustDecodeBounds=true;
+        Bitmap bit=BitmapFactory.decodeFile(file, bitopt);
+
+        int h=(int) Math.ceil(bitopt.outHeight/(float)height);
+        int w=(int) Math.ceil(bitopt.outWidth/(float)width);
+
+        if(h>1 || w>1){
+            if(h>w){
+                bitopt.inSampleSize=h;
+
+            }else{
+                bitopt.inSampleSize=w;
+            }
+        }
+        bitopt.inJustDecodeBounds=false;
+        bit=BitmapFactory.decodeFile(file, bitopt);
+
+        return bit;
     }
 }

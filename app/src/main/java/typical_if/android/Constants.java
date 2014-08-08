@@ -40,6 +40,9 @@ public class Constants {
 
     public static long USER_ID;
 
+
+    public static String tempCameraPhotoFile = "";
+
     public static final Resources RESOURCES = MyApplication.getAppContext().getResources();
 
     public static final String TIME_FORMAT_STRING = "kk:mm";

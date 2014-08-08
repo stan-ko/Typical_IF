@@ -29,15 +29,17 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.PhotoListAdapter;
 import typical_if.android.model.Photo;
 
 public class FragmentPhotoList extends Fragment {
-
+    static Uri mImageUri;
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
     private static final String ARG_VK_ALBUM_ID = "vk_album_id";
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
@@ -160,26 +162,7 @@ public class FragmentPhotoList extends Fragment {
                         dialog.cancel();
                         break;
                     case 1:
-                        Uri newImageUri = null;
-                        File path = new File(Environment.getExternalStorageDirectory().getPath() + "/Images/");
-                        path.mkdirs();
-                        boolean setWritable = false;
-                        setWritable = path.setWritable(true, false);
-                        File file = new File(path, "Image_Story_" + System.currentTimeMillis() + ".jpg");
-                        newImageUri = Uri.fromFile(file);
-                        Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, newImageUri);
-
-                        //Intent second = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        try {
-                            //getActivity().startActivityForResult(intent, PICK_FROM_CAMERA);
-                            FragmentTakePicture fragmentTakePicture = new FragmentTakePicture();
-                            getFragmentManager().beginTransaction().replace(R.id.container, fragmentTakePicture).addToBackStack(null).commit();
-                        } catch (ActivityNotFoundException e) {
-                            String errorMessage = "Whoops - your device doesn't support capturing images!";
-                            Toast toast = Toast.makeText(getActivity().getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
-                            toast.show();
-                        }
+                        takePhotoFromCamera();
                         dialog.cancel();
 
                         break;
@@ -192,4 +175,18 @@ public class FragmentPhotoList extends Fragment {
 
         return builder.create();
     }
+
+    public void takePhotoFromCamera() {
+        File file = new File(Environment.getExternalStorageDirectory(),
+                "pic_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
+        if (file == null)
+            return;
+        Constants.tempCameraPhotoFile = file.getAbsolutePath();
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri outputFileUri = Uri.fromFile(file);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        getActivity().startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
+    }
+
+
 }
