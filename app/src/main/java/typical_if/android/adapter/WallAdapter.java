@@ -3,6 +3,7 @@ package typical_if.android.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.model.VKApiPost;
@@ -22,8 +22,8 @@ import com.vk.sdk.api.model.VKPostArray;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
-import typical_if.android.MyApplication;
 import typical_if.android.R;
+import typical_if.android.fragment.FragmentPostCommentAndInfo;
 import typical_if.android.model.Wall.Group;
 import typical_if.android.model.Wall.Profile;
 import typical_if.android.model.Wall.Wall;
@@ -34,24 +34,17 @@ public class WallAdapter extends BaseAdapter {
     private Wall wall;
     private VKPostArray posts;
     private LayoutInflater layoutInflater;
-    Context context = MyApplication.getAppContext();
+    private Context context;
     private String postColor;
-    final DisplayImageOptions options;
-    public WallAdapter(Wall wall, LayoutInflater inflater, String postColor) {
+    private FragmentManager fragmentManager;
+
+    public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, String postColor) {
         this.wall = wall;
         this.posts = wall.posts;
         this.layoutInflater = inflater;
-        //this.context = VKUIHelper.getApplicationContext();
+        this.context = VKUIHelper.getApplicationContext();
+        this.fragmentManager = fragmentManager;
         this.postColor = postColor;
-        this.options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.ic_stubif) // TODO resource or drawable
-                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
-                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-//            .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
-//            .bitmapConfig(Bitmap.Config.ARGB_8888) // default
-                .build();
     }
 
     @Override
@@ -70,7 +63,7 @@ public class WallAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
 
         if (convertView == null) {
@@ -99,6 +92,7 @@ public class WallAdapter extends BaseAdapter {
 
 
         viewHolder.txt_post_comment.setText(valueOf(post.comments_count));
+
         viewHolder.txt_post_like.setText(valueOf(post.likes_count));
 
         viewHolder.txt_post_share.setText(valueOf(post.reposts_count));
@@ -200,7 +194,7 @@ public class WallAdapter extends BaseAdapter {
             copyHistoryLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final Uri uri = Uri.parse("http://vk.com/" + finalCopy_history_name);
+                    Uri uri = Uri.parse("http://vk.com/" + finalCopy_history_name);
                     context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             });
@@ -261,35 +255,45 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.postSignedLayout.setVisibility(View.GONE);
         }
 
+        final View finalConvertView = convertView;
+        viewHolder.txt_post_comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentPostCommentAndInfo fragment = FragmentPostCommentAndInfo.newInstance(finalConvertView, wall.group.id, post);
+                fragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+            }
+        });
+
         return convertView;
     }
 
     public class ViewHolder {
-        private final RelativeLayout postTextLayout;
+        public final RelativeLayout postTextLayout;
         public final RelativeLayout postMediaLayout;
         public final LinearLayout postAudioLayout;
-        private final RelativeLayout copyHistoryLayout;
-        private final LinearLayout postAttachmentsLayout;
+        public final RelativeLayout copyHistoryLayout;
+        public final LinearLayout postAttachmentsLayout;
         public final LinearLayout postDocumentLayout;
         public final LinearLayout postAlbumLayout;
-        private final RelativeLayout postGeoLayout;
+        public final RelativeLayout postGeoLayout;
         public final RelativeLayout postWikiPageLayout;
         public final RelativeLayout postLinkLayout;
-        private final RelativeLayout postSignedLayout;
+        public final RelativeLayout postSignedLayout;
         public final RelativeLayout postPollLayout;
 
-        private final TextView txt_post_date;
+        public final TextView txt_post_date;
 
-        private final TextView txt_post_like;
-        private final TextView txt_post_share;
-        private final TextView txt_post_comment;
+        public final TextView txt_post_like;
+        public final TextView txt_post_share;
+        public final TextView txt_post_comment;
+        public final ImageView img_post_comment;
 
-        private final ImageView img_fixed_post;
-        private final CheckBox cb_repost;
+        public final ImageView img_fixed_post;
+        public final CheckBox cb_repost;
 
-        private final ImageView img_post_other;
+        public final ImageView img_post_other;
 
-        private ViewHolder(View convertView) {
+        public ViewHolder(View convertView) {
             this.postAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.postAttachmentsLayout);
             this.postTextLayout = (RelativeLayout) convertView.findViewById(R.id.postTextLayout);
             this.postMediaLayout = (RelativeLayout) convertView.findViewById(R.id.postMediaLayout);
@@ -307,7 +311,9 @@ public class WallAdapter extends BaseAdapter {
 
             this.txt_post_like = (TextView) convertView.findViewById(R.id.txt_post_like);
             this.txt_post_share = (TextView) convertView.findViewById(R.id.txt_post_share);
+
             this.txt_post_comment = (TextView) convertView.findViewById(R.id.txt_post_comment);
+            this.img_post_comment = (ImageView) convertView.findViewById(R.id.img_post_comment);
 
             this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
             this.cb_repost = (CheckBox) convertView.findViewById(R.id.cb_post_repost);

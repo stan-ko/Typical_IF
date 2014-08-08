@@ -1,7 +1,9 @@
 package typical_if.android;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.SpannableStringBuilder;
@@ -305,30 +307,7 @@ public class ItemDataSetter {
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
-        final Matcher matReply = Pattern.compile("\\[(club|id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]").matcher(text);
-
-        while (matReply.find()) {
-            start = stringB.indexOf(matReply.group());
-            end = start + matReply.group().length();
-
-            final String[] replier = matReply.group().replaceAll("[\\[\\]]", "").split("\\|");
-            stringB.replace(start, end, replier[1]);
-            spannable.replace(start, end, replier[1]);
-
-            end = start + replier[1].length();
-            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new NonUnderlinedClickableSpan() {
-                @Override
-                public void onClick(View textView) {
-                    Uri uri = Uri.parse("http://vk.com/" + replier[0]);
-                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                }
-            }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        }
-
         final Matcher matSite = Pattern.compile("@club26363301 \\(fromMobileIF\\)").matcher(text);
-
         while (matSite.find()) {
             start = stringB.indexOf(matSite.group());
             end = start + matSite.group().length();
@@ -344,6 +323,27 @@ public class ItemDataSetter {
                 @Override
                 public void onClick(View textView) {
                     Uri uri = Uri.parse(replier);
+                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        final Matcher matReply = Pattern.compile("\\[(club|id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]").matcher(text);
+            while (matReply.find()) {
+                start = stringB.indexOf(matReply.group());
+            end = start + matReply.group().length();
+
+            final String[] replier = matReply.group().replaceFirst("\\[", "").replaceFirst("\\]", "").split("\\|");
+            stringB.replace(start, end, replier[1]);
+            spannable.replace(start, end, replier[1]);
+
+            end = start + replier[1].length();
+            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new NonUnderlinedClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    Uri uri = Uri.parse("http://vk.com/" + replier[0]);
                     context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -864,6 +864,22 @@ public class ItemDataSetter {
         } else {
             return "#DE9C0E";
         }
+    }
+
+    public static void saveUserId(long uid) {
+        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+        final SharedPreferences.Editor ed = sPref.edit();
+        final long user_id = uid;
+        final String long_key = "uid";
+        ed.putLong(long_key, user_id);
+        ed.commit();
+    }
+
+    public static void loadUserId()  {
+        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+        final String long_key = "uid";
+        final long user_id = sPref.getLong(long_key, 0);
+        Constants.USER_ID = user_id;
     }
 
     public static class NonUnderlinedClickableSpan extends ClickableSpan {

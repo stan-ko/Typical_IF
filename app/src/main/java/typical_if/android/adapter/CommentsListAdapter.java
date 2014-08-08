@@ -17,6 +17,8 @@ import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.model.VKApiComment;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
@@ -76,12 +78,26 @@ public class CommentsListAdapter extends BaseAdapter {
 
         for (int k = 0; k < commentList.size(); k++) {
             if (commentList.get(k).reply_to_user > (long) 0) {
-                commentList.get(k).text = commentList.get(k).text.replaceFirst("^(\\[id\\d+\\|)", "").replaceFirst("(\\])", "").toString();
+                final Matcher matReply = Pattern.compile("\\[(id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]").matcher(commentList.get(k).text);
+                StringBuilder stringB = new StringBuilder(commentList.get(k).text);
+                int start;
+                int end;
+                while (matReply.find()) {
+                    start = stringB.indexOf(matReply.group());
+                    end = start + matReply.group().length();
+
+                    final String[] replier = matReply.group().replaceFirst("\\[", "").replaceFirst("\\]", "").split("\\|");
+                    stringB.replace(start, end, replier[1]);
+                    break;
+                }
+
+                commentList.get(k).text =  stringB.toString();
             } else {
                 commentList.get(k).text = commentList.get(k).text;
             }
         }
     }
+
 
 
     public void holderInitialize(ViewHolder viewHolder, VKApiComment comment) {

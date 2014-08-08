@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.util.DisplayMetrics;
 
-import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -46,6 +45,9 @@ public class MyApplication extends Application {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheOnDisc(true)
                 .cacheInMemory(true)
+                .showImageOnLoading(R.drawable.ic_stubif) // TODO resource or drawable
+                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
+                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
                 .resetViewBeforeLoading(true)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .displayer(new FadeInBitmapDisplayer(300)).build();

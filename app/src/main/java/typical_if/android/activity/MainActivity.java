@@ -19,9 +19,16 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import typical_if.android.Constants;
+import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
+import typical_if.android.VKHelper;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentEventsList;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
@@ -58,7 +65,10 @@ public class MainActivity extends ActionBarActivity implements
 
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
+
     }
+
+
 
     public long setGroupId(int clickedPosition) {
         if (clickedPosition == 0) {
@@ -108,7 +118,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.main, menu);
             MenuItem item = menu.getItem(0);
             item.setVisible(false);
@@ -151,11 +161,31 @@ public class MainActivity extends ActionBarActivity implements
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
             mNavigationDrawerFragment.refreshNavigationDrawer();
+            VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    JSONArray arr = response.json.optJSONArray("response");
+                    JSONObject jsonObject = arr.optJSONObject(0);
+                    Constants.USER_ID = jsonObject.optLong("id");
+                    ItemDataSetter.saveUserId(Constants.USER_ID);
+                }
+            });
         }
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
             mNavigationDrawerFragment.refreshNavigationDrawer();
+            VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    JSONArray arr = response.json.optJSONArray("response");
+                    JSONObject jsonObject = arr.optJSONObject(0);
+                    Constants.USER_ID = jsonObject.optLong("id");
+                    ItemDataSetter.saveUserId(Constants.USER_ID);
+                }
+            });
         }
     };
 

@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -26,10 +25,10 @@ import com.vk.sdk.api.VKResponse;
 import java.util.Locale;
 
 import typical_if.android.Constants;
+import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
-import typical_if.android.fragment.NavigationDrawerFragment;
 
 public class SplashActivity extends Activity implements Animation.AnimationListener {
 
@@ -43,8 +42,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     Configuration config;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
 
-    //  final OfflineMode offlineMode = new OfflineMode();
-    private NavigationDrawerFragment mNavigationDrawerFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +77,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
 
-
+        ItemDataSetter.loadUserId();
         //   --------------------START------------- all Request from internet before start APP----------------------
         VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
             @Override
@@ -132,12 +129,11 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
-            mNavigationDrawerFragment.refreshNavigationDrawer();
+
         }
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
-            mNavigationDrawerFragment.refreshNavigationDrawer();
         }
     };
 
