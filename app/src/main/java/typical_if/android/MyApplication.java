@@ -66,7 +66,6 @@ public class MyApplication extends Application {
                         //.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
                         //.memoryCacheSize(2 * 1024 * 1024)
                         //.memoryCacheSizePercentage(13) // default
-                        //jhfjhs
                         //.diskCache(new UnlimitedDiscCache(cacheDir)) // default
                 .denyCacheImageMultipleSizesInMemory()
                 .defaultDisplayImageOptions(defaultOptions)
