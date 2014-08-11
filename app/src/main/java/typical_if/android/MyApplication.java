@@ -69,6 +69,7 @@ public class MyApplication extends Application {
                         //.diskCache(new UnlimitedDiscCache(cacheDir)) // default
                      //;;;
                 .denyCacheImageMultipleSizesInMemory()
+                //
                 .defaultDisplayImageOptions(defaultOptions)
                 .memoryCache(new WeakMemoryCache())
                 .discCacheSize(100 * 1024 * 1024)
