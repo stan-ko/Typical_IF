@@ -32,7 +32,6 @@ import typical_if.android.model.Wall.Wall;
 
 public class FragmentWall extends Fragment {
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
-    final String SAVED_TEXT = "saved_text";
 
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
     JazzyListView wallListView;
@@ -45,8 +44,6 @@ public class FragmentWall extends Fragment {
     Long gid;
 
     Bundle arguments;
-    //SharedPreferences sPref;
-    //JSONObject jsonObj;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -65,6 +62,8 @@ public class FragmentWall extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this.setRetainInstance(true);
+
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
         spinnerLayout = (RelativeLayout) rootView.findViewById(R.id.spinner_layout);
 
@@ -111,6 +110,8 @@ public class FragmentWall extends Fragment {
         wallListView.setTransitionEffect(mCurrentTransitionEffect);
         wallListView.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), true, true));
     }
+
+
 
     @Override
     public void onAttach(Activity activity) {

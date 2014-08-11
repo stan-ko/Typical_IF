@@ -5,8 +5,10 @@ import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
+import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -189,5 +191,17 @@ public class VKHelper {
 
         final VKRequest request = new VKRequest("video.get", params);
         request.executeWithListener(vkRequestListener);
+    }
+
+    public static ArrayList<VKApiPhoto> getPhotosFromJSONArray(JSONObject jsonArray) {
+        JSONObject object = jsonArray.optJSONObject("response");
+        JSONArray array = object.optJSONArray("items");
+
+        final ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
+        for (int i=0; i<array.length(); i++){
+            final VKApiPhoto photo = new VKApiPhoto().parse(array.optJSONObject(i));
+            photos.add(photo);
+        }
+        return photos;
     }
 }

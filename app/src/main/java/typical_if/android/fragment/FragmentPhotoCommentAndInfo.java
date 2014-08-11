@@ -33,6 +33,7 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
+import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +49,6 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
-import typical_if.android.model.Photo;
 import typical_if.android.model.Profile;
 
 /**
@@ -65,7 +65,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     private static String ARG_VK_GROUP_ID = "vk_group_id";
     private static final String ARG_VK_ALBUM_ID = "vk_album_id";
     private static final String ARG_VK_USER_ID = "user_id";
-    public static ArrayList<Photo> photo;
+    public static ArrayList<VKApiPhoto> photo;
     Bundle arguments;
 
     ListView listOfComments;
@@ -84,7 +84,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     long gid;
 
     public static FragmentPhotoCommentAndInfo newInstance(long vk_group_id, long vk_album_id,
-                                                          ArrayList<Photo> photo, long vk_user_id,
+                                                          ArrayList<VKApiPhoto> photo, long vk_user_id,
                                                           int isLiked, int currentPosition, int like_st) {
 
         FragmentPhotoCommentAndInfo fragment = new FragmentPhotoCommentAndInfo();
@@ -133,7 +133,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         ImageLoader.getInstance().displayImage(photo.get(currentPosition).photo_1280, headerView);
 
         final Button sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
-        final ArrayList<Photo> photo = this.photo;
+        final ArrayList<VKApiPhoto> photo = this.photo;
         updateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
 

@@ -101,7 +101,7 @@ public class FragmentAlbumsList extends Fragment {
                 Log.v("Module Item Trigger", arguments.getLong(ARG_VK_GROUP_ID) + "__" + albums.get(position).id + "");
                 Fragment fragment = FragmentPhotoList.newInstance(arguments.getLong(ARG_VK_GROUP_ID), albums.get(position).id);
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack("AlbumList").commit();
+                fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack("AlbumList").commit();
             }
         });
     }

@@ -143,6 +143,8 @@ public class VKApiPhoto extends VKAttachments.VKApiAttachment implements Parcela
 	{
 		parse(from);
 	}
+
+
     /**
      * Fills a Photo instance from JSONObject.
      */
