@@ -7,22 +7,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-
 import java.util.Locale;
 
-import typical_if.android.Constants;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
-import typical_if.android.VKHelper;
 
 public class SplashActivity extends Activity implements Animation.AnimationListener {
 
@@ -82,6 +75,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         return super.onOptionsItemSelected(item);
     }
 
