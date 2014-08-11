@@ -28,7 +28,7 @@ import typical_if.android.model.Profile;
 /**
  * Created by admin on 23.07.2014.
  */
-public class CommentsListAdapter extends BaseAdapter {
+public class FCommentsListAdapter extends BaseAdapter {
     ArrayList<VKApiComment> commentList;
     ArrayList<Profile> profilesList;
     private LayoutInflater layoutInflater;
