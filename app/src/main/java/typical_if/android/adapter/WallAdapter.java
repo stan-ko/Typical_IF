@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.model.VKApiPost;
@@ -37,6 +38,8 @@ public class WallAdapter extends BaseAdapter {
     private Context context;
     private String postColor;
     private FragmentManager fragmentManager;
+    final DisplayImageOptions options;
+
 
     public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, String postColor) {
         this.wall = wall;
@@ -45,6 +48,21 @@ public class WallAdapter extends BaseAdapter {
         this.context = VKUIHelper.getApplicationContext();
         this.fragmentManager = fragmentManager;
         this.postColor = postColor;
+        this.wall = wall;
+        this.posts = wall.posts;
+        this.layoutInflater = inflater;
+        this.context = VKUIHelper.getApplicationContext();
+        this.postColor = postColor;
+
+        this.options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.ic_stubif) // TODO resource or drawable
+                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
+                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+//            .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
+//            .bitmapConfig(Bitmap.Config.ARGB_8888) // default
+                .build();
     }
 
     @Override
