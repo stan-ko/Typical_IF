@@ -3,7 +3,6 @@ package typical_if.android.fragment;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,7 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,25 +18,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Toast;
 
 import com.twotoasters.jazzylistview.JazzyGridView;
 import com.twotoasters.jazzylistview.JazzyHelper;
-import com.twotoasters.jazzylistview.JazzyListView;
-
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.PhotoListAdapter;
-import typical_if.android.model.Photo;
 
 public class FragmentPhotoList extends Fragment {
     static Uri mImageUri;
@@ -46,7 +41,6 @@ public class FragmentPhotoList extends Fragment {
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private static final int PICK_FROM_CAMERA = 1;
     JazzyGridView gridOfPhotos;
-    PhotoListAdapter photoListAdapter;
 
     public static FragmentPhotoList newInstance(long vk_group_id, long vk_album_id) {
         FragmentPhotoList fragment = new FragmentPhotoList();
@@ -73,7 +67,6 @@ public class FragmentPhotoList extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_photo_list, container, false);
         setRetainInstance(true);
         doRequest(rootView);
-
         return rootView;
     }
 
@@ -132,24 +125,19 @@ public class FragmentPhotoList extends Fragment {
     }
 
     protected void handleResponse(VKResponse response, int columns, View view) {
-        final ArrayList<Photo> photos = Photo.getPhotosFromJSONArray(response.json);
+        final ArrayList<VKApiPhoto> photos = VKHelper.getPhotosFromJSONArray(response.json);
         gridOfPhotos = (JazzyGridView) view.findViewById(R.id.gridOfPhotos);
         gridOfPhotos.setTransitionEffect(mCurrentTransitionEffect);
         gridOfPhotos.setNumColumns(columns);
-        try {
-            photoListAdapter = new PhotoListAdapter(photos, getActivity().getLayoutInflater());
-        }
-        catch (NullPointerException e){
-            Log.d("Connection", "BAD CONNECTION (NULL POINTER EXCEPTION)");
-        }
+        final PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos, getActivity().getLayoutInflater());
         gridOfPhotos.setAdapter(photoListAdapter);
         gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = null;
                 fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID));
-                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
         });
     }

@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -56,6 +58,7 @@ import java.util.regex.Pattern;
 
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
+import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.model.Wall.Profile;
 import typical_if.android.model.Wall.Wall;
 
@@ -83,6 +86,10 @@ public class ItemDataSetter {
     public static String postColor;
     public static WallAdapter.ViewHolder wallViewHolder;
     public static CommentsListAdapter.ViewHolder commentViewHolder;
+
+    public static int position;
+    public static FragmentManager fragmentManager;
+    public static long aid = 0;
 
     public static void setAttachemnts(VKAttachments attachments, LinearLayout parentLayout, int type) {
         ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
@@ -673,7 +680,8 @@ public class ItemDataSetter {
                             img.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Toast.makeText(context, photos.get(finalJ).src.getImageForDimension(photos.get(finalJ).width, photos.get(finalJ).height) + "", Toast.LENGTH_SHORT).show();
+                                    Fragment fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, wall.group.id, aid);
+                                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                 }
                             });
                             if (photoPointer == photos.size()) {
@@ -698,7 +706,8 @@ public class ItemDataSetter {
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Toast.makeText(context, photos.get(finalL).src.getImageForDimension(photos.get(finalL).width, photos.get(finalL).height) + "", Toast.LENGTH_SHORT).show();
+                                        Fragment fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, wall.group.id, aid);
+                                        fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                     }
                                 });
                             }
@@ -731,7 +740,7 @@ public class ItemDataSetter {
                             }
                             img = (ImageView) view_i_j_k;
                             if (videosCount == 1) {
-                                img.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 250));
+                                img.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, setInDp(250)));
                                 img.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             }
                             final int finalJ = videoPointer++;

@@ -14,17 +14,18 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.vk.sdk.api.model.VKApiPhoto;
+
 import java.util.ArrayList;
 
 import typical_if.android.R;
 import typical_if.android.adapter.FullScreenImageAdapter;
-import typical_if.android.model.Photo;
 
 public class FragmentFullScreenImagePhotoViewer extends Fragment implements Animation.AnimationListener {
 
 
     private OnFragmentInteractionListener mListener;
-    public static ArrayList<Photo> photos;
+    public static ArrayList<VKApiPhoto> photos;
     private static ViewPager imagepager;
     public static int currentposition;
 
@@ -37,7 +38,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements Anim
     int isLiked;
     long user_id;
 
-    public static FragmentFullScreenImagePhotoViewer newInstance(ArrayList<Photo> photos, int currentposition, long vk_group_id, long vk_album_id) {
+    public static FragmentFullScreenImagePhotoViewer newInstance(ArrayList<VKApiPhoto> photos, int currentposition, long vk_group_id, long vk_album_id) {
 
         FragmentFullScreenImagePhotoViewer fragment = new FragmentFullScreenImagePhotoViewer();
         Bundle args = new Bundle();

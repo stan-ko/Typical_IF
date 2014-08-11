@@ -80,6 +80,7 @@ public class WallAdapter extends BaseAdapter {
         return posts.get(position).id;
     }
 
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
@@ -95,6 +96,8 @@ public class WallAdapter extends BaseAdapter {
         ItemDataSetter.wallViewHolder = viewHolder;
         ItemDataSetter.postColor = postColor;
         ItemDataSetter.wall = wall;
+        ItemDataSetter.position = position;
+        ItemDataSetter.fragmentManager = fragmentManager;
 
         final VKApiPost post = posts.get(position);
 
@@ -116,53 +119,6 @@ public class WallAdapter extends BaseAdapter {
         viewHolder.txt_post_share.setText(valueOf(post.reposts_count));
 
         viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
-/*
-        if (post.user_reposted) {
-            viewHolder.cb_repost.setChecked(true);
-            viewHolder.cb_repost.setEnabled(false);
-        } else {
-            viewHolder.cb_repost.setChecked(false);
-            viewHolder.cb_repost.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-                    View view = inflater.inflate(R.layout.txt_dialog_comment, null);
-                    dialog.setView(view);
-                    dialog.setTitle(txt_dialog_comment);
-
-                    final TextView text = (TextView) view.findViewById(R.id.txt_post_comment);
-
-                    dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            final String pidFull = "wall-" + wall.group.id + "_" + post.id;
-                            VKHelper.doRepost(pidFull, (String) text.getText(), new VKRequest.VKRequestListener() {
-                                @Override
-                                public void onComplete(VKResponse response) {
-                                    super.onComplete(response);
-                                    JSONObject object = response.json.optJSONObject("response");
-                                    int isSuccessed = object.optInt("success");
-
-                                    if (isSuccessed == 1) {
-                                        Toast.makeText(context, "All is done", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                            viewHolder.cb_repost.setChecked(true);
-                        }
-                    });
-
-                    dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    dialog.create();
-                }
-            });
-        }*/
 
         viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -278,7 +234,8 @@ public class WallAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 FragmentPostCommentAndInfo fragment = FragmentPostCommentAndInfo.newInstance(finalConvertView, wall.group.id, post);
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                notifyDataSetChanged();
             }
         });
 

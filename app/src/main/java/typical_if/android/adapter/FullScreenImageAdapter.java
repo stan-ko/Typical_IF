@@ -20,6 +20,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,6 @@ import typical_if.android.MyApplication;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.fragment.FragmentPhotoCommentAndInfo;
-import typical_if.android.model.Photo;
 
 /**
  * Created by LJ on 21.07.2014.
@@ -35,7 +35,7 @@ import typical_if.android.model.Photo;
 public class FullScreenImageAdapter extends PagerAdapter {
 
     LayoutInflater inflater;
-    private ArrayList<Photo> photos;
+    private ArrayList<VKApiPhoto> photos;
     private View rootView;
     private DisplayImageOptions options;
     final int displayHeight = MyApplication.getDisplayHeight();
@@ -48,7 +48,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
     int isLiked;
     Bundle arguments;
 
-    public FullScreenImageAdapter(ArrayList<Photo> photos, LayoutInflater inflater, Bundle arguments, long groupID, long albumID, long userID, FragmentManager fragmentManager, View rootView) {
+    public FullScreenImageAdapter(ArrayList<VKApiPhoto> photos, LayoutInflater inflater, Bundle arguments, long groupID, long albumID, long userID, FragmentManager fragmentManager, View rootView) {
         this.rootView = rootView;
         this.photos = photos;
         this.inflater = inflater;
@@ -107,22 +107,22 @@ public class FullScreenImageAdapter extends PagerAdapter {
         countComments.setText(String.valueOf(photos.get(position).comments));
 
 
-        if (photos.get(position).user_likes == 0) {
+        if (photos.get(position).user_likes == false) {
             like_status=0;
             like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
             likedOrNotLikedBox.setChecked(false);
         }
-        if (photos.get(position).user_likes == 1) {
+        if (photos.get(position).user_likes == true) {
             like_status=1;
             like.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
             likedOrNotLikedBox.setChecked(true);
         }
-        arguments.putInt("isLiked", photos.get(position).user_likes);
+        arguments.putBoolean("isLiked", photos.get(position).user_likes);
 
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (photos.get(position).user_likes == 0) {
+                if (photos.get(position).user_likes == false) {
                     VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
@@ -133,14 +133,14 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
 
                             Toast.makeText(VKUIHelper.getApplicationContext(), "LIKED: ", Toast.LENGTH_SHORT).show();
-                            photos.get(position).user_likes = 1;
+                            photos.get(position).user_likes = true;
                             like_status=1;
 
                         }
                     });
 
                 }
-                if (photos.get(position).user_likes == 1) {
+                if (photos.get(position).user_likes == true) {
                     VKHelper.deleteLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
@@ -148,7 +148,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
                             likedOrNotLikedBox.setChecked(false);
                             like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
                             countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString()) - 1));
-                            photos.get(position).user_likes = 0;
+                            photos.get(position).user_likes = false;
                             like_status=0;
 
                             Toast.makeText(VKUIHelper.getApplicationContext(), "LIKE DELETED", Toast.LENGTH_SHORT).show();
@@ -165,7 +165,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
                 Toast.makeText(VKUIHelper.getApplicationContext(), "position is: " + position, Toast.LENGTH_SHORT).show();
 
                 FragmentPhotoCommentAndInfo fragment = FragmentPhotoCommentAndInfo.newInstance(groupID, albumID, photos, user_id, arguments.getInt("isLiked"), position, like_status);
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
         });
         return viewLayout;
@@ -178,10 +178,10 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
     }
 
-    public void loadImage(Photo photo, ImageView imageView) {
+    public void loadImage(VKApiPhoto photo, ImageView imageView) {
         String url = null;
-        if (!TextUtils.isEmpty(photo.photo_2048) && displayHeight > 1199) {
-            url = photo.photo_2048;
+        if (!TextUtils.isEmpty(photo.photo_2560) && displayHeight > 1199) {
+            url = photo.photo_2560;
         } else if (!TextUtils.isEmpty(photo.photo_1280) && displayHeight > 799) {
             url = photo.photo_1280;
         } else if (!TextUtils.isEmpty(photo.photo_807) && displayHeight > 600) {

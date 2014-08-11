@@ -53,7 +53,6 @@ public class MainActivity extends ActionBarActivity implements
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,10 +64,7 @@ public class MainActivity extends ActionBarActivity implements
 
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
-
     }
-
-
 
     public long setGroupId(int clickedPosition) {
         if (clickedPosition == 0) {
@@ -196,6 +192,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onNavigationDrawerItemSelected(int groupPosition, int childPosition) {
         Fragment fragment = null;
+        FragmentManager fragmentManager = getSupportFragmentManager();
         long vkGroupId = Constants.TF_ID;
         switch (groupPosition) {
             case 0:
@@ -210,6 +207,7 @@ public class MainActivity extends ActionBarActivity implements
                 } else if (childPosition == 1) {
                     fragment = FragmentAlbumsList.newInstance(vkGroupId);
                 }
+
                 break;
             case 4:
                 onSectionAttached(groupPosition);
@@ -228,7 +226,6 @@ public class MainActivity extends ActionBarActivity implements
                 break;
         }
         if (groupPosition != 5) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
         restoreActionBar();
