@@ -1,22 +1,17 @@
 package typical_if.android.fragment;
 
-
 import android.app.Activity;
-import android.app.FragmentManager;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Matrix;
-import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,31 +20,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import com.koushikdutta.ion.bitmap.BitmapInfo;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import typical_if.android.MyApplication;
 import typical_if.android.R;
+import typical_if.android.UploadPhotoService;
 
 /**
  * Created by LJ on 29.07.2014.
@@ -92,6 +72,7 @@ public class FragmentPhotoFromCamera extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        getActivity().stopService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
     }
 
     @Override
@@ -103,12 +84,15 @@ public class FragmentPhotoFromCamera extends Fragment {
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                final VKRequest req = VKApi.uploadAlbumPhotoRequest(new File(path), 123513499, 8686797);
+                final File tempFile = new File(path);
+                getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
+                final VKRequest req = VKApi.uploadAlbumPhotoRequest(tempFile, 123513499, 8686797);
                 req.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
                         Log.d("MY response", response.responseString);
+                        //getActivity().stopService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
                     }
                 });
                 return true;
@@ -116,7 +100,6 @@ public class FragmentPhotoFromCamera extends Fragment {
         });
         super.onCreateOptionsMenu(menu,inflater);
     }
-
 
     public static Bitmap rotate(Bitmap b, int degrees) {
         if (degrees != 0 && b != null) {
@@ -182,4 +165,5 @@ public class FragmentPhotoFromCamera extends Fragment {
 
         return bit;
     }
+
 }

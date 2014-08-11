@@ -111,10 +111,9 @@ public class MainActivity extends ActionBarActivity implements
         actionBar.setIcon(mIcon);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
+        if (mNavigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.main, menu);
             MenuItem item = menu.getItem(0);
             item.setVisible(false);
