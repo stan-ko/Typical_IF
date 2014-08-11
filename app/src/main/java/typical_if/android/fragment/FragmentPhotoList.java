@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,6 +46,7 @@ public class FragmentPhotoList extends Fragment {
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private static final int PICK_FROM_CAMERA = 1;
     JazzyGridView gridOfPhotos;
+    PhotoListAdapter photoListAdapter;
 
     public static FragmentPhotoList newInstance(long vk_group_id, long vk_album_id) {
         FragmentPhotoList fragment = new FragmentPhotoList();
@@ -134,7 +136,12 @@ public class FragmentPhotoList extends Fragment {
         gridOfPhotos = (JazzyGridView) view.findViewById(R.id.gridOfPhotos);
         gridOfPhotos.setTransitionEffect(mCurrentTransitionEffect);
         gridOfPhotos.setNumColumns(columns);
-        final PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos, getActivity().getLayoutInflater());
+        try {
+            photoListAdapter = new PhotoListAdapter(photos, getActivity().getLayoutInflater());
+        }
+        catch (NullPointerException e){
+            Log.d("Connection", "BAD CONNECTION (NULL POINTER EXCEPTION)");
+        }
         gridOfPhotos.setAdapter(photoListAdapter);
         gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

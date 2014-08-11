@@ -27,6 +27,9 @@ import typical_if.android.model.Album;
  * Created by admin on 14.07.2014.
  */
 public class FragmentAlbumsList extends Fragment {
+
+   AlbumCoverAdapter albumCoverAdapter;
+   JazzyListView listOfAlbums;
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
     /**
@@ -91,8 +94,15 @@ public class FragmentAlbumsList extends Fragment {
     protected void handleResponse(VKResponse response) {
         final Bundle arguments = getArguments();
         final ArrayList<Album> albums = Album.getAlbumFromJSONArray(response.json);
-        JazzyListView listOfAlbums = (JazzyListView) getView().findViewById(R.id.listOfAlbums);
-        final AlbumCoverAdapter albumCoverAdapter = new AlbumCoverAdapter(albums, getActivity().getLayoutInflater());
+
+        try {
+            listOfAlbums = (JazzyListView) getView().findViewById(R.id.listOfAlbums);
+           albumCoverAdapter = new AlbumCoverAdapter(albums, getActivity().getLayoutInflater());
+        }
+        catch (NullPointerException e){
+            Log.d("Connection", "BAD CONNECTION (NULL POINTER EXCEPTION)");
+        }
+
         listOfAlbums.setTransitionEffect(mCurrentTransitionEffect);
         listOfAlbums.setAdapter(albumCoverAdapter);
         listOfAlbums.setOnItemClickListener(new AdapterView.OnItemClickListener() {
