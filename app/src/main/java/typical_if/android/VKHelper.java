@@ -24,7 +24,7 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void getPhotoList(long owner_id, long album_id, VKRequest.VKRequestListener listener) {
+    public static void getPhotoList(long owner_id, long album_id,int rev, VKRequest.VKRequestListener listener) {
 
 
         VKParameters params = new VKParameters();
@@ -33,19 +33,18 @@ public class VKHelper {
 
         params.put("owner_id", owner_id);
         params.put("album_id", album_id);
-        params.put("rev",0);
+        params.put("rev",rev);
         params.put("extended", 1);
         params.put("offset",0);
         params.put("count",200);
         }
 
 else {
-
-            int offset =count*100 ;
+           int offset =count*100 ;
 
             params.put("owner_id", owner_id);
             params.put("album_id", album_id);
-            params.put("rev",0);
+            params.put("rev",rev);
             params.put("extended", 1);
             params.put("offset",String.valueOf(offset));
             params.put("count",200);
@@ -126,13 +125,13 @@ else {
         request.executeWithListener(listener);
     }
 
-//    public static void doRepost(String pid, String message, VKRequest.VKRequestListener listener) {
-//        VKParameters params = new VKParameters();
-//        params.put("object", pid);
-//        params.put("message", message);
-//        final VKRequest request = new VKRequest("wall.repost", params);
-//        request.executeWithListener(listener);
-//    }
+    public static void doRepost(String pid, String message, VKRequest.VKRequestListener listener) {
+        VKParameters params = new VKParameters();
+        params.put("object", pid);
+        params.put("message", message);
+        final VKRequest request = new VKRequest("wall.repost", params);
+        request.executeWithListener(listener);
+    }
 
     public static void doReportPost(long oid, long pid, int reason, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
@@ -220,4 +219,6 @@ else {
         final VKRequest request = new VKRequest("video.get", params);
         request.executeWithListener(vkRequestListener);
     }
+
+
 }

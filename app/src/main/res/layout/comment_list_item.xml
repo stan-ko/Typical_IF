@@ -157,4 +157,14 @@
         android:focusable="false"
         android:focusableInTouchMode="false"/>
 
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9"
+        android:id="@+id/post_comment_like_checkbox"
+        android:layout_alignBottom="@+id/img_user_avatar"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:button="@drawable/like_or_not_liked_selector" />
+
 </RelativeLayout>

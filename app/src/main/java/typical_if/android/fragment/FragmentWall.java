@@ -17,7 +17,6 @@ import com.vk.sdk.api.VKResponse;
 
 import org.json.JSONObject;
 
-import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
@@ -67,9 +66,10 @@ public class FragmentWall extends Fragment {
         gid = arguments.getLong(ARG_VK_GROUP_ID);
         postColor = ItemDataSetter.getPostColor(gid);
 
+
         //  initGroupWall(offlineMode.loadJSON(gid), inflater);
         // spinnerLayout.setVisibility(View.GONE);
-        VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(gid, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);

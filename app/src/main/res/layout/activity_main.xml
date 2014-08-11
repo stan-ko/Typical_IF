@@ -30,4 +30,6 @@
         android:name="typical_if.android.fragment.NavigationDrawerFragment"
         tools:layout="@layout/fragment_navigation_drawer" />
 
+
+
 </android.support.v4.widget.DrawerLayout>

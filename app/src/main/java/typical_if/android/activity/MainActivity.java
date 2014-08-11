@@ -99,7 +99,6 @@ public class MainActivity extends ActionBarActivity implements
 
     public long setGroupId(int clickedPosition) {
         if (clickedPosition == 0) {
-
             return Constants.TF_ID;
         } else if (clickedPosition == 1) {
 
@@ -108,7 +107,6 @@ public class MainActivity extends ActionBarActivity implements
 
             return Constants.FB_ID;
         } else {
-
             return Constants.FN_ID;
         }
     }
@@ -152,7 +150,9 @@ public class MainActivity extends ActionBarActivity implements
         if (mNavigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.main, menu);
             MenuItem item = menu.getItem(0);
+            MenuItem item1 = menu.getItem(1);
             item.setVisible(false);
+            item1.setVisible(false);
             restoreActionBar();
             return true;
         }

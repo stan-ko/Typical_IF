@@ -30,15 +30,15 @@ public class Constants {
             VKScope.NOTIFICATIONS
     };
 
-    public static final long TF_ID = -27922438;
-    //public static final long TF_ID = -42709618;
+    //public static final long TF_ID = -27922438;
+    public static final long TF_ID = -36573302;
     public static final long TZ_ID = -26363301;
     public static final long FB_ID = -39253850;
     public static final long FN_ID = -38380107;
 
     public static final String APP_ID = "4456259";
     public static long USER_ID;
-    public static long GROUP_ID;
+
 
     public static final Resources RESOURCES = VKUIHelper.getApplicationContext().getResources();
 

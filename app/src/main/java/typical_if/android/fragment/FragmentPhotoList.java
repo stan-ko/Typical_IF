@@ -1,9 +1,9 @@
 package typical_if.android.fragment;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -20,21 +20,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.Toast;
 
-import com.nhaarman.listviewanimations.ArrayAdapter;
 import com.twotoasters.jazzylistview.JazzyGridView;
 import com.twotoasters.jazzylistview.JazzyHelper;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -54,6 +52,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     private static final int PICK_FROM_FILE = 2;
     final int PIC_CROP = 2;
     private static Uri mImageCaptureUri;
+    Animation animationEnlarge, animationShrink;
     JazzyGridView gridOfPhotos;
 
     public static FragmentPhotoList newInstance(long vk_group_id, long vk_album_id) {
@@ -114,6 +113,24 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
         inflater.inflate(R.menu.main, menu);
         MenuItem item =  menu.getItem(0).setEnabled(true);
+        MenuItem item1 = menu.getItem(1).setEnabled(true);
+        item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                VKHelper.getPhotoList(getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID),1, new VKRequest.VKRequestListener() {
+
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+                        handleResponse(response, columns, view);
+                        Log.d("OnComplete has done !",response.json.toString());
+                    }
+                });
+
+                return true;
+            }
+        });
+
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -132,45 +149,34 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         public void onFragmentInteraction(Uri uri);
     }
 int columns;
+View view=null;
     public void doRequest(final View view){
+        this.view=view;
         final Bundle arguments = getArguments();
-        float scalefactor = getResources().getDisplayMetrics().density * 50;
+        float scaleFactor = getResources().getDisplayMetrics().density * 50;
         int number = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-        final int columns = (int) ((float) number / (float) scalefactor);
+        final int columns = (int) ((float) number / (float) scaleFactor);
         this.columns=columns;
         VKHelper.count=0;
-        VKHelper.getPhotoList(arguments.getLong(ARG_VK_GROUP_ID), arguments.getLong(ARG_VK_ALBUM_ID), new VKRequest.VKRequestListener() {
+        VKHelper.getPhotoList(arguments.getLong(ARG_VK_GROUP_ID), arguments.getLong(ARG_VK_ALBUM_ID),1, new VKRequest.VKRequestListener() {
 
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 handleResponse(response, columns, view);
             }
-
-            @Override
-            public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
-                super.attemptFailed(request, attemptNumber, totalAttempts);
-            }
-
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-            }
-
-            @Override
-            public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
-                super.onProgress(progressType, bytesLoaded, bytesTotal);
-            }
         });
     }
-
+    FragmentTransaction transaction;
+    ObjectAnimator objectAnimator = new ObjectAnimator();
     protected void handleResponse (VKResponse response, final int columns, View view) {
-        //     Log.d("-------------------yutyut------------->",response.json.toString()+"");
+
         final ArrayList<Photo> photos = Photo.getPhotosFromJSONArray(response.json);
         for(int i =0; i<photos.size();i++){
           photos2.add(photos.get(i));
-            Log.d(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>",photos2.size()+"");
-        }
+            }
+
+
 
 
         try {
@@ -179,18 +185,22 @@ int columns;
         } catch (NullPointerException e) {
             Log.d("Loadding failed", "Not complete");
         }
-
+        final Animation a;
+        a = AnimationUtils.loadAnimation(getActivity().getApplicationContext(),R.anim.abc_slide_in_bottom);
         gridOfPhotos.setNumColumns(columns);
         final PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
         gridOfPhotos.setAdapter(photoListAdapter);
+        gridOfPhotos.setAnimation(a);
         gridOfPhotos.setOnScrollListener(this);
         gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID));
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_enter, R.anim.pop_exit);
+                transaction = fragmentManager.beginTransaction();
+
+                transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
                 transaction.replace(R.id.container, fragment).addToBackStack("String").commit();
             }
         });
@@ -219,23 +229,14 @@ int columns;
                                 "tmp_avatar_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
                         mImageCaptureUri = Uri.fromFile(file);
 
-                        try {
-                            //second.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, mImageCaptureUri);
-                            //second.putExtra("return-data", true);
+                        try { startActivityForResult(second, PICK_FROM_CAMERA);
 
-                            startActivityForResult(second, PICK_FROM_CAMERA);
-
-
-                          //  Log.d("URI -_---->>>>>>>>>>>>>>>", mImageCaptureUri.toString());
                                 FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance(mImageCaptureUri);
                                 android.support.v4.app.FragmentManager fragmentManagers = getFragmentManager();
                                 fragmentManagers.beginTransaction().replace(R.id.container, fragmentPhotoFromCamera).addToBackStack("PhotoList").commit();
                         } catch(ActivityNotFoundException anfe){
-                            //display an error message
-                            String errorMessage = "Whoops - your device doesn't support capturing images!";
-                         //   Toast toast = Toast.makeText(getActivity().getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
-                            //toast.show();
-                        }
+                            Toast.makeText(getActivity().getApplicationContext(),"Whoops - your device doesn't support capturing images!",Toast.LENGTH_LONG);
+                       }
 
                         dialog.cancel();
 
@@ -287,28 +288,6 @@ int columns;
         }
     }
 
-
-    private final static int ITEMS_PPAGE = 20;
-
-    private ProgressDialog mDialog;
-    private ArrayList<HashMap<String, String>> mSongsList;
-
-    private static String IMAGE_POSITION;
-    private GridView mGridView;
-    //MainGridViewLazyAdapter mAdapter;
-    private ArrayAdapter<String> mAdapter;
-    private String cat_url;
-    private String artist_url;
-
-    private int mVisibleThreshold = 5;
-    private int mCurrentPage = 0;
-    private int mPreviousTotal = 0;
-    private boolean mLoading = true;
-    private boolean mLastPage = false;
-
-    private String mXml;
-
-    private int stop = 0;
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -316,23 +295,27 @@ int columns;
 
     @Override
     public void onScroll(final AbsListView view, int firstVisibleItem, final int visibleItemCount, int totalItemCount) {
-        if(firstVisibleItem + visibleItemCount >= totalItemCount){
+        if (firstVisibleItem + visibleItemCount >= totalItemCount) {
 
-            VKHelper.getPhotoList(getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID), new VKRequest.VKRequestListener() {
+            VKHelper.getPhotoList(getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID),0, new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {
                     super.onComplete(response);
-                    handleResponse(response,columns, view );
-                    Log.d("----------------------------------------------------------------------------->",visibleItemCount+"");
+                    handleResponse(response, columns, view);
+                    Log.d("----------------------------------------------------------------------------->", visibleItemCount + "");
                 }
 
             });
-        }else {}
+        } else {
+        }
+
+
     }
 
+}
 
 
-    }
+
 
 
 

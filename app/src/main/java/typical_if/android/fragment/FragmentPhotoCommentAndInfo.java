@@ -133,6 +133,8 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         final ImageView postPhotoUserAvatar = (ImageView) rootView.findViewById(R.id.post_user_avatar);
         final TextView postPhotoUserName = ((TextView) rootView.findViewById(R.id.post_user_name));
         final TextView postPhotoUserDateOfComment = ((TextView) rootView.findViewById(R.id.post_user_date_of_comment));
+       // final CheckBox repost = (CheckBox)rootView.findViewById(R.id.repost_checkbox);
+
 
         VKHelper.getPostUserInfo(photo.user_id, "photo_50", new VKRequest.VKRequestListener() {
             @Override
@@ -142,15 +144,15 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                 ImageLoader.getInstance().displayImage(postSender.photo_50, postPhotoUserAvatar);
                 postPhotoUserName.setText(postSender.last_name + " " + postSender.first_name);
                 postPhotoUserDateOfComment.setText(ItemDataSetter.getFormattedDate(photo.date));
-                 }
+
+            }
         });
 
         photoUserSender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Uri uri = Uri.parse("http://vk.com/id" + postSender.id + "");
-                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
+                         Uri uri = Uri.parse("http://vk.com/id" + postSender.id + "");
+                         getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -165,6 +167,8 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
 
 
 
+        ////////////////////////////////////////////////
+View additionalView = rootView.inflate(getActivity().getApplicationContext(),R.layout.comment_list_item,null);
         final CheckBox likePostPhoto = ((CheckBox) rootView.findViewById(R.id.like_post_photo_checkbox));
 
         if (photo.user_likes == 0) {
@@ -191,9 +195,9 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                             photo.user_likes=1;
                             FragmentFullScreenImagePhotoViewer.isLiked=1;
                             likePostPhoto.setText(String.valueOf(++photo.likes));
-                            likePostPhoto.setBackgroundColor(Color.BLUE);
+                           // likePostPhoto.setBackgroundColor(Color.BLUE);
                             likePostPhoto.setChecked(true);
-                            likePostPhoto.setTextColor(Color.WHITE);
+                           // likePostPhoto.setTextColor(Color.WHITE);
                         }
                     });
 
@@ -206,9 +210,9 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                                     photo.user_likes=0;
                                     FragmentFullScreenImagePhotoViewer.isLiked=0;
                                     likePostPhoto.setText(String.valueOf(--photo.likes ));
-                                    likePostPhoto.setBackgroundColor(Color.WHITE);
+                                   // likePostPhoto.setBackgroundColor(Color.WHITE);
                                     likePostPhoto.setChecked(false);
-                                    likePostPhoto.setTextColor(Color.GRAY);
+                                   // likePostPhoto.setTextColor(Color.GRAY);
                                 }
                             });
                 }
@@ -248,6 +252,11 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
             }
         });
 
+
+
+
+
+
  return rootView;
 
     }
@@ -270,7 +279,8 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         });
 
 
-        listOfComments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listOfComments.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 if (position > 0) {
@@ -289,7 +299,11 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         if (comment.from_id == Constants.USER_ID) {
             items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись", "Видалити"};
         } else {
+            if(comments.get(position).user_likes == false){
             items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись"};
+            }else {
+                items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені не подобається", "Поскаржитись"};
+            }
         }
 
         onInitContextMenu(items, position);
@@ -302,8 +316,13 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         JSONArray[] arrayOfComments = VKHelper.getResponseArrayOfComment(response);
 
         comments = VKHelper.getCommentsFromJSON(arrayOfComments[0]);
+
+
+
+
         Collections.sort(comments);
         profiles = Profile.getProfilesFromJSONArray(arrayOfComments[1]);
+
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -314,7 +333,6 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                     listOfComments.setAdapter(adapter);
                 } else {
                     adapter.UpdateCommentList(comments, profiles, listOfComments);
-
                 }
             }
         });
@@ -350,7 +368,31 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                     }
                     break;
                     case 3: {
-                        Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
+                        if (comments.get(position).user_likes == false) {
+
+                            VKHelper.setLike("photo_comment", gid, comments.get(position).id, new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    super.onComplete(response);
+                                    comments.get(position).likes += 1;
+                                    comments.get(position).user_likes = true;
+                                    Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+                        }
+                        else {
+                            VKHelper.deleteLike("photo_comment", gid, comments.get(position).id, new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    super.onComplete(response);
+                                    comments.get(position).likes -= 1;
+                                    comments.get(position).user_likes = false;
+                                    Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+
                     }
                     break;
                     case 4:

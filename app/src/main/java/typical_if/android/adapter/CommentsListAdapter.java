@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,7 +32,7 @@ public class CommentsListAdapter extends BaseAdapter {
     ArrayList<Profile> profilesList;
     private LayoutInflater layoutInflater;
     private static Context context;
-
+    public ViewHolder viewHolder;
     String first_name = "";
     String last_name = "";
     String url = "";
@@ -75,7 +76,7 @@ public class CommentsListAdapter extends BaseAdapter {
 
         for (int k = 0; k < commentList.size(); k++) {
             if (commentList.get(k).reply_to_user > (long) 0) {
-                commentList.get(k).text = commentList.get(k).text.replaceFirst("^(\\[id\\d+\\|)", "").replaceFirst("(\\])", "").toString();
+                commentList.get(k).text = commentList.get(k).text.replaceFirst("^(\\[id\\d+\\|)", "").replaceFirst("(\\])", "");
             } else {
                 commentList.get(k).text = commentList.get(k).text;
             }
@@ -84,16 +85,31 @@ public class CommentsListAdapter extends BaseAdapter {
 
 
     public void holderInitialize(ViewHolder viewHolder, VKApiComment comment) {
+
         ItemDataSetter.commentViewHolder = viewHolder;
         ItemDataSetter.postColor = postColor;
 
         ImageLoader.getInstance().displayImage(url, viewHolder.user_avatar);
+        if (comment.likes==0){
+            viewHolder.likes.setVisibility(View.GONE);
 
-        viewHolder.user_name.setText(last_name + " " + first_name);
+        }else{
+            viewHolder.likes.setText(String.valueOf(comment.likes));
+
+            if(comment.user_likes==false){
+
+                viewHolder.likes.setChecked(true);
+            }else {
+                viewHolder.likes.setChecked(false);
+            }
+        }
+            viewHolder.user_name.setText(last_name + " " + first_name);
+
         if (comment.text.length() != 0) {
             ItemDataSetter.setText(comment.text, viewHolder.commentTextLayout);
         } else {
             viewHolder.commentTextLayout.setVisibility(View.GONE);
+
         }
 
         viewHolder.date_of_user_comment.setText(String.valueOf(ItemDataSetter.getFormattedDate(comment.date)));
@@ -125,7 +141,7 @@ public class CommentsListAdapter extends BaseAdapter {
         this.position=position;
 
         final VKApiComment comment = commentList.get(position);
-        ViewHolder viewHolder;
+
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.comment_list_item, null);
             viewHolder = new ViewHolder(convertView);
@@ -144,6 +160,7 @@ public class CommentsListAdapter extends BaseAdapter {
         public final ImageView user_avatar;
         public final TextView user_name;
         public final TextView date_of_user_comment;
+        public final CheckBox likes;
 
         public final RelativeLayout commentMediaLayout;
         private final RelativeLayout commentTextLayout;
@@ -160,6 +177,7 @@ public class CommentsListAdapter extends BaseAdapter {
             this.user_avatar = (ImageView) convertView.findViewById(R.id.img_user_avatar);
             this.user_name = (TextView) convertView.findViewById(R.id.user_name_textView);
             this.date_of_user_comment = (TextView) convertView.findViewById(R.id.text_date_of_comment);
+            this.likes = (CheckBox)convertView.findViewById(R.id.post_comment_like_checkbox);
 
             this.commentAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.commentAttachmentsLayout);
             this.commentMediaLayout = (RelativeLayout) convertView.findViewById(R.id.commentMediaLayout);

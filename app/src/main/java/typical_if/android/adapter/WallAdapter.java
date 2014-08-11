@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,6 +25,8 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKPostArray;
 
+import org.json.JSONObject;
+
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
@@ -31,8 +34,6 @@ import typical_if.android.VKHelper;
 import typical_if.android.model.Wall.Group;
 import typical_if.android.model.Wall.Profile;
 import typical_if.android.model.Wall.Wall;
-
-import static java.lang.String.valueOf;
 
 public class WallAdapter extends BaseAdapter {
     private Wall wall;
@@ -65,7 +66,7 @@ public class WallAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
 
         if (convertView == null) {
@@ -92,34 +93,69 @@ public class WallAdapter extends BaseAdapter {
         String copy_history_logo = "";
         String copy_history_name = "";
 
-
-        viewHolder.txt_post_comment.setText(valueOf(post.comments_count));
-        viewHolder.txt_post_like.setText(valueOf(post.likes_count));
-
-        viewHolder.txt_post_share.setText(valueOf(post.reposts_count));
-
+        viewHolder.cb_repost.setText(String.valueOf(post.reposts_count));
         viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
-/*
+        viewHolder.txt_post_comment.setText(String.valueOf(post.comments_count));
+        viewHolder.cb_like.setText(String.valueOf(post.likes_count));
+
+        if (post.user_likes == true) {
+            viewHolder.cb_like.setChecked(true);
+        } else {
+            viewHolder.cb_like.setChecked(false);
+        }
+
+        viewHolder.cb_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (post.user_likes == false) {
+                    VKHelper.setLike("post", (wall.group.id * -1), post.id, new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            Toast.makeText(VKUIHelper.getApplicationContext(), "Liked", Toast.LENGTH_SHORT).show();
+                            super.onComplete(response);
+                            viewHolder.cb_like.setText(String.valueOf(++post.likes_count));
+                            viewHolder.cb_like.setChecked(true);
+                            post.user_likes = true;
+                        }
+                    });
+                } else {
+
+                    VKHelper.deleteLike("post", (wall.group.id * -1), post.id, new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            Toast.makeText(VKUIHelper.getApplicationContext(), "Like has deleted", Toast.LENGTH_SHORT).show();
+                            viewHolder.cb_like.setText(String.valueOf(--post.likes_count));
+                            viewHolder.cb_like.setChecked(false);
+                            post.user_likes = false;
+                        }
+                    });
+                }
+            }
+        });
+
         if (post.user_reposted) {
             viewHolder.cb_repost.setChecked(true);
             viewHolder.cb_repost.setEnabled(false);
+            viewHolder.cb_repost.setOnClickListener(null);
         } else {
             viewHolder.cb_repost.setChecked(false);
-            viewHolder.cb_repost.setOnClickListener(new View.OnClickListener() {
+            viewHolder.iv_repost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder dialog = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-                    View view = inflater.inflate(R.layout.txt_dialog_comment, null);
+                    View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
                     dialog.setView(view);
-                    dialog.setTitle(txt_dialog_comment);
+                    dialog.setTitle("Ваш коментар");
 
-                    final TextView text = (TextView) view.findViewById(R.id.txt_post_comment);
+                    final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
 
                     dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             final String pidFull = "wall-" + wall.group.id + "_" + post.id;
-                            VKHelper.doRepost(pidFull, (String) text.getText(), new VKRequest.VKRequestListener() {
+                            VKHelper.doRepost(pidFull, text.getText().toString(), new VKRequest.VKRequestListener() {
                                 @Override
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
@@ -127,11 +163,33 @@ public class WallAdapter extends BaseAdapter {
                                     int isSuccessed = object.optInt("success");
 
                                     if (isSuccessed == 1) {
+
                                         Toast.makeText(context, "All is done", Toast.LENGTH_SHORT).show();
+                                        viewHolder.cb_repost.setChecked(true);
+                                        viewHolder.cb_repost.setText(String.valueOf(++post.reposts_count));
+                                        if (post.user_likes == false) {
+
+                                            VKHelper.setLike("post", (wall.group.id * (-1)), post.id, new VKRequest.VKRequestListener() {
+                                                @Override
+                                                public void onComplete(VKResponse response) {
+                                                    super.onComplete(response);
+
+                                                    viewHolder.cb_like.setText(String.valueOf(++post.likes_count));
+                                                    viewHolder.cb_like.setChecked(true);
+
+
+                                                }
+                                            });
+                                        }
+                                        viewHolder.cb_repost.setChecked(true);
+                                        viewHolder.cb_repost.setEnabled(false);
+                                    } else {
+                                        viewHolder.cb_repost.setChecked(false);
                                     }
                                 }
                             });
-                            viewHolder.cb_repost.setChecked(true);
+
+
                         }
                     });
 
@@ -142,10 +200,12 @@ public class WallAdapter extends BaseAdapter {
                         }
                     });
 
-                    dialog.create();
+                    dialog.create().show();
                 }
             });
-        }*/
+
+            viewHolder.cb_repost.setOnClickListener(null);
+        }
 
         viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -334,13 +394,14 @@ public class WallAdapter extends BaseAdapter {
         public final RelativeLayout postPollLayout;
 
         private final TextView txt_post_date;
-        private final TextView txt_post_like;
-        private final TextView txt_post_share;
+        // private final TextView txt_post_like;
         private final TextView txt_post_comment;
 
         private final ImageView img_fixed_post;
         private final ImageView img_post_other;
         private final CheckBox cb_repost;
+        private final ImageView iv_repost;
+        private final CheckBox cb_like;
 
 
         private ViewHolder(View convertView) {
@@ -358,14 +419,15 @@ public class WallAdapter extends BaseAdapter {
             this.postPollLayout = (RelativeLayout) convertView.findViewById(R.id.postPollLayout);
 
             this.txt_post_date = (TextView) convertView.findViewById(R.id.txt_post_date);
-            this.txt_post_like = (TextView) convertView.findViewById(R.id.txt_post_like);
-            this.txt_post_share = (TextView) convertView.findViewById(R.id.txt_post_share);
+            // this.txt_post_like = (TextView) convertView.findViewById(R.id.txt_post_like);
             this.txt_post_comment = (TextView) convertView.findViewById(R.id.txt_post_comment);
 
             this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
             this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other);
-
             this.cb_repost = (CheckBox) convertView.findViewById(R.id.cb_post_repost);
+            this.iv_repost = (ImageView) convertView.findViewById(R.id.iv_post_repost);
+            this.cb_like = (CheckBox) convertView.findViewById(R.id.cb_post_like);
+
         }
     }
 }

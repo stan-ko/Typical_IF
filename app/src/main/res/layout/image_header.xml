@@ -72,7 +72,7 @@
         android:layout_alignParentStart="true"
         android:visibility="visible" />
 
-    <LinearLayout
+    <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -82,70 +82,9 @@
         android:layout_below="@+id/list_header_image"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:clickable="false">
 
-        <!--<RelativeLayout-->
-            <!--android:layout_width="70dp"-->
-            <!--android:layout_height="30dp"-->
-
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--android:layout_alignParentStart="true"-->
-            <!--android:layout_marginLeft="5dp"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:id="@+id/relativeLayout2"-->
-            <!--android:background="@drawable/message_text_shape">-->
-
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/imageView2"-->
-                <!--android:src="@drawable/ic_post_btn_like_up"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_alignParentLeft="true"-->
-                <!--android:layout_alignParentStart="true" />-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
-                <!--android:text="117"-->
-                <!--android:id="@+id/textView3"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_toRightOf="@+id/imageView2"-->
-                <!--android:layout_alignParentTop="false"-->
-                <!--android:layout_alignWithParentIfMissing="false"-->
-                <!--android:layout_alignParentRight="false"-->
-                <!--android:layout_alignBaseline="@+id/imageView2"-->
-                <!--android:layout_marginLeft="6dp"-->
-                <!--android:layout_marginTop="5dp"-->
-                <!--android:textColor="#ff74767d" />-->
-        <!--</RelativeLayout>-->
-
-        <!--<RelativeLayout-->
-            <!--android:layout_width="42dp"-->
-            <!--android:layout_height="30dp"-->
-
-            <!--android:id="@+id/relativeLayout"-->
-            <!--android:layout_alignTop="@+id/relativeLayout2"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_marginLeft="250dp"-->
-            <!--android:layout_marginTop="10dp"-->
-            <!--android:background="@drawable/message_text_shape">-->
-
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:id="@+id/imageView3"-->
-                <!--android:src="@drawable/ic_post_btn_repost_up"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_alignParentLeft="true"-->
-                <!--android:layout_alignParentStart="true" />-->
-
-        <!--</RelativeLayout>-->
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -155,9 +94,24 @@
             android:button="@drawable/like_or_not_liked_selector"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
-            android:checked="false"
+            android:checked="true"
             android:clickable="true"
             android:enabled="true"/>
-    </LinearLayout>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:id="@+id/repost_checkbox"
+            android:button="@drawable/repost_selector"
+            android:checked="false"
+            android:clickable="true"
+            android:enabled="true"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="5dp" />
+
+    </RelativeLayout>
 
 </RelativeLayout>
