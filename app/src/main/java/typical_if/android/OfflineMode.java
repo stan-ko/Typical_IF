@@ -1,7 +1,10 @@
 package typical_if.android;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.vk.sdk.VKUIHelper;
@@ -19,7 +22,6 @@ public class OfflineMode {
     //String SAVED_JSON = "saved_text";
     //JSONObject jsonObj;
     //long time =5;
-
     public static void saveJSON(JSONObject jsonObject, long gid) {
         final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences(String.valueOf(gid),Activity.MODE_PRIVATE);
         final SharedPreferences.Editor ed = sPref.edit();
@@ -45,5 +47,18 @@ public class OfflineMode {
             Log.d("-------------Respons-----Load----Error---------",savedText );
         }
         return jsonObj;
+    }
+    public static boolean isOnline(final Context context) {
+        //final Activity activity = new Activity();
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo nInfo = cm.getActiveNetworkInfo();
+        if (nInfo != null && nInfo.isConnected()) {
+            Log.v("status", "ONLINE");
+            return true;
+        }
+        else {
+            Log.v("status", "OFFLINE");
+            return false;
+        }
     }
 }

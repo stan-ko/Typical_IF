@@ -2,10 +2,13 @@ package typical_if.android.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
@@ -78,36 +81,57 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
 
         ItemDataSetter.loadUserId();
-        //   --------------------START------------- all Request from internet before start APP----------------------
-        VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                OfflineMode.saveJSON(response.json, Constants.TF_ID);
-            }
-        });
-        VKHelper.doGroupWallRequest(Constants.TZ_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                OfflineMode.saveJSON(response.json, Constants.TZ_ID);
-            }
-        });
-        VKHelper.doGroupWallRequest(Constants.FB_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                OfflineMode.saveJSON(response.json, Constants.FB_ID);
-            }
-        });
-        VKHelper.doGroupWallRequest(Constants.FN_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                OfflineMode.saveJSON(response.json, Constants.FN_ID);
-            }
-        });
-        //     -------------------------END-------- all Request from internet before start APP----------------------
+        if (OfflineMode.isOnline(getApplicationContext())==true) {
+            //   --------------------START------------- all Request from internet before start APP----------------------
+            VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    OfflineMode.saveJSON(response.json, Constants.TF_ID);
+                }
+            });
+            VKHelper.doGroupWallRequest(Constants.TZ_ID, new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    OfflineMode.saveJSON(response.json, Constants.TZ_ID);
+                }
+            });
+            VKHelper.doGroupWallRequest(Constants.FB_ID, new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    OfflineMode.saveJSON(response.json, Constants.FB_ID);
+                }
+            });
+            VKHelper.doGroupWallRequest(Constants.FN_ID, new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    OfflineMode.saveJSON(response.json, Constants.FN_ID);
+                }
+            });
+            //-------------------------END-------- all Request from internet before start APP----------------------
+        }else{
+            Log.d("----------------Internet conection Error","------------------------");
+
+//            Thread t = new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+//                    builder.setMessage("dialog_fire_missiles")
+//                            .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                }
+//                            })
+//                            .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+//                                public void onClick(DialogInterface dialog, int id) {
+//                                    // User cancelled the dialog
+//                                }
+//                            });
+//                    builder.create().show();}
+//            });
+        };
     }
     private final VKSdkListener sdkListener = new VKSdkListener() {
         @Override

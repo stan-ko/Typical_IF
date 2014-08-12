@@ -231,23 +231,6 @@ public class MainActivity extends ActionBarActivity implements
         restoreActionBar();
     }
 
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-//            switch (event.getAction()) {
-//                case KeyEvent.ACTION_DOWN:
-//                    if (event.getDownTime() - lastPressedTime < PERIOD) {
-//                        finish();
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.exit_toast),Toast.LENGTH_SHORT).show();
-//                        lastPressedTime = event.getEventTime();
-//                    }
-//                    return true;
-//            }
-//        }
-//        return false;
-//    }
-
     @Override
     public void onFragmentInteraction(Uri uri) {
 

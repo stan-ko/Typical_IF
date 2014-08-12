@@ -37,7 +37,6 @@ import typical_if.android.model.Wall.Wall;
 
 public class FragmentWall extends Fragment implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener {
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
-    //final String SAVED_TEXT = "saved_text";
 
     private int mCurrentTransitionEffect = JazzyHelper.TRANSPARENT;
     JazzyListView wallListView;
@@ -94,6 +93,7 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
     }
 
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater) {
+        //if (OfflineMode.isOnline())
         Wall wall = Wall.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
         adapter = new WallAdapter(wall, inflater, fragmentManager, postColor);
@@ -135,7 +135,6 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
                 swipeView.setRefreshing(false);
                 VKHelper.doGroupWallRequest(gid, new VKRequest.VKRequestListener() {
                     @Override
-                    //jhghgf
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
                         OfflineMode.saveJSON(response.json, gid);
