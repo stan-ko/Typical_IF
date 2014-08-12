@@ -57,6 +57,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
     CheckBox likedOrNotLikedBox;
     TextView counterOfPhotos;
     TextView albumSize;
+   public static RelativeLayout panel;
 
     public static FragmentFullScreenImagePhotoViewer newInstance(ArrayList<Photo> photos, int currentposition, long vk_group_id, long vk_album_id) {
 
@@ -97,10 +98,12 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
         photoHeader = (TextView) rootView.findViewById(R.id.photoHeader);
         counterOfPhotos = (TextView) rootView.findViewById(R.id.counterOfPhotos);
         albumSize = (TextView) rootView.findViewById(R.id.amountOfPhotos);
+        panel = ((RelativeLayout) rootView.findViewById(R.id.fullscreen_action_panel));
 
         FragmentManager manager = getFragmentManager();
         imagepager = (ViewPager) rootView.findViewById(R.id.pager);
         imagepager.setOnPageChangeListener(this);
+        onPageSelected(0);
 
         imagepager.setAdapter(new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, arguments.getLong(ARG_VK_GROUP_ID),
                 arguments.getLong(ARG_VK_ALBUM_ID), arguments.getLong(ARG_VK_USER_ID), manager, rootView));
@@ -157,16 +160,15 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
+     }
 
 
     @Override
-    public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) {
-
-
-    }
+    public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) { }
+  
     @Override
     public void onPageSelected(final int position) {
+
             photoHeader.setText(photos.get(position).text);
             countLikes.setText(String.valueOf(photos.get(position).likes));
             countComments.setText(String.valueOf(photos.get(position).comments));
@@ -251,7 +253,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
                     FragmentPhotoCommentAndInfo fragment = FragmentPhotoCommentAndInfo.newInstance(args.getLong(ARG_VK_GROUP_ID),
                             args.getLong(ARG_VK_ALBUM_ID),
                             photos.get(position),Constants.USER_ID);
-                    getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                    getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 }
             });
 
