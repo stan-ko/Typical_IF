@@ -8,23 +8,23 @@ import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.util.List;
 
 import typical_if.android.R;
-import typical_if.android.model.Photo;
 
 /**
  * Created by LJ on 16.07.2014.
  */
 public class PhotoListAdapter extends BaseAdapter {
-    List<Photo> photoList;
+    List<VKApiPhoto> photoList;
     LayoutInflater layoutInflater;
     final DisplayImageOptions options;
 
     ImageLoader imageLoader;
 
-    public PhotoListAdapter(List<Photo> list, LayoutInflater inflater) {
+    public PhotoListAdapter(List<VKApiPhoto> list, LayoutInflater inflater) {
         this.photoList = list;
         this.layoutInflater = inflater;
 
@@ -57,7 +57,7 @@ public class PhotoListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Photo photo = photoList.get(position);
+        final VKApiPhoto photo = photoList.get(position);
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.fragment_photo_list_item, null);

@@ -18,6 +18,8 @@ import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.model.VKApiComment;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
@@ -49,18 +51,20 @@ public class CommentsListAdapter extends BaseAdapter {
     }
 
     public void  UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<Profile> profilesList, ListView listView) {
+    
         this.profilesList = profilesList;
         this.commentList.clear();
         this.commentList.addAll(commentList);
         this.notifyDataSetChanged();
-        scrollListToBottom(listView);
+        scrollMyListViewToBottom(listView);
     }
 
-    private void scrollListToBottom(final ListView myListView) {
+    private void scrollMyListViewToBottom(final ListView myListView) {
         myListView.post(new Runnable() {
             @Override
             public void run() {
-                 myListView.setSelection(getCount() - 1);
+                // Select the last row so it will scroll into view...
+                myListView.setSelection(getCount() - 1);
             }
         });
     }
@@ -71,12 +75,26 @@ public class CommentsListAdapter extends BaseAdapter {
                 first_name = profilesList.get(i).first_name;
                 last_name = profilesList.get(i).last_name;
                 url = profilesList.get(i).photo_100;
+
             }
         }
 
         for (int k = 0; k < commentList.size(); k++) {
             if (commentList.get(k).reply_to_user > (long) 0) {
-                commentList.get(k).text = commentList.get(k).text.replaceFirst("^(\\[id\\d+\\|)", "").replaceFirst("(\\])", "");
+                final Matcher matReply = Pattern.compile("\\[(id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]").matcher(commentList.get(k).text);
+                StringBuilder stringB = new StringBuilder(commentList.get(k).text);
+                int start;
+                int end;
+                while (matReply.find()) {
+                    start = stringB.indexOf(matReply.group());
+                    end = start + matReply.group().length();
+
+                    final String[] replier = matReply.group().replaceFirst("\\[", "").replaceFirst("\\]", "").split("\\|");
+                    stringB.replace(start, end, replier[1]);
+                    break;
+                }
+
+                commentList.get(k).text = stringB.toString();
             } else {
                 commentList.get(k).text = commentList.get(k).text;
             }
@@ -93,33 +111,50 @@ public class CommentsListAdapter extends BaseAdapter {
         if (comment.likes==0){
             viewHolder.likes.setVisibility(View.GONE);
 
-        }else{
-            viewHolder.likes.setText(String.valueOf(comment.likes));
+    }
 
-            if(comment.user_likes==false){
+    else
 
-                viewHolder.likes.setChecked(true);
-            }else {
-                viewHolder.likes.setChecked(false);
-            }
-        }
-            viewHolder.user_name.setText(last_name + " " + first_name);
+    {
+        viewHolder.likes.setText(String.valueOf(comment.likes));
 
-        if (comment.text.length() != 0) {
-            ItemDataSetter.setText(comment.text, viewHolder.commentTextLayout);
+        if (comment.user_likes == false) {
+
+            viewHolder.likes.setChecked(true);
         } else {
-            viewHolder.commentTextLayout.setVisibility(View.GONE);
-
-        }
-
-        viewHolder.date_of_user_comment.setText(String.valueOf(ItemDataSetter.getFormattedDate(comment.date)));
-
-        if (comment.attachments != null && comment.attachments.size() != 0) {
-            ItemDataSetter.setAttachemnts(comment.attachments, viewHolder.commentAttachmentsLayout, 2);
-        } else {
-            viewHolder.commentAttachmentsLayout.setVisibility(View.GONE);
+            viewHolder.likes.setChecked(false);
         }
     }
+
+    viewHolder.user_name.setText(last_name+" "+first_name);
+
+    if(comment.text.length()!=0)
+
+    {
+        ItemDataSetter.setText(comment.text, viewHolder.commentTextLayout);
+    }
+
+    else
+
+    {
+        viewHolder.commentTextLayout.setVisibility(View.GONE);
+
+    }
+
+    viewHolder.date_of_user_comment.setText(String.valueOf(ItemDataSetter.getFormattedDate(comment.date)));
+
+    if(comment.attachments!=null&&comment.attachments.size()!=0)
+
+    {
+        ItemDataSetter.setAttachemnts(comment.attachments, viewHolder.commentAttachmentsLayout, 2);
+    }
+
+    else
+
+    {
+        viewHolder.commentAttachmentsLayout.setVisibility(View.GONE);
+    }
+}
 
     @Override
     public int getCount() {
@@ -171,10 +206,12 @@ public class CommentsListAdapter extends BaseAdapter {
         public final RelativeLayout commentWikiPageLayout;
         public final RelativeLayout commentLinkLayout;
         public final RelativeLayout commentPollLayout;
+        public final RelativeLayout commentParentLayout;
         public final RelativeLayout commentDataLayout;
 
         public ViewHolder(View convertView) {
             this.user_avatar = (ImageView) convertView.findViewById(R.id.img_user_avatar);
+
             this.user_name = (TextView) convertView.findViewById(R.id.user_name_textView);
             this.date_of_user_comment = (TextView) convertView.findViewById(R.id.text_date_of_comment);
             this.likes = (CheckBox)convertView.findViewById(R.id.post_comment_like_checkbox);
@@ -188,6 +225,7 @@ public class CommentsListAdapter extends BaseAdapter {
             this.commentLinkLayout = (RelativeLayout) convertView.findViewById(R.id.commentLinkLayout);
             this.commentTextLayout = (RelativeLayout) convertView.findViewById(R.id.commentTextLayout);
             this.commentPollLayout = (RelativeLayout) convertView.findViewById(R.id.commentPollLayout);
+            this.commentParentLayout = (RelativeLayout) convertView.findViewById(R.id.commentParentLayout);
             this.commentDataLayout = (RelativeLayout) convertView.findViewById(R.id.commentDataLayout);
         }
     }

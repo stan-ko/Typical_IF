@@ -23,7 +23,7 @@ import android.widget.ExpandableListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import typical_if.android.AnimatedExpandableListView;
+import typical_if.android.view.AnimatedExpandableListView;
 import typical_if.android.R;
 import typical_if.android.adapter.ExpandableListAdapter;
 
@@ -328,6 +328,8 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerLayout != null && isDrawerOpen()) {
             inflater.inflate(R.menu.global, menu);
             showGlobalContextActionBar();
+        } else {
+
         }
         super.onCreateOptionsMenu(menu, inflater);
     }

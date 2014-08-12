@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -14,6 +13,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,15 +30,15 @@ import com.twotoasters.jazzylistview.JazzyGridView;
 import com.twotoasters.jazzylistview.JazzyHelper;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.io.File;
 import java.util.ArrayList;
 
+import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.PhotoListAdapter;
-import typical_if.android.model.Photo;
-//import typical_if.android.model.UploadPhotos;
 
 public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollListener {
 
@@ -47,7 +47,6 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
     private static final String ARG_VK_ALBUM_ID = "vk_album_id";
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
-    private OnFragmentInteractionListener mListener;
     private static final int PICK_FROM_CAMERA = 1;
     private static final int PICK_FROM_FILE = 2;
     final int PIC_CROP = 2;
@@ -61,6 +60,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         args.putLong(ARG_VK_GROUP_ID, vk_group_id);
         args.putLong(ARG_VK_ALBUM_ID, vk_album_id);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -75,7 +75,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_photo_list, container, false);
         setRetainInstance(true);
         doRequest(rootView);
@@ -110,7 +110,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
         MenuItem item =  menu.getItem(0).setEnabled(true);
         MenuItem item1 = menu.getItem(1).setEnabled(true);
@@ -131,6 +131,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
             }
         });
 
+        MenuItem item = menu.getItem(0).setEnabled(true);
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -152,18 +153,36 @@ int columns;
 View view=null;
     public void doRequest(final View view){
         this.view=view;
+    public void doRequest(final View view) {
         final Bundle arguments = getArguments();
         float scaleFactor = getResources().getDisplayMetrics().density * 50;
+        float scalefactor = getResources().getDisplayMetrics().density * 80;
         int number = getActivity().getWindowManager().getDefaultDisplay().getWidth();
         final int columns = (int) ((float) number / (float) scaleFactor);
         this.columns=columns;
         VKHelper.count=0;
         VKHelper.getPhotoList(arguments.getLong(ARG_VK_GROUP_ID), arguments.getLong(ARG_VK_ALBUM_ID),1, new VKRequest.VKRequestListener() {
 
+        VKHelper.getPhotoList(arguments.getLong(ARG_VK_GROUP_ID), arguments.getLong(ARG_VK_ALBUM_ID), new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 handleResponse(response, columns, view);
+            }
+
+            @Override
+            public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
+                super.attemptFailed(request, attemptNumber, totalAttempts);
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+            }
+
+            @Override
+            public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
+                super.onProgress(progressType, bytesLoaded, bytesTotal);
             }
         });
     }
@@ -187,6 +206,10 @@ View view=null;
         }
         final Animation a;
         a = AnimationUtils.loadAnimation(getActivity().getApplicationContext(),R.anim.abc_slide_in_bottom);
+    protected void handleResponse(VKResponse response, int columns, View view) {
+        final ArrayList<VKApiPhoto> photos = VKHelper.getPhotosFromJSONArray(response.json);
+        gridOfPhotos = (JazzyGridView) view.findViewById(R.id.gridOfPhotos);
+        gridOfPhotos.setTransitionEffect(mCurrentTransitionEffect);
         gridOfPhotos.setNumColumns(columns);
         final PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
         gridOfPhotos.setAdapter(photoListAdapter);
@@ -202,19 +225,23 @@ View view=null;
 
                 transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
                 transaction.replace(R.id.container, fragment).addToBackStack("String").commit();
+                Fragment fragment = null;
+                fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID));
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
         });
 
     }
 
-    public Dialog addPhoto(){
-        final String [] items = {"З карти памяті", "З камери"};
+    public Dialog addPhoto() {
+        final String[] items = {"З карти памяті", "З камери"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Завантажити фото ?");
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (which){
+                switch (which) {
                     case 0:
                         FragmentUploadAlbumList fragmentUploadPhotoList = new FragmentUploadAlbumList();
                         android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
@@ -238,6 +265,7 @@ View view=null;
                             Toast.makeText(getActivity().getApplicationContext(),"Whoops - your device doesn't support capturing images!",Toast.LENGTH_LONG);
                        }
 
+                        takePhotoFromCamera();
                         dialog.cancel();
 
                         break;
@@ -247,18 +275,20 @@ View view=null;
             }
         });
         builder.setCancelable(true);
+
         return builder.create();
     }
 
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-            if(requestCode == PICK_FROM_CAMERA){
-                mImageCaptureUri = data.getData();
-                performCrop();
-
-        }
+    public void takePhotoFromCamera() {
+        File file = new File(Environment.getExternalStorageDirectory(),
+                "pic_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
+        if (file == null)
+            return;
+        Constants.tempCameraPhotoFile = file.getAbsolutePath();
+        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+        Uri outputFileUri = Uri.fromFile(file);
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        getActivity().startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
     }
 
 
@@ -313,28 +343,3 @@ View view=null;
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

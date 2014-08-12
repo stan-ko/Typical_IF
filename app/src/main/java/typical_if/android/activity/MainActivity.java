@@ -22,35 +22,36 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import typical_if.android.Constants;
-import typical_if.android.OfflineMode;
+import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentEventsList;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.fragment.FragmentPhotoCommentAndInfo;
-import typical_if.android.fragment.FragmentPhotoList;
-import typical_if.android.fragment.FragmentUploadPhotoList;
+import typical_if.android.fragment.FragmentPhotoFromCamera;
 import typical_if.android.fragment.FragmentWall;
 import typical_if.android.fragment.NavigationDrawerFragment;
 
 
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
-        FragmentPhotoList.OnFragmentInteractionListener,
         FragmentFullScreenImagePhotoViewer.OnFragmentInteractionListener,
-        FragmentUploadPhotoList.OnFragmentInteractionListener,
         FragmentPhotoCommentAndInfo.OnFragmentInteractionListener {
 
-    private CharSequence mTitle;
-    private Drawable mIcon;
 
-    private NavigationDrawerFragment mNavigationDrawerFragment;
-    private static String sTokenKey = "VK_ACCESS_TOKEN";
+    private Drawable mIcon;
+    private CharSequence mTitle;
     private long lastPressedTime;
+    private static Uri mImageCaptureUri;
     private static final int PERIOD = 2000;
-    final OfflineMode offlineMode = new OfflineMode();
+    private static final int PICK_FROM_CAMERA = 1;
+    private static String sTokenKey = "VK_ACCESS_TOKEN";
+    private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,38 +64,6 @@ public class MainActivity extends ActionBarActivity implements
 
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
-
-        //--------------------START------------- all Request from internet before start APP----------------------
-        VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                offlineMode.saveJSON(response.json, Constants.TF_ID);
-            }
-        });
-        VKHelper.doGroupWallRequest(Constants.TZ_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                offlineMode.saveJSON(response.json, Constants.TZ_ID);
-            }
-        });
-        VKHelper.doGroupWallRequest(Constants.FB_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                offlineMode.saveJSON(response.json, Constants.FB_ID);
-            }
-        });
-        VKHelper.doGroupWallRequest(Constants.FN_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                offlineMode.saveJSON(response.json, Constants.FN_ID);
-            }
-        });
-        //-------------------------END-------- all Request from internet before start APP----------------------
-
     }
 
     public long setGroupId(int clickedPosition) {
@@ -144,7 +113,6 @@ public class MainActivity extends ActionBarActivity implements
         actionBar.setIcon(mIcon);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (mNavigationDrawerFragment.isDrawerOpen()) {
@@ -162,6 +130,13 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         VKUIHelper.onActivityResult(this, requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_FROM_CAMERA) {
+                FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance(Constants.tempCameraPhotoFile);
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragmentPhotoFromCamera).addToBackStack(null).commit();
+            }
+        }
     }
 
     private final VKSdkListener sdkListener = new VKSdkListener() {
@@ -172,7 +147,7 @@ public class MainActivity extends ActionBarActivity implements
 
         @Override
         public void onTokenExpired(VKAccessToken expiredToken) {
-            VKSdk.authorize(Constants.sMyScope);
+            VKSdk.authorize(Constants.S_MY_SCOPE);
         }
 
         @Override
@@ -185,11 +160,31 @@ public class MainActivity extends ActionBarActivity implements
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
             mNavigationDrawerFragment.refreshNavigationDrawer();
+            VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    JSONArray arr = response.json.optJSONArray("response");
+                    JSONObject jsonObject = arr.optJSONObject(0);
+                    Constants.USER_ID = jsonObject.optLong("id");
+                    ItemDataSetter.saveUserId(Constants.USER_ID);
+                }
+            });
         }
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
             mNavigationDrawerFragment.refreshNavigationDrawer();
+            VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    JSONArray arr = response.json.optJSONArray("response");
+                    JSONObject jsonObject = arr.optJSONObject(0);
+                    Constants.USER_ID = jsonObject.optLong("id");
+                    ItemDataSetter.saveUserId(Constants.USER_ID);
+                }
+            });
         }
     };
 
@@ -201,6 +196,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onNavigationDrawerItemSelected(int groupPosition, int childPosition) {
         Fragment fragment = null;
+        FragmentManager fragmentManager = getSupportFragmentManager();
         long vkGroupId = Constants.TF_ID;
         switch (groupPosition) {
             case 0:
@@ -217,6 +213,7 @@ public class MainActivity extends ActionBarActivity implements
                 } else if (childPosition == 1) {
                     fragment = FragmentAlbumsList.newInstance(vkGroupId);
                 }
+
                 break;
             case 4:
                 onSectionAttached(groupPosition);
@@ -228,35 +225,17 @@ public class MainActivity extends ActionBarActivity implements
                     mNavigationDrawerFragment.refreshNavigationDrawer();
                 } else {
                     if (!VKSdk.wakeUpSession()) {
-                        VKSdk.authorize(Constants.sMyScope, true, true);
+                        VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
                     } else
-                        VKSdk.authorize(Constants.sMyScope, true, true);
+                        VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
                 }
                 break;
         }
         if (groupPosition != 5) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
         restoreActionBar();
     }
-
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-//            switch (event.getAction()) {
-//                case KeyEvent.ACTION_DOWN:
-//                    if (event.getDownTime() - lastPressedTime < PERIOD) {
-//                        finish();
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.exit_toast),Toast.LENGTH_SHORT).show();
-//                        lastPressedTime = event.getEventTime();
-//                    }
-//                    return true;
-//            }
-//        }
-//        return false;
-//    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {

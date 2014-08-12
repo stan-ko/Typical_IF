@@ -6,6 +6,8 @@
     <!-- to allow UIL to cache images on SD card -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
@@ -15,6 +17,10 @@
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppTheme"
         android:name="MyApplication">
+        <service
+            android:enabled="true"
+            android:name=".UploadPhotoService">
+        </service>
         <activity android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".activity.SplashActivity"
             android:label="@string/app_name" >

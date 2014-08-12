@@ -139,6 +139,8 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
      */
     public int signer_id;
 
+
+    public int is_pinned;
     /**
      * List of history of the reposts.
      */
@@ -182,6 +184,9 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
         JSONObject geo = source.optJSONObject("geo");
         if(geo != null) {
             this.geo = new VKApiPlace().parse(geo);
+        }
+        if (source.has("is_pinned")) {
+            is_pinned = source.optInt("is_pinned");
         }
         signer_id = source.optInt("signer_id");
         copy_history = new VKList<VKApiPost>(source.optJSONArray("copy_history"), VKApiPost.class);

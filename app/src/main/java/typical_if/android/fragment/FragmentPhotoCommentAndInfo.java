@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -31,10 +30,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
+import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,7 +52,6 @@ import typical_if.android.MyApplication;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
-import typical_if.android.model.Photo;
 import typical_if.android.model.Profile;
 
 /**
@@ -63,36 +63,47 @@ import typical_if.android.model.Profile;
  * create an instance of this fragment.
  */
 public class FragmentPhotoCommentAndInfo extends Fragment {
-    final int displayHeight = MyApplication.getDisplayHeight();
+
     private OnFragmentInteractionListener mListener;
     private static String ARG_VK_GROUP_ID = "vk_group_id";
     private static final String ARG_VK_ALBUM_ID = "vk_album_id";
     private static final String ARG_VK_USER_ID = "user_id";
-    public static Photo photo;
+    public static VKApiPhoto photo;
     Profile postSender;
+    public static ArrayList<VKApiPhoto> photo;
+    Bundle arguments;
+
     ListView listOfComments;
     ArrayList<VKApiComment> comments;
     ArrayList<Profile> profiles;
     CommentsListAdapter adapter;
     String message = null;
     EditText commentMessage;
+    CheckBox likes;
+    View rootView;
+    int isLiked;
+    int countLikes;
+    static int currentPosition;
     int reply_to_comment = 0;
+    static int like_status;
     long gid;
 
-
-
-
-    public static FragmentPhotoCommentAndInfo newInstance(long vk_group_id, long vk_album_id,Photo photo, long vk_user_id ) {
+    public static FragmentPhotoCommentAndInfo newInstance(long vk_group_id, long vk_album_id,
+                                                          ArrayList<Photo> photo, long vk_user_id,
+                                                          int isLiked, int currentPosition, int like_st) {
 
         FragmentPhotoCommentAndInfo fragment = new FragmentPhotoCommentAndInfo();
         Bundle args = new Bundle();
         args.putLong(ARG_VK_GROUP_ID, vk_group_id);
         args.putLong(ARG_VK_ALBUM_ID, vk_album_id);
         args.putLong(ARG_VK_USER_ID, vk_user_id);
+        args.putInt("isLiked", isLiked);
+        FragmentPhotoCommentAndInfo.currentPosition = currentPosition;
+
         fragment.setArguments(args);
+
         FragmentPhotoCommentAndInfo.photo = photo;
-
-
+        like_status = like_st;
 
         return fragment;
     }
@@ -115,7 +126,12 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
 
         final Bundle arguments = getArguments();
         final View rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
+        //likes = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox1));
+        listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
 
+        // final ImageView imageOnCommentFragment = (ImageView) rootView.findViewById(R.id.imageView_on_photo_comment_fragment);
+        View listHeaderView = rootView.inflate(getActivity().getApplicationContext(), R.layout.image_header, null);
+        //RelativeLayout photoUserSender = ((RelativeLayout) rootView.findViewById(R.id.user_photo_sender));
 
 
         final Button sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
@@ -127,8 +143,11 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         View listHeaderView = rootView.inflate(getActivity().getApplicationContext(), R.layout.image_header, null);
         ImageView headerView = (ImageView) listHeaderView.findViewById(R.id.list_header_image);
         listOfComments.addHeaderView(listHeaderView);
-        loadImage(photo, headerView);
+        ImageLoader.getInstance().displayImage(photo.get(currentPosition).photo_1280, headerView);
 
+        final Button sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
+        final ArrayList<VKApiPhoto> photo = this.photo;
+        updateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
         final RelativeLayout photoUserSender = ((RelativeLayout) rootView.findViewById(R.id.user_photo_sender));
         final ImageView postPhotoUserAvatar = (ImageView) rootView.findViewById(R.id.post_user_avatar);
         final TextView postPhotoUserName = ((TextView) rootView.findViewById(R.id.post_user_name));
@@ -164,6 +183,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
      //gid=Constants.GROUP_ID;
 
 
+        final CheckBox likePostPhoto = ((CheckBox) rootView.findViewById(R.id.like_post_photo_checkbox));
 
 
 
@@ -174,16 +194,18 @@ View additionalView = rootView.inflate(getActivity().getApplicationContext(),R.l
         if (photo.user_likes == 0) {
             likePostPhoto.setBackgroundColor(Color.WHITE);
             likePostPhoto.setChecked(false);
-            likePostPhoto.setText(String.valueOf(photo.likes ));
+            //   likePostPhoto.setText(String.valueOf(photo.get(currentPosition).likes + 1));
             likePostPhoto.setTextColor(Color.GRAY);
         }
-        else {
+        if (like_status == 1) {
             likePostPhoto.setBackgroundColor(Color.BLUE);
             likePostPhoto.setChecked(true);
-            likePostPhoto.setText(String.valueOf(photo.likes ));
+            //  likePostPhoto.setText(String.valueOf(photo.get(currentPosition).likes - 1));
             likePostPhoto.setTextColor(Color.WHITE);
         }
 
+
+//        likePostPhoto.setText(photo.get(currentPosition).likes);
         likePostPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,14 +241,16 @@ View additionalView = rootView.inflate(getActivity().getApplicationContext(),R.l
             }
         });
 
+
         sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                message = commentMessage.getText().toString() + ", @club26363301 (fromMobileIF)";
+
+                message = commentMessage.getText().toString();
 
                 if (reply_to_comment == 0) {
 
-                    VKHelper.createCommentForPhoto(arguments.getLong(ARG_VK_GROUP_ID), photo.id, message, 0, 0, new VKRequest.VKRequestListener() {
+                    VKHelper.createCommentForPhoto(arguments.getLong(ARG_VK_GROUP_ID), photo.get(currentPosition).id, message, 0, 0, new VKRequest.VKRequestListener() {
 
                         @Override
                         public void onComplete(VKResponse response) {
@@ -248,7 +272,10 @@ View additionalView = rootView.inflate(getActivity().getApplicationContext(),R.l
                             updateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
                         }
                     });
+
                 }
+
+
             }
         });
 
@@ -275,7 +302,10 @@ View additionalView = rootView.inflate(getActivity().getApplicationContext(),R.l
                         parseCommentList(response);
                     }
                 }).start();
+
+
             }
+
         });
 
 
@@ -292,7 +322,7 @@ View additionalView = rootView.inflate(getActivity().getApplicationContext(),R.l
     }
 
 
-    public void showContextMenu(int position) {
+    public void showContextMenu(long id, int position) {
         VKApiComment comment = comments.get(position);
 
         CharSequence[] items;
@@ -322,6 +352,7 @@ View additionalView = rootView.inflate(getActivity().getApplicationContext(),R.l
 
         Collections.sort(comments);
         profiles = Profile.getProfilesFromJSONArray(arrayOfComments[1]);
+        //profile=profiles;
 
 
         getActivity().runOnUiThread(new Runnable() {
@@ -333,6 +364,8 @@ View additionalView = rootView.inflate(getActivity().getApplicationContext(),R.l
                     listOfComments.setAdapter(adapter);
                 } else {
                     adapter.UpdateCommentList(comments, profiles, listOfComments);
+                   
+
                 }
             }
         });
@@ -347,19 +380,27 @@ View additionalView = rootView.inflate(getActivity().getApplicationContext(),R.l
             public void onClick(DialogInterface dialog, int item) {
                 switch (item) {
                     case 0: {
+                        //onVkontakteBtnPressed();
                         Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).from_id + "");
                         getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                     break;
                     case 1: {
+                        //////////////////////////////////////////////////////////////////////
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
                                 reply_to_comment = comments.get(position).id;
                                 commentMessage.setText(Identify(comments, profiles) + ", ");
+
+
                             }
                         });
+
+
+                        ////////////////////////////////////////////////////////////////////
                     }
                     break;
                     case 2: {
@@ -393,10 +434,15 @@ View additionalView = rootView.inflate(getActivity().getApplicationContext(),R.l
                             });
                         }
 
+                        Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
                     }
                     break;
                     case 4:
                         Dialogs.reportListDialog(gid, comments.get(position).id);
+                        break;
+                    case 5: {
+                    case 4:
+                        Dialogs.reportListDialog(VKUIHelper.getApplicationContext(), gid, comments.get(position).id);
                         break;
                     case 5: {
                         VKHelper.deleteCommentForPhoto(getArguments().getLong(ARG_VK_GROUP_ID), comments.get(position).id, new VKRequest.VKRequestListener() {

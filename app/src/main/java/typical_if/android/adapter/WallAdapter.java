@@ -35,6 +35,8 @@ import typical_if.android.model.Wall.Group;
 import typical_if.android.model.Wall.Profile;
 import typical_if.android.model.Wall.Wall;
 
+import static java.lang.String.valueOf;
+
 public class WallAdapter extends BaseAdapter {
     private Wall wall;
     private VKPostArray posts;
@@ -47,7 +49,23 @@ public class WallAdapter extends BaseAdapter {
         this.posts = wall.posts;
         this.layoutInflater = inflater;
         this.context = VKUIHelper.getApplicationContext();
+        this.fragmentManager = fragmentManager;
         this.postColor = postColor;
+        this.wall = wall;
+        this.posts = wall.posts;
+        this.layoutInflater = inflater;
+        this.context = VKUIHelper.getApplicationContext();
+        this.postColor = postColor;
+
+        this.options = new DisplayImageOptions.Builder()
+                .showImageOnLoading(R.drawable.ic_stubif) // TODO resource or drawable
+                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
+                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
+                .cacheInMemory(true)
+                .cacheOnDisk(true)
+//            .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
+//            .bitmapConfig(Bitmap.Config.ARGB_8888) // default
+                .build();
     }
 
     @Override
@@ -66,7 +84,7 @@ public class WallAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         final ViewHolder viewHolder;
 
         if (convertView == null) {
@@ -89,6 +107,12 @@ public class WallAdapter extends BaseAdapter {
 
         final VKApiPost post = posts.get(position);
 
+        if (post.is_pinned == 1) {
+            viewHolder.img_fixed_post.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.img_fixed_post.setVisibility(View.GONE);
+        }
+
         String copy_history_title = "";
         String copy_history_logo = "";
         String copy_history_name = "";
@@ -103,331 +127,324 @@ public class WallAdapter extends BaseAdapter {
         } else {
             viewHolder.cb_like.setChecked(false);
         }
+        viewHolder.txt_post_comment.setText(valueOf(post.comments_count));
+
+        viewHolder.txt_post_like.setText(valueOf(post.likes_count));
 
         viewHolder.cb_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (post.user_likes == false) {
-                    VKHelper.setLike("post", (wall.group.id * -1), post.id, new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(VKResponse response) {
-                            Toast.makeText(VKUIHelper.getApplicationContext(), "Liked", Toast.LENGTH_SHORT).show();
-                            super.onComplete(response);
-                            viewHolder.cb_like.setText(String.valueOf(++post.likes_count));
-                            viewHolder.cb_like.setChecked(true);
-                            post.user_likes = true;
-                        }
-                    });
+                viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
+
+                if (post.user_reposted) {
+                    viewHolder.cb_repost.setChecked(true);
+                    viewHolder.cb_repost.setEnabled(false);
                 } else {
-
-                    VKHelper.deleteLike("post", (wall.group.id * -1), post.id, new VKRequest.VKRequestListener() {
+                    viewHolder.cb_repost.setChecked(false);
+                    viewHolder.cb_repost.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onComplete(VKResponse response) {
-                            super.onComplete(response);
-                            Toast.makeText(VKUIHelper.getApplicationContext(), "Like has deleted", Toast.LENGTH_SHORT).show();
-                            viewHolder.cb_like.setText(String.valueOf(--post.likes_count));
-                            viewHolder.cb_like.setChecked(false);
-                            post.user_likes = false;
-                        }
-                    });
-                }
-            }
-        });
+                        public void onClick(View v) {
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+                            View view = inflater.inflate(R.layout.txt_dialog_comment, null);
+                            dialog.setView(view);
+                            dialog.setTitle(txt_dialog_comment);
 
-        if (post.user_reposted) {
-            viewHolder.cb_repost.setChecked(true);
-            viewHolder.cb_repost.setEnabled(false);
-            viewHolder.cb_repost.setOnClickListener(null);
-        } else {
-            viewHolder.cb_repost.setChecked(false);
-            viewHolder.iv_repost.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    AlertDialog.Builder dialog = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-                    View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
-                    dialog.setView(view);
-                    dialog.setTitle("Ваш коментар");
+                            final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
 
-                    final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
-
-                    dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            final String pidFull = "wall-" + wall.group.id + "_" + post.id;
-                            VKHelper.doRepost(pidFull, text.getText().toString(), new VKRequest.VKRequestListener() {
+                            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                 @Override
-                                public void onComplete(VKResponse response) {
-                                    super.onComplete(response);
-                                    JSONObject object = response.json.optJSONObject("response");
-                                    int isSuccessed = object.optInt("success");
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final String pidFull = "wall-" + wall.group.id + "_" + post.id;
+                                    VKHelper.doRepost(pidFull, text.getText().toString(), new VKRequest.VKRequestListener() {
+                                        @Override
+                                        public void onComplete(VKResponse response) {
+                                            super.onComplete(response);
+                                            JSONObject object = response.json.optJSONObject("response");
+                                            int isSuccessed = object.optInt("success");
 
-                                    if (isSuccessed == 1) {
+                                            if (isSuccessed == 1) {
 
-                                        Toast.makeText(context, "All is done", Toast.LENGTH_SHORT).show();
-                                        viewHolder.cb_repost.setChecked(true);
-                                        viewHolder.cb_repost.setText(String.valueOf(++post.reposts_count));
-                                        if (post.user_likes == false) {
+                                                Toast.makeText(context, "All is done", Toast.LENGTH_SHORT).show();
+                                                viewHolder.cb_repost.setChecked(true);
+                                                viewHolder.cb_repost.setText(String.valueOf(++post.reposts_count));
+                                                if (post.user_likes == false) {
 
-                                            VKHelper.setLike("post", (wall.group.id * (-1)), post.id, new VKRequest.VKRequestListener() {
-                                                @Override
-                                                public void onComplete(VKResponse response) {
-                                                    super.onComplete(response);
+                                                    VKHelper.setLike("post", (wall.group.id * (-1)), post.id, new VKRequest.VKRequestListener() {
+                                                        @Override
+                                                        public void onComplete(VKResponse response) {
+                                                            super.onComplete(response);
 
-                                                    viewHolder.cb_like.setText(String.valueOf(++post.likes_count));
-                                                    viewHolder.cb_like.setChecked(true);
+                                                            viewHolder.cb_like.setText(String.valueOf(++post.likes_count));
+                                                            viewHolder.cb_like.setChecked(true);
 
 
+                                                        }
+                                                    });
                                                 }
-                                            });
+                                                viewHolder.cb_repost.setChecked(true);
+                                                viewHolder.cb_repost.setEnabled(false);
+                                            } else {
+                                                viewHolder.cb_repost.setChecked(false);
+                                            }
                                         }
-                                        viewHolder.cb_repost.setChecked(true);
-                                        viewHolder.cb_repost.setEnabled(false);
-                                    } else {
-                                        viewHolder.cb_repost.setChecked(false);
-                                    }
+                                    });
+
+
                                 }
                             });
 
+                            dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
 
+                            dialog.create().show();
                         }
                     });
 
-                    dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                    dialog.create().show();
+                    viewHolder.cb_repost.setOnClickListener(null);
                 }
-            });
 
-            viewHolder.cb_repost.setOnClickListener(null);
-        }
-
-        viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-                final String[] items = {Constants.POST_REPORT, Constants.POST_COPY_LINK};
-
-                builder.setItems(items, new DialogInterface.OnClickListener() {
+                viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                final AlertDialog.Builder builderIn = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-                                builderIn.setTitle(Constants.POST_REPORT);
-                                final String[] items = {Constants.POST_REPORT_SPAM, Constants.POST_REPORT_OFFENSE, Constants.POST_REPORT_ADULT, Constants.POST_REPORT_DRUGS, Constants.POST_REPORT_PORNO, Constants.POST_REPORT_VIOLENCE};
+                    public void onClick(View v) {
+                        final AlertDialog.Builder builder = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+                        final String[] items = {Constants.POST_REPORT, Constants.POST_COPY_LINK};
 
-                                builderIn.setItems(items, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        int reason = 0;
-                                        switch (which) {
-                                            case 0:
-                                                reason = 0;
-                                                break;
-                                            case 1:
-                                                reason = 6;
-                                                break;
-                                            case 2:
-                                                reason = 5;
-                                                break;
-                                            case 3:
-                                                reason = 4;
-                                                break;
-                                            case 4:
-                                                reason = 1;
-                                                break;
-                                            case 5:
-                                                reason = 3;
-                                                break;
-                                        }
-                                        VKHelper.doReportPost(wall.group.id, post.id, reason, new VKRequest.VKRequestListener() {
+                        builder.setItems(items, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                switch (which) {
+                                    case 0:
+                                        final AlertDialog.Builder builderIn = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+                                        builderIn.setTitle(Constants.POST_REPORT);
+                                        final String[] items = {Constants.POST_REPORT_SPAM, Constants.POST_REPORT_OFFENSE, Constants.POST_REPORT_ADULT, Constants.POST_REPORT_DRUGS, Constants.POST_REPORT_PORNO, Constants.POST_REPORT_VIOLENCE};
+
+                                        builderIn.setItems(items, new DialogInterface.OnClickListener() {
                                             @Override
-                                            public void onComplete(VKResponse response) {
-                                                super.onComplete(response);
-                                                int isSuccessed = response.json.optInt("response");
-
-                                                if (isSuccessed == 1) {
-                                                    Toast.makeText(context, "Reported", Toast.LENGTH_SHORT).show();
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                int reason = 0;
+                                                switch (which) {
+                                                    case 0:
+                                                        reason = 0;
+                                                        break;
+                                                    case 1:
+                                                        reason = 6;
+                                                        break;
+                                                    case 2:
+                                                        reason = 5;
+                                                        break;
+                                                    case 3:
+                                                        reason = 4;
+                                                        break;
+                                                    case 4:
+                                                        reason = 1;
+                                                        break;
+                                                    case 5:
+                                                        reason = 3;
+                                                        break;
                                                 }
+                                                VKHelper.doReportPost(wall.group.id, post.id, reason, new VKRequest.VKRequestListener() {
+                                                    @Override
+                                                    public void onComplete(VKResponse response) {
+                                                        super.onComplete(response);
+                                                        int isSuccessed = response.json.optInt("response");
+
+                                                        if (isSuccessed == 1) {
+                                                            Toast.makeText(context, "Reported", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                });
                                             }
                                         });
-                                    }
-                                });
-                                builderIn.show();
-                                break;
+                                        builderIn.show();
+                                        break;
 
-                            case 1:
-                                ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                                clipboard.setText("http://vk.com/wall-" + wall.group.id + "_" + post.id);
-                                break;
-                        }
+                                    case 1:
+                                        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                                        clipboard.setText("http://vk.com/wall-" + wall.group.id + "_" + post.id);
+                                        break;
+                                }
+                            }
+                        });
+
+                        builder.show();
+                Dialogs.reportDialog(context, wall.group.id, post.id);
                     }
                 });
 
-                builder.show();
-            }
-        });
-
-        if (post.text.length() != 0) {
-            ItemDataSetter.setText(post.text, viewHolder.postTextLayout);
-        } else {
-            viewHolder.postTextLayout.setVisibility(View.GONE);
-        }
-
-        if (post.copy_history != null && post.copy_history.size() != 0) {
-            final VKApiPost copyHistory = post.copy_history.get(0);
-            Group group;
-            for (int i = 0; i < wall.groups.size(); i++) {
-                group = wall.groups.get(i);
-                if (copyHistory.from_id * (-1) == group.id) {
-                    copy_history_title = group.name;
-                    copy_history_logo = group.photo_100;
-                    copy_history_name = group.screen_name;
+                if (post.text.length() != 0) {
+                    ItemDataSetter.setText(post.text, viewHolder.postTextLayout);
+                } else {
+                    viewHolder.postTextLayout.setVisibility(View.GONE);
                 }
-            }
 
-            if (copy_history_title.equals("") && copy_history_logo.equals("")) {
-                Profile profile;
-                for (int i = 0; i < wall.profiles.size(); i++) {
-                    profile = wall.profiles.get(i);
-                    if (copyHistory.from_id == profile.id) {
-                        copy_history_title = profile.last_name + " " + profile.first_name;
-                        copy_history_logo = profile.photo_100;
-                        copy_history_name = profile.screen_name;
+                if (post.copy_history != null && post.copy_history.size() != 0) {
+                    final VKApiPost copyHistory = post.copy_history.get(0);
+                    Group group;
+                    for (int i = 0; i < wall.groups.size(); i++) {
+                        group = wall.groups.get(i);
+                        if (copyHistory.from_id * (-1) == group.id) {
+                            copy_history_title = group.name;
+                            copy_history_logo = group.photo_100;
+                            copy_history_name = group.screen_name;
+                        }
                     }
+
+                    if (copy_history_title.equals("") && copy_history_logo.equals("")) {
+                        Profile profile;
+                        for (int i = 0; i < wall.profiles.size(); i++) {
+                            profile = wall.profiles.get(i);
+                            if (copyHistory.from_id == profile.id) {
+                                copy_history_title = profile.last_name + " " + profile.first_name;
+                                copy_history_logo = profile.photo_100;
+                                copy_history_name = profile.screen_name;
+                            }
+                        }
+                    }
+
+                    ViewGroup copyHistoryContainer = ItemDataSetter.getPreparedView(viewHolder.copyHistoryLayout, R.layout.copy_history_layout);
+                    //RelativeLayout leftLine = (RelativeLayout) copyHistoryContainer.findViewById(R.id.leftLine);
+                    //leftLine.setVisibility(View.VISIBLE);
+                    //leftLine.setBackgroundColor(Color.parseColor(postColor));
+
+                    LinearLayout copyHistoryList = (LinearLayout) copyHistoryContainer.getChildAt(0);
+                    RelativeLayout copyHistoryLayout = (RelativeLayout) copyHistoryList.getChildAt(0);
+                    final String finalCopy_history_name = copy_history_name;
+                    copyHistoryLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Uri uri = Uri.parse("http://vk.com/" + finalCopy_history_name);
+                            context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.viewer_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        }
+                    });
+                    ((TextView) copyHistoryLayout.getChildAt(1)).setText(copy_history_title);
+                    ((TextView) copyHistoryLayout.getChildAt(2)).setText(ItemDataSetter.getFormattedDate(copyHistory.date));
+
+
+                    ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)));
+
+                    RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryTextLayout);
+                    if (copyHistory.text.length() != 0) {
+                        ItemDataSetter.setText(copyHistory.text, parentCopyHistoryTextContainer);
+                    } else {
+                        parentCopyHistoryTextContainer.setVisibility(View.GONE);
+                    }
+
+                    LinearLayout parentCopyHistoryAttachmentsContainer = (LinearLayout) copyHistoryList.findViewById(R.id.copyHistoryAttachmentsLayout);
+                    if (copyHistory.attachments != null && copyHistory.attachments.size() != 0) {
+                        ItemDataSetter.setAttachemnts(copyHistory.attachments, parentCopyHistoryAttachmentsContainer, 0);
+                    } else {
+                        parentCopyHistoryAttachmentsContainer.setVisibility(View.GONE);
+                    }
+
+                    RelativeLayout copyHistoryGeoContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryGeoLayout);
+                    if (copyHistory.geo != null) {
+                        ItemDataSetter.setGeo(copyHistory.geo, copyHistoryGeoContainer);
+                    } else {
+                        copyHistoryGeoContainer.setVisibility(View.GONE);
+                    }
+
+                    RelativeLayout copyHistorySignedContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistorySignedLayout);
+                    if (copyHistory.signer_id != 0) {
+                        ItemDataSetter.setSigned(copyHistory.signer_id, copyHistorySignedContainer);
+                    } else {
+                        copyHistorySignedContainer.setVisibility(View.GONE);
+                    }
+
+                    viewHolder.copyHistoryLayout.addView(copyHistoryContainer);
+                } else {
+                    viewHolder.copyHistoryLayout.setVisibility(View.GONE);
                 }
-            }
 
-            ViewGroup copyHistoryContainer = ItemDataSetter.getPreparedView(viewHolder.copyHistoryLayout, R.layout.copy_history_layout);
-            //RelativeLayout leftLine = (RelativeLayout) copyHistoryContainer.findViewById(R.id.leftLine);
-            //leftLine.setVisibility(View.VISIBLE);
-            //leftLine.setBackgroundColor(Color.parseColor(postColor));
-
-            LinearLayout copyHistoryList = (LinearLayout) copyHistoryContainer.getChildAt(0);
-            RelativeLayout copyHistoryLayout = (RelativeLayout) copyHistoryList.getChildAt(0);
-            final String finalCopy_history_name = copy_history_name;
-            copyHistoryLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Uri uri = Uri.parse("http://vk.com/" + finalCopy_history_name);
-                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.viewer_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                if (post.attachments != null && post.attachments.size() != 0) {
+                    ItemDataSetter.setAttachemnts(post.attachments, viewHolder.postAttachmentsLayout, 1);
+                } else {
+                    viewHolder.postAttachmentsLayout.setVisibility(View.GONE);
                 }
-            });
-            ((TextView) copyHistoryLayout.getChildAt(1)).setText(copy_history_title);
-            ((TextView) copyHistoryLayout.getChildAt(2)).setText(ItemDataSetter.getFormattedDate(copyHistory.date));
 
+                if (post.geo != null) {
+                    ItemDataSetter.setGeo(post.geo, viewHolder.postGeoLayout);
+                } else {
+                    viewHolder.postGeoLayout.setVisibility(View.GONE);
+                }
 
-            ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)));
+                if (post.signer_id != 0) {
+                    ItemDataSetter.setSigned(post.signer_id, viewHolder.postSignedLayout);
+                } else {
+                    viewHolder.postSignedLayout.setVisibility(View.GONE);
+                }
 
-            RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryTextLayout);
-            if (copyHistory.text.length() != 0) {
-                ItemDataSetter.setText(copyHistory.text, parentCopyHistoryTextContainer);
-            } else {
-                parentCopyHistoryTextContainer.setVisibility(View.GONE);
+                return convertView;
             }
 
-            LinearLayout parentCopyHistoryAttachmentsContainer = (LinearLayout) copyHistoryList.findViewById(R.id.copyHistoryAttachmentsLayout);
-            if (copyHistory.attachments != null && copyHistory.attachments.size() != 0) {
-                ItemDataSetter.setAttachemnts(copyHistory.attachments, parentCopyHistoryAttachmentsContainer, 0);
-            } else {
-                parentCopyHistoryAttachmentsContainer.setVisibility(View.GONE);
-            }
+            public static class ViewHolder {
+                private final RelativeLayout postTextLayout;
+                public final RelativeLayout postMediaLayout;
+                public final LinearLayout postAudioLayout;
+                private final RelativeLayout copyHistoryLayout;
+                private final LinearLayout postAttachmentsLayout;
+                public final LinearLayout postDocumentLayout;
+                public final LinearLayout postAlbumLayout;
+                private final RelativeLayout postGeoLayout;
+                public final RelativeLayout postWikiPageLayout;
+                public final RelativeLayout postLinkLayout;
+                private final RelativeLayout postSignedLayout;
+                public final RelativeLayout postPollLayout;
 
-            RelativeLayout copyHistoryGeoContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryGeoLayout);
-            if (copyHistory.geo != null) {
-                ItemDataSetter.setGeo(copyHistory.geo, copyHistoryGeoContainer);
-            } else {
-                copyHistoryGeoContainer.setVisibility(View.GONE);
-            }
+                private final TextView txt_post_date;
+                // private final TextView txt_post_like;
+                private final TextView txt_post_comment;
+        public final TextView txt_post_date;
 
-            RelativeLayout copyHistorySignedContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistorySignedLayout);
-            if (copyHistory.signer_id != 0) {
-                ItemDataSetter.setSigned(copyHistory.signer_id, copyHistorySignedContainer);
-            } else {
-                copyHistorySignedContainer.setVisibility(View.GONE);
-            }
+                private final ImageView img_fixed_post;
+                private final ImageView img_post_other;
+                private final CheckBox cb_repost;
+                private final ImageView iv_repost;
+                private final CheckBox cb_like;
+        public final TextView txt_post_like;
+        public final TextView txt_post_share;
+        public final TextView txt_post_comment;
+        public final ImageView img_post_comment;
 
-            viewHolder.copyHistoryLayout.addView(copyHistoryContainer);
-        } else {
-            viewHolder.copyHistoryLayout.setVisibility(View.GONE);
-        }
+        public final ImageView img_fixed_post;
+        public final CheckBox cb_repost;
 
-        if (post.attachments != null && post.attachments.size() != 0) {
-            ItemDataSetter.setAttachemnts(post.attachments, viewHolder.postAttachmentsLayout, 1);
-        } else {
-            viewHolder.postAttachmentsLayout.setVisibility(View.GONE);
-        }
+                private ViewHolder(View convertView) {
+                    this.postAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.postAttachmentsLayout);
+                    this.postTextLayout = (RelativeLayout) convertView.findViewById(R.id.postTextLayout);
+                    this.postMediaLayout = (RelativeLayout) convertView.findViewById(R.id.postMediaLayout);
+                    this.postAudioLayout = (LinearLayout) convertView.findViewById(R.id.postAudioLayout);
+                    this.postDocumentLayout = (LinearLayout) convertView.findViewById(R.id.postDocumentLayout);
+                    this.copyHistoryLayout = (RelativeLayout) convertView.findViewById(R.id.copyHistoryLayout);
+                    this.postAlbumLayout = (LinearLayout) convertView.findViewById(R.id.postAlbumLayout);
+                    this.postGeoLayout = (RelativeLayout) convertView.findViewById(R.id.postGeoLayout);
+                    this.postWikiPageLayout = (RelativeLayout) convertView.findViewById(R.id.postWikiPageLayout);
+                    this.postLinkLayout = (RelativeLayout) convertView.findViewById(R.id.postLinkLayout);
+                    this.postSignedLayout = (RelativeLayout) convertView.findViewById(R.id.postSignedLayout);
+                    this.postPollLayout = (RelativeLayout) convertView.findViewById(R.id.postPollLayout);
 
-        if (post.geo != null) {
-            ItemDataSetter.setGeo(post.geo, viewHolder.postGeoLayout);
-        } else {
-            viewHolder.postGeoLayout.setVisibility(View.GONE);
-        }
+                    this.txt_post_date = (TextView) convertView.findViewById(R.id.txt_post_date);
+                    // this.txt_post_like = (TextView) convertView.findViewById(R.id.txt_post_like);
 
-        if (post.signer_id != 0) {
-            ItemDataSetter.setSigned(post.signer_id, viewHolder.postSignedLayout);
-        } else {
-            viewHolder.postSignedLayout.setVisibility(View.GONE);
-        }
+            this.txt_post_like = (TextView) convertView.findViewById(R.id.txt_post_like);
+            this.txt_post_share = (TextView) convertView.findViewById(R.id.txt_post_share);
 
-        return convertView;
-    }
+                    this.txt_post_comment = (TextView) convertView.findViewById(R.id.txt_post_comment);
+            this.img_post_comment = (ImageView) convertView.findViewById(R.id.img_post_comment);
 
-    public static class ViewHolder {
-        private final RelativeLayout postTextLayout;
-        public final RelativeLayout postMediaLayout;
-        public final LinearLayout postAudioLayout;
-        private final RelativeLayout copyHistoryLayout;
-        private final LinearLayout postAttachmentsLayout;
-        public final LinearLayout postDocumentLayout;
-        public final LinearLayout postAlbumLayout;
-        private final RelativeLayout postGeoLayout;
-        public final RelativeLayout postWikiPageLayout;
-        public final RelativeLayout postLinkLayout;
-        private final RelativeLayout postSignedLayout;
-        public final RelativeLayout postPollLayout;
-
-        private final TextView txt_post_date;
-        // private final TextView txt_post_like;
-        private final TextView txt_post_comment;
-
-        private final ImageView img_fixed_post;
-        private final ImageView img_post_other;
-        private final CheckBox cb_repost;
-        private final ImageView iv_repost;
-        private final CheckBox cb_like;
+                    this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
+                    this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other);
+                    this.cb_repost = (CheckBox) convertView.findViewById(R.id.cb_post_repost);
+                    this.iv_repost = (ImageView) convertView.findViewById(R.id.iv_post_repost);
+                    this.cb_like = (CheckBox) convertView.findViewById(R.id.cb_post_like);
 
 
-        private ViewHolder(View convertView) {
-            this.postAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.postAttachmentsLayout);
-            this.postTextLayout = (RelativeLayout) convertView.findViewById(R.id.postTextLayout);
-            this.postMediaLayout = (RelativeLayout) convertView.findViewById(R.id.postMediaLayout);
-            this.postAudioLayout = (LinearLayout) convertView.findViewById(R.id.postAudioLayout);
-            this.postDocumentLayout = (LinearLayout) convertView.findViewById(R.id.postDocumentLayout);
-            this.copyHistoryLayout = (RelativeLayout) convertView.findViewById(R.id.copyHistoryLayout);
-            this.postAlbumLayout = (LinearLayout) convertView.findViewById(R.id.postAlbumLayout);
-            this.postGeoLayout = (RelativeLayout) convertView.findViewById(R.id.postGeoLayout);
-            this.postWikiPageLayout = (RelativeLayout) convertView.findViewById(R.id.postWikiPageLayout);
-            this.postLinkLayout = (RelativeLayout) convertView.findViewById(R.id.postLinkLayout);
-            this.postSignedLayout = (RelativeLayout) convertView.findViewById(R.id.postSignedLayout);
-            this.postPollLayout = (RelativeLayout) convertView.findViewById(R.id.postPollLayout);
-
-            this.txt_post_date = (TextView) convertView.findViewById(R.id.txt_post_date);
-            // this.txt_post_like = (TextView) convertView.findViewById(R.id.txt_post_like);
-            this.txt_post_comment = (TextView) convertView.findViewById(R.id.txt_post_comment);
-
-            this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
             this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other);
-            this.cb_repost = (CheckBox) convertView.findViewById(R.id.cb_post_repost);
-            this.iv_repost = (ImageView) convertView.findViewById(R.id.iv_post_repost);
-            this.cb_like = (CheckBox) convertView.findViewById(R.id.cb_post_like);
-
+                }
+            }
         }
-    }
-}
+    

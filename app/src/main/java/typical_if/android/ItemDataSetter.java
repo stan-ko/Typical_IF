@@ -1,9 +1,13 @@
 package typical_if.android;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -54,6 +58,7 @@ import java.util.regex.Pattern;
 
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
+import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.model.Wall.Profile;
 import typical_if.android.model.Wall.Wall;
 
@@ -81,6 +86,10 @@ public class ItemDataSetter {
     public static String postColor;
     public static WallAdapter.ViewHolder wallViewHolder;
     public static CommentsListAdapter.ViewHolder commentViewHolder;
+
+    public static int position;
+    public static FragmentManager fragmentManager;
+    public static long aid = 0;
 
     public static void setAttachemnts(VKAttachments attachments, LinearLayout parentLayout, int type) {
         ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
@@ -200,9 +209,9 @@ public class ItemDataSetter {
         ((TextView) pollContainer.getChildAt(0)).setText(poll.question);
 
         if (poll.anonymous == 0) {
-            ((TextView) pollContainer.getChildAt(1)).setText(Constants.poll_not_anonymous + " " + poll.votes);
+            ((TextView) pollContainer.getChildAt(1)).setText(Constants.POLL_NOT_ANONYMOUS + " " + poll.votes);
         } else {
-            ((TextView) pollContainer.getChildAt(1)).setText(Constants.poll_anonymous + " " + poll.votes);
+            ((TextView) pollContainer.getChildAt(1)).setText(Constants.POLL_ANONYMOUS + " " + poll.votes);
         }
         ((ImageView) pollContainer.getChildAt(2)).setBackgroundColor(Color.parseColor(postColor));
 
@@ -237,7 +246,7 @@ public class ItemDataSetter {
                 @Override
                 public void onClick(View textView) {
                     Uri uri = Uri.parse("http://vk.com/feed?q=%23" + temp.replaceFirst("#", "") + "&section=search");
-                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.viewer_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
@@ -301,18 +310,38 @@ public class ItemDataSetter {
                 @Override
                 public void onClick(View textView) {
                     Uri uri = Uri.parse(temp);
-                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.browser_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+        final Matcher matSite = Pattern.compile("@club26363301 \\(fromMobileIF\\)").matcher(text);
+        while (matSite.find()) {
+            start = stringB.indexOf(matSite.group());
+            end = start + matSite.group().length();
+
+            final String replier = "fromMobileIF";
+            stringB.replace(start, end, replier);
+            spannable.replace(start, end, replier);
+
+            end = start + replier.length();
+            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new NonUnderlinedClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    Uri uri = Uri.parse(replier);
+                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         final Matcher matReply = Pattern.compile("\\[(club|id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]").matcher(text);
-
-        while (matReply.find()) {
-            start = stringB.indexOf(matReply.group());
+            while (matReply.find()) {
+                start = stringB.indexOf(matReply.group());
             end = start + matReply.group().length();
 
-            final String[] replier = matReply.group().replaceAll("[\\[\\]]", "").split("\\|");
+            final String[] replier = matReply.group().replaceFirst("\\[", "").replaceFirst("\\]", "").split("\\|");
             stringB.replace(start, end, replier[1]);
             spannable.replace(start, end, replier[1]);
 
@@ -323,7 +352,7 @@ public class ItemDataSetter {
                 @Override
                 public void onClick(View textView) {
                     Uri uri = Uri.parse("http://vk.com/" + replier[0]);
-                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.viewer_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
@@ -344,9 +373,9 @@ public class ItemDataSetter {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
                         mainText.setText(originalSpannable);
-                        showAll.setText(Constants.show_min_text);
+                        showAll.setText(Constants.SHOW_MIN_TEXT);
                     } else {
-                        showAll.setText(Constants.show_all_text);
+                        showAll.setText(Constants.SHOW_ALL_TEXT);
                         mainText.setText(tempModifySpannable);
                     }
                 }
@@ -381,7 +410,7 @@ public class ItemDataSetter {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse("http://vk.com/id" + valueOf(id));
-                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.viewer_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 
@@ -407,7 +436,7 @@ public class ItemDataSetter {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse(link.url);
-                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.browser_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 
@@ -446,7 +475,7 @@ public class ItemDataSetter {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse(wikiPage.source);
-                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.viewer_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 
@@ -512,7 +541,7 @@ public class ItemDataSetter {
             if (doc.isImage()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
-                size.setText(Constants.docTypeImage + " " + readableFileSize(doc.size));
+                size.setText(Constants.DOC_TYPE_IMAGE + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -522,7 +551,7 @@ public class ItemDataSetter {
             } else if (doc.isGif()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
-                size.setText(Constants.docTypeAnimation + " " + readableFileSize(doc.size));
+                size.setText(Constants.DOC_TYPE_ANIMATION + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -562,12 +591,12 @@ public class ItemDataSetter {
                 RelativeLayout.LayoutParams paramsForSize = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                 paramsForSize.setMargins(setInDp(55), setInDp(20), 0, 0);
                 size.setLayoutParams(paramsForSize);
-                size.setText(Constants.docTypeDocument + " " + readableFileSize(doc.size));
+                size.setText(Constants.DOC_TYPE_DOCUMENT + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Uri uri = Uri.parse(doc.url);
-                        context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.downloader_chooser).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.DOWNLOADER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                 });
             }
@@ -652,7 +681,8 @@ public class ItemDataSetter {
                             img.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Toast.makeText(context, photos.get(finalJ).src.getImageForDimension(photos.get(finalJ).width, photos.get(finalJ).height) + "", Toast.LENGTH_SHORT).show();
+                                    Fragment fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, wall.group.id, aid);
+                                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                 }
                             });
                             if (photoPointer == photos.size()) {
@@ -677,7 +707,8 @@ public class ItemDataSetter {
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Toast.makeText(context, photos.get(finalL).src.getImageForDimension(photos.get(finalL).width, photos.get(finalL).height) + "", Toast.LENGTH_SHORT).show();
+                                        Fragment fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, wall.group.id, aid);
+                                        fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                     }
                                 });
                             }
@@ -710,7 +741,7 @@ public class ItemDataSetter {
                             }
                             img = (ImageView) view_i_j_k;
                             if (videosCount == 1) {
-                                img.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, 250));
+                                img.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, setInDp(250)));
                                 img.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             }
                             final int finalJ = videoPointer++;
@@ -794,7 +825,7 @@ public class ItemDataSetter {
 
     public static String readableFileSize(long size) {
         if (size <= 0) return "0";
-        final String[] units = new String[]{Constants.size_in_b, Constants.size_in_kb, Constants.size_in_mb, Constants.size_in_gb, Constants.size_in_tb};
+        final String[] units = new String[]{Constants.SIZE_IN_B, Constants.SIZE_IN_KB, Constants.SIZE_IN_MB, Constants.SIZE_IN_GB, Constants.SIZE_IN_TB};
         int digitGroups = (int) (Math.log10(size) / Math.log10(1024));
         return new DecimalFormat("#,##0.#").format(size / Math.pow(1024, digitGroups)) + " " + units[digitGroups];
     }
@@ -819,13 +850,13 @@ public class ItemDataSetter {
         now.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
 
         if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
-            return Constants.today + " " + DateFormat.format(Constants.timeFormatString, smsTime);
+            return String.format(Constants.TODAY, DateFormat.format(Constants.TIME_FORMAT_STRING, smsTime));
         } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1) {
-            return Constants.yesterday + " " + DateFormat.format(Constants.timeFormatString, smsTime);
+            return String.format(Constants.YESTERDAY, DateFormat.format(Constants.TIME_FORMAT_STRING, smsTime));
         } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
-            return DateFormat.format(Constants.dateTimeFormatString, smsTime).toString();
+            return DateFormat.format(Constants.DATE_TIME_FORMAT_STRING, smsTime).toString();
         } else
-            return DateFormat.format(Constants.otherFormatString, smsTime).toString();
+            return DateFormat.format(Constants.OTHER_FORMAT_STRING, smsTime).toString();
     }
 
     public static int setInDp(int dps) {
@@ -843,6 +874,22 @@ public class ItemDataSetter {
         } else {
             return "#DE9C0E";
         }
+    }
+
+    public static void saveUserId(long uid) {
+        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+        final SharedPreferences.Editor ed = sPref.edit();
+        final long user_id = uid;
+        final String long_key = "uid";
+        ed.putLong(long_key, user_id);
+        ed.commit();
+    }
+
+    public static void loadUserId()  {
+        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+        final String long_key = "uid";
+        final long user_id = sPref.getLong(long_key, 0);
+        Constants.USER_ID = user_id;
     }
 
     public static class NonUnderlinedClickableSpan extends ClickableSpan {

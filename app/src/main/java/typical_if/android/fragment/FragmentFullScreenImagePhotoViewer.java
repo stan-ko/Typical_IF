@@ -15,20 +15,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
 import typical_if.android.R;
-import typical_if.android.VKHelper;
 import typical_if.android.adapter.FullScreenImageAdapter;
-import typical_if.android.model.Photo;
 
 public class FragmentFullScreenImagePhotoViewer extends Fragment implements ViewPager.OnPageChangeListener {
 
@@ -272,6 +268,13 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
     }
 
 
+//    protected void initAdapter(View view, Bundle argument, ) {
+//        Bundle arguments = getArguments();
+//        imagepager = (ViewPager) view.findViewById(R.id.pager);
+//        imagepager.setAdapter(new FullScreenImageAdapter(photos, getLayoutInflater(arguments), argument));
+//        imagepager.setCurrentItem(currentposition);
+//    }
+
 //        fullScreenPhoto.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -284,10 +287,11 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
 //                    likePhoto.startAnimation(animTextViewDown);}
 //                }
 //
-//int clickCounter = -1;
+//
 //
 //            }
 //        });
+
 
 
 }

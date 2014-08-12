@@ -1,6 +1,10 @@
 package typical_if.android;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.vk.sdk.VKUIHelper;
@@ -13,28 +17,48 @@ import org.json.JSONObject;
  */
 public class OfflineMode {
 
-    SharedPreferences sPref;
-    String SAVED_JSON = "saved_text";
-    JSONObject jsonObj;
-
-    public void saveJSON(JSONObject jsonObject, long gid) {
-        sPref = VKUIHelper.getTopActivity().getPreferences(VKUIHelper.getTopActivity().MODE_PRIVATE);
-        SharedPreferences.Editor ed = sPref.edit();
-        String JsonString = jsonObject.toString();
-        SAVED_JSON = String.valueOf(gid);
-        ed.putString(SAVED_JSON, JsonString);
+    //What these fields are for?
+    //SharedPreferences sPref;
+    //String SAVED_JSON = "saved_text";
+    //JSONObject jsonObj;
+    //long time =5;
+    public static void saveJSON(JSONObject jsonObject, long gid) {
+        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences(String.valueOf(gid),Activity.MODE_PRIVATE);
+        final SharedPreferences.Editor ed = sPref.edit();
+        final String JsonString = jsonObject.toString();
+        final String JsonKey = String.valueOf(gid);
+        //ed.clear();
+        ed.putString(JsonKey, JsonString);
+        Log.d("------------------Respons------Save------Secsesful-----", JsonString);
         ed.commit();
     }
 
-    public JSONObject loadJSON(long gid) {
-        sPref = VKUIHelper.getTopActivity().getPreferences(VKUIHelper.getTopActivity().MODE_PRIVATE);
-        SAVED_JSON = String.valueOf(gid);
-        String savedText = sPref.getString(SAVED_JSON, "");
+    public static JSONObject loadJSON(long gid)  {
+        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences(String.valueOf(gid), Activity.MODE_PRIVATE);
+        final String JsonKey = String.valueOf(gid);
+        final String savedText = sPref.getString(JsonKey, "");
+        JSONObject jsonObj = null;
         try {
             jsonObj = new JSONObject(savedText);
+            Log.d("-------------Respons-----Load----Secsesful---------",savedText );
+
         } catch (JSONException e) {
             e.printStackTrace();
+            Log.d("-------------Respons-----Load----Error---------",savedText );
         }
         return jsonObj;
+    }
+    public static boolean isOnline(final Context context) {
+        //final Activity activity = new Activity();
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo nInfo = cm.getActiveNetworkInfo();
+        if (nInfo != null && nInfo.isConnected()) {
+            Log.v("status", "ONLINE");
+            return true;
+        }
+        else {
+            Log.v("status", "OFFLINE");
+            return false;
+        }
     }
 }

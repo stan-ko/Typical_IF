@@ -11,6 +11,9 @@
     android:focusable="false"
     android:focusableInTouchMode="false">
 
+ 
+   
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -33,6 +36,8 @@
         android:focusableInTouchMode="false"
         android:orientation="vertical"
         android:visibility="gone"
+        android:background="@android:drawable/editbox_background_normal"
+       
         android:layout_toEndOf="@+id/img_user_avatar"
         android:layout_below="@+id/commentTextLayout"
         android:layout_alignParentLeft="true"
@@ -166,5 +171,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:button="@drawable/like_or_not_liked_selector" />
+      
 
 </RelativeLayout>

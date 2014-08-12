@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/upload_captured_photo_to_album"
+        android:title=""
+        android:icon="@android:drawable/ic_menu_upload"
+        />
+</menu>
