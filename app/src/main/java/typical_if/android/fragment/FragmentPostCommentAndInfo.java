@@ -43,15 +43,12 @@ import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Profile;
+import typical_if.android.model.Wall.Wall;
 
 /**
  * Created by admin on 07.08.2014.
  */
 public class FragmentPostCommentAndInfo extends Fragment {
-
-    private static String ARG_VK_GROUP_ID = "vk_group_id";
-    private static final String ARG_VK_ALBUM_ID = "vk_album_id";
-    private static final String ARG_VK_USER_ID = "user_id";
 
     ListView listOfComments;
     ArrayList<VKApiComment> comments;
@@ -60,15 +57,14 @@ public class FragmentPostCommentAndInfo extends Fragment {
     String message = null;
     EditText commentMessage;
     View rootView;
-    static int currentPosition;
     int reply_to_comment = 0;
-    static int like_status;
-    long gid;
+    Wall wall;
     VKApiPost post;
-    View convertView;
+    String postColor;
+    long gid;
+    int position;
     WallAdapter.ViewHolder viewHolder;
     Button sendComment;
-    CheckBox likePostPhoto;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,24 +73,34 @@ public class FragmentPostCommentAndInfo extends Fragment {
         }
     }
 
-    public static FragmentPostCommentAndInfo newInstance(View convertView, long gid, VKApiPost post) {
+    public static FragmentPostCommentAndInfo newInstance(String postColor, int position, Wall wall, VKApiPost post) {
         FragmentPostCommentAndInfo fragment = new FragmentPostCommentAndInfo();
-        fragment.convertView = convertView;
-        fragment.viewHolder = (WallAdapter.ViewHolder) convertView.getTag();
-        fragment.gid = gid * -1;
+        fragment.postColor = postColor;
+        fragment.wall = wall;
+        fragment.position = position;
         fragment.post = post;
+        fragment.gid = wall.group.id * -1;
         return fragment;
     }
 
+
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         final View rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
         sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
 
+        final View wallItem = inflater.inflate(R.layout.wall_lv_item, null);
+        viewHolder = new WallAdapter.ViewHolder(wallItem);
+        WallAdapter.initViewHolder(viewHolder, postColor, wall, position, getFragmentManager(), post, getActivity().getBaseContext());
+
         viewHolder.txt_post_comment.setVisibility(View.GONE);
         viewHolder.img_post_comment.setVisibility(View.GONE);
+        viewHolder.img_post_other.setVisibility(View.GONE);
+
 
         if (post.text.length() != 0) {
             RelativeLayout textLayout = (RelativeLayout) viewHolder.postTextLayout.getChildAt(0);
@@ -113,7 +119,7 @@ public class FragmentPostCommentAndInfo extends Fragment {
                 checkBox.setVisibility(View.GONE);
             }
         }
-        listOfComments.addHeaderView(convertView);
+        listOfComments.addHeaderView(wallItem);
 
         updateCommentList(gid, post.id, listOfComments, inflater);
 
@@ -205,7 +211,7 @@ public class FragmentPostCommentAndInfo extends Fragment {
                     adapter = new CommentsListAdapter(comments, profiles, inflater, postColor);
                     listOfComments.setAdapter(adapter);
                 } else {
-                    adapter.updateCommentList(comments, profiles, listOfComments);
+                    adapter.UpdateCommentList(comments, profiles, listOfComments);
 
                 }
             }
@@ -309,5 +315,4 @@ public class FragmentPostCommentAndInfo extends Fragment {
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.context_menu_device_item_remove, menu);
     }
-
 }

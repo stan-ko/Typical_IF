@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,7 +95,7 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
         //if (OfflineMode.isOnline())
         Wall wall = Wall.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
-        adapter = new WallAdapter(wall, inflater, fragmentManager, postColor);
+        adapter = new WallAdapter(wall, inflater,fragmentManager,postColor);
         wallListView = (JazzyListView) rootView.findViewById(R.id.listViewWall);
         wallListView.setAdapter(adapter);
         wallListView.setTransitionEffect(mCurrentTransitionEffect);
@@ -106,7 +105,7 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        //((MainActivity) activity).onSectionAttached(getArguments().getLong(ARG_VK_GROUP_ID));
+
     }
 
     @Override

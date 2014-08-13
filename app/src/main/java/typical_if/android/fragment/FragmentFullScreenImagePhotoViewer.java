@@ -12,25 +12,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiPhoto;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
 import typical_if.android.R;
+import typical_if.android.VKHelper;
 import typical_if.android.adapter.FullScreenImageAdapter;
 
 public class FragmentFullScreenImagePhotoViewer extends Fragment implements ViewPager.OnPageChangeListener {
 
 
-    private OnFragmentInteractionListener mListener;
-    public static ArrayList<Photo> photos;
+    private FragmentFullScreenImagePhotoViewer.OnFragmentInteractionListener mListener;
+    public static ArrayList<VKApiPhoto> photos;
     private ViewPager imagepager;
     public static int currentPosition;
 
@@ -42,7 +47,6 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
     public static Bundle args;
     public View rootView;
 
-   static int isLiked;
     long user_id;
 
     TextView countLikes;
@@ -55,7 +59,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
     TextView albumSize;
    public static RelativeLayout panel;
 
-    public static FragmentFullScreenImagePhotoViewer newInstance(ArrayList<Photo> photos, int currentposition, long vk_group_id, long vk_album_id) {
+    public static FragmentFullScreenImagePhotoViewer newInstance(ArrayList<VKApiPhoto> photos, int currentposition, long vk_group_id, long vk_album_id) {
 
         FragmentFullScreenImagePhotoViewer fragment = new FragmentFullScreenImagePhotoViewer();
         args = new Bundle();
@@ -130,7 +134,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
 
     @Override
     public void onResume() {
-       super.onResume();
+        super.onResume();
         VKUIHelper.onResume(getActivity());
     }
 
@@ -156,105 +160,105 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
     public void onDetach() {
         super.onDetach();
         mListener = null;
-     }
+    }
+
 
 
     @Override
     public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) { }
-  
     @Override
     public void onPageSelected(final int position) {
 
-            photoHeader.setText(photos.get(position).text);
+        photoHeader.setText(photos.get(position).text);
+        countLikes.setText(String.valueOf(photos.get(position).likes));
+        countComments.setText(String.valueOf(photos.get(position).comments));
+        counterOfPhotos.setText(String.valueOf(position + 1));
+        albumSize.setText(String.valueOf(VKHelper.countOfPhotos));
+
+        VKHelper.isLiked("photo", FragmentFullScreenImagePhotoViewer.args.getLong(FragmentFullScreenImagePhotoViewer.ARG_VK_GROUP_ID),
+                photos.get(position).id, new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+                        try {
+                            JSONObject j = response.json.optJSONObject("response");
+
+                            photos.get(position).user_likes = j.optInt("liked");;
+                        }catch (NullPointerException ex){
+
+
+                        }
+
+                    }
+                });
+
+        if (photos.get(position).user_likes == 0) {
+
             countLikes.setText(String.valueOf(photos.get(position).likes));
             countComments.setText(String.valueOf(photos.get(position).comments));
-            counterOfPhotos.setText(String.valueOf(position + 1));
-            albumSize.setText(String.valueOf(Photo.countOfPhotos));
+            like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
+            likedOrNotLikedBox.setChecked(false);
+        }
+        else{
+            countLikes.setText(String.valueOf(photos.get(position).likes));
+            countComments.setText(String.valueOf(photos.get(position).comments));
+            like.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
+            likedOrNotLikedBox.setChecked(true);
+        }
 
-            VKHelper.isLiked("photo", FragmentFullScreenImagePhotoViewer.args.getLong(FragmentFullScreenImagePhotoViewer.ARG_VK_GROUP_ID),
-                    photos.get(position).id, new VKRequest.VKRequestListener() {
+        like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (photos.get(position).user_likes == 0) {
+                    VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
-                            try {
-                                JSONObject j = response.json.optJSONObject("response");
+                            like.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
+                            likedOrNotLikedBox.setChecked(true);
 
-                                photos.get(position).user_likes = j.optInt("liked");;
-                            }catch (NullPointerException ex){
-
-
-                            }
+                            countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString()) + 1));
+                            ++photos.get(position).likes;
+                            Toast.makeText(VKUIHelper.getApplicationContext(), "LIKED: ", Toast.LENGTH_SHORT).show();
+                            photos.get(position).user_likes = 1;
 
                         }
                     });
-
-            if (photos.get(position).user_likes == 0) {
-
-                countLikes.setText(String.valueOf(photos.get(position).likes));
-                countComments.setText(String.valueOf(photos.get(position).comments));
-                like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
-                likedOrNotLikedBox.setChecked(false);
-            }
-            else{
-                countLikes.setText(String.valueOf(photos.get(position).likes));
-                countComments.setText(String.valueOf(photos.get(position).comments));
-                like.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
-                likedOrNotLikedBox.setChecked(true);
-            }
-
-            like.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (photos.get(position).user_likes == 0) {
-                        VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(VKResponse response) {
-                                super.onComplete(response);
-                                like.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
-                                likedOrNotLikedBox.setChecked(true);
-
-                                countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString()) + 1));
-                                ++photos.get(position).likes;
-                                Toast.makeText(VKUIHelper.getApplicationContext(), "LIKED: ", Toast.LENGTH_SHORT).show();
-                                photos.get(position).user_likes = 1;
-
-                            }
-                        });
-                    }
-                    else {
-                        VKHelper.deleteLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(VKResponse response) {
-                                super.onComplete(response);
-                                likedOrNotLikedBox.setChecked(false);
-
-                                like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
-                                countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString()) - 1));
-                                --photos.get(position).likes;
-                                photos.get(position).user_likes = 0;
-
-
-                                Toast.makeText(VKUIHelper.getApplicationContext(), "LIKE DELETED", Toast.LENGTH_SHORT).show();
-
-                            }
-                        });
-                    }
                 }
-            });
+                else {
+                    VKHelper.deleteLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            likedOrNotLikedBox.setChecked(false);
 
-            comment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                            like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
+                            countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString()) - 1));
+                            --photos.get(position).likes;
+                            photos.get(position).user_likes = 0;
 
-                    FragmentPhotoCommentAndInfo fragment = FragmentPhotoCommentAndInfo.newInstance(args.getLong(ARG_VK_GROUP_ID),
-                            args.getLong(ARG_VK_ALBUM_ID),
-                            photos.get(position),Constants.USER_ID);
-                    getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+
+                            Toast.makeText(VKUIHelper.getApplicationContext(), "LIKE DELETED", Toast.LENGTH_SHORT).show();
+
+                        }
+                    });
                 }
-            });
+            }
+        });
+
+        comment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentPhotoCommentAndInfo fragment = FragmentPhotoCommentAndInfo.newInstance(args.getLong(ARG_VK_GROUP_ID),
+                        args.getLong(ARG_VK_ALBUM_ID),
+                        photos.get(position),Constants.USER_ID);
+                getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+            }
+        });
 
 
-        }
+    }
 
 
     @Override
@@ -268,13 +272,6 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
     }
 
 
-//    protected void initAdapter(View view, Bundle argument, ) {
-//        Bundle arguments = getArguments();
-//        imagepager = (ViewPager) view.findViewById(R.id.pager);
-//        imagepager.setAdapter(new FullScreenImageAdapter(photos, getLayoutInflater(arguments), argument));
-//        imagepager.setCurrentItem(currentposition);
-//    }
-
 //        fullScreenPhoto.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -287,11 +284,10 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
 //                    likePhoto.startAnimation(animTextViewDown);}
 //                }
 //
-//
+//int clickCounter = -1;
 //
 //            }
 //        });
-
 
 
 }

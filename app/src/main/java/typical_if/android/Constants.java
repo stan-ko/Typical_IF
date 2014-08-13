@@ -3,7 +3,6 @@ package typical_if.android;
 import android.content.res.Resources;
 
 import com.vk.sdk.VKScope;
-import com.vk.sdk.VKUIHelper;
 
 /**
  * Created by Miller on 17.07.2014.
@@ -81,12 +80,12 @@ public class Constants {
 //    public static final String POST_REPORT_DRUGS = RESOURCES.getString(R.string.post_report_drugs);
 //    public static final String POST_REPORT_PORNO = RESOURCES.getString(R.string.post_report_porno);
 //    public static final String POST_REPORT_VIOLENCE = RESOURCES.getString(R.string.post_report_violence);
-    public static final String POST_REPORT = RESOURCES.getString(R.string.post_report);
-    public static final String POST_COPY_LINK = RESOURCES.getString(R.string.post_copy_link);
-    public static final String POST_REPORT_SPAM = RESOURCES.getString(R.string.post_report_spam);
-    public static final String POST_REPORT_OFFENSE = RESOURCES.getString(R.string.post_report_offense);
-    public static final String POST_REPORT_ADULT = RESOURCES.getString(R.string.post_report_adult);
-    public static final String POST_REPORT_DRUGS = RESOURCES.getString(R.string.post_report_drugs);
-    public static final String POST_REPORT_PORNO = RESOURCES.getString(R.string.post_report_porno);
-    public static final String POST_REPORT_VIOLENCE = RESOURCES.getString(R.string.post_report_violence);
+//    public static final String POST_REPORT = RESOURCES.getString(R.string.post_report);
+//    public static final String POST_COPY_LINK = RESOURCES.getString(R.string.post_copy_link);
+//    public static final String POST_REPORT_SPAM = RESOURCES.getString(R.string.post_report_spam);
+//    public static final String POST_REPORT_OFFENSE = RESOURCES.getString(R.string.post_report_offense);
+//    public static final String POST_REPORT_ADULT = RESOURCES.getString(R.string.post_report_adult);
+//    public static final String POST_REPORT_DRUGS = RESOURCES.getString(R.string.post_report_drugs);
+//    public static final String POST_REPORT_PORNO = RESOURCES.getString(R.string.post_report_porno);
+//    public static final String POST_REPORT_VIOLENCE = RESOURCES.getString(R.string.post_report_violence);
 }

@@ -2,8 +2,6 @@ package typical_if.android.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -11,7 +9,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -69,7 +66,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                 startActivity(i);
                 finish();
             }
-        }, 2000);
+        }, 5000);
 
         locale = new Locale("uk");
         Locale.setDefault(locale);
@@ -142,7 +139,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         @Override
         public void onTokenExpired(VKAccessToken expiredToken) {
-            VKSdk.authorize(Constants.S_MY_SCOPE);
+            VKSdk.authorize(Constants.sMyScope);
         }
 
         @Override

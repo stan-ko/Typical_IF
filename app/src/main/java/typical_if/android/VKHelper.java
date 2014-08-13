@@ -5,8 +5,10 @@ import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
+import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -264,6 +266,9 @@ else {
 
     public static ArrayList<VKApiPhoto> getPhotosFromJSONArray(JSONObject jsonArray) {
         JSONObject object = jsonArray.optJSONObject("response");
+        try {
+            countOfPhotos = object.getInt("count");
+        } catch (JSONException e) {}
         JSONArray array = object.optJSONArray("items");
 
         final ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
@@ -273,6 +278,7 @@ else {
         }
         return photos;
     }
+    public static int countOfPhotos;
 
 
 }

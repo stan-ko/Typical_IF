@@ -29,7 +29,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static com.vk.sdk.api.model.ParseUtils.parseBoolean;
 import static com.vk.sdk.api.model.ParseUtils.parseInt;
 import static com.vk.sdk.api.model.VKAttachments.TYPE_PHOTO;
 
@@ -42,6 +41,10 @@ public class VKApiPhoto extends VKAttachments.VKApiAttachment implements Parcela
      * Photo ID, positive number
      */
     public int id;
+    /**
+     * Photo ID, positive number
+     */
+    public int user_id;
 
     /**
      * Photo album ID.
@@ -112,12 +115,12 @@ public class VKApiPhoto extends VKAttachments.VKApiAttachment implements Parcela
     /**
      * Information whether the current user liked the photo.
      */
-    public boolean user_likes;
+    public int user_likes;
 
     /**
      * Whether the current user can comment on the photo
      */
-    public boolean can_comment;
+    public int can_comment;
 
     /**
      * Number of likes on the photo.
@@ -149,6 +152,7 @@ public class VKApiPhoto extends VKAttachments.VKApiAttachment implements Parcela
      * Fills a Photo instance from JSONObject.
      */
     public VKApiPhoto parse(JSONObject from) {
+        user_id = from.optInt("user_id");
         album_id = from.optInt("album_id");
         date = from.optLong("date");
         height = from.optInt("height");
@@ -167,10 +171,10 @@ public class VKApiPhoto extends VKAttachments.VKApiAttachment implements Parcela
 
         JSONObject likes = from.optJSONObject("likes");
         this.likes = ParseUtils.parseInt(likes, "count");
-        this.user_likes = ParseUtils.parseBoolean(likes, "user_likes");
+        this.user_likes = ParseUtils.parseInt(likes, "user_likes");
         comments = parseInt(from.optJSONObject("comments"), "count");
         tags = parseInt(from.optJSONObject("tags"), "count");
-        can_comment = parseBoolean(from, "can_comment");
+        can_comment = parseInt(from, "can_comment");
 
         src.setOriginalDimension(width, height);
         JSONArray photo_sizes = from.optJSONArray("sizes");
@@ -205,6 +209,7 @@ public class VKApiPhoto extends VKAttachments.VKApiAttachment implements Parcela
      */
     public VKApiPhoto(Parcel in) {
         this.id = in.readInt();
+        this.user_id=in.readInt();
         this.album_id = in.readInt();
         this.owner_id = in.readInt();
         this.width = in.readInt();
@@ -218,8 +223,8 @@ public class VKApiPhoto extends VKAttachments.VKApiAttachment implements Parcela
         this.photo_807 = in.readString();
         this.photo_1280 = in.readString();
         this.photo_2560 = in.readString();
-        this.user_likes = in.readByte() != 0;
-        this.can_comment = in.readByte() != 0;
+        this.user_likes = in.readInt();
+        this.can_comment = in.readInt();
         this.likes = in.readInt();
         this.comments = in.readInt();
         this.tags = in.readInt();
@@ -261,6 +266,7 @@ public class VKApiPhoto extends VKAttachments.VKApiAttachment implements Parcela
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
+        dest.writeInt(this.user_id);
         dest.writeInt(this.album_id);
         dest.writeInt(this.owner_id);
         dest.writeInt(this.width);
@@ -274,8 +280,8 @@ public class VKApiPhoto extends VKAttachments.VKApiAttachment implements Parcela
         dest.writeString(this.photo_807);
         dest.writeString(this.photo_1280);
         dest.writeString(this.photo_2560);
-        dest.writeByte(user_likes ? (byte) 1 : (byte) 0);
-        dest.writeByte(can_comment ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.user_likes);
+        dest.writeInt(this.can_comment);
         dest.writeInt(this.likes);
         dest.writeInt(this.comments);
         dest.writeInt(this.tags);

@@ -34,6 +34,7 @@ import typical_if.android.fragment.FragmentEventsList;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.fragment.FragmentPhotoCommentAndInfo;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
+import typical_if.android.fragment.FragmentPhotoList;
 import typical_if.android.fragment.FragmentWall;
 import typical_if.android.fragment.NavigationDrawerFragment;
 
@@ -41,7 +42,8 @@ import typical_if.android.fragment.NavigationDrawerFragment;
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         FragmentFullScreenImagePhotoViewer.OnFragmentInteractionListener,
-        FragmentPhotoCommentAndInfo.OnFragmentInteractionListener {
+        FragmentPhotoCommentAndInfo.OnFragmentInteractionListener,
+        FragmentPhotoList.OnFragmentInteractionListener{
 
 
     private Drawable mIcon;
@@ -147,7 +149,7 @@ public class MainActivity extends ActionBarActivity implements
 
         @Override
         public void onTokenExpired(VKAccessToken expiredToken) {
-            VKSdk.authorize(Constants.S_MY_SCOPE);
+            VKSdk.authorize(Constants.sMyScope);
         }
 
         @Override
@@ -225,9 +227,9 @@ public class MainActivity extends ActionBarActivity implements
                     mNavigationDrawerFragment.refreshNavigationDrawer();
                 } else {
                     if (!VKSdk.wakeUpSession()) {
-                        VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
+                        VKSdk.authorize(Constants.sMyScope, true, true);
                     } else
-                        VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
+                        VKSdk.authorize(Constants.sMyScope, true, true);
                 }
                 break;
         }
