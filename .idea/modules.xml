@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Typical_IF6.iml" filepath="$PROJECT_DIR$/Typical_IF6.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Typical_IF.iml" filepath="$PROJECT_DIR$/Typical_IF.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/jazzy_lib/jazzy_lib.iml" filepath="$PROJECT_DIR$/jazzy_lib/jazzy_lib.iml" />
       <module fileurl="file://$PROJECT_DIR$/vksdk_library/vksdk_library.iml" filepath="$PROJECT_DIR$/vksdk_library/vksdk_library.iml" />
