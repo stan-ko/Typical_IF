@@ -224,7 +224,7 @@ public class ItemDataSetter {
         final TextView mainText = ((TextView) textContainer.getChildAt(0));
         final CheckBox showAll = ((CheckBox) textContainer.getChildAt(1));
 
-        final Matcher matTags = Pattern.compile("#\\w+").matcher(text);
+        final Matcher matTags = Pattern.compile("#[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ0-9_]+").matcher(text);
 
         StringBuilder stringB = new StringBuilder(text);
         final SpannableStringBuilder spannable = new SpannableStringBuilder(text);
@@ -336,7 +336,7 @@ public class ItemDataSetter {
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
-        final Matcher matReply = Pattern.compile("\\[(club|id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]").matcher(text);
+        final Matcher matReply = Pattern.compile("\\[(club|id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\w)(\\W)_]+?\\]").matcher(text);
             while (matReply.find()) {
                 start = stringB.indexOf(matReply.group());
             end = start + matReply.group().length();
@@ -751,6 +751,7 @@ public class ItemDataSetter {
                                 public void onClick(View v) {
                                     String videoID = videos.get(finalJ).toAttachmentString().toString();
                                     videoID = videoID.replaceFirst("video", "");
+                                    Toast.makeText(context, videos.get(finalJ).access_key, Toast.LENGTH_SHORT).show();
                                     VKHelper.doPlayerRequest(videoID, new VKRequest.VKRequestListener() {
                                         @Override
                                         public void onComplete(VKResponse response) {
@@ -758,12 +759,17 @@ public class ItemDataSetter {
                                             JSONObject mainResponse = response.json.optJSONObject("response");
                                             JSONArray item = mainResponse.optJSONArray("items");
                                             try {
-                                                videos.get(finalJ).player = ((JSONObject) item.get(0)).optString("player");
+                                                JSONObject files = ((JSONObject) item.get(0)).optJSONObject("files");
+                                                if (files != null && files.has("external")) {
+                                                    String url = files.optString("external");
+                                                    Uri uri = Uri.parse(url);
+                                                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                                                } else {
+                                                    Dialogs.videoResolutionDialog(context, files);
+                                                }
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
-
-                                            Toast.makeText(context, videos.get(finalJ).player, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }

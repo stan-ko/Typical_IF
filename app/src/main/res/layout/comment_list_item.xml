@@ -136,7 +136,6 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/img_user_avatar"
-        android:src="@drawable/ic_launcher"
         android:cropToPadding="false"
         android:scaleType="fitStart"
         android:layout_weight="0.34"
@@ -146,7 +145,8 @@
         android:layout_marginRight="5dp"
         android:clickable="false"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false"
+        android:src="@drawable/abc_ab_solid_dark_holo" />
 
     <TextView
         android:layout_width="wrap_content"

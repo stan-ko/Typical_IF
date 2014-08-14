@@ -31,6 +31,7 @@ package com.vk.sdk.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -205,6 +206,7 @@ public class VKApiVideo extends VKAttachments.VKApiAttachment implements Parcela
         comments = from.optInt("comments");
         player = from.optString("player");
         access_key = from.optString("access_key");
+        Log.d("_________________________________________________________", access_key);
         album_id = from.optInt("album_id");
 
         JSONObject likes = from.optJSONObject("likes");
@@ -289,6 +291,15 @@ public class VKApiVideo extends VKAttachments.VKApiAttachment implements Parcela
     @Override
     public int getId() {
         return id;
+    }
+
+    public static String getVideoUrl(long owner_id, long video_id) {
+        String res = null;
+        String base_url = "http://vk.com/";
+        res = base_url + "video" + owner_id + "_" + video_id;
+        //sample http://vkontakte.ru/video4491835_158963813
+        //http://79.gt2.vkadre.ru/assets/videos/f6b1af1e4258-24411750.vk.flv
+        return res;
     }
 
     @Override

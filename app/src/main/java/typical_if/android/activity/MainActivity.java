@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCaptchaDialog;
@@ -26,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import typical_if.android.Constants;
+import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -54,6 +56,26 @@ public class MainActivity extends ActionBarActivity implements
     private static final int PICK_FROM_CAMERA = 1;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     private NavigationDrawerFragment mNavigationDrawerFragment;
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.comment_attachment_photo:
+                Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
+                Dialogs.addPhotoToCommentDialog(getSupportFragmentManager());
+                //return true;
+            case R.id.comment_attachment_video:
+                Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.comment_attachment_audio:
+                Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.comment_attachment_doc:
+                Toast.makeText(this, "4", Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +139,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.main, menu);
             MenuItem item = menu.getItem(0);
             MenuItem item1 = menu.getItem(1);
@@ -189,11 +211,6 @@ public class MainActivity extends ActionBarActivity implements
             });
         }
     };
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
 
     @Override
     public void onNavigationDrawerItemSelected(int groupPosition, int childPosition) {

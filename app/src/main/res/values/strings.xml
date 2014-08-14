@@ -64,5 +64,12 @@
         <item>Насильство</item>
     </array>
 
+    <string-array name="comment_attachment_list">
+        <item>Photo</item>
+        <item>Video</item>
+        <item>Audio</item>
+        <item>Audio</item>
+        <item>Document</item>
+    </string-array>
 
 </resources>
