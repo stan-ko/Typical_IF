@@ -49,6 +49,7 @@
 
     <string name="post_report">Поскаржитись</string>
     <string name="post_copy_link">Копіювати посилання</string>
+    <string name="noInternetMessageFromToast_EN">No internet connection. You use offline mode</string>
     <!--<string name="post_report_spam">Спам</string>-->
     <!--<string name="post_report_offense">Образа</string>-->
     <!--<string name="post_report_adult">Матеріал для дорослих</string>-->

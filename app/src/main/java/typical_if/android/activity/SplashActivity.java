@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,11 +45,13 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     Locale locale;
     Configuration config;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
+    SharedPreferences firstOpenPref = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        firstOpenPref = getSharedPreferences("com.mycompany.myAppName", MODE_PRIVATE);
 
         textView = (TextView) findViewById(R.id.splash_title);
         imageView = (ImageView) findViewById(R.id.splash_logo);
@@ -57,17 +61,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         textView.startAnimation(animMoveDown);
 
         animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        //animFadeIn.setAnimationListener(this);
         imageView.startAnimation(animFadeIn);
-
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Intent i = new Intent(SplashActivity.this, MainActivity.class);
-//                startActivity(i);
-//                finish();
-//            }
-//        }, 5000);
 
         locale = new Locale("uk");
         Locale.setDefault(locale);
@@ -81,15 +75,19 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         ItemDataSetter.loadUserId();
     }
-
+    int counter = 5;
     void showAlertNoInternet() {
         Log.d("----------------Internet conection Error", "------------------------");
-
+        counter--;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.app_name)
                 .setMessage("No fucking active Internet connection is available. Would you like to")
-                .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Retry "+"("+counter+")", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
+                        if (counter <2) {
+                            startActivity(new Intent(Settings.ACTION_SETTINGS));
+                            counter=5;
+                        }
                         checkIfOnlineAndProceed();
                     }
                 })
@@ -98,20 +96,39 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                         finish();
                     }
                 });
+        if (!isFirstOpen() & OfflineMode.loadJSON(Constants.TF_ID) != null) {
+            builder.setNeutralButton("Offline", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    startNextActivity();
+                }
+            });
+
+        }
+
+
         // TODO: add neutral button if has cached data to work offline with
 
         builder.create().show();
     }
 
+    private boolean isFirstOpen() {
+        boolean temp = false;
+        if (firstOpenPref.getBoolean("firstrun", true)) {
+            temp = true;
+            firstOpenPref.edit().putBoolean("firstrun", false).commit();
+        }
+        return temp;
+    }
+
     void checkIfOnlineAndProceed() {
-        if ( OfflineMode.isOnline(getApplicationContext()) ) {
+        if (OfflineMode.isOnline(getApplicationContext())) {
             makeRequests();
         } else {
             showAlertNoInternet();
         }
     }
 
-    private void makeRequests(){
+    private void makeRequests() {
         threadsCounter = new AtomicInteger(4);
         //   --------------------START------------- all Request from internet before start APP----------------------
         VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
@@ -135,6 +152,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                 OfflineMode.saveJSON(response.json, Constants.TZ_ID);
                 decrementThreadsCounter();
             }
+
             @Override
             public void onError(VKError error) {
                 super.onError(error);
@@ -148,6 +166,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                 OfflineMode.saveJSON(response.json, Constants.FB_ID);
                 decrementThreadsCounter();
             }
+
             @Override
             public void onError(VKError error) {
                 super.onError(error);
@@ -161,6 +180,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                 OfflineMode.saveJSON(response.json, Constants.FN_ID);
                 decrementThreadsCounter();
             }
+
             @Override
             public void onError(VKError error) {
                 super.onError(error);
@@ -171,8 +191,9 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     }
 
     AtomicInteger threadsCounter;
-    void decrementThreadsCounter(){
-        if (threadsCounter.decrementAndGet()==0)
+
+    void decrementThreadsCounter() {
+        if (threadsCounter.decrementAndGet() == 0)
             startNextActivity();
     }
 
@@ -228,7 +249,8 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
     // Animation listener implementation
     @Override
-    public void onAnimationStart(Animation animation) {}
+    public void onAnimationStart(Animation animation) {
+    }
 
     @Override
     public void onAnimationEnd(Animation animation) {
@@ -236,5 +258,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     }
 
     @Override
-    public void onAnimationRepeat(Animation animation) {}
+    public void onAnimationRepeat(Animation animation) {
+    }
 }

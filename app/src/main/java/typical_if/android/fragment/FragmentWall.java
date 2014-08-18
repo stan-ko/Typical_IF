@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
@@ -26,6 +27,8 @@ import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Wall.Wall;
+
+import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 
 /**
@@ -134,18 +137,23 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
 
     @Override
     public void onRefresh() {
+
+        if (OfflineMode.isOnline(getApplicationContext())==false){
+            Toast.makeText(getApplicationContext(),getString(R.string.noInternetMessageFromToast_EN), Toast.LENGTH_SHORT).show();
+
+        }
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 swipeView.setRefreshing(false);
                 VKHelper.doGroupWallRequest(gid, new VKRequest.VKRequestListener() {
                     @Override
-                    //jhghgf
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
                         OfflineMode.saveJSON(response.json, gid);
                         initGroupWall(OfflineMode.loadJSON(gid), inflaterGlobal);
                         wallListView.setOnScrollListener(onScrollListenerObject);
+
                     }
                 });
             }
