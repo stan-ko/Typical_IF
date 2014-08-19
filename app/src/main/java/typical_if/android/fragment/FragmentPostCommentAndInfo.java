@@ -23,7 +23,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -31,6 +30,7 @@ import com.vk.sdk.api.model.VKApiComment;
 import com.vk.sdk.api.model.VKApiPost;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,12 +38,15 @@ import java.util.Collections;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Profile;
 import typical_if.android.model.Wall.Wall;
+
+import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 /**
  * Created by admin on 07.08.2014.
@@ -154,20 +157,27 @@ public class FragmentPostCommentAndInfo extends Fragment {
     }
 
 
-    public void updateCommentList(long gid, long pid, final ListView listOfComments, final LayoutInflater inflater) {
+    public void updateCommentList(long gid, final long pid, final ListView listOfComments, final LayoutInflater inflater) {
         VKHelper.getCommentsForPost(gid, pid, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
+                OfflineMode.saveJSON(response.json, pid);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         Looper.prepare();
-                        parseCommentList(response);
+                        parseCommentList(OfflineMode.loadJSON(pid));
                     }
                 }).start();
             }
         });
+
+
+        if (!OfflineMode.isOnline(getApplicationContext()) & OfflineMode.loadJSON(pid) !=null ) {
+                    parseCommentList(OfflineMode.loadJSON(pid));
+            // If IsOnline and response from preferenses not null then load Json from preferenses
+        }
 
         listOfComments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -194,12 +204,14 @@ public class FragmentPostCommentAndInfo extends Fragment {
     }
 
 
-    public void parseCommentList(final VKResponse response) {
+    public void parseCommentList(final JSONObject response) {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
 
         JSONArray[] arrayOfComments = VKHelper.getResponseArrayOfComment(response);
 
+
         comments = VKHelper.getCommentsFromJSON(arrayOfComments[0]);
+
         Collections.sort(comments);
         profiles = Profile.getProfilesFromJSONArray(arrayOfComments[1]);
 
@@ -250,7 +262,7 @@ public class FragmentPostCommentAndInfo extends Fragment {
                     }
                     break;
                     case 4:
-                        Dialogs.reportListDialog(VKUIHelper.getApplicationContext(), gid, comments.get(position).id);
+                        Dialogs.reportListDialog(getApplicationContext(), gid, comments.get(position).id);
                         break;
                     case 5: {
                         VKHelper.deleteCommentForPost(gid, comments.get(position).id, new VKRequest.VKRequestListener() {

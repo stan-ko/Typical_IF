@@ -43,6 +43,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     ImageView imageView;
 
     Locale locale;
+    int counter = 5;
     Configuration config;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     SharedPreferences firstOpenPref = null;
@@ -51,7 +52,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        firstOpenPref = getSharedPreferences("com.mycompany.myAppName", MODE_PRIVATE);
+        firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
 
         textView = (TextView) findViewById(R.id.splash_title);
         imageView = (ImageView) findViewById(R.id.splash_logo);
@@ -75,7 +76,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         ItemDataSetter.loadUserId();
     }
-    int counter = 5;
     void showAlertNoInternet() {
         Log.d("----------------Internet conection Error", "------------------------");
         counter--;
@@ -113,9 +113,9 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
     private boolean isFirstOpen() {
         boolean temp = false;
-        if (firstOpenPref.getBoolean("firstrun", true)) {
+        if (firstOpenPref.getBoolean("firstRun", true)) {
             temp = true;
-            firstOpenPref.edit().putBoolean("firstrun", false).commit();
+            firstOpenPref.edit().putBoolean("firstRun", false).commit();
         }
         return temp;
     }

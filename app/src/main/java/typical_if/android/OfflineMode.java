@@ -7,8 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import com.vk.sdk.VKUIHelper;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

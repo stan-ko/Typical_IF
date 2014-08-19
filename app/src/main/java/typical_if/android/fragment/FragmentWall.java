@@ -137,10 +137,8 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
 
     @Override
     public void onRefresh() {
-
         if (OfflineMode.isOnline(getApplicationContext())==false){
             Toast.makeText(getApplicationContext(),getString(R.string.noInternetMessageFromToast_EN), Toast.LENGTH_SHORT).show();
-
         }
         new Handler().postDelayed(new Runnable() {
             @Override

@@ -3,7 +3,6 @@ package typical_if.android;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
 import com.vk.sdk.api.model.VKApiPhoto;
 
@@ -194,12 +193,11 @@ else {
         request.executeWithListener(listener);
     }
 
-    public static JSONArray[] getResponseArrayOfComment(VKResponse response) {
-        if (response == null || response.json == null) return null;
+    public static JSONArray[] getResponseArrayOfComment(JSONObject response) {
+       // if (response == null || response.json == null) return null;
         JSONArray[] array = new JSONArray[2];
-        array[0] = response.json.optJSONObject("response").optJSONArray("items");
-        array[1] = response.json.optJSONObject("response").optJSONArray("profiles");
-
+        array[0] = response.optJSONObject("response").optJSONArray("items");
+        array[1] = response.optJSONObject("response").optJSONArray("profiles");
         return array;
     }
 

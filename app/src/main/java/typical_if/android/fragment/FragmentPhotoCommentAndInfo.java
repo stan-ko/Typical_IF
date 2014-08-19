@@ -32,7 +32,6 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKUIHelper;
-
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -41,6 +40,7 @@ import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,10 +51,10 @@ import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.MyApplication;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
-
 import typical_if.android.model.Profile;
 
 public class FragmentPhotoCommentAndInfo extends Fragment {
@@ -144,7 +144,10 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
+
                 postSender = Profile.parseUserInfoFromJSON(response.json);
+
+
                 ImageLoader.getInstance().displayImage(postSender.photo_50, postPhotoUserAvatar);
                 postPhotoUserName.setText(postSender.last_name + " " + postSender.first_name);
                 postPhotoUserDateOfComment.setText(ItemDataSetter.getFormattedDate(photo.date));
@@ -271,11 +274,13 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
+                OfflineMode.saveJSON(response.json, photo.id);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         Looper.prepare();
-                        parseCommentList(response);
+                        parseCommentList(OfflineMode.loadJSON(photo.id));
+                       // Log.d("/////////////////////////////////","fuck Yura");
                     }
                 }).start();
 
@@ -283,7 +288,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
             }
 
         });
-
+//        parseCommentList(OfflineMode.loadJSON(photo.id));
 
         listOfComments.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
@@ -316,7 +321,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     }
 
 
-    public void parseCommentList(final VKResponse response) {
+    public void parseCommentList(final JSONObject response) {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
 
         JSONArray[] arrayOfComments = VKHelper.getResponseArrayOfComment(response);

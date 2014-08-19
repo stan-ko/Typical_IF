@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKUIHelper;
@@ -22,12 +23,14 @@ import com.vk.sdk.api.model.VKPostArray;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.fragment.FragmentPostCommentAndInfo;
 import typical_if.android.model.Wall.Group;
 import typical_if.android.model.Wall.Profile;
 import typical_if.android.model.Wall.Wall;
 
+import static com.vk.sdk.VKUIHelper.getApplicationContext;
 import static java.lang.String.valueOf;
 
 public class WallAdapter extends BaseAdapter {
@@ -225,14 +228,25 @@ public class WallAdapter extends BaseAdapter {
 
 
         viewHolder.txt_post_comment.setTag(new ParamsHolder(position, post));
-        viewHolder.txt_post_comment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParamsHolder paramsHolder = (ParamsHolder) v.getTag();
-                FragmentPostCommentAndInfo fragment = FragmentPostCommentAndInfo.newInstance(postColor, paramsHolder.position, wall, paramsHolder.post);
-                fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-            }
-        });
+
+        if (OfflineMode.isOnline(getApplicationContext()) | OfflineMode.loadJSON(post.id)!=null){
+            viewHolder.txt_post_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ParamsHolder paramsHolder = (ParamsHolder) v.getTag();
+                    FragmentPostCommentAndInfo fragment = FragmentPostCommentAndInfo.newInstance(postColor, paramsHolder.position, wall, paramsHolder.post);
+                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                }
+            });
+        }else {
+            viewHolder.txt_post_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(), " comments are not available to this post. Please turn On the internet ", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
 
     }
 
