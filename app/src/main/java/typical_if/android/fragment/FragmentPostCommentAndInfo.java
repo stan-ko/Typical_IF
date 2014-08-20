@@ -174,7 +174,7 @@ public class FragmentPostCommentAndInfo extends Fragment {
         });
 
 
-        if (!OfflineMode.isOnline(getApplicationContext()) & OfflineMode.loadJSON(pid) !=null ) {
+        if (!OfflineMode.isOnline(getApplicationContext()) & OfflineMode.isJsonNull(pid)  ) {
                     parseCommentList(OfflineMode.loadJSON(pid));
             // If IsOnline and response from preferenses not null then load Json from preferenses
         }

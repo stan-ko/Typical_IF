@@ -59,4 +59,21 @@ public class OfflineMode {
             return false;
         }
     }
+    public static boolean isJsonNull(long id){
+        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
+        final String JsonKey = String.valueOf(id);
+        final String savedText = sPref.getString(JsonKey, "");
+        try {
+            final JSONObject jsonObj = new JSONObject(savedText);
+            Log.d("-------------Response-----NotNull---------",savedText );
+            return true;
+        } catch (JSONException e) {
+           // e.printStackTrace();
+            Log.d("-------------Response-----IsNull---------", savedText);
+            return false;
+        }
+
+
+
+    }
 }

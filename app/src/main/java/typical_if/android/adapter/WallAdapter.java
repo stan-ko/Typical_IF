@@ -229,7 +229,7 @@ public class WallAdapter extends BaseAdapter {
 
         viewHolder.txt_post_comment.setTag(new ParamsHolder(position, post));
 
-        if (OfflineMode.isOnline(getApplicationContext()) | OfflineMode.loadJSON(post.id)!=null){
+        if (OfflineMode.isOnline(getApplicationContext()) | OfflineMode.isJsonNull(post.id)){
             viewHolder.txt_post_comment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

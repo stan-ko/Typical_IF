@@ -63,7 +63,7 @@ else {
         params.put("owner_id", gid);
         params.put("domain", gid);
         params.put("offset", 0);
-        params.put("count", 100);
+        params.put("count", 10);
         params.put("filter", "all");
         params.put("extended", 1);
 
