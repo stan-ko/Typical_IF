@@ -345,21 +345,19 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
     @Override
     public void onScroll(final AbsListView view, int firstVisibleItem, final int visibleItemCount, int totalItemCount) {
-        if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-
-            VKHelper.getPhotoList(getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID), 0, new VKRequest.VKRequestListener() {
-                @Override
-                public void onComplete(VKResponse response) {
-                    super.onComplete(response);
-                    handleResponse(response, columns, view);
-                    Log.d("----------------------------------------------------------------------------->", visibleItemCount + "");
-                }
-
-            });
-        } else {
-        }
-
-
+//        if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+//
+//            VKHelper.getPhotoList(getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID), 0, new VKRequest.VKRequestListener() {
+//                @Override
+//                public void onComplete(VKResponse response) {
+//                    super.onComplete(response);
+//                    handleResponse(response, columns, view);
+//                    Log.d("----------------------------------------------------------------------------->", visibleItemCount + "");
+//                }
+//
+//            });
+//        } else {
+//        }
     }
 
 }
