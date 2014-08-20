@@ -37,6 +37,7 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKApiDocument;
 import com.vk.sdk.api.model.VKApiLink;
+import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPhotoAlbum;
 import com.vk.sdk.api.model.VKApiPlace;
 import com.vk.sdk.api.model.VKApiPoll;
@@ -58,7 +59,6 @@ import java.util.regex.Pattern;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
-import typical_if.android.model.TFVKPhoto;
 import typical_if.android.model.Wall.Profile;
 import typical_if.android.model.Wall.Wall;
 
@@ -92,7 +92,7 @@ public class ItemDataSetter {
     public static long aid = 0;
 
     public static void setAttachemnts(VKAttachments attachments, LinearLayout parentLayout, int type) {
-        ArrayList<TFVKPhoto> photos = new ArrayList<TFVKPhoto>();
+        ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
         ArrayList<VKApiVideo> videos = new ArrayList<VKApiVideo>();
         ArrayList<VKApiAudio> audios = new ArrayList<VKApiAudio>();
         ArrayList<VKApiDocument> docs = new ArrayList<VKApiDocument>();
@@ -105,7 +105,7 @@ public class ItemDataSetter {
 
         for (VKAttachments.VKApiAttachment attachment : attachments) {
             if (attachment.getType().equals(VKAttachments.TYPE_PHOTO)) {
-                photos.add((TFVKPhoto) attachment);
+                photos.add( (VKApiPhoto)attachment);
             } else if (attachment.getType().equals(VKAttachments.TYPE_VIDEO)) {
                 videos.add((VKApiVideo) attachment);
             } else if (attachment.getType().equals(VKAttachments.TYPE_AUDIO)) {
@@ -605,7 +605,7 @@ public class ItemDataSetter {
         }
     }
 
-    public static void setMedia(RelativeLayout parent, final ArrayList<TFVKPhoto> photos, final ArrayList<VKApiVideo> videos) {
+    public static void setMedia(RelativeLayout parent, final ArrayList<VKApiPhoto> photos, final ArrayList<VKApiVideo> videos) {
         ImageView img;
         RelativeLayout relativeLayout;
         ViewGroup mediaContainer = null;

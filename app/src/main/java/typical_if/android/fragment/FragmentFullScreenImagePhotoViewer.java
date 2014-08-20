@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,13 +30,12 @@ import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.FullScreenImageAdapter;
-import typical_if.android.model.TFVKPhoto;
 
 public class FragmentFullScreenImagePhotoViewer extends Fragment implements ViewPager.OnPageChangeListener {
 
 
     private FragmentFullScreenImagePhotoViewer.OnFragmentInteractionListener mListener;
-    public static ArrayList<TFVKPhoto> photos;
+    public static ArrayList<VKApiPhoto> photos;
     private ViewPager imagepager;
     public static int currentPosition;
 
@@ -59,7 +59,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
     TextView albumSize;
    public static RelativeLayout panel;
 
-    public static FragmentFullScreenImagePhotoViewer newInstance(ArrayList<TFVKPhoto> photos, int currentposition, long vk_group_id, long vk_album_id) {
+    public static FragmentFullScreenImagePhotoViewer newInstance(ArrayList<VKApiPhoto> photos, int currentposition, long vk_group_id, long vk_album_id) {
 
         FragmentFullScreenImagePhotoViewer fragment = new FragmentFullScreenImagePhotoViewer();
         args = new Bundle();

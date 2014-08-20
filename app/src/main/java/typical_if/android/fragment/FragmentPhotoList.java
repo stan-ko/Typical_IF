@@ -30,6 +30,7 @@ import com.twotoasters.jazzylistview.JazzyGridView;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,11 +39,10 @@ import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.PhotoListAdapter;
-import typical_if.android.model.TFVKPhoto;
 
 public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollListener {
 
-    public ArrayList<TFVKPhoto> photos2 = new ArrayList<TFVKPhoto>();
+    public ArrayList<VKApiPhoto> photos2 = new ArrayList<VKApiPhoto>();
     private OnFragmentInteractionListener mListener;
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
     private static final String ARG_VK_ALBUM_ID = "vk_album_id";
@@ -213,7 +213,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
     protected void handleResponse(VKResponse response, final int columns, View view) {
 
-        final ArrayList<TFVKPhoto> photos = VKHelper.getPhotosFromJSONArray(response.json);
+        final ArrayList<VKApiPhoto> photos = VKHelper.getPhotosFromJSONArray(response.json);
         albumSize = VKHelper.countOfPhotos;
         for (int i = 0; i < photos.size(); i++) {
             photos2.add(photos.get(i));

@@ -35,6 +35,7 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
+import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -54,7 +55,7 @@ import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.model.Profile;
-import typical_if.android.model.TFVKPhoto;
+import typical_if.android.util.PhotoUrlHelper;
 
 public class FragmentPhotoCommentAndInfo extends Fragment {
     final int displayHeight = MyApplication.getDisplayHeight();
@@ -62,9 +63,9 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     private static String ARG_VK_GROUP_ID = "vk_group_id";
     private static final String ARG_VK_ALBUM_ID = "vk_album_id";
     private static final String ARG_VK_USER_ID = "user_id";
-    public static TFVKPhoto photo;
+    public static VKApiPhoto photo;
     Profile postSender;
-   // public static ArrayList<TFVKPhoto> photo;
+   // public static ArrayList<VKApiPhoto> photo;
 
 
     ListView listOfComments;
@@ -81,7 +82,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     long gid;
 
     public static FragmentPhotoCommentAndInfo newInstance(long vk_group_id, long vk_album_id,
-                                                          TFVKPhoto photo, long vk_user_id
+                                                          VKApiPhoto photo, long vk_user_id
                                                          ) {
 
         FragmentPhotoCommentAndInfo fragment = new FragmentPhotoCommentAndInfo();
@@ -121,7 +122,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
 
 
         final Button sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
-        final TFVKPhoto photo = this.photo;
+        final VKApiPhoto photo = this.photo;
 
 
 
@@ -561,9 +562,9 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    public void loadImage(TFVKPhoto photo, ImageView imageView) {
+    public void loadImage(VKApiPhoto photo, ImageView imageView) {
         //ImageLoader.getInstance().displayImage(photo.photo_75, imageView);
         //String url = photo.getFullScreenUrl();
-        ImageLoader.getInstance().displayImage(photo.getFullScreenUrl(), imageView );
+        ImageLoader.getInstance().displayImage(PhotoUrlHelper.getFullScreenUrl(photo), imageView );
     }
 }
