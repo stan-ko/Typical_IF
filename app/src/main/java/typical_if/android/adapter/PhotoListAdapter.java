@@ -12,24 +12,23 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.util.List;
 
-import typical_if.android.MyApplication;
 import typical_if.android.R;
+import typical_if.android.model.TFVKPhoto;
 
 /**
  * Created by LJ on 16.07.2014.
  */
 public class PhotoListAdapter extends BaseAdapter {
-    List<VKApiPhoto> photoList;
+    List<TFVKPhoto> photoList;
     LayoutInflater layoutInflater;
     final DisplayImageOptions options;
 
     ImageLoader imageLoader;
 
-    public PhotoListAdapter(List<VKApiPhoto> list, LayoutInflater inflater) {
+    public PhotoListAdapter(List<TFVKPhoto> list, LayoutInflater inflater) {
         this.photoList = list;
         this.layoutInflater = inflater;
 
@@ -62,7 +61,7 @@ public class PhotoListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final VKApiPhoto photo = photoList.get(position);
+        final TFVKPhoto photo = photoList.get(position);
         final ViewHolder viewHolder;
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.fragment_photo_list_item, null);
@@ -74,13 +73,7 @@ public class PhotoListAdapter extends BaseAdapter {
 
         final ProgressBar pbPreviewImageIsLoading = viewHolder.pbPreviewImageIsLoading;
 
-        final String photoUrl;
-        if (MyApplication.getDisplayHeight()<1000)
-            photoUrl = photo.photo_75;
-        else
-            photoUrl = photo.photo_130;
-
-        imageLoader.getInstance().displayImage(photoUrl, viewHolder.photo, options, new ImageLoadingListener() {
+        imageLoader.getInstance().displayImage(photo.getPreviewUrl(), viewHolder.photo, options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 pbPreviewImageIsLoading.setVisibility(View.VISIBLE);

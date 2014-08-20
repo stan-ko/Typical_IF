@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,12 +16,12 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.util.ArrayList;
 
 import typical_if.android.MyApplication;
 import typical_if.android.R;
+import typical_if.android.model.TFVKPhoto;
 
 /**
  * Created by LJ on 21.07.2014.
@@ -31,7 +30,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
     final int displayHeight = MyApplication.getDisplayHeight();
     LayoutInflater inflater;
 
-    public static ArrayList<VKApiPhoto> photos;
+    public static ArrayList<TFVKPhoto> photos;
 
     public FragmentManager fragmentManager;
     public Bundle arguments;
@@ -39,7 +38,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
     private DisplayImageOptions options;
 
 
-    public FullScreenImageAdapter(ArrayList<VKApiPhoto> photos, LayoutInflater inflater, Bundle arguments, long groupID, long albumID, long userID, FragmentManager fragmentManager, View rootView) {
+    public FullScreenImageAdapter(ArrayList<TFVKPhoto> photos, LayoutInflater inflater, Bundle arguments, long groupID, long albumID, long userID, FragmentManager fragmentManager, View rootView) {
         this.rootView = rootView;
         this.photos = photos;
         this.inflater = inflater;
@@ -81,26 +80,12 @@ public class FullScreenImageAdapter extends PagerAdapter {
         (container).removeView((RelativeLayout) object);
     }
 
-    private void loadPreview(/*final int position, */final VKApiPhoto photo, final ImageView imageView, final ProgressBar pbImageIsLoading) {
+    private void loadPreview(/*final int position, */final TFVKPhoto photo, final ImageView imageView, final ProgressBar pbImageIsLoading) {
 //        ImageLoader.getInstance().displayImage(photos.get(position).photo_75, imageView, options);
 //
-        final String urlOfPhotoPreview = photo.photo_130;
+        final String urlOfPhotoPreview = photo.getPreviewUrl();
 
-        final String urlOfFullScreenPhoto;
-        if (!TextUtils.isEmpty(photo.photo_2560) && displayHeight > 1199) {
-            urlOfFullScreenPhoto = photo.photo_2560;
-        } else if (!TextUtils.isEmpty(photo.photo_1280) && displayHeight > 799) {
-            urlOfFullScreenPhoto = photo.photo_1280;
-        } else if (!TextUtils.isEmpty(photo.photo_807) && displayHeight > 600) {
-            urlOfFullScreenPhoto = photo.photo_807;
-        } else if (!TextUtils.isEmpty(photo.photo_604)) {
-            urlOfFullScreenPhoto = photo.photo_604;
-        } else if (!TextUtils.isEmpty(photo.photo_130)) {
-            urlOfFullScreenPhoto = photo.photo_130;
-        } else if (!TextUtils.isEmpty(photo.photo_75)) {
-            urlOfFullScreenPhoto = photo.photo_75;
-        } else
-            urlOfFullScreenPhoto = null;
+        final String urlOfFullScreenPhoto = photo.getFullScreenUrl();
 
         ImageLoader.getInstance().displayImage(urlOfPhotoPreview, imageView, options, new ImageLoadingListener() {
             @Override

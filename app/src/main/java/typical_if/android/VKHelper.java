@@ -4,13 +4,14 @@ import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.model.VKApiComment;
-import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import typical_if.android.model.TFVKPhoto;
 
 /**
  * Created by admin on 17.07.2014.
@@ -262,16 +263,16 @@ else {
         request.executeWithListener(vkRequestListener);
     }
 
-    public static ArrayList<VKApiPhoto> getPhotosFromJSONArray(JSONObject jsonArray) {
+    public static ArrayList<TFVKPhoto> getPhotosFromJSONArray(JSONObject jsonArray) {
         JSONObject object = jsonArray.optJSONObject("response");
         try {
             countOfPhotos = object.getInt("count");
         } catch (JSONException e) {}
         JSONArray array = object.optJSONArray("items");
 
-        final ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
+        final ArrayList<TFVKPhoto> photos = new ArrayList<TFVKPhoto>();
         for (int i=0; i<array.length(); i++){
-            final VKApiPhoto photo = new VKApiPhoto().parse(array.optJSONObject(i));
+            final TFVKPhoto photo = new TFVKPhoto().parse(array.optJSONObject(i));
             photos.add(photo);
         }
         return photos;
