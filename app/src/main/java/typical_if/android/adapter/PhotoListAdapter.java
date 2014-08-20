@@ -72,16 +72,12 @@ public class PhotoListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public static class ViewHolder {
+    private static class ViewHolder {
         public final ImageView photo;
 
-
         public ViewHolder(View convertView) {
-
             this.photo = (ImageView) convertView.findViewById(R.id.img_photo_cover);
-
         }
     }
-
 
 }
