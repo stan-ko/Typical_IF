@@ -3,27 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!--<RelativeLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
+    <ImageView
+        android:id="@+id/img_photo_cover"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:longClickable="false"
+        android:scaleType="centerCrop" />
 
-        <!--<ProgressBar-->
-            <!--style="?android:attr/progressBarStyleLarge"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/pbPreviewImageIsLoading"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:indeterminate="true" />-->
+    <ProgressBar
+        android:id="@+id/pbPreviewImageIsLoading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center"
+        android:indeterminate="true" />
 
-        <ImageView
-            android:id="@+id/img_photo_cover"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="left|top"
-            android:longClickable="false"
-            android:scaleType="centerCrop" />
-
-
-    <!--</RelativeLayout>-->
 </FrameLayout>

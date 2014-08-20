@@ -120,7 +120,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
             @Override
             public void onLoadingCancelled(String imageUri, View view) {
-                pbImageIsLoading.setVisibility(View.VISIBLE);
+                pbImageIsLoading.setVisibility(View.GONE);
             }
         });
     }
