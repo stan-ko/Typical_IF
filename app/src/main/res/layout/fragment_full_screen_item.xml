@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-
-
-
-
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <typical_if.android.TouchImageView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
         android:id="@+id/full_screen_photo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center_horizontal|top"
-        android:src="@drawable/abc_ab_bottom_solid_dark_holo"
         android:scaleType="centerCrop" />
 
-
-
-
-
-
+    <ProgressBar
+        android:id="@+id/pbImageIsLoading"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:indeterminate="true" />
 
 </RelativeLayout>

@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -36,7 +35,6 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
-import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,6 +54,7 @@ import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.model.Profile;
+import typical_if.android.model.TFVKPhoto;
 
 public class FragmentPhotoCommentAndInfo extends Fragment {
     final int displayHeight = MyApplication.getDisplayHeight();
@@ -63,9 +62,9 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     private static String ARG_VK_GROUP_ID = "vk_group_id";
     private static final String ARG_VK_ALBUM_ID = "vk_album_id";
     private static final String ARG_VK_USER_ID = "user_id";
-    public static VKApiPhoto photo;
+    public static TFVKPhoto photo;
     Profile postSender;
-   // public static ArrayList<VKApiPhoto> photo;
+   // public static ArrayList<TFVKPhoto> photo;
 
 
     ListView listOfComments;
@@ -82,7 +81,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     long gid;
 
     public static FragmentPhotoCommentAndInfo newInstance(long vk_group_id, long vk_album_id,
-                                                          VKApiPhoto photo, long vk_user_id
+                                                          TFVKPhoto photo, long vk_user_id
                                                          ) {
 
         FragmentPhotoCommentAndInfo fragment = new FragmentPhotoCommentAndInfo();
@@ -122,7 +121,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
 
 
         final Button sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
-        final VKApiPhoto photo = this.photo;
+        final TFVKPhoto photo = this.photo;
 
 
 
@@ -562,25 +561,9 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    public void loadImage(VKApiPhoto photo, ImageView imageView) {
-        ImageLoader.getInstance().displayImage(photo.photo_75, imageView);
-
-        String url = null;
-
-        if (!TextUtils.isEmpty(photo.photo_2560) && displayHeight > 1199) {
-            url = photo.photo_2560;
-        } else if (!TextUtils.isEmpty(photo.photo_1280) && displayHeight > 799) {
-            url = photo.photo_1280;
-        } else if (!TextUtils.isEmpty(photo.photo_807) && displayHeight > 600) {
-            url = photo.photo_807;
-        } else if (!TextUtils.isEmpty(photo.photo_604)) {
-            url = photo.photo_604;
-        } else if (!TextUtils.isEmpty(photo.photo_130)) {
-            url = photo.photo_130;
-        } else if (!TextUtils.isEmpty(photo.photo_75)) {
-            url = photo.photo_75;
-        }
-        ImageLoader.getInstance().displayImage(url, imageView );
+    public void loadImage(TFVKPhoto photo, ImageView imageView) {
+        //ImageLoader.getInstance().displayImage(photo.photo_75, imageView);
+        //String url = photo.getFullScreenUrl();
+        ImageLoader.getInstance().displayImage(photo.getFullScreenUrl(), imageView );
     }
-
 }
