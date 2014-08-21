@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/make_post"
+        android:title="make_post"
+        android:icon="@android:drawable/ic_menu_edit"/>
+    <item android:id="@+id/suggested_posts"
+        android:title="suggested_posts"
+        android:icon="@android:drawable/ic_menu_edit"/>
+    <item android:id="@+id/join_leave_group"
+        android:title="join_leave_group"
+        android:icon="@android:drawable/ic_menu_edit"/>
+</menu>

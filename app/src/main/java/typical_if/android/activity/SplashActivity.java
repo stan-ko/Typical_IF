@@ -212,7 +212,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         @Override
         public void onTokenExpired(VKAccessToken expiredToken) {
-            VKSdk.authorize(Constants.sMyScope);
+            VKSdk.authorize(Constants.S_MY_SCOPE);
         }
 
         @Override

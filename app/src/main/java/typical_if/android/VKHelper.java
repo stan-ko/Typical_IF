@@ -1,5 +1,7 @@
 package typical_if.android;
 
+import android.text.Editable;
+
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
@@ -59,6 +61,64 @@ else {
         request.executeWithListener(listener);
     }
 
+
+    public static void editSuggestedPost(long gid, long pid, Editable message, String attachments, VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put("post_id", pid);
+        params.put("owner_id", gid);
+        params.put("message", message);
+        params.put("attachments", attachments);
+
+        final VKRequest request = new VKRequest("wall.edit", params);
+        request.executeWithListener(vkRequestListener);
+    }
+
+    public static void deleteSuggestedPost(long gid, long pid, VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put("post_id", pid);
+        params.put("owner_id", gid);
+
+        final VKRequest request = new VKRequest("wall.delete", params);
+        request.executeWithListener(vkRequestListener);
+    }
+
+    public static void getSuggestedPosts(long gid, VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put("owner_id", gid);
+        params.put("domain", gid);
+        params.put("offset", 0);
+        params.put("count", 100);
+        params.put("filter", "suggests");
+        params.put("extended", 1);
+
+        final VKRequest request = VKApi.wall().get(params);
+        request.executeWithListener(vkRequestListener);
+    }
+
+    public static void isMember(long gid, VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put("group_id", gid);
+
+        final VKRequest request = new VKRequest("groups.isMember", params);
+        request.executeWithListener(vkRequestListener);
+    }
+
+    public static void groupJoin(long gid, VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put("group_id", gid);
+
+        final VKRequest request = new VKRequest("groups.join", params);
+        request.executeWithListener(vkRequestListener);
+    }
+
+    public static void groupLeave(long gid, VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put("group_id", gid);
+
+        final VKRequest request = new VKRequest("groups.leave", params);
+        request.executeWithListener(vkRequestListener);
+    }
+
     public static void doGroupWallRequest(long gid, VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put("owner_id", gid);
@@ -110,15 +170,6 @@ else {
         request.executeWithListener(listener);
 
     }
-
-    public static void getFixedPostId(String gid, VKRequest.VKRequestListener listener) {
-  
-        VKParameters params = new VKParameters();
-        params.put("group_id", gid);
-        params.put("fields", "fixed_post");
-        final VKRequest request = new VKRequest("groups.getById", params);
-        request.executeWithListener(listener);
-    }
     
     public static void createCommentForPost(long owner_id, long post_id, String message, int reply_to_comment, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
@@ -137,14 +188,6 @@ else {
 //        final VKRequest request = new VKRequest("wall.repost", params);
 //        request.executeWithListener(listener);
 //    }
-    public static void getFixedPost(String pid, VKRequest.VKRequestListener listener) {
-        VKParameters params = new VKParameters();
-        params.put("posts", pid);
-        params.put("extended", 1);
-        params.put("copy_history_depth", 1);
-        final VKRequest request = new VKRequest("wall.getById", params);
-        request.executeWithListener(listener);
-    }
 
     public static void doRepost(String pid, String message, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
@@ -192,6 +235,30 @@ else {
 
         final VKRequest request = new VKRequest("wall.getComments", params);
         request.executeWithListener(listener);
+    }
+
+    public static void getUserAudios(VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put("owner_id", Constants.USER_ID);
+
+        final VKRequest request = new VKRequest("audio.get", params);
+        request.executeWithListener(vkRequestListener);
+    }
+
+    public static void getUserVideos(VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put("owner_id", Constants.USER_ID);
+
+        final VKRequest request = new VKRequest("video.get", params);
+        request.executeWithListener(vkRequestListener);
+    }
+
+    public static void getUserDocs(VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put("owner_id", Constants.USER_ID);
+
+        final VKRequest request = new VKRequest("docs.get", params);
+        request.executeWithListener(vkRequestListener);
     }
 
     public static JSONArray[] getResponseArrayOfComment(JSONObject response) {
@@ -252,7 +319,15 @@ else {
         request.executeWithListener(listener);
     }
 
+    public static void doWallPost(long owner_id, Editable message, String attachments, VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put("owner_id",owner_id);
+        params.put("message", message);
+        params.put("attachments", attachments);
 
+        final VKRequest request = new VKRequest("wall.post", params);
+        request.executeWithListener(vkRequestListener);
+    }
 
     public static void doPlayerRequest(String videos, VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();

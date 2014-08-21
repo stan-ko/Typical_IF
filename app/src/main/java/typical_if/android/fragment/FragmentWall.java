@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -36,7 +39,7 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
  */
 
 
-public class FragmentWall extends Fragment implements AbsListView.OnScrollListener, SwipeRefreshLayout.OnRefreshListener {
+public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
 
     private int mCurrentTransitionEffect = JazzyHelper.TRANSPARENT;
@@ -50,14 +53,36 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
     String postColor;
     Long gid;
 
+    static boolean isSuggested;
+    static int isMember;
+
     SwipeRefreshLayout swipeView;
-    AbsListView.OnScrollListener onScrollListenerObject;
+    AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+        }
+
+        @Override
+        public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            boolean enable = false;
+
+            if (absListView != null && absListView.getChildCount() > 0) {
+                boolean firstItemVisible = absListView.getFirstVisiblePosition() == 0;
+                boolean topOfFirstItemVisible = absListView.getChildAt(0).getTop() == 0;
+                enable = firstItemVisible && topOfFirstItemVisible;
+            }
+
+            swipeView.setEnabled(enable);
+        }
+    };
     Bundle arguments;
 
-    public static FragmentWall newInstance(long vkGroupId) {
+    public static FragmentWall newInstance(long vkGroupId, boolean isSuggestedParam) {
         FragmentWall fragment = new FragmentWall();
         Bundle args = new Bundle();
         args.putLong(ARG_VK_GROUP_ID, vkGroupId);
+        isSuggested = isSuggestedParam;
         fragment.setArguments(args);
         return fragment;
     }
@@ -75,52 +100,41 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
         arguments = getArguments();
         gid = arguments.getLong(ARG_VK_GROUP_ID);
         postColor = ItemDataSetter.getPostColor(gid);
-        initGroupWall(OfflineMode.loadJSON(gid), inflater);
-        spinnerLayout.setVisibility(View.GONE);
-        wallListView.setOnScrollListener(this);
-
-//        wallListView.setOnScrollListener(new EndlessScrollListener() {
-//
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount) {
-//                // TODO Auto-generated method stub
-////        new Loadmore().execute();
-//                Log.d("------------------------", "-------------EndLess-------");
-//
-//            }
-//        });
-
-        onScrollListenerObject = this;
 
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
-        swipeView.setOnRefreshListener(this);
-        swipeView.setColorScheme(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_light);
 
+        if (!isSuggested) {
+            initGroupWall(OfflineMode.loadJSON(gid), inflater);
+
+            swipeView.setOnRefreshListener(this);
+            swipeView.setColorScheme(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_light);
+        } else {
+            VKHelper.getSuggestedPosts(gid, new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    initGroupWall(response.json, inflater);
+                    wallListView.setOnScrollListener(null);
+
+                    swipeView.setOnRefreshListener(null);
+                    swipeView.setEnabled(false);
+                    swipeView.setRefreshing(false);
+                }
+            });
+        }
         return rootView;
-
-//        wallListView.setOnScrollListener(new EndlessScrollListener() {
-//
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount) {
-//                // TODO Auto-generated method stub
-//               // new Loadmore().execute();
-//
-//            }
-//        });
     }
 
 
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater) {
         Wall wall = Wall.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
-        adapter = new WallAdapter(wall, inflater, fragmentManager, postColor);
+        adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
         wallListView = (JazzyListView) rootView.findViewById(R.id.listViewWall);
         wallListView.setAdapter(adapter);
-        //final View view = null;
-
         wallListView.setTransitionEffect(mCurrentTransitionEffect);
-        wallListView.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), true, true));
-
+        wallListView.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerObject));
+        spinnerLayout.setVisibility(View.GONE);
     }
 
     int mCurCheckPosition = 0;
@@ -135,26 +149,72 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
     }
 
 
+    public void onCreate(Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(final Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        VKHelper.isMember(gid * (-1), new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+
+                isMember = response.json.optInt("response");
+
+                if (isMember == 0) {
+                    menu.findItem(R.id.join_leave_group).setTitle("Join");
+                } else {
+                    menu.findItem(R.id.join_leave_group).setTitle("Leave");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.make_post, menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.make_post:
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container, FragmentMakePost.newInstance(gid, 0, 0)).addToBackStack("makePostFragment").commit();
+                break;
+            case R.id.suggested_posts:
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container, FragmentWall.newInstance(gid, true)).addToBackStack(null).commit();
+                break;
+            case R.id.join_leave_group:
+                if (isMember == 0) {
+                    VKHelper.groupJoin(gid * (-1), new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            Toast.makeText(getActivity(), "Joined", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(gid, false)).commit();
+                        }
+                    });
+                } else {
+                    VKHelper.groupLeave(gid * (-1), new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            Toast.makeText(getActivity(), "Leaved", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(gid, false)).commit();
+                        }
+                    });
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    };
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("curChoice", wallListView.getScrollY());
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView absListView, int i) {
-    }
-
-    @Override
-    public void onScroll(AbsListView absListView, int i, int i2, int i3) {
-        boolean topEnable = false;
-        if (absListView != null && absListView.getChildCount() > 0) {
-            boolean firstItemVisible = absListView.getFirstVisiblePosition() == 0;
-            boolean topOfFirstItemVisible = absListView.getChildAt(0).getTop() == 0;
-            topEnable = firstItemVisible && topOfFirstItemVisible;
-            swipeView.setEnabled(topEnable);
-        }
-
     }
 
     @Override
@@ -172,8 +232,6 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
                         super.onComplete(response);
                         OfflineMode.saveJSON(response.json, gid);
                         initGroupWall(OfflineMode.loadJSON(gid), inflaterGlobal);
-                        wallListView.setOnScrollListener(onScrollListenerObject);
-
                     }
                 });
             }

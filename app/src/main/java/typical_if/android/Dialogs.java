@@ -4,20 +4,22 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
-import android.support.v4.app.FragmentManager;
 import android.text.ClipboardManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiPost;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import typical_if.android.fragment.FragmentAlbumsList;
+import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentUploadAlbumList;
+import typical_if.android.fragment.FragmentWall;
 
 /**
  * Created by admin on 06.08.2014.
@@ -25,7 +27,7 @@ import typical_if.android.fragment.FragmentUploadAlbumList;
 public class Dialogs {
 
     public static void reportListDialog(final Context context, final long gid, final long id) {
-        final AlertDialog.Builder builderIn = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+        final AlertDialog.Builder builderIn = new AlertDialog.Builder(Constants.mainActivity);
         builderIn.setTitle(R.string.post_report);
         final Resources resources = context.getResources();
 
@@ -71,33 +73,8 @@ public class Dialogs {
         builderIn.show();
     }
 
-    public static void addPhotoToCommentDialog(final FragmentManager fragmentManager) {
-        final String[] items = {"З карти памяті", "З своїх альбомів"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-        builder.setTitle("Завантажити фото ?");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        fragmentManager.beginTransaction().add(R.id.container, new FragmentUploadAlbumList()).addToBackStack(null).commit();
-                        Log.d("222222222222222222222222222222222222222", "333333333333333333333333333");
-                        //dialog.cancel();
-                        break;
-                    case 1:
-                        dialog.cancel();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-        builder.setCancelable(true);
-        builder.show();
-    }
-
     public static void reportDialog(final Context context, final long gid, final long id) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
         final Resources resources = context.getResources();
 
         final String[] items = {resources.getString(R.string.post_report), resources.getString(R.string.post_copy_link)};
@@ -120,8 +97,64 @@ public class Dialogs {
         builder.show();
     }
 
+    public static void suggestPostDialog(final Context context, final long gid, final VKApiPost post) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
+        final Resources resources = context.getResources();
+
+        final String[] items = {"Edit", "Delete"};
+
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        ItemDataSetter.setSuggestAttachments(post.attachments);
+                        Constants.tempTextSuggestPost = post.text;
+                        ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentMakePost.newInstance(gid, post.id, 1)).addToBackStack(null).commit();
+                        break;
+                    case 1:
+                        VKHelper.deleteSuggestedPost(gid, post.id, new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(VKResponse response) {
+                                super.onComplete(response);
+                                ItemDataSetter.fragmentManager.popBackStack();
+                                ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(gid, true)).addToBackStack(null).commit();
+                                Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        break;
+                }
+            }
+        });
+
+        builder.show();
+    }
+
+    public static void photoAttachDialog(final Context context, final long gid, final int type) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
+        final Resources resources = context.getResources();
+
+        final String[] items = {"Own", "SD-card"};
+
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAlbumsList.newInstance(Constants.USER_ID)).addToBackStack(null).commit();
+                        break;
+                    case 1:
+                        ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentUploadAlbumList.newInstance(gid, type)).addToBackStack(null).commit();
+                        break;
+                }
+            }
+        });
+
+        builder.show();
+    }
+
     public static void videoResolutionDialog(final Context context, JSONObject jsonObject) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(VKUIHelper.getTopActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
         final Resources resources = context.getResources();
 
         ArrayList<String> items = new ArrayList<String>();

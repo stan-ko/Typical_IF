@@ -30,7 +30,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -419,7 +418,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                     }
                     break;
                     case 4:
-                        Dialogs.reportListDialog(VKUIHelper.getApplicationContext(),gid, comments.get(position).id);
+                        Dialogs.reportListDialog(Constants.mainActivity, gid, comments.get(position).id);
                         break;
                     case 5: {
                         VKHelper.deleteCommentForPhoto(getArguments().getLong(ARG_VK_GROUP_ID), comments.get(position).id, new VKRequest.VKRequestListener() {

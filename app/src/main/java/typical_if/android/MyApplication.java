@@ -45,9 +45,9 @@ public class MyApplication extends Application {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheOnDisc(true)
                 .cacheInMemory(true)
-                .showImageOnLoading(R.drawable.ic_stubif) // TODO resource or drawable
-                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
-                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
+//                .showImageOnLoading(R.drawable.ic_stubif) // TODO resource or drawable
+//                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
+//                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
                 .resetViewBeforeLoading(true)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .displayer(new FadeInBitmapDisplayer(300)).build();

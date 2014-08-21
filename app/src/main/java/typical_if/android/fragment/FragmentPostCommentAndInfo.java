@@ -44,9 +44,8 @@ import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Profile;
+import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
-
-import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 /**
  * Created by admin on 07.08.2014.
@@ -62,6 +61,7 @@ public class FragmentPostCommentAndInfo extends Fragment {
     View rootView;
     int reply_to_comment = 0;
     Wall wall;
+    VKWallPostWrapper postWrapper;
     VKApiPost post;
     String postColor;
     long gid;
@@ -76,21 +76,19 @@ public class FragmentPostCommentAndInfo extends Fragment {
         }
     }
 
-    public static FragmentPostCommentAndInfo newInstance(String postColor, int position, Wall wall, VKApiPost post) {
+    public static FragmentPostCommentAndInfo newInstance(String postColor, int position, Wall wall, VKWallPostWrapper postWrapper) {
         FragmentPostCommentAndInfo fragment = new FragmentPostCommentAndInfo();
         fragment.postColor = postColor;
         fragment.wall = wall;
         fragment.position = position;
-        fragment.post = post;
+        fragment.postWrapper = postWrapper;
+        fragment.post = postWrapper.post;
         fragment.gid = wall.group.id * -1;
         return fragment;
     }
 
-
-
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         final View rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
         sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
@@ -98,21 +96,21 @@ public class FragmentPostCommentAndInfo extends Fragment {
 
         final View wallItem = inflater.inflate(R.layout.wall_lv_item, null);
         viewHolder = new WallAdapter.ViewHolder(wallItem);
-        WallAdapter.initViewHolder(viewHolder, postColor, wall, position, getFragmentManager(), post, getActivity().getBaseContext());
+        WallAdapter.initViewHolder(viewHolder, postColor, wall, position, getFragmentManager(), postWrapper, getActivity().getBaseContext());
 
         viewHolder.txt_post_comment.setVisibility(View.GONE);
         viewHolder.img_post_comment.setVisibility(View.GONE);
         viewHolder.img_post_other.setVisibility(View.GONE);
 
 
-        if (post.text.length() != 0) {
+        if (postWrapper.postTextChecker) {
             RelativeLayout textLayout = (RelativeLayout) viewHolder.postTextLayout.getChildAt(0);
             CheckBox checkBox = (CheckBox) textLayout.getChildAt(1);
             checkBox.setChecked(true);
             checkBox.setVisibility(View.GONE);
         }
 
-        if (post.copy_history != null && post.copy_history.size() != 0) {
+        if (postWrapper.copyHistoryChecker) {
             if (post.copy_history.get(0).text.length() != 0) {
                 LinearLayout copyHistoryContainer = (LinearLayout) ((RelativeLayout) viewHolder.copyHistoryLayout.getChildAt(0)).getChildAt(0);
                 RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryContainer.findViewById(R.id.copyHistoryTextLayout);
@@ -174,7 +172,7 @@ public class FragmentPostCommentAndInfo extends Fragment {
         });
 
 
-        if (!OfflineMode.isOnline(getApplicationContext()) & OfflineMode.isJsonNull(pid)  ) {
+        if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(pid)  ) {
                     parseCommentList(OfflineMode.loadJSON(pid));
             // If IsOnline and response from preferenses not null then load Json from preferenses
         }
@@ -262,7 +260,7 @@ public class FragmentPostCommentAndInfo extends Fragment {
                     }
                     break;
                     case 4:
-                        Dialogs.reportListDialog(getApplicationContext(), gid, comments.get(position).id);
+                        Dialogs.reportListDialog(Constants.mainActivity, gid, comments.get(position).id);
                         break;
                     case 5: {
                         VKHelper.deleteCommentForPost(gid, comments.get(position).id, new VKRequest.VKRequestListener() {

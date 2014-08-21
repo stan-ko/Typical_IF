@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -16,10 +17,11 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -31,9 +33,9 @@ import android.widget.Toast;
 
 import com.koushikdutta.ion.Ion;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.VKUIHelper;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKApiDocument;
 import com.vk.sdk.api.model.VKApiLink;
@@ -44,10 +46,6 @@ import com.vk.sdk.api.model.VKApiPoll;
 import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKApiWikiPage;
 import com.vk.sdk.api.model.VKAttachments;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -72,6 +70,29 @@ public class ItemDataSetter {
     public static Context context = VKUIHelper.getApplicationContext();
     public static LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
+    public final static Animation animationFadeIn = AnimationUtils.loadAnimation(context, R.anim.fade_in);
+    public final static ImageLoadingListener animationLoader = new ImageLoadingListener() {
+        @Override
+        public void onLoadingStarted(String imageUri, View view) {
+
+        }
+
+        @Override
+        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+        }
+
+        @Override
+        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+            view.startAnimation(animationFadeIn);
+        }
+
+        @Override
+        public void onLoadingCancelled(String imageUri, View view) {
+
+        }
+    };
+
     public static ViewGroup getPreparedView(ViewGroup parent, int layoutRes) {
         parent.setVisibility(View.VISIBLE);
         parent.removeAllViews();
@@ -90,6 +111,23 @@ public class ItemDataSetter {
     public static int position;
     public static FragmentManager fragmentManager;
     public static long aid = 0;
+
+    public static void setSuggestAttachments(VKAttachments attachments) {
+        int counter = 0;
+        for (VKAttachments.VKApiAttachment attachment : attachments) {
+            if (attachment.getType().equals(VKAttachments.TYPE_PHOTO)) {
+                Constants.tempPhotoPostAttach.add((VKApiPhoto) attachment);
+            } else if (attachment.getType().equals(VKAttachments.TYPE_VIDEO)) {
+                Constants.tempVideoPostAttach.add((VKApiVideo) attachment);
+            } else if (attachment.getType().equals(VKAttachments.TYPE_AUDIO)) {
+                Constants.tempAudioPostAttach.add((VKApiAudio) attachment);
+            } else if (attachment.getType().equals(VKAttachments.TYPE_DOC)) {
+                Constants.tempDocPostAttach.add((VKApiDocument) attachment);
+            }
+            counter++;
+        }
+        Constants.tempPostAttachCounter = counter;
+    }
 
     public static void setAttachemnts(VKAttachments attachments, LinearLayout parentLayout, int type) {
         ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
@@ -290,8 +328,7 @@ public class ItemDataSetter {
                         .append("[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}")
                         .append("|[1-9][0-9]|[0-9])))")
                         .append("(?:\\:\\d{1,5})?)") // plus option port number
-                        .append("(\\/(?:(?:" +
-                                "a-zA-Z0-9\\;\\/\\?\\:\\@\\&\\=\\#\\~")  // plus option query params
+                        .append("(\\/(?:(?:a-zA-Z0-9\\;\\/\\?\\:\\@\\&\\=\\#\\~")  // plus option query params
                         .append("\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?")
                         .append("(?:\\b|$)").toString()
         ).matcher(text);
@@ -401,7 +438,7 @@ public class ItemDataSetter {
         }
 
         ViewGroup signedContainer = getPreparedView(parent, R.layout.signed_post_container);
-        ImageLoader.getInstance().displayImage(image, (ImageView) signedContainer.getChildAt(0));
+        ImageLoader.getInstance().displayImage(image, (ImageView) signedContainer.getChildAt(0), animationLoader);
 
         TextView txt_name = ((TextView) signedContainer.getChildAt(1));
         txt_name.setText(name);
@@ -420,7 +457,7 @@ public class ItemDataSetter {
     public static void setLink(RelativeLayout parent, final VKApiLink link) {
         ViewGroup linkContainer = getPreparedView(parent, R.layout.link_container);
 
-        ImageLoader.getInstance().displayImage(link.image_src, (ImageView) linkContainer.getChildAt(0));
+        ImageLoader.getInstance().displayImage(link.image_src, (ImageView) linkContainer.getChildAt(0), animationLoader);
         ((TextView) linkContainer.getChildAt(1)).setText(link.title);
         ((TextView) linkContainer.getChildAt(2)).setText(link.url);
 
@@ -449,7 +486,7 @@ public class ItemDataSetter {
         ImageView image = (ImageView) geoContainer.findViewById(R.id.img_geo);
         final String[] coordinates = geo.coordinates.split(" ");
         String url = "http://maps.google.com/maps/api/staticmap?center=" + coordinates[0] + "," + coordinates[1] + "&zoom=15&size=600x400&sensor=false";
-        ImageLoader.getInstance().displayImage(url, image);
+        ImageLoader.getInstance().displayImage(url, image, animationLoader);
 
         TextView txt = (TextView) geoContainer.findViewById(R.id.txt_geo);
         txt.setText(geo.title);
@@ -491,7 +528,7 @@ public class ItemDataSetter {
             tempAlbumContainer.setVisibility(View.VISIBLE);
 
             ImageView image = (ImageView) tempAlbumContainer.findViewById(R.id.img_album_thumb);
-            ImageLoader.getInstance().displayImage(album.photo_604, image);
+            ImageLoader.getInstance().displayImage(album.photo_604, image, animationLoader);
             ((TextView) tempAlbumContainer.getChildAt(1)).setText(valueOf(album.size));
             ((TextView) tempAlbumContainer.getChildAt(2)).setText(album.title);
 
@@ -540,7 +577,7 @@ public class ItemDataSetter {
 
             if (doc.isImage()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                ImageLoader.getInstance().displayImage(doc.photo_100, image);
+                ImageLoader.getInstance().displayImage(doc.photo_100, image, animationLoader);
                 size.setText(Constants.DOC_TYPE_IMAGE + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -550,7 +587,7 @@ public class ItemDataSetter {
                 });
             } else if (doc.isGif()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                ImageLoader.getInstance().displayImage(doc.photo_100, image);
+                ImageLoader.getInstance().displayImage(doc.photo_100, image, animationLoader);
                 size.setText(Constants.DOC_TYPE_ANIMATION + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -570,7 +607,7 @@ public class ItemDataSetter {
                                 spinner.setVisibility(View.GONE);
                                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 image.setLayoutParams(new RelativeLayout.LayoutParams(setInDp(100), setInDp(60)));
-                                ImageLoader.getInstance().displayImage(doc.photo_100, image);
+                                ImageLoader.getInstance().displayImage(doc.photo_100, image, animationLoader);
                                 title.setVisibility(View.VISIBLE);
                                 size.setVisibility(View.VISIBLE);
                                 image.setEnabled(false);
@@ -677,7 +714,9 @@ public class ItemDataSetter {
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
                                 img.setLayoutParams(params);
                             }
-                            ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img);
+
+
+                            ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img, animationLoader);
                             img.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -703,7 +742,7 @@ public class ItemDataSetter {
                                 }
                                 img = (ImageView) layout_i_j_k_l.getChildAt(0);
                                 final int finalL = photoPointer++;
-                                ImageLoader.getInstance().displayImage(photos.get(finalL).photo_604, img);
+                                ImageLoader.getInstance().displayImage(photos.get(finalL).photo_604, img, animationLoader);
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -745,33 +784,33 @@ public class ItemDataSetter {
                                 img.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             }
                             final int finalJ = videoPointer++;
-                            ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img);
+                            ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img, animationLoader);
                             img.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    String videoID = videos.get(finalJ).toAttachmentString().toString();
-                                    videoID = videoID.replaceFirst("video", "");
-                                    Toast.makeText(context, videos.get(finalJ).access_key, Toast.LENGTH_SHORT).show();
-                                    VKHelper.doPlayerRequest(videoID, new VKRequest.VKRequestListener() {
-                                        @Override
-                                        public void onComplete(VKResponse response) {
-                                            super.onComplete(response);
-                                            JSONObject mainResponse = response.json.optJSONObject("response");
-                                            JSONArray item = mainResponse.optJSONArray("items");
-                                            try {
-                                                JSONObject files = ((JSONObject) item.get(0)).optJSONObject("files");
-                                                if (files != null && files.has("external")) {
-                                                    String url = files.optString("external");
-                                                    Uri uri = Uri.parse(url);
-                                                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                                                } else {
-                                                    Dialogs.videoResolutionDialog(context, files);
-                                                }
-                                            } catch (JSONException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    });
+//                                    String videoID = videos.get(finalJ).toAttachmentString().toString();
+//                                    videoID = videoID.replaceFirst("video", "");
+//                                    Toast.makeText(context, videos.get(finalJ).access_key, Toast.LENGTH_SHORT).show();
+//                                    VKHelper.doPlayerRequest(videoID, new VKRequest.VKRequestListener() {
+//                                        @Override
+//                                        public void onComplete(VKResponse response) {
+//                                            super.onComplete(response);
+//                                            JSONObject mainResponse = response.json.optJSONObject("response");
+//                                            JSONArray item = mainResponse.optJSONArray("items");
+//                                            try {
+//                                                JSONObject files = ((JSONObject) item.get(0)).optJSONObject("files");
+//                                                if (files != null && files.has("external")) {
+//                                                    String url = files.optString("external");
+//                                                    Uri uri = Uri.parse(url);
+//                                                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+//                                                } else {
+//                                                    Dialogs.videoResolutionDialog(context, files);
+//                                                }
+//                                            } catch (JSONException e) {
+//                                                e.printStackTrace();
+//                                            }
+//                                        }
+//                                    });
                                 }
                             });
                             relativeLayout = (RelativeLayout) layout_i_j.getChildAt(k + 1);
@@ -790,28 +829,28 @@ public class ItemDataSetter {
                                     }
                                     final int finalJ = videoPointer++;
                                     img = (ImageView) layout_i_j_k_l.getChildAt(0);
-                                    ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img);
+                                    ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img, animationLoader);
 
                                     img.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            String videoID = videos.get(finalJ).toAttachmentString().toString();
-                                            videoID = videoID.replaceFirst("video", "");
-                                            Log.d("", videoID);
-                                            VKHelper.doPlayerRequest(videoID, new VKRequest.VKRequestListener() {
-                                                @Override
-                                                public void onComplete(VKResponse response) {
-                                                    super.onComplete(response);
-                                                    JSONObject mainResponse = response.json.optJSONObject("response");
-                                                    JSONArray item = mainResponse.optJSONArray("items");
-                                                    try {
-                                                        videos.get(finalJ).player = ((JSONObject) item.get(0)).optString("player");
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                    Toast.makeText(context, videos.get(finalJ).player, Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
+//                                            String videoID = videos.get(finalJ).toAttachmentString().toString();
+//                                            videoID = videoID.replaceFirst("video", "");
+//                                            Log.d("", videoID);
+//                                            VKHelper.doPlayerRequest(videoID, new VKRequest.VKRequestListener() {
+//                                                @Override
+//                                                public void onComplete(VKResponse response) {
+//                                                    super.onComplete(response);
+//                                                    JSONObject mainResponse = response.json.optJSONObject("response");
+//                                                    JSONArray item = mainResponse.optJSONArray("items");
+//                                                    try {
+//                                                        videos.get(finalJ).player = ((JSONObject) item.get(0)).optString("player");
+//                                                    } catch (JSONException e) {
+//                                                        e.printStackTrace();
+//                                                    }
+//                                                    Toast.makeText(context, videos.get(finalJ).player, Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            });
                                         }
                                     });
                                     relativeLayout = (RelativeLayout) layout_i_j_k_l.getChildAt(1);

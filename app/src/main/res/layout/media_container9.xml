@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="250dp"
         android:visibility="visible"
         android:baselineAligned="false" >
@@ -20,7 +20,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:visibility="visible"
                 android:id="@+id/linearLayout11" >
 
@@ -37,8 +37,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout44" >
 
@@ -101,8 +101,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout45" >
 
@@ -163,8 +163,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout47" >
 
@@ -225,7 +225,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:visibility="visible"
                 android:id="@+id/linearLayout12" >
 
@@ -242,8 +242,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout49" >
 
@@ -300,14 +300,14 @@
                     android:layout_marginRight="5dp" >
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:id="@+id/imageView82"
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout50" >
 
@@ -362,14 +362,14 @@
                     android:layout_weight=".30" >
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:id="@+id/imageView84"
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout52" >
 
@@ -430,7 +430,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:visibility="visible"
                 android:id="@+id/linearLayout6" >
 
@@ -441,14 +441,14 @@
                     android:layout_marginRight="5dp" >
 
                     <ImageView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/imageView20"
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout54" >
 
@@ -505,14 +505,14 @@
                     android:layout_marginRight="5dp" >
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:id="@+id/imageView22"
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout55" >
 
@@ -567,14 +567,14 @@
                     android:layout_weight=".30" >
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:id="@+id/imageView87"
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout57" >
 

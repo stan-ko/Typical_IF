@@ -28,10 +28,11 @@ import typical_if.android.model.Album;
  */
 public class FragmentAlbumsList extends Fragment {
 
-   AlbumCoverAdapter albumCoverAdapter;
-   JazzyListView listOfAlbums;
+    AlbumCoverAdapter albumCoverAdapter;
+    JazzyListView listOfAlbums;
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -97,9 +98,8 @@ public class FragmentAlbumsList extends Fragment {
 
         try {
             listOfAlbums = (JazzyListView) getView().findViewById(R.id.listOfAlbums);
-           albumCoverAdapter = new AlbumCoverAdapter(albums, getActivity().getLayoutInflater());
-        }
-        catch (NullPointerException e){
+            albumCoverAdapter = new AlbumCoverAdapter(albums, getActivity().getLayoutInflater());
+        } catch (NullPointerException e) {
             Log.d("Connection", "BAD CONNECTION (NULL POINTER EXCEPTION)");
         }
 
