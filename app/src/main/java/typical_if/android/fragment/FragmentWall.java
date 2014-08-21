@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,8 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
 
     String postColor;
     Long gid;
+    int countPost=10;
+    boolean temp = true;
 
     SwipeRefreshLayout swipeView;
     AbsListView.OnScrollListener onScrollListenerObject;
@@ -78,37 +81,14 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
         initGroupWall(OfflineMode.loadJSON(gid), inflater);
         spinnerLayout.setVisibility(View.GONE);
         wallListView.setOnScrollListener(this);
-
-//        wallListView.setOnScrollListener(new EndlessScrollListener() {
-//
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount) {
-//                // TODO Auto-generated method stub
-////        new Loadmore().execute();
-//                Log.d("------------------------", "-------------EndLess-------");
-//
-//            }
-//        });
-
         onScrollListenerObject = this;
-
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         swipeView.setOnRefreshListener(this);
         swipeView.setColorScheme(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_light);
-
         return rootView;
 
-//        wallListView.setOnScrollListener(new EndlessScrollListener() {
-//
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount) {
-//                // TODO Auto-generated method stub
-//               // new Loadmore().execute();
-//
-//            }
-//        });
-    }
 
+    }
 
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater) {
         Wall wall = Wall.getGroupWallFromJSON(jsonObject);
@@ -116,15 +96,12 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
         adapter = new WallAdapter(wall, inflater, fragmentManager, postColor);
         wallListView = (JazzyListView) rootView.findViewById(R.id.listViewWall);
         wallListView.setAdapter(adapter);
-        //final View view = null;
-
         wallListView.setTransitionEffect(mCurrentTransitionEffect);
         wallListView.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), true, true));
-
+       // endlessPosition();
     }
 
     int mCurCheckPosition = 0;
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -134,7 +111,6 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
         }
     }
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -143,10 +119,22 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
 
     @Override
     public void onScrollStateChanged(AbsListView absListView, int i) {
+        temp=true;
     }
 
     @Override
-    public void onScroll(AbsListView absListView, int i, int i2, int i3) {
+    public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount,
+                         int totalItemCount) {
+        final int lastItem = firstVisibleItem + visibleItemCount;
+//        Log.d("**********************************", firstVisibleItem+"---"+visibleItemCount+"------"+totalItemCount);
+
+        if (lastItem == totalItemCount & temp) {
+                countPost = countPost + 10;
+                endlessAdd(countPost,lastItem);
+                temp=false;
+            Log.d("**********************************", countPost + "-----------"+lastItem);
+        }
+
         boolean topEnable = false;
         if (absListView != null && absListView.getChildCount() > 0) {
             boolean firstItemVisible = absListView.getFirstVisiblePosition() == 0;
@@ -154,7 +142,6 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
             topEnable = firstItemVisible && topOfFirstItemVisible;
             swipeView.setEnabled(topEnable);
         }
-
     }
 
     @Override
@@ -166,7 +153,7 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
             @Override
             public void run() {
                 swipeView.setRefreshing(false);
-                VKHelper.doGroupWallRequest(gid, new VKRequest.VKRequestListener() {
+                VKHelper.doGroupWallRequest(countPost, gid, new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
@@ -179,4 +166,23 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
             }
         }, 1000);
     }
+
+    private void endlessAdd (int countPost, final int lastItem){
+        VKHelper.doGroupWallRequest(countPost, gid, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                OfflineMode.saveJSON(response.json, gid);
+                initGroupWall(OfflineMode.loadJSON(gid), inflaterGlobal);
+               // endlessPosition(lastItem);
+                wallListView.setOnScrollListener(onScrollListenerObject);
+
+            }
+        });
+    }
+    //public  void endlessPosition(int lastItem){
+      //  wallListView.smoothScrollToPosition(lastItem);
+
+    //}
+
 }
