@@ -119,12 +119,12 @@ else {
         request.executeWithListener(vkRequestListener);
     }
 
-    public static void doGroupWallRequest(long gid, VKRequest.VKRequestListener vkRequestListener) {
+    public static void doGroupWallRequest(int countPosts, long gid, VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put("owner_id", gid);
         params.put("domain", gid);
         params.put("offset", 0);
-        params.put("count", 10);
+        params.put("count", countPosts);
         params.put("filter", "all");
         params.put("extended", 1);
 
