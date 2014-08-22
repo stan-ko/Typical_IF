@@ -35,7 +35,6 @@ import typical_if.android.fragment.FragmentEventsList;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.fragment.FragmentPhotoCommentAndInfo;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
-import typical_if.android.fragment.FragmentPhotoList;
 import typical_if.android.fragment.FragmentWall;
 import typical_if.android.fragment.NavigationDrawerFragment;
 
@@ -137,7 +136,7 @@ public class MainActivity extends ActionBarActivity implements
         if (resultCode == RESULT_OK) {
             if (requestCode == PICK_FROM_CAMERA) {
                 FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance(Constants.tempCameraPhotoFile);
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragmentPhotoFromCamera).addToBackStack(null).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.container, fragmentPhotoFromCamera).addToBackStack(null).commit();
             }
         }
     }

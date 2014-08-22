@@ -2,15 +2,8 @@ package typical_if.android.fragment;
 
 import android.animation.ObjectAnimator;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -26,15 +19,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
-import com.twotoasters.jazzylistview.JazzyGridView;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
@@ -111,7 +101,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
                         handleResponse(response, columns, view);
-                        addPhoto().show();
+                        Dialogs.addPhotoFrom();
                     }
                 });
 

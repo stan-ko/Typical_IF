@@ -17,12 +17,9 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPost;
 
-import java.io.File;
-
-import typical_if.android.fragment.FragmentUploadAlbumList;
-
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import typical_if.android.fragment.FragmentAlbumsList;
@@ -215,7 +212,7 @@ public class Dialogs {
                 switch (which) {
                     case 0:
                         FragmentUploadAlbumList fragmentUploadPhotoList = new FragmentUploadAlbumList();
-                        fragmentManager.beginTransaction().replace(R.id.container, fragmentUploadPhotoList).addToBackStack(null).commit();
+                        fragmentManager.beginTransaction().add(R.id.container, fragmentUploadPhotoList).addToBackStack(null).commit();
                         dialog.cancel();
                         break;
                     case 1:

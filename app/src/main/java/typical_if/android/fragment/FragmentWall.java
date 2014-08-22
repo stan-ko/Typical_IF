@@ -1,6 +1,5 @@
 package typical_if.android.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -165,7 +164,7 @@ temp = true;
 
 
     public void onCreate(Bundle savedInstanceState) {
-//        setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
 
