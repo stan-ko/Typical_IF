@@ -17,7 +17,8 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 public class MyApplication extends Application {
 
     private static Context appContext;
-    public static Context getAppContext(){
+
+    public static Context getAppContext() {
         return appContext;
     }
 
@@ -59,27 +60,27 @@ public class MyApplication extends Application {
                 .diskCacheExtraOptions(480, 800, null)
                         //.taskExecutor(...)
                         //.taskExecutorForCachedImages(...)
-                        .threadPoolSize(30) // default
-                        .threadPriority(30) // default
+                .threadPoolSize(30) // default
+                .threadPriority(30) // default
                         //.tasksProcessingOrder(QueueProcessingType.FIFO) // default
                         //.discCache(new FileCountLimitedDiscCache(cacheDir, new Md5FileNameGenerator(), 1000))
                         //.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
                         //.memoryCacheSize(2 * 1024 * 1024)
                         //.memoryCacheSizePercentage(13) // default
                         //.diskCache(new UnlimitedDiscCache(cacheDir)) // default
-                     //;;;
+                        //;;;
                 .denyCacheImageMultipleSizesInMemory()
-                //
+                        //
                 .defaultDisplayImageOptions(defaultOptions)
                 .memoryCache(new WeakMemoryCache())
-               // .discCacheSize(100 * 1024 * 1024)
+                        // .discCacheSize(100 * 1024 * 1024)
 
                         //.diskCacheSize(50 * 1024 * 1024)
                         //.diskCacheFileCount(100)
                         //.diskCacheFileNameGenerator(new HashCodeFileNameGenerator()) // default
                         //.imageDownloader(new BaseImageDownloader(context)) // default
                         //.imageDecoder(new BaseImageDecoder()) // default
-               // .writeDebugLogs()
+                        // .writeDebugLogs()
                 .build();
         ImageLoader.getInstance().init(config);
 

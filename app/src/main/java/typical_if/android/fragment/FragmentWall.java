@@ -46,6 +46,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     RelativeLayout spinnerLayout;
     View rootView;
+    PauseOnScrollListener pauseOnScrollListener;
     LayoutInflater inflaterGlobal;
 
     String postColor;
@@ -54,13 +55,13 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     int countPost = 10;
     static boolean isSuggested;
     static int isMember;
-    boolean temp =true;
+    boolean temp = true;
 
     SwipeRefreshLayout swipeView;
     AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
-temp = true;
+            temp = true;
         }
 
         @Override
@@ -73,7 +74,7 @@ temp = true;
                 countPost = countPost + 10;
                 endlessAdd(countPost, lastItem);
                 temp = false;
-             ///   Log.d("**********************************", countPost + "-----------" + lastItem);
+                ///   Log.d("**********************************", countPost + "-----------" + lastItem);
             }
 
             boolean enable = false;
@@ -107,11 +108,10 @@ temp = true;
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
         spinnerLayout = (RelativeLayout) rootView.findViewById(R.id.spinner_layout);
         inflaterGlobal = inflater;
-
         arguments = getArguments();
         gid = arguments.getLong(ARG_VK_GROUP_ID);
         postColor = ItemDataSetter.getPostColor(gid);
-
+        pauseOnScrollListener = new PauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerObject);
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
 
         if (!isSuggested) {
@@ -143,8 +143,8 @@ temp = true;
         adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
         wallListView = (ListView) rootView.findViewById(R.id.listViewWall);
         wallListView.setAdapter(adapter);
-       // wallListView.setTransitionEffect(mCurrentTransitionEffect);
-        wallListView.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerObject));
+        // wallListView.setTransitionEffect(mCurrentTransitionEffect);
+        wallListView.setOnScrollListener(pauseOnScrollListener);
         spinnerLayout.setVisibility(View.GONE);
     }
 
