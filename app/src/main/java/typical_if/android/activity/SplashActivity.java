@@ -132,7 +132,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     private void makeRequests() {
         threadsCounter = new AtomicInteger(4);
         //   --------------------START------------- all Request from internet before start APP----------------------
-        VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(countOfPosts, Constants.TF_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
@@ -146,7 +146,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                 decrementThreadsCounter();
             }
         });
-        VKHelper.doGroupWallRequest(Constants.TZ_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(countOfPosts, Constants.TZ_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
@@ -160,7 +160,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                 decrementThreadsCounter();
             }
         });
-        VKHelper.doGroupWallRequest(Constants.FB_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(countOfPosts, Constants.FB_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
@@ -174,7 +174,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                 decrementThreadsCounter();
             }
         });
-        VKHelper.doGroupWallRequest(Constants.FN_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(countOfPosts, Constants.FN_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
