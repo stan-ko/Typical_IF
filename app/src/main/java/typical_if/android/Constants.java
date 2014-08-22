@@ -2,6 +2,9 @@ package typical_if.android;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.media.MediaPlayer;
+import android.widget.CheckBox;
+import android.widget.SeekBar;
 
 import com.vk.sdk.VKScope;
 import com.vk.sdk.api.model.VKApiAudio;
@@ -55,10 +58,17 @@ public class Constants {
     public static int tempMaxPostAttachCounter = 0;
     public static int tempCurrentPhotoAttachCounter = 0;
 
+    public static String tempCameraPhotoFile = "";
+    public static MediaPlayer mediaPlayer = null;
+    public static boolean originRecord = true;
+    public static Thread tempThread = null;
+    public static CheckBox previousCheckBoxState = null;
+    public static SeekBar previousSeekBarState = null;
+    public static AudioRecords playedPausedRecord = new AudioRecords(null, false, false, false);
+
+
 
     public static String tempTextSuggestPost = "";
-
-    public static String tempCameraPhotoFile = "";
 
     public static final Resources RESOURCES = MyApplication.getAppContext().getResources();
 

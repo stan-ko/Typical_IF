@@ -18,21 +18,22 @@
         android:checked="false"
         android:layout_above="@+id/txt_audio_duration" />
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
+    <SeekBar
+        style="@style/Theme.Base.AppCompat.Light.DialogWhenLarge"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:id="@+id/progress_audio"
         android:layout_below="@+id/cb_audio_play_or_stop"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:layout_toLeftOf="@+id/txt_audio_duration"
         android:layout_marginRight="5dp"
         android:indeterminate="false"
         android:max="100"
-        android:progress="50"
-        android:layout_marginTop="3dp" />
+        android:progress="0"
+        android:layout_marginTop="3dp"
+        android:thumb="@drawable/abc_ab_stacked_transparent_dark_holo" />
 
     <TextView
         android:layout_width="wrap_content"

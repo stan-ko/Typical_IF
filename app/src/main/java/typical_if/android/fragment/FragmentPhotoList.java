@@ -25,6 +25,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import com.twotoasters.jazzylistview.JazzyGridView;
@@ -37,6 +38,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
+import typical_if.android.Dialogs;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.PhotoListAdapter;
@@ -53,7 +55,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     final int PIC_CROP = 2;
     private static Uri mImageCaptureUri;
 
-    JazzyGridView gridOfPhotos;
+    GridView gridOfPhotos;
 
     public static FragmentPhotoList newInstance(long vk_group_id, long vk_album_id) {
         FragmentPhotoList fragment = new FragmentPhotoList();
@@ -86,14 +88,6 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-
-
     }
 
     @Override
@@ -110,6 +104,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                Dialogs.addPhotoFrom().show();
                 VKHelper.getPhotoList(getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID), 1, new VKRequest.VKRequestListener() {
 
                     @Override
@@ -125,6 +120,16 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         });
 
         //super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
     }
 
 
@@ -221,7 +226,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         }
 
         try {
-            gridOfPhotos = (JazzyGridView) view.findViewById(R.id.gridOfPhotos);
+            gridOfPhotos = (GridView) view.findViewById(R.id.gridOfPhotos);
             // gridOfPhotos.setTransitionEffect(mCurrentTransitionEffect);
         } catch (NullPointerException e) {
             Log.d("Loadding failed", "Not complete");
@@ -261,111 +266,4 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         }
 
     }
-
-    public Dialog addPhoto() {
-        final String[] items = {"З карти памяті", "З камери"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Завантажити фото ?");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        FragmentUploadAlbumList fragmentUploadPhotoList = new FragmentUploadAlbumList();
-                        android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                        fragmentManager.beginTransaction().add(R.id.container, fragmentUploadPhotoList).addToBackStack("PhotoList").commit();
-                        dialog.cancel();
-                        break;
-                    case 1:
-
-
-                        Intent second = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        File file = new File(Environment.getExternalStorageDirectory(),
-                                "tmp_avatar_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-                        mImageCaptureUri = Uri.fromFile(file);
-
-                        try {
-                            startActivityForResult(second, PICK_FROM_CAMERA);
-
-                            FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance("mImageCaptureUri");
-                            android.support.v4.app.FragmentManager fragmentManagers = getFragmentManager();
-                            fragmentManagers.beginTransaction().add(R.id.container, fragmentPhotoFromCamera).addToBackStack("PhotoList").commit();
-                        } catch (ActivityNotFoundException anfe) {
-                            Toast.makeText(getActivity().getApplicationContext(), "Whoops - your device doesn't support capturing images!", Toast.LENGTH_LONG);
-                        }
-
-                        takePhotoFromCamera();
-                        dialog.cancel();
-
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-        builder.setCancelable(true);
-
-        return builder.create();
-    }
-
-    public void takePhotoFromCamera() {
-        File file = new File(Environment.getExternalStorageDirectory(),
-                "pic_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-        if (file == null)
-            return;
-        Constants.tempCameraPhotoFile = file.getAbsolutePath();
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri outputFileUri = Uri.fromFile(file);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        getActivity().startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
-    }
-
-
-    private void performCrop() {
-        try {
-            Intent cropIntent = new Intent("com.android.camera.action.CROP");
-            //indicate image type and Uri
-            cropIntent.setDataAndType(mImageCaptureUri, "image/*");
-            //set crop properties
-            cropIntent.putExtra("crop", "true");
-            //indicate aspect of desired crop
-            cropIntent.putExtra("aspectX", 1);
-            cropIntent.putExtra("aspectY", 1);
-            //indicate output X and Y
-            cropIntent.putExtra("outputX", 256);
-            cropIntent.putExtra("outputY", 256);
-            //retrieve data on return
-            cropIntent.putExtra("return-data", true);
-            //start the activity - we handle returning in onActivityResult
-            startActivityForResult(cropIntent, PIC_CROP);
-        } catch (ActivityNotFoundException anfe) {
-            //display an error message
-            String errorMessage = "Whoops - your device doesn't support the crop action!";
-            Toast toast = Toast.makeText(getActivity().getApplicationContext(), errorMessage, Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
-
-    @Override
-    public void onScrollStateChanged(AbsListView view, int scrollState) {
-
-    }
-
-    @Override
-    public void onScroll(final AbsListView view, int firstVisibleItem, final int visibleItemCount, int totalItemCount) {
-//        if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-//
-//            VKHelper.getPhotoList(getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID), 0, new VKRequest.VKRequestListener() {
-//                @Override
-//                public void onComplete(VKResponse response) {
-//                    super.onComplete(response);
-//                    handleResponse(response, columns, view);
-//                    Log.d("----------------------------------------------------------------------------->", visibleItemCount + "");
-//                }
-//
-//            });
-//        } else {
-//        }
-    }
-
 }

@@ -6,7 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.SpannableStringBuilder;
@@ -17,6 +20,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +41,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKApiDocument;
 import com.vk.sdk.api.model.VKApiLink;
@@ -47,6 +55,11 @@ import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKApiWikiPage;
 import com.vk.sdk.api.model.VKAttachments;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,8 +67,12 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
+import typical_if.android.fragment.FragmentPhotoFromCamera;
+import typical_if.android.fragment.FragmentVideoView;
+import typical_if.android.fragment.FragmentWall;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.model.Wall.Profile;
 import typical_if.android.model.Wall.Wall;
@@ -67,6 +84,7 @@ import static java.lang.String.valueOf;
  * Created by admin on 05.08.2014.
  */
 public class ItemDataSetter {
+
     public static Context context = VKUIHelper.getApplicationContext();
     public static LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -109,7 +127,7 @@ public class ItemDataSetter {
     public static CommentsListAdapter.ViewHolder commentViewHolder;
 
     public static int position;
-    public static FragmentManager fragmentManager;
+    public static android.support.v4.app.FragmentManager fragmentManager;
     public static long aid = 0;
 
     public static void setSuggestAttachments(VKAttachments attachments) {
@@ -262,7 +280,7 @@ public class ItemDataSetter {
         final TextView mainText = ((TextView) textContainer.getChildAt(0));
         final CheckBox showAll = ((CheckBox) textContainer.getChildAt(1));
 
-        final Matcher matTags = Pattern.compile("#[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ0-9_]+").matcher(text);
+        final Matcher matTags = Pattern.compile("#\\w+").matcher(text);
 
         StringBuilder stringB = new StringBuilder(text);
         final SpannableStringBuilder spannable = new SpannableStringBuilder(text);
@@ -486,7 +504,7 @@ public class ItemDataSetter {
         ImageView image = (ImageView) geoContainer.findViewById(R.id.img_geo);
         final String[] coordinates = geo.coordinates.split(" ");
         String url = "http://maps.google.com/maps/api/staticmap?center=" + coordinates[0] + "," + coordinates[1] + "&zoom=15&size=600x400&sensor=false";
-        ImageLoader.getInstance().displayImage(url, image, animationLoader);
+        ImageLoader.getInstance().displayImage(url, image);
 
         TextView txt = (TextView) geoContainer.findViewById(R.id.txt_geo);
         txt.setText(geo.title);
@@ -520,6 +538,7 @@ public class ItemDataSetter {
     }
 
     public static void setAlbums(LinearLayout parent, final ArrayList<VKApiPhotoAlbum> albums) {
+
         ViewGroup tempAlbumContainer;
         parent.removeAllViews();
         parent.setVisibility(View.VISIBLE);
@@ -528,7 +547,7 @@ public class ItemDataSetter {
             tempAlbumContainer.setVisibility(View.VISIBLE);
 
             ImageView image = (ImageView) tempAlbumContainer.findViewById(R.id.img_album_thumb);
-            ImageLoader.getInstance().displayImage(album.photo_604, image, animationLoader);
+            ImageLoader.getInstance().displayImage(album.photo_604, image);
             ((TextView) tempAlbumContainer.getChildAt(1)).setText(valueOf(album.size));
             ((TextView) tempAlbumContainer.getChildAt(2)).setText(album.title);
 
@@ -547,15 +566,41 @@ public class ItemDataSetter {
         ViewGroup tempAudioContainer;
         parent.removeAllViews();
         parent.setVisibility(View.VISIBLE);
-        for (VKApiAudio audio : audios) {
+        for (final VKApiAudio audio : audios) {
             tempAudioContainer = (ViewGroup) inflater.inflate(R.layout.audio_container, parent, false);
             tempAudioContainer.setVisibility(View.VISIBLE);
 
             tempAudioContainer.getChildAt(0).setBackgroundColor(Color.parseColor(postColor));
+            CheckBox play_pause_music = (CheckBox) tempAudioContainer.getChildAt(0);
+            SeekBar progressBar = (SeekBar) tempAudioContainer.getChildAt(1);
+
+            if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPlayed == true){
+                Log.d("MY Fucking LOG", Constants.playedPausedRecord.audioUrl + " " + audio.url + " " + Constants.playedPausedRecord.isPlayed);
+                Log.d("True", Constants.playedPausedRecord.audioUrl + " " + Constants.playedPausedRecord.isPlayed);
+                play_pause_music.setChecked(true);
+                Log.d("Progress bar in IDS", progressBar.toString());
+                Constants.tempThread.interrupt();
+                AudioPlayer.progressBar(progressBar).start();
+                Constants.tempThread = AudioPlayer.progressBar(progressBar);
+                Constants.previousCheckBoxState = play_pause_music;
+                Constants.previousSeekBarState = progressBar;
+                progressBar.setVisibility(View.VISIBLE);
+            }
+            if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPaused == true){
+                Constants.tempThread.interrupt();
+                AudioPlayer.progressBar(progressBar).start();
+                progressBar.setVisibility(View.VISIBLE);
+                Constants.tempThread = AudioPlayer.progressBar(progressBar);
+
+            }
+
+
             ((TextView) tempAudioContainer.getChildAt(2)).setText(getMediaTime(audio.duration));
             ((TextView) tempAudioContainer.getChildAt(3)).setText(audio.artist);
             ((TextView) tempAudioContainer.getChildAt(4)).setText(audio.title);
 
+
+            AudioPlayer.getOwnMadiaPlayer(VKUIHelper.getTopActivity(), audio.url, play_pause_music, progressBar);
             parent.addView(tempAudioContainer);
         }
     }

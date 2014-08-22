@@ -49,6 +49,8 @@
 
     <string name="post_report">Поскаржитись</string>
     <string name="post_copy_link">Копіювати посилання</string>
+
+    <string name="add_photo_from_title">Завантажити фото ?</string>
     <string name="noInternetMessageFromToast_EN">No internet connection. You use offline mode</string>
     <!--<string name="post_report_spam">Спам</string>-->
     <!--<string name="post_report_offense">Образа</string>-->
@@ -64,6 +66,12 @@
         <item>Дитяча порнографія</item>
         <item>Насильство</item>
     </array>
+
+    <array name="add_photo_from">
+        <item>З карти памяті</item>
+        <item>З камери</item>
+    </array>
+
 
     <string-array name="comment_attachment_list">
         <item>Photo</item>

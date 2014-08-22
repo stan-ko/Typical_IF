@@ -7,11 +7,11 @@
     android:background="#ffffffff">
 
 
-    <com.twotoasters.jazzylistview.JazzyGridView
+    <GridView
 
         android:id="@+id/gridOfPhotos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:verticalSpacing="5dp"
 
         android:horizontalSpacing="5dp"

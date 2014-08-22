@@ -26,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import typical_if.android.Constants;
+import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -42,8 +43,7 @@ import typical_if.android.fragment.NavigationDrawerFragment;
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         FragmentFullScreenImagePhotoViewer.OnFragmentInteractionListener,
-        FragmentPhotoCommentAndInfo.OnFragmentInteractionListener,
-        FragmentPhotoList.OnFragmentInteractionListener{
+        FragmentPhotoCommentAndInfo.OnFragmentInteractionListener{
 
 
     private Drawable mIcon;
@@ -68,6 +68,9 @@ public class MainActivity extends ActionBarActivity implements
 
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
+
+        ItemDataSetter.fragmentManager = getSupportFragmentManager();
+        Dialogs.fragmentManager = getSupportFragmentManager();
     }
 
     public long setGroupId(int clickedPosition) {
