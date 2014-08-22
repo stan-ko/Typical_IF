@@ -43,7 +43,7 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
     private int mCurrentTransitionEffect = JazzyHelper.TRANSPARENT;
     JazzyListView wallListView;
     WallAdapter adapter;
-
+int lastItemG;
     RelativeLayout spinnerLayout;
     View rootView;
     LayoutInflater inflaterGlobal;
@@ -109,6 +109,7 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
             mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
             wallListView.scrollTo(0, mCurCheckPosition);
         }
+        endlessPosition(lastItemG);
     }
 
     @Override
@@ -130,9 +131,11 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
 
         if (lastItem == totalItemCount & temp) {
                 countPost = countPost + 10;
+            lastItemG = lastItem;
                 endlessAdd(countPost,lastItem);
+
                 temp=false;
-            Log.d("**********************************", countPost + "-----------"+lastItem);
+            Log.d("**********************************", countPost + "-----------"+lastItem+"============="+absListView.getVerticalScrollbarPosition());
         }
 
         boolean topEnable = false;
@@ -174,15 +177,16 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
                 super.onComplete(response);
                 OfflineMode.saveJSON(response.json, gid);
                 initGroupWall(OfflineMode.loadJSON(gid), inflaterGlobal);
-               // endlessPosition(lastItem);
+
                 wallListView.setOnScrollListener(onScrollListenerObject);
 
             }
         });
-    }
-    //public  void endlessPosition(int lastItem){
-      //  wallListView.smoothScrollToPosition(lastItem);
 
-    //}
+    }
+    public synchronized void endlessPosition(int lastItem){
+        wallListView.smoothScrollToPosition(lastItem);
+
+    }
 
 }
