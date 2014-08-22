@@ -6,12 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -41,9 +37,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.VKUIHelper;
-import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKApiDocument;
 import com.vk.sdk.api.model.VKApiLink;
@@ -55,11 +48,6 @@ import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKApiWikiPage;
 import com.vk.sdk.api.model.VKAttachments;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,12 +55,8 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
-import typical_if.android.fragment.FragmentPhotoFromCamera;
-import typical_if.android.fragment.FragmentVideoView;
-import typical_if.android.fragment.FragmentWall;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.model.Wall.Profile;
 import typical_if.android.model.Wall.Wall;
@@ -787,7 +771,7 @@ public class ItemDataSetter {
                                 }
                                 img = (ImageView) layout_i_j_k_l.getChildAt(0);
                                 final int finalL = photoPointer++;
-                                ImageLoader.getInstance().displayImage(photos.get(finalL).photo_604, img, animationLoader);
+                                ImageLoader.getInstance().displayImage(photos.get(finalL).photo_130, img, animationLoader);
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -874,7 +858,7 @@ public class ItemDataSetter {
                                     }
                                     final int finalJ = videoPointer++;
                                     img = (ImageView) layout_i_j_k_l.getChildAt(0);
-                                    ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img, animationLoader);
+                                    ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_130, img, animationLoader);
 
                                     img.setOnClickListener(new View.OnClickListener() {
                                         @Override

@@ -1,6 +1,7 @@
 package typical_if.android.adapter;
 
 import android.net.Uri;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,12 +35,14 @@ public class PhotoUploadAdapter extends BaseAdapter {
     ArrayList<UploadPhotos> uploadphotolist;
     ImageLoader imageLoader;
     android.support.v4.app.FragmentManager manager;
+    int which;
 
-    public PhotoUploadAdapter(String titlename, LayoutInflater inflater, ArrayList<UploadPhotos> uploadphotolist, android.support.v4.app.FragmentManager fragmentManager) {
+    public PhotoUploadAdapter(String titlename, LayoutInflater inflater, ArrayList<UploadPhotos> uploadphotolist, FragmentManager fragmentManager, int which) {
         this.titlename = titlename;
         this.layoutInflater = inflater;
         this.uploadphotolist = uploadphotolist;
         this.manager = fragmentManager;
+        this.which = which;
         this.options = new DisplayImageOptions.Builder()
                 .showImageOnLoading(R.drawable.ic_stub) // TODO resource or drawable
                 .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
@@ -88,7 +91,7 @@ public class PhotoUploadAdapter extends BaseAdapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 uploadphotolist.get(position).ischecked = isChecked;
 
-                if (Constants.tempPostAttachCounter == 0) {
+                if (which == 1) {
                     if (isChecked) {
                         viewHolder.background.setVisibility(View.VISIBLE);
                     } else {

@@ -238,7 +238,7 @@ public class FragmentMakePost extends Fragment {
     }
 
     public static void refreshMakePostFragment(int which) {
-        txtPostAttachCounter.setText(": " + Constants.tempPostAttachCounter + "/" + + Constants.tempMaxPostAttachCounter);
+        txtPostAttachCounter.setText(": " + Constants.tempPostAttachCounter + "/" + Constants.tempMaxPostAttachCounter);
 
         if (Constants.tempPostAttachCounter == 0) {
             makePostAttachmentsContainer.setVisibility(View.GONE);

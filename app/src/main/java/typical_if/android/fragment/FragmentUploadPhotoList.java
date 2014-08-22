@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKRequest;
@@ -19,6 +20,7 @@ import com.vk.sdk.api.model.VKPhotoArray;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import typical_if.android.Constants;
 import typical_if.android.R;
@@ -88,6 +90,8 @@ public class FragmentUploadPhotoList extends Fragment {
 
     public static void refreshCheckBoxes() {
         CheckBox checkBox;
+        Toast.makeText(Constants.mainActivity, "Lo" + Constants.tempCurrentPhotoAttachCounter, Toast.LENGTH_SHORT).show();
+
         if (Constants.tempCurrentPhotoAttachCounter == (Constants.tempMaxPostAttachCounter - Constants.tempPostAttachCounter)) {
             for (int i = 0; i < photos.getCount(); i++) {
                 checkBox = (CheckBox) photos.getChildAt(i).findViewById(R.id.checkBox_for_upload);
@@ -113,11 +117,21 @@ public class FragmentUploadPhotoList extends Fragment {
 
     protected void handleResponse(View rootView, LayoutInflater inflater, final ArrayList<UploadPhotos> photolist, int columns) {
         photos = (GridView) rootView.findViewById(R.id.adding_photo_upload);
-        PhotoUploadAdapter photoUploadAdapter = new PhotoUploadAdapter(category, inflater, photolist, getActivity().getSupportFragmentManager());
+        PhotoUploadAdapter photoUploadAdapter = new PhotoUploadAdapter(category, inflater, photolist, getActivity().getSupportFragmentManager(), which);
         photos.setAdapter(photoUploadAdapter);
         photos.setNumColumns(columns);
     }
 
+    private AtomicInteger decrementer;
+
+    public void decrementThreadsCounter() {
+        if (decrementer.decrementAndGet() == 0) {
+            getActivity().getSupportFragmentManager().popBackStack();
+            getActivity().getSupportFragmentManager().popBackStack();
+            Constants.tempPostAttachCounter += Constants.tempCurrentPhotoAttachCounter;
+            FragmentMakePost.refreshMakePostFragment(0);
+        }
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -128,7 +142,7 @@ public class FragmentUploadPhotoList extends Fragment {
             item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    final int[] counter = {0};
+                    decrementer = new AtomicInteger(Constants.tempCurrentPhotoAttachCounter);
 
                     for (int j = 0; j < photolist.size(); j++) {
                         if (photolist.get(j).ischecked) {
@@ -137,26 +151,11 @@ public class FragmentUploadPhotoList extends Fragment {
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
                                     Constants.tempPhotoPostAttach.add(((VKPhotoArray) response.parsedModel).get(0));
-                                    counter[0]++;
+                                    decrementThreadsCounter();
                                 }
                             });
                         }
                     }
-
-//                    while (Constants.tempPhotoPostAttach.size() != originalSize) {
-//                        try {
-//                            Thread.sleep(3);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                        if (Constants.tempPhotoPostAttach.size() == originalSize) {
-//                            getActivity().getSupportFragmentManager().popBackStack();
-//                            getActivity().getSupportFragmentManager().popBackStack();
-//                            FragmentMakePost.refreshMakePostFragment(0);
-//                            break;
-//                        }
-//                    }
 
                     return true;
                 }
