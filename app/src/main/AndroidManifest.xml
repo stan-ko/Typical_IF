@@ -15,6 +15,13 @@
             android:enabled="true"
             android:name=".UploadPhotoService">
         </service>
+        <service
+            android:enabled="true"
+            android:name=".AudioPlayerService">
+            <intent-filter>
+                <action android:name="com.action.PAUSE"/>
+            </intent-filter>
+        </service>
         <activity android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".activity.SplashActivity"
             android:label="@string/app_name" >

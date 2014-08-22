@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
+import typical_if.android.Dialogs;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.PhotoListAdapter;
@@ -94,7 +95,7 @@ public class FragmentPhotoList extends Fragment {
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                addPhoto().show();
+                Dialogs.addPhotoFrom().show();
 
                 return true;
             }
@@ -154,46 +155,46 @@ public class FragmentPhotoList extends Fragment {
         });
     }
 
-    public Dialog addPhoto() {
-        final String[] items = {"З карти памяті", "З камери"};
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Завантажити фото ?");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        FragmentUploadAlbumList fragmentUploadPhotoList = new FragmentUploadAlbumList();
-                        android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.container, fragmentUploadPhotoList).addToBackStack("PhotoList").commit();
-                        dialog.cancel();
-                        break;
-                    case 1:
-                        takePhotoFromCamera();
-                        dialog.cancel();
-
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-        builder.setCancelable(true);
-
-        return builder.create();
-    }
-
-    public void takePhotoFromCamera() {
-        File file = new File(Environment.getExternalStorageDirectory(),
-                "pic_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
-        if (file == null)
-            return;
-        Constants.tempCameraPhotoFile = file.getAbsolutePath();
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri outputFileUri = Uri.fromFile(file);
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        getActivity().startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
-    }
+//    public Dialog addPhoto() {
+//        final String[] items = getResources().getStringArray(R.array.add_photo_from);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        builder.setTitle("Завантажити фото ?");
+//        builder.setItems(items, new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                switch (which) {
+//                    case 0:
+//                        FragmentUploadAlbumList fragmentUploadPhotoList = new FragmentUploadAlbumList();
+//                        android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+//                        fragmentManager.beginTransaction().replace(R.id.container, fragmentUploadPhotoList).addToBackStack(null).commit();
+//                        dialog.cancel();
+//                        break;
+//                    case 1:
+//                        takePhotoFromCamera();
+//                        dialog.cancel();
+//
+//                        break;
+//                    default:
+//                        break;
+//                }
+//            }
+//        });
+//        builder.setCancelable(true);
+//
+//        return builder.create();
+//    }
+//
+//    public void takePhotoFromCamera() {
+//        File file = new File(Environment.getExternalStorageDirectory(),
+//                "pic_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
+//        if (file == null)
+//            return;
+//        Constants.tempCameraPhotoFile = file.getAbsolutePath();
+//        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//        Uri outputFileUri = Uri.fromFile(file);
+//        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+//        getActivity().startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
+//    }
 
 
 }

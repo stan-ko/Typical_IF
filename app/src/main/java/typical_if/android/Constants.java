@@ -1,9 +1,15 @@
 package typical_if.android;
 
 import android.content.res.Resources;
+import android.media.MediaPlayer;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.SeekBar;
 
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKUIHelper;
+
+import java.util.ArrayList;
 
 /**
  * Created by Miller on 17.07.2014.
@@ -42,6 +48,14 @@ public class Constants {
 
 
     public static String tempCameraPhotoFile = "";
+    public static MediaPlayer mediaPlayer = null;
+    public static boolean originRecord = true;
+    public static Thread tempThread = null;
+    public static CheckBox previousCheckBoxState = null;
+    public static SeekBar previousSeekBarState = null;
+    public static AudioRecords playedPausedRecord = new AudioRecords(null, false, false, false);
+
+
 
     public static final Resources RESOURCES = MyApplication.getAppContext().getResources();
 
@@ -81,4 +95,25 @@ public class Constants {
 //    public static final String POST_REPORT_DRUGS = RESOURCES.getString(R.string.post_report_drugs);
 //    public static final String POST_REPORT_PORNO = RESOURCES.getString(R.string.post_report_porno);
 //    public static final String POST_REPORT_VIOLENCE = RESOURCES.getString(R.string.post_report_violence);
+
+//    static class AudioRecords {
+//
+//        String audioUrl;
+//        boolean isPaused;
+//        boolean isPlayed;
+//        int progresBarposition;
+//        int totalDuration;
+//
+//        AudioRecords(String audioUrl, boolean isPaused, boolean isPlayed,  int progresBarposition, int totalDuration){
+//            this.audioUrl = audioUrl;
+//            this.isPaused = isPaused;
+//            this.isPlayed = isPlayed;
+//            this.progresBarposition = progresBarposition;
+//            this.totalDuration = totalDuration;
+//        }
+//
+//    }
+
 }
+
+

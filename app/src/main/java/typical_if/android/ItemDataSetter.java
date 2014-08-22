@@ -1,11 +1,15 @@
 package typical_if.android;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.support.v4.app.Fragment;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -24,12 +28,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.koushikdutta.ion.Ion;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
@@ -47,6 +53,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,8 +61,12 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
+import typical_if.android.fragment.FragmentPhotoFromCamera;
+import typical_if.android.fragment.FragmentVideoView;
+import typical_if.android.fragment.FragmentWall;
 import typical_if.android.model.Wall.Profile;
 import typical_if.android.model.Wall.Wall;
 
@@ -66,8 +77,10 @@ import static java.lang.String.valueOf;
  * Created by admin on 05.08.2014.
  */
 public class ItemDataSetter {
+
     public static Context context = VKUIHelper.getApplicationContext();
     public static LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public static android.support.v4.app.FragmentManager fragmentManager = null;
 
     public static ViewGroup getPreparedView(ViewGroup parent, int layoutRes) {
         parent.setVisibility(View.VISIBLE);
@@ -475,6 +488,7 @@ public class ItemDataSetter {
     }
 
     public static void setAlbums(LinearLayout parent, final ArrayList<VKApiPhotoAlbum> albums) {
+
         ViewGroup tempAlbumContainer;
         parent.removeAllViews();
         parent.setVisibility(View.VISIBLE);
@@ -502,15 +516,40 @@ public class ItemDataSetter {
         ViewGroup tempAudioContainer;
         parent.removeAllViews();
         parent.setVisibility(View.VISIBLE);
-        for (VKApiAudio audio : audios) {
+        for (final VKApiAudio audio : audios) {
             tempAudioContainer = (ViewGroup) inflater.inflate(R.layout.audio_container, parent, false);
             tempAudioContainer.setVisibility(View.VISIBLE);
 
             tempAudioContainer.getChildAt(0).setBackgroundColor(Color.parseColor(postColor));
+            CheckBox play_pause_music = (CheckBox) tempAudioContainer.getChildAt(0);
+            SeekBar progressBar = (SeekBar) tempAudioContainer.getChildAt(1);
+
+                if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPlayed == true){
+                    Log.d("MY Fucking LOG", Constants.playedPausedRecord.audioUrl+" "+audio.url+" "+Constants.playedPausedRecord.isPlayed);
+                    Log.d("True", Constants.playedPausedRecord.audioUrl+" "+Constants.playedPausedRecord.isPlayed);
+                    play_pause_music.setChecked(true);
+                    Log.d("Progress bar in IDS", progressBar.toString());
+                    Constants.tempThread.interrupt();
+                    AudioPlayer.progressBar(progressBar).start();
+                    Constants.tempThread = AudioPlayer.progressBar(progressBar);
+                    Constants.previousCheckBoxState = play_pause_music;
+                    Constants.previousSeekBarState = progressBar;
+                    progressBar.setVisibility(View.VISIBLE);
+            }
+            if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPaused == true){
+                    Constants.tempThread.interrupt();
+                    AudioPlayer.progressBar(progressBar).start();
+                    progressBar.setVisibility(View.VISIBLE);
+                    Constants.tempThread = AudioPlayer.progressBar(progressBar);
+                }
+
+
             ((TextView) tempAudioContainer.getChildAt(2)).setText(getMediaTime(audio.duration));
             ((TextView) tempAudioContainer.getChildAt(3)).setText(audio.artist);
             ((TextView) tempAudioContainer.getChildAt(4)).setText(audio.title);
 
+
+            AudioPlayer.getOwnMadiaPlayer(VKUIHelper.getTopActivity(), audio.url, play_pause_music, progressBar);
             parent.addView(tempAudioContainer);
         }
     }
@@ -752,8 +791,8 @@ public class ItemDataSetter {
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }
-
                                             Toast.makeText(context, videos.get(finalJ).player, Toast.LENGTH_SHORT).show();
+                                            fragmentManager.beginTransaction().replace(R.id.container, new FragmentVideoView()).addToBackStack(null).commit();
                                         }
                                     });
                                 }

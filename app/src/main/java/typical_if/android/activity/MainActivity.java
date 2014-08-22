@@ -1,6 +1,7 @@
 package typical_if.android.activity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import typical_if.android.Constants;
+import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -66,6 +68,8 @@ public class MainActivity extends ActionBarActivity implements
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
 
+        ItemDataSetter.fragmentManager = getSupportFragmentManager();
+        Dialogs.fragmentManager = getSupportFragmentManager();
     }
 
 

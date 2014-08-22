@@ -110,6 +110,7 @@ public class FragmentWall extends Fragment {
         wallListView.setAdapter(adapter);
         wallListView.setTransitionEffect(mCurrentTransitionEffect);
         wallListView.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), true, true));
+
     }
 
     @Override
