@@ -456,7 +456,10 @@ public class VKRequest extends VKObject {
 
 			    if (requestListener != null)
 			    {
-				    requestListener.onComplete(response);
+				  try {
+                      requestListener.onComplete(response);
+                  }catch(NullPointerException npe){Log.d(npe.toString(),"--------------------------------------------------->");
+                  }
 			    }
 		    }
 	    });

@@ -4,8 +4,9 @@ xmlns:android="http://schemas.android.com/apk/res/android"
 android:fillAfter="true">
 
 <alpha
-    android:duration="1000"
+    android:duration="250"
     android:fromAlpha="0.0"
     android:interpolator="@android:anim/linear_interpolator"
-    android:toAlpha="1.0" />
+    android:toAlpha="1.0"
+    />
 </set>

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -19,9 +20,11 @@ import com.vk.sdk.VKUIHelper;
 import java.io.File;
 import java.util.ArrayList;
 
+import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.fragment.FragmentFullScreenViewFromPhone;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
+import typical_if.android.fragment.FragmentUploadPhotoList;
 import typical_if.android.model.UploadPhotos;
 
 ;
@@ -86,28 +89,30 @@ public class PhotoUploadAdapter extends BaseAdapter {
         File file = new File(uploadphotolist.get(position).photosrc);
         imageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), viewHolder.photo, options);
 
-        viewHolder.checkbox.setOnClickListener(new View.OnClickListener() {
+        viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox) v;
-                uploadphotolist.get(position).ischecked = cb.isChecked();
-                if (cb.isChecked() == true) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                uploadphotolist.get(position).ischecked = isChecked;
+
+                if (isChecked) {
                     viewHolder.background.setVisibility(View.VISIBLE);
-                } else if (cb.isChecked() == false) {
+                    Constants.tempCurrentPhotoAttachCounter++;
+                } else {
                     viewHolder.background.setVisibility(View.INVISIBLE);
+                    Constants.tempCurrentPhotoAttachCounter--;
                 }
+
+                viewHolder.checkbox.setChecked(isChecked);
+
+                FragmentUploadPhotoList.refreshCheckBoxes();
             }
         });
-
-
-        UploadPhotos up = uploadphotolist.get(position);
-        viewHolder.checkbox.setChecked(up.ischecked);
 
         viewHolder.photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FragmentFullScreenViewFromPhone fragmentFullScreenViewFromPhone = new FragmentFullScreenViewFromPhone().newInstance(position, uploadphotolist);
-                manager.beginTransaction().replace(R.id.container, fragmentFullScreenViewFromPhone).addToBackStack(null).commit();
+                manager.beginTransaction().add(R.id.container, fragmentFullScreenViewFromPhone).addToBackStack(null).commit();
             }
         });
 

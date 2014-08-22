@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -13,7 +14,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.model.VKApiComment;
 
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import typical_if.android.ItemDataSetter;
+import typical_if.android.MyApplication;
 import typical_if.android.R;
 import typical_if.android.model.Profile;
 
@@ -29,57 +30,68 @@ import typical_if.android.model.Profile;
  * Created by admin on 23.07.2014.
  */
 public class CommentsListAdapter extends BaseAdapter {
-    ArrayList<VKApiComment> commentList;
-    ArrayList<Profile> profilesList;
-    private LayoutInflater layoutInflater;
-    private static Context context;
 
+    final ArrayList<VKApiComment> commentList;
+    final ArrayList<Profile> profilesList;
+
+    private final LayoutInflater layoutInflater;
+    private static final Context appContext = MyApplication.getAppContext();
+
+    public ViewHolder viewHolder;
     String first_name = "";
     String last_name = "";
     String url = "";
+    int position;
 
-    String postColor;
+    final String postColor;
+
+    final static Pattern matPattern = Pattern.compile("\\[(id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]");
 
     public CommentsListAdapter(ArrayList<VKApiComment> commentList, ArrayList<Profile> profilesList, LayoutInflater inflater, String postColor) {
         this.commentList = commentList;
         this.profilesList = profilesList;
         layoutInflater = inflater;
-        this.context = VKUIHelper.getApplicationContext();
         this.postColor = postColor;
     }
 
-    public void updateCommentList(ArrayList<VKApiComment> commentList, ArrayList<Profile> profilesList, ListView listView) {
-        this.profilesList = profilesList;
+    public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<Profile> profilesList, ListView listView) {
+        this.profilesList.clear();
+        this.profilesList.addAll(profilesList);
         this.commentList.clear();
         this.commentList.addAll(commentList);
         this.notifyDataSetChanged();
-        scrollMyListViewToBottom(listView);
+        scrollCommentsToBottom(listView);
     }
 
-    private void scrollMyListViewToBottom(final ListView myListView) {
-        myListView.post(new Runnable() {
+    private void scrollCommentsToBottom(final ListView listView) {
+        listView.post(new Runnable() {
             @Override
             public void run() {
-                // Select the last row so it will scroll into view...
-                myListView.setSelection(getCount() - 1);
+                listView.setSelection(getCount() - 1);
             }
         });
     }
 
     public void userIdentifier(VKApiComment comment) {
-        for (int i = 0; i < profilesList.size(); i++) {
-            if (comment.from_id == profilesList.get(i).id) {
-                first_name = profilesList.get(i).first_name;
-                last_name = profilesList.get(i).last_name;
-                url = profilesList.get(i).photo_100;
+        final int profilesListCount = profilesList.size();
+        Profile profile;
+        for (int i = 0; i < profilesListCount; i++) {
+            profile = profilesList.get(i);
+            if (comment.from_id == profile.id) {
+                first_name = profile.first_name;
+                last_name = profile.last_name;
+                url = profile.photo_100;
 
             }
         }
 
-        for (int k = 0; k < commentList.size(); k++) {
-            if (commentList.get(k).reply_to_user > (long) 0) {
-                final Matcher matReply = Pattern.compile("\\[(id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]").matcher(commentList.get(k).text);
-                StringBuilder stringB = new StringBuilder(commentList.get(k).text);
+        final int commentListCount = commentList.size();
+        VKApiComment vkApiComment;
+        for (int k = 0; k < commentListCount; k++) {
+            vkApiComment = commentList.get(k);
+            if (vkApiComment.reply_to_user > (long) 0) {
+                final Matcher matReply = matPattern.matcher(vkApiComment.text);
+                StringBuilder stringB = new StringBuilder(vkApiComment.text);
                 int start;
                 int end;
                 while (matReply.find()) {
@@ -91,22 +103,47 @@ public class CommentsListAdapter extends BaseAdapter {
                     break;
                 }
 
-                commentList.get(k).text =  stringB.toString();
-            } else {
-                commentList.get(k).text = commentList.get(k).text;
+                vkApiComment.text = stringB.toString();
             }
+//            else {
+//                vkApiComment.text = vkApiComment.text;
+//            }
         }
     }
 
+    public void changeStateLikeForComment(boolean state, String count) {
+
+        viewHolder.likes.setVisibility(View.VISIBLE);
+
+        viewHolder.likes.setChecked(state);
+        viewHolder.likes.setText(count);
+        notifyDataSetChanged();
+
+    }
 
 
-    public void holderInitialize(ViewHolder viewHolder, VKApiComment comment) {
+    public void holderInitialize(final ViewHolder viewHolder, final VKApiComment comment) {
+
         ItemDataSetter.commentViewHolder = viewHolder;
         ItemDataSetter.postColor = postColor;
 
         ImageLoader.getInstance().displayImage(url, viewHolder.user_avatar);
+        if (comment.likes == 0) {
+            viewHolder.likes.setVisibility(View.GONE);
+        } else {
+            viewHolder.likes.setVisibility(View.VISIBLE);
+            viewHolder.likes.setText(String.valueOf(comment.likes));
+
+            if (comment.user_likes == false) {
+
+                viewHolder.likes.setChecked(false);
+            } else {
+                viewHolder.likes.setChecked(true);
+            }
+        }
 
         viewHolder.user_name.setText(last_name + " " + first_name);
+
         if (comment.text.length() != 0) {
             ItemDataSetter.setText(comment.text, viewHolder.commentTextLayout);
         } else {
@@ -128,7 +165,7 @@ public class CommentsListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public VKApiComment getItem(int position) {
         return commentList.get(position);
     }
 
@@ -139,8 +176,10 @@ public class CommentsListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        this.position = position;
+
         final VKApiComment comment = commentList.get(position);
-        ViewHolder viewHolder;
+
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.comment_list_item, null);
             viewHolder = new ViewHolder(convertView);
@@ -159,6 +198,7 @@ public class CommentsListAdapter extends BaseAdapter {
         public final ImageView user_avatar;
         public final TextView user_name;
         public final TextView date_of_user_comment;
+        public final CheckBox likes;
 
         public final RelativeLayout commentMediaLayout;
         private final RelativeLayout commentTextLayout;
@@ -170,12 +210,14 @@ public class CommentsListAdapter extends BaseAdapter {
         public final RelativeLayout commentLinkLayout;
         public final RelativeLayout commentPollLayout;
         public final RelativeLayout commentParentLayout;
+        public final RelativeLayout commentDataLayout;
 
         public ViewHolder(View convertView) {
             this.user_avatar = (ImageView) convertView.findViewById(R.id.img_user_avatar);
 
             this.user_name = (TextView) convertView.findViewById(R.id.user_name_textView);
             this.date_of_user_comment = (TextView) convertView.findViewById(R.id.text_date_of_comment);
+            this.likes = (CheckBox) convertView.findViewById(R.id.post_comment_like_checkbox);
 
             this.commentAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.commentAttachmentsLayout);
             this.commentMediaLayout = (RelativeLayout) convertView.findViewById(R.id.commentMediaLayout);
@@ -187,6 +229,9 @@ public class CommentsListAdapter extends BaseAdapter {
             this.commentTextLayout = (RelativeLayout) convertView.findViewById(R.id.commentTextLayout);
             this.commentPollLayout = (RelativeLayout) convertView.findViewById(R.id.commentPollLayout);
             this.commentParentLayout = (RelativeLayout) convertView.findViewById(R.id.commentParentLayout);
+            this.commentDataLayout = (RelativeLayout) convertView.findViewById(R.id.commentDataLayout);
         }
     }
+
+
 }

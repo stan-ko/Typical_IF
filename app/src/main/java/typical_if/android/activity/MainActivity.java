@@ -1,7 +1,6 @@
 package typical_if.android.activity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -36,6 +35,7 @@ import typical_if.android.fragment.FragmentEventsList;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 import typical_if.android.fragment.FragmentPhotoCommentAndInfo;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
+import typical_if.android.fragment.FragmentPhotoList;
 import typical_if.android.fragment.FragmentWall;
 import typical_if.android.fragment.NavigationDrawerFragment;
 
@@ -43,7 +43,8 @@ import typical_if.android.fragment.NavigationDrawerFragment;
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         FragmentFullScreenImagePhotoViewer.OnFragmentInteractionListener,
-        FragmentPhotoCommentAndInfo.OnFragmentInteractionListener {
+        FragmentPhotoCommentAndInfo.OnFragmentInteractionListener,
+        FragmentPhotoList.OnFragmentInteractionListener{
 
 
     private Drawable mIcon;
@@ -55,7 +56,6 @@ public class MainActivity extends ActionBarActivity implements
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,14 +65,14 @@ public class MainActivity extends ActionBarActivity implements
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
+        Constants.mainActivity = this;
+
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
 
         ItemDataSetter.fragmentManager = getSupportFragmentManager();
         Dialogs.fragmentManager = getSupportFragmentManager();
     }
-
-
 
     public long setGroupId(int clickedPosition) {
         if (clickedPosition == 0) {
@@ -121,10 +121,10 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (mNavigationDrawerFragment.isDrawerOpen()) {
+        if (!mNavigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.main, menu);
             MenuItem item = menu.getItem(0);
-            item.setVisible(false);
+            item.setVisible(true);
             restoreActionBar();
             return true;
         }
@@ -193,13 +193,9 @@ public class MainActivity extends ActionBarActivity implements
     };
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onNavigationDrawerItemSelected(int groupPosition, int childPosition) {
         Fragment fragment = null;
+        FragmentManager fragmentManager = getSupportFragmentManager();
         long vkGroupId = Constants.TF_ID;
         switch (groupPosition) {
             case 0:
@@ -210,50 +206,59 @@ public class MainActivity extends ActionBarActivity implements
                 onSectionAttached(groupPosition);
 
                 if (childPosition == 0) {
-                    fragment = FragmentWall.newInstance(vkGroupId);
+                    fragment = FragmentWall.newInstance(vkGroupId, false);
                 } else if (childPosition == 1) {
                     fragment = FragmentAlbumsList.newInstance(vkGroupId);
                 }
+
                 break;
             case 4:
                 onSectionAttached(groupPosition);
                 fragment = FragmentEventsList.newInstance(vkGroupId);
                 break;
             case 5:
-                if (VKSdk.wakeUpSession() && VKSdk.isLoggedIn()) {
-                    VKSdk.logout();
-                    mNavigationDrawerFragment.refreshNavigationDrawer();
+                boolean isWakeUp = true;
+
+                try {
+                    if (VKSdk.wakeUpSession()) {
+                        isWakeUp = true;
+                    } else {
+                        isWakeUp = false;
+                    }
+                } catch (NullPointerException e) {
+                    isWakeUp = false;
+                }
+                if (isWakeUp) {
+                    if (VKSdk.isLoggedIn()) {
+                        VKSdk.logout();
+                        mNavigationDrawerFragment.refreshNavigationDrawer();
+                    } else {
+                        if (!VKSdk.wakeUpSession()) {
+                            VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
+                        } else
+                            VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
+                    }
                 } else {
-                    if (!VKSdk.wakeUpSession()) {
-                        VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
-                    } else
-                        VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
+                    if (VKSdk.isLoggedIn()) {
+                        VKSdk.logout();
+                        mNavigationDrawerFragment.refreshNavigationDrawer();
+                    } else {
+                        if (!VKSdk.wakeUpSession()) {
+                            VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
+                        } else
+                            VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
+                    }
                 }
                 break;
         }
         if (groupPosition != 5) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
+            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+                fragmentManager.popBackStack();
+            }
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
         restoreActionBar();
     }
-
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-//            switch (event.getAction()) {
-//                case KeyEvent.ACTION_DOWN:
-//                    if (event.getDownTime() - lastPressedTime < PERIOD) {
-//                        finish();
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), getApplicationContext().getResources().getString(R.string.exit_toast),Toast.LENGTH_SHORT).show();
-//                        lastPressedTime = event.getEventTime();
-//                    }
-//                    return true;
-//            }
-//        }
-//        return false;
-//    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {

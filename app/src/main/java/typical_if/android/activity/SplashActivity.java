@@ -2,10 +2,13 @@ package typical_if.android.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.Handler;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
@@ -23,6 +26,7 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
@@ -39,13 +43,17 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     ImageView imageView;
 
     Locale locale;
+    int counter = 5;
     Configuration config;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
+    SharedPreferences firstOpenPref = null;
+    int countOfPosts = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
 
         textView = (TextView) findViewById(R.id.splash_title);
         imageView = (ImageView) findViewById(R.id.splash_logo);
@@ -55,17 +63,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         textView.startAnimation(animMoveDown);
 
         animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        animFadeIn.setAnimationListener(this);
         imageView.startAnimation(animFadeIn);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent i = new Intent(SplashActivity.this, MainActivity.class);
-                startActivity(i);
-                finish();
-            }
-        }, 2000);
 
         locale = new Locale("uk");
         Locale.setDefault(locale);
@@ -78,37 +76,135 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
 
         ItemDataSetter.loadUserId();
+    }
+    void showAlertNoInternet() {
+        Log.d("----------------Internet conection Error", "------------------------");
+        counter--;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.app_name)
+                .setMessage("No fucking active Internet connection is available. Would you like to")
+                .setPositiveButton("Retry "+"("+counter+")", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (counter <2) {
+                            startActivity(new Intent(Settings.ACTION_SETTINGS));
+                            counter=5;
+                        }
+                        checkIfOnlineAndProceed();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                    }
+                });
+        if (!isFirstOpen() & OfflineMode.loadJSON(Constants.TF_ID) != null) {
+            builder.setNeutralButton("Offline", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    startNextActivity();
+                }
+            });
+
+        }
+
+
+        // TODO: add neutral button if has cached data to work offline with
+
+        builder.create().show();
+    }
+
+    private boolean isFirstOpen() {
+        boolean temp = false;
+        if (firstOpenPref.getBoolean("firstRun", true)) {
+            temp = true;
+            firstOpenPref.edit().putBoolean("firstRun", false).commit();
+        }
+        return temp;
+    }
+
+    void checkIfOnlineAndProceed() {
+        if (OfflineMode.isOnline(getApplicationContext())) {
+            makeRequests();
+        } else {
+            showAlertNoInternet();
+        }
+    }
+
+    private void makeRequests() {
+        threadsCounter = new AtomicInteger(4);
         //   --------------------START------------- all Request from internet before start APP----------------------
-        VKHelper.doGroupWallRequest(Constants.TF_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(countOfPosts, Constants.TF_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 OfflineMode.saveJSON(response.json, Constants.TF_ID);
+                decrementThreadsCounter();
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                decrementThreadsCounter();
             }
         });
-        VKHelper.doGroupWallRequest(Constants.TZ_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(countOfPosts, Constants.TZ_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 OfflineMode.saveJSON(response.json, Constants.TZ_ID);
+                decrementThreadsCounter();
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                decrementThreadsCounter();
             }
         });
-        VKHelper.doGroupWallRequest(Constants.FB_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(countOfPosts, Constants.FB_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 OfflineMode.saveJSON(response.json, Constants.FB_ID);
+                decrementThreadsCounter();
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                decrementThreadsCounter();
             }
         });
-        VKHelper.doGroupWallRequest(Constants.FN_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(countOfPosts, Constants.FN_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 OfflineMode.saveJSON(response.json, Constants.FN_ID);
+                decrementThreadsCounter();
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                decrementThreadsCounter();
             }
         });
-        //     -------------------------END-------- all Request from internet before start APP----------------------
+        //-------------------------END-------- all Request from internet before start APP----------------------
     }
+
+    AtomicInteger threadsCounter;
+
+    void decrementThreadsCounter() {
+        if (threadsCounter.decrementAndGet() == 0)
+            startNextActivity();
+    }
+
+    private void startNextActivity() {
+        final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
     private final VKSdkListener sdkListener = new VKSdkListener() {
         @Override
         public void onCaptchaError(VKError captchaError) {
@@ -152,18 +248,17 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         return super.onOptionsItemSelected(item);
     }
 
+    // Animation listener implementation
     @Override
     public void onAnimationStart(Animation animation) {
-
     }
 
     @Override
     public void onAnimationEnd(Animation animation) {
-
+        checkIfOnlineAndProceed();
     }
 
     @Override
     public void onAnimationRepeat(Animation animation) {
-
     }
 }

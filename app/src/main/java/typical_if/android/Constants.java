@@ -1,13 +1,16 @@
 package typical_if.android;
 
+import android.app.Activity;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
 
 import com.vk.sdk.VKScope;
-import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.model.VKApiAudio;
+import com.vk.sdk.api.model.VKApiDocument;
+import com.vk.sdk.api.model.VKApiPhoto;
+import com.vk.sdk.api.model.VKApiVideo;
 
 import java.util.ArrayList;
 
@@ -42,10 +45,21 @@ public class Constants {
     public static final long FB_ID = -39253850;
     public static final long FN_ID = -38380107;
 
+    public static Activity mainActivity;
     public static final String APP_ID = "4456259";
 
     public static long USER_ID;
 
+    public static ArrayList<VKApiPhoto> tempPhotoPostAttach = new ArrayList<VKApiPhoto>();
+    public static ArrayList<VKApiVideo> tempVideoPostAttach = new ArrayList<VKApiVideo>();
+    public static ArrayList<VKApiAudio> tempAudioPostAttach = new ArrayList<VKApiAudio>();
+    public static ArrayList<VKApiDocument> tempDocPostAttach = new ArrayList<VKApiDocument>();
+    public static int tempPostAttachCounter = 0;
+    public static int tempMaxPostAttachCounter = 0;
+    public static int tempCurrentPhotoAttachCounter = 0;
+
+
+    public static String tempTextSuggestPost = "";
 
     public static String tempCameraPhotoFile = "";
     public static MediaPlayer mediaPlayer = null;
@@ -87,33 +101,4 @@ public class Constants {
     public static final String POLL_NOT_ANONYMOUS = RESOURCES.getString(R.string.poll_not_anonymous);
     public static final String txt_dialog_comment = RESOURCES.getString(R.string.txt_dialog_comment);
 
-//    public static final String POST_REPORT = RESOURCES.getString(R.string.post_report);
-//    public static final String POST_COPY_LINK = RESOURCES.getString(R.string.post_copy_link);
-//    public static final String POST_REPORT_SPAM = RESOURCES.getString(R.string.post_report_spam);
-//    public static final String POST_REPORT_OFFENSE = RESOURCES.getString(R.string.post_report_offense);
-//    public static final String POST_REPORT_ADULT = RESOURCES.getString(R.string.post_report_adult);
-//    public static final String POST_REPORT_DRUGS = RESOURCES.getString(R.string.post_report_drugs);
-//    public static final String POST_REPORT_PORNO = RESOURCES.getString(R.string.post_report_porno);
-//    public static final String POST_REPORT_VIOLENCE = RESOURCES.getString(R.string.post_report_violence);
-
-//    static class AudioRecords {
-//
-//        String audioUrl;
-//        boolean isPaused;
-//        boolean isPlayed;
-//        int progresBarposition;
-//        int totalDuration;
-//
-//        AudioRecords(String audioUrl, boolean isPaused, boolean isPlayed,  int progresBarposition, int totalDuration){
-//            this.audioUrl = audioUrl;
-//            this.isPaused = isPaused;
-//            this.isPlayed = isPlayed;
-//            this.progresBarposition = progresBarposition;
-//            this.totalDuration = totalDuration;
-//        }
-//
-//    }
-
 }
-
-

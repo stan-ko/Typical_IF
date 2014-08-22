@@ -25,17 +25,20 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
+import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,28 +48,24 @@ import java.util.Locale;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
+import typical_if.android.MyApplication;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
-import typical_if.android.model.Photo;
 import typical_if.android.model.Profile;
+import typical_if.android.util.PhotoUrlHelper;
 
-/**
- * A simple {@link android.support.v4.app.Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link FragmentPhotoCommentAndInfo.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link FragmentPhotoCommentAndInfo#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FragmentPhotoCommentAndInfo extends Fragment {
-
+    final int displayHeight = MyApplication.getDisplayHeight();
     private OnFragmentInteractionListener mListener;
     private static String ARG_VK_GROUP_ID = "vk_group_id";
     private static final String ARG_VK_ALBUM_ID = "vk_album_id";
     private static final String ARG_VK_USER_ID = "user_id";
-    public static ArrayList<Photo> photo;
-    Bundle arguments;
+    public static VKApiPhoto photo;
+    Profile postSender;
+   // public static ArrayList<VKApiPhoto> photo;
+
 
     ListView listOfComments;
     ArrayList<VKApiComment> comments;
@@ -74,31 +73,29 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     CommentsListAdapter adapter;
     String message = null;
     EditText commentMessage;
-    CheckBox likes;
+
     View rootView;
-    int isLiked;
-    int countLikes;
-    static int currentPosition;
+
     int reply_to_comment = 0;
     static int like_status;
     long gid;
 
     public static FragmentPhotoCommentAndInfo newInstance(long vk_group_id, long vk_album_id,
-                                                          ArrayList<Photo> photo, long vk_user_id,
-                                                          int isLiked, int currentPosition, int like_st) {
+                                                          VKApiPhoto photo, long vk_user_id
+                                                         ) {
 
         FragmentPhotoCommentAndInfo fragment = new FragmentPhotoCommentAndInfo();
         Bundle args = new Bundle();
         args.putLong(ARG_VK_GROUP_ID, vk_group_id);
         args.putLong(ARG_VK_ALBUM_ID, vk_album_id);
         args.putLong(ARG_VK_USER_ID, vk_user_id);
-        args.putInt("isLiked", isLiked);
-        FragmentPhotoCommentAndInfo.currentPosition = currentPosition;
+
+
 
         fragment.setArguments(args);
 
         FragmentPhotoCommentAndInfo.photo = photo;
-        like_status = like_st;
+
 
         return fragment;
     }
@@ -121,58 +118,104 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
 
         final Bundle arguments = getArguments();
         final View rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
-        //likes = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox1));
-        listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
 
-        // final ImageView imageOnCommentFragment = (ImageView) rootView.findViewById(R.id.imageView_on_photo_comment_fragment);
-        View listHeaderView = rootView.inflate(getActivity().getApplicationContext(), R.layout.image_header, null);
-        //RelativeLayout photoUserSender = ((RelativeLayout) rootView.findViewById(R.id.user_photo_sender));
-
-        ImageView headerView = (ImageView) listHeaderView.findViewById(R.id.list_header_image);
-        listOfComments.addHeaderView(listHeaderView);
-        ImageLoader.getInstance().displayImage(photo.get(currentPosition).photo_1280, headerView);
 
         final Button sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
-        final ArrayList<Photo> photo = this.photo;
+        final VKApiPhoto photo = this.photo;
+
+
+
+        listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
+        View listHeaderView = rootView.inflate(getActivity().getApplicationContext(), R.layout.image_header, null);
+        ImageView headerView = (ImageView) listHeaderView.findViewById(R.id.list_header_image);
+        listOfComments.addHeaderView(listHeaderView);
+        loadImage(photo, headerView);
+
+
+
+        final RelativeLayout photoUserSender = ((RelativeLayout) rootView.findViewById(R.id.user_photo_sender));
+        final ImageView postPhotoUserAvatar = (ImageView) rootView.findViewById(R.id.post_user_avatar);
+        final TextView postPhotoUserName = ((TextView) rootView.findViewById(R.id.post_user_name));
+        final TextView postPhotoUserDateOfComment = ((TextView) rootView.findViewById(R.id.post_user_date_of_comment));
+
+
+        VKHelper.getPostUserInfo(photo.user_id, "photo_50", new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+
+                postSender = Profile.parseUserInfoFromJSON(response.json);
+
+
+                ImageLoader.getInstance().displayImage(postSender.photo_50, postPhotoUserAvatar);
+                postPhotoUserName.setText(postSender.last_name + " " + postSender.first_name);
+                postPhotoUserDateOfComment.setText(ItemDataSetter.getFormattedDate(photo.date));
+
+            }
+        });
+
+        photoUserSender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                         Uri uri = Uri.parse("http://vk.com/id" + postSender.id + "");
+                         getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
         updateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
 
-        gid = arguments.getLong(ARG_VK_GROUP_ID);
+       gid = arguments.getLong(ARG_VK_GROUP_ID);
+     //gid=Constants.GROUP_ID;
 
 
         final CheckBox likePostPhoto = ((CheckBox) rootView.findViewById(R.id.like_post_photo_checkbox));
 
-        if (like_status == 0) {
+        if (photo.user_likes == 0) {
             likePostPhoto.setBackgroundColor(Color.WHITE);
             likePostPhoto.setChecked(false);
-            //   likePostPhoto.setText(String.valueOf(photo.get(currentPosition).likes + 1));
+            likePostPhoto.setText(String.valueOf(photo.likes ));
             likePostPhoto.setTextColor(Color.GRAY);
         }
-        if (like_status == 1) {
+        else {
             likePostPhoto.setBackgroundColor(Color.BLUE);
             likePostPhoto.setChecked(true);
-            //  likePostPhoto.setText(String.valueOf(photo.get(currentPosition).likes - 1));
+            likePostPhoto.setText(String.valueOf(photo.likes ));
             likePostPhoto.setTextColor(Color.WHITE);
         }
 
-
-//        likePostPhoto.setText(photo.get(currentPosition).likes);
         likePostPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (like_status == 0) {
-                    likePostPhoto.setBackgroundColor(Color.WHITE);
-                    likePostPhoto.setChecked(false);
-                    //   likePostPhoto.setText(String.valueOf(photo.get(currentPosition).likes + 1));
-                    likePostPhoto.setTextColor(Color.GRAY);
-                    like_status = 1;
+                if (photo.user_likes == 0) {
+                    VKHelper.setLike("photo", photo.owner_id, photo.id, new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            photo.user_likes=1;
+
+                            likePostPhoto.setText(String.valueOf(++photo.likes));
+                            // likePostPhoto.setBackgroundColor(Color.BLUE);
+                            likePostPhoto.setChecked(true);
+                            // likePostPhoto.setTextColor(Color.WHITE);
+                        }
+                    });
+
                 }
-                if (like_status == 1) {
-                    likePostPhoto.setBackgroundColor(Color.BLUE);
-                    likePostPhoto.setChecked(true);
-                    //  likePostPhoto.setText(String.valueOf(photo.get(currentPosition).likes - 1));
-                    likePostPhoto.setTextColor(Color.WHITE);
-                    like_status = 0;
+                else {
+                    VKHelper.deleteLike("photo", photo.owner_id, photo.id, new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            photo.user_likes=0;
+
+                            likePostPhoto.setText(String.valueOf(--photo.likes ));
+                            // likePostPhoto.setBackgroundColor(Color.WHITE);
+                            likePostPhoto.setChecked(false);
+                            // likePostPhoto.setTextColor(Color.GRAY);
+                        }
+                    });
                 }
             }
         });
@@ -180,11 +223,12 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                message = commentMessage.getText().toString() + ", @club26363301 (fromMobileIF)";
+
+                message = commentMessage.getText().toString();
 
                 if (reply_to_comment == 0) {
 
-                    VKHelper.createCommentForPhoto(arguments.getLong(ARG_VK_GROUP_ID), photo.get(currentPosition).id, message, 0, 0, new VKRequest.VKRequestListener() {
+                    VKHelper.createCommentForPhoto(arguments.getLong(ARG_VK_GROUP_ID), photo.id, message, 0, 0, new VKRequest.VKRequestListener() {
 
                         @Override
                         public void onComplete(VKResponse response) {
@@ -196,7 +240,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                     });
 
                 } else {
-                    VKHelper.createCommentForPhoto(arguments.getLong(ARG_VK_GROUP_ID), photo.get(currentPosition).id, message, 0, reply_to_comment, new VKRequest.VKRequestListener() {
+                    VKHelper.createCommentForPhoto(arguments.getLong(ARG_VK_GROUP_ID), photo.id, message, 0, reply_to_comment, new VKRequest.VKRequestListener() {
 
                         @Override
                         public void onComplete(VKResponse response) {
@@ -206,60 +250,47 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                             updateCommentList(arguments.getLong(ARG_VK_GROUP_ID), listOfComments, inflater);
                         }
                     });
+
                 }
+
+
             }
         });
 
-//for(int i = 0 ; i < comments.size();i++){
-//    if (comments.get(i).user_likes==true){
-//        likedImage.setBackgroundResource(R.drawable.ic_post_btn_like_selected);
-//        if (comments.get(i).user_likes==false){ likedImage.setBackgroundResource(R.drawable.ic_post_btn_like_up);}
-//    }
-//}
-//
-//
-//        VKHelper.isLIked("photo", photo.get(currentPosition).owner_id, photo.get(currentPosition).id,new VKRequest.VKRequestListener() {
-//            @Override
-//            public void onComplete(VKResponse response) {
-//                super.onComplete(response);
-//
-//                isLiked= (response.json.optJSONObject("response")).optInt("liked");
-//                if(isLiked==0){
-//                    notLikedPhoto.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
-//                    likedOrNotLikedBox.setChecked(false);}
-//                if(isLiked==1){notLikedPhoto.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
-//                    likedOrNotLikedBox.setChecked(true);}
-//
-//                arguments.putInt("isLiked",isLiked);
-//
-//
-//            }
-//        });
 
 
-        return rootView;
+
+
+
+ return rootView;
 
     }
 
 
     public void updateCommentList(long owner_id, final ListView listOfComments, final LayoutInflater inflater) {
-        VKHelper.getCommentsForPhoto(owner_id, photo.get(currentPosition).id, new VKRequest.VKRequestListener() {
+        VKHelper.getCommentsForPhoto(owner_id, photo.id, new VKRequest.VKRequestListener() {
 
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
+                OfflineMode.saveJSON(response.json, photo.id);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         Looper.prepare();
-                        parseCommentList(response);
+                        parseCommentList(OfflineMode.loadJSON(photo.id));
+                       // Log.d("/////////////////////////////////","fuck Yura");
                     }
                 }).start();
+
+
             }
+
         });
+//        parseCommentList(OfflineMode.loadJSON(photo.id));
 
-
-        listOfComments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listOfComments.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
                 if (position > 0) {
@@ -278,21 +309,31 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         if (comment.from_id == Constants.USER_ID) {
             items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись", "Видалити"};
         } else {
+            if(comments.get(position).user_likes == false){
             items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись"};
+            }else {
+                items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені не подобається", "Поскаржитись"};
+            }
         }
 
         onInitContextMenu(items, position);
     }
 
 
-    public void parseCommentList(final VKResponse response) {
+    public void parseCommentList(final JSONObject response) {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
 
         JSONArray[] arrayOfComments = VKHelper.getResponseArrayOfComment(response);
 
         comments = VKHelper.getCommentsFromJSON(arrayOfComments[0]);
+
+
+
+
         Collections.sort(comments);
         profiles = Profile.getProfilesFromJSONArray(arrayOfComments[1]);
+        //profile=profiles;
+
 
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -302,7 +343,8 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                     adapter = new CommentsListAdapter(comments, profiles, inflater, postColor);
                     listOfComments.setAdapter(adapter);
                 } else {
-                    adapter.updateCommentList(comments, profiles, listOfComments);
+                    adapter.UpdateCommentList(comments, profiles, listOfComments);
+                   
 
                 }
             }
@@ -310,6 +352,7 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
     }
 
     public void onInitContextMenu(final CharSequence[] items, final int position) {
+
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -317,19 +360,27 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
             public void onClick(DialogInterface dialog, int item) {
                 switch (item) {
                     case 0: {
+                        //onVkontakteBtnPressed();
                         Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).from_id + "");
                         getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                     break;
                     case 1: {
+                        //////////////////////////////////////////////////////////////////////
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
                                 reply_to_comment = comments.get(position).id;
                                 commentMessage.setText(Identify(comments, profiles) + ", ");
+
+
                             }
                         });
+
+
+                        ////////////////////////////////////////////////////////////////////
                     }
                     break;
                     case 2: {
@@ -338,11 +389,36 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
                     }
                     break;
                     case 3: {
+                        if (comments.get(position).user_likes == false) {
+
+                            VKHelper.setLike("photo_comment", gid, comments.get(position).id, new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    super.onComplete(response);
+                                    comments.get(position).likes += 1;
+                                    comments.get(position).user_likes = true;
+                                    Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+                        }
+                        else {
+                            VKHelper.deleteLike("photo_comment", gid, comments.get(position).id, new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    super.onComplete(response);
+                                    comments.get(position).likes -= 1;
+                                    comments.get(position).user_likes = false;
+                                    Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+
                         Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
                     }
                     break;
                     case 4:
-                        Dialogs.reportListDialog(VKUIHelper.getApplicationContext(), gid, comments.get(position).id);
+                        Dialogs.reportListDialog(Constants.mainActivity, gid, comments.get(position).id);
                         break;
                     case 5: {
                         VKHelper.deleteCommentForPhoto(getArguments().getLong(ARG_VK_GROUP_ID), comments.get(position).id, new VKRequest.VKRequestListener() {
@@ -485,5 +561,9 @@ public class FragmentPhotoCommentAndInfo extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-
+    public void loadImage(VKApiPhoto photo, ImageView imageView) {
+        //ImageLoader.getInstance().displayImage(photo.photo_75, imageView);
+        //String url = photo.getFullScreenUrl();
+        ImageLoader.getInstance().displayImage(PhotoUrlHelper.getFullScreenUrl(photo), imageView );
+    }
 }

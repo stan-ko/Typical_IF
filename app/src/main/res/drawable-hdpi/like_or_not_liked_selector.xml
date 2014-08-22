@@ -3,6 +3,7 @@
     <item
         android:state_checked="false"
         android:drawable="@drawable/ic_post_btn_like_up" />
+
     <item
         android:state_checked="true"
         android:drawable="@drawable/ic_post_btn_like_selected" />

@@ -6,15 +6,15 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="250dp"
         android:visibility="visible" >
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_weight=".50"
-            android:layout_marginRight="5dp" >
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:layout_weight=".50">
 
             <ImageView
                 android:layout_width="match_parent"
@@ -24,7 +24,7 @@
                 android:visibility="visible" />
 
             <RelativeLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:visibility="gone"
                 android:layout_alignRight="@+id/img_photo_3_1"
@@ -77,18 +77,18 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:layout_weight=".50" >
+            android:layout_height="match_parent"
+            android:layout_weight=".50">
 
             <LinearLayout
                 android:orientation="vertical"
-                android:layout_width="165dp"
-                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:id="@+id/linearLayout3_1" >
 
                 <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight=".50"
                     android:layout_marginBottom="5dp" >
 
@@ -99,7 +99,7 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="250dp"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout3" >
@@ -150,8 +150,8 @@
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_weight=".50" >
 
                     <ImageView
@@ -161,7 +161,7 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="250dp"
                         android:id="@+id/relativeLayout5"
                         android:visibility="gone" >

@@ -28,10 +28,11 @@ import typical_if.android.model.Album;
  */
 public class FragmentAlbumsList extends Fragment {
 
-   AlbumCoverAdapter albumCoverAdapter;
-   JazzyListView listOfAlbums;
+    AlbumCoverAdapter albumCoverAdapter;
+    JazzyListView listOfAlbums;
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -78,7 +79,7 @@ public class FragmentAlbumsList extends Fragment {
             public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
                 super.attemptFailed(request, attemptNumber, totalAttempts);
             }
-
+            
             @Override
             public void onError(VKError error) {
                 super.onError(error);
@@ -97,9 +98,8 @@ public class FragmentAlbumsList extends Fragment {
 
         try {
             listOfAlbums = (JazzyListView) getView().findViewById(R.id.listOfAlbums);
-           albumCoverAdapter = new AlbumCoverAdapter(albums, getActivity().getLayoutInflater());
-        }
-        catch (NullPointerException e){
+            albumCoverAdapter = new AlbumCoverAdapter(albums, getActivity().getLayoutInflater());
+        } catch (NullPointerException e) {
             Log.d("Connection", "BAD CONNECTION (NULL POINTER EXCEPTION)");
         }
 
@@ -111,7 +111,7 @@ public class FragmentAlbumsList extends Fragment {
                 Log.v("Module Item Trigger", arguments.getLong(ARG_VK_GROUP_ID) + "__" + albums.get(position).id + "");
                 Fragment fragment = FragmentPhotoList.newInstance(arguments.getLong(ARG_VK_GROUP_ID), albums.get(position).id);
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack("AlbumList").commit();
             }
         });
     }

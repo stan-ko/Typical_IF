@@ -45,9 +45,9 @@ public class MyApplication extends Application {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheOnDisc(true)
                 .cacheInMemory(true)
-                .showImageOnLoading(R.drawable.ic_stubif) // TODO resource or drawable
-                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
-                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
+//                .showImageOnLoading(R.drawable.ic_stubif) // TODO resource or drawable
+//                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
+//                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
                 .resetViewBeforeLoading(true)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .displayer(new FadeInBitmapDisplayer(300)).build();
@@ -67,10 +67,12 @@ public class MyApplication extends Application {
                         //.memoryCacheSize(2 * 1024 * 1024)
                         //.memoryCacheSizePercentage(13) // default
                         //.diskCache(new UnlimitedDiscCache(cacheDir)) // default
+                     //;;;
                 .denyCacheImageMultipleSizesInMemory()
-                //.defaultDisplayImageOptions(defaultOptions)
+                //
+                .defaultDisplayImageOptions(defaultOptions)
                 .memoryCache(new WeakMemoryCache())
-                //.discCacheSize(100 * 1024 * 1024)
+                .discCacheSize(100 * 1024 * 1024)
 
                         //.diskCacheSize(50 * 1024 * 1024)
                         //.diskCacheFileCount(100)

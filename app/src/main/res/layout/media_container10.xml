@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="250dp"
         android:visibility="visible"
         android:baselineAligned="false" >
@@ -20,7 +20,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:visibility="visible"
                 android:id="@+id/linearLayout7" >
 
@@ -37,8 +37,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout59" >
 
@@ -101,8 +101,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout60" >
 
@@ -165,8 +165,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout62" >
 
@@ -227,8 +227,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout64" >
 
@@ -289,7 +289,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:visibility="visible"
                 android:id="@+id/linearLayout8" >
 
@@ -306,8 +306,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout73" >
 
@@ -369,8 +369,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout74" >
 
@@ -431,7 +431,7 @@
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:visibility="visible"
                 android:id="@+id/linearLayout9" >
 
@@ -448,8 +448,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout66" >
 
@@ -512,8 +512,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout67" >
 
@@ -576,8 +576,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout69" >
 
@@ -638,8 +638,8 @@
                         android:scaleType="centerCrop" />
 
                     <RelativeLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:visibility="gone"
                         android:id="@+id/relativeLayout71" >
 

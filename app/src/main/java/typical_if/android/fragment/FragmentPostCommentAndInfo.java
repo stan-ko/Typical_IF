@@ -23,7 +23,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -31,6 +30,7 @@ import com.vk.sdk.api.model.VKApiComment;
 import com.vk.sdk.api.model.VKApiPost;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,20 +38,19 @@ import java.util.Collections;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Profile;
+import typical_if.android.model.Wall.VKWallPostWrapper;
+import typical_if.android.model.Wall.Wall;
 
 /**
  * Created by admin on 07.08.2014.
  */
 public class FragmentPostCommentAndInfo extends Fragment {
-
-    private static String ARG_VK_GROUP_ID = "vk_group_id";
-    private static final String ARG_VK_ALBUM_ID = "vk_album_id";
-    private static final String ARG_VK_USER_ID = "user_id";
 
     ListView listOfComments;
     ArrayList<VKApiComment> comments;
@@ -60,15 +59,15 @@ public class FragmentPostCommentAndInfo extends Fragment {
     String message = null;
     EditText commentMessage;
     View rootView;
-    static int currentPosition;
     int reply_to_comment = 0;
-    static int like_status;
-    long gid;
+    Wall wall;
+    VKWallPostWrapper postWrapper;
     VKApiPost post;
-    View convertView;
+    String postColor;
+    long gid;
+    int position;
     WallAdapter.ViewHolder viewHolder;
     Button sendComment;
-    CheckBox likePostPhoto;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,12 +76,14 @@ public class FragmentPostCommentAndInfo extends Fragment {
         }
     }
 
-    public static FragmentPostCommentAndInfo newInstance(View convertView, long gid, VKApiPost post) {
+    public static FragmentPostCommentAndInfo newInstance(String postColor, int position, Wall wall, VKWallPostWrapper postWrapper) {
         FragmentPostCommentAndInfo fragment = new FragmentPostCommentAndInfo();
-        fragment.convertView = convertView;
-        fragment.viewHolder = (WallAdapter.ViewHolder) convertView.getTag();
-        fragment.gid = gid * -1;
-        fragment.post = post;
+        fragment.postColor = postColor;
+        fragment.wall = wall;
+        fragment.position = position;
+        fragment.postWrapper = postWrapper;
+        fragment.post = postWrapper.post;
+        fragment.gid = wall.group.id * -1;
         return fragment;
     }
 
@@ -93,17 +94,23 @@ public class FragmentPostCommentAndInfo extends Fragment {
         sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
 
+        final View wallItem = inflater.inflate(R.layout.wall_lv_item, null);
+        viewHolder = new WallAdapter.ViewHolder(wallItem);
+        WallAdapter.initViewHolder(viewHolder, postColor, wall, position, getFragmentManager(), postWrapper, getActivity().getBaseContext());
+
         viewHolder.txt_post_comment.setVisibility(View.GONE);
         viewHolder.img_post_comment.setVisibility(View.GONE);
+        viewHolder.img_post_other.setVisibility(View.GONE);
 
-        if (post.text.length() != 0) {
+
+        if (postWrapper.postTextChecker) {
             RelativeLayout textLayout = (RelativeLayout) viewHolder.postTextLayout.getChildAt(0);
             CheckBox checkBox = (CheckBox) textLayout.getChildAt(1);
             checkBox.setChecked(true);
             checkBox.setVisibility(View.GONE);
         }
 
-        if (post.copy_history != null && post.copy_history.size() != 0) {
+        if (postWrapper.copyHistoryChecker) {
             if (post.copy_history.get(0).text.length() != 0) {
                 LinearLayout copyHistoryContainer = (LinearLayout) ((RelativeLayout) viewHolder.copyHistoryLayout.getChildAt(0)).getChildAt(0);
                 RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryContainer.findViewById(R.id.copyHistoryTextLayout);
@@ -113,7 +120,7 @@ public class FragmentPostCommentAndInfo extends Fragment {
                 checkBox.setVisibility(View.GONE);
             }
         }
-        listOfComments.addHeaderView(convertView);
+        listOfComments.addHeaderView(wallItem);
 
         updateCommentList(gid, post.id, listOfComments, inflater);
 
@@ -148,20 +155,27 @@ public class FragmentPostCommentAndInfo extends Fragment {
     }
 
 
-    public void updateCommentList(long gid, long pid, final ListView listOfComments, final LayoutInflater inflater) {
+    public void updateCommentList(long gid, final long pid, final ListView listOfComments, final LayoutInflater inflater) {
         VKHelper.getCommentsForPost(gid, pid, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
+                OfflineMode.saveJSON(response.json, pid);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         Looper.prepare();
-                        parseCommentList(response);
+                        parseCommentList(OfflineMode.loadJSON(pid));
                     }
                 }).start();
             }
         });
+
+
+        if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(pid)  ) {
+                    parseCommentList(OfflineMode.loadJSON(pid));
+            // If IsOnline and response from preferenses not null then load Json from preferenses
+        }
 
         listOfComments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -188,12 +202,14 @@ public class FragmentPostCommentAndInfo extends Fragment {
     }
 
 
-    public void parseCommentList(final VKResponse response) {
+    public void parseCommentList(final JSONObject response) {
         final LayoutInflater inflater = getActivity().getLayoutInflater();
 
         JSONArray[] arrayOfComments = VKHelper.getResponseArrayOfComment(response);
 
+
         comments = VKHelper.getCommentsFromJSON(arrayOfComments[0]);
+
         Collections.sort(comments);
         profiles = Profile.getProfilesFromJSONArray(arrayOfComments[1]);
 
@@ -205,7 +221,7 @@ public class FragmentPostCommentAndInfo extends Fragment {
                     adapter = new CommentsListAdapter(comments, profiles, inflater, postColor);
                     listOfComments.setAdapter(adapter);
                 } else {
-                    adapter.updateCommentList(comments, profiles, listOfComments);
+                    adapter.UpdateCommentList(comments, profiles, listOfComments);
 
                 }
             }
@@ -244,7 +260,7 @@ public class FragmentPostCommentAndInfo extends Fragment {
                     }
                     break;
                     case 4:
-                        Dialogs.reportListDialog(VKUIHelper.getApplicationContext(), gid, comments.get(position).id);
+                        Dialogs.reportListDialog(Constants.mainActivity, gid, comments.get(position).id);
                         break;
                     case 5: {
                         VKHelper.deleteCommentForPost(gid, comments.get(position).id, new VKRequest.VKRequestListener() {
@@ -309,5 +325,4 @@ public class FragmentPostCommentAndInfo extends Fragment {
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.context_menu_device_item_remove, menu);
     }
-
 }

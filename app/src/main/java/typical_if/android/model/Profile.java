@@ -18,7 +18,7 @@ public class Profile {
     public String  photo_50;
     public String  photo_100;
     public boolean online;
-    int reply_to_comment;
+
 
 
     public Profile(long id, String first_name, String last_name, int sex, String screen_name, String photo_50, String photo_100, boolean online){
@@ -64,6 +64,14 @@ public class Profile {
      return profiles;
     }
 
+   public static Profile parseUserInfoFromJSON (JSONObject o){
+       JSONArray a = o.optJSONArray("response");
+       JSONObject o1 = a.optJSONObject(0);
+
+     return new Profile(o1.optLong("id"),o1.optString("first_name"),
+                        o1.optString("last_name"),0,null,
+                        o1.optString("photo_50"),null,false);
+   }
 
 
 

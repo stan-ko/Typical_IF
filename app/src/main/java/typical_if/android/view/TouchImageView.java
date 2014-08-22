@@ -1,4 +1,5 @@
-package typical_if.android.view;
+package typical_if.android;
+
 import android.content.Context;
 import android.graphics.Matrix;
 import android.graphics.PointF;
@@ -8,7 +9,11 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+
+import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 
 public class TouchImageView extends ImageView {
 
@@ -34,8 +39,11 @@ public class TouchImageView extends ImageView {
     int oldMeasuredWidth, oldMeasuredHeight;
 
     ScaleGestureDetector mScaleDetector;
-
+    TouchImageView photo = this;
+    int clickCounter = -1;
     Context context;
+    Animation fadeIn;
+    Animation fadeOut;
 
     public TouchImageView(Context context) {
         super(context);
@@ -50,6 +58,24 @@ public class TouchImageView extends ImageView {
     private void sharedConstructing(Context context) {
         super.setClickable(true);
         this.context = context;
+        fadeIn= AnimationUtils.loadAnimation(context,R.anim.fade_in);
+        fadeOut=AnimationUtils.loadAnimation(context,R.anim.fade_out);
+
+          photo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickCounter++;
+                if(clickCounter%2==0) {
+                    { FragmentFullScreenImagePhotoViewer.panel.startAnimation(fadeIn);}
+                }else{
+                    {FragmentFullScreenImagePhotoViewer.panel.startAnimation(fadeOut);}
+                }
+
+
+
+            }
+        });
+
         mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
         matrix = new Matrix();
         m = new float[9];

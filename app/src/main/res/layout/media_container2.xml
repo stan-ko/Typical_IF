@@ -6,13 +6,13 @@
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="250dp"
         android:visibility="visible" >
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight=".50"
             android:layout_marginRight="5dp" >
 
@@ -24,7 +24,7 @@
                 android:scaleType="centerCrop" />
 
             <RelativeLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:visibility="gone"
                 android:id="@+id/relativeLayout" >
@@ -75,8 +75,8 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight=".50"
             android:visibility="visible" >
 
@@ -89,7 +89,7 @@
                 android:visibility="visible" />
 
             <RelativeLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:visibility="gone"
                 android:id="@+id/relativeLayout4" >

@@ -21,6 +21,8 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
+import com.vk.sdk.VKUIHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,8 +40,6 @@ public class NavigationDrawerFragment extends Fragment {
     /**
      * Remember the position of the selected item.
      */
-    private static final String STATE_SELECTED_GROUP_POSITION = "selected_navigation_drawer_group_position";
-    private static final String STATE_SELECTED_CHILD_POSITION = "selected_navigation_drawer_child_position";
 
     /**
      * Per the design guidelines, you should show the drawer on launch until the user manually
@@ -62,8 +62,6 @@ public class NavigationDrawerFragment extends Fragment {
     private AnimatedExpandableListView mDrawerListView;
     private View mFragmentContainerView;
 
-    private int mCurrentSelectedGroupPosition = 0;
-    private int mCurrentSelectedChildPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
 
@@ -84,12 +82,10 @@ public class NavigationDrawerFragment extends Fragment {
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
         if (savedInstanceState != null) {
-            mCurrentSelectedGroupPosition = savedInstanceState.getInt(STATE_SELECTED_GROUP_POSITION);
-            mCurrentSelectedChildPosition = savedInstanceState.getInt(STATE_SELECTED_CHILD_POSITION);
             mFromSavedInstanceState = true;
         }
         // Select either the default item (0) or the last selected item.
-        selectItem(mCurrentSelectedGroupPosition, mCurrentSelectedChildPosition);
+        selectItem(0, 0);
     }
 
     public void refreshNavigationDrawer() {
@@ -118,17 +114,16 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setOnGroupClickListener(new AnimatedExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                mCurrentSelectedGroupPosition = groupPosition;
                 if (listDataChild.get(groupPosition) == null) {
                     if (mDrawerLayout != null) {
+                        mCallbacks.onNavigationDrawerItemSelected(groupPosition, 0);
                         mDrawerLayout.closeDrawer(mFragmentContainerView);
-                        mCallbacks.onNavigationDrawerItemSelected(mCurrentSelectedGroupPosition, 0);
                     }
                 } else {
-                    if (mDrawerListView.isGroupExpanded(mCurrentSelectedGroupPosition)) {
-                        mDrawerListView.collapseGroupWithAnimation(mCurrentSelectedGroupPosition);
+                    if (mDrawerListView.isGroupExpanded(groupPosition)) {
+                        mDrawerListView.collapseGroupWithAnimation(groupPosition);
                     } else {
-                        mDrawerListView.expandGroupWithAnimation(mCurrentSelectedGroupPosition);
+                        mDrawerListView.expandGroupWithAnimation(groupPosition);
                     }
                 }
                 return true;
@@ -150,12 +145,10 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                mCurrentSelectedGroupPosition = groupPosition;
-                mCurrentSelectedChildPosition = childPosition;
                 List<String> list = listDataChild.get(groupPosition);
                 if (mDrawerLayout != null) {
                     mDrawerLayout.closeDrawer(mFragmentContainerView);
-                    mCallbacks.onNavigationDrawerItemSelected(mCurrentSelectedGroupPosition, mCurrentSelectedChildPosition);
+                    mCallbacks.onNavigationDrawerItemSelected(groupPosition, childPosition);
                 }
                 return false;
             }
@@ -278,8 +271,6 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private void selectItem(int groupPosition, int childPosition) {
-        mCurrentSelectedGroupPosition = groupPosition;
-        mCurrentSelectedChildPosition = childPosition;
 
         if (mDrawerListView != null) {
             //mDrawerListView.setSelectedChild(groupPosition, childPosition, true);
@@ -288,7 +279,7 @@ public class NavigationDrawerFragment extends Fragment {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(mCurrentSelectedGroupPosition, mCurrentSelectedChildPosition);
+            mCallbacks.onNavigationDrawerItemSelected(groupPosition, childPosition);
         }
     }
 
@@ -311,8 +302,6 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(STATE_SELECTED_GROUP_POSITION, mCurrentSelectedGroupPosition);
-        outState.putInt(STATE_SELECTED_CHILD_POSITION, mCurrentSelectedChildPosition);
     }
 
     @Override
@@ -342,7 +331,7 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (item.getItemId() == R.id.action_example) {
-            Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
             return true;
         }
 

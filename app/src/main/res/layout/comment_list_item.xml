@@ -11,6 +11,9 @@
     android:focusable="false"
     android:focusableInTouchMode="false">
 
+ 
+   
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -33,6 +36,8 @@
         android:focusableInTouchMode="false"
         android:orientation="vertical"
         android:visibility="gone"
+        android:background="@android:drawable/editbox_background_normal"
+       
         android:layout_toEndOf="@+id/img_user_avatar"
         android:layout_below="@+id/commentTextLayout"
         android:layout_alignParentLeft="true"
@@ -131,7 +136,6 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/img_user_avatar"
-        android:src="@drawable/ic_launcher"
         android:cropToPadding="false"
         android:scaleType="fitStart"
         android:layout_weight="0.34"
@@ -141,7 +145,8 @@
         android:layout_marginRight="5dp"
         android:clickable="false"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false"
+        android:src="@drawable/abc_ab_solid_dark_holo" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -156,5 +161,16 @@
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"/>
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9"
+        android:id="@+id/post_comment_like_checkbox"
+        android:layout_alignBottom="@+id/img_user_avatar"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:button="@drawable/like_or_not_liked_selector" />
+      
 
 </RelativeLayout>
