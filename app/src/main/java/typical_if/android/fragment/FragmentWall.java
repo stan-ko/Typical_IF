@@ -43,7 +43,7 @@ public class FragmentWall extends Fragment implements AbsListView.OnScrollListen
     private int mCurrentTransitionEffect = JazzyHelper.TRANSPARENT;
     JazzyListView wallListView;
     WallAdapter adapter;
-int lastItemG;
+
     RelativeLayout spinnerLayout;
     View rootView;
     LayoutInflater inflaterGlobal;
@@ -109,7 +109,6 @@ int lastItemG;
             mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
             wallListView.scrollTo(0, mCurCheckPosition);
         }
-        endlessPosition(lastItemG);
     }
 
     @Override
@@ -131,11 +130,9 @@ int lastItemG;
 
         if (lastItem == totalItemCount & temp) {
                 countPost = countPost + 10;
-            lastItemG = lastItem;
                 endlessAdd(countPost,lastItem);
-
                 temp=false;
-            Log.d("**********************************", countPost + "-----------"+lastItem+"============="+absListView.getVerticalScrollbarPosition());
+            Log.d("**********************************", countPost + "-----------"+lastItem);
         }
 
         boolean topEnable = false;
@@ -146,7 +143,38 @@ int lastItemG;
             swipeView.setEnabled(topEnable);
         }
     }
-
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.make_post:
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container, FragmentMakePost.newInstance(gid, 0, 0)).addToBackStack("makePostFragment").commit();
+                break;
+            case R.id.suggested_posts:
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container, FragmentWall.newInstance(gid, true)).addToBackStack(null).commit();
+                break;
+            case R.id.join_leave_group:
+                if (isMember == 0) {
+                    VKHelper.groupJoin(gid * (-1), new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            Toast.makeText(getActivity(), "Joined", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(gid, false)).commit();
+                        }
+                    });
+                } else {
+                    VKHelper.groupLeave(gid * (-1), new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            Toast.makeText(getActivity(), "Leaved", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(gid, false)).commit();
+                        }
+                    });
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    };
     @Override
     public void onRefresh() {
         if (OfflineMode.isOnline(getApplicationContext()) == false) {
@@ -177,16 +205,15 @@ int lastItemG;
                 super.onComplete(response);
                 OfflineMode.saveJSON(response.json, gid);
                 initGroupWall(OfflineMode.loadJSON(gid), inflaterGlobal);
-
+               // endlessPosition(lastItem);
                 wallListView.setOnScrollListener(onScrollListenerObject);
 
             }
         });
-
     }
-    public synchronized void endlessPosition(int lastItem){
-        wallListView.smoothScrollToPosition(lastItem);
+    //public  void endlessPosition(int lastItem){
+      //  wallListView.smoothScrollToPosition(lastItem);
 
-    }
+    //}
 
 }

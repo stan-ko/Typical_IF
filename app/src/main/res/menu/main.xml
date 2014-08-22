@@ -5,11 +5,12 @@
     <item android:id="@+id/action_example"
         android:title=""
         android:icon="@android:drawable/ic_menu_add"
-        app:showAsAction="withText|ifRoom" />
+        app:showAsAction="never" />
+    <!--
     <item android:id="@+id/action_bar_comment_attachment"
         android:title=""
         android:icon="@android:drawable/ic_menu_set_as"
-        app:showAsAction="ifRoom">
+        app:showAsAction="never">
         <menu>
             <item
                 android:id="@+id/comment_attachment_photo"
@@ -25,4 +26,5 @@
                 android:title="Doc" />
         </menu>
     </item>
+    -->
 </menu>

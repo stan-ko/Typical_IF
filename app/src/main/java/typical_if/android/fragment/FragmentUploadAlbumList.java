@@ -26,10 +26,15 @@ public class FragmentUploadAlbumList extends Fragment {
     private String[] arrPath;
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
-    public static FragmentAlbumsList newInstance(long vkGroupId) {
-        FragmentAlbumsList fragment = new FragmentAlbumsList();
+    int which;
+    long gid;
+
+    public static FragmentUploadAlbumList newInstance(long vkGroupId, int which) {
+        FragmentUploadAlbumList fragment = new FragmentUploadAlbumList();
         Bundle args = new Bundle();
         args.putLong(ARG_VK_GROUP_ID, vkGroupId);
+        fragment.which = which;
+        fragment.gid = vkGroupId;
 
         fragment.setArguments(args);
         return fragment;
@@ -71,13 +76,12 @@ public class FragmentUploadAlbumList extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = null;
-                fragment = FragmentUploadPhotoList.newInstance(String.valueOf(albumtitles.get(position)), arrPath);
+                fragment = FragmentUploadPhotoList.newInstance(String.valueOf(albumtitles.get(position)), arrPath, gid,which);
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-               // fragmentManager.popBackStack();
-                fragmentManager.beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
         });
-        //imagecursor.close();
+
         return rootView;
     }
 

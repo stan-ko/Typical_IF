@@ -8,19 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import typical_if.android.R;
 import typical_if.android.activity.MainActivity;
 
-//import static typical_if.android.activity.MainActivity.TF_ID;
 
 /**
  * Created by admin on 14.07.2014.
  */
 public class FragmentEventsList extends Fragment{
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
-    private ImageLoader imageLoader = null;
     /**
      * Returns a new instance of this fragment for the given section
      * number.

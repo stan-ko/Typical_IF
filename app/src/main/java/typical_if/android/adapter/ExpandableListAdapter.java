@@ -16,14 +16,15 @@ import com.vk.sdk.VKSdk;
 
 import java.util.List;
 
-import typical_if.android.view.AnimatedExpandableListView;
 import typical_if.android.R;
+import typical_if.android.view.AnimatedExpandableListView;
 
 public class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
 
     private final List<String> _listDataHeader;
     private final SparseArray<List<String>> _listDataChild;
     private final LayoutInflater inflater;
+
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader, SparseArray<List<String>> listChildData) {
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -57,7 +58,7 @@ public class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedEx
 
     @Override
     public int getRealChildrenCount(int groupPosition) {
-        if(this._listDataChild.get(groupPosition) == null){
+        if (this._listDataChild.get(groupPosition) == null) {
             return 0;
         }
         return this._listDataChild.get(groupPosition).size();
@@ -87,15 +88,58 @@ public class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedEx
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.groupItem);
         lblListHeader.setTypeface(null, Typeface.BOLD);
 
-        if(getGroupCount()-1 == groupPosition){
-            if (VKSdk.wakeUpSession() && VKSdk.isLoggedIn()){
-                lblListHeader.setText(R.string.title_logout);
-            }else{
-                lblListHeader.setText(R.string.title_login);
+//        if (groupPosition == 5) {
+//            try {
+//                if (VKSdk.wakeUpSession()) {
+//                    if (VKSdk.isLoggedIn()) {
+//                        lblListHeader.setText(R.string.title_logout);
+//                    } else {
+//                        lblListHeader.setText(R.string.title_login);
+//                    }
+//                }
+//            } catch (NullPointerException e) {
+//                if (VKSdk.isLoggedIn()) {
+//                    lblListHeader.setText(R.string.title_logout);
+//                } else {
+//                    lblListHeader.setText(R.string.title_login);
+//                }
+//            }
+//
+//        } else {
+//            lblListHeader.setText(headerTitle);
+//        }
+
+        boolean isWakeUp = true;
+
+        try {
+            if (VKSdk.wakeUpSession()) {
+                isWakeUp = true;
+            } else {
+                isWakeUp = false;
             }
-        }else{
+        } catch (NullPointerException e) {
+            isWakeUp = false;
+        }
+
+        if (groupPosition == 5) {
+            if (isWakeUp) {
+                if (VKSdk.isLoggedIn()) {
+                    lblListHeader.setText(R.string.title_logout);
+                } else {
+                    lblListHeader.setText(R.string.title_login);
+                }
+            } else {
+                if (VKSdk.isLoggedIn()) {
+                    lblListHeader.setText(R.string.title_logout);
+                } else {
+                    lblListHeader.setText(R.string.title_login);
+                }
+            }
+        } else {
             lblListHeader.setText(headerTitle);
         }
+
+
         return convertView;
     }
 

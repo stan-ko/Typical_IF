@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -235,22 +236,29 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         gridOfPhotos.setAdapter(photoListAdapter);
         gridOfPhotos.setAnimation(a);
         gridOfPhotos.setOnScrollListener(this);
-        gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID));
-                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                transaction = fragmentManager.beginTransaction();
-
-                transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-                transaction.add(R.id.container, fragment).addToBackStack("String").commit();
-//                Fragment fragment = null;
-//                fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID));
-//                FragmentManager fragmentManager = getFragmentManager();
-//                fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-            }
-        });
+        if (getArguments().getLong(ARG_VK_GROUP_ID) > 0) {
+            gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    getActivity().getSupportFragmentManager().popBackStack();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                    Constants.tempPostAttachCounter++;
+                    Constants.tempPhotoPostAttach.add(photos.get(position));
+                    FragmentMakePost.refreshMakePostFragment(0);
+                }
+            });
+        } else {
+            gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Fragment fragment = null;
+                    fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID));
+                    FragmentManager fragmentManager = getFragmentManager();
+                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                }
+            });
+        }
 
     }
 
@@ -265,7 +273,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                     case 0:
                         FragmentUploadAlbumList fragmentUploadPhotoList = new FragmentUploadAlbumList();
                         android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.container, fragmentUploadPhotoList).addToBackStack("PhotoList").commit();
+                        fragmentManager.beginTransaction().add(R.id.container, fragmentUploadPhotoList).addToBackStack("PhotoList").commit();
                         dialog.cancel();
                         break;
                     case 1:
@@ -281,7 +289,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
                             FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance("mImageCaptureUri");
                             android.support.v4.app.FragmentManager fragmentManagers = getFragmentManager();
-                            fragmentManagers.beginTransaction().replace(R.id.container, fragmentPhotoFromCamera).addToBackStack("PhotoList").commit();
+                            fragmentManagers.beginTransaction().add(R.id.container, fragmentPhotoFromCamera).addToBackStack("PhotoList").commit();
                         } catch (ActivityNotFoundException anfe) {
                             Toast.makeText(getActivity().getApplicationContext(), "Whoops - your device doesn't support capturing images!", Toast.LENGTH_LONG);
                         }

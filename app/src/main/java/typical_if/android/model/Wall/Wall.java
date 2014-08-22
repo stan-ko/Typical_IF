@@ -19,9 +19,7 @@ public class Wall {
 
     public int count;
 
-
-    public boolean isFixedPost = false;
-    public VKPostArray posts = new VKPostArray();
+    public ArrayList<VKWallPostWrapper> posts = new ArrayList<VKWallPostWrapper>();
     public final ArrayList<Profile> profiles = new ArrayList<Profile>();
     public final ArrayList<Group> groups = new ArrayList<Group>();
 
@@ -46,7 +44,13 @@ public class Wall {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        wall.posts = posts;
+
+        ArrayList<VKWallPostWrapper> wallPosts = new ArrayList<VKWallPostWrapper>();
+        for (int i = 0; i < posts.size(); i++) {
+            wallPosts.add(new VKWallPostWrapper(posts.get(i)));
+        }
+
+        wall.posts = wallPosts;
 
         // groups
         final JSONArray groups = object.optJSONArray(Wall.JSON_KEY_GROUPS);
@@ -67,40 +71,6 @@ public class Wall {
             profile = getProfileFromJSON(profiles.optJSONObject(i));
             wall.profiles.add(profile);
         }
-/*
-        VKHelper.getFixedPostId(wall.group.screen_name, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                JSONArray object = response.json.optJSONArray("response");
-                try {
-                    if (object.getJSONObject(0).has("fixed_post")) {
-                        int pid = object.getJSONObject(0).optInt("fixed_post");
-                        final String pidFull = "-" + wall.group.id + "_" + pid;
-                        VKHelper.getFixedPost(pidFull, new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(VKResponse response) {
-                                super.onComplete(response);
-                                final JSONObject object = response.json.optJSONObject(Wall.JSON_KEY_RESPONSE);
-                                final VKPostArray postsFixed = new VKPostArray();
-                                try {
-                                    postsFixed.parse(object);
-                                    if (postsFixed != null && postsFixed.size() != 0) {
-                                        //posts.add(0, postsFixed.get(0));
-                                        wall.isFixedPost = true;
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });*/
-
         return wall;
     }
 

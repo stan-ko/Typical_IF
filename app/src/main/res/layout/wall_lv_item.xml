@@ -1,38 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="fill_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
     <RelativeLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:background="@drawable/abc_menu_dropdown_panel_holo_light"
         android:layout_marginLeft="-6dp"
-        android:layout_marginRight="-6dp">
+        android:layout_marginRight="-6dp"
+        android:id="@+id/relativeLayout">
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/postParentLayout">
 
             <RelativeLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/postSignedLayout"
                 android:background="@android:drawable/editbox_background_normal" />
 
             <RelativeLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/postTextLayout"
                 android:background="@android:drawable/editbox_background_normal"></RelativeLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/postAttachmentsLayout"
                 android:orientation="vertical"
@@ -40,7 +41,7 @@
                 android:background="@android:drawable/editbox_background_normal">
 
                 <RelativeLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postMediaLayout"
@@ -49,21 +50,21 @@
                     android:paddingBottom="5dp" />
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postAudioLayout"
                     android:orientation="vertical" />
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postDocumentLayout"
                     android:orientation="vertical" />
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postAlbumLayout"
@@ -75,19 +76,19 @@
                     android:showDividers="middle" />
 
                 <RelativeLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/postWikiPageLayout"
                     android:visibility="gone"></RelativeLayout>
 
                 <RelativeLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postLinkLayout" />
 
                 <RelativeLayout
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postPollLayout" />
@@ -95,21 +96,21 @@
             </LinearLayout>
 
             <RelativeLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/postGeoLayout"
                 android:visibility="gone"
                 android:background="@android:drawable/editbox_background_normal"></RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/copyHistoryLayout"
                 android:background="@android:drawable/editbox_background_normal" />
 
             <RelativeLayout
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:id="@+id/postFeaturesLayout"
                 android:visibility="visible"
@@ -132,8 +133,8 @@
                     android:text="67"
                     android:id="@+id/txt_post_comment"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@+id/img_post_like" />
+                    android:layout_toLeftOf="@+id/img_post_share"
+                    android:layout_marginRight="10dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -143,8 +144,7 @@
                     android:id="@+id/txt_post_like"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:visibility="invisible" />
+                    android:layout_alignParentEnd="true" />
 
                 <ImageView
                     android:layout_width="25dp"
@@ -153,8 +153,27 @@
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@+id/txt_post_like"
                     android:layout_toStartOf="@+id/txt_post_like"
-                    android:src="@android:drawable/ic_menu_rotate"
-                    android:visibility="invisible" />
+                    android:src="@android:drawable/ic_menu_rotate" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:text="12"
+                    android:id="@+id/txt_post_share"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/img_post_like"
+                    android:layout_toStartOf="@+id/img_post_like"
+                    android:layout_marginRight="10dp" />
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:id="@+id/img_post_share"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/txt_post_share"
+                    android:layout_toStartOf="@+id/txt_post_share"
+                    android:src="@android:drawable/ic_menu_share" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -166,8 +185,8 @@
                     android:layout_toStartOf="@+id/img_fixed_post"
                     android:layout_toEndOf="@+id/img_post_other"
                     android:visibility="visible"
-                    android:layout_toRightOf="@+id/img_post_other"
-                    android:layout_toLeftOf="@+id/cb_post_repost" />
+                    android:layout_toLeftOf="@+id/img_fixed_post"
+                    android:layout_toRightOf="@+id/img_post_other" />
 
                 <ImageView
                     android:layout_width="20dp"
@@ -189,19 +208,7 @@
                     android:layout_toStartOf="@+id/img_post_comment"
                     android:checked="false"
                     android:button="@drawable/repost_or_not_selector"
-                    android:visibility="visible"
-                    android:text="2"
-                    android:clickable="false"
-                    android:enabled="true" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/iv_post_repost"
-                    android:layout_alignBottom="@+id/img_post_comment"
-                    android:layout_toLeftOf="@+id/img_post_comment"
-                    android:layout_toRightOf="@+id/txt_post_date"
-                    android:layout_alignParentTop="true" />
+                    android:visibility="gone" />
 
                 <ImageView
                     android:layout_width="20dp"
@@ -212,23 +219,6 @@
                     android:layout_alignParentStart="true"
                     android:src="@drawable/abc_ic_menu_moreoverflow_normal_holo_light"
                     android:layout_marginLeft="-8dp" />
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="37dp"
-                    android:text="171"
-                    android:id="@+id/cb_post_like"
-                    android:button="@drawable/like_or_not_liked_selector"
-                    android:checked="false"
-                    android:clickable="false"
-                    android:enabled="true"
-                    android:layout_alignTop="@+id/txt_post_like"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
-
-
-
-
             </RelativeLayout>
 
         </LinearLayout>

@@ -12,7 +12,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCaptchaDialog;
@@ -27,7 +26,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import typical_if.android.Constants;
-import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -57,26 +55,6 @@ public class MainActivity extends ActionBarActivity implements
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.comment_attachment_photo:
-                Toast.makeText(this, "1", Toast.LENGTH_SHORT).show();
-                Dialogs.addPhotoToCommentDialog(getSupportFragmentManager());
-                //return true;
-            case R.id.comment_attachment_video:
-                Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.comment_attachment_audio:
-                Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.comment_attachment_doc:
-                Toast.makeText(this, "4", Toast.LENGTH_SHORT).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +64,8 @@ public class MainActivity extends ActionBarActivity implements
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
+        Constants.mainActivity = this;
+
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
     }
@@ -94,10 +74,8 @@ public class MainActivity extends ActionBarActivity implements
         if (clickedPosition == 0) {
             return Constants.TF_ID;
         } else if (clickedPosition == 1) {
-
             return Constants.TZ_ID;
         } else if (clickedPosition == 2) {
-
             return Constants.FB_ID;
         } else {
             return Constants.FN_ID;
@@ -142,9 +120,7 @@ public class MainActivity extends ActionBarActivity implements
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.main, menu);
             MenuItem item = menu.getItem(0);
-            MenuItem item1 = menu.getItem(1);
-            item.setVisible(false);
-            item1.setVisible(false);
+            item.setVisible(true);
             restoreActionBar();
             return true;
         }
@@ -171,7 +147,7 @@ public class MainActivity extends ActionBarActivity implements
 
         @Override
         public void onTokenExpired(VKAccessToken expiredToken) {
-            VKSdk.authorize(Constants.sMyScope);
+            VKSdk.authorize(Constants.S_MY_SCOPE);
         }
 
         @Override
@@ -223,12 +199,10 @@ public class MainActivity extends ActionBarActivity implements
             case 2:
             case 3:
                 vkGroupId = setGroupId(groupPosition);
-
                 onSectionAttached(groupPosition);
 
                 if (childPosition == 0) {
-                    fragment = FragmentWall.newInstance(vkGroupId);
-
+                    fragment = FragmentWall.newInstance(vkGroupId, false);
                 } else if (childPosition == 1) {
                     fragment = FragmentAlbumsList.newInstance(vkGroupId);
                 }
@@ -239,18 +213,44 @@ public class MainActivity extends ActionBarActivity implements
                 fragment = FragmentEventsList.newInstance(vkGroupId);
                 break;
             case 5:
-                if (VKSdk.wakeUpSession() && VKSdk.isLoggedIn()) {
-                    VKSdk.logout();
-                    mNavigationDrawerFragment.refreshNavigationDrawer();
+                boolean isWakeUp = true;
+
+                try {
+                    if (VKSdk.wakeUpSession()) {
+                        isWakeUp = true;
+                    } else {
+                        isWakeUp = false;
+                    }
+                } catch (NullPointerException e) {
+                    isWakeUp = false;
+                }
+                if (isWakeUp) {
+                    if (VKSdk.isLoggedIn()) {
+                        VKSdk.logout();
+                        mNavigationDrawerFragment.refreshNavigationDrawer();
+                    } else {
+                        if (!VKSdk.wakeUpSession()) {
+                            VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
+                        } else
+                            VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
+                    }
                 } else {
-                    if (!VKSdk.wakeUpSession()) {
-                        VKSdk.authorize(Constants.sMyScope, true, true);
-                    } else
-                        VKSdk.authorize(Constants.sMyScope, true, true);
+                    if (VKSdk.isLoggedIn()) {
+                        VKSdk.logout();
+                        mNavigationDrawerFragment.refreshNavigationDrawer();
+                    } else {
+                        if (!VKSdk.wakeUpSession()) {
+                            VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
+                        } else
+                            VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
+                    }
                 }
                 break;
         }
         if (groupPosition != 5) {
+            for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+                fragmentManager.popBackStack();
+            }
             fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
         restoreActionBar();

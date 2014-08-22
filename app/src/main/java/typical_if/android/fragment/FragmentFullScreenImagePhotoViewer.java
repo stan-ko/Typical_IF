@@ -253,7 +253,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
                 FragmentPhotoCommentAndInfo fragment = FragmentPhotoCommentAndInfo.newInstance(args.getLong(ARG_VK_GROUP_ID),
                         args.getLong(ARG_VK_ALBUM_ID),
                         photos.get(position),Constants.USER_ID);
-                getFragmentManager().beginTransaction().replace(R.id.container, fragment).addToBackStack(null).commit();
+                getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
         });
 

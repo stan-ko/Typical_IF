@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.vk.sdk.api.VKResponse;
 import java.io.File;
 import java.util.ArrayList;
 
+import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.adapter.PhotoUploadAdapter;
 import typical_if.android.model.UploadPhotos;
@@ -35,13 +37,19 @@ public class FragmentUploadPhotoList extends Fragment {
     static String category;
     static String[] uris;
     ArrayList<UploadPhotos> photolist = null;
+    static GridView photos;
+    int which;
+    long gid;
 
-    public static FragmentUploadPhotoList newInstance(String category, String[] uris) {
+    public static FragmentUploadPhotoList newInstance(String category, String[] uris, long gid, int which) {
         FragmentUploadPhotoList fragment = new FragmentUploadPhotoList();
         Bundle args = new Bundle();
         fragment.setArguments(args);
-        FragmentUploadPhotoList.category = category;
-        FragmentUploadPhotoList.uris = uris;
+        fragment.category = category;
+        fragment.uris = uris;
+        fragment.which = which;
+        fragment.gid = gid;
+
         return fragment;
     }
 
@@ -83,9 +91,33 @@ public class FragmentUploadPhotoList extends Fragment {
         super.onDetach();
     }
 
+    public static void refreshCheckBoxes() {
+        CheckBox checkBox;
+        if (Constants.tempCurrentPhotoAttachCounter == (Constants.tempMaxPostAttachCounter - Constants.tempPostAttachCounter)) {
+            for (int i = 0; i < photos.getCount(); i++) {
+                checkBox = (CheckBox) photos.getChildAt(i).findViewById(R.id.checkBox_for_upload);
+                if (!checkBox.isChecked()) {
+                    checkBox.setEnabled(false);
+                }
+            }
+        } else {
+            for (int i = 0; i < photos.getCount(); i++) {
+                checkBox = (CheckBox) photos.getChildAt(i).findViewById(R.id.checkBox_for_upload);
+                if (!checkBox.isChecked()) {
+                    checkBox.setEnabled(true);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Constants.tempCurrentPhotoAttachCounter = 0;
+    }
 
     protected void handleResponse(View rootView, LayoutInflater inflater, final ArrayList<UploadPhotos> photolist, int columns) {
-        final GridView photos = (GridView) rootView.findViewById(R.id.adding_photo_upload);
+        photos = (GridView) rootView.findViewById(R.id.adding_photo_upload);
         android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
         PhotoUploadAdapter photoUploadAdapter = new PhotoUploadAdapter(category, inflater, photolist, fragmentManager);
         photos.setAdapter(photoUploadAdapter);
@@ -97,24 +129,46 @@ public class FragmentUploadPhotoList extends Fragment {
         inflater.inflate(R.menu.upload_captured_photo, menu);
         MenuItem item = menu.getItem(0);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        //item.setEnabled(false);
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                for (int j = 0; j < photolist.size(); j++) {
-                    if (photolist.get(j).ischecked == true) {
-                        final VKRequest req = VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photosrc), 123513499, 8686797);
-                        req.executeWithListener(new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(VKResponse response) {
-                                super.onComplete(response);
-                            }
-                        });
+        if (which == 0) {
+            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    VKRequest req;
+                    for (int j = 0; j < photolist.size(); j++) {
+                        if (photolist.get(j).ischecked) {
+                            req = VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photosrc), Constants.USER_ID, (int) gid);
+                            req.executeWithListener(new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    super.onComplete(response);
+                                    Log.d(response.json.toString(), "=================================================");
+                                }
+                            });
+                        }
                     }
+                    return true;
                 }
-                return true;
-            }
-        });
+            });
+        } else {
+            item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    VKRequest req;
+                    for (int j = 0; j < photolist.size(); j++) {
+                        if (photolist.get(j).ischecked) {
+                            req = VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photosrc), 123513499, 8686797);
+                            req.executeWithListener(new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    super.onComplete(response);
+                                }
+                            });
+                        }
+                    }
+                    return true;
+                }
+            });
+        }
     }
 
 
