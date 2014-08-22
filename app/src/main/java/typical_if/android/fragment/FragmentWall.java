@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,13 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
-import com.twotoasters.jazzylistview.JazzyHelper;
-import com.twotoasters.jazzylistview.JazzyListView;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
@@ -43,8 +41,7 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static final String ARG_VK_GROUP_ID = "vk_group_id";
 
-    private int mCurrentTransitionEffect = JazzyHelper.TRANSPARENT;
-    JazzyListView wallListView;
+    ListView wallListView;
     WallAdapter adapter;
 
     RelativeLayout spinnerLayout;
@@ -76,7 +73,7 @@ temp = true;
                 countPost = countPost + 10;
                 endlessAdd(countPost, lastItem);
                 temp = false;
-                Log.d("**********************************", countPost + "-----------" + lastItem);
+             ///   Log.d("**********************************", countPost + "-----------" + lastItem);
             }
 
             boolean enable = false;
@@ -144,9 +141,9 @@ temp = true;
         Wall wall = Wall.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
         adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
-        wallListView = (JazzyListView) rootView.findViewById(R.id.listViewWall);
+        wallListView = (ListView) rootView.findViewById(R.id.listViewWall);
         wallListView.setAdapter(adapter);
-        wallListView.setTransitionEffect(mCurrentTransitionEffect);
+       // wallListView.setTransitionEffect(mCurrentTransitionEffect);
         wallListView.setOnScrollListener(new PauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerObject));
         spinnerLayout.setVisibility(View.GONE);
     }
@@ -263,7 +260,7 @@ temp = true;
                 OfflineMode.saveJSON(response.json, gid);
                 initGroupWall(OfflineMode.loadJSON(gid), inflaterGlobal);
                 // endlessPosition(lastItem);
-                wallListView.setOnScrollListener(onScrollListenerObject);
+                //wallListView.setOnScrollListener(onScrollListenerObject);
 
             }
         });

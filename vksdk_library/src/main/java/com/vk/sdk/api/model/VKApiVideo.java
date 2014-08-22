@@ -31,7 +31,6 @@ package com.vk.sdk.api.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -206,7 +205,7 @@ public class VKApiVideo extends VKAttachments.VKApiAttachment implements Parcela
         comments = from.optInt("comments");
         player = from.optString("player");
         access_key = from.optString("access_key");
-        Log.d("_________________________________________________________", access_key);
+        //Log.d("_________________________________________________________", access_key);
         album_id = from.optInt("album_id");
 
         JSONObject likes = from.optJSONObject("likes");

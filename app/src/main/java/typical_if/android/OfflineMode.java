@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +21,7 @@ public class OfflineMode {
         final String JsonString = jsonObject.toString();
         final String JsonKey = String.valueOf(gid);
         ed.putString(JsonKey, JsonString);
-        Log.d("------------------Respons------Save------Secsesful-----", JsonString);
+       // Log.d("------------------Respons------Save------Secsesful-----", JsonString);
         ed.commit();
     }
 
@@ -37,11 +36,11 @@ public class OfflineMode {
                 //String countJ = jsonObj.getString("count");
            //     Log.d("****--****", ""+countJ);
 
-            Log.d("-------------Respons-----Load----Secsesful---------",savedText );
+            //Log.d("-------------Respons-----Load----Secsesful---------",savedText );
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Log.d("-------------Respons-----Load----Error---------",savedText );
+           // Log.d("-------------Respons-----Load----Error---------",savedText );
         }
         return jsonObj;
     }
@@ -49,11 +48,11 @@ public class OfflineMode {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo nInfo = cm.getActiveNetworkInfo();
         if (nInfo != null && nInfo.isConnected()) {
-            Log.v("status", "ONLINE");
+          //  Log.v("status", "ONLINE");
             return true;
         }
         else {
-            Log.v("status", "OFFLINE");
+           // Log.v("status", "OFFLINE");
             return false;
         }
     }
@@ -63,10 +62,10 @@ public class OfflineMode {
         final String savedText = sPref.getString(JsonKey, "");
         try {
             final JSONObject jsonObj = new JSONObject(savedText);
-            Log.d("-------------Response-----NotNull---------", savedText);
+           // Log.d("-------------Response-----NotNull---------", savedText);
             return true;
         } catch (JSONException e) {
-            Log.d("-------------Response-----IsNull---------", savedText);
+          //  Log.d("-------------Response-----IsNull---------", savedText);
             return false;
         }
     }

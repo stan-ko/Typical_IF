@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
@@ -78,7 +77,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         ItemDataSetter.loadUserId();
     }
     void showAlertNoInternet() {
-        Log.d("----------------Internet conection Error", "------------------------");
+        //Log.d("----------------Internet conection Error", "------------------------");
         counter--;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.app_name)

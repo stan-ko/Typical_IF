@@ -263,7 +263,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        Log.d("stateOnPageScrollStateChanged^---------------------------------------------------------------->" + "   ", state + "");
+        //Log.d("stateOnPageScrollStateChanged^---------------------------------------------------------------->" + "   ", state + "");
     }
 
     public interface OnFragmentInteractionListener {
