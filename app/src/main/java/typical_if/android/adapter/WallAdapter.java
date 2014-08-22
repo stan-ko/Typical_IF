@@ -124,6 +124,13 @@ public class WallAdapter extends BaseAdapter {
                     Dialogs.reportDialog(Constants.mainActivity, wall.group.id, post.id);
                 }
             });
+            viewHolder.txt_post_comment.setVisibility(View.VISIBLE);
+            viewHolder.txt_post_like.setVisibility(View.VISIBLE);
+            viewHolder.txt_post_share.setVisibility(View.VISIBLE);
+            viewHolder.img_post_comment.setVisibility(View.VISIBLE);
+            viewHolder.img_post_like.setVisibility(View.VISIBLE);
+            viewHolder.img_post_share.setVisibility(View.VISIBLE);
+
         } else {
             viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -131,6 +138,12 @@ public class WallAdapter extends BaseAdapter {
                     Dialogs.suggestPostDialog(Constants.mainActivity, wall.group.id * -1, post);
                 }
             });
+            viewHolder.txt_post_comment.setVisibility(View.GONE);
+            viewHolder.txt_post_like.setVisibility(View.GONE);
+            viewHolder.txt_post_share.setVisibility(View.GONE);
+            viewHolder.img_post_comment.setVisibility(View.GONE);
+            viewHolder.img_post_like.setVisibility(View.GONE);
+            viewHolder.img_post_share.setVisibility(View.GONE);
         }
 
         viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);
@@ -276,7 +289,9 @@ public class WallAdapter extends BaseAdapter {
         public final TextView txt_post_date;
 
         public final TextView txt_post_like;
+        public final ImageView img_post_like;
         public final TextView txt_post_share;
+        public final ImageView img_post_share;
         public final TextView txt_post_comment;
         public final ImageView img_post_comment;
 
@@ -301,8 +316,9 @@ public class WallAdapter extends BaseAdapter {
             this.txt_post_date = (TextView) convertView.findViewById(R.id.txt_post_date);
 
             this.txt_post_like = (TextView) convertView.findViewById(R.id.txt_post_like);
+            this.img_post_like = (ImageView) convertView.findViewById(R.id.img_post_like);
             this.txt_post_share = (TextView) convertView.findViewById(R.id.txt_post_share);
-
+            this.img_post_share = (ImageView) convertView.findViewById(R.id.img_post_share);
             this.txt_post_comment = (TextView) convertView.findViewById(R.id.txt_post_comment);
             this.img_post_comment = (ImageView) convertView.findViewById(R.id.img_post_comment);
 
