@@ -164,7 +164,7 @@ temp = true;
 
 
     public void onCreate(Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
 

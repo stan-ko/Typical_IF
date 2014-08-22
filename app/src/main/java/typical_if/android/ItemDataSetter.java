@@ -1,7 +1,6 @@
 package typical_if.android;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +20,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -87,7 +87,6 @@ public class ItemDataSetter {
 
     public static Context context = VKUIHelper.getApplicationContext();
     public static LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    public static android.support.v4.app.FragmentManager fragmentManager = null;
 
     public final static Animation animationFadeIn = AnimationUtils.loadAnimation(context, R.anim.fade_in);
     public final static ImageLoadingListener animationLoader = new ImageLoadingListener() {
@@ -128,7 +127,7 @@ public class ItemDataSetter {
     public static CommentsListAdapter.ViewHolder commentViewHolder;
 
     public static int position;
-    public static FragmentManager fragmentManager;
+    public static android.support.v4.app.FragmentManager fragmentManager;
     public static long aid = 0;
 
     public static void setSuggestAttachments(VKAttachments attachments) {
@@ -281,7 +280,7 @@ public class ItemDataSetter {
         final TextView mainText = ((TextView) textContainer.getChildAt(0));
         final CheckBox showAll = ((CheckBox) textContainer.getChildAt(1));
 
-        final Matcher matTags = Pattern.compile("#[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ0-9_]+").matcher(text);
+        final Matcher matTags = Pattern.compile("#\\w+").matcher(text);
 
         StringBuilder stringB = new StringBuilder(text);
         final SpannableStringBuilder spannable = new SpannableStringBuilder(text);
@@ -548,7 +547,7 @@ public class ItemDataSetter {
             tempAlbumContainer.setVisibility(View.VISIBLE);
 
             ImageView image = (ImageView) tempAlbumContainer.findViewById(R.id.img_album_thumb);
-            ImageLoader.getInstance().displayImage(album.photo_604, image, animationLoader);
+            ImageLoader.getInstance().displayImage(album.photo_604, image);
             ((TextView) tempAlbumContainer.getChildAt(1)).setText(valueOf(album.size));
             ((TextView) tempAlbumContainer.getChildAt(2)).setText(album.title);
 
@@ -575,24 +574,25 @@ public class ItemDataSetter {
             CheckBox play_pause_music = (CheckBox) tempAudioContainer.getChildAt(0);
             SeekBar progressBar = (SeekBar) tempAudioContainer.getChildAt(1);
 
-                if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPlayed == true){
-                    Log.d("MY Fucking LOG", Constants.playedPausedRecord.audioUrl+" "+audio.url+" "+Constants.playedPausedRecord.isPlayed);
-                    Log.d("True", Constants.playedPausedRecord.audioUrl+" "+Constants.playedPausedRecord.isPlayed);
-                    play_pause_music.setChecked(true);
-                    Log.d("Progress bar in IDS", progressBar.toString());
-                    Constants.tempThread.interrupt();
-                    AudioPlayer.progressBar(progressBar).start();
-                    Constants.tempThread = AudioPlayer.progressBar(progressBar);
-                    Constants.previousCheckBoxState = play_pause_music;
-                    Constants.previousSeekBarState = progressBar;
-                    progressBar.setVisibility(View.VISIBLE);
+            if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPlayed == true){
+                Log.d("MY Fucking LOG", Constants.playedPausedRecord.audioUrl + " " + audio.url + " " + Constants.playedPausedRecord.isPlayed);
+                Log.d("True", Constants.playedPausedRecord.audioUrl + " " + Constants.playedPausedRecord.isPlayed);
+                play_pause_music.setChecked(true);
+                Log.d("Progress bar in IDS", progressBar.toString());
+                Constants.tempThread.interrupt();
+                AudioPlayer.progressBar(progressBar).start();
+                Constants.tempThread = AudioPlayer.progressBar(progressBar);
+                Constants.previousCheckBoxState = play_pause_music;
+                Constants.previousSeekBarState = progressBar;
+                progressBar.setVisibility(View.VISIBLE);
             }
             if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPaused == true){
-                    Constants.tempThread.interrupt();
-                    AudioPlayer.progressBar(progressBar).start();
-                    progressBar.setVisibility(View.VISIBLE);
-                    Constants.tempThread = AudioPlayer.progressBar(progressBar);
-                }
+                Constants.tempThread.interrupt();
+                AudioPlayer.progressBar(progressBar).start();
+                progressBar.setVisibility(View.VISIBLE);
+                Constants.tempThread = AudioPlayer.progressBar(progressBar);
+
+            }
 
 
             ((TextView) tempAudioContainer.getChildAt(2)).setText(getMediaTime(audio.duration));

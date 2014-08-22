@@ -58,9 +58,6 @@ public class Constants {
     public static int tempMaxPostAttachCounter = 0;
     public static int tempCurrentPhotoAttachCounter = 0;
 
-
-    public static String tempTextSuggestPost = "";
-
     public static String tempCameraPhotoFile = "";
     public static MediaPlayer mediaPlayer = null;
     public static boolean originRecord = true;
@@ -70,6 +67,8 @@ public class Constants {
     public static AudioRecords playedPausedRecord = new AudioRecords(null, false, false, false);
 
 
+
+    public static String tempTextSuggestPost = "";
 
     public static final Resources RESOURCES = MyApplication.getAppContext().getResources();
 

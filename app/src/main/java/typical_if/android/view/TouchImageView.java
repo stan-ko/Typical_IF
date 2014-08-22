@@ -1,4 +1,4 @@
-package typical_if.android;
+package typical_if.android.view;
 
 import android.content.Context;
 import android.graphics.Matrix;
@@ -13,6 +13,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
+
+import typical_if.android.R;
 import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
 
 public class TouchImageView extends ImageView {

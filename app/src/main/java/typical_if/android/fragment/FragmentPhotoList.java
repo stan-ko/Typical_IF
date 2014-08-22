@@ -25,6 +25,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import com.twotoasters.jazzylistview.JazzyGridView;
@@ -54,7 +55,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     final int PIC_CROP = 2;
     private static Uri mImageCaptureUri;
 
-    JazzyGridView gridOfPhotos;
+    GridView gridOfPhotos;
 
     public static FragmentPhotoList newInstance(long vk_group_id, long vk_album_id) {
         FragmentPhotoList fragment = new FragmentPhotoList();
@@ -87,14 +88,6 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-
-
     }
 
     @Override
@@ -127,6 +120,16 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         });
 
         //super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
     }
 
 
@@ -223,7 +226,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         }
 
         try {
-            gridOfPhotos = (JazzyGridView) view.findViewById(R.id.gridOfPhotos);
+            gridOfPhotos = (GridView) view.findViewById(R.id.gridOfPhotos);
             // gridOfPhotos.setTransitionEffect(mCurrentTransitionEffect);
         } catch (NullPointerException e) {
             Log.d("Loadding failed", "Not complete");

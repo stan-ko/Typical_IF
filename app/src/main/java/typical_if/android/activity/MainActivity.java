@@ -43,8 +43,7 @@ import typical_if.android.fragment.NavigationDrawerFragment;
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         FragmentFullScreenImagePhotoViewer.OnFragmentInteractionListener,
-        FragmentPhotoCommentAndInfo.OnFragmentInteractionListener,
-        FragmentPhotoList.OnFragmentInteractionListener{
+        FragmentPhotoCommentAndInfo.OnFragmentInteractionListener{
 
 
     private Drawable mIcon;
