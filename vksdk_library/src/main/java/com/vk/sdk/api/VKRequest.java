@@ -458,7 +458,8 @@ public class VKRequest extends VKObject {
 			    {
 				  try {
                       requestListener.onComplete(response);
-                  }catch(NullPointerException npe){Log.d(npe.toString(),"--------------------------------------------------->");
+                  }catch(NullPointerException npe){
+                  //Log.d(npe.toString(),"--------------------------------------------------->");
                   }
 			    }
 		    }

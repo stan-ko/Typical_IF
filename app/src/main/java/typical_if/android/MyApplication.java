@@ -59,8 +59,8 @@ public class MyApplication extends Application {
                 .diskCacheExtraOptions(480, 800, null)
                         //.taskExecutor(...)
                         //.taskExecutorForCachedImages(...)
-                        //.threadPoolSize(3) // default
-                        //.threadPriority(Thread.NORM_PRIORITY - 1) // default
+                        .threadPoolSize(30) // default
+                        .threadPriority(30) // default
                         //.tasksProcessingOrder(QueueProcessingType.FIFO) // default
                         //.discCache(new FileCountLimitedDiscCache(cacheDir, new Md5FileNameGenerator(), 1000))
                         //.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
@@ -72,14 +72,14 @@ public class MyApplication extends Application {
                 //
                 .defaultDisplayImageOptions(defaultOptions)
                 .memoryCache(new WeakMemoryCache())
-                .discCacheSize(100 * 1024 * 1024)
+               // .discCacheSize(100 * 1024 * 1024)
 
                         //.diskCacheSize(50 * 1024 * 1024)
                         //.diskCacheFileCount(100)
                         //.diskCacheFileNameGenerator(new HashCodeFileNameGenerator()) // default
                         //.imageDownloader(new BaseImageDownloader(context)) // default
                         //.imageDecoder(new BaseImageDecoder()) // default
-                .writeDebugLogs()
+               // .writeDebugLogs()
                 .build();
         ImageLoader.getInstance().init(config);
 
