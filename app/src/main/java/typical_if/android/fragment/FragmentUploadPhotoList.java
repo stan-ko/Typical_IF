@@ -1,26 +1,21 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.GridView;
-import android.widget.Toast;
 
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKPhotoArray;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -38,6 +33,7 @@ public class FragmentUploadPhotoList extends Fragment {
     static String[] uris;
     ArrayList<UploadPhotos> photolist = null;
     static GridView photos;
+
     int which;
     long gid;
 
@@ -49,7 +45,6 @@ public class FragmentUploadPhotoList extends Fragment {
         fragment.uris = uris;
         fragment.which = which;
         fragment.gid = gid;
-
         return fragment;
     }
 
@@ -118,11 +113,11 @@ public class FragmentUploadPhotoList extends Fragment {
 
     protected void handleResponse(View rootView, LayoutInflater inflater, final ArrayList<UploadPhotos> photolist, int columns) {
         photos = (GridView) rootView.findViewById(R.id.adding_photo_upload);
-        android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-        PhotoUploadAdapter photoUploadAdapter = new PhotoUploadAdapter(category, inflater, photolist, fragmentManager);
+        PhotoUploadAdapter photoUploadAdapter = new PhotoUploadAdapter(category, inflater, photolist, getActivity().getSupportFragmentManager());
         photos.setAdapter(photoUploadAdapter);
         photos.setNumColumns(columns);
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -133,19 +128,36 @@ public class FragmentUploadPhotoList extends Fragment {
             item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    VKRequest req;
+                    final int[] counter = {0};
+
                     for (int j = 0; j < photolist.size(); j++) {
                         if (photolist.get(j).ischecked) {
-                            req = VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photosrc), Constants.USER_ID, (int) gid);
-                            req.executeWithListener(new VKRequest.VKRequestListener() {
+                            VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photosrc), Constants.USER_ID, (int) gid).executeWithListener(new VKRequest.VKRequestListener() {
                                 @Override
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
-                                    Log.d(response.json.toString(), "=================================================");
+                                    Constants.tempPhotoPostAttach.add(((VKPhotoArray) response.parsedModel).get(0));
+                                    counter[0]++;
                                 }
                             });
                         }
                     }
+
+//                    while (Constants.tempPhotoPostAttach.size() != originalSize) {
+//                        try {
+//                            Thread.sleep(3);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        if (Constants.tempPhotoPostAttach.size() == originalSize) {
+//                            getActivity().getSupportFragmentManager().popBackStack();
+//                            getActivity().getSupportFragmentManager().popBackStack();
+//                            FragmentMakePost.refreshMakePostFragment(0);
+//                            break;
+//                        }
+//                    }
+
                     return true;
                 }
             });

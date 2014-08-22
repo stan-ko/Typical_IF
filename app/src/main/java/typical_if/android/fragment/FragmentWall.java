@@ -52,7 +52,8 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     LayoutInflater inflaterGlobal;
 
     String postColor;
-    Long gid;
+    long gid;
+
     int countPost = 10;
     static boolean isSuggested;
     static int isMember;

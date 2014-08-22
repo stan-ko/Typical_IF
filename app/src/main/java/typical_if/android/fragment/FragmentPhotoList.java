@@ -106,8 +106,8 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
         MenuItem item = menu.getItem(0).setEnabled(true);
-        MenuItem item1 = menu.getItem(1).setEnabled(true);
-        item1.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+        //MenuItem item1 = menu.getItem(1).setEnabled(true);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 VKHelper.getPhotoList(getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID), 1, new VKRequest.VKRequestListener() {
@@ -116,7 +116,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
                         handleResponse(response, columns, view);
-                        Log.d("OnComplete has done !", response.json.toString());
+                        addPhoto().show();
                     }
                 });
 

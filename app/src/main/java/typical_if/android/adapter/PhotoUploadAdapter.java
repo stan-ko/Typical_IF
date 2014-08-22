@@ -1,8 +1,5 @@
 package typical_if.android.adapter;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,11 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vk.sdk.VKUIHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -23,7 +18,6 @@ import java.util.ArrayList;
 import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.fragment.FragmentFullScreenViewFromPhone;
-import typical_if.android.fragment.FragmentPhotoFromCamera;
 import typical_if.android.fragment.FragmentUploadPhotoList;
 import typical_if.android.model.UploadPhotos;
 
@@ -94,17 +88,27 @@ public class PhotoUploadAdapter extends BaseAdapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 uploadphotolist.get(position).ischecked = isChecked;
 
-                if (isChecked) {
-                    viewHolder.background.setVisibility(View.VISIBLE);
-                    Constants.tempCurrentPhotoAttachCounter++;
+                if (Constants.tempPostAttachCounter == 0) {
+                    if (isChecked) {
+                        viewHolder.background.setVisibility(View.VISIBLE);
+                    } else {
+                        viewHolder.background.setVisibility(View.INVISIBLE);
+                    }
+
+                    viewHolder.checkbox.setChecked(isChecked);
                 } else {
-                    viewHolder.background.setVisibility(View.INVISIBLE);
-                    Constants.tempCurrentPhotoAttachCounter--;
+                    if (isChecked) {
+                        viewHolder.background.setVisibility(View.VISIBLE);
+                        Constants.tempCurrentPhotoAttachCounter++;
+                    } else {
+                        viewHolder.background.setVisibility(View.INVISIBLE);
+                        Constants.tempCurrentPhotoAttachCounter--;
+                    }
+
+                    viewHolder.checkbox.setChecked(isChecked);
+
+                    FragmentUploadPhotoList.refreshCheckBoxes();
                 }
-
-                viewHolder.checkbox.setChecked(isChecked);
-
-                FragmentUploadPhotoList.refreshCheckBoxes();
             }
         });
 
