@@ -378,7 +378,7 @@ public class VKSdk {
     }
 
     public static boolean wakeUpSession(Activity activity) {
-        VKAccessToken token = VKAccessToken.tokenFromSharedPreferences(activity,
+        VKAccessToken token = VKAccessToken.tokenFromSharedPreferences(VKUIHelper.getTopActivity(),
                 VK_SDK_ACCESS_TOKEN_PREF_KEY);
 
         if (sInstance.performTokenCheck(token, false)) {

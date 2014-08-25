@@ -61,17 +61,13 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
-            if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-                ImageLoader.getInstance().stop();
-            } else {
-                ImageLoader.getInstance().resume();
-            }
             temp = true;
         }
 
         @Override
         public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount,
                              int totalItemCount) {
+
             final int lastItem = firstVisibleItem + visibleItemCount;
 //        Log.d("**********************************", firstVisibleItem+"---"+visibleItemCount+"------"+totalItemCount);
 
@@ -145,13 +141,18 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater) {
         Wall wall = Wall.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
+
         adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
         wallListView = (ListView) rootView.findViewById(R.id.listViewWall);
         wallListView.setAdapter(adapter);
-        //wallListView.setScrollingCacheEnabled(false);
         // wallListView.setTransitionEffect(mCurrentTransitionEffect);
         wallListView.setOnScrollListener(pauseOnScrollListener);
         spinnerLayout.setVisibility(View.GONE);
+
+        if(wall.posts.size() == 0) {
+            fragmentManager.popBackStack();
+            Toast.makeText(getApplicationContext(), "No suggested posts", Toast.LENGTH_SHORT).show();
+        }
     }
 
     int mCurCheckPosition = 0;

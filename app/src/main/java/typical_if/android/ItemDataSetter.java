@@ -16,6 +16,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -322,16 +323,16 @@ public class ItemDataSetter {
                         .append("|v[aceginu]")
                         .append("|w[fs]")
                         .append("|y[etu]")
-                        .append("|z[amw]))")
-                        .append("|(?:(?:25[0-5]|2[0-4]") // or ip address
-                        .append("[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(?:25[0-5]|2[0-4][0-9]")
-                        .append("|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(?:25[0-5]|2[0-4][0-9]|[0-1]")
-                        .append("[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}")
-                        .append("|[1-9][0-9]|[0-9])))")
-                        .append("(?:\\:\\d{1,5})?)") // plus option port number
-                        .append("(\\/(?:(?:a-zA-Z0-9\\;\\/\\?\\:\\@\\&\\=\\#\\~")  // plus option query params
-                        .append("\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?")
-                        .append("(?:\\b|$)").toString()
+                        .append("|z[amw]))[^\\s]+))").toString()
+//                        .append("|(?:(?:25[0-5]|2[0-4]") // or ip address
+//                        .append("[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(?:25[0-5]|2[0-4][0-9]")
+//                        .append("|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(?:25[0-5]|2[0-4][0-9]|[0-1]")
+//                        .append("[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}")
+//                        .append("|[1-9][0-9]|[0-9])))")
+//                        .append("(?:\\:\\d{1,5})?)") // plus option port number
+//                        .append("(\\/(?:(?:a-zA-Z0-9\\;\\/\\?\\:\\@\\&\\=\\#\\~")  // plus option query params
+//                        .append("\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?")
+//                        .append("(?:\\b|$)").toString()
         ).matcher(text);
 
         while (matLinks.find()) {
@@ -804,9 +805,15 @@ public class ItemDataSetter {
                 if (!(layout_i instanceof LinearLayout)) {
                     continue;
                 } else {
-                    int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
-                    layout_i.setLayoutParams(params);
+                    if (videos.size() == 1 && photos.size() == 0) {
+                        if (videos.size() == 1 && photos.size() == 0) {
+                            int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                            float scaleFactor = (float) newWidth / 320;
+                            int newHeight = (int) (240 * scaleFactor);
+                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
+                            layout_i.setLayoutParams(params);
+                        }
+                    }
                 }
                 layout_i.setVisibility(View.VISIBLE);
                 final int jMax = layout_i.getChildCount();
@@ -825,11 +832,6 @@ public class ItemDataSetter {
                             img = (ImageView) view_i_j_k;
 
                             final int finalJ = videoPointer++;
-
-                            if (videosCount == 1 && photos.size() == 0) {
-                                int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
-                                videos.get(finalJ).photo_320 = videos.get(finalJ).photo.getImageForDimension(newWidth, newWidth);
-                            }
 
                             ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img);
 

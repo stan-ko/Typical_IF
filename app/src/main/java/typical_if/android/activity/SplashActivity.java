@@ -52,6 +52,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
         firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
 
         textView = (TextView) findViewById(R.id.splash_title);

@@ -58,15 +58,18 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Constants.mainActivity = this;
+
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        Constants.mainActivity = this;
-
         VKUIHelper.onCreate(this);
+        VKSdk.wakeUpSession(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
+        VKSdk.wakeUpSession(this);
 
         ItemDataSetter.fragmentManager = getSupportFragmentManager();
         Dialogs.fragmentManager = getSupportFragmentManager();
@@ -157,7 +160,7 @@ public class MainActivity extends ActionBarActivity implements
             new AlertDialog.Builder(VKUIHelper.getTopActivity())
                     .setMessage(authorizationError.toString())
                     .show();
-        }
+    }
 
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
@@ -215,7 +218,7 @@ public class MainActivity extends ActionBarActivity implements
                 fragment = FragmentEventsList.newInstance(vkGroupId);
                 break;
             case 5:
-                if (VKSdk.isLoggedIn() && VKSdk.wakeUpSession(Constants.mainActivity)) {
+                if (VKSdk.isLoggedIn()) {
                     VKSdk.logout();
                     mNavigationDrawerFragment.refreshNavigationDrawer();
                 } else {

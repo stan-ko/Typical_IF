@@ -16,7 +16,6 @@ import com.vk.sdk.VKSdk;
 
 import java.util.List;
 
-import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.view.AnimatedExpandableListView;
 
@@ -90,7 +89,7 @@ public class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedEx
         lblListHeader.setTypeface(null, Typeface.BOLD);
 
         if (groupPosition == 5) {
-            if (VKSdk.isLoggedIn() && VKSdk.wakeUpSession(Constants.mainActivity)) {
+            if (VKSdk.isLoggedIn()) {
                 lblListHeader.setText(R.string.title_logout);
             } else {
                 lblListHeader.setText(R.string.title_login);

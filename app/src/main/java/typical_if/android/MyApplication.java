@@ -2,13 +2,14 @@ package typical_if.android;
 
 import android.app.Application;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
 
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 /**
@@ -50,6 +51,7 @@ public class MyApplication extends Application {
 //                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
 //                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
                 .resetViewBeforeLoading(true)
+                .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .displayer(new FadeInBitmapDisplayer(300)).build();
 
@@ -58,10 +60,7 @@ public class MyApplication extends Application {
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
                 .memoryCacheExtraOptions(480, 800) // default = device screen dimensions
                 .diskCacheExtraOptions(480, 800, null)
-                        //.taskExecutor(...)
                         //.taskExecutorForCachedImages(...)
-                .threadPoolSize(5) // default
-                .threadPriority(Thread.MIN_PRIORITY + 3)
                         //.tasksProcessingOrder(QueueProcessingType.FIFO) // default
                         //.discCache(new FileCountLimitedDiscCache(cacheDir, new Md5FileNameGenerator(), 1000))
                         //.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
@@ -71,7 +70,8 @@ public class MyApplication extends Application {
                         //;;;
                 .denyCacheImageMultipleSizesInMemory()
                 .defaultDisplayImageOptions(defaultOptions)
-                .memoryCache(new WeakMemoryCache())
+                .tasksProcessingOrder(QueueProcessingType.FIFO)
+//                .memoryCache(new WeakMemoryCache())
                         // .discCacheSize(100 * 1024 * 1024)
 
                         //.diskCacheSize(50 * 1024 * 1024)
