@@ -61,6 +61,11 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
+            if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                ImageLoader.getInstance().stop();
+            } else {
+                ImageLoader.getInstance().resume();
+            }
             temp = true;
         }
 
@@ -88,6 +93,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             swipeView.setEnabled(enable);
         }
     };
+
     Bundle arguments;
 
     public static FragmentWall newInstance(long vkGroupId, boolean isSuggestedParam) {
@@ -116,7 +122,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
         if (!isSuggested) {
             initGroupWall(OfflineMode.loadJSON(gid), inflater);
-
             swipeView.setOnRefreshListener(this);
             swipeView.setColorScheme(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_light);
         } else {
@@ -143,6 +148,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
         wallListView = (ListView) rootView.findViewById(R.id.listViewWall);
         wallListView.setAdapter(adapter);
+        //wallListView.setScrollingCacheEnabled(false);
         // wallListView.setTransitionEffect(mCurrentTransitionEffect);
         wallListView.setOnScrollListener(pauseOnScrollListener);
         spinnerLayout.setVisibility(View.GONE);
@@ -232,7 +238,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onRefresh() {
-        if (OfflineMode.isOnline(getApplicationContext()) == false) {
+        if (!OfflineMode.isOnline(getApplicationContext())) {
             Toast.makeText(getApplicationContext(), getString(R.string.noInternetMessageFromToast_EN), Toast.LENGTH_SHORT).show();
         }
         new Handler().postDelayed(new Runnable() {

@@ -215,37 +215,11 @@ public class MainActivity extends ActionBarActivity implements
                 fragment = FragmentEventsList.newInstance(vkGroupId);
                 break;
             case 5:
-                boolean isWakeUp = true;
-
-                try {
-                    if (VKSdk.wakeUpSession()) {
-                        isWakeUp = true;
-                    } else {
-                        isWakeUp = false;
-                    }
-                } catch (NullPointerException e) {
-                    isWakeUp = false;
-                }
-                if (isWakeUp) {
-                    if (VKSdk.isLoggedIn()) {
-                        VKSdk.logout();
-                        mNavigationDrawerFragment.refreshNavigationDrawer();
-                    } else {
-                        if (!VKSdk.wakeUpSession()) {
-                            VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
-                        } else
-                            VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
-                    }
+                if (VKSdk.isLoggedIn() && VKSdk.wakeUpSession(Constants.mainActivity)) {
+                    VKSdk.logout();
+                    mNavigationDrawerFragment.refreshNavigationDrawer();
                 } else {
-                    if (VKSdk.isLoggedIn()) {
-                        VKSdk.logout();
-                        mNavigationDrawerFragment.refreshNavigationDrawer();
-                    } else {
-                        if (!VKSdk.wakeUpSession()) {
-                            VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
-                        } else
-                            VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
-                    }
+                    VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
                 }
                 break;
         }

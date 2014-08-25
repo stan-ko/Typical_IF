@@ -17,7 +17,10 @@
         android:dividerHeight="2dp"
         android:layout_centerHorizontal="true"
         android:background="#ffd6d6d6"
-        android:divider="#ffd6d6d6" />
+        android:divider="#ffd6d6d6"
+        android:smoothScrollbar="true"
+        android:scrollingCache="false"
+        android:animationCache="false"/>
 
     <RelativeLayout
         android:layout_width="fill_parent"

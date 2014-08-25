@@ -16,6 +16,7 @@ import com.vk.sdk.VKSdk;
 
 import java.util.List;
 
+import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.view.AnimatedExpandableListView;
 
@@ -88,52 +89,11 @@ public class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedEx
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.groupItem);
         lblListHeader.setTypeface(null, Typeface.BOLD);
 
-//        if (groupPosition == 5) {
-//            try {
-//                if (VKSdk.wakeUpSession()) {
-//                    if (VKSdk.isLoggedIn()) {
-//                        lblListHeader.setText(R.string.title_logout);
-//                    } else {
-//                        lblListHeader.setText(R.string.title_login);
-//                    }
-//                }
-//            } catch (NullPointerException e) {
-//                if (VKSdk.isLoggedIn()) {
-//                    lblListHeader.setText(R.string.title_logout);
-//                } else {
-//                    lblListHeader.setText(R.string.title_login);
-//                }
-//            }
-//
-//        } else {
-//            lblListHeader.setText(headerTitle);
-//        }
-
-        boolean isWakeUp = true;
-
-        try {
-            if (VKSdk.wakeUpSession()) {
-                isWakeUp = true;
-            } else {
-                isWakeUp = false;
-            }
-        } catch (NullPointerException e) {
-            isWakeUp = false;
-        }
-
         if (groupPosition == 5) {
-            if (isWakeUp) {
-                if (VKSdk.isLoggedIn()) {
-                    lblListHeader.setText(R.string.title_logout);
-                } else {
-                    lblListHeader.setText(R.string.title_login);
-                }
+            if (VKSdk.isLoggedIn() && VKSdk.wakeUpSession(Constants.mainActivity)) {
+                lblListHeader.setText(R.string.title_logout);
             } else {
-                if (VKSdk.isLoggedIn()) {
-                    lblListHeader.setText(R.string.title_logout);
-                } else {
-                    lblListHeader.setText(R.string.title_login);
-                }
+                lblListHeader.setText(R.string.title_login);
             }
         } else {
             lblListHeader.setText(headerTitle);

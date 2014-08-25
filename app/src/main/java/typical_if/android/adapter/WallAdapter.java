@@ -86,6 +86,7 @@ public class WallAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+
         final VKWallPostWrapper post = posts.get(position);
 
         initViewHolder(viewHolder, postColor, wall, position, fragmentManager, post, context);
@@ -273,6 +274,8 @@ public class WallAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
+        public int position;
+
         public final RelativeLayout postTextLayout;
         public final RelativeLayout postMediaLayout;
         public final LinearLayout postAudioLayout;

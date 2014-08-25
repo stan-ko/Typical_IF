@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,7 +109,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
         imagepager.setCurrentItem(currentPosition);
 
 
-        Log.d("Current VIEW", photos.get(imagepager.getCurrentItem()).text);
+        //Log.d("Current VIEW", photos.get(imagepager.getCurrentItem()).text);
         VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {

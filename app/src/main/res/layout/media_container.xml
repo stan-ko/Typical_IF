@@ -25,12 +25,12 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:layout_alignParentTop="false"
+                android:layout_height="wrap_content"
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
-                android:layout_alignParentBottom="false"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:layout_alignParentTop="true"
+                android:layout_alignBottom="@+id/img_photo_1">
 
                 <ImageView
                     android:layout_width="30dp"

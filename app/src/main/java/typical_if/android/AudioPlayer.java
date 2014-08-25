@@ -1,23 +1,15 @@
 package typical_if.android;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.Configuration;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 
-import com.vk.sdk.VKUIHelper;
-
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  * Created by LJ on 12.08.2014.
@@ -25,8 +17,6 @@ import java.util.ArrayList;
 public class AudioPlayer {
 
     public static void getOwnMadiaPlayer(final Activity activity, final String stream, final CheckBox play, final SeekBar progress) {
-
-        final AudioManager audioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);
 
         play.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -58,7 +48,7 @@ public class AudioPlayer {
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
-                            Constants.mediaPlayer.setAudioStreamType(audioManager.STREAM_MUSIC);
+                            Constants.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                             Constants.mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                                 @Override
                                 public void onPrepared(MediaPlayer mp) {
@@ -69,8 +59,6 @@ public class AudioPlayer {
                                     Constants.playedPausedRecord.audioUrl = stream;
                                     Constants.playedPausedRecord.isPlayed = true;
                                     Constants.playedPausedRecord.isPaused = false;
-                                    //VKUIHelper.getTopActivity().startService(new Intent(VKUIHelper.getTopActivity().getApplicationContext(), AudioPlayerService.class));
-
                                 }
                             });
                             Constants.mediaPlayer.prepareAsync();

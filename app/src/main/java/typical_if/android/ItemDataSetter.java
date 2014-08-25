@@ -16,7 +16,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -440,7 +439,7 @@ public class ItemDataSetter {
         }
 
         ViewGroup signedContainer = getPreparedView(parent, R.layout.signed_post_container);
-        ImageLoader.getInstance().displayImage(image, (ImageView) signedContainer.getChildAt(0), animationLoader);
+        ImageLoader.getInstance().displayImage(image, (ImageView) signedContainer.getChildAt(0));
 
         TextView txt_name = ((TextView) signedContainer.getChildAt(1));
         txt_name.setText(name);
@@ -459,7 +458,7 @@ public class ItemDataSetter {
     public static void setLink(RelativeLayout parent, final VKApiLink link) {
         ViewGroup linkContainer = getPreparedView(parent, R.layout.link_container);
 
-        ImageLoader.getInstance().displayImage(link.image_src, (ImageView) linkContainer.getChildAt(0), animationLoader);
+        //getInstance().displayImage(link.image_src, (ImageView) linkContainer.getChildAt(0));
         ((TextView) linkContainer.getChildAt(1)).setText(link.title);
         ((TextView) linkContainer.getChildAt(2)).setText(link.url);
 
@@ -559,10 +558,10 @@ public class ItemDataSetter {
             SeekBar progressBar = (SeekBar) tempAudioContainer.getChildAt(1);
 
             if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPlayed == true){
-                Log.d("MY Fucking LOG", Constants.playedPausedRecord.audioUrl + " " + audio.url + " " + Constants.playedPausedRecord.isPlayed);
-                Log.d("True", Constants.playedPausedRecord.audioUrl + " " + Constants.playedPausedRecord.isPlayed);
+                //Log.d("MY Fucking LOG", Constants.playedPausedRecord.audioUrl + " " + audio.url + " " + Constants.playedPausedRecord.isPlayed);
+                //Log.d("True", Constants.playedPausedRecord.audioUrl + " " + Constants.playedPausedRecord.isPlayed);
                 play_pause_music.setChecked(true);
-                Log.d("Progress bar in IDS", progressBar.toString());
+                //Log.d("Progress bar in IDS", progressBar.toString());
                 Constants.tempThread.interrupt();
                 AudioPlayer.progressBar(progressBar).start();
                 Constants.tempThread = AudioPlayer.progressBar(progressBar);
@@ -606,7 +605,7 @@ public class ItemDataSetter {
 
             if (doc.isImage()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                ImageLoader.getInstance().displayImage(doc.photo_100, image, animationLoader);
+                ImageLoader.getInstance().displayImage(doc.photo_100, image);
                 size.setText(Constants.DOC_TYPE_IMAGE + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -616,7 +615,7 @@ public class ItemDataSetter {
                 });
             } else if (doc.isGif()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                ImageLoader.getInstance().displayImage(doc.photo_100, image, animationLoader);
+                ImageLoader.getInstance().displayImage(doc.photo_100, image);
                 size.setText(Constants.DOC_TYPE_ANIMATION + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -636,7 +635,7 @@ public class ItemDataSetter {
                                 spinner.setVisibility(View.GONE);
                                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 image.setLayoutParams(new RelativeLayout.LayoutParams(setInDp(100), setInDp(60)));
-                                ImageLoader.getInstance().displayImage(doc.photo_100, image, animationLoader);
+                                ImageLoader.getInstance().displayImage(doc.photo_100, image);
                                 title.setVisibility(View.VISIBLE);
                                 size.setVisibility(View.VISIBLE);
                                 image.setEnabled(false);
@@ -720,10 +719,18 @@ public class ItemDataSetter {
             final int photosCount = photos.size();
             for (int i = 0; i < photosCount; i++) {
                 final ViewGroup layout_i = (ViewGroup) mediaContainer.getChildAt(i);
+
                 if (!(layout_i instanceof LinearLayout)) {
                     continue;
+                } else {
+                    if (photosCount > 1) {
+                        int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
+                        layout_i.setLayoutParams(params);
+                    }
                 }
                 layout_i.setVisibility(View.VISIBLE);
+
                 linearBreak:
                 for (int j = 0, photoPointer = 0; j < photos.size(); j++) {
                     final ViewGroup layout_i_j = (ViewGroup) layout_i.getChildAt(j);
@@ -738,14 +745,15 @@ public class ItemDataSetter {
                             final int finalJ = photoPointer++;
                             if (photosCount == 1 && videos.size() == 0) {
                                 int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
-                                float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width + 30);
+                                float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width);
                                 int newHeight = (int) (photos.get(finalJ).height * scaleFactor);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
                                 img.setLayoutParams(params);
+                                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             }
 
+                            ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img);
 
-                            ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img, animationLoader);
                             img.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -769,9 +777,12 @@ public class ItemDataSetter {
                                     lastPositionK = k;
                                     break linearBreak;
                                 }
+
                                 img = (ImageView) layout_i_j_k_l.getChildAt(0);
                                 final int finalL = photoPointer++;
-                                ImageLoader.getInstance().displayImage(photos.get(finalL).photo_130, img, animationLoader);
+
+                                ImageLoader.getInstance().displayImage(photos.get(finalL).photo_604, img);
+
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -792,6 +803,10 @@ public class ItemDataSetter {
                 final ViewGroup layout_i = (ViewGroup) mediaContainer.getChildAt(i);
                 if (!(layout_i instanceof LinearLayout)) {
                     continue;
+                } else {
+                    int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
+                    layout_i.setLayoutParams(params);
                 }
                 layout_i.setVisibility(View.VISIBLE);
                 final int jMax = layout_i.getChildCount();
@@ -808,42 +823,45 @@ public class ItemDataSetter {
                                 break;
                             }
                             img = (ImageView) view_i_j_k;
-                            if (videosCount == 1) {
-                                img.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, setInDp(250)));
-                                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            }
+
                             final int finalJ = videoPointer++;
-                            ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img, animationLoader);
-                            img.setOnClickListener(new View.OnClickListener() {
+
+                            if (videosCount == 1 && photos.size() == 0) {
+                                int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                                videos.get(finalJ).photo_320 = videos.get(finalJ).photo.getImageForDimension(newWidth, newWidth);
+                            }
+
+                            ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img);
+
+                            relativeLayout = (RelativeLayout) layout_i_j.getChildAt(k + 1);
+                            relativeLayout.setVisibility(View.VISIBLE);
+                            relativeLayout.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
 //                                    String videoID = videos.get(finalJ).toAttachmentString().toString();
 //                                    videoID = videoID.replaceFirst("video", "");
-//                                    Toast.makeText(context, videos.get(finalJ).access_key, Toast.LENGTH_SHORT).show();
+//
+//
 //                                    VKHelper.doPlayerRequest(videoID, new VKRequest.VKRequestListener() {
 //                                        @Override
 //                                        public void onComplete(VKResponse response) {
 //                                            super.onComplete(response);
 //                                            JSONObject mainResponse = response.json.optJSONObject("response");
 //                                            JSONArray item = mainResponse.optJSONArray("items");
-//                                            try {
-//                                                JSONObject files = ((JSONObject) item.get(0)).optJSONObject("files");
-//                                                if (files != null && files.has("external")) {
-//                                                    String url = files.optString("external");
-//                                                    Uri uri = Uri.parse(url);
-//                                                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-//                                                } else {
-//                                                    Dialogs.videoResolutionDialog(context, files);
-//                                                }
-//                                            } catch (JSONException e) {
-//                                                e.printStackTrace();
+//                                            JSONObject files = item.optJSONObject(0).optJSONObject("files");
+//                                            Toast.makeText(context, files.toString(), Toast.LENGTH_SHORT).show();
+//                                            if (files != null && files.has("external")) {
+//                                                String url = files.optString("external");
+//                                                Uri uri = Uri.parse(url);
+//                                                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+//                                            } else {
+//                                                Dialogs.videoResolutionDialog(context, files);
 //                                            }
 //                                        }
 //                                    });
+                                    Toast.makeText(context, "V rozrobci", Toast.LENGTH_SHORT).show();
                                 }
                             });
-                            relativeLayout = (RelativeLayout) layout_i_j.getChildAt(k + 1);
-                            relativeLayout.setVisibility(View.VISIBLE);
                             ((TextView) relativeLayout.getChildAt(1)).setText(getMediaTime(videos.get(finalJ).duration));
                             ((TextView) relativeLayout.getChildAt(2)).setText(videos.get(finalJ).title);
                         } else if (view_i_j_k instanceof LinearLayout) {
@@ -858,7 +876,7 @@ public class ItemDataSetter {
                                     }
                                     final int finalJ = videoPointer++;
                                     img = (ImageView) layout_i_j_k_l.getChildAt(0);
-                                    ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_130, img, animationLoader);
+                                    ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_130, img);
 
                                     img.setOnClickListener(new View.OnClickListener() {
                                         @Override

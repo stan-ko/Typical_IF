@@ -46,7 +46,7 @@ public class MyApplication extends Application {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheOnDisc(true)
                 .cacheInMemory(true)
-//                .showImageOnLoading(R.drawable.ic_stubif) // TODO resource or drawable
+                .showImageOnLoading(R.drawable.grey) // TODO resource or drawable
 //                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
 //                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
                 .resetViewBeforeLoading(true)
@@ -60,8 +60,8 @@ public class MyApplication extends Application {
                 .diskCacheExtraOptions(480, 800, null)
                         //.taskExecutor(...)
                         //.taskExecutorForCachedImages(...)
-                .threadPoolSize(30) // default
-                .threadPriority(30) // default
+                .threadPoolSize(5) // default
+                .threadPriority(Thread.MIN_PRIORITY + 3)
                         //.tasksProcessingOrder(QueueProcessingType.FIFO) // default
                         //.discCache(new FileCountLimitedDiscCache(cacheDir, new Md5FileNameGenerator(), 1000))
                         //.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
@@ -70,7 +70,6 @@ public class MyApplication extends Application {
                         //.diskCache(new UnlimitedDiscCache(cacheDir)) // default
                         //;;;
                 .denyCacheImageMultipleSizesInMemory()
-                        //
                 .defaultDisplayImageOptions(defaultOptions)
                 .memoryCache(new WeakMemoryCache())
                         // .discCacheSize(100 * 1024 * 1024)
