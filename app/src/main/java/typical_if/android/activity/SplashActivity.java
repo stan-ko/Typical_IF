@@ -46,7 +46,12 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     Configuration config;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     SharedPreferences firstOpenPref = null;
-    final int countOfPosts = 100;
+
+    public static int getCountOfPosts() {
+        return countOfPosts;
+    }
+
+    private final static int countOfPosts = 100;
     final int offsetDefault = 0;
 
     @Override
