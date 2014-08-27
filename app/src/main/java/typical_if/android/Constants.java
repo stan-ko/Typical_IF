@@ -65,9 +65,11 @@ public class Constants {
     public static ArrayList<VKApiVideo> tempVideoPostAttach = new ArrayList<VKApiVideo>();
     public static ArrayList<VKApiAudio> tempAudioPostAttach = new ArrayList<VKApiAudio>();
     public static ArrayList<VKApiDocument> tempDocPostAttach = new ArrayList<VKApiDocument>();
+
     public static int tempPostAttachCounter = 0;
     public static int tempMaxPostAttachCounter = 0;
     public static int tempCurrentPhotoAttachCounter = 0;
+    public static int COUNT_OF_PHOTOS=0;
 
     public static String tempCameraPhotoFile = "";
     public static MediaPlayer mediaPlayer = null;

@@ -133,13 +133,13 @@
                         android:layout_toEndOf="@+id/cb_like"
                         android:visibility="visible"
                         android:text="Сьогодні о 16:18"
-                        android:textSize="10dp"
+                        android:textSize="15dp"
                         android:layout_centerVertical="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
 
                     <CheckBox
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:id="@+id/cb_like"
                         android:button="@drawable/like_or_not_liked_selector"
@@ -152,7 +152,7 @@
                         android:visibility="visible" />
 
                     <CheckBox
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:id="@+id/cb_comment"
                         android:button="@android:drawable/ic_notification_clear_all"
@@ -164,7 +164,7 @@
                         android:layout_toStartOf="@+id/cb_like" />
 
                     <CheckBox
-                        android:layout_width="50dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="50dp"
                         android:id="@+id/cb_repost"
                         android:button="@drawable/repost_or_not_selector"
