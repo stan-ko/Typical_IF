@@ -113,10 +113,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
             });
 
         }
-
-
-        // TODO: add neutral button if has cached data to work offline with
-
         builder.create().show();
     }
 

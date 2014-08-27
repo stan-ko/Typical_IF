@@ -22,10 +22,13 @@ import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.PhotoListAdapter;
@@ -134,7 +137,8 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                 @Override
                 public void onComplete(VKResponse response) {
                     super.onComplete(response);
-                    handleResponse(response, columns, view);
+                    OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
+                    handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
                 }
             });
         } else {
@@ -143,18 +147,22 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                 @Override
                 public void onComplete(VKResponse response) {
                     super.onComplete(response);
-                    handleResponse(response, columns, view);
+                    OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
+                    handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
                 }
             });
+        }
+        if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(Constants.ALBUM_ID)) {
+            handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID),columns, view);
         }
     }
 
 
     public static int albumSize;
 
-    protected void handleResponse(VKResponse response, final int columns, View view) {
+    protected void handleResponse(JSONObject jsonObject, final int columns, View view) {
 
-        final ArrayList<VKApiPhoto> photos = VKHelper.getPhotosFromJSONArray(response.json);
+        final ArrayList<VKApiPhoto> photos = VKHelper.getPhotosFromJSONArray(jsonObject);
         albumSize = VKHelper.countOfPhotos;
         for (int i = 0; i < photos.size(); i++) {
             photos2.add(photos.get(i));

@@ -11,6 +11,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,16 +20,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
-
-import com.vk.sdk.VKUIHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import typical_if.android.view.AnimatedExpandableListView;
 import typical_if.android.R;
 import typical_if.android.adapter.ExpandableListAdapter;
+import typical_if.android.view.AnimatedExpandableListView;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -126,6 +124,8 @@ public class NavigationDrawerFragment extends Fragment {
                         mDrawerListView.expandGroupWithAnimation(groupPosition);
                     }
                 }
+                Log.d("--child---NO-------------", "---------------------");
+
                 return true;
             }
 
@@ -150,6 +150,7 @@ public class NavigationDrawerFragment extends Fragment {
                     mDrawerLayout.closeDrawer(mFragmentContainerView);
                     mCallbacks.onNavigationDrawerItemSelected(groupPosition, childPosition);
                 }
+                Log.d("--child----------------", "---------------------");
                 return false;
             }
         });

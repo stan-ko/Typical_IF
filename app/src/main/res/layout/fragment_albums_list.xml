@@ -5,7 +5,7 @@
     android:background="#ff000000">
 
 
-    <com.twotoasters.jazzylistview.JazzyListView
+    <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/listOfAlbums"
