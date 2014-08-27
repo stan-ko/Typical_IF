@@ -255,7 +255,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             public void run() {
                 swipeView.setRefreshing(false);
 
-                VKHelper.doGroupWallRequest(offsetO, 10, Constants.GROUP_ID, new VKRequest.VKRequestListener() {
+                VKHelper.doGroupWallRequest(offsetO, Offset, Constants.GROUP_ID, new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
