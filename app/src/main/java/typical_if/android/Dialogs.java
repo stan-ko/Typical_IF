@@ -149,7 +149,7 @@ public class Dialogs {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAlbumsList.newInstance()).addToBackStack(null).commit();
+                        ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAlbumsList.newInstance(type)).addToBackStack(null).commit();
                         break;
                     case 1:
                         ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentUploadAlbumList.newInstance(gid, type)).addToBackStack(null).commit();

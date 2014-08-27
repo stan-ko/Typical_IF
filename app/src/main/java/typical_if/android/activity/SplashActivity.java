@@ -54,6 +54,11 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        VKUIHelper.onCreate(this);
+        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
+        VKSdk.wakeUpSession(this);
+
+
         firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
 
         textView = (TextView) findViewById(R.id.splash_title);
@@ -72,9 +77,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         config = new Configuration();
         config.locale = locale;
         getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
-
-        VKUIHelper.onCreate(this);
-        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
 
         ItemDataSetter.loadUserId();
     }

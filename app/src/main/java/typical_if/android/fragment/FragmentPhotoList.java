@@ -37,16 +37,16 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
     //private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private static final int PICK_FROM_CAMERA = 1;
-
+    int type;
     final int PIC_CROP = 2;
     private static Uri mImageCaptureUri;
 
     GridView gridOfPhotos;
 
-    public static FragmentPhotoList newInstance() {
+    public static FragmentPhotoList newInstance(int type) {
         FragmentPhotoList fragment = new FragmentPhotoList();
         Bundle args = new Bundle();
-
+        fragment.type = type;
         fragment.setArguments(args);
         return fragment;
     }
@@ -90,7 +90,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Dialogs.addPhotoFrom().show();
-               return true;
+                return true;
             }
         });
 
@@ -123,22 +123,31 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         float scaleFactor = getResources().getDisplayMetrics().density * 80;
 
         int number = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-        final int columns = (int) ((float) number /scaleFactor);
+        final int columns = (int) ((float) number / scaleFactor);
         this.columns = columns;
         VKHelper.offsetCounter = 0;
 
 
-        VKHelper.getPhotoList(Constants.GROUP_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
+        if (type == 0) {
+            VKHelper.getPhotoList(Constants.USER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
 
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                handleResponse(response, columns, view);
-            }
-        });
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    handleResponse(response, columns, view);
+                }
+            });
+        } else {
+            VKHelper.getPhotoList(Constants.GROUP_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
 
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    handleResponse(response, columns, view);
+                }
+            });
+        }
     }
-
 
 
     public static int albumSize;
@@ -169,7 +178,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         gridOfPhotos.setAnimation(a);
         gridOfPhotos.setOnScrollListener(this);
 
-        if (Constants.GROUP_ID > 0) {
+        if (type == 0) {
             gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -185,11 +194,11 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
-                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-           final FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+                    final FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-                transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-                transaction.add(R.id.container, fragment).addToBackStack("String").commit();
+                    transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+                    transaction.add(R.id.container, fragment).addToBackStack("String").commit();
                 }
             });
         }
