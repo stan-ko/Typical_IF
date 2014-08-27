@@ -50,6 +50,17 @@ public class Constants {
 
     public static long USER_ID;
 
+    public static String PARAM_NAME;
+    public static String PARAM_NAME2;
+
+    public static String DELETE_COMMENT_METHOD_NAME;
+    public static String CREATE_COMMENT_METHOD_NAME;
+    public static String EDIT_COMMENT_METHOD_NAME;
+    public static String GET_COMMENTS_METHOD_NAME;
+
+    public static long GROUP_ID;
+    public static long ALBUM_ID;
+
     public static ArrayList<VKApiPhoto> tempPhotoPostAttach = new ArrayList<VKApiPhoto>();
     public static ArrayList<VKApiVideo> tempVideoPostAttach = new ArrayList<VKApiVideo>();
     public static ArrayList<VKApiAudio> tempAudioPostAttach = new ArrayList<VKApiAudio>();

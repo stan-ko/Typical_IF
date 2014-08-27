@@ -9,63 +9,62 @@
         android:layout_height="match_parent"
         android:id="@+id/img_album_cover"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="4dp"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="4dp"
         android:background="#ff000000"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="4dp"
         android:scaleType="centerCrop" />
 
 
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="85dp"
+        android:layout_height="65dp"
         android:layout_alignBottom="@+id/img_album_cover"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:background="@drawable/cross_color"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp">
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/txt_album_name"
-            android:textSize="25dp"
+            android:textSize="15dp"
+            android:textColor="#ffffffff"
+            android:paddingLeft="12dp"
+            android:paddingBottom="5dp"
             android:layout_above="@+id/txt_photos_count"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:textColor="#ffffffff"
-            android:paddingLeft="10dp" />
+            android:layout_alignParentStart="true" />
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:text="New Text"
             android:id="@+id/txt_photos_count"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:layout_gravity="right"
 
             android:textColor="#b5ffffff"
-            android:paddingLeft="10dp"
-            android:paddingBottom="10dp"
             android:layout_toEndOf="@+id/photo_ico"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/photo_ico" />
+            android:layout_toRightOf="@+id/photo_ico"
+            android:layout_marginBottom="5dp" />
 
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/photo_ico"
             android:layout_alignTop="@+id/txt_photos_count"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="10dp"
-            android:src="@android:drawable/ic_menu_camera" />
+            android:src="@android:drawable/ic_menu_camera"
+            android:layout_marginBottom="5dp" />
 
     </RelativeLayout>
 

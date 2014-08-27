@@ -74,7 +74,10 @@ public class VKApiUser extends VKApiOwner implements android.os.Parcelable {
      * First name of user.
      */
     public String first_name = "DELETED";
-
+    /**
+     * Screen name of user.
+     */
+    public String screen_name = "DELETED";
     /**
      * Last name of user.
      */

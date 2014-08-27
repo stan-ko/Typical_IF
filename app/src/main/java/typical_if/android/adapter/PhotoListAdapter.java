@@ -72,30 +72,30 @@ public class PhotoListAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        final ProgressBar pbPreviewImageIsLoading = viewHolder.pbPreviewImageIsLoading;
+       // final ProgressBar pbPreviewImageIsLoading = viewHolder.pbPreviewImageIsLoading;
 
         imageLoader.getInstance().displayImage(PhotoUrlHelper.getPreviewUrl(photo), viewHolder.photo, options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
-                pbPreviewImageIsLoading.setVisibility(View.VISIBLE);
+                //pbPreviewImageIsLoading.setVisibility(View.VISIBLE);
                 //((ViewGroup)view.getParent()).findViewById(R.id.pbPreviewImageIsLoading).setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                pbPreviewImageIsLoading.setVisibility(View.GONE);
+              //  pbPreviewImageIsLoading.setVisibility(View.GONE);
                 //((ViewGroup)view.getParent()).findViewById(R.id.pbPreviewImageIsLoading).setVisibility(View.GONE);
             }
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                pbPreviewImageIsLoading.setVisibility(View.GONE);
+             //   pbPreviewImageIsLoading.setVisibility(View.GONE);
                 //((ViewGroup)view.getParent()).findViewById(R.id.pbPreviewImageIsLoading).setVisibility(View.GONE);
             }
 
             @Override
             public void onLoadingCancelled(String imageUri, View view) {
-                viewHolder.pbPreviewImageIsLoading.setVisibility(View.GONE);
+              //  viewHolder.pbPreviewImageIsLoading.setVisibility(View.GONE);
                 //((ViewGroup)view.getParent()).findViewById(R.id.pbPreviewImageIsLoading).setVisibility(View.GONE);
             }
         });
@@ -105,11 +105,11 @@ public class PhotoListAdapter extends BaseAdapter {
 
     private static class ViewHolder {
         public final ImageView photo;
-        public final ProgressBar pbPreviewImageIsLoading;
+        //public final ProgressBar pbPreviewImageIsLoading;
 
         public ViewHolder(View convertView) {
             this.photo = (ImageView) convertView.findViewById(R.id.img_photo_cover);
-            this.pbPreviewImageIsLoading = (ProgressBar) convertView.findViewById(R.id.pbPreviewImageIsLoading);
+          //  this.pbPreviewImageIsLoading = (ProgressBar) convertView.findViewById(R.id.pbPreviewImageIsLoading);
         }
     }
 

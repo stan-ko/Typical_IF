@@ -16,7 +16,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +43,7 @@ import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPhotoAlbum;
 import com.vk.sdk.api.model.VKApiPlace;
 import com.vk.sdk.api.model.VKApiPoll;
+import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKApiWikiPage;
 import com.vk.sdk.api.model.VKAttachments;
@@ -57,8 +57,7 @@ import java.util.regex.Pattern;
 
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
-import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
-import typical_if.android.model.Wall.Profile;
+import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.model.Wall.Wall;
 
 import static java.lang.String.format;
@@ -112,7 +111,7 @@ public class ItemDataSetter {
 
     public static int position;
     public static android.support.v4.app.FragmentManager fragmentManager;
-    public static long aid = 0;
+
 
     public static void setSuggestAttachments(VKAttachments attachments) {
         int counter = 0;
@@ -427,7 +426,7 @@ public class ItemDataSetter {
     }
 
     public static void setSigned(final int id, RelativeLayout parent) {
-        Profile profile;
+        VKApiUser profile;
         String name = null;
         String image = null;
 
@@ -758,7 +757,7 @@ public class ItemDataSetter {
                             img.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Fragment fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, wall.group.id, aid);
+                                    Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
                                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                 }
                             });
@@ -787,7 +786,7 @@ public class ItemDataSetter {
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Fragment fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, wall.group.id, aid);
+                                        Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
                                         fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                     }
                                 });

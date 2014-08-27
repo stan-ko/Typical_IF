@@ -126,7 +126,7 @@ public class Dialogs {
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
                                 ItemDataSetter.fragmentManager.popBackStack();
-                                ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(gid, true)).addToBackStack(null).commit();
+                                ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
                                 Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -149,7 +149,7 @@ public class Dialogs {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAlbumsList.newInstance(Constants.USER_ID)).addToBackStack(null).commit();
+                        ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAlbumsList.newInstance()).addToBackStack(null).commit();
                         break;
                     case 1:
                         ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentUploadAlbumList.newInstance(gid, type)).addToBackStack(null).commit();

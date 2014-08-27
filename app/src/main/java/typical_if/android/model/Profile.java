@@ -30,6 +30,7 @@ public class Profile {
         this.photo_50= photo_50;
         this.photo_100=photo_100;
         this.online=online;
+        //88
      }
 
     public static final String JSON_KEY_ID = "id";

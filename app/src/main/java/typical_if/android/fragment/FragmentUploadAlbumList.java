@@ -24,7 +24,7 @@ import typical_if.android.adapter.AlbumUploadAdapter;
 public class FragmentUploadAlbumList extends Fragment {
     private int count;
     private String[] arrPath;
-    private static final String ARG_VK_GROUP_ID = "vk_group_id";
+
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
     int which;
     long gid;
@@ -32,7 +32,7 @@ public class FragmentUploadAlbumList extends Fragment {
     public static FragmentUploadAlbumList newInstance(long vkGroupId, int which) {
         FragmentUploadAlbumList fragment = new FragmentUploadAlbumList();
         Bundle args = new Bundle();
-        args.putLong(ARG_VK_GROUP_ID, vkGroupId);
+
         fragment.which = which;
         fragment.gid = vkGroupId;
 

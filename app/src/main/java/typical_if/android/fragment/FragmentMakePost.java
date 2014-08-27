@@ -35,7 +35,7 @@ import typical_if.android.VKHelper;
  * Created by admin on 18.08.2014.
  */
 public class FragmentMakePost extends Fragment {
-    private static final String ARG_VK_GROUP_ID = "vk_group_id";
+
     private static long gid;
     private long pid;
     private int type;
@@ -47,7 +47,7 @@ public class FragmentMakePost extends Fragment {
     public static FragmentMakePost newInstance(long vkGroupId, long post_id, int typeParam) {
         FragmentMakePost fragment = new FragmentMakePost();
         Bundle args = new Bundle();
-        args.putLong(ARG_VK_GROUP_ID, vkGroupId);
+
         fragment.gid = vkGroupId;
         fragment.pid = post_id;
         fragment.type = typeParam;
@@ -177,7 +177,7 @@ public class FragmentMakePost extends Fragment {
                                 super.onComplete(response);
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 ItemDataSetter.fragmentManager.popBackStack();
-                                ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(gid, true)).addToBackStack(null).commit();
+                                ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
                                 Toast.makeText(getActivity(), "Edited", Toast.LENGTH_SHORT).show();
                             }
                         });

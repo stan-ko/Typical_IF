@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import typical_if.android.model.Wall.Wall;
 
 /**
  * Created by pc on 05.08.14.
@@ -70,35 +73,69 @@ public class OfflineMode {
         }
     }
 
-        public static JSONObject jsonPlus( JSONObject j, JSONObject j2){
+    public static JSONObject jsonPlus (final JSONObject jsonObject, final JSONObject jsonObjectOffset) {
 
-            try {
-                int countJ = j.getInt("count");
-                int countJ2 = j2.getInt("count");
-                int count = countJ+countJ2;
+        //---------------1-----------------------------
+        final JSONObject object = jsonObject.optJSONObject(Wall.JSON_KEY_RESPONSE);
+        //final int count = object.optInt(Wall.JSON_KEY_COUNT);
+      //  Log.d(Wall.JSON_KEY_COUNT, String.valueOf(count));
+        // items
+        String items = object.optString(Wall.JSON_KEY_ITEMS);
+//        Log.d(Wall.JSON_KEY_ITEMS, String.valueOf(items));
+        StringBuilder itemsSB = new StringBuilder(items.subSequence(0, items.length()));
+        itemsSB.delete(0, 1);
+        itemsSB.delete(itemsSB.length()-1, itemsSB.length());
+        items= itemsSB.toString();
+        Log.d(Wall.JSON_KEY_ITEMS, String.valueOf(items));
+        // groups
+//        final String groups = object.optString(Wall.JSON_KEY_GROUPS);
+//        Log.d(Wall.JSON_KEY_GROUPS, String.valueOf(groups));
+        // profiles
+        String profiles = object.optString(Wall.JSON_KEY_PROFILES);
+        StringBuilder profilesSB = new StringBuilder(profiles.subSequence(0, profiles.length()));
+        profilesSB.delete(0, 1);
+        profilesSB.delete(profilesSB.length()-1, profilesSB.length());
+        profiles= profilesSB.toString();
+        Log.d(Wall.JSON_KEY_PROFILES, String.valueOf(profiles));
+        //---------------end 1-----------------------------
 
-                String itemsJ = j.getString("items");
-                String itemsJ2 = j2.getString("items");
-                String items = itemsJ+itemsJ2;
+        //---------------2-----------------------------
+        final JSONObject objectOffset = jsonObjectOffset.optJSONObject(Wall.JSON_KEY_RESPONSE);
+        final int countOffset = objectOffset.optInt(Wall.JSON_KEY_COUNT);
+        Log.d(Wall.JSON_KEY_COUNT, String.valueOf(countOffset));
+        // items
+        String itemsOffset = objectOffset.optString(Wall.JSON_KEY_ITEMS);
+        Log.d(Wall.JSON_KEY_ITEMS, String.valueOf(itemsOffset));
+        StringBuilder itemsSBOffset = new StringBuilder(itemsOffset.subSequence(0, itemsOffset.length()));
+        itemsSBOffset.delete(0, 1);
+        itemsSBOffset.delete(itemsSBOffset.length()-1, itemsSBOffset.length());
+        itemsOffset= itemsSBOffset.toString();
+        Log.d(Wall.JSON_KEY_ITEMS, String.valueOf(itemsOffset));
+        // groups
+        final String groupsOffset = objectOffset.optString(Wall.JSON_KEY_GROUPS);
+        Log.d(Wall.JSON_KEY_GROUPS, String.valueOf(groupsOffset));
+        // profiles
+        String profilesOffset = objectOffset.optString(Wall.JSON_KEY_PROFILES);
+        StringBuilder profilesOffsetSB = new StringBuilder(profilesOffset.subSequence(0, profilesOffset.length()));
+        profilesOffsetSB.delete(0, 1);
+        profilesOffsetSB.delete(profilesOffsetSB.length()-1, profilesOffsetSB.length());
+        profilesOffset= profilesOffset.toString();
+        Log.d(Wall.JSON_KEY_PROFILES, String.valueOf(profilesOffset));
+        //---------------end 2-----------------------------
+        final String response = "{\"response\":{" +
+                "\"count\":"+countOffset+"," +
+                "\"items\":["+items+","+itemsOffset+"]," +
+                "\"groups\":"+groupsOffset+"," +
+                " \"profiles\":["+profiles+","+profilesOffset+"]}}" ;
 
-                String groupsJ = j.getString("groups");
-                String groupsJ2 = j2.getString("groups");
-                String groups = groupsJ+groupsJ2;
-
-                String profilesJ = j.getString("profiles");
-                String profilesJ2 = j2.getString("profiles");
-                String profiles = profilesJ+profilesJ2;
-
-                String JsonString = "{\"response\":{\"count\":"+Integer.toString(count)+",\"items\":[{"+items+"}]";
-
-                JSONObject jsonObject = new JSONObject();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            JSONObject jsonObject = new JSONObject();
-
-            return jsonObject;
+        JSONObject wall = null;
+        try {
+            wall = new JSONObject(response);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        return wall;
+    }
 
 
     }

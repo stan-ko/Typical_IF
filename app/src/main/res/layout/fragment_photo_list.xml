@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.FragmentPhotoList"
-    android:background="#ffffffff">
+    android:background="#ff000000">
 
 
     <GridView
@@ -12,17 +12,17 @@
         android:id="@+id/gridOfPhotos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:verticalSpacing="5dp"
+        android:verticalSpacing="2dp"
 
-        android:horizontalSpacing="5dp"
+        android:horizontalSpacing="2dp"
         android:columnWidth="180dp"
 
 
 
-        android:paddingLeft="10dp"
-        android:paddingTop="10dp"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
         android:paddingRight="5dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="5dp"
 
         />
 </FrameLayout>

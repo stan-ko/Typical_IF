@@ -17,6 +17,7 @@ import com.vk.sdk.api.VKResponse;
 
 import java.util.ArrayList;
 
+import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
@@ -31,16 +32,16 @@ public class FragmentAlbumsList extends Fragment {
     AlbumCoverAdapter albumCoverAdapter;
     JazzyListView listOfAlbums;
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
-    private static final String ARG_VK_GROUP_ID = "vk_group_id";
+
 
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static FragmentAlbumsList newInstance(long vkGroupId) {
+    public static FragmentAlbumsList newInstance() {
         FragmentAlbumsList fragment = new FragmentAlbumsList();
         Bundle args = new Bundle();
-        args.putLong(ARG_VK_GROUP_ID, vkGroupId);
+
 
         fragment.setArguments(args);
         return fragment;
@@ -61,14 +62,14 @@ public class FragmentAlbumsList extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(getArguments().getLong(ARG_VK_GROUP_ID));
+        ((MainActivity) activity).onSectionAttached(Constants.GROUP_ID);
 
 
     }
 
     private void doRequest() {
         final Bundle arguments = getArguments();
-        VKHelper.getAlbumList(arguments.getLong(ARG_VK_GROUP_ID), new VKRequest.VKRequestListener() {
+        VKHelper.getAlbumList(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
@@ -93,7 +94,7 @@ public class FragmentAlbumsList extends Fragment {
     }
 
     protected void handleResponse(VKResponse response) {
-        final Bundle arguments = getArguments();
+
         final ArrayList<Album> albums = Album.getAlbumFromJSONArray(response.json);
 
         try {
@@ -108,8 +109,10 @@ public class FragmentAlbumsList extends Fragment {
         listOfAlbums.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.v("Module Item Trigger", arguments.getLong(ARG_VK_GROUP_ID) + "__" + albums.get(position).id + "");
-                Fragment fragment = FragmentPhotoList.newInstance(arguments.getLong(ARG_VK_GROUP_ID), albums.get(position).id);
+              Constants.ALBUM_ID = albums.get(position).id;
+
+
+                Fragment fragment = FragmentPhotoList.newInstance();
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack("AlbumList").commit();
             }

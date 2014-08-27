@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.activity.MainActivity;
 
@@ -16,15 +17,15 @@ import typical_if.android.activity.MainActivity;
  * Created by admin on 14.07.2014.
  */
 public class FragmentEventsList extends Fragment{
-    private static final String ARG_VK_GROUP_ID = "vk_group_id";
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static FragmentEventsList newInstance(long vkGroupId) {
+    public static FragmentEventsList newInstance() {
         FragmentEventsList fragment = new FragmentEventsList();
         Bundle args = new Bundle();
-        args.putLong(ARG_VK_GROUP_ID, vkGroupId);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,6 +46,6 @@ public class FragmentEventsList extends Fragment{
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(getArguments().getLong(ARG_VK_GROUP_ID));
+        ((MainActivity) activity).onSectionAttached(Constants.GROUP_ID);
     }
 }

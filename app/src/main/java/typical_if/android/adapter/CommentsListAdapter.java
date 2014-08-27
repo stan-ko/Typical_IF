@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.api.model.VKApiComment;
+import com.vk.sdk.api.model.VKApiUser;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -32,7 +33,7 @@ import typical_if.android.model.Profile;
 public class CommentsListAdapter extends BaseAdapter {
 
     final ArrayList<VKApiComment> commentList;
-    final ArrayList<Profile> profilesList;
+    final ArrayList<VKApiUser> profilesList;
 
     private final LayoutInflater layoutInflater;
     private static final Context appContext = MyApplication.getAppContext();
@@ -47,14 +48,14 @@ public class CommentsListAdapter extends BaseAdapter {
 
     final static Pattern matPattern = Pattern.compile("\\[(id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]");
 
-    public CommentsListAdapter(ArrayList<VKApiComment> commentList, ArrayList<Profile> profilesList, LayoutInflater inflater, String postColor) {
+    public CommentsListAdapter(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList, LayoutInflater inflater, String postColor) {
         this.commentList = commentList;
         this.profilesList = profilesList;
         layoutInflater = inflater;
         this.postColor = postColor;
     }
 
-    public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<Profile> profilesList, ListView listView) {
+    public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList, ListView listView) {
         this.profilesList.clear();
         this.profilesList.addAll(profilesList);
         this.commentList.clear();
@@ -74,7 +75,7 @@ public class CommentsListAdapter extends BaseAdapter {
 
     public void userIdentifier(VKApiComment comment) {
         final int profilesListCount = profilesList.size();
-        Profile profile;
+        VKApiUser profile;
         for (int i = 0; i < profilesListCount; i++) {
             profile = profilesList.get(i);
             if (comment.from_id == profile.id) {

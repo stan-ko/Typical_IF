@@ -30,10 +30,10 @@ import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.FullScreenImageAdapter;
 
-public class FragmentFullScreenImagePhotoViewer extends Fragment implements ViewPager.OnPageChangeListener {
+public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPageChangeListener {
 
 
-    private FragmentFullScreenImagePhotoViewer.OnFragmentInteractionListener mListener;
+    private FragmentFullScreenViewer.OnFragmentInteractionListener mListener;
     public static ArrayList<VKApiPhoto> photos;
     private ViewPager imagepager;
     public static int currentPosition;
@@ -58,20 +58,20 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
     TextView albumSize;
    public static RelativeLayout panel;
 
-    public static FragmentFullScreenImagePhotoViewer newInstance(ArrayList<VKApiPhoto> photos, int currentposition, long vk_group_id, long vk_album_id) {
+    public static FragmentFullScreenViewer newInstance(ArrayList<VKApiPhoto> photos, int currentposition) {
 
-        FragmentFullScreenImagePhotoViewer fragment = new FragmentFullScreenImagePhotoViewer();
+        FragmentFullScreenViewer fragment = new FragmentFullScreenViewer();
         args = new Bundle();
         fragment.setArguments(args);
-        FragmentFullScreenImagePhotoViewer.photos = photos;
-        FragmentFullScreenImagePhotoViewer.currentPosition = currentposition;
-        args.putLong(ARG_VK_GROUP_ID, vk_group_id);
-        args.putLong(ARG_VK_ALBUM_ID, vk_album_id);
+        FragmentFullScreenViewer.photos = photos;
+        FragmentFullScreenViewer.currentPosition = currentposition;
+
+
 
         return fragment;
     }
 
-    public FragmentFullScreenImagePhotoViewer() {
+    public FragmentFullScreenViewer() {
 
     }
 
@@ -104,13 +104,13 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
         imagepager.setOnPageChangeListener(this);
         onPageSelected(0);
 
-        imagepager.setAdapter(new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, arguments.getLong(ARG_VK_GROUP_ID),
-                arguments.getLong(ARG_VK_ALBUM_ID), arguments.getLong(ARG_VK_USER_ID), manager, rootView));
+        imagepager.setAdapter(new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,Constants.GROUP_ID,
+                Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView));
         imagepager.setCurrentItem(currentPosition);
 
 
         //Log.d("Current VIEW", photos.get(imagepager.getCurrentItem()).text);
-        VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
+        VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
@@ -174,8 +174,7 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
         counterOfPhotos.setText(String.valueOf(position + 1));
         albumSize.setText(String.valueOf(VKHelper.countOfPhotos));
 
-        VKHelper.isLiked("photo", FragmentFullScreenImagePhotoViewer.args.getLong(FragmentFullScreenImagePhotoViewer.ARG_VK_GROUP_ID),
-                photos.get(position).id, new VKRequest.VKRequestListener() {
+        VKHelper.isLiked("photo",Constants.GROUP_ID, photos.get(position).id, new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
@@ -249,9 +248,9 @@ public class FragmentFullScreenImagePhotoViewer extends Fragment implements View
             @Override
             public void onClick(View v) {
 
-                FragmentPhotoCommentAndInfo fragment = FragmentPhotoCommentAndInfo.newInstance(args.getLong(ARG_VK_GROUP_ID),
-                        args.getLong(ARG_VK_ALBUM_ID),
-                        photos.get(position),Constants.USER_ID);
+                FragmentWithComments fragment = FragmentWithComments.newInstanceForPhoto(
+
+                        photos.get(position), Constants.USER_ID);
                 getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
         });

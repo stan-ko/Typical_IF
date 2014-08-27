@@ -35,7 +35,7 @@ public class PhotoUrlHelper {
 
     public static String getPreviewUrl(final VKApiPhoto photo) {
         final String urlOfPreviewPhoto;
-        if (MyApplication.getDisplayHeight() < 1000)
+        if (MyApplication.getDisplayHeight() < 500)
             urlOfPreviewPhoto = photo.photo_75;
         else
             urlOfPreviewPhoto = photo.photo_130;

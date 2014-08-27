@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiPost;
+import com.vk.sdk.api.model.VKApiUser;
 
 import java.util.ArrayList;
 
@@ -26,10 +28,10 @@ import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
-import typical_if.android.fragment.FragmentPostCommentAndInfo;
-import typical_if.android.model.Wall.Group;
-import typical_if.android.model.Wall.Profile;
+import typical_if.android.fragment.FragmentWithComments;
+
 import typical_if.android.model.Wall.VKWallPostWrapper;
+
 import typical_if.android.model.Wall.Wall;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
@@ -96,171 +98,175 @@ public class WallAdapter extends BaseAdapter {
 
 
     public static void initViewHolder(ViewHolder viewHolder, final String postColor, final Wall wall, int position, final FragmentManager fragmentManager, final VKWallPostWrapper postWrapper, final Context context) {
-        ItemDataSetter.wallViewHolder = viewHolder;
-        ItemDataSetter.postColor = postColor;
-        ItemDataSetter.wall = wall;
-        ItemDataSetter.position = position;
-        ItemDataSetter.fragmentManager = fragmentManager;
+        try {
+            ItemDataSetter.wallViewHolder = viewHolder;
+            ItemDataSetter.postColor = postColor;
+            ItemDataSetter.wall = wall;
+            ItemDataSetter.position = position;
+            ItemDataSetter.fragmentManager = fragmentManager;
 
-        final VKApiPost post = postWrapper.post;
+            final VKApiPost post = postWrapper.post;
 
-        viewHolder.img_fixed_post.setVisibility(postWrapper.postPinnedVisibility);
+            viewHolder.img_fixed_post.setVisibility(postWrapper.postPinnedVisibility);
 
-        String copy_history_title = "";
-        String copy_history_logo = "";
-        String copy_history_name = "";
+            String copy_history_title = "";
+            String copy_history_logo = "";
+            String copy_history_name = "";
 
-        viewHolder.txt_post_comment.setText(valueOf(post.comments_count));
+            viewHolder.txt_post_comment.setText(valueOf(post.comments_count));
 
-        viewHolder.txt_post_like.setText(valueOf(post.likes_count));
+            viewHolder.txt_post_like.setText(valueOf(post.likes_count));
 
-        viewHolder.txt_post_share.setText(valueOf(post.reposts_count));
+            viewHolder.txt_post_share.setText(valueOf(post.reposts_count));
 
-        viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
+            viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
 
-        if (!isSuggested) {
-            viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Dialogs.reportDialog(Constants.mainActivity, wall.group.id, post.id);
-                }
-            });
-            viewHolder.txt_post_comment.setVisibility(View.VISIBLE);
-            viewHolder.txt_post_like.setVisibility(View.VISIBLE);
-            viewHolder.txt_post_share.setVisibility(View.VISIBLE);
-            viewHolder.img_post_comment.setVisibility(View.VISIBLE);
-            viewHolder.img_post_like.setVisibility(View.VISIBLE);
-            viewHolder.img_post_share.setVisibility(View.VISIBLE);
+            if (!isSuggested) {
+                viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Dialogs.reportDialog(Constants.mainActivity, wall.group.id, post.id);
+                    }
+                });
+                viewHolder.txt_post_comment.setVisibility(View.VISIBLE);
+                viewHolder.txt_post_like.setVisibility(View.VISIBLE);
+                viewHolder.txt_post_share.setVisibility(View.VISIBLE);
+                viewHolder.img_post_comment.setVisibility(View.VISIBLE);
+                viewHolder.img_post_like.setVisibility(View.VISIBLE);
+                viewHolder.img_post_share.setVisibility(View.VISIBLE);
 
-        } else {
-            viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Dialogs.suggestPostDialog(Constants.mainActivity, wall.group.id * -1, post);
-                }
-            });
-            viewHolder.txt_post_comment.setVisibility(View.GONE);
-            viewHolder.txt_post_like.setVisibility(View.GONE);
-            viewHolder.txt_post_share.setVisibility(View.GONE);
-            viewHolder.img_post_comment.setVisibility(View.GONE);
-            viewHolder.img_post_like.setVisibility(View.GONE);
-            viewHolder.img_post_share.setVisibility(View.GONE);
-        }
-
-        viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);
-        if (postWrapper.postTextChecker) {
-            ItemDataSetter.setText(post.text, viewHolder.postTextLayout);
-        }
-
-        viewHolder.copyHistoryLayout.setVisibility(postWrapper.copyHistoryContainerVisibility);
-        if (postWrapper.copyHistoryChecker) {
-            final VKApiPost copyHistory = post.copy_history.get(0);
-            Group group;
-            for (int i = 0; i < wall.groups.size(); i++) {
-                group = wall.groups.get(i);
-                if (copyHistory.from_id * (-1) == group.id) {
-                    copy_history_title = group.name;
-                    copy_history_logo = group.photo_100;
-                    copy_history_name = group.screen_name;
-                }
+            } else {
+                viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Dialogs.suggestPostDialog(Constants.mainActivity, wall.group.id * -1, post);
+                    }
+                });
+                viewHolder.txt_post_comment.setVisibility(View.GONE);
+                viewHolder.txt_post_like.setVisibility(View.GONE);
+                viewHolder.txt_post_share.setVisibility(View.GONE);
+                viewHolder.img_post_comment.setVisibility(View.GONE);
+                viewHolder.img_post_like.setVisibility(View.GONE);
+                viewHolder.img_post_share.setVisibility(View.GONE);
             }
 
-            if (copy_history_title.equals("") && copy_history_logo.equals("")) {
-                Profile profile;
-                for (int i = 0; i < wall.profiles.size(); i++) {
-                    profile = wall.profiles.get(i);
-                    if (copyHistory.from_id == profile.id) {
-                        copy_history_title = profile.last_name + " " + profile.first_name;
-                        copy_history_logo = profile.photo_100;
-                        copy_history_name = profile.screen_name;
+            viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);
+            if (postWrapper.postTextChecker) {
+                ItemDataSetter.setText(post.text, viewHolder.postTextLayout);
+            }
+
+            viewHolder.copyHistoryLayout.setVisibility(postWrapper.copyHistoryContainerVisibility);
+            if (postWrapper.copyHistoryChecker) {
+                final VKApiPost copyHistory = post.copy_history.get(0);
+                VKApiCommunity group;
+                for (int i = 0; i < wall.groups.size(); i++) {
+                    group = wall.groups.get(i);
+                    if (copyHistory.from_id * (-1) == group.id) {
+                        copy_history_title = group.name;
+                        copy_history_logo = group.photo_100;
+                        copy_history_name = group.screen_name;
                     }
                 }
-            }
 
-            ViewGroup copyHistoryContainer = ItemDataSetter.getPreparedView(viewHolder.copyHistoryLayout, R.layout.copy_history_layout);
-            //RelativeLayout leftLine = (RelativeLayout) copyHistoryContainer.findViewById(R.id.leftLine);
-            //leftLine.setVisibility(View.VISIBLE);
-            //leftLine.setBackgroundColor(Color.parseColor(postColor));
-
-            LinearLayout copyHistoryList = (LinearLayout) copyHistoryContainer.getChildAt(0);
-            RelativeLayout copyHistoryLayout = (RelativeLayout) copyHistoryList.getChildAt(0);
-            final String finalCopy_history_name = copy_history_name;
-            copyHistoryLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Uri uri = Uri.parse("http://vk.com/" + finalCopy_history_name);
-                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                if (copy_history_title.equals("") && copy_history_logo.equals("")) {
+                    VKApiUser profile;
+                    for (int i = 0; i < wall.profiles.size(); i++) {
+                        profile = wall.profiles.get(i);
+                        if (copyHistory.from_id == profile.id) {
+                            copy_history_title = profile.last_name + " " + profile.first_name;
+                            copy_history_logo = profile.photo_100;
+                            copy_history_name = profile.screen_name;
+                        }
+                    }
                 }
-            });
-            ((TextView) copyHistoryLayout.getChildAt(1)).setText(copy_history_title);
-            ((TextView) copyHistoryLayout.getChildAt(2)).setText(ItemDataSetter.getFormattedDate(copyHistory.date));
+
+                ViewGroup copyHistoryContainer = ItemDataSetter.getPreparedView(viewHolder.copyHistoryLayout, R.layout.copy_history_layout);
+                //RelativeLayout leftLine = (RelativeLayout) copyHistoryContainer.findViewById(R.id.leftLine);
+                //leftLine.setVisibility(View.VISIBLE);
+                //leftLine.setBackgroundColor(Color.parseColor(postColor));
+
+                LinearLayout copyHistoryList = (LinearLayout) copyHistoryContainer.getChildAt(0);
+                RelativeLayout copyHistoryLayout = (RelativeLayout) copyHistoryList.getChildAt(0);
+                final String finalCopy_history_name = copy_history_name;
+                copyHistoryLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri uri = Uri.parse("http://vk.com/" + finalCopy_history_name);
+                        context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    }
+                });
+                ((TextView) copyHistoryLayout.getChildAt(1)).setText(copy_history_title);
+                ((TextView) copyHistoryLayout.getChildAt(2)).setText(ItemDataSetter.getFormattedDate(copyHistory.date));
 
 
-            ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)));
+                ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)));
 
-            RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryTextLayout);
-            parentCopyHistoryTextContainer.setVisibility(postWrapper.copyHistoryTextContainerVisibility);
-            if (postWrapper.copyHistoryTextChecker) {
-                ItemDataSetter.setText(copyHistory.text, parentCopyHistoryTextContainer);
-            }
-
-            LinearLayout parentCopyHistoryAttachmentsContainer = (LinearLayout) copyHistoryList.findViewById(R.id.copyHistoryAttachmentsLayout);
-            parentCopyHistoryAttachmentsContainer.setVisibility(postWrapper.copyHistoryAttachmentsContainerVisibility);
-            if (postWrapper.copyHistoryAttachmentsChecker) {
-                ItemDataSetter.setAttachemnts(copyHistory.attachments, parentCopyHistoryAttachmentsContainer, 0);
-            }
-
-            RelativeLayout copyHistoryGeoContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryGeoLayout);
-            copyHistoryGeoContainer.setVisibility(postWrapper.copyHistoryGeoContainerVisibility);
-            if (postWrapper.copyHistoryGeoChecker) {
-                ItemDataSetter.setGeo(copyHistory.geo, copyHistoryGeoContainer);
-            }
-
-            RelativeLayout copyHistorySignedContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistorySignedLayout);
-            copyHistorySignedContainer.setVisibility(postWrapper.copyHistorySignedContainerVisibility);
-            if (postWrapper.copyHistorySignedChecker) {
-                ItemDataSetter.setSigned(copyHistory.signer_id, copyHistorySignedContainer);
-            }
-
-            viewHolder.copyHistoryLayout.addView(copyHistoryContainer);
-        }
-
-        viewHolder.postAttachmentsLayout.setVisibility(postWrapper.postAttachmentsVisibility);
-        if (postWrapper.postAttachmentsChecker) {
-            ItemDataSetter.setAttachemnts(post.attachments, viewHolder.postAttachmentsLayout, 1);
-        }
-
-        viewHolder.postGeoLayout.setVisibility(postWrapper.postGeoVisibility);
-        if (postWrapper.postGeoChecker) {
-            ItemDataSetter.setGeo(post.geo, viewHolder.postGeoLayout);
-        }
-
-        viewHolder.postSignedLayout.setVisibility(postWrapper.postSignedVisibility);
-        if (postWrapper.postSignedChecker) {
-            ItemDataSetter.setSigned(post.signer_id, viewHolder.postSignedLayout);
-        }
-
-        viewHolder.txt_post_comment.setTag(new ParamsHolder(position, postWrapper));
-
-        if (OfflineMode.isOnline(getApplicationContext()) | OfflineMode.isJsonNull(post.id)){
-            viewHolder.txt_post_comment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ParamsHolder paramsHolder = (ParamsHolder) v.getTag();
-                    FragmentPostCommentAndInfo fragment = FragmentPostCommentAndInfo.newInstance(postColor, paramsHolder.position, wall, paramsHolder.post);
-                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryTextLayout);
+                parentCopyHistoryTextContainer.setVisibility(postWrapper.copyHistoryTextContainerVisibility);
+                if (postWrapper.copyHistoryTextChecker) {
+                    ItemDataSetter.setText(copyHistory.text, parentCopyHistoryTextContainer);
                 }
-            });
-        }else {
-            viewHolder.txt_post_comment.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), " comments are not available to this post. Please turn On the internet ", Toast.LENGTH_SHORT).show();
+
+                LinearLayout parentCopyHistoryAttachmentsContainer = (LinearLayout) copyHistoryList.findViewById(R.id.copyHistoryAttachmentsLayout);
+                parentCopyHistoryAttachmentsContainer.setVisibility(postWrapper.copyHistoryAttachmentsContainerVisibility);
+                if (postWrapper.copyHistoryAttachmentsChecker) {
+                    ItemDataSetter.setAttachemnts(copyHistory.attachments, parentCopyHistoryAttachmentsContainer, 0);
                 }
-            });
+
+                RelativeLayout copyHistoryGeoContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryGeoLayout);
+                copyHistoryGeoContainer.setVisibility(postWrapper.copyHistoryGeoContainerVisibility);
+                if (postWrapper.copyHistoryGeoChecker) {
+                    ItemDataSetter.setGeo(copyHistory.geo, copyHistoryGeoContainer);
+                }
+
+                RelativeLayout copyHistorySignedContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistorySignedLayout);
+                copyHistorySignedContainer.setVisibility(postWrapper.copyHistorySignedContainerVisibility);
+                if (postWrapper.copyHistorySignedChecker) {
+                    ItemDataSetter.setSigned(copyHistory.signer_id, copyHistorySignedContainer);
+                }
+
+                viewHolder.copyHistoryLayout.addView(copyHistoryContainer);
+            }
+
+            viewHolder.postAttachmentsLayout.setVisibility(postWrapper.postAttachmentsVisibility);
+            if (postWrapper.postAttachmentsChecker) {
+                ItemDataSetter.setAttachemnts(post.attachments, viewHolder.postAttachmentsLayout, 1);
+            }
+
+            viewHolder.postGeoLayout.setVisibility(postWrapper.postGeoVisibility);
+            if (postWrapper.postGeoChecker) {
+                ItemDataSetter.setGeo(post.geo, viewHolder.postGeoLayout);
+            }
+
+            viewHolder.postSignedLayout.setVisibility(postWrapper.postSignedVisibility);
+            if (postWrapper.postSignedChecker) {
+                ItemDataSetter.setSigned(post.signer_id, viewHolder.postSignedLayout);
+            }
+
+            viewHolder.txt_post_comment.setTag(new ParamsHolder(position, postWrapper));
+
+            if (OfflineMode.isOnline(getApplicationContext()) | OfflineMode.isJsonNull(post.id)) {
+                viewHolder.txt_post_comment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        ParamsHolder paramsHolder = (ParamsHolder) v.getTag();
+                        FragmentWithComments fragment = FragmentWithComments.newInstanceForWall(postColor, paramsHolder.position, wall, paramsHolder.post);
+                        fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                    }
+                });
+            } else {
+                viewHolder.txt_post_comment.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getApplicationContext(), " comments are not available to this post. Please turn On the internet ", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+
+        }catch(Throwable a){
+
         }
-
-
     }
 
     public static class ParamsHolder {

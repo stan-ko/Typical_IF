@@ -23,6 +23,7 @@ import com.vk.sdk.api.VKResponse;
 
 import org.json.JSONObject;
 
+import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
@@ -39,7 +40,7 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 
 public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    private static final String ARG_VK_GROUP_ID = "vk_group_id";
+
 
     ListView wallListView;
     WallAdapter adapter;
@@ -48,9 +49,9 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     View rootView;
     PauseOnScrollListener pauseOnScrollListener;
     LayoutInflater inflaterGlobal;
-
+    final int offsetDefault = 0;
     String postColor;
-    long gid;
+    JSONObject jsonObjectOld;
 
     int countPost = 10;
     static boolean isSuggested;
@@ -92,10 +93,10 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     Bundle arguments;
 
-    public static FragmentWall newInstance(long vkGroupId, boolean isSuggestedParam) {
+    public static FragmentWall newInstance(boolean isSuggestedParam) {
         FragmentWall fragment = new FragmentWall();
         Bundle args = new Bundle();
-        args.putLong(ARG_VK_GROUP_ID, vkGroupId);
+
         isSuggested = isSuggestedParam;
         fragment.setArguments(args);
         return fragment;
@@ -111,17 +112,19 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         spinnerLayout = (RelativeLayout) rootView.findViewById(R.id.spinner_layout);
         inflaterGlobal = inflater;
         arguments = getArguments();
-        gid = arguments.getLong(ARG_VK_GROUP_ID);
-        postColor = ItemDataSetter.getPostColor(gid);
+
+        postColor = ItemDataSetter.getPostColor(Constants.GROUP_ID);
         pauseOnScrollListener = new PauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerObject);
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
 
         if (!isSuggested) {
-            initGroupWall(OfflineMode.loadJSON(gid), inflater);
+            jsonObjectOld = OfflineMode.loadJSON(Constants.GROUP_ID);
+            initGroupWall(jsonObjectOld, inflater);
+
             swipeView.setOnRefreshListener(this);
             swipeView.setColorScheme(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_light);
         } else {
-            VKHelper.getSuggestedPosts(gid, new VKRequest.VKRequestListener() {
+            VKHelper.getSuggestedPosts(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {
                     super.onComplete(response);
@@ -139,7 +142,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
 
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater) {
-        Wall wall = Wall.getGroupWallFromJSON(jsonObject);
+        Wall wall = VKHelper.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
 
         adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
@@ -175,7 +178,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onPrepareOptionsMenu(final Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        VKHelper.isMember(gid * (-1), new VKRequest.VKRequestListener() {
+        VKHelper.isMember(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
@@ -199,28 +202,28 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.make_post:
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container, FragmentMakePost.newInstance(gid, 0, 0)).addToBackStack("makePostFragment").commit();
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container, FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0)).addToBackStack("makePostFragment").commit();
                 break;
             case R.id.suggested_posts:
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container, FragmentWall.newInstance(gid, true)).addToBackStack(null).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
                 break;
             case R.id.join_leave_group:
                 if (isMember == 0) {
-                    VKHelper.groupJoin(gid * (-1), new VKRequest.VKRequestListener() {
+                    VKHelper.groupJoin(Constants.GROUP_ID , new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
                             Toast.makeText(getActivity(), "Joined", Toast.LENGTH_SHORT).show();
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(gid, false)).commit();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
                         }
                     });
                 } else {
-                    VKHelper.groupLeave(gid * (-1), new VKRequest.VKRequestListener() {
+                    VKHelper.groupLeave(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
                             Toast.makeText(getActivity(), "Leaved", Toast.LENGTH_SHORT).show();
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(gid, false)).commit();
+                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
                         }
                     });
                 }
@@ -247,12 +250,12 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             public void run() {
                 swipeView.setRefreshing(false);
 
-                VKHelper.doGroupWallRequest(countPost, gid, new VKRequest.VKRequestListener() {
+                VKHelper.doGroupWallRequest(offsetDefault, countPost, Constants.GROUP_ID, new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
                         super.onComplete(response);
-                        OfflineMode.saveJSON(response.json, gid);
-                        initGroupWall(OfflineMode.loadJSON(gid), inflaterGlobal);
+                        OfflineMode.saveJSON(response.json, Constants.GROUP_ID);
+                        initGroupWall(OfflineMode.loadJSON(Constants.GROUP_ID), inflaterGlobal);
                     }
                 });
             }
@@ -260,14 +263,17 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     private void endlessAdd(int countPost, final int lastItem) {
-        VKHelper.doGroupWallRequest(countPost, gid, new VKRequest.VKRequestListener() {
+
+        VKHelper.doGroupWallRequest(101, 90, Constants.GROUP_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-                OfflineMode.saveJSON(response.json, gid);
-                initGroupWall(OfflineMode.loadJSON(gid), inflaterGlobal);
+                OfflineMode.saveJSON(OfflineMode.jsonPlus(jsonObjectOld,response.json), Constants.GROUP_ID);
+                initGroupWall(OfflineMode.loadJSON(Constants.GROUP_ID), inflaterGlobal);
                 // endlessPosition(lastItem);
                 //wallListView.setOnScrollListener(onScrollListenerObject);
+                wallListView.smoothScrollToPosition(101);
+              //  wallListView.get
 
             }
         });

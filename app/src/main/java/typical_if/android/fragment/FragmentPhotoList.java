@@ -1,11 +1,9 @@
 package typical_if.android.fragment;
 
-import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +18,6 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
@@ -37,8 +34,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
     public ArrayList<VKApiPhoto> photos2 = new ArrayList<VKApiPhoto>();
     private OnFragmentInteractionListener mListener;
-    private static final String ARG_VK_GROUP_ID = "vk_group_id";
-    private static final String ARG_VK_ALBUM_ID = "vk_album_id";
+
     //private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private static final int PICK_FROM_CAMERA = 1;
 
@@ -47,11 +43,10 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
     GridView gridOfPhotos;
 
-    public static FragmentPhotoList newInstance(long vk_group_id, long vk_album_id) {
+    public static FragmentPhotoList newInstance() {
         FragmentPhotoList fragment = new FragmentPhotoList();
         Bundle args = new Bundle();
-        args.putLong(ARG_VK_GROUP_ID, vk_group_id);
-        args.putLong(ARG_VK_ALBUM_ID, vk_album_id);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -95,17 +90,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Dialogs.addPhotoFrom().show();
-                VKHelper.getPhotoList(getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID), 1, new VKRequest.VKRequestListener() {
-
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
-                        handleResponse(response, columns, view);
-                        Dialogs.addPhotoFrom();
-                    }
-                });
-
-                return true;
+               return true;
             }
         });
 
@@ -135,76 +120,27 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         this.view = view;
 
         final Bundle arguments = getArguments();
-        float scaleFactor = getResources().getDisplayMetrics().density * 50;
-        float scalefactor = getResources().getDisplayMetrics().density * 80;
+        float scaleFactor = getResources().getDisplayMetrics().density * 80;
+
         int number = getActivity().getWindowManager().getDefaultDisplay().getWidth();
-        final int columns = (int) ((float) number / (float) scaleFactor);
+        final int columns = (int) ((float) number /scaleFactor);
         this.columns = columns;
-        VKHelper.count = 0;
-        VKHelper.getPhotoList(arguments.getLong(ARG_VK_GROUP_ID), arguments.getLong(ARG_VK_ALBUM_ID), 1, new VKRequest.VKRequestListener() {
+        VKHelper.offsetCounter = 0;
+
+
+        VKHelper.getPhotoList(Constants.GROUP_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
 
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 handleResponse(response, columns, view);
             }
-
-            @Override
-            public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
-                super.attemptFailed(request, attemptNumber, totalAttempts);
-            }
-
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-            }
-
-            @Override
-            public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
-                super.onProgress(progressType, bytesLoaded, bytesTotal);
-            }
         });
+
     }
 
 
-    FragmentTransaction transaction;
-    ObjectAnimator objectAnimator = new ObjectAnimator();
 
-    //
-//    protected void handleResponse (VKResponse response, final int columns, View view) {
-//
-//        final ArrayList<Photo> photos = Photo.getPhotosFromJSONArray(response.json);
-//        for(int i =0; i<photos.size();i++){
-//            photos2.add(photos.get(i));
-//        }
-//
-//        try {
-//            gridOfPhotos = (JazzyGridView) view.findViewById(R.id.gridOfPhotos);
-//            // gridOfPhotos.setTransitionEffect(mCurrentTransitionEffect);
-//        } catch (NullPointerException e) {
-//            Log.d("Loadding failed", "Not complete");
-//        }
-//        final Animation a;
-//        a = AnimationUtils.loadAnimation(getActivity().getApplicationContext(),R.anim.abc_slide_in_bottom);
-//        gridOfPhotos.setNumColumns(columns);
-//        final PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
-//        gridOfPhotos.setAdapter(photoListAdapter);
-//        gridOfPhotos.setAnimation(a);
-//        gridOfPhotos.setOnScrollListener(this);
-//        gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Fragment fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID));
-//                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-//                transaction = fragmentManager.beginTransaction();
-//
-//                transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
-//                transaction.replace(R.id.container, fragment).addToBackStack("String").commit();
-//            }
-//        });
-//
-//    }
     public static int albumSize;
 
     protected void handleResponse(VKResponse response, final int columns, View view) {
@@ -219,12 +155,13 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
             gridOfPhotos = (GridView) view.findViewById(R.id.gridOfPhotos);
             // gridOfPhotos.setTransitionEffect(mCurrentTransitionEffect);
         } catch (NullPointerException e) {
-            Log.d("Loadding failed", "Not complete");
+            Log.d("Loading failed", "Not complete");
         }
 
 
         final Animation a;
         a = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.abc_slide_in_bottom);
+
 
         gridOfPhotos.setNumColumns(columns);
         final PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
@@ -232,7 +169,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         gridOfPhotos.setAnimation(a);
         gridOfPhotos.setOnScrollListener(this);
 
-        if (getArguments().getLong(ARG_VK_GROUP_ID) > 0) {
+        if (Constants.GROUP_ID > 0) {
             gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -247,10 +184,12 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
             gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Fragment fragment = null;
-                    fragment = FragmentFullScreenImagePhotoViewer.newInstance(photos, position, getArguments().getLong(ARG_VK_GROUP_ID), getArguments().getLong(ARG_VK_ALBUM_ID));
-                    FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                    Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
+                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+           final FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+                transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
+                transaction.add(R.id.container, fragment).addToBackStack("String").commit();
                 }
             });
         }

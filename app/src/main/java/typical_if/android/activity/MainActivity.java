@@ -32,8 +32,8 @@ import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentEventsList;
-import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
-import typical_if.android.fragment.FragmentPhotoCommentAndInfo;
+import typical_if.android.fragment.FragmentFullScreenViewer;
+import typical_if.android.fragment.FragmentWithComments;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
 import typical_if.android.fragment.FragmentWall;
 import typical_if.android.fragment.NavigationDrawerFragment;
@@ -41,8 +41,8 @@ import typical_if.android.fragment.NavigationDrawerFragment;
 
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
-        FragmentFullScreenImagePhotoViewer.OnFragmentInteractionListener,
-        FragmentPhotoCommentAndInfo.OnFragmentInteractionListener{
+        FragmentFullScreenViewer.OnFragmentInteractionListener,
+        FragmentWithComments.OnFragmentInteractionListener{
 
 
     private Drawable mIcon;
@@ -165,7 +165,7 @@ public class MainActivity extends ActionBarActivity implements
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
             mNavigationDrawerFragment.refreshNavigationDrawer();
-            VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
+            VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {
                     super.onComplete(response);
@@ -180,7 +180,7 @@ public class MainActivity extends ActionBarActivity implements
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
             mNavigationDrawerFragment.refreshNavigationDrawer();
-            VKHelper.getUserInfo(new VKRequest.VKRequestListener() {
+            VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {
                     super.onComplete(response);
@@ -197,25 +197,26 @@ public class MainActivity extends ActionBarActivity implements
     public void onNavigationDrawerItemSelected(int groupPosition, int childPosition) {
         Fragment fragment = null;
         FragmentManager fragmentManager = getSupportFragmentManager();
-        long vkGroupId = Constants.TF_ID;
+        long vkGroupId ;
         switch (groupPosition) {
             case 0:
             case 1:
             case 2:
             case 3:
                 vkGroupId = setGroupId(groupPosition);
+                Constants.GROUP_ID = vkGroupId;
                 onSectionAttached(groupPosition);
 
                 if (childPosition == 0) {
-                    fragment = FragmentWall.newInstance(vkGroupId, false);
+                    fragment = FragmentWall.newInstance(false);
                 } else if (childPosition == 1) {
-                    fragment = FragmentAlbumsList.newInstance(vkGroupId);
+                    fragment = FragmentAlbumsList.newInstance();
                 }
 
                 break;
             case 4:
                 onSectionAttached(groupPosition);
-                fragment = FragmentEventsList.newInstance(vkGroupId);
+                fragment = FragmentEventsList.newInstance();
                 break;
             case 5:
                 if (VKSdk.isLoggedIn()) {

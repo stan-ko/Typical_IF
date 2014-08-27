@@ -13,7 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import typical_if.android.R;
-import typical_if.android.fragment.FragmentFullScreenImagePhotoViewer;
+import typical_if.android.fragment.FragmentFullScreenViewer;
 
 public class TouchImageView extends ImageView {
 
@@ -66,9 +66,10 @@ public class TouchImageView extends ImageView {
             public void onClick(View v) {
                 clickCounter++;
                 if(clickCounter%2==0) {
-                    { FragmentFullScreenImagePhotoViewer.panel.startAnimation(fadeIn);}
+                    { FragmentFullScreenViewer.panel.startAnimation(fadeIn);}
                 }else{
-                    {FragmentFullScreenImagePhotoViewer.panel.startAnimation(fadeOut);}
+                    {
+                        FragmentFullScreenViewer.panel.startAnimation(fadeOut);}
                 }
 
 

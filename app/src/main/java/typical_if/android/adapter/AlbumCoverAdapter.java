@@ -64,7 +64,7 @@ public class AlbumCoverAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.fragment_albums_list_item, null);
             viewHolder = new ViewHolder(convertView);
-            ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) viewHolder.album_cover.getLayoutParams();
+            ViewGroup.LayoutParams lp = viewHolder.album_cover.getLayoutParams();
             lp.height = imageHeight;
             viewHolder.album_cover.setLayoutParams(lp);
             convertView.setTag(viewHolder);
