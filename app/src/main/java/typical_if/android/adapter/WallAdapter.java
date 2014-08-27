@@ -1,6 +1,8 @@
 package typical_if.android.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
@@ -8,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,9 +21,13 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKApiUser;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -28,10 +36,9 @@ import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.VKHelper;
 import typical_if.android.fragment.FragmentWithComments;
-
 import typical_if.android.model.Wall.VKWallPostWrapper;
-
 import typical_if.android.model.Wall.Wall;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
@@ -40,7 +47,7 @@ import static java.lang.String.valueOf;
 public class WallAdapter extends BaseAdapter {
     private Wall wall;
     private ArrayList<VKWallPostWrapper> posts;
-    private LayoutInflater layoutInflater;
+    private static LayoutInflater layoutInflater;
     private Context context;
     private String postColor;
     private FragmentManager fragmentManager;
@@ -96,8 +103,12 @@ public class WallAdapter extends BaseAdapter {
         return convertView;
     }
 
+    static String copy_history_title = "";
+    static String copy_history_logo = "";
+    static String copy_history_name = "";
+    static AlertDialog.Builder dialog;
 
-    public static void initViewHolder(ViewHolder viewHolder, final String postColor, final Wall wall, int position, final FragmentManager fragmentManager, final VKWallPostWrapper postWrapper, final Context context) {
+    public static void initViewHolder(final ViewHolder viewHolder, final String postColor, final Wall wall, int position, final FragmentManager fragmentManager, final VKWallPostWrapper postWrapper, final Context context) {
         try {
             ItemDataSetter.wallViewHolder = viewHolder;
             ItemDataSetter.postColor = postColor;
@@ -109,17 +120,129 @@ public class WallAdapter extends BaseAdapter {
 
             viewHolder.img_fixed_post.setVisibility(postWrapper.postPinnedVisibility);
 
-            String copy_history_title = "";
-            String copy_history_logo = "";
-            String copy_history_name = "";
+            if (post.user_likes) {
+                viewHolder.cb_post_like.setChecked(true);
+            } else {
+                viewHolder.cb_post_like.setChecked(false);
+            }
 
-            viewHolder.txt_post_comment.setText(valueOf(post.comments_count));
-
-            viewHolder.txt_post_like.setText(valueOf(post.likes_count));
-
-            viewHolder.txt_post_share.setText(valueOf(post.reposts_count));
-
+            viewHolder.cb_post_comment.setText(valueOf(post.comments_count));
+            viewHolder.cb_post_like.setText(valueOf(post.likes_count));
+            viewHolder.cb_post_repost.setText(String.valueOf(post.reposts_count));
             viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
+
+
+
+
+            viewHolder.button_like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    if (!post.user_likes) {
+                        VKHelper.setLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(VKResponse response) {
+                                Toast.makeText(VKUIHelper.getApplicationContext(), "Liked", Toast.LENGTH_SHORT).show();
+                                super.onComplete(response);
+                                viewHolder.cb_post_like.setText(String.valueOf(++post.likes_count));
+                                viewHolder.cb_post_like.setChecked(true);
+                                post.user_likes = true;
+                            }
+                        });
+                    } else {
+
+                        VKHelper.deleteLike("post",Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(VKResponse response) {
+                                super.onComplete(response);
+                                Toast.makeText(VKUIHelper.getApplicationContext(), "Like has deleted", Toast.LENGTH_SHORT).show();
+                                viewHolder.cb_post_like.setText(String.valueOf(--post.likes_count));
+                                viewHolder.cb_post_like.setChecked(false);
+                                post.user_likes = false;
+                            }
+                        });
+                    }
+                }
+            });
+
+
+            if (post.user_reposted) {
+                viewHolder.cb_post_repost.setChecked(true);
+                viewHolder.cb_post_repost.setOnClickListener(null);
+            } else {
+                viewHolder.cb_post_repost.setChecked(false);
+                viewHolder.button_repost.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                    public void onClick(View v) {
+                        try {
+                            dialog = new AlertDialog.Builder(Constants.mainActivity);
+//
+                            View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
+                            dialog.setView(view);
+                            dialog.setTitle("Ваш коментар");
+//
+                            final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
+//
+                            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final String pidFull = "wall" + Constants.GROUP_ID + "_" + post.id;
+                                   VKHelper.doRepost(pidFull, text.getText().toString(), new VKRequest.VKRequestListener() {
+                                       @Override
+                                       public void onComplete(VKResponse response) {
+                                            super.onComplete(response);
+                                           JSONObject object = response.json.optJSONObject("response");
+                                            int isSuccessed = object.optInt("success");
+//
+                                           if (isSuccessed == 1) {
+//
+                                                Toast.makeText(context, "All is done", Toast.LENGTH_SHORT).show();
+                                                viewHolder.cb_post_repost.setChecked(true);
+                                                viewHolder.cb_post_repost.setText(String.valueOf(++post.reposts_count));
+//
+                                                if (!post.user_likes) {
+
+                                                    VKHelper.setLike("post", (wall.group.id * (-1)), post.id, new VKRequest.VKRequestListener() {
+                                                        @Override
+                                                        public void onComplete(VKResponse response) {
+                                                            super.onComplete(response);
+
+                                                            viewHolder.cb_post_like.setText(String.valueOf(++post.likes_count));
+                                                            viewHolder.cb_post_like.setChecked(true);
+                                                            post.user_likes = true;
+
+                                                        }
+                                                    });
+                                                }
+                                                viewHolder.cb_post_repost.setChecked(true);
+                                                viewHolder.cb_post_repost.setEnabled(false);
+                                            } else {
+                                                viewHolder.cb_post_repost.setChecked(false);
+                                            }
+                                        }
+                                   });
+//
+//
+                              }
+                            });
+//                            dialog.setNegativeButton("Відміна", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialogInterface, int i) {
+//                                    dialog.setCancelable(true);
+//                                }
+//                            });
+                            dialog.create().show();
+//                        } catch (NullPointerException npe) {
+//                            Toast.makeText(getApplicationContext(), "Щось пішло не так...Оновіть будь-ласка сторінку", Toast.LENGTH_LONG).show();
+//                            Log.d("", "Something went wrong in WallAdapter");
+                        }catch(NullPointerException npe){}
+                 }
+                });
+           }
+
+
+
+
 
             if (!isSuggested) {
                 viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
@@ -128,12 +251,12 @@ public class WallAdapter extends BaseAdapter {
                         Dialogs.reportDialog(Constants.mainActivity, wall.group.id, post.id);
                     }
                 });
-                viewHolder.txt_post_comment.setVisibility(View.VISIBLE);
-                viewHolder.txt_post_like.setVisibility(View.VISIBLE);
-                viewHolder.txt_post_share.setVisibility(View.VISIBLE);
-                viewHolder.img_post_comment.setVisibility(View.VISIBLE);
-                viewHolder.img_post_like.setVisibility(View.VISIBLE);
-                viewHolder.img_post_share.setVisibility(View.VISIBLE);
+//                  viewHolder.cb_post_comment.setVisibility(View.VISIBLE);
+//                 viewHolder.cb_post_like.setVisibility(View.VISIBLE);
+//                viewHolder.txt_post_share.setVisibility(View.VISIBLE);
+//                viewHolder.img_post_comment.setVisibility(View.VISIBLE);
+//                viewHolder.img_post_like.setVisibility(View.VISIBLE);
+//                viewHolder.img_post_share.setVisibility(View.VISIBLE);
 
             } else {
                 viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
@@ -142,12 +265,12 @@ public class WallAdapter extends BaseAdapter {
                         Dialogs.suggestPostDialog(Constants.mainActivity, wall.group.id * -1, post);
                     }
                 });
-                viewHolder.txt_post_comment.setVisibility(View.GONE);
-                viewHolder.txt_post_like.setVisibility(View.GONE);
-                viewHolder.txt_post_share.setVisibility(View.GONE);
-                viewHolder.img_post_comment.setVisibility(View.GONE);
-                viewHolder.img_post_like.setVisibility(View.GONE);
-                viewHolder.img_post_share.setVisibility(View.GONE);
+//                viewHolder.txt_post_comment.setVisibility(View.GONE);
+//                viewHolder.txt_post_like.setVisibility(View.GONE);
+              //  viewHolder.txt_post_share.setVisibility(View.GONE);
+//                viewHolder.img_post_comment.setVisibility(View.GONE);
+//                viewHolder.img_post_like.setVisibility(View.GONE);
+              //  viewHolder.img_post_share.setVisibility(View.GONE);
             }
 
             viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);
@@ -243,10 +366,10 @@ public class WallAdapter extends BaseAdapter {
                 ItemDataSetter.setSigned(post.signer_id, viewHolder.postSignedLayout);
             }
 
-            viewHolder.txt_post_comment.setTag(new ParamsHolder(position, postWrapper));
+            viewHolder.button_comment.setTag(new ParamsHolder(position, postWrapper));
 
             if (OfflineMode.isOnline(getApplicationContext()) | OfflineMode.isJsonNull(post.id)) {
-                viewHolder.txt_post_comment.setOnClickListener(new View.OnClickListener() {
+                viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         ParamsHolder paramsHolder = (ParamsHolder) v.getTag();
@@ -255,7 +378,7 @@ public class WallAdapter extends BaseAdapter {
                     }
                 });
             } else {
-                viewHolder.txt_post_comment.setOnClickListener(new View.OnClickListener() {
+                viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Toast.makeText(getApplicationContext(), " comments are not available to this post. Please turn On the internet ", Toast.LENGTH_SHORT).show();
@@ -264,7 +387,7 @@ public class WallAdapter extends BaseAdapter {
             }
 
 
-        }catch(Throwable a){
+        } catch (Throwable a) {
 
         }
     }
@@ -295,17 +418,20 @@ public class WallAdapter extends BaseAdapter {
         public final RelativeLayout postSignedLayout;
         public final RelativeLayout postPollLayout;
 
+        public final CheckBox cb_post_like;
+        public final CheckBox cb_post_repost;
+        public final CheckBox cb_post_comment;
+        public final Button button_like;
+        public final Button button_repost;
+        public final Button button_comment;
         public final TextView txt_post_date;
 
-        public final TextView txt_post_like;
-        public final ImageView img_post_like;
-        public final TextView txt_post_share;
-        public final ImageView img_post_share;
-        public final TextView txt_post_comment;
-        public final ImageView img_post_comment;
+
+
+
 
         public final ImageView img_fixed_post;
-        public final CheckBox cb_repost;
+
 
         public final ImageView img_post_other;
 
@@ -322,19 +448,17 @@ public class WallAdapter extends BaseAdapter {
             this.postLinkLayout = (RelativeLayout) convertView.findViewById(R.id.postLinkLayout);
             this.postSignedLayout = (RelativeLayout) convertView.findViewById(R.id.postSignedLayout);
             this.postPollLayout = (RelativeLayout) convertView.findViewById(R.id.postPollLayout);
-            this.txt_post_date = (TextView) convertView.findViewById(R.id.txt_post_date);
-
-            this.txt_post_like = (TextView) convertView.findViewById(R.id.txt_post_like);
-            this.img_post_like = (ImageView) convertView.findViewById(R.id.img_post_like);
-            this.txt_post_share = (TextView) convertView.findViewById(R.id.txt_post_share);
-            this.img_post_share = (ImageView) convertView.findViewById(R.id.img_post_share);
-            this.txt_post_comment = (TextView) convertView.findViewById(R.id.txt_post_comment);
-            this.img_post_comment = (ImageView) convertView.findViewById(R.id.img_post_comment);
-
             this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
-            this.cb_repost = (CheckBox) convertView.findViewById(R.id.cb_post_repost);
+            this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other_actions);
 
-            this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other);
+            this.cb_post_like=(CheckBox)convertView.findViewById(R.id.cb_like);
+            this.cb_post_comment=(CheckBox)convertView.findViewById(R.id.cb_comment);
+            this.cb_post_repost=(CheckBox)convertView.findViewById(R.id.cb_repost);
+            this.button_like= ((Button) convertView.findViewById(R.id.button_like));
+            this.button_comment= ((Button) convertView.findViewById(R.id.button_comment));
+            this.button_repost= ((Button) convertView.findViewById(R.id.button_repost));
+            this.txt_post_date= ((TextView) convertView.findViewById(R.id.txt_post_date_of_comment));
+
         }
     }
 }

@@ -24,7 +24,6 @@ import java.util.regex.Pattern;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.MyApplication;
 import typical_if.android.R;
-import typical_if.android.model.Profile;
 
 
 /**
@@ -118,6 +117,7 @@ public class CommentsListAdapter extends BaseAdapter {
 
         viewHolder.likes.setChecked(state);
         viewHolder.likes.setText(count);
+        viewHolder.likes.setEnabled(false);
         notifyDataSetChanged();
 
     }
@@ -134,6 +134,7 @@ public class CommentsListAdapter extends BaseAdapter {
         } else {
             viewHolder.likes.setVisibility(View.VISIBLE);
             viewHolder.likes.setText(String.valueOf(comment.likes));
+            viewHolder.likes.setEnabled(false);
 
             if (comment.user_likes == false) {
 

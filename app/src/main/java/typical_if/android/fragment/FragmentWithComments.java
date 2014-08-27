@@ -116,7 +116,7 @@ public class FragmentWithComments extends Fragment {
         return fragment;
     }
 
-    public static FragmentWithComments newInstanceForWall(String postColor, int position, Wall wall, VKWallPostWrapper post ) {
+    public static FragmentWithComments newInstanceForWall(String postColor, int position, Wall wall, VKWallPostWrapper post) {
         loadFromWall = true;
 
         FragmentWithComments fragment = new FragmentWithComments();
@@ -258,8 +258,8 @@ public class FragmentWithComments extends Fragment {
         viewHolder = new WallAdapter.ViewHolder(wallItem);
         WallAdapter.initViewHolder(viewHolder, postColor, wall, position, getFragmentManager(), post, getActivity().getBaseContext());
 
-        viewHolder.txt_post_comment.setVisibility(View.GONE);
-        viewHolder.img_post_comment.setVisibility(View.GONE);
+        viewHolder.cb_post_comment.setVisibility(View.GONE);
+        viewHolder.button_comment.setVisibility(View.GONE);
         viewHolder.img_post_other.setVisibility(View.GONE);
 
         final VKWallPostWrapper post = this.post;
@@ -376,7 +376,7 @@ public class FragmentWithComments extends Fragment {
             }
 
         });
-        if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(item_id)  ) {
+        if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(item_id)) {
             parseCommentList(OfflineMode.loadJSON(item_id));
             // If IsOnline and response from preferenses not null then load Json from preferenses
         }
@@ -394,36 +394,42 @@ public class FragmentWithComments extends Fragment {
         );
     }
 
-public boolean myComment=false;
+    public boolean myComment = false;
 
     public void showContextMenu(int position) {
         VKApiComment comment = comments.get(position);
 
-       String name = Identify(comments, profiles, position);
-if (name==""||name==null){
-    name=comment.text.substring(0,2);
-}
+        String name = Identify(comments, profiles, position);
+        if (name == "" || name == null) {
+            name = comment.text.substring(0, 2);
+        }
         CharSequence[] items;
 
 
         if (comment.from_id == Constants.USER_ID) {
-            myComment=true;
+            myComment = true;
             if (comment.reply_to_comment != 0) {
                 if (!comment.user_likes)
                     items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись", "Видалити", "Редагувати", name};
                 else
                     items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені не подобається", "Поскаржитись", "Видалити", "Редагувати", name};
-            } else
+            } else if (!comment.user_likes) {
                 items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись", "Видалити", "Редагувати"};
+            } else {
+                items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені не подобається", "Поскаржитись", "Видалити", "Редагувати"};
+            }
         } else {
-            myComment=false;
+            myComment = false;
             if (comment.reply_to_comment != 0) {
                 if (!comment.user_likes)
                     items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись", name};
                 else
                     items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені не подобається", "Поскаржитись", name};
-            } else
+            } else if (!comment.user_likes) {
                 items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись"};
+            } else {
+                items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені не подобається", "Поскаржитись"};
+            }
 
         }
 
@@ -494,8 +500,9 @@ if (name==""||name==null){
                                 @Override
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
-                                    comments.get(position).likes += 1;
+                                ++comments.get(position).likes;
                                     comments.get(position).user_likes = true;
+                                    adapter.changeStateLikeForComment(true,String.valueOf(comments.get(position).likes));
                                     Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -505,8 +512,9 @@ if (name==""||name==null){
                                 @Override
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
-                                    comments.get(position).likes -= 1;
+                                    --comments.get(position).likes;
                                     comments.get(position).user_likes = false;
+                                    adapter.changeStateLikeForComment(false,String.valueOf(comments.get(position).likes));
                                     Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
                                 }
                             });
@@ -519,20 +527,21 @@ if (name==""||name==null){
                         Dialogs.reportListDialog(VKUIHelper.getApplicationContext(), Constants.GROUP_ID, comments.get(position).id);
                         break;
                     case 5: {
-                        if(myComment){
-                     VKHelper.deleteComment(Constants.GROUP_ID, comments.get(position).id, new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(VKResponse response) {
-                                super.onComplete(response);
-                                updateCommentList(Constants.GROUP_ID, item_id, listOfComments, inflater);
-                            }
+                        if (myComment) {
+                            VKHelper.deleteComment(Constants.GROUP_ID, comments.get(position).id, new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(VKResponse response) {
+                                    super.onComplete(response);
+                                    updateCommentList(Constants.GROUP_ID, item_id, listOfComments, inflater);
+                                }
 
 
-                        });}else{
+                            });
+                        } else {
                             Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).reply_to_user + "");
                             getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
                                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                                }
+                        }
 
                     }
                     break;

@@ -170,7 +170,10 @@
         android:layout_alignBottom="@+id/img_user_avatar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:button="@drawable/like_or_not_liked_selector" />
+        android:button="@drawable/like_or_not_liked_selector"
+        android:clickable="false"
+        android:enabled="false"
+        android:visibility="visible" />
       
 
 </RelativeLayout>
