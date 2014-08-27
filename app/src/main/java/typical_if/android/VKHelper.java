@@ -409,7 +409,7 @@ public class VKHelper {
 
         // groups
         final JSONArray groups = object.optJSONArray(Wall.JSON_KEY_GROUPS);
-        Log.d(wall.TAG, "Wall groups: " + groups.toString());
+        //Log.d(wall.TAG, "Wall groups: " + groups.toString());
         VKApiCommunity group;
         VKApi.users().get();
         for (int i = 0; i < groups.length(); i++) {
