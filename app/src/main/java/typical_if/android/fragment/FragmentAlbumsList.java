@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 
 import com.twotoasters.jazzylistview.JazzyHelper;
 import com.twotoasters.jazzylistview.JazzyListView;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
@@ -32,16 +31,16 @@ public class FragmentAlbumsList extends Fragment {
     AlbumCoverAdapter albumCoverAdapter;
     JazzyListView listOfAlbums;
     private int mCurrentTransitionEffect = JazzyHelper.TILT;
-
+    int type;
 
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static FragmentAlbumsList newInstance() {
+    public static FragmentAlbumsList newInstance(int type) {
         FragmentAlbumsList fragment = new FragmentAlbumsList();
         Bundle args = new Bundle();
-
+        fragment.type = type;
 
         fragment.setArguments(args);
         return fragment;
@@ -63,34 +62,27 @@ public class FragmentAlbumsList extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached(Constants.GROUP_ID);
-
-
     }
 
     private void doRequest() {
         final Bundle arguments = getArguments();
-        VKHelper.getAlbumList(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-                handleResponse(response);
-            }
-
-            @Override
-            public void attemptFailed(VKRequest request, int attemptNumber, int totalAttempts) {
-                super.attemptFailed(request, attemptNumber, totalAttempts);
-            }
-            
-            @Override
-            public void onError(VKError error) {
-                super.onError(error);
-            }
-
-            @Override
-            public void onProgress(VKRequest.VKProgressType progressType, long bytesLoaded, long bytesTotal) {
-                super.onProgress(progressType, bytesLoaded, bytesTotal);
-            }
-        });
+        if (type == 0) {
+            VKHelper.getAlbumList(Constants.USER_ID, new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    handleResponse(response);
+                }
+            });
+        } else {
+            VKHelper.getAlbumList(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    handleResponse(response);
+                }
+            });
+        }
     }
 
     protected void handleResponse(VKResponse response) {
@@ -109,10 +101,10 @@ public class FragmentAlbumsList extends Fragment {
         listOfAlbums.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-              Constants.ALBUM_ID = albums.get(position).id;
+                Constants.ALBUM_ID = albums.get(position).id;
 
 
-                Fragment fragment = FragmentPhotoList.newInstance();
+                Fragment fragment = FragmentPhotoList.newInstance(type);
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack("AlbumList").commit();
             }
