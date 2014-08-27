@@ -717,6 +717,7 @@ public class ItemDataSetter {
 
         if (photos != null) {
             final int photosCount = photos.size();
+
             for (int i = 0; i < photosCount; i++) {
                 final ViewGroup layout_i = (ViewGroup) mediaContainer.getChildAt(i);
 
@@ -757,6 +758,7 @@ public class ItemDataSetter {
                             img.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    Constants.COUNT_OF_PHOTOS=photosCount;
                                     Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
                                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                 }
@@ -786,6 +788,8 @@ public class ItemDataSetter {
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
+                                        Constants.COUNT_OF_PHOTOS=photosCount;
+                                        position=9;
                                         Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
                                         fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                     }

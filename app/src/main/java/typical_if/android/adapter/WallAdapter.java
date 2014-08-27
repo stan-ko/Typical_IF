@@ -221,21 +221,20 @@ public class WallAdapter extends BaseAdapter {
                                             }
                                         }
                                    });
-//
-//
+
                               }
                             });
-//                            dialog.setNegativeButton("Відміна", new DialogInterface.OnClickListener() {
-//                                @Override
-//                                public void onClick(DialogInterface dialogInterface, int i) {
-//                                    dialog.setCancelable(true);
-//                                }
-//                            });
+                            dialog.setNegativeButton("Відміна", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialog.setCancelable(true);
+                                }
+                            });
                             dialog.create().show();
-//                        } catch (NullPointerException npe) {
-//                            Toast.makeText(getApplicationContext(), "Щось пішло не так...Оновіть будь-ласка сторінку", Toast.LENGTH_LONG).show();
-//                            Log.d("", "Something went wrong in WallAdapter");
-                        }catch(NullPointerException npe){}
+//
+                        }catch(NullPointerException npe){
+                            Toast.makeText(getApplicationContext(), "Щось пішло не так...Оновіть будь-ласка сторінку", Toast.LENGTH_LONG).show();
+                        }
                  }
                 });
            }
@@ -251,12 +250,7 @@ public class WallAdapter extends BaseAdapter {
                         Dialogs.reportDialog(Constants.mainActivity, wall.group.id, post.id);
                     }
                 });
-//                  viewHolder.cb_post_comment.setVisibility(View.VISIBLE);
-//                 viewHolder.cb_post_like.setVisibility(View.VISIBLE);
-//                viewHolder.txt_post_share.setVisibility(View.VISIBLE);
-//                viewHolder.img_post_comment.setVisibility(View.VISIBLE);
-//                viewHolder.img_post_like.setVisibility(View.VISIBLE);
-//                viewHolder.img_post_share.setVisibility(View.VISIBLE);
+
 
             } else {
                 viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
@@ -265,12 +259,7 @@ public class WallAdapter extends BaseAdapter {
                         Dialogs.suggestPostDialog(Constants.mainActivity, wall.group.id * -1, post);
                     }
                 });
-//                viewHolder.txt_post_comment.setVisibility(View.GONE);
-//                viewHolder.txt_post_like.setVisibility(View.GONE);
-              //  viewHolder.txt_post_share.setVisibility(View.GONE);
-//                viewHolder.img_post_comment.setVisibility(View.GONE);
-//                viewHolder.img_post_like.setVisibility(View.GONE);
-              //  viewHolder.img_post_share.setVisibility(View.GONE);
+
             }
 
             viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);

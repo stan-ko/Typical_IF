@@ -65,7 +65,7 @@ public class FragmentAlbumsList extends Fragment {
     }
 
     private void doRequest() {
-        final Bundle arguments = getArguments();
+
         if (type == 0) {
             VKHelper.getAlbumList(Constants.USER_ID, new VKRequest.VKRequestListener() {
                 @Override

@@ -168,11 +168,16 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
     @Override
     public void onPageSelected(final int position) {
 
+
         photoHeader.setText(photos.get(position).text);
         countLikes.setText(String.valueOf(photos.get(position).likes));
         countComments.setText(String.valueOf(photos.get(position).comments));
         counterOfPhotos.setText(String.valueOf(position + 1));
+      if (VKHelper.countOfPhotos==0)
+          albumSize.setText(String.valueOf(Constants.COUNT_OF_PHOTOS));
+      else
         albumSize.setText(String.valueOf(VKHelper.countOfPhotos));
+
 
         VKHelper.isLiked("photo",Constants.GROUP_ID, photos.get(position).id, new VKRequest.VKRequestListener() {
                     @Override
