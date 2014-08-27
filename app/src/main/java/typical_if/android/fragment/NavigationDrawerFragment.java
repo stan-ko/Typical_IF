@@ -11,7 +11,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -124,7 +123,6 @@ public class NavigationDrawerFragment extends Fragment {
                         mDrawerListView.expandGroupWithAnimation(groupPosition);
                     }
                 }
-                Log.d("--child---NO-------------", "---------------------");
 
                 return true;
             }
@@ -150,7 +148,6 @@ public class NavigationDrawerFragment extends Fragment {
                     mDrawerLayout.closeDrawer(mFragmentContainerView);
                     mCallbacks.onNavigationDrawerItemSelected(groupPosition, childPosition);
                 }
-                Log.d("--child----------------", "---------------------");
                 return false;
             }
         });
