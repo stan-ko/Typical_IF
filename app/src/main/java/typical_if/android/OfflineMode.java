@@ -43,7 +43,7 @@ public class OfflineMode {
 
         } catch (JSONException e) {
             e.printStackTrace();
-           // Log.d("-------------Respons-----Load----Error---------",savedText );
+           // Log.d("------4-------Respons-----Load----Error---------",savedText );
         }
         return jsonObj;
     }
