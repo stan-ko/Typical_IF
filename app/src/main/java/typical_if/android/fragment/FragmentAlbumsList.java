@@ -108,6 +108,7 @@ public class FragmentAlbumsList extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Constants.ALBUM_ID = albums.get(position).id;
+                Constants.TEMP_OWNER_ID = albums.get(position).owner_id;
 
                 Fragment fragment = FragmentPhotoList.newInstance(type);
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();

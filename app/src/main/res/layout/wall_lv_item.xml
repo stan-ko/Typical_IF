@@ -114,7 +114,18 @@
 
                     android:id="@+id/relativeLayout"
                     android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/img_post_other_actions"
                     android:layout_toRightOf="@+id/img_post_other_actions">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/img_fixed_post"
+                        android:src="@android:drawable/ic_lock_lock"
+                        android:visibility="invisible"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="-5dp"
+                        android:layout_marginRight="5dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -122,14 +133,14 @@
                         android:id="@+id/txt_post_date_of_comment"
                         android:textColor="#ff535353"
                         android:singleLine="true"
-                        android:layout_toStartOf="@+id/img_fixed_post"
-                        android:layout_toEndOf="@+id/cb_like"
+                        android:layout_toStartOf="@+id/cb_repost"
+                        android:layout_toEndOf="@+id/img_fixed_post"
                         android:visibility="visible"
                         android:text="Сьогодні о 16:18"
                         android:textSize="15dp"
                         android:layout_centerVertical="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true" />
+                        android:layout_toLeftOf="@+id/cb_repost"
+                        android:layout_toRightOf="@+id/img_fixed_post" />
 
                     <CheckBox
                         android:layout_width="wrap_content"
@@ -206,23 +217,14 @@
                 </RelativeLayout>
 
                 <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/img_fixed_post"
-                    android:src="@android:drawable/ic_lock_lock"
-                    android:visibility="gone"
-                    android:layout_marginRight="5dp"
-                    android:layout_centerVertical="true" />
-
-                <ImageView
-                    android:layout_width="35dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/img_post_other_actions"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:src="@drawable/abc_ic_menu_moreoverflow_normal_holo_light"
-                    android:layout_marginLeft="-8dp" />
+                    android:layout_marginLeft="-10dp" />
 
 
             </RelativeLayout>

@@ -38,7 +38,7 @@ public class VKWallPostWrapper extends VKApiPost {
         if (post.is_pinned == 1) {
             this.postPinnedVisibility = View.VISIBLE;
         } else {
-            this.postPinnedVisibility = View.GONE;
+            this.postPinnedVisibility = View.INVISIBLE;
         }
 
         if (post.text.length() != 0) {

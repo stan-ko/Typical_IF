@@ -118,15 +118,15 @@ public class Dialogs {
                     case 0:
                         ItemDataSetter.setSuggestAttachments(post.attachments);
                         Constants.tempTextSuggestPost = post.text;
-                        ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentMakePost.newInstance(gid, post.id, 1)).addToBackStack(null).commit();
+                        fragmentManager.beginTransaction().add(R.id.container, FragmentMakePost.newInstance(gid, post.id, 1)).addToBackStack(null).commit();
                         break;
                     case 1:
                         VKHelper.deleteSuggestedPost(gid, post.id, new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
-                                ItemDataSetter.fragmentManager.popBackStack();
-                                ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
+                                fragmentManager.popBackStack();
+                                fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
                                 Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -149,10 +149,10 @@ public class Dialogs {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAlbumsList.newInstance(type)).addToBackStack(null).commit();
+                        fragmentManager.beginTransaction().add(R.id.container, FragmentAlbumsList.newInstance(type)).addToBackStack(null).commit();
                         break;
                     case 1:
-                        ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentUploadAlbumList.newInstance(gid, type)).addToBackStack(null).commit();
+                        fragmentManager.beginTransaction().add(R.id.container, FragmentUploadAlbumList.newInstance(gid, type)).addToBackStack(null).commit();
                         break;
                 }
             }
@@ -211,8 +211,7 @@ public class Dialogs {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        FragmentUploadAlbumList fragmentUploadPhotoList = new FragmentUploadAlbumList();
-                        fragmentManager.beginTransaction().add(R.id.container, fragmentUploadPhotoList).addToBackStack(null).commit();
+                        fragmentManager.beginTransaction().add(R.id.container, FragmentUploadAlbumList.newInstance(Constants.GROUP_ID * (-1), 1)).addToBackStack(null).commit();
                         dialog.cancel();
                         break;
                     case 1:

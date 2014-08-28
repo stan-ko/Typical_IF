@@ -71,10 +71,9 @@ public class MainActivity extends ActionBarActivity implements
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-//        VKUIHelper.onCreate(this);
-//        VKSdk.wakeUpSession(this);
-//        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
-//        VKSdk.wakeUpSession(this);
+        VKUIHelper.onCreate(this);
+        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
+        VKSdk.wakeUpSession(this);
 
         ItemDataSetter.fragmentManager = getSupportFragmentManager();
         Dialogs.fragmentManager = getSupportFragmentManager();

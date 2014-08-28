@@ -62,6 +62,7 @@ public class Constants {
 
     public static long GROUP_ID;
     public static long ALBUM_ID;
+    public static long TEMP_OWNER_ID;
 
     public static ArrayList<VKApiPhoto> tempPhotoPostAttach = new ArrayList<VKApiPhoto>();
     public static ArrayList<VKApiVideo> tempVideoPostAttach = new ArrayList<VKApiVideo>();

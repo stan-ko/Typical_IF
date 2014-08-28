@@ -130,7 +130,6 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         this.columns = columns;
         VKHelper.offsetCounter = 0;
 
-
         if (type == 0) {
             VKHelper.getPhotoList(Constants.USER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
 
@@ -142,7 +141,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                 }
             });
         } else {
-            VKHelper.getPhotoList(Constants.GROUP_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
+            VKHelper.getPhotoList(Constants.TEMP_OWNER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
 
                 @Override
                 public void onComplete(VKResponse response) {

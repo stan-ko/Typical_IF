@@ -539,6 +539,7 @@ public class ItemDataSetter {
                 @Override
                 public void onClick(View v) {
                     Constants.ALBUM_ID = album.id;
+                    Constants.TEMP_OWNER_ID = album.owner_id;
                     fragmentManager.beginTransaction().add(R.id.container, FragmentPhotoList.newInstance(1)).addToBackStack(null).commit();
                 }
             });
@@ -758,6 +759,40 @@ public class ItemDataSetter {
                                 img.setLayoutParams(params);
                                 img.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             }
+//                            else if (photosCount == 2 && videos.size() == 0 && finalJ == 0) {
+//                                int totalWidth = MyApplication.getDisplayWidth();
+//                                boolean firstIsPortrait;
+//                                boolean secondIsPortrait;
+//
+//                                if (photos.get(finalJ).height >= photos.get(finalJ).width) {
+//                                    firstIsPortrait = true;
+//                                } else {
+//                                    firstIsPortrait = false;
+//                                }
+//
+//                                if (photos.get(finalJ + 1).height >= photos.get(finalJ + 1).width) {
+//                                    secondIsPortrait = true;
+//                                } else {
+//                                    secondIsPortrait = false;
+//                                }
+//
+//                                int newWidth = 0;
+//                                float scaleFactor = 0;
+//                                int newHeight = 0;
+//                                if (firstIsPortrait && !secondIsPortrait) {
+//                                    newWidth = MyApplication.getDisplayWidth() - photos.get(finalJ).width;
+//                                    scaleFactor = (float) newWidth / photos.get(finalJ).width;
+//                                    newHeight = (int) (photos.get(finalJ).height * scaleFactor);
+//                                } else if (!firstIsPortrait && secondIsPortrait){
+//                                    newWidth = MyApplication.getDisplayWidth() - photos.get(finalJ + 1).width;
+//                                    scaleFactor = (float) newWidth / photos.get(finalJ + 1).width;
+//                                    newHeight = (int) (photos.get(finalJ).height * scaleFactor);
+//                                }
+//
+//                                //layout_i_j.setLayoutParams(new LinearLayout.LayoutParams(photos.get(finalJ).width, photos.get(finalJ).height));
+//                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(totalWidth, newHeight);
+//                                layout_i.setLayoutParams(params);
+//                            }
 
                             ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img);
 

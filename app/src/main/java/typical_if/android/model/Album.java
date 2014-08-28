@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class Album {
     public long id; //— идентификатор альбома;
     public String thumb_id; //— идентификатор фотографии, которая является обложкой;
-    public String owner_id; //— идентификатор владельца альбома;
+    public long owner_id; //— идентификатор владельца альбома;
     public String title; //— название альбома;
     public String description; //— описание альбома; (не приходит для системных альбомов)
     public String created; //— дата создания альбома в формате unixtime; (не приходит для системных альбомов);
@@ -27,7 +27,7 @@ public class Album {
   //  public ArrayList<VKApiPhoto> photos;
 
     public Album(){}
-    public Album(long id, String thumb_id, String owner_id, String title, String description, String created, String updated, int size, int can_upload, String privacy_view, String privacy_comment, String thumb_src, JSONArray sizes) {
+    public Album(long id, String thumb_id, long owner_id, String title, String description, String created, String updated, int size, int can_upload, String privacy_view, String privacy_comment, String thumb_src, JSONArray sizes) {
 
         this.id = id;
         this.thumb_id = thumb_id;
@@ -61,7 +61,7 @@ public class Album {
     public static Album getAlbumFromJSON(JSONObject albumJSON){
         return new Album(albumJSON.optLong(JSON_KEY_ID),
                 albumJSON.optString(JSON_KEY_THUMB_ID),
-                albumJSON.optString(JSON_KEY_OWNER_ID),
+                albumJSON.optLong(JSON_KEY_OWNER_ID),
                 albumJSON.optString(JSON_KEY_TITLE),
                 albumJSON.optString(JSON_KEY_DESCRIPTION),
                 albumJSON.optString(JSON_KEY_CREATED),

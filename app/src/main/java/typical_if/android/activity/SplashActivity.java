@@ -61,8 +61,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
-        VKSdk.wakeUpSession(this);
-
 
         firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
 

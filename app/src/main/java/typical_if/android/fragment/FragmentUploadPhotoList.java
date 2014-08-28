@@ -167,7 +167,7 @@ public class FragmentUploadPhotoList extends Fragment {
                     VKRequest req;
                     for (int j = 0; j < photolist.size(); j++) {
                         if (photolist.get(j).ischecked) {
-                            req = VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photosrc), 123513499, 8686797);
+                            req = VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photosrc), Constants.ALBUM_ID, (int) gid);
                             req.executeWithListener(new VKRequest.VKRequestListener() {
                                 @Override
                                 public void onComplete(VKResponse response) {
