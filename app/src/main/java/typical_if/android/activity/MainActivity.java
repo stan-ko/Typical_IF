@@ -1,6 +1,8 @@
 package typical_if.android.activity;
 
 import android.app.AlertDialog;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -25,6 +27,7 @@ import com.vk.sdk.api.VKResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import typical_if.android.AudioPlayerService;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
@@ -60,6 +63,8 @@ public class MainActivity extends ActionBarActivity implements
         setContentView(R.layout.activity_main);
 
         Constants.mainActivity = this;
+        Constants.myIntent = new Intent(this, AudioPlayerService.class);
+        Constants.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -157,7 +162,7 @@ public class MainActivity extends ActionBarActivity implements
 
         @Override
         public void onAccessDenied(final VKError authorizationError) {
-            new AlertDialog.Builder(VKUIHelper.getTopActivity())
+            new AlertDialog.Builder(Constants.mainActivity)
                     .setMessage(authorizationError.toString())
                     .show();
     }
@@ -239,6 +244,13 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        stopService(Constants.myIntent);
+        AudioPlayerService.cancelNotification(Constants.mainActivity.getApplicationContext(), Constants.notifID);
     }
 }
 

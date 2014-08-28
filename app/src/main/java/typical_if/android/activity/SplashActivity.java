@@ -222,7 +222,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         @Override
         public void onAccessDenied(final VKError authorizationError) {
-            new AlertDialog.Builder(VKUIHelper.getTopActivity())
+            new AlertDialog.Builder(Constants.mainActivity)
                     .setMessage(authorizationError.toString())
                     .show();
         }

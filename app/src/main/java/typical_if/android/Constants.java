@@ -1,6 +1,8 @@
 package typical_if.android;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.widget.CheckBox;
@@ -71,9 +73,13 @@ public class Constants {
     public static int tempCurrentPhotoAttachCounter = 0;
     public static int COUNT_OF_PHOTOS=0;
 
+    public static Intent myIntent;
+    public static int notifID = 2048;
+    public static NotificationManager notificationManager;
+    public static String title = "";
+    public static String artist = "";
     public static String tempCameraPhotoFile = "";
     public static MediaPlayer mediaPlayer = null;
-    public static boolean originRecord = true;
     public static Thread tempThread = null;
     public static CheckBox previousCheckBoxState = null;
     public static SeekBar previousSeekBarState = null;

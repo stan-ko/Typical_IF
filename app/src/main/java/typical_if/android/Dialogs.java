@@ -203,9 +203,9 @@ public class Dialogs {
     }
 
     public static Dialog addPhotoFrom() {
-        final String[] items =  VKUIHelper.getTopActivity().getResources().getStringArray(R.array.add_photo_from);
-        AlertDialog.Builder builder = new AlertDialog.Builder(VKUIHelper.getTopActivity());
-        builder.setTitle(VKUIHelper.getTopActivity().getResources().getString(R.string.add_photo_from_title));
+        final String[] items =  Constants.mainActivity.getResources().getStringArray(R.array.add_photo_from);
+        AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
+        builder.setTitle(Constants.mainActivity.getResources().getString(R.string.add_photo_from_title));
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -239,7 +239,7 @@ public class Dialogs {
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         Uri outputFileUri = Uri.fromFile(file);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        VKUIHelper.getTopActivity().startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
+        Constants.mainActivity.startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
     }
 
 }

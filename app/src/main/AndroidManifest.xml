@@ -26,6 +26,7 @@
             android:name=".AudioPlayerService">
             <intent-filter>
                 <action android:name="com.action.PAUSE"/>
+                <action android:name="com.action.PLAY"/>
             </intent-filter>
         </service>
         <activity android:theme="@android:style/Theme.NoTitleBar.Fullscreen"

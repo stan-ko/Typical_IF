@@ -43,7 +43,7 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
 
-    ListView wallListView;
+    static ListView wallListView;
     WallAdapter adapter;
 
     RelativeLayout spinnerLayout;
@@ -52,6 +52,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     LayoutInflater inflaterGlobal;
     final int offsetO = 0;
     int countPostDefaultForOffset=100;
+    public static int playableLogoRes;
     String postColor;
     JSONObject jsonObjectOld;
 
@@ -127,6 +128,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         arguments = getArguments();
 
         postColor = ItemDataSetter.getPostColor(Constants.GROUP_ID);
+        playableLogoRes = ItemDataSetter.getPlayingLogo(Constants.GROUP_ID);
         pauseOnScrollListener = new PauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerObject);
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
 
@@ -289,4 +291,9 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
     }
+
+    public static void refresh() {
+        ((WallAdapter)wallListView.getAdapter()).notifyDataSetChanged();
+    }
+
 }

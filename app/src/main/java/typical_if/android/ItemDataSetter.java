@@ -554,17 +554,18 @@ public class ItemDataSetter {
         for (final VKApiAudio audio : audios) {
             tempAudioContainer = (ViewGroup) inflater.inflate(R.layout.audio_container, parent, false);
             tempAudioContainer.setVisibility(View.VISIBLE);
-
             tempAudioContainer.getChildAt(0).setBackgroundColor(Color.parseColor(postColor));
-            CheckBox play_pause_music = (CheckBox) tempAudioContainer.getChildAt(0);
+            final CheckBox play_pause_music = (CheckBox) tempAudioContainer.getChildAt(0);
             SeekBar progressBar = (SeekBar) tempAudioContainer.getChildAt(1);
 
             if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPlayed == true){
-                //Log.d("MY Fucking LOG", Constants.playedPausedRecord.audioUrl + " " + audio.url + " " + Constants.playedPausedRecord.isPlayed);
-                //Log.d("True", Constants.playedPausedRecord.audioUrl + " " + Constants.playedPausedRecord.isPlayed);
                 play_pause_music.setChecked(true);
-                //Log.d("Progress bar in IDS", progressBar.toString());
-                Constants.tempThread.interrupt();
+                try {
+                    Constants.tempThread.interrupt();
+                }
+                catch (NullPointerException e){
+
+                }
                 AudioPlayer.progressBar(progressBar).start();
                 Constants.tempThread = AudioPlayer.progressBar(progressBar);
                 Constants.previousCheckBoxState = play_pause_music;
@@ -572,11 +573,15 @@ public class ItemDataSetter {
                 progressBar.setVisibility(View.VISIBLE);
             }
             if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPaused == true){
-                Constants.tempThread.interrupt();
+
                 AudioPlayer.progressBar(progressBar).start();
+                try {
+                    Constants.tempThread.interrupt();
+                }
+                catch (NullPointerException e){
+                }
                 progressBar.setVisibility(View.VISIBLE);
                 Constants.tempThread = AudioPlayer.progressBar(progressBar);
-
             }
 
 
@@ -584,8 +589,7 @@ public class ItemDataSetter {
             ((TextView) tempAudioContainer.getChildAt(3)).setText(audio.artist);
             ((TextView) tempAudioContainer.getChildAt(4)).setText(audio.title);
 
-
-            AudioPlayer.getOwnMadiaPlayer(VKUIHelper.getTopActivity(), audio.url, play_pause_music, progressBar);
+            AudioPlayer.getOwnMediaPlayer(audio.url, play_pause_music, progressBar, audio.title, audio.artist);
             parent.addView(tempAudioContainer);
         }
     }
@@ -972,6 +976,18 @@ public class ItemDataSetter {
             return "#1799CD";
         } else {
             return "#DE9C0E";
+        }
+    }
+
+    public static int getPlayingLogo (long groupIndex) {
+        if (groupIndex == Constants.TF_ID) {
+            return R.drawable.tf_logo;
+        } else if (groupIndex == Constants.TZ_ID) {
+            return R.drawable.tz_logo;
+        } else if (groupIndex == Constants.FB_ID) {
+            return R.drawable.fb_logo;
+        } else {
+            return R.drawable.fn_logo;
         }
     }
 
