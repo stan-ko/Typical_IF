@@ -312,7 +312,7 @@ public class FragmentWithComments extends Fragment {
                 if (!edit_status) {
                     if (reply_to_comment == 0) {
 
-                        VKHelper.createComment(Constants.GROUP_ID, item_id, message, 0, new VKRequest.VKRequestListener() {
+                        VKHelper.createComment(Constants.GROUP_ID, item_id, message + "\n@club26363301 (fromMobileIF)", 0, new VKRequest.VKRequestListener() {
 
                             @Override
                             public void onComplete(VKResponse response) {
@@ -325,7 +325,7 @@ public class FragmentWithComments extends Fragment {
                         });
 
                     } else {
-                        VKHelper.createComment(Constants.GROUP_ID, item_id, message, reply_to_comment, new VKRequest.VKRequestListener() {
+                        VKHelper.createComment(Constants.GROUP_ID, item_id, message + "\n@club26363301 (fromMobileIF)", reply_to_comment, new VKRequest.VKRequestListener() {
 
                             @Override
                             public void onComplete(VKResponse response) {

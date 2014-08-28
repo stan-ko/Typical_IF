@@ -188,7 +188,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onPrepareOptionsMenu(final Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        VKHelper.isMember(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
+        VKHelper.isMember(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
@@ -217,7 +217,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 break;
             case R.id.join_leave_group:
                 if (isMember == 0) {
-                    VKHelper.groupJoin(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
+                    VKHelper.groupJoin(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
@@ -226,7 +226,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                         }
                     });
                 } else {
-                    VKHelper.groupLeave(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
+                    VKHelper.groupLeave(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);

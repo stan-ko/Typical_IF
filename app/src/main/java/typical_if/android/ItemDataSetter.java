@@ -58,6 +58,7 @@ import java.util.regex.Pattern;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
+import typical_if.android.fragment.FragmentPhotoList;
 import typical_if.android.model.Wall.Wall;
 
 import static java.lang.String.format;
@@ -537,7 +538,8 @@ public class ItemDataSetter {
             tempAlbumContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(context, valueOf(album.id), Toast.LENGTH_SHORT).show();
+                    Constants.ALBUM_ID = album.id;
+                    fragmentManager.beginTransaction().add(R.id.container, FragmentPhotoList.newInstance(1)).addToBackStack(null).commit();
                 }
             });
 
@@ -759,7 +761,7 @@ public class ItemDataSetter {
                                 @Override
                                 public void onClick(View v) {
                                     Constants.COUNT_OF_PHOTOS=photosCount;
-                                    Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
+                                    Fragment fragment = FragmentFullScreenViewer.newInstance(photos, finalJ);
                                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                 }
                             });
@@ -790,7 +792,7 @@ public class ItemDataSetter {
                                     public void onClick(View v) {
                                         Constants.COUNT_OF_PHOTOS=photosCount;
                                         position=9;
-                                        Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
+                                        Fragment fragment = FragmentFullScreenViewer.newInstance(photos, finalL);
                                         fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                     }
                                 });

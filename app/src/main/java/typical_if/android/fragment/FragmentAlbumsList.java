@@ -109,7 +109,6 @@ public class FragmentAlbumsList extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Constants.ALBUM_ID = albums.get(position).id;
 
-
                 Fragment fragment = FragmentPhotoList.newInstance(type);
                 android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack("AlbumList").commit();

@@ -4,12 +4,9 @@
     android:layout_width="match_parent" android:layout_height="fill_parent">
 
     <RelativeLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@drawable/abc_menu_dropdown_panel_holo_light"
-        android:layout_marginLeft="-6dp"
-        android:layout_marginRight="-6dp">
+        android:layout_centerHorizontal="true">
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -21,23 +18,20 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:id="@+id/postSignedLayout"
-                android:background="@android:drawable/editbox_background_normal" />
+                android:id="@+id/postSignedLayout" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:id="@+id/postTextLayout"
-                android:background="@android:drawable/editbox_background_normal"></RelativeLayout>
+                android:id="@+id/postTextLayout"></RelativeLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/postAttachmentsLayout"
                 android:orientation="vertical"
-                android:visibility="gone"
-                android:background="@android:drawable/editbox_background_normal">
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
@@ -98,22 +92,21 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/postGeoLayout"
-                android:visibility="gone"
-                android:background="@android:drawable/editbox_background_normal"></RelativeLayout>
+                android:visibility="gone"></RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:id="@+id/copyHistoryLayout"
-                android:background="@android:drawable/editbox_background_normal" />
+                android:id="@+id/copyHistoryLayout" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="51dp"
+                android:layout_height="50dp"
                 android:id="@+id/postFeaturesLayout"
                 android:visibility="visible"
-                android:background="@android:drawable/editbox_background_normal">
+                android:padding="10dp"
+                android:background="#ffffffff">
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
