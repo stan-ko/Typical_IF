@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -732,7 +734,12 @@ public class ItemDataSetter {
                     continue;
                 } else {
                     if (photosCount > 1) {
-                        int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                        int newWidth;
+                        if (getScreenOrientation() == 1) {
+                            newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                        } else {
+                            newWidth = MyApplication.getDisplayHeight(); //this method should return the width of device screen.
+                        }
                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
                         layout_i.setLayoutParams(params);
                     }
@@ -752,7 +759,12 @@ public class ItemDataSetter {
                             img = (ImageView) view_i_j_k;
                             final int finalJ = photoPointer++;
                             if (photosCount == 1 && videos.size() == 0) {
-                                int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                                int newWidth;
+                                if (getScreenOrientation() == 1) {
+                                    newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                                } else {
+                                    newWidth = MyApplication.getDisplayHeight(); //this method should return the width of device screen.
+                                }
                                 float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width);
                                 int newHeight = (int) (photos.get(finalJ).height * scaleFactor);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
@@ -799,7 +811,7 @@ public class ItemDataSetter {
                             img.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Constants.COUNT_OF_PHOTOS=photosCount;
+                                    Constants.COUNT_OF_PHOTOS = photosCount;
                                     Fragment fragment = FragmentFullScreenViewer.newInstance(photos, finalJ);
                                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                 }
@@ -829,7 +841,7 @@ public class ItemDataSetter {
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Constants.COUNT_OF_PHOTOS=photosCount;
+                                        Constants.COUNT_OF_PHOTOS = photosCount;
                                         position=9;
                                         Fragment fragment = FragmentFullScreenViewer.newInstance(photos, finalL);
                                         fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
@@ -851,12 +863,26 @@ public class ItemDataSetter {
                 } else {
                     if (videos.size() == 1 && photos.size() == 0) {
                         if (videos.size() == 1 && photos.size() == 0) {
-                            int newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                            int newWidth;
+                            if (getScreenOrientation() == 1) {
+                                newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                            } else {
+                                newWidth = MyApplication.getDisplayHeight(); //this method should return the width of device screen.
+                            }
                             float scaleFactor = (float) newWidth / 320;
                             int newHeight = (int) (240 * scaleFactor);
                             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
                             layout_i.setLayoutParams(params);
                         }
+                    } else if (photos.size() == 0 && videos.size() > 1) {
+                        int newWidth;
+                        if (getScreenOrientation() == 1) {
+                            newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                        } else {
+                            newWidth = MyApplication.getDisplayHeight(); //this method should return the width of device screen.
+                        }
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
+                        layout_i.setLayoutParams(params);
                     }
                 }
                 layout_i.setVisibility(View.VISIBLE);
@@ -1000,6 +1026,22 @@ public class ItemDataSetter {
     public static int setInDp(int dps) {
         final float scale = Constants.RESOURCES.getDisplayMetrics().density;
         return (int) (dps * scale + 0.5f);
+    }
+
+    public static int getScreenOrientation()
+    {
+        Display getOrient = Constants.mainActivity.getWindowManager().getDefaultDisplay();
+        int orientation = Configuration.ORIENTATION_UNDEFINED;
+        if(getOrient.getWidth()==getOrient.getHeight()){
+            orientation = Configuration.ORIENTATION_SQUARE;
+        } else{
+            if(getOrient.getWidth() < getOrient.getHeight()){
+                orientation = Configuration.ORIENTATION_PORTRAIT;
+            }else {
+                orientation = Configuration.ORIENTATION_LANDSCAPE;
+            }
+        }
+        return orientation;
     }
 
     public static String getPostColor(long groupIndex) {

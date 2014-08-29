@@ -111,7 +111,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         FragmentWall fragment = new FragmentWall();
         Bundle args = new Bundle();
 
-        isSuggested = isSuggestedParam;
+        fragment.isSuggested = isSuggestedParam;
         fragment.setArguments(args);
         return fragment;
     }
@@ -155,6 +155,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         return rootView;
     }
 
+
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater) {
         Wall wall = VKHelper.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
@@ -165,6 +166,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         spinnerLayout.setVisibility(View.GONE);
         if (wall.posts.size() == 0) {
             fragmentManager.popBackStack();
+            fragmentManager.beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).addToBackStack(null).commit();
             Toast.makeText(getApplicationContext(), "No suggested posts", Toast.LENGTH_SHORT).show();
         }
     }

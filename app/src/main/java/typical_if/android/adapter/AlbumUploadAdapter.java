@@ -8,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
@@ -23,20 +22,11 @@ public class AlbumUploadAdapter extends BaseAdapter {
     ArrayList<String> titles;
     LayoutInflater layoutInflater;
     String[] arrPath;
-    ImageLoader imageLoader;
-    private DisplayImageOptions opt;
 
     public AlbumUploadAdapter(ArrayList<String> titles, LayoutInflater layoutInflater, String[] arrPath) {
         this.titles = titles;
         this.layoutInflater = layoutInflater;
         this.arrPath = arrPath;
-        this.opt = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.ic_stub) // TODO resource or drawable
-                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
-                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .build();
     }
 
     @Override
@@ -78,7 +68,7 @@ public class AlbumUploadAdapter extends BaseAdapter {
 
         File file = new File((String) covers.get(covers.size() - 1));
 
-        imageLoader.getInstance().displayImage(String.valueOf(Uri.fromFile(file)), viewHolder.album_cover, opt);
+        ImageLoader.getInstance().displayImage(String.valueOf(Uri.fromFile(file)), viewHolder.album_cover);
         viewHolder.photos_count.setText(count + " фото");
         viewHolder.album_name.setText(titles.get(position));
 

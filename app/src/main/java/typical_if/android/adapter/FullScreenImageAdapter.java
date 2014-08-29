@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -36,7 +35,6 @@ public class FullScreenImageAdapter extends PagerAdapter {
     public FragmentManager fragmentManager;
     public Bundle arguments;
     private View rootView;
-    private DisplayImageOptions options;
 
 
     public FullScreenImageAdapter(ArrayList<VKApiPhoto> photos, LayoutInflater inflater, Bundle arguments, long groupID, long albumID, long userID, FragmentManager fragmentManager, View rootView) {
@@ -45,13 +43,6 @@ public class FullScreenImageAdapter extends PagerAdapter {
         this.inflater = inflater;
         this.arguments = arguments;
         this.fragmentManager = fragmentManager;
-        this.options = new DisplayImageOptions.Builder()
-                //.showImageOnLoading(R.drawable.ic_stub) // TODO resource or drawable
-                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
-                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .build();
     }
 
 
@@ -88,7 +79,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
         final String urlOfFullScreenPhoto = PhotoUrlHelper.getFullScreenUrl(photo);
 
-        ImageLoader.getInstance().displayImage(urlOfPhotoPreview, imageView, options, new ImageLoadingListener() {
+        ImageLoader.getInstance().displayImage(urlOfPhotoPreview, imageView, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 pbImageIsLoading.setVisibility(View.VISIBLE);
@@ -112,7 +103,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
     }
 
     void loadFullSceenPhoto(final String url, final ImageView imageView, final ProgressBar pbImageIsLoading) {
-        ImageLoader.getInstance().displayImage(url, imageView, options, new ImageLoadingListener() {
+        ImageLoader.getInstance().displayImage(url, imageView, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 pbImageIsLoading.setVisibility(View.VISIBLE);

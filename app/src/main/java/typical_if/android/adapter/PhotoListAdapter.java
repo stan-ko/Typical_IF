@@ -6,9 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -25,23 +23,10 @@ import typical_if.android.util.PhotoUrlHelper;
 public class PhotoListAdapter extends BaseAdapter {
     List<VKApiPhoto> photoList;
     LayoutInflater layoutInflater;
-    final DisplayImageOptions options;
-
-    ImageLoader imageLoader;
 
     public PhotoListAdapter(List<VKApiPhoto> list, LayoutInflater inflater) {
         this.photoList = list;
         this.layoutInflater = inflater;
-
-        this.options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.gray_icon) // TODO resource or drawable
-                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
-                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-                .bitmapConfig(Bitmap.Config.RGB_565)
-//            .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
-                .build();
     }
 
 
@@ -74,7 +59,7 @@ public class PhotoListAdapter extends BaseAdapter {
 
        // final ProgressBar pbPreviewImageIsLoading = viewHolder.pbPreviewImageIsLoading;
 
-        imageLoader.getInstance().displayImage(PhotoUrlHelper.getPreviewUrl(photo), viewHolder.photo, options, new ImageLoadingListener() {
+        ImageLoader.getInstance().displayImage(PhotoUrlHelper.getPreviewUrl(photo), viewHolder.photo, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 //pbPreviewImageIsLoading.setVisibility(View.VISIBLE);

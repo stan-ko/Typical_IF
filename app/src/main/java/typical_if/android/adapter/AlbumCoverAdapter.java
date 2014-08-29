@@ -7,7 +7,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -18,25 +17,14 @@ import typical_if.android.model.Album;
 
 public class AlbumCoverAdapter extends BaseAdapter {
     private List<Album> albumList;
-    private DisplayImageOptions options;
     LayoutInflater layoutInflater;
     final int imageHeight;
-    ImageLoader imageLoader;
    public static int _albumSize;
 
     public AlbumCoverAdapter(List<Album> list, LayoutInflater inflater) {
         albumList = list;
         layoutInflater = inflater;
         imageHeight = MyApplication.getDisplayHeight() / 3;
-        this.options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.ic_stub) // TODO resource or drawable
-                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
-                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-//            .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
-//            .bitmapConfig(Bitmap.Config.ARGB_8888) // default
-                .build();
     }
 
 
@@ -77,7 +65,7 @@ public class AlbumCoverAdapter extends BaseAdapter {
         viewHolder.photos_count.setText(album.size + "");
 
         String url = album.sizes.optJSONObject(2).optString("src");
-        imageLoader.getInstance().displayImage(url, viewHolder.album_cover, options);
+        ImageLoader.getInstance().displayImage(url, viewHolder.album_cover);
 
         return convertView;
     }

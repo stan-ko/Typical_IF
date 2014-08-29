@@ -10,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.io.File;
@@ -31,9 +30,7 @@ public class PhotoUploadAdapter extends BaseAdapter {
 
     String titlename;
     LayoutInflater layoutInflater;
-    final DisplayImageOptions options;
     ArrayList<UploadPhotos> uploadphotolist;
-    ImageLoader imageLoader;
     android.support.v4.app.FragmentManager manager;
     int which;
 
@@ -43,15 +40,6 @@ public class PhotoUploadAdapter extends BaseAdapter {
         this.uploadphotolist = uploadphotolist;
         this.manager = fragmentManager;
         this.which = which;
-        this.options = new DisplayImageOptions.Builder()
-                .showImageOnLoading(R.drawable.ic_stub) // TODO resource or drawable
-                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
-                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
-                .cacheInMemory(true)
-                .cacheOnDisk(true)
-//            .imageScaleType(ImageScaleType.IN_SAMPLE_POWER_OF_2) // default
-//            .bitmapConfig(Bitmap.Config.ARGB_8888) // default
-                .build();
     }
 
 
@@ -84,7 +72,7 @@ public class PhotoUploadAdapter extends BaseAdapter {
         }
 
         File file = new File(uploadphotolist.get(position).photosrc);
-        imageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), viewHolder.photo, options);
+        ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), viewHolder.photo);
 
         viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
