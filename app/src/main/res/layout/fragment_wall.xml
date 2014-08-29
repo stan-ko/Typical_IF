@@ -5,38 +5,46 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/refresh"
     android:focusableInTouchMode="true">
+    <!--
+    android:layout_marginTop="-48dp"
+    android:paddingTop="48dp"
+    -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#ffd6d6d6">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="match_parent"
+        android:background="#ffd6d6d6">
 
-    <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listViewWall"
-        android:dividerHeight="2dp"
-        android:layout_centerHorizontal="true"
-        android:background="#ffd6d6d6"
-        android:divider="#ffd6d6d6"
-        android:smoothScrollbar="true"
-        android:scrollingCache="false"
-        android:animationCache="false"/>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/spinner_layout"
-        android:visibility="visible">
-
-        <ProgressBar
-            style="?android:attr/progressBarStyleLarge"
+        <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
+            android:id="@+id/listViewWall"
+            android:dividerHeight="2dp"
+            android:layout_centerHorizontal="true"
+            android:background="#ffd6d6d6"
+            android:divider="#ffd6d6d6"
+            android:smoothScrollbar="true"
+            android:scrollingCache="false"
+            android:animationCache="false"/>
 
-</RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:id="@+id/spinner_layout"
+            android:visibility="visible"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </android.support.v4.widget.SwipeRefreshLayout>
