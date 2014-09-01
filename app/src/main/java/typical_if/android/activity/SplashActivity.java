@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -58,7 +59,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
 
@@ -86,8 +87,9 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     void showAlertNoInternet() {
         //Log.d("----------------Internet conection Error", "------------------------");
         counter--;
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.app_name)
+                .setCancelable(false)
                 .setMessage("No fucking active Internet connection is available. Would you like to")
                 .setPositiveButton("Retry "+"("+counter+")", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -96,16 +98,19 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                             counter=5;
                         }
                         checkIfOnlineAndProceed();
+                        builder.setCancelable(true);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         finish();
+                        builder.setCancelable(true);
                     }
                 });
         if (!isFirstOpen() & OfflineMode.loadJSON(Constants.TF_ID) != null) {
             builder.setNeutralButton("Offline", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    builder.setCancelable(true);
                     startNextActivity();
                 }
             });

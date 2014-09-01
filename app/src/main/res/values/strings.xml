@@ -52,6 +52,7 @@
 
     <string name="add_photo_from_title">Завантажити фото ?</string>
     <string name="noInternetMessageFromToast_EN">No internet connection. You use offline mode</string>
+    <string name="Alboms">Альбоми</string>
     <!--<string name="post_report_spam">Спам</string>-->
     <!--<string name="post_report_offense">Образа</string>-->
     <!--<string name="post_report_adult">Матеріал для дорослих</string>-->

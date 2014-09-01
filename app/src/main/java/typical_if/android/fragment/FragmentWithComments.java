@@ -284,8 +284,6 @@ public class FragmentWithComments extends Fragment {
         listOfComments.addHeaderView(wallItem);
 
         updateCommentList(Constants.GROUP_ID, post.post.id, listOfComments, inflater);
-
-
     }
 
 
