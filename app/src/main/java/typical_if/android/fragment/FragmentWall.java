@@ -28,7 +28,6 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
-import typical_if.android.activity.MainActivity;
 import typical_if.android.activity.SplashActivity;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Wall.Wall;
@@ -65,8 +64,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     SwipeRefreshLayout swipeView;
     AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
-        int mLastFirstVisibleItem = 0;
-        android.support.v7.app.ActionBar actionBar;
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             temp = true;
@@ -75,27 +72,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         @Override
         public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount,
                              int totalItemCount) {
-            absListView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_DISABLED);
-
-            if (absListView.getId() == wallListView.getId()) {
-                final int currentFirstVisibleItem = wallListView.getFirstVisiblePosition();
-                actionBar = ((MainActivity)getActivity()).getSupportActionBar();
-
-                if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-                    if (actionBar.isShowing()) {
-                        actionBar.hide();
-                        ImageLoader.getInstance().stop();
-                    }
-                }
-                else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-                    if (!actionBar.isShowing()) {
-                        actionBar.show();
-                        ImageLoader.getInstance().stop();
-                    }
-                }
-
-                mLastFirstVisibleItem = currentFirstVisibleItem;
-            }
 
             final int lastItem = firstVisibleItem + visibleItemCount;
 
@@ -124,18 +100,14 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 boolean topOfFirstItemVisible = absListView.getChildAt(0).getTop() == 0;
                 enable = firstItemVisible && topOfFirstItemVisible;
             }
-
             swipeView.setEnabled(enable);
         }
     };
-
     Bundle arguments;
-
     public static FragmentWall newInstance(boolean isSuggestedParam) {
-        FragmentWall fragment = new FragmentWall();
+            FragmentWall fragment = new FragmentWall();
         Bundle args = new Bundle();
-
-        fragment.isSuggested = isSuggestedParam;
+        isSuggested = isSuggestedParam;
         fragment.setArguments(args);
         return fragment;
     }
@@ -179,7 +151,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         return rootView;
     }
 
-
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater) {
         Wall wall = VKHelper.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
@@ -190,7 +161,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         spinnerLayout.setVisibility(View.GONE);
         if (wall.posts.size() == 0) {
             fragmentManager.popBackStack();
-            fragmentManager.beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).addToBackStack(null).commit();
             Toast.makeText(getApplicationContext(), "No suggested posts", Toast.LENGTH_SHORT).show();
         }
     }
