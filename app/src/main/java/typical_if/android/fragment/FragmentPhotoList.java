@@ -1,8 +1,10 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -16,7 +18,9 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -37,7 +41,9 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
     public ArrayList<VKApiPhoto> photos2 = new ArrayList<VKApiPhoto>();
     private OnFragmentInteractionListener mListener;
-
+ private int counter = 5;
+     private boolean temp = true;
+     private  boolean isRequestNull;
     //private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private static final int PICK_FROM_CAMERA = 1;
     int type;
@@ -119,10 +125,9 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     int columns;
     View view = null;
 
-    public void doRequest(final View view) {
+    public boolean doRequest(final View view) {
         this.view = view;
 
-        final Bundle arguments = getArguments();
         float scaleFactor = getResources().getDisplayMetrics().density * 80;
 
         int number = getActivity().getWindowManager().getDefaultDisplay().getWidth();
@@ -130,32 +135,65 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         this.columns = columns;
         VKHelper.offsetCounter = 0;
 
-        if (type == 0) {
-            VKHelper.getPhotoList(Constants.USER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
+            if (OfflineMode.isOnline(getActivity().getApplicationContext())) {
+                temp = false;
+                if (type == 0) {
+                    VKHelper.getPhotoList(Constants.USER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
 
-                @Override
-                public void onComplete(VKResponse response) {
-                    super.onComplete(response);
-                    OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
-                    handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
-                }
-            });
-        } else {
-            VKHelper.getPhotoList(Constants.TEMP_OWNER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+                        OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
+                        handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
+                    }
+                });
+            } else {
+                VKHelper.getPhotoList(Constants.TEMP_OWNER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
 
-                @Override
-                public void onComplete(VKResponse response) {
-                    super.onComplete(response);
-                    OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
-                    handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
-                }
-            });
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+                        OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
+                        handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
+                    }
+                });
+
+            }
+            isRequestNull =true;
         }
         if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(Constants.ALBUM_ID)) {
             handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID),columns, view);
+            isRequestNull =true;
+        }else {
+            if (temp) {
+                isRequestNull = false;
+                showAlertNoInternet(view);
+            }
         }
+        return isRequestNull;
     }
 
+    void showAlertNoInternet(final View view) {
+
+        final LinearLayout lv = (LinearLayout) view.findViewById(R.id.LinerLayout_Error_Photo);
+        final Button btn = (Button) view.findViewById(R.id.ButtonFromOfflinePhoto);
+        lv.setVisibility(View.VISIBLE);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View clickView) {
+                counter--;
+                if (doRequest(view) == true) {
+                    lv.setVisibility(View.GONE);
+                }
+            }
+        });
+        if (counter < 1) {
+            startActivity(new Intent(Settings.ACTION_SETTINGS));
+            counter = 5;
+        }
+        btn.setText("Retry " + counter);
+
+    }
 
     public static int albumSize;
 

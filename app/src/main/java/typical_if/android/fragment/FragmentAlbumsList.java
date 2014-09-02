@@ -1,9 +1,6 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -13,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.vk.sdk.api.VKRequest;
@@ -38,9 +37,10 @@ public class FragmentAlbumsList extends Fragment {
     AlbumCoverAdapter albumCoverAdapter;
     ListView listOfAlbums;
     //private int mCurrentTransitionEffect = JazzyHelper.TILT;
-    int type;
-    int counter = 5;
-    boolean temp = true;
+    private int type;
+    private int counter = 5;
+    private boolean temp = true;
+    private boolean isRequestNul;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -75,7 +75,8 @@ public class FragmentAlbumsList extends Fragment {
         ((MainActivity) activity).onSectionAttached(Constants.GROUP_ID);
     }
 
-    private void doRequest(final View view) {
+    private boolean doRequest(final View view) {
+
         if (OfflineMode.isOnline(getActivity().getApplicationContext())) {
             temp = false;
             if (type == 0) {
@@ -85,6 +86,7 @@ public class FragmentAlbumsList extends Fragment {
                         super.onComplete(response);
                         OfflineMode.saveJSON(response.json, Constants.GROUP_ID + "albums");
                         handleResponse(OfflineMode.loadJSON(Constants.GROUP_ID + "albums"), view);
+
                     }
                 });
             } else {
@@ -97,43 +99,41 @@ public class FragmentAlbumsList extends Fragment {
                     }
                 });
             }
+            isRequestNul=  true;
         }
         if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(Constants.GROUP_ID + "albums")) {
             handleResponse(OfflineMode.loadJSON(Constants.GROUP_ID + "albums"), view);
-
+            isRequestNul = true;
         } else {
             if (temp) {
                 showAlertNoInternet(view);
+                isRequestNul = false;
             }
         }
 
+        return isRequestNul;
     }
 
     void showAlertNoInternet(final View view) {
-        //Log.d("----------------Internet conection Error", "------------------------");
-        counter--;
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-        Dialog dialog = new Dialog(this.getActivity().getApplicationContext());
-        dialog.setCanceledOnTouchOutside(true);
-        builder.setTitle(R.string.albums)
-                .setCancelable(false)
-                .setMessage("No fucking active Internet connection is available. Would you like to&")
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
-                    }
-                })
-                .setPositiveButton("Retry " + "(" + counter + ")", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        if (counter < 2) {
-                            startActivity(new Intent(Settings.ACTION_SETTINGS));
-                            counter = 5;
-                        }
-                        doRequest(view);
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
+
+        final LinearLayout lv = (LinearLayout) view.findViewById(R.id.LinerLayyout_Error);
+        final Button btn = (Button) view.findViewById(R.id.ButtonFromOfflineAlbums);
+        lv.setVisibility(View.VISIBLE);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View clickView) {
+                counter--;
+                if (doRequest(view) == true) {
+                    lv.setVisibility(View.GONE);
+                }
+            }
+        });
+        if (counter < 1) {
+            startActivity(new Intent(Settings.ACTION_SETTINGS));
+            counter = 5;
+        }
+        btn.setText("Retry " + counter);
+
     }
 
     protected void handleResponse(JSONObject jsonObject, View view) {
