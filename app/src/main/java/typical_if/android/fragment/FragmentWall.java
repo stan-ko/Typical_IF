@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
@@ -28,6 +30,7 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.activity.SplashActivity;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Wall.Wall;
@@ -45,13 +48,14 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     static ListView wallListView;
     WallAdapter adapter;
+    ActionBar actionBar;
 
     RelativeLayout spinnerLayout;
     View rootView;
     PauseOnScrollListener pauseOnScrollListener;
     LayoutInflater inflaterGlobal;
     final int offsetO = 0;
-    int countPostDefaultForOffset=100;
+    int countPostDefaultForOffset = 100;
     public static int playableLogoRes;
     String postColor;
     JSONObject jsonObjectOld;
@@ -64,6 +68,9 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     SwipeRefreshLayout swipeView;
     AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
+
+//        int mLastFirstVisibleItem = 0;
+
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             temp = true;
@@ -74,6 +81,18 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                              int totalItemCount) {
 
             final int lastItem = firstVisibleItem + visibleItemCount;
+//
+//            if (absListView.getId() == wallListView.getId()) {
+//                final int currentFirstVisibleItem = wallListView.getFirstVisiblePosition();
+//                if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+//                    actionBar.hide();
+//                }
+//                else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+//                    actionBar.show();
+//                }
+//
+//                mLastFirstVisibleItem = currentFirstVisibleItem;
+//            }
 
             Thread t = new Thread(new Runnable() {
                 @Override
@@ -83,15 +102,15 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
             });
 
-            if (lastItem == totalItemCount-20 & temp2) {
+            if (lastItem == totalItemCount - 20 & temp2) {
                 t.start();
-                temp2=false;
+                temp2 = false;
             }
 
             if (lastItem == totalItemCount & temp) {
                 endlessAdd(lastItem);
                 temp = false;
-                temp2=true;
+                temp2 = true;
             }
             boolean enable = false;
 
@@ -101,11 +120,13 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 enable = firstItemVisible && topOfFirstItemVisible;
             }
             swipeView.setEnabled(enable);
+
         }
     };
     Bundle arguments;
+
     public static FragmentWall newInstance(boolean isSuggestedParam) {
-            FragmentWall fragment = new FragmentWall();
+        FragmentWall fragment = new FragmentWall();
         Bundle args = new Bundle();
         isSuggested = isSuggestedParam;
         fragment.setArguments(args);
@@ -117,11 +138,11 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
         spinnerLayout = (RelativeLayout) rootView.findViewById(R.id.spinner_layout);
         inflaterGlobal = inflater;
         arguments = getArguments();
+        actionBar = ((MainActivity) getActivity()).getSupportActionBar();
 
         postColor = ItemDataSetter.getPostColor(Constants.GROUP_ID);
         playableLogoRes = ItemDataSetter.getPlayingLogo(Constants.GROUP_ID);
@@ -148,6 +169,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
             });
         }
+
         return rootView;
     }
 
@@ -161,7 +183,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         spinnerLayout.setVisibility(View.GONE);
         if (wall.posts.size() == 0) {
             fragmentManager.popBackStack();
-            Toast.makeText(getApplicationContext(), "No suggested posts", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.no_suggested_posts), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -176,7 +198,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
-
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
@@ -190,11 +211,16 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 isMember = response.json.optInt("response");
-                if (isMember == 0) {
-                    menu.findItem(R.id.join_leave_group).setTitle("Join");
+                if (VKSdk.isLoggedIn()) {
+                    if (isMember == 0) {
+                        menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_join));
+                    } else {
+                        menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_leave));
+                    }
                 } else {
-                    menu.findItem(R.id.join_leave_group).setTitle("Leave");
+                    menu.findItem(R.id.join_leave_group).setVisible(false);
                 }
+
             }
         });
     }
@@ -218,7 +244,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
-                            Toast.makeText(getActivity(), "Joined", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), getString(R.string.group_joined), Toast.LENGTH_SHORT).show();
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
                         }
                     });
@@ -227,7 +253,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
-                            Toast.makeText(getActivity(), "Leaved", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), getString(R.string.group_leaved), Toast.LENGTH_SHORT).show();
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
                         }
                     });
@@ -235,23 +261,24 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 break;
         }
         return super.onOptionsItemSelected(item);
-    };
+    }
+
+    ;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("curChoice", wallListView.getScrollY());
     }
+
     @Override
     public void onRefresh() {
         if (!OfflineMode.isOnline(getApplicationContext())) {
-            Toast.makeText(getApplicationContext(), getString(R.string.noInternetMessageFromToast_EN), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.no_internet_message_toast_en), Toast.LENGTH_SHORT).show();
         }
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                swipeView.setRefreshing(false);
-
                 VKHelper.doGroupWallRequest(offsetO, Offset, Constants.GROUP_ID, new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {
@@ -260,15 +287,18 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                         initGroupWall(OfflineMode.loadJSON(Constants.GROUP_ID), inflaterGlobal);
                     }
                 });
+
+                swipeView.setRefreshing(false);
             }
         }, 1000);
     }
 
-    private void endlessAdd( final int lastItem) {
-        jsonObjectOld= OfflineMode.loadJSON(Constants.GROUP_ID);
-                initGroupWall(jsonObjectOld, inflaterGlobal);
-                scrollCommentsToBottom(wallListView, lastItem);
+    private void endlessAdd(final int lastItem) {
+        jsonObjectOld = OfflineMode.loadJSON(Constants.GROUP_ID);
+        initGroupWall(jsonObjectOld, inflaterGlobal);
+        scrollCommentsToBottom(wallListView, lastItem);
     }
+
     private void endlessGet(final int Offset) {
         VKHelper.doGroupWallRequest(Offset, countPostDefaultForOffset, Constants.GROUP_ID, new VKRequest.VKRequestListener() {
             @Override
@@ -278,17 +308,18 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
     }
+
     private void scrollCommentsToBottom(final ListView listView, final int lastItem) {
         listView.post(new Runnable() {
             @Override
             public void run() {
-                listView.setSelection(lastItem-2);
+                listView.setSelection(lastItem - 2);
             }
         });
     }
 
     public static void refresh() {
-        ((WallAdapter)wallListView.getAdapter()).notifyDataSetChanged();
+        ((WallAdapter) wallListView.getAdapter()).notifyDataSetChanged();
     }
 
 }

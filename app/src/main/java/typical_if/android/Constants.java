@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.vk.sdk.VKScope;
 import com.vk.sdk.api.model.VKApiAudio;
@@ -86,11 +87,11 @@ public class Constants {
     public static SeekBar previousSeekBarState = null;
     public static AudioRecords playedPausedRecord = new AudioRecords(null, false, false, false);
 
-
-
     public static String tempTextSuggestPost = "";
 
     public static final Resources RESOURCES = MyApplication.getAppContext().getResources();
+
+    public static Toast toastInProgress = Toast.makeText(MyApplication.getAppContext(), RESOURCES.getString(R.string.in_progress), Toast.LENGTH_SHORT);
 
     public static final String TIME_FORMAT_STRING = "kk:mm";
     public static final String DATE_TIME_FORMAT_STRING = "d MMMM о kk:mm";

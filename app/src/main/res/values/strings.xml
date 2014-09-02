@@ -8,6 +8,7 @@
     <string name="menu_group_title_fb">Франківська Барахолка</string>
     <string name="menu_group_title_fn">Франківські Новини</string>
     <string name="menu_group_title_events">Зустрічі Франківська</string>
+    <string name="menu_group_exit">Покинути програму</string>
 
     <string name="title_login">Залогінитись</string>
     <string name="title_logout">Розлогінитись</string>
@@ -43,22 +44,25 @@
 
     <string name="txt_dialog_comment">Ваш коментар…</string>
 
-
-    <string name="exit_toast">Нажміть ще раз, щоб вийти</string>
-
-
     <string name="post_report">Поскаржитись</string>
     <string name="post_copy_link">Копіювати посилання</string>
 
+    <string name="in_progress">В розробці</string>
+    <string name="no_suggested_posts">Немає запропонованих новин</string>
+
     <string name="add_photo_from_title">Завантажити фото ?</string>
-    <string name="noInternetMessageFromToast_EN">No internet connection. You use offline mode</string>
-    <string name="Alboms">Альбоми</string>
-    <!--<string name="post_report_spam">Спам</string>-->
-    <!--<string name="post_report_offense">Образа</string>-->
-    <!--<string name="post_report_adult">Матеріал для дорослих</string>-->
-    <!--<string name="post_report_drugs">Пропаганда наркотиків</string>-->
-    <!--<string name="post_report_porno">Дитяча порнографія</string>-->
-    <!--<string name="post_report_violence">Насильство</string>-->
+    <string name="no_internet_message_toast_en">No internet connection. You use offline mode</string>
+
+    <string name="ab_title_make_post">Запропонувати новину</string>
+    <string name="ab_title_suggested_posts">Запропоновані новини</string>
+    <string name="ab_title_group_join">Вступити до спільноти</string>
+    <string name="ab_title_group_leave">Покинути спільноту</string>
+    <string name="group_joined">Ви вступили до спільноти</string>
+    <string name="group_leaved">Ви покинули спільноту</string>
+
+    <string name="albums">Альбоми</string>
+
+
     <array name="post_report_types">
         <item>Спам</item>
         <item>Образа</item>
@@ -72,7 +76,6 @@
         <item>З карти памяті</item>
         <item>З камери</item>
     </array>
-
 
     <string-array name="comment_attachment_list">
         <item>Photo</item>

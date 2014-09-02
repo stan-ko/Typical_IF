@@ -931,7 +931,7 @@ public class ItemDataSetter {
 //                                            }
 //                                        }
 //                                    });
-                                    Toast.makeText(context, "V rozrobci", Toast.LENGTH_SHORT).show();
+                                    Constants.toastInProgress.show();
                                 }
                             });
                             ((TextView) relativeLayout.getChildAt(1)).setText(getMediaTime(videos.get(finalJ).duration));
@@ -950,9 +950,9 @@ public class ItemDataSetter {
                                     img = (ImageView) layout_i_j_k_l.getChildAt(0);
                                     ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_130, img);
 
-                                    img.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
+//                                    img.setOnClickListener(new View.OnClickListener() {
+//                                        @Override
+//                                        public void onClick(View v) {
 //                                            String videoID = videos.get(finalJ).toAttachmentString().toString();
 //                                            videoID = videoID.replaceFirst("video", "");
 //                                            Log.d("", videoID);
@@ -970,10 +970,17 @@ public class ItemDataSetter {
 //                                                    Toast.makeText(context, videos.get(finalJ).player, Toast.LENGTH_SHORT).show();
 //                                                }
 //                                            });
-                                        }
-                                    });
+//                                        }
+//                                    });
                                     relativeLayout = (RelativeLayout) layout_i_j_k_l.getChildAt(1);
                                     relativeLayout.setVisibility(View.VISIBLE);
+                                    relativeLayout.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Constants.toastInProgress.show();
+                                        }
+                                    });
+
                                     ((TextView) relativeLayout.getChildAt(1)).setText(getMediaTime(videos.get(finalJ).duration));
                                     ((TextView) relativeLayout.getChildAt(2)).setText(videos.get(finalJ).title);
                                 }

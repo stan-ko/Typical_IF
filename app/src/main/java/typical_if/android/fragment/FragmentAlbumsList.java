@@ -115,7 +115,7 @@ public class FragmentAlbumsList extends Fragment {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
         Dialog dialog = new Dialog(this.getActivity().getApplicationContext());
         dialog.setCanceledOnTouchOutside(true);
-        builder.setTitle(R.string.Alboms)
+        builder.setTitle(R.string.albums)
                 .setCancelable(false)
                 .setMessage("No fucking active Internet connection is available. Would you like to&")
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

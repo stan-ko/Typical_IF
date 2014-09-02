@@ -5,14 +5,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/refresh"
     android:focusableInTouchMode="true">
-    <!--
-    android:layout_marginTop="-48dp"
-    android:paddingTop="48dp"
-    -->
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent" android:layout_height="match_parent"
-        android:background="#ffd6d6d6">
+        android:layout_width="match_parent" android:layout_height="match_parent">
 
         <ListView
             android:layout_width="wrap_content"

@@ -34,11 +34,10 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.fragment.FragmentAlbumsList;
-import typical_if.android.fragment.FragmentEventsList;
 import typical_if.android.fragment.FragmentFullScreenViewer;
-import typical_if.android.fragment.FragmentWithComments;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
 import typical_if.android.fragment.FragmentWall;
+import typical_if.android.fragment.FragmentWithComments;
 import typical_if.android.fragment.NavigationDrawerFragment;
 
 
@@ -55,11 +54,12 @@ public class MainActivity extends ActionBarActivity implements
     private static final int PERIOD = 2000;
     private static final int PICK_FROM_CAMERA = 1;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    public static NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         Constants.mainActivity = this;
@@ -219,8 +219,7 @@ public class MainActivity extends ActionBarActivity implements
 
                 break;
             case 4:
-                onSectionAttached(groupPosition);
-                fragment = FragmentEventsList.newInstance();
+                Constants.toastInProgress.show();
                 break;
             case 5:
                 if (VKSdk.isLoggedIn()) {
@@ -230,8 +229,12 @@ public class MainActivity extends ActionBarActivity implements
                     VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
                 }
                 break;
+            case 6:
+                finish();
+                break;
         }
-        if (groupPosition != 5) {
+
+        if (groupPosition != 6 && groupPosition != 5 && groupPosition != 4) {
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                 fragmentManager.popBackStack();
             }
@@ -243,6 +246,15 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            mNavigationDrawerFragment.openDrawer();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override

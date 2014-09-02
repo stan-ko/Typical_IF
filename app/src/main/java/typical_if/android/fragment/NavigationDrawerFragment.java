@@ -55,9 +55,9 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private ExpandableListAdapter mExpandapleListAdapter;
 
-    private DrawerLayout mDrawerLayout;
+    public static DrawerLayout mDrawerLayout;
     private AnimatedExpandableListView mDrawerListView;
-    private View mFragmentContainerView;
+    public static View mFragmentContainerView;
 
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
@@ -181,6 +181,7 @@ public class NavigationDrawerFragment extends Fragment {
         listDataHeader.add(getString(R.string.menu_group_title_fn));
         listDataHeader.add(getString(R.string.menu_group_title_events));
         listDataHeader.add("");
+        listDataHeader.add(getString(R.string.menu_group_exit));
 
     }
 
@@ -350,6 +351,14 @@ public class NavigationDrawerFragment extends Fragment {
 
     private ActionBar getActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
+    }
+
+    public void openDrawer() {
+        mDrawerLayout.openDrawer(mFragmentContainerView);
+    }
+
+    public void closeDrawer() {
+        mDrawerLayout.closeDrawer(mFragmentContainerView);
     }
 
     /**
