@@ -62,7 +62,8 @@ public class AudioPlayerService extends Service {
                     Constants.mediaPlayer.pause();
                     Constants.playedPausedRecord.isPlayed = false;
                     Constants.playedPausedRecord.isPaused = true;
-                    FragmentWall.refresh();
+                    //FragmentWall.refresh();
+                    Constants.previousCheckBoxState.setChecked(false);
                     contentView.setImageViewResource(R.id.notification_image, android.R.drawable.ic_media_play);
                     pendingIntent = PendingIntent.getService(Constants.mainActivity.getApplicationContext(), 0, new Intent(playMusic), 0);
                     onCreate();
@@ -72,7 +73,8 @@ public class AudioPlayerService extends Service {
                     Constants.mediaPlayer.start();
                     Constants.playedPausedRecord.isPlayed = true;
                     Constants.playedPausedRecord.isPaused = false;
-                    FragmentWall.refresh();
+                    //FragmentWall.refresh();
+                    Constants.previousCheckBoxState.setChecked(true);
                     contentView.setImageViewResource(R.id.notification_image, android.R.drawable.ic_media_pause);
                     pendingIntent = PendingIntent.getService(Constants.mainActivity.getApplicationContext(), 0, new Intent(pauseMusic), 0);
                     onCreate();

@@ -10,8 +10,8 @@ public class AudioRecords {
 
     String audioUrl;
     boolean isFirstTimePlayed;
-    boolean isPaused;
-    boolean isPlayed;
+    public boolean isPaused;
+    public boolean isPlayed;
     int progresBarposition = 0;
     int totalDuration = 0;
 
