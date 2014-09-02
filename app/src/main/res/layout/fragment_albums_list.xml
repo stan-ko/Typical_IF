@@ -7,12 +7,14 @@
 
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:visibility="gone">
 
         <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/imageButtonFromOfflneAlbums" />
+            android:id="@+id/imageButtonFromOfflneAlbums"
+            android:visibility="gone" />
     </FrameLayout>
 
     <ListView
