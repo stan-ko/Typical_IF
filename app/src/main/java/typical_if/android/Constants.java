@@ -76,6 +76,7 @@ public class Constants {
     public static int COUNT_OF_PHOTOS=0;
 
     public static Intent myIntent;
+    public static long timerForNotif = 0;
     public static int notifID = 2048;
     public static NotificationManager notificationManager;
     public static String title = "";

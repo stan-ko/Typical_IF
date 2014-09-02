@@ -9,7 +9,6 @@ import android.widget.SeekBar;
 
 import java.io.IOException;
 
-import typical_if.android.fragment.FragmentWall;
 
 /**
  * Created by LJ on 12.08.2014.
@@ -25,6 +24,7 @@ public class AudioPlayer {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (buttonView.isChecked()) {
+
                     if (play != Constants.previousCheckBoxState && Constants.previousCheckBoxState != null){
                         Constants.previousCheckBoxState.setChecked(false);
                     }
@@ -70,12 +70,12 @@ public class AudioPlayer {
                             }
                         });
                         Constants.mediaPlayer.prepareAsync();
-                        Constants.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                            @Override
-                            public void onCompletion(MediaPlayer mp) {
-                                FragmentWall.refresh();
-                            }
-                        });
+//                        Constants.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+//                            @Override
+//                            public void onCompletion(MediaPlayer mp) {
+//                                FragmentWall.refresh();
+//                            }
+//                        });
 
                     }
                     else if (Constants.playedPausedRecord.audioUrl == stream && Constants.playedPausedRecord.isPaused == true){
@@ -92,6 +92,8 @@ public class AudioPlayer {
                     Constants.playedPausedRecord = new AudioRecords(stream, false, true, false);
                     Constants.mainActivity.stopService(Constants.myIntent);
                     Constants.mainActivity.startService(Constants.myIntent);
+                    Constants.timerForNotif = System.currentTimeMillis();
+                    //AudioPlayerService.cancelNotification(Constants.mainActivity.getApplicationContext() , Constants.notifID);
                 }
             }
         });
@@ -103,9 +105,14 @@ public class AudioPlayer {
             @Override
             public void run() {
                 int currentPosition = 0;
-                int total = Constants.mediaPlayer.getDuration();
-                progress.setMax(total);
-                Constants.playedPausedRecord.totalDuration = total;
+                try {
+                    int total = Constants.mediaPlayer.getDuration();
+                    progress.setMax(total);
+                    Constants.playedPausedRecord.totalDuration = total;
+                }
+                catch (IllegalStateException e){
+
+                }
                 while (Constants.mediaPlayer != null) {
                     try {
                         Thread.sleep(1000);
@@ -114,6 +121,12 @@ public class AudioPlayer {
                         return;
                     } catch (Exception e) {
                         return;
+                    }
+
+                    if (System.currentTimeMillis() >= (Constants.timerForNotif + 10000) && Constants.playedPausedRecord.isPaused == true){
+                        Constants.mainActivity.stopService(Constants.myIntent);
+                        AudioPlayerService.cancelNotification(Constants.mainActivity.getApplicationContext(), Constants.notifID);
+                        Constants.timerForNotif = 0;
                     }
 
                     progress.setProgress(currentPosition);

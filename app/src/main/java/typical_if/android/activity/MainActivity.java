@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCaptchaDialog;
@@ -27,6 +28,7 @@ import com.vk.sdk.api.VKResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import typical_if.android.AudioPlayer;
 import typical_if.android.AudioPlayerService;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
@@ -260,8 +262,20 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        stopService(Constants.myIntent);
-        AudioPlayerService.cancelNotification(Constants.mainActivity.getApplicationContext(), Constants.notifID);
+
+        if (this.isFinishing()) {
+            stopService(new Intent(this, AudioPlayerService.class));
+            AudioPlayerService.cancelNotification(this, Constants.notifID);
+            if (Constants.mediaPlayer != null) {
+                Constants.mediaPlayer.stop();
+                //Constants.mediaPlayer.release();
+                Constants.playedPausedRecord.isPaused = true;
+                Constants.playedPausedRecord.isPlayed = false;
+                Constants.previousSeekBarState.setVisibility(View.INVISIBLE);
+                Constants.tempThread.interrupt();
+                AudioPlayer.progressBar(Constants.previousSeekBarState).interrupt();
+            }
+        }
     }
 }
 

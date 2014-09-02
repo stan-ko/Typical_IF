@@ -1,6 +1,7 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import typical_if.android.Constants;
 import typical_if.android.R;
+import typical_if.android.UploadPhotoService;
 import typical_if.android.adapter.PhotoUploadAdapter;
 import typical_if.android.model.UploadPhotos;
 
@@ -113,6 +115,7 @@ public class FragmentUploadPhotoList extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         Constants.tempCurrentPhotoAttachCounter = 0;
+        getActivity().stopService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
     }
 
     protected void handleResponse(View rootView, LayoutInflater inflater, final ArrayList<UploadPhotos> photolist, int columns) {
@@ -166,6 +169,7 @@ public class FragmentUploadPhotoList extends Fragment {
                 public boolean onMenuItemClick(MenuItem item) {
                     VKRequest req;
                     for (int j = 0; j < photolist.size(); j++) {
+                        getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
                         if (photolist.get(j).ischecked) {
                             req = VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photosrc), Constants.ALBUM_ID, (int) gid);
                             req.executeWithListener(new VKRequest.VKRequestListener() {
