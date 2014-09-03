@@ -47,7 +47,7 @@ public class FullScreenPhotoUploadAdapter extends PagerAdapter {
         View viewLayout = inflater.inflate(R.layout.fragment_full_screen_view_from_phone_photolist, null);
         imageView = (ImageView) viewLayout.findViewById(R.id.full_screen_photo_from_phone);
         ((ViewPager) container).addView(viewLayout);
-        ImageLoader.getInstance().displayImage(String.valueOf(Uri.fromFile(new File(photos.get(position).photosrc))), imageView);
+        ImageLoader.getInstance().displayImage(String.valueOf(Uri.fromFile(new File(photos.get(position).photoSrc))), imageView);
         return viewLayout;
     }
 

@@ -71,13 +71,13 @@ public class PhotoUploadAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        File file = new File(uploadphotolist.get(position).photosrc);
+        File file = new File(uploadphotolist.get(position).photoSrc);
         ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), viewHolder.photo);
 
         viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                uploadphotolist.get(position).ischecked = isChecked;
+                uploadphotolist.get(position).isChecked = isChecked;
 
                 if (which == 1) {
                     if (isChecked) {

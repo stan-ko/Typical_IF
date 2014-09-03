@@ -148,8 +148,8 @@ public class FragmentUploadPhotoList extends Fragment {
                     decrementer = new AtomicInteger(Constants.tempCurrentPhotoAttachCounter);
 
                     for (int j = 0; j < photolist.size(); j++) {
-                        if (photolist.get(j).ischecked) {
-                            VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photosrc), Constants.USER_ID, (int) gid).executeWithListener(new VKRequest.VKRequestListener() {
+                        if (photolist.get(j).isChecked) {
+                            VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photoSrc), Constants.USER_ID, (int) gid).executeWithListener(new VKRequest.VKRequestListener() {
                                 @Override
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
@@ -170,8 +170,8 @@ public class FragmentUploadPhotoList extends Fragment {
                     VKRequest req;
                     for (int j = 0; j < photolist.size(); j++) {
                         getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
-                        if (photolist.get(j).ischecked) {
-                            req = VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photosrc), Constants.ALBUM_ID, (int) gid);
+                        if (photolist.get(j).isChecked) {
+                            req = VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photoSrc), Constants.ALBUM_ID, (int) gid);
                             req.executeWithListener(new VKRequest.VKRequestListener() {
                                 @Override
                                 public void onComplete(VKResponse response) {

@@ -45,7 +45,7 @@
                 android:layout_gravity="center"
                 android:id="@+id/textView2"
                 android:layout_marginTop="260dp"
-                android:text="No internet, and you albums aren't saved."
+                android:text="No internet, and you photos aren't saved."
                 android:textStyle="italic"
                 android:textSize="30dp"
                 android:textColor="#ffffffff"
