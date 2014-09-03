@@ -55,7 +55,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     PauseOnScrollListener pauseOnScrollListener;
     LayoutInflater inflaterGlobal;
     final int offsetO = 0;
-    int countPostDefaultForOffset = 100;
+    final int countPostDefaultForOffset = 100;
     public static int playableLogoRes;
     String postColor;
     JSONObject jsonObjectOld;
@@ -65,11 +65,19 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     static int isMember;
     boolean temp = true;
     boolean temp2 = true;
-
+    boolean enable = false;
+    Bundle arguments;
     SwipeRefreshLayout swipeView;
-    AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
 
-//        int mLastFirstVisibleItem = 0;
+    final Thread t = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            Offset = Offset + 100;
+            endlessGet(Offset);
+        }
+    });
+
+    AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
 
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -79,28 +87,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         @Override
         public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount,
                              int totalItemCount) {
-
             final int lastItem = firstVisibleItem + visibleItemCount;
-//
-//            if (absListView.getId() == wallListView.getId()) {
-//                final int currentFirstVisibleItem = wallListView.getFirstVisiblePosition();
-//                if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-//                    actionBar.hide();
-//                }
-//                else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-//                    actionBar.show();
-//                }
-//
-//                mLastFirstVisibleItem = currentFirstVisibleItem;
-//            }
-
-            Thread t = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    Offset = Offset + 100;
-                    endlessGet(Offset);
-                }
-            });
 
             if (lastItem == totalItemCount - 20 & temp2) {
                 t.start();
@@ -112,7 +99,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 temp = false;
                 temp2 = true;
             }
-            boolean enable = false;
 
             if (absListView != null && absListView.getChildCount() > 0) {
                 boolean firstItemVisible = absListView.getFirstVisiblePosition() == 0;
@@ -123,7 +109,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
         }
     };
-    Bundle arguments;
+
 
     public static FragmentWall newInstance(boolean isSuggestedParam) {
         FragmentWall fragment = new FragmentWall();
@@ -316,10 +302,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 listView.setSelection(lastItem - 2);
             }
         });
-    }
 
-    public static void refresh() {
-        ((WallAdapter) wallListView.getAdapter()).notifyDataSetChanged();
     }
-
 }

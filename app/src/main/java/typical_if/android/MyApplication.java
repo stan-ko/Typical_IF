@@ -50,7 +50,7 @@ public class MyApplication extends Application {
 //                .showImageOnLoading(R.drawable.grey) // TODO resource or drawable
 //                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
 //                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
-                .resetViewBeforeLoading(false)
+                .resetViewBeforeLoading(true)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .displayer(new FadeInBitmapDisplayer(1600)).build();
