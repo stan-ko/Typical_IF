@@ -47,15 +47,13 @@ public class MyApplication extends Application {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheOnDisc(true)
                 .cacheInMemory(true)
-                .showImageOnLoading(R.drawable.grey) // TODO resource or drawable
+//                .showImageOnLoading(R.drawable.grey) // TODO resource or drawable
 //                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
 //                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
-                .delayBeforeLoading(800)
-
-                .resetViewBeforeLoading(true)
+                .resetViewBeforeLoading(false)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
-                .displayer(new FadeInBitmapDisplayer(800)).build();
+                .displayer(new FadeInBitmapDisplayer(1600)).build();
 
         // Create global configuration and initialize ImageLoader with this configuration
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())

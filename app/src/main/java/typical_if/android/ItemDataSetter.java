@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.Transformation;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -413,11 +414,14 @@ public class ItemDataSetter {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                     if (isChecked) {
-                        mainText.setText(originalSpannable);
+                        if (mainText.onPreDraw()) {
+                            mainText.setText(originalSpannable);
+                        }
+                        expand(mainText, originalSpannable);
                         showAll.setText(Constants.SHOW_MIN_TEXT);
                     } else {
                         showAll.setText(Constants.SHOW_ALL_TEXT);
-                        mainText.setText(tempModifySpannable);
+                        collapse(mainText, tempModifySpannable);
                     }
                 }
             });
@@ -461,7 +465,7 @@ public class ItemDataSetter {
     public static void setLink(RelativeLayout parent, final VKApiLink link) {
         ViewGroup linkContainer = getPreparedView(parent, R.layout.link_container);
 
-        //getInstance().displayImage(link.image_src, (ImageView) linkContainer.getChildAt(0));
+        ImageLoader.getInstance().displayImage(link.image_src, (ImageView) linkContainer.getChildAt(0));
         ((TextView) linkContainer.getChildAt(1)).setText(link.title);
         ((TextView) linkContainer.getChildAt(2)).setText(link.url);
 
@@ -1101,5 +1105,82 @@ public class ItemDataSetter {
         @Override
         public void onClick(View widget) {
         }
+    }
+
+    private static int textOriginalHeight;
+
+    public static void expand(final View v, final SpannableStringBuilder text) {
+        int ANIMATION_DURATION=500;//in milisecond
+        v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final int targtetHeight = v.getMeasuredHeight();
+        textOriginalHeight = v.getHeight();
+
+        v.getLayoutParams().height = textOriginalHeight;
+        v.setVisibility(View.VISIBLE);
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    v.getLayoutParams().height = interpolatedTime == 1
+                            ? ViewGroup.LayoutParams.WRAP_CONTENT
+                            : textOriginalHeight + (int)(targtetHeight * interpolatedTime);
+                    v.requestLayout();
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // 1dp/ms
+        a.setDuration(ANIMATION_DURATION);
+        a.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                ((TextView)v).setText(text);
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        v.startAnimation(a);
+    }
+
+    public static void collapse(final View v, final SpannableStringBuilder text) {
+        final int initialHeight = v.getMeasuredHeight();
+        int ANIMATION_DURATION=500;
+
+        final Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.getLayoutParams().height = interpolatedTime == 1 || initialHeight * (1 - interpolatedTime) <= textOriginalHeight
+                        ? ViewGroup.LayoutParams.WRAP_CONTENT
+                        : initialHeight - (int)(initialHeight * interpolatedTime);
+                if (initialHeight * (1 - interpolatedTime) <= textOriginalHeight) {
+                    ((TextView)v).setText(text);
+                }
+
+                v.requestLayout();
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // 1dp/ms
+        a.setDuration(ANIMATION_DURATION);
+        v.startAnimation(a);
     }
 }

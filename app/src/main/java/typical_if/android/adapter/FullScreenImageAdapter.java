@@ -12,8 +12,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.model.VKApiPhoto;
 
@@ -35,7 +37,13 @@ public class FullScreenImageAdapter extends PagerAdapter {
     public FragmentManager fragmentManager;
     public Bundle arguments;
     private View rootView;
-
+    private DisplayImageOptions options = new DisplayImageOptions.Builder()
+            .cacheOnDisc(true)
+            .cacheInMemory(true)
+            .delayBeforeLoading(100)
+            .resetViewBeforeLoading(false)
+            .bitmapConfig(Bitmap.Config.RGB_565)
+            .imageScaleType(ImageScaleType.EXACTLY).build();
 
     public FullScreenImageAdapter(ArrayList<VKApiPhoto> photos, LayoutInflater inflater, Bundle arguments, long groupID, long albumID, long userID, FragmentManager fragmentManager, View rootView) {
         this.rootView = rootView;
@@ -79,7 +87,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
         final String urlOfFullScreenPhoto = PhotoUrlHelper.getFullScreenUrl(photo);
 
-        ImageLoader.getInstance().displayImage(urlOfPhotoPreview, imageView, new ImageLoadingListener() {
+        ImageLoader.getInstance().displayImage(urlOfPhotoPreview, imageView, options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 pbImageIsLoading.setVisibility(View.VISIBLE);
@@ -103,7 +111,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
     }
 
     void loadFullSceenPhoto(final String url, final ImageView imageView, final ProgressBar pbImageIsLoading) {
-        ImageLoader.getInstance().displayImage(url, imageView, new ImageLoadingListener() {
+        ImageLoader.getInstance().displayImage(url, imageView, options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 pbImageIsLoading.setVisibility(View.VISIBLE);
