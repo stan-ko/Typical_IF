@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
@@ -88,6 +89,11 @@ public class FragmentAlbumsList extends Fragment {
                         handleResponse(OfflineMode.loadJSON(Constants.GROUP_ID + "albums"), view);
 
                     }
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                    }
                 });
             } else {
                 VKHelper.getAlbumList(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
@@ -96,6 +102,11 @@ public class FragmentAlbumsList extends Fragment {
                         super.onComplete(response);
                         OfflineMode.saveJSON(response.json, Constants.GROUP_ID + "albums");
                         handleResponse(OfflineMode.loadJSON(Constants.GROUP_ID + "albums"), view);
+                    }
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }
                 });
             }

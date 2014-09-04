@@ -61,6 +61,10 @@
     <string name="group_leaved">Ви покинули спільноту</string>
 
     <string name="albums">Альбоми</string>
+    <string name="OnErrorToast">Помилка</string>
+    <string name="DialogReported">Reported</string>
+    <string name="Liked">Liked</string>
+    <string name="DialogDeleted">Deleted</string>
 
 
     <array name="post_report_types">

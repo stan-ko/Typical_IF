@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 
@@ -73,10 +75,11 @@ public class FragmentMakePost extends Fragment {
     static ImageView imgPostAttachAudio;
     static ImageView imgPostAttachDoc;
 
+    public static final String TOO_MANY_ATTACHES = "Too many attaches!";
     private static final View.OnClickListener tooManyAttachments = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Toast.makeText(ItemDataSetter.context, "Too many attaches!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ItemDataSetter.context, TOO_MANY_ATTACHES, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -161,6 +164,11 @@ public class FragmentMakePost extends Fragment {
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 Toast.makeText(getActivity(), "Posted", Toast.LENGTH_SHORT).show();
                             }
+                            @Override
+                            public void onError(VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                            }
                         });
                     }
                 });
@@ -179,6 +187,11 @@ public class FragmentMakePost extends Fragment {
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
                                 Toast.makeText(getActivity(), "Edited", Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onError(VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }
                         });
                     }

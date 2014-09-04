@@ -1,10 +1,7 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
@@ -30,6 +28,7 @@ import java.io.File;
 
 import typical_if.android.Constants;
 import typical_if.android.MyApplication;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.UploadPhotoService;
 
@@ -96,6 +95,11 @@ public class FragmentPhotoFromCamera extends Fragment {
                         super.onComplete(response);
                         Log.d("MY response", response.responseString);
                         //getActivity().stopService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
+                    }
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }
                 });
                 return true;

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
@@ -26,6 +27,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.FullScreenImageAdapter;
@@ -33,6 +35,8 @@ import typical_if.android.adapter.FullScreenImageAdapter;
 public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPageChangeListener {
 
 
+    public static final String LIKED = "LIKED: ";
+    public static final String LIKE_DELETED = "LIKE DELETED";
     private FragmentFullScreenViewer.OnFragmentInteractionListener mListener;
     public static ArrayList<VKApiPhoto> photos;
     private ViewPager imagepager;
@@ -121,6 +125,11 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
                 arguments.putLong(ARG_VK_USER_ID, user_id);
 
             }
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+            }
         });
 
 
@@ -193,6 +202,11 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
                         }
 
                     }
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+            }
                 });
 
         if (photos.get(position).user_likes == 0) {
@@ -222,9 +236,14 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
 
                             countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString()) + 1));
                             ++photos.get(position).likes;
-                            Toast.makeText(VKUIHelper.getApplicationContext(), "LIKED: ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VKUIHelper.getApplicationContext(), LIKED, Toast.LENGTH_SHORT).show();
                             photos.get(position).user_likes = 1;
 
+                        }
+                        @Override
+                        public void onError(VKError error) {
+                            super.onError(error);
+                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }
                     });
                 }
@@ -241,8 +260,14 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
                             photos.get(position).user_likes = 0;
 
 
-                            Toast.makeText(VKUIHelper.getApplicationContext(), "LIKE DELETED", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VKUIHelper.getApplicationContext(), LIKE_DELETED, Toast.LENGTH_SHORT).show();
 
+                        }
+
+                        @Override
+                        public void onError(VKError error) {
+                            super.onError(error);
+                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }
                     });
                 }

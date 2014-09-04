@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiCommunity;
@@ -45,6 +46,11 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 import static java.lang.String.valueOf;
 
 public class WallAdapter extends BaseAdapter {
+    public static final String LIKE_HAS_DELETED = "Like has deleted";
+    public static final String YOUR_COMENNT = "Ваш коментар";
+    public static final String ALL_IS_DONE = "All is done";
+    public static final String somethink_wrong = "Щось пішло не так...Оновіть будь-ласка сторінку";
+    public static final String COMMENTS_ARE_NOT_AVAILABLE_TO_THIS_POST_PLEASE_TURN_ON_THE_INTERNET = " comments are not available to this post. Please turn On the internet ";
     private Wall wall;
     private ArrayList<VKWallPostWrapper> posts;
     private static LayoutInflater layoutInflater;
@@ -140,11 +146,16 @@ public class WallAdapter extends BaseAdapter {
                         VKHelper.setLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(VKResponse response) {
-                                Toast.makeText(VKUIHelper.getApplicationContext(), "Liked", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(VKUIHelper.getApplicationContext(), context.getString(R.string.Liked), Toast.LENGTH_SHORT).show();
                                 super.onComplete(response);
                                 viewHolder.cb_post_like.setText(String.valueOf(++post.likes_count));
                                 viewHolder.cb_post_like.setChecked(true);
                                 post.user_likes = true;
+                            }
+                            @Override
+                            public void onError(VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }
                         });
                     } else {
@@ -153,10 +164,15 @@ public class WallAdapter extends BaseAdapter {
                             @Override
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
-                                Toast.makeText(VKUIHelper.getApplicationContext(), "Like has deleted", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(VKUIHelper.getApplicationContext(), LIKE_HAS_DELETED, Toast.LENGTH_SHORT).show();
                                 viewHolder.cb_post_like.setText(String.valueOf(--post.likes_count));
                                 viewHolder.cb_post_like.setChecked(false);
                                 post.user_likes = false;
+                            }
+                            @Override
+                            public void onError(VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }
                         });
                     }
@@ -177,7 +193,7 @@ public class WallAdapter extends BaseAdapter {
 //
                             View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
                             dialog.setView(view);
-                            dialog.setTitle("Ваш коментар");
+                            dialog.setTitle(YOUR_COMENNT);
 //
                             final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
 //
@@ -194,7 +210,7 @@ public class WallAdapter extends BaseAdapter {
 //
                                             if (isSuccessed == 1) {
 //
-                                                Toast.makeText(context, "All is done", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(context, ALL_IS_DONE, Toast.LENGTH_SHORT).show();
                                                 viewHolder.cb_post_repost.setChecked(true);
                                                 viewHolder.cb_post_repost.setText(String.valueOf(++post.reposts_count));
 //
@@ -218,6 +234,11 @@ public class WallAdapter extends BaseAdapter {
                                                 viewHolder.cb_post_repost.setChecked(false);
                                             }
                                         }
+                                        @Override
+                                        public void onError(VKError error) {
+                                            super.onError(error);
+                                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                        }
                                     });
 
                                 }
@@ -231,7 +252,7 @@ public class WallAdapter extends BaseAdapter {
                             dialog.create().show();
 //
                         } catch (NullPointerException npe) {
-                            Toast.makeText(getApplicationContext(), "Щось пішло не так...Оновіть будь-ласка сторінку", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), somethink_wrong, Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -377,7 +398,7 @@ public class WallAdapter extends BaseAdapter {
                 viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), " comments are not available to this post. Please turn On the internet ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), COMMENTS_ARE_NOT_AVAILABLE_TO_THIS_POST_PLEASE_TURN_ON_THE_INTERNET, Toast.LENGTH_SHORT).show();
                     }
                 });
             }

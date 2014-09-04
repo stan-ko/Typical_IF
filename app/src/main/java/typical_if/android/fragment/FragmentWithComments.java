@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
@@ -60,6 +61,7 @@ import typical_if.android.util.PhotoUrlHelper;
 
 public class FragmentWithComments extends Fragment {
 
+    public static final String POSTED = "POSTED";
     final int displayHeight = MyApplication.getDisplayHeight();
     private OnFragmentInteractionListener mListener;
 
@@ -188,6 +190,11 @@ public class FragmentWithComments extends Fragment {
                 postPhotoUserDateOfComment.setText(ItemDataSetter.getFormattedDate(photo.date));
 
             }
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+            }
         });
 
         photoUserSender.setOnClickListener(new View.OnClickListener() {
@@ -232,6 +239,11 @@ public class FragmentWithComments extends Fragment {
                             likePostPhoto.setChecked(true);
                             likePostPhoto.setTextColor(Color.WHITE);
                         }
+                        @Override
+                        public void onError(VKError error) {
+                            super.onError(error);
+                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                        }
                     });
 
                 } else {
@@ -244,6 +256,11 @@ public class FragmentWithComments extends Fragment {
                             likePostPhoto.setBackgroundColor(Color.WHITE);
                             likePostPhoto.setChecked(false);
                             likePostPhoto.setTextColor(Color.GRAY);
+                        }
+                        @Override
+                        public void onError(VKError error) {
+                            super.onError(error);
+                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }
                     });
                 }
@@ -319,6 +336,11 @@ public class FragmentWithComments extends Fragment {
                                 commentMessage.setText("");
                                 updateCommentList(Constants.GROUP_ID, item_id, listOfComments, inflater);
                             }
+                            @Override
+                            public void onError(VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                            }
 
                         });
 
@@ -328,9 +350,14 @@ public class FragmentWithComments extends Fragment {
                             @Override
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
-                                Toast.makeText(getActivity().getApplicationContext(), "POSTED", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity().getApplicationContext(), POSTED, Toast.LENGTH_SHORT).show();
                                 commentMessage.setText("");
                                 updateCommentList(Constants.GROUP_ID, item_id, listOfComments, inflater);
+                            }
+                            @Override
+                            public void onError(VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }
                         });
 
@@ -343,6 +370,11 @@ public class FragmentWithComments extends Fragment {
                             updateCommentList(Constants.GROUP_ID, item_id, listOfComments, inflater);
                             commentMessage.setText("");
                             edit_status = false;
+                        }
+                        @Override
+                        public void onError(VKError error) {
+                            super.onError(error);
+                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }
                     });
 
@@ -371,6 +403,11 @@ public class FragmentWithComments extends Fragment {
                         parseCommentList(OfflineMode.loadJSON(item_id));
                     }
                 }).start();
+            }
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }
 
         });
@@ -503,6 +540,11 @@ public class FragmentWithComments extends Fragment {
                                     adapter.changeStateLikeForComment(true,String.valueOf(comments.get(position).likes));
                                     Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
                                 }
+                                @Override
+                                public void onError(VKError error) {
+                                    super.onError(error);
+                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                }
                             });
 
                         } else {
@@ -514,6 +556,11 @@ public class FragmentWithComments extends Fragment {
                                     comments.get(position).user_likes = false;
                                     adapter.changeStateLikeForComment(false,String.valueOf(comments.get(position).likes));
                                     Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
+                                }
+                                @Override
+                                public void onError(VKError error) {
+                                    super.onError(error);
+                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                                 }
                             });
                         }
@@ -531,6 +578,11 @@ public class FragmentWithComments extends Fragment {
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
                                     updateCommentList(Constants.GROUP_ID, item_id, listOfComments, inflater);
+                                }
+                                @Override
+                                public void onError(VKError error) {
+                                    super.onError(error);
+                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                                 }
 
 

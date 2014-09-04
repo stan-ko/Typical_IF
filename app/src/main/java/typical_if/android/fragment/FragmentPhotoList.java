@@ -14,14 +14,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
@@ -146,6 +145,11 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                         OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
                         handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
                     }
+                        @Override
+                        public void onError(VKError error) {
+                            super.onError(error);
+                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                        }
                 });
             } else {
                 VKHelper.getPhotoList(Constants.TEMP_OWNER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
@@ -155,6 +159,11 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                         super.onComplete(response);
                         OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
                         handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
+                    }
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }
                 });
 
@@ -213,14 +222,14 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         }
 
 
-        final Animation a;
-        a = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.abc_slide_in_bottom);
+       // final Animation a;
+//        a = AnimationUtils.loadAnimation(getActivity().getApplicationContext(), R.anim.abc_slide_in_bottom);
 
 
         gridOfPhotos.setNumColumns(columns);
         final PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
         gridOfPhotos.setAdapter(photoListAdapter);
-        gridOfPhotos.setAnimation(a);
+//        gridOfPhotos.setAnimation(a);
         gridOfPhotos.setOnScrollListener(this);
 
         if (type == 0) {

@@ -33,6 +33,7 @@ import typical_if.android.AudioPlayerService;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.fragment.FragmentAlbumsList;
@@ -180,6 +181,11 @@ public class MainActivity extends ActionBarActivity implements
                     Constants.USER_ID = jsonObject.optLong("id");
                     ItemDataSetter.saveUserId(Constants.USER_ID);
                 }
+                @Override
+                public void onError(VKError error) {
+                    super.onError(error);
+                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                }
             });
         }
 
@@ -194,6 +200,11 @@ public class MainActivity extends ActionBarActivity implements
                     JSONObject jsonObject = arr.optJSONObject(0);
                     Constants.USER_ID = jsonObject.optLong("id");
                     ItemDataSetter.saveUserId(Constants.USER_ID);
+                }
+                @Override
+                public void onError(VKError error) {
+                    super.onError(error);
+                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                 }
             });
         }
