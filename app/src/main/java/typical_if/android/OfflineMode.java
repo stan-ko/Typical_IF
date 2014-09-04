@@ -22,6 +22,7 @@ public class OfflineMode {
         final SharedPreferences.Editor ed = sPref.edit();
         final String JsonString = jsonObject.toString();
         final String JsonKey = String.valueOf(gid);
+        ed.clear();
         ed.putString(JsonKey, JsonString);
         ed.commit();
     }
@@ -30,6 +31,7 @@ public class OfflineMode {
         final SharedPreferences.Editor ed = sPref.edit();
         final String JsonString = jsonObject.toString();
         final String JsonKey = id;
+        ed.clear();
         ed.putString(JsonKey, JsonString);
         ed.commit();
     }

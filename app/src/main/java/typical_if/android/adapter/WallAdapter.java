@@ -193,7 +193,7 @@ public class WallAdapter extends BaseAdapter {
                                             int isSuccessed = object.optInt("success");
 //
                                             if (isSuccessed == 1) {
-//
+                                                post.user_reposted=true;
                                                 Toast.makeText(context, "All is done", Toast.LENGTH_SHORT).show();
                                                 viewHolder.cb_post_repost.setChecked(true);
                                                 viewHolder.cb_post_repost.setText(String.valueOf(++post.reposts_count));
@@ -231,7 +231,7 @@ public class WallAdapter extends BaseAdapter {
                             dialog.create().show();
 //
                         } catch (NullPointerException npe) {
-                            Toast.makeText(getApplicationContext(), "Щось пішло не так...Оновіть будь-ласка сторінку", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Щось пішло не так... Оновіть будь-ласка сторінку", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

@@ -80,9 +80,10 @@ public class FragmentWithComments extends Fragment {
     View rootView = null;
     int reply_to_comment = 0;
     Wall wall = null;
-    VKWallPostWrapper post = null;
+    static VKWallPostWrapper post = null;
     String postColor = null;
     public int positionOfComment = 0;
+    public static int group_id;
 
     WallAdapter.ViewHolder viewHolder = null;
     Button sendComment = null;
@@ -112,6 +113,7 @@ public class FragmentWithComments extends Fragment {
 
 
         item_id = photo.id;
+        group_id=photo.owner_id;
 
         return fragment;
     }
@@ -120,12 +122,12 @@ public class FragmentWithComments extends Fragment {
         loadFromWall = true;
 
         FragmentWithComments fragment = new FragmentWithComments();
-        Bundle args = new Bundle();
+        //Bundle args = new Bundle();
 
         fragment.postColor = postColor;
         fragment.wall = wall;
         fragment.position = position;
-        fragment.post = post;
+        FragmentWithComments.post = post;
 
 
         TYPE = "comment";
@@ -136,6 +138,7 @@ public class FragmentWithComments extends Fragment {
         Constants.GET_COMMENTS_METHOD_NAME = "wall.getComments";
         Constants.PARAM_NAME2 = "post_id";
         item_id = post.post.id;
+        group_id=post.post.from_id;
         return fragment;
     }
 
@@ -199,7 +202,7 @@ public class FragmentWithComments extends Fragment {
             }
         });
 
-        updateCommentList(Constants.GROUP_ID, photo.id, listOfComments, inflater);
+        updateCommentList(group_id, photo.id, listOfComments, inflater);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
 
 
@@ -221,7 +224,7 @@ public class FragmentWithComments extends Fragment {
             @Override
             public void onClick(View v) {
                 if (photo.user_likes == 0) {
-                    VKHelper.setLike("photo", photo.owner_id, photo.id, new VKRequest.VKRequestListener() {
+                    VKHelper.setLike("photo", group_id, photo.id, new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
@@ -235,7 +238,7 @@ public class FragmentWithComments extends Fragment {
                     });
 
                 } else {
-                    VKHelper.deleteLike("photo", photo.owner_id, photo.id, new VKRequest.VKRequestListener() {
+                    VKHelper.deleteLike("photo", group_id, photo.id, new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
@@ -283,7 +286,7 @@ public class FragmentWithComments extends Fragment {
         }
         listOfComments.addHeaderView(wallItem);
 
-        updateCommentList(Constants.GROUP_ID, post.post.id, listOfComments, inflater);
+        updateCommentList(group_id, post.post.id, listOfComments, inflater);
     }
 
 
@@ -310,37 +313,37 @@ public class FragmentWithComments extends Fragment {
                 if (!edit_status) {
                     if (reply_to_comment == 0) {
 
-                        VKHelper.createComment(Constants.GROUP_ID, item_id, message + "\n@club26363301 (fromMobileIF)", 0, new VKRequest.VKRequestListener() {
+                        VKHelper.createComment(group_id, item_id, message + "\n@club26363301 (fromMobileIF)", 0, new VKRequest.VKRequestListener() {
 
                             @Override
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
                                 Toast.makeText(getActivity().getApplicationContext(), "POSTED", Toast.LENGTH_SHORT).show();
                                 commentMessage.setText("");
-                                updateCommentList(Constants.GROUP_ID, item_id, listOfComments, inflater);
+                                updateCommentList(group_id, item_id, listOfComments, inflater);
                             }
 
                         });
 
                     } else {
-                        VKHelper.createComment(Constants.GROUP_ID, item_id, message + "\n@club26363301 (fromMobileIF)", reply_to_comment, new VKRequest.VKRequestListener() {
+                        VKHelper.createComment(group_id, item_id, message + "\n@club26363301 (fromMobileIF)", reply_to_comment, new VKRequest.VKRequestListener() {
 
                             @Override
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
                                 Toast.makeText(getActivity().getApplicationContext(), "POSTED", Toast.LENGTH_SHORT).show();
                                 commentMessage.setText("");
-                                updateCommentList(Constants.GROUP_ID, item_id, listOfComments, inflater);
+                                updateCommentList(group_id, item_id, listOfComments, inflater);
                             }
                         });
 
                     }
                 } else
-                    VKHelper.editComment(Constants.GROUP_ID, comments.get(positionOfComment).id, message, null, new VKRequest.VKRequestListener() {
+                    VKHelper.editComment(group_id, comments.get(positionOfComment).id, message, null, new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
-                            updateCommentList(Constants.GROUP_ID, item_id, listOfComments, inflater);
+                            updateCommentList(group_id, item_id, listOfComments, inflater);
                             commentMessage.setText("");
                             edit_status = false;
                         }
@@ -494,7 +497,7 @@ public class FragmentWithComments extends Fragment {
                     case 3: {
                         if (!comments.get(position).user_likes) {
 
-                            VKHelper.setLike(TYPE, Constants.GROUP_ID, comments.get(position).id, new VKRequest.VKRequestListener() {
+                            VKHelper.setLike(TYPE, group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
                                 @Override
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
@@ -506,7 +509,7 @@ public class FragmentWithComments extends Fragment {
                             });
 
                         } else {
-                            VKHelper.deleteLike(TYPE, Constants.GROUP_ID, comments.get(position).id, new VKRequest.VKRequestListener() {
+                            VKHelper.deleteLike(TYPE, group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
                                 @Override
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
@@ -522,15 +525,15 @@ public class FragmentWithComments extends Fragment {
                     }
                     break;
                     case 4:
-                        Dialogs.reportListDialog(VKUIHelper.getApplicationContext(), Constants.GROUP_ID, comments.get(position).id);
+                        Dialogs.reportListDialog(VKUIHelper.getApplicationContext(), group_id, comments.get(position).id);
                         break;
                     case 5: {
                         if (myComment) {
-                            VKHelper.deleteComment(Constants.GROUP_ID, comments.get(position).id, new VKRequest.VKRequestListener() {
+                            VKHelper.deleteComment(group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
                                 @Override
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
-                                    updateCommentList(Constants.GROUP_ID, item_id, listOfComments, inflater);
+                                    updateCommentList(group_id, item_id, listOfComments, inflater);
                                 }
 
 
@@ -601,8 +604,6 @@ public class FragmentWithComments extends Fragment {
         MenuInflater inflater = getActivity().getMenuInflater();
         inflater.inflate(R.menu.context_menu_device_item_remove, menu);
     }
-
-    AlertDialog alert;
 
     @Override
     public void onAttach(Activity activity) {

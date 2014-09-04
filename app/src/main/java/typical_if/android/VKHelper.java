@@ -41,9 +41,8 @@ public class VKHelper {
     }
 
     public static void getPhotoList(long owner_id, long album_id,int rev, int count, VKRequest.VKRequestListener listener) {
+         VKParameters params = new VKParameters();
 
-
-        VKParameters params = new VKParameters();
 
         if (offsetCounter==0){
 

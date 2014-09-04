@@ -1,5 +1,6 @@
 package typical_if.android.fragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -79,7 +80,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
 
-        @Override
+            @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             temp = true;
         }
@@ -174,6 +175,16 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     int mCurCheckPosition = 0;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
