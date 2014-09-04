@@ -231,7 +231,7 @@ public class WallAdapter extends BaseAdapter {
                             dialog.create().show();
 //
                         } catch (NullPointerException npe) {
-                            Toast.makeText(getApplicationContext(), somethink_wrong, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "Щось пішло не так... Оновіть будь-ласка сторінку", Toast.LENGTH_LONG).show();
                         }
                     }
                 });

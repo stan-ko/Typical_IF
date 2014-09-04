@@ -53,7 +53,6 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.CommentsListAdapter;
-
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
@@ -94,6 +93,7 @@ public class FragmentWithComments extends Fragment {
     int position;
     LayoutInflater inflater;
     static long item_id;
+    static long from_user;
 
     public static FragmentWithComments newInstanceForPhoto(VKApiPhoto photo, long vk_user_id) {
         loadFromWall = false;
@@ -116,6 +116,11 @@ public class FragmentWithComments extends Fragment {
 
         item_id = photo.id;
         group_id=photo.owner_id;
+        if (photo.user_id==0){
+            photo.user_id=photo.owner_id;
+        }
+        from_user=photo.user_id;
+
 
         return fragment;
     }
@@ -141,6 +146,7 @@ public class FragmentWithComments extends Fragment {
         Constants.PARAM_NAME2 = "post_id";
         item_id = post.post.id;
         group_id=post.post.from_id;
+        from_user=post.post.from_id;
         return fragment;
     }
 
@@ -161,6 +167,7 @@ public class FragmentWithComments extends Fragment {
         final VKApiPhoto photo = this.photo;
 
 
+
         listOfComments = ((ListView) this.rootView.findViewById(R.id.listOfComments));
         View listHeaderView = rootView.inflate(getActivity().getApplicationContext(), R.layout.image_header, null);
         ImageView headerView = (ImageView) listHeaderView.findViewById(R.id.list_header_image);
@@ -173,8 +180,10 @@ public class FragmentWithComments extends Fragment {
         final TextView postPhotoUserName = ((TextView) rootView.findViewById(R.id.post_user_name));
         final TextView postPhotoUserDateOfComment = ((TextView) rootView.findViewById(R.id.post_user_date_of_comment));
 
-
-        VKHelper.getWhoIsPosted(photo.user_id, "photo_50", new VKRequest.VKRequestListener() {
+//        if (from_user==0){
+//            from_user=photo.owner_id;
+//        }
+        VKHelper.getWhoIsPosted(from_user, "photo_50", new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
@@ -197,6 +206,7 @@ public class FragmentWithComments extends Fragment {
             public void onError(VKError error) {
                 super.onError(error);
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+
             }
         });
 
@@ -216,15 +226,15 @@ public class FragmentWithComments extends Fragment {
         final CheckBox likePostPhoto = ((CheckBox) rootView.findViewById(R.id.like_post_photo_checkbox));
 
         if (photo.user_likes == 0) {
-            likePostPhoto.setBackgroundColor(Color.WHITE);
+
             likePostPhoto.setChecked(false);
             likePostPhoto.setText(String.valueOf(photo.likes));
             likePostPhoto.setTextColor(Color.GRAY);
         } else {
-            likePostPhoto.setBackgroundColor(Color.BLUE);
+
             likePostPhoto.setChecked(true);
             likePostPhoto.setText(String.valueOf(photo.likes));
-            likePostPhoto.setTextColor(Color.WHITE);
+            likePostPhoto.setTextColor(Color.GRAY);
         }
 
         likePostPhoto.setOnClickListener(new View.OnClickListener() {
@@ -236,11 +246,11 @@ public class FragmentWithComments extends Fragment {
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
                             photo.user_likes = 1;
-
-                            likePostPhoto.setText(String.valueOf(++photo.likes));
-                            likePostPhoto.setBackgroundColor(Color.BLUE);
+                            ++photo.likes;
+                            likePostPhoto.setText(String.valueOf(photo.likes));
                             likePostPhoto.setChecked(true);
-                            likePostPhoto.setTextColor(Color.WHITE);
+
+
                         }
                         @Override
                         public void onError(VKError error) {
@@ -255,10 +265,10 @@ public class FragmentWithComments extends Fragment {
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
                             photo.user_likes = 0;
-                            likePostPhoto.setText(String.valueOf(--photo.likes));
-                            likePostPhoto.setBackgroundColor(Color.WHITE);
+                            --photo.likes;
+                            likePostPhoto.setText(String.valueOf(photo.likes));
                             likePostPhoto.setChecked(false);
-                            likePostPhoto.setTextColor(Color.GRAY);
+
                         }
                         @Override
                         public void onError(VKError error) {
