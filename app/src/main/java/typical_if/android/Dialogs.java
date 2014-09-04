@@ -13,6 +13,7 @@ import android.text.ClipboardManager;
 import android.widget.Toast;
 
 import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPost;
@@ -72,8 +73,13 @@ public class Dialogs {
                         int isSuccessed = response.json.optInt("response");
 
                         if (isSuccessed == 1) {
-                            Toast.makeText(VKUIHelper.getApplicationContext(), "Reported", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VKUIHelper.getApplicationContext(), context.getString(R.string.DialogReported), Toast.LENGTH_SHORT).show();
                         }
+                    }
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }
                 });
             }
@@ -127,7 +133,12 @@ public class Dialogs {
                                 super.onComplete(response);
                                 fragmentManager.popBackStack();
                                 fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
-                                Toast.makeText(context, "Deleted", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, context.getString(R.string.DialogDeleted), Toast.LENGTH_SHORT).show();
+                            }
+                            @Override
+                            public void onError(VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }
                         });
                         break;

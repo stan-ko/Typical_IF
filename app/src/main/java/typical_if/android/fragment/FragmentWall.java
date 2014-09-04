@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
@@ -88,6 +89,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         @Override
         public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount,
                              int totalItemCount) {
+
             final int lastItem = firstVisibleItem + visibleItemCount;
 
             if (lastItem == totalItemCount - 20 & temp2) {
@@ -109,6 +111,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             swipeView.setEnabled(enable);
 
         }
+
     };
 
 
@@ -153,6 +156,11 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                     swipeView.setOnRefreshListener(null);
                     swipeView.setEnabled(false);
                     swipeView.setRefreshing(false);
+                }
+                @Override
+                public void onError(VKError error) {
+                    super.onError(error);
+                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                 }
             });
         }
@@ -219,6 +227,11 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
 
             }
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+            }
         });
     }
 
@@ -244,6 +257,11 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                             Toast.makeText(getActivity(), getString(R.string.group_joined), Toast.LENGTH_SHORT).show();
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
                         }
+                        @Override
+                        public void onError(VKError error) {
+                            super.onError(error);
+                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                        }
                     });
                 } else {
                     VKHelper.groupLeave(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
@@ -252,6 +270,11 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                             super.onComplete(response);
                             Toast.makeText(getActivity(), getString(R.string.group_leaved), Toast.LENGTH_SHORT).show();
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
+                        }
+                        @Override
+                        public void onError(VKError error) {
+                            super.onError(error);
+                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }
                     });
                 }
@@ -283,6 +306,11 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                         OfflineMode.saveJSON(response.json, Constants.GROUP_ID);
                         initGroupWall(OfflineMode.loadJSON(Constants.GROUP_ID), inflaterGlobal);
                     }
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                    }
                 });
 
                 swipeView.setRefreshing(false);
@@ -302,6 +330,11 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
                 OfflineMode.saveJSON(OfflineMode.jsonPlus(jsonObjectOld, response.json), Constants.GROUP_ID);
+            }
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }
         });
     }

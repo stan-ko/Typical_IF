@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.AudioAttachAdapter;
@@ -73,6 +75,12 @@ public class FragmentAttachPostList extends Fragment {
 
                         spinnerLayout.setVisibility(View.GONE);
                     }
+
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                    }
                 });
                 break;
             case 1:
@@ -97,6 +105,11 @@ public class FragmentAttachPostList extends Fragment {
 
                         spinnerLayout.setVisibility(View.GONE);
                     }
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                    }
                 });
                 break;
             case 3:
@@ -120,6 +133,11 @@ public class FragmentAttachPostList extends Fragment {
                         });
 
                         spinnerLayout.setVisibility(View.GONE);
+                    }
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }
                 });
         }

@@ -15,6 +15,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKPhotoArray;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import typical_if.android.Constants;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.UploadPhotoService;
 import typical_if.android.adapter.PhotoUploadAdapter;
@@ -156,6 +158,11 @@ public class FragmentUploadPhotoList extends Fragment {
                                     Constants.tempPhotoPostAttach.add(((VKPhotoArray) response.parsedModel).get(0));
                                     decrementThreadsCounter();
                                 }
+                                @Override
+                                public void onError(VKError error) {
+                                    super.onError(error);
+                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                }
                             });
                         }
                     }
@@ -176,6 +183,11 @@ public class FragmentUploadPhotoList extends Fragment {
                                 @Override
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
+                                }
+                                @Override
+                                public void onError(VKError error) {
+                                    super.onError(error);
+                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                                 }
                             });
                         }

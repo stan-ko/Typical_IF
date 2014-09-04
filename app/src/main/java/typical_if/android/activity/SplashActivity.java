@@ -151,6 +151,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
             public void onError(VKError error) {
                 super.onError(error);
                 decrementThreadsCounter();
+                OfflineMode.onErrorToast(getApplicationContext());
             }
         });
         VKHelper.doGroupWallRequest(offsetDefault, countOfPosts, Constants.TZ_ID, new VKRequest.VKRequestListener() {
@@ -165,6 +166,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
             public void onError(VKError error) {
                 super.onError(error);
                 decrementThreadsCounter();
+                OfflineMode.onErrorToast(getApplicationContext());
             }
         });
         VKHelper.doGroupWallRequest(offsetDefault, countOfPosts, Constants.FB_ID, new VKRequest.VKRequestListener() {
@@ -179,6 +181,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
             public void onError(VKError error) {
                 super.onError(error);
                 decrementThreadsCounter();
+                OfflineMode.onErrorToast(getApplicationContext());
             }
         });
         VKHelper.doGroupWallRequest(offsetDefault, countOfPosts, Constants.FN_ID, new VKRequest.VKRequestListener() {
@@ -193,6 +196,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
             public void onError(VKError error) {
                 super.onError(error);
                 decrementThreadsCounter();
+                OfflineMode.onErrorToast(getApplicationContext());
             }
         });
         //-------------------------END-------- all Request from internet before start APP----------------------

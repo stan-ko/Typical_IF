@@ -30,7 +30,6 @@ import java.util.ArrayList;
 
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
-import typical_if.android.MyApplication;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -39,10 +38,9 @@ import typical_if.android.adapter.PhotoListAdapter;
 public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollListener {
 
     public ArrayList<VKApiPhoto> photos2 = new ArrayList<VKApiPhoto>();
-    int height = MyApplication.getDisplayHeight();
     private OnFragmentInteractionListener mListener;
  private int counter = 5;
-
+     private boolean temp = true;
      private  boolean isRequestNull;
     //private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private static final int PICK_FROM_CAMERA = 1;
@@ -50,7 +48,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     final int PIC_CROP = 2;
     private static Uri mImageCaptureUri;
 
-
+    GridView gridOfPhotos;
 
     public static FragmentPhotoList newInstance(int type) {
         FragmentPhotoList fragment = new FragmentPhotoList();
@@ -106,89 +104,15 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         //super.onCreateOptionsMenu(menu, inflater);
     }
 
-//    final Thread t = new Thread(new Runnable() {
-//        @Override
-//        public void run() {
-////            Offset = Offset + 100;
-////            endlessGet(Offset);
-//        }
-//    });
-
-    boolean temp = false;
-    boolean updated = false;
-    int yPos;
-
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
     }
 
     @Override
-    public void onScroll(final AbsListView view, int firstVisibleItem, final int visibleItemCount, int totalItemCount) {
-
-        _lastInScreen = firstVisibleItem + visibleItemCount;
-
-
-        if (firstVisibleItem + visibleItemCount >= totalItemCount) {
-
-            if (_lastInScreen < VKHelper.countOfPhotos) {
-                _substract = VKHelper.countOfPhotos - _lastInScreen;
-                _ratio = (_substract / 100f);
-                if (_ratio < 2) {
-                    _count = 0;
-
-                }
-                if (_ratio > 1) {
-                    _count = 100;
-                    --_ratio;
-
-                } else {
-                    _count = (int) (_ratio * 100);
-
-                }
-            }
-            getElsePhotos(firstVisibleItem,visibleItemCount,totalItemCount, view);
-            scrollPhotoListToBottom(gridOfPhotos,_lastInScreen);
-
-        }
-
-
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
     }
-
-    int _lastInScreen;
-    int _substract;
-    float _ratio;
-    int _count=100;
-
-    private void getElsePhotos(int firstVisibleItem, final int visibleItemCount, final int totalItemCount,final AbsListView view ){
-
-        if (firstVisibleItem + visibleItemCount >= totalItemCount & !updated) {
-
-
-            VKHelper.getPhotoList(Constants.GROUP_ID,Constants.ALBUM_ID, 1, _count, new VKRequest.VKRequestListener() {
-                @Override
-                public void onComplete(VKResponse response) {
-
-                    super.onComplete(response);
-                    OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
-                    handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
-
-
-                    Log.d("PhotoList has Updated", totalItemCount + "");
-                }
-
-            });
-            updated=true;
-
-
-
-
-
-        }
-
-    }
-
 
 
     public interface OnFragmentInteractionListener {
@@ -270,7 +194,6 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     }
 
     public static int albumSize;
-    GridView gridOfPhotos;
 
     protected void handleResponse(JSONObject jsonObject, final int columns, View view) {
 
@@ -288,20 +211,20 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         }
 
 
+       
 
 
         gridOfPhotos.setNumColumns(columns);
-        PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
-        photoListAdapter.notifyDataSetChanged();
-        gridOfPhotos.invalidateViews();
+        final PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
         gridOfPhotos.setAdapter(photoListAdapter);
-        updated=false;
+      
         gridOfPhotos.setOnScrollListener(this);
 
         if (type == 0) {
             gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    getActivity().getSupportFragmentManager().popBackStack();
                     getActivity().getSupportFragmentManager().popBackStack();
                     Constants.tempPostAttachCounter++;
                     Constants.tempPhotoPostAttach.add(photos.get(position));
@@ -312,7 +235,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
             gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Fragment fragment = FragmentFullScreenViewer.newInstance(photos2, position);
+                    Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
                     android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
                     final FragmentTransaction transaction = fragmentManager.beginTransaction();
 
@@ -323,16 +246,4 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         }
 
     }
-
-    private void scrollPhotoListToBottom(final GridView gridOfPhotos, final int lastItem) {
-        gridOfPhotos.post(new Runnable() {
-            @Override
-            public void run() {
-                gridOfPhotos.setSelection(lastItem);
-
-            }
-        });
-
-    }
-
 }
