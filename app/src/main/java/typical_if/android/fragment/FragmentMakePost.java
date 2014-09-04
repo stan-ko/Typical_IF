@@ -126,6 +126,7 @@ public class FragmentMakePost extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
 
         View rootView = inflater.inflate(R.layout.fragment_make_post, container, false);
         setRetainInstance(true);
@@ -569,12 +570,6 @@ public class FragmentMakePost extends Fragment {
             }
         }
         parent.addView(mediaContainer);
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        ((MainActivity)getActivity()).getSupportActionBar().show();
     }
 
     @Override

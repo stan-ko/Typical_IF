@@ -62,17 +62,12 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     public FragmentPhotoList() {
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-        setHasOptionsMenu(true);
-    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
 
         final View rootView = inflater.inflate(R.layout.fragment_photo_list, container, false);
         setRetainInstance(true);

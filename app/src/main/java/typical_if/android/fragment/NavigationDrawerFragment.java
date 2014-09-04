@@ -15,7 +15,6 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
@@ -88,13 +87,6 @@ public class NavigationDrawerFragment extends Fragment {
 
     public void refreshNavigationDrawer() {
         mExpandapleListAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Indicate that this fragment would like to influence the set of actions in the action bar.
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -237,10 +229,10 @@ public class NavigationDrawerFragment extends Fragment {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
-                ((MainActivity)getActivity()).getSupportActionBar().show();
-
                 if (!isAdded()) {
                     return;
+                } else {
+                    FragmentWall.setDisabledMenu();
                 }
 
                 if (!mUserLearnedDrawer) {
@@ -251,8 +243,6 @@ public class NavigationDrawerFragment extends Fragment {
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).commit();
                 }
-
-                getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
 
@@ -260,6 +250,7 @@ public class NavigationDrawerFragment extends Fragment {
         // per the navigation drawer design guidelines.
         if (!mUserLearnedDrawer && !mFromSavedInstanceState) {
             mDrawerLayout.openDrawer(mFragmentContainerView);
+            FragmentWall.setDisabledMenu();
         }
 
         // Defer code dependent on restoration of previous instance state.
@@ -295,6 +286,7 @@ public class NavigationDrawerFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
         }
+
     }
 
     @Override
@@ -325,29 +317,19 @@ public class NavigationDrawerFragment extends Fragment {
         } else {
 
         }
-        super.onCreateOptionsMenu(menu, inflater);
+        //super.onCreateOptionsMenu(menu, inflater);
     }
-
+//
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
+        FragmentWall.setDisabledMenu();
         super.onPrepareOptionsMenu(menu);
         if (mDrawerLayout != null && isDrawerOpen()) {
-            menu.setGroupVisible(0, false);
             showGlobalContextActionBar();
         } else {
 
         }
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
      * 'context', rather than just what's in the current screen.

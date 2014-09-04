@@ -34,6 +34,7 @@ public class FragmentFullScreenViewFromPhone extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_fullscreen_view, container, false);
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
 
         ViewPager imagepager = (ViewPager) rootView.findViewById(R.id.pager);
         imagepager.setAdapter(new FullScreenPhotoUploadAdapter(photolist, inflater));

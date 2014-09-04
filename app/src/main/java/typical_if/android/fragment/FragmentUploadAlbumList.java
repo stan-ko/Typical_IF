@@ -48,6 +48,7 @@ public class FragmentUploadAlbumList extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
 
         final View rootView = inflater.inflate(R.layout.fragment_album_upload_list, container, false);
         setRetainInstance(true);
@@ -92,6 +93,7 @@ public class FragmentUploadAlbumList extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
+        FragmentWall.setDisabledMenu();
         super.onAttach(activity);
     }
 }

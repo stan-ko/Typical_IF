@@ -7,6 +7,8 @@ import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -63,6 +65,7 @@ public class FragmentAlbumsList extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
 
         final View rootView = inflater.inflate(R.layout.fragment_albums_list, container, false);
         setRetainInstance(true);
@@ -72,9 +75,15 @@ public class FragmentAlbumsList extends Fragment {
 
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Constants.makePostMenu = menu;
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
     @Override
     public void onAttach(Activity activity) {
+        FragmentWall.setDisabledMenu();
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached(Constants.GROUP_ID);
     }

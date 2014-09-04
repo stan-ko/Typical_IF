@@ -62,13 +62,13 @@ public class FragmentUploadPhotoList extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
 
         float scalefactor = getResources().getDisplayMetrics().density * 100;
         int number = getActivity().getWindowManager().getDefaultDisplay().getWidth();
@@ -89,6 +89,7 @@ public class FragmentUploadPhotoList extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
+        FragmentWall.setDisabledMenu();
         super.onAttach(activity);
     }
 
@@ -98,7 +99,7 @@ public class FragmentUploadPhotoList extends Fragment {
     }
 
     public static void refreshCheckBoxes() {
-        CheckBox checkBox;
+        CheckBox checkBox = null;
 
         if (Constants.tempCurrentPhotoAttachCounter == (Constants.tempMaxPostAttachCounter - Constants.tempPostAttachCounter)) {
             for (int i = 0; i < photos.getCount(); i++) {
@@ -109,7 +110,11 @@ public class FragmentUploadPhotoList extends Fragment {
             }
         } else {
             for (int i = 0; i < photos.getCount(); i++) {
-                checkBox = (CheckBox) photos.getChildAt(i).findViewById(R.id.checkBox_for_upload);
+                try {
+                    checkBox = (CheckBox) photos.getChildAt(i).findViewById(R.id.checkBox_for_upload);
+                } catch (NullPointerException e) {
+
+                }
                 if (!checkBox.isChecked()) {
                     checkBox.setEnabled(true);
                 }
@@ -145,7 +150,7 @@ public class FragmentUploadPhotoList extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.upload_captured_photo, menu);
         MenuItem item = menu.getItem(0);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);

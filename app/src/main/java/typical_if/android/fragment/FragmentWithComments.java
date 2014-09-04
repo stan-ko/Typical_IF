@@ -324,6 +324,7 @@ public class FragmentWithComments extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
 
         this.inflater = inflater;
         rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);

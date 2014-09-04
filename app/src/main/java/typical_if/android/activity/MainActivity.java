@@ -59,7 +59,7 @@ public class MainActivity extends ActionBarActivity implements
     public static NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
@@ -80,6 +80,17 @@ public class MainActivity extends ActionBarActivity implements
         VKSdk.wakeUpSession(this);
 
         ItemDataSetter.fragmentManager = getSupportFragmentManager();
+        ItemDataSetter.fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    if (Constants.makePostMenu.size() == 3) {
+                        FragmentWall.setEnabledMenu();
+                        getSupportActionBar().show();
+                    }
+                }
+            }
+        });
         Dialogs.fragmentManager = getSupportFragmentManager();
     }
 
@@ -246,7 +257,7 @@ public class MainActivity extends ActionBarActivity implements
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                 fragmentManager.popBackStack();
             }
-            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment, "FragmentWall").commit();
         }
         restoreActionBar();
     }
