@@ -7,13 +7,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
@@ -30,6 +31,7 @@ import typical_if.android.Constants;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.FullScreenImageAdapter;
 
 public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPageChangeListener {
@@ -80,16 +82,10 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-
-        }
-    }
-    @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final Bundle arguments = getArguments();
 
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
 
         rootView = inflater.inflate(R.layout.fragment_fullscreen_list, container, false);
 
@@ -141,6 +137,12 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         VKUIHelper.onResume(getActivity());
@@ -169,8 +171,6 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
         super.onDetach();
         mListener = null;
     }
-
-
 
     @Override
     public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) { }
@@ -236,7 +236,6 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
 
                             countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString()) + 1));
                             ++photos.get(position).likes;
-                            Toast.makeText(VKUIHelper.getApplicationContext(), LIKED, Toast.LENGTH_SHORT).show();
                             photos.get(position).user_likes = 1;
 
                         }
@@ -258,9 +257,6 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
                             countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString()) - 1));
                             --photos.get(position).likes;
                             photos.get(position).user_likes = 0;
-
-
-                            Toast.makeText(VKUIHelper.getApplicationContext(), LIKE_DELETED, Toast.LENGTH_SHORT).show();
 
                         }
 

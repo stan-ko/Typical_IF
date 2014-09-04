@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import typical_if.android.R;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.FullScreenPhotoUploadAdapter;
 import typical_if.android.model.UploadPhotos;
 
@@ -31,6 +32,9 @@ public class FragmentFullScreenViewFromPhone extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_fullscreen_view, container, false);
+
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
+
         ViewPager imagepager = (ViewPager) rootView.findViewById(R.id.pager);
         imagepager.setAdapter(new FullScreenPhotoUploadAdapter(photolist, inflater));
         imagepager.setCurrentItem(currentposition);

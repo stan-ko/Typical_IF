@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import typical_if.android.Constants;
+import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.UploadPhotoService;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.PhotoUploadAdapter;
 import typical_if.android.model.UploadPhotos;
 
@@ -65,6 +67,9 @@ public class FragmentUploadPhotoList extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
+
         float scalefactor = getResources().getDisplayMetrics().density * 100;
         int number = getActivity().getWindowManager().getDefaultDisplay().getWidth();
         final int columns = (int) ((float) number / (float) scalefactor);
@@ -94,7 +99,6 @@ public class FragmentUploadPhotoList extends Fragment {
 
     public static void refreshCheckBoxes() {
         CheckBox checkBox;
-        Toast.makeText(Constants.mainActivity, "Lo" + Constants.tempCurrentPhotoAttachCounter, Toast.LENGTH_SHORT).show();
 
         if (Constants.tempCurrentPhotoAttachCounter == (Constants.tempMaxPostAttachCounter - Constants.tempPostAttachCounter)) {
             for (int i = 0; i < photos.getCount(); i++) {
@@ -128,8 +132,10 @@ public class FragmentUploadPhotoList extends Fragment {
     }
 
     private AtomicInteger decrementer;
+    private int counter = 1;
 
     public void decrementThreadsCounter() {
+        Toast.makeText(ItemDataSetter.context, ItemDataSetter.context.getString(R.string.upload_progress) + " " + counter++ + "/" + Constants.tempCurrentPhotoAttachCounter, Toast.LENGTH_SHORT).show();
         if (decrementer.decrementAndGet() == 0) {
             getActivity().getSupportFragmentManager().popBackStack();
             getActivity().getSupportFragmentManager().popBackStack();

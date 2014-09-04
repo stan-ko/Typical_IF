@@ -2,7 +2,7 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/upload_captured_photo_to_album"
-        android:title=""
+        android:title="@string/ab_title_upload_photo"
         android:icon="@android:drawable/ic_menu_upload"
         />
 </menu>

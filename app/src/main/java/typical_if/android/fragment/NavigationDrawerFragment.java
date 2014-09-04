@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import typical_if.android.R;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.ExpandableListAdapter;
 import typical_if.android.view.AnimatedExpandableListView;
 
@@ -235,6 +236,9 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+
+                ((MainActivity)getActivity()).getSupportActionBar().show();
+
                 if (!isAdded()) {
                     return;
                 }
@@ -286,6 +290,7 @@ public class NavigationDrawerFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
+            ((MainActivity)getActivity()).getSupportActionBar().show();
             mCallbacks = (NavigationDrawerCallbacks) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
@@ -315,7 +320,7 @@ public class NavigationDrawerFragment extends Fragment {
         // If the drawer is open, show the global app actions in the action bar. See also
         // showGlobalContextActionBar, which controls the top-left area of the action bar.
         if (mDrawerLayout != null && isDrawerOpen()) {
-            inflater.inflate(R.menu.global, menu);
+            inflater.inflate(R.menu.main, menu);
             showGlobalContextActionBar();
         } else {
 
@@ -324,13 +329,19 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (mDrawerLayout != null && isDrawerOpen()) {
+            menu.setGroupVisible(0, false);
+            showGlobalContextActionBar();
+        } else {
+
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-
-        if (item.getItemId() == R.id.action_example) {
-            // Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
             return true;
         }
 

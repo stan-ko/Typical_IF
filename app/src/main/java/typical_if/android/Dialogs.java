@@ -73,7 +73,7 @@ public class Dialogs {
                         int isSuccessed = response.json.optInt("response");
 
                         if (isSuccessed == 1) {
-                            Toast.makeText(VKUIHelper.getApplicationContext(), context.getString(R.string.DialogReported), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, resources.getString(R.string.post_reported), Toast.LENGTH_SHORT).show();
                         }
                     }
                     @Override
@@ -115,7 +115,7 @@ public class Dialogs {
         final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
         final Resources resources = context.getResources();
 
-        final String[] items = {"Edit", "Delete"};
+        final String[] items = {resources.getString(R.string.post_edit), resources.getString(R.string.post_delete)};
 
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -133,7 +133,7 @@ public class Dialogs {
                                 super.onComplete(response);
                                 fragmentManager.popBackStack();
                                 fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
-                                Toast.makeText(context, context.getString(R.string.DialogDeleted), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context, resources.getString(R.string.post_deleted), Toast.LENGTH_SHORT).show();
                             }
                             @Override
                             public void onError(VKError error) {
@@ -153,7 +153,7 @@ public class Dialogs {
         final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
         final Resources resources = context.getResources();
 
-        final String[] items = {"Own", "SD-card"};
+        final String[] items = {resources.getString(R.string.photo_from_own), resources.getString(R.string.photo_from_sd)};
 
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override

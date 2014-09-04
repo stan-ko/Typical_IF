@@ -1,6 +1,5 @@
 package typical_if.android.activity;
 
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -13,8 +12,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCaptchaDialog;
@@ -62,6 +61,8 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 
         setContentView(R.layout.activity_main);
 
@@ -131,8 +132,6 @@ public class MainActivity extends ActionBarActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.main, menu);
-            MenuItem item = menu.getItem(0);
-            item.setVisible(true);
             restoreActionBar();
             return true;
         }
@@ -163,11 +162,7 @@ public class MainActivity extends ActionBarActivity implements
         }
 
         @Override
-        public void onAccessDenied(final VKError authorizationError) {
-            new AlertDialog.Builder(Constants.mainActivity)
-                    .setMessage(authorizationError.toString())
-                    .show();
-    }
+        public void onAccessDenied(final VKError authorizationError) {}
 
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
@@ -264,6 +259,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            getSupportActionBar().show();
             mNavigationDrawerFragment.openDrawer();
         } else {
             super.onBackPressed();

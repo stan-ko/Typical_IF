@@ -140,7 +140,6 @@ public class WallAdapter extends BaseAdapter {
                         VKHelper.setLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(VKResponse response) {
-                                Toast.makeText(VKUIHelper.getApplicationContext(), "Liked", Toast.LENGTH_SHORT).show();
                                 super.onComplete(response);
                                 viewHolder.cb_post_like.setText(String.valueOf(++post.likes_count));
                                 viewHolder.cb_post_like.setChecked(true);
@@ -153,7 +152,6 @@ public class WallAdapter extends BaseAdapter {
                             @Override
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
-                                Toast.makeText(VKUIHelper.getApplicationContext(), "Like has deleted", Toast.LENGTH_SHORT).show();
                                 viewHolder.cb_post_like.setText(String.valueOf(--post.likes_count));
                                 viewHolder.cb_post_like.setChecked(false);
                                 post.user_likes = false;
@@ -194,7 +192,6 @@ public class WallAdapter extends BaseAdapter {
 //
                                             if (isSuccessed == 1) {
                                                 post.user_reposted=true;
-                                                Toast.makeText(context, "All is done", Toast.LENGTH_SHORT).show();
                                                 viewHolder.cb_post_repost.setChecked(true);
                                                 viewHolder.cb_post_repost.setText(String.valueOf(++post.reposts_count));
 //
@@ -231,7 +228,7 @@ public class WallAdapter extends BaseAdapter {
                             dialog.create().show();
 //
                         } catch (NullPointerException npe) {
-                            Toast.makeText(getApplicationContext(), "Щось пішло не так... Оновіть будь-ласка сторінку", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -377,7 +374,7 @@ public class WallAdapter extends BaseAdapter {
                 viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), " comments are not available to this post. Please turn On the internet ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
                     }
                 });
             }

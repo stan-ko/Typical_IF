@@ -61,6 +61,9 @@ public class FragmentAlbumsList extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
+
         final View rootView = inflater.inflate(R.layout.fragment_albums_list, container, false);
         setRetainInstance(true);
         doRequest(rootView);

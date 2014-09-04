@@ -258,6 +258,13 @@ public class ItemDataSetter {
         }
         ((ImageView) pollContainer.getChildAt(2)).setBackgroundColor(Color.parseColor(postColor));
 
+        pollContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Constants.toastInProgress.show();
+            }
+        });
+
         parent.addView(pollContainer);
     }
 

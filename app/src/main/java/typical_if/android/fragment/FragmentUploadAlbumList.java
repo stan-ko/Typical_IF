@@ -16,6 +16,7 @@ import com.twotoasters.jazzylistview.JazzyHelper;
 import java.util.ArrayList;
 
 import typical_if.android.R;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.AlbumUploadAdapter;
 
 /**
@@ -45,6 +46,9 @@ public class FragmentUploadAlbumList extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
+
         final View rootView = inflater.inflate(R.layout.fragment_album_upload_list, container, false);
         setRetainInstance(true);
 

@@ -147,7 +147,7 @@ public class OfflineMode {
         return wall;
     }
     public  static void onErrorToast(Context ApplicationContext){
-        Toast.makeText(ApplicationContext, ApplicationContext.getString(R.string.OnErrorToast), Toast.LENGTH_SHORT).show();
+        Toast.makeText(ApplicationContext, ApplicationContext.getString(R.string.error), Toast.LENGTH_SHORT).show();
 
     }
 

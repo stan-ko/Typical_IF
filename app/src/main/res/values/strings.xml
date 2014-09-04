@@ -49,9 +49,17 @@
 
     <string name="in_progress">В розробці</string>
     <string name="no_suggested_posts">Немає запропонованих новин</string>
+    <string name="post_deleted">Новина видалена</string>
+    <string name="post_added">Новина запропонована</string>
+    <string name="post_reported">Ви поскаржились на запис</string>
+    <string name="post_edit">Редагувати новину</string>
+    <string name="post_delete">Видалити новину</string>
 
-    <string name="add_photo_from_title">Завантажити фото ?</string>
-    <string name="no_internet_message_toast_en">No internet connection. You use offline mode</string>
+    <string name="photo_from_own">З альбомів</string>
+    <string name="photo_from_sd">З карти пам\'яті</string>
+
+    <string name="add_photo_from_title">Завантажити фото </string>
+    <string name="no_internet_message_toast_en">Інтернет відсутній. Ви знаходитесь в режимі офлайн.</string>
 
     <string name="ab_title_make_post">Запропонувати новину</string>
     <string name="ab_title_suggested_posts">Запропоновані новини</string>
@@ -60,11 +68,14 @@
     <string name="group_joined">Ви вступили до спільноти</string>
     <string name="group_leaved">Ви покинули спільноту</string>
 
+    <string name="error">Помилка</string>
+    <string name="max_attaches">Максимальна кількість прикріплень</string>
+
+    <string name="upload_progress">Вивантажено</string>
+    <string name="upload">Вивантажується...</string>
+
     <string name="albums">Альбоми</string>
-    <string name="OnErrorToast">Помилка</string>
-    <string name="DialogReported">Reported</string>
-    <string name="Liked">Liked</string>
-    <string name="DialogDeleted">Deleted</string>
+    <string name="ab_title_upload_photo">Вивантажити фото</string>
 
 
     <array name="post_report_types">
