@@ -130,9 +130,8 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     public void onScroll(final AbsListView view, int firstVisibleItem, final int visibleItemCount, int totalItemCount) {
 
         _lastInScreen = firstVisibleItem + visibleItemCount;
-
-
-        if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+Log.d("----------"+VKHelper.countOfPhotos+"----------",""+totalItemCount);
+        if (_lastInScreen >= totalItemCount & totalItemCount>=100  & totalItemCount!=VKHelper.countOfPhotos) {
 
             if (_lastInScreen < VKHelper.countOfPhotos) {
                 _substract = VKHelper.countOfPhotos - _lastInScreen;
