@@ -130,7 +130,6 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     public void onScroll(final AbsListView view, int firstVisibleItem, final int visibleItemCount, int totalItemCount) {
 
         _lastInScreen = firstVisibleItem + visibleItemCount;
-Log.d("----------"+VKHelper.countOfPhotos+"----------",""+totalItemCount);
         if (_lastInScreen >= totalItemCount & totalItemCount>=100  & totalItemCount!=VKHelper.countOfPhotos) {
 
             if (_lastInScreen < VKHelper.countOfPhotos) {
@@ -153,11 +152,7 @@ Log.d("----------"+VKHelper.countOfPhotos+"----------",""+totalItemCount);
             scrollPhotoListToBottom(gridOfPhotos,_lastInScreen);
 
         }
-
-
-
     }
-
     int _lastInScreen;
     int _substract;
     float _ratio;
@@ -182,16 +177,9 @@ Log.d("----------"+VKHelper.countOfPhotos+"----------",""+totalItemCount);
 
             });
             updated=true;
-
-
-
-
-
         }
 
     }
-
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
