@@ -165,9 +165,6 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                     super.onComplete(response);
                     OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
                     handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
-
-
-                    Log.d("PhotoList has Updated", totalItemCount + "");
                 }
 
             });

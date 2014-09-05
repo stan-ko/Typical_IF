@@ -234,6 +234,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
         ((MainActivity)getActivity()).getSupportActionBar().show();
         super.onCreate(savedInstanceState);
     }
@@ -242,6 +243,13 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public void onPrepareOptionsMenu(final Menu menu) {
         Constants.makePostMenu = menu;
+
+        if (OfflineMode.isOnline(getApplicationContext())) {
+            setEnabledMenu();
+        } else {
+            setDisabledMenu();
+        }
+
         super.onPrepareOptionsMenu(menu);
         VKHelper.isMember(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
             @Override

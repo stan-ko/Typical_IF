@@ -90,8 +90,8 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.app_name)
                 .setCancelable(false)
-                .setMessage("No fucking active Internet connection is available. Would you like to")
-                .setPositiveButton("Retry "+"("+counter+")", new DialogInterface.OnClickListener() {
+                .setMessage(getString(R.string.no_internet_chooser))
+                .setPositiveButton(getString(R.string.retry) + " ("+counter+")", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (counter <2) {
                             startActivity(new Intent(Settings.ACTION_SETTINGS));
@@ -101,14 +101,14 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                         builder.setCancelable(true);
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         finish();
                         builder.setCancelable(true);
                     }
                 });
         if (!isFirstOpen() & OfflineMode.loadJSON(Constants.TF_ID) != null) {
-            builder.setNeutralButton("Offline", new DialogInterface.OnClickListener() {
+            builder.setNeutralButton(getString(R.string.offline), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     builder.setCancelable(true);
                     startNextActivity();

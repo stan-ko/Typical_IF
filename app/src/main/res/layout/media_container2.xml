@@ -26,9 +26,10 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="match_parent"
                 android:visibility="gone"
-                android:id="@+id/relativeLayout" >
+                android:id="@+id/relativeLayout"
+                android:layout_alignParentBottom="true">
 
                 <ImageView
                     android:layout_width="30dp"
@@ -92,7 +93,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="match_parent"
                 android:visibility="gone"
                 android:id="@+id/relativeLayout4" >
 

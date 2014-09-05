@@ -872,8 +872,8 @@ public class ItemDataSetter {
                 if (!(layout_i instanceof LinearLayout)) {
                     continue;
                 } else {
-                    if (videos.size() == 1 && photos.size() == 0) {
-                        if (videos.size() == 1 && photos.size() == 0) {
+                    if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
+                        if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
                             int newWidth;
                             if (getScreenOrientation() == 1) {
                                 newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.

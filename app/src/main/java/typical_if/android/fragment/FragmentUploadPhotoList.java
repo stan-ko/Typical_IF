@@ -161,6 +161,7 @@ public class FragmentUploadPhotoList extends Fragment {
                     decrementer = new AtomicInteger(Constants.tempCurrentPhotoAttachCounter);
 
                     for (int j = 0; j < photolist.size(); j++) {
+                        getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
                         if (photolist.get(j).isChecked) {
                             VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photoSrc), Constants.USER_ID, (int) gid).executeWithListener(new VKRequest.VKRequestListener() {
                                 @Override

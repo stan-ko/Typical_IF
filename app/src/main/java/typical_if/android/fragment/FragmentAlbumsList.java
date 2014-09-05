@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -155,7 +154,7 @@ public class FragmentAlbumsList extends Fragment {
             startActivity(new Intent(Settings.ACTION_SETTINGS));
             counter = 5;
         }
-        btn.setText("Retry " + counter);
+        btn.setText(getActivity().getString(R.string.retry) + " (" + counter + ")");
 
     }
 
@@ -165,7 +164,6 @@ public class FragmentAlbumsList extends Fragment {
             listOfAlbums = (ListView) view.findViewById(R.id.listOfAlbums);
             albumCoverAdapter = new AlbumCoverAdapter(albums, getActivity().getLayoutInflater());
         } catch (NullPointerException e) {
-            Log.d("Connection", "BAD CONNECTION (NULL POINTER EXCEPTION)");
         }
         //listOfAlbums.setTransitionEffect(mCurrentTransitionEffect);
         listOfAlbums.setAdapter(albumCoverAdapter);
