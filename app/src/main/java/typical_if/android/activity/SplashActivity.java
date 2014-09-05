@@ -199,6 +199,21 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                 OfflineMode.onErrorToast(getApplicationContext());
             }
         });
+        VKHelper.doGroupWallRequest(offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                super.onComplete(response);
+                OfflineMode.saveJSON(response.json, Constants.ZF_ID);
+                decrementThreadsCounter();
+            }
+
+            @Override
+            public void onError(VKError error) {
+                super.onError(error);
+                decrementThreadsCounter();
+                OfflineMode.onErrorToast(getApplicationContext());
+            }
+        });
         //-------------------------END-------- all Request from internet before start APP----------------------
     }
 

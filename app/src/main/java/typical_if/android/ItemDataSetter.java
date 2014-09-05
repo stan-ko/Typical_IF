@@ -1069,8 +1069,10 @@ public class ItemDataSetter {
             return "#D5902FA7";
         } else if (groupIndex == Constants.FB_ID) {
             return "#1799CD";
-        } else {
+        } else if (groupIndex == Constants.FN_ID) {
             return "#DE9C0E";
+        } else {
+            return "#84134800";
         }
     }
 

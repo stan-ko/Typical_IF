@@ -232,6 +232,8 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 } else {
+                    showGlobalContextActionBar();
+                    ((MainActivity)getActivity()).getSupportActionBar().show();
                     FragmentWall.setDisabledMenu();
                 }
 

@@ -101,8 +101,10 @@ public class MainActivity extends ActionBarActivity implements
             return Constants.TZ_ID;
         } else if (clickedPosition == 2) {
             return Constants.FB_ID;
-        } else {
+        } else if (clickedPosition == 3) {
             return Constants.FN_ID;
+        } else {
+            return Constants.ZF_ID;
         }
     }
 
@@ -226,6 +228,7 @@ public class MainActivity extends ActionBarActivity implements
             case 1:
             case 2:
             case 3:
+            case 4:
                 vkGroupId = setGroupId(groupPosition);
                 Constants.GROUP_ID = vkGroupId;
                 onSectionAttached(groupPosition);
@@ -237,9 +240,9 @@ public class MainActivity extends ActionBarActivity implements
                 }
 
                 break;
-            case 4:
-                Constants.toastInProgress.show();
-                break;
+//            case 4:
+//                Constants.toastInProgress.show();
+//                break;
             case 5:
                 if (VKSdk.isLoggedIn()) {
                     VKSdk.logout();
@@ -253,11 +256,11 @@ public class MainActivity extends ActionBarActivity implements
                 break;
         }
 
-        if (groupPosition != 6 && groupPosition != 5 && groupPosition != 4) {
+        if (groupPosition != 6 && groupPosition != 5) {
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                 fragmentManager.popBackStack();
             }
-            fragmentManager.beginTransaction().replace(R.id.container, fragment, "FragmentWall").commit();
+            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         }
         restoreActionBar();
     }

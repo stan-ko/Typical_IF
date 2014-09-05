@@ -147,6 +147,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         if (isSuggested) {
             ((MainActivity)getActivity()).getSupportActionBar().show();
             ItemDataSetter.fragmentManager.beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
+            setDisabledMenu();
         }
 
         super.onDetach();
