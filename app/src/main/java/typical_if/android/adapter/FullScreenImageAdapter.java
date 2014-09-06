@@ -40,7 +40,6 @@ public class FullScreenImageAdapter extends PagerAdapter {
     private DisplayImageOptions options = new DisplayImageOptions.Builder()
             .cacheOnDisc(true)
             .cacheInMemory(true)
-            .delayBeforeLoading(100)
             .resetViewBeforeLoading(false)
             .bitmapConfig(Bitmap.Config.RGB_565)
             .imageScaleType(ImageScaleType.EXACTLY).build();

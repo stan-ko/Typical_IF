@@ -1,6 +1,5 @@
 package typical_if.android;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
@@ -8,8 +7,6 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-
-import typical_if.android.model.UploadPhotos;
 
 /**
  * Created by LJ on 08.08.2014.
@@ -25,8 +22,8 @@ public class UploadPhotoService extends Service{
         super.onCreate();
         mNotifyManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("Завантаження зображень на сервер")
-                .setContentText("Триває завантаження")
+                .setContentTitle(Constants.RESOURCES.getString(R.string.upload_photo_server))
+                .setContentText(Constants.RESOURCES.getString(R.string.upload_photo_progress))
                 .setSmallIcon(android.R.drawable.ic_menu_upload);
     }
 
@@ -50,7 +47,7 @@ public class UploadPhotoService extends Service{
                     Log.d("MYTAG", "sleep failure");
                 }
                 // When the loop is finished, updates the notification
-                mBuilder.setContentText("Завантаження завершено")
+                mBuilder.setContentText(Constants.RESOURCES.getString(R.string.upload_photo_finish))
                         // Removes the progress bar
                         .setProgress(0,0,false);
                 mNotifyManager.notify(id, mBuilder.build());

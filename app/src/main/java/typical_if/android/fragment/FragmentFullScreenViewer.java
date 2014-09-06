@@ -30,6 +30,7 @@ import typical_if.android.Constants;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.FullScreenImageAdapter;
 
 public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPageChangeListener {
@@ -58,7 +59,7 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
     ImageView addLike;
     ImageView goToComments;
     TextView photoHeader;
-   // CheckBox likedOrNotLikedBox;
+  //  CheckBox likedOrNotLikedBox;
     TextView counterOfPhotos;
     TextView albumSize;
     CheckBox cb_like;
@@ -93,10 +94,10 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final Bundle arguments = getArguments();
 
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
 
         rootView = inflater.inflate(R.layout.fragment_fullscreen_list, container, false);
-        cb_like= ((CheckBox) rootView.findViewById(R.id.cb_photo_like));
-        cb_comment= ((CheckBox) rootView.findViewById(R.id.cb_photo_comment));
 
 
        // countLikes = (TextView) rootView.findViewById(R.id.count_of_likes);
@@ -121,6 +122,7 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
         imagepager.setCurrentItem(currentPosition);
         adapter.notifyDataSetChanged();
 
+
         //Log.d("Current VIEW", photos.get(imagepager.getCurrentItem()).text);
         VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
             @Override
@@ -139,7 +141,6 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }
         });
-
 
 
         setRetainInstance(true);
@@ -185,7 +186,6 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
     public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) { }
     @Override
     public void onPageSelected(final int position) {
-
 
 
         photoHeader.setText(photos.get(position).text);

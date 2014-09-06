@@ -1,6 +1,5 @@
 package typical_if.android.activity;
 
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +14,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCaptchaDialog;
@@ -60,8 +60,10 @@ public class MainActivity extends ActionBarActivity implements
     public static NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 
         setContentView(R.layout.activity_main);
 
@@ -79,6 +81,17 @@ public class MainActivity extends ActionBarActivity implements
         VKSdk.wakeUpSession(this);
 
         ItemDataSetter.fragmentManager = getSupportFragmentManager();
+        ItemDataSetter.fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    if (Constants.makePostMenu.size() == 3) {
+                        FragmentWall.setEnabledMenu();
+                        getSupportActionBar().show();
+                    }
+                }
+            }
+        });
         Dialogs.fragmentManager = getSupportFragmentManager();
     }
 
@@ -89,8 +102,10 @@ public class MainActivity extends ActionBarActivity implements
             return Constants.TZ_ID;
         } else if (clickedPosition == 2) {
             return Constants.FB_ID;
-        } else {
+        } else if (clickedPosition == 3) {
             return Constants.FN_ID;
+        } else {
+            return Constants.ZF_ID;
         }
     }
 
@@ -128,11 +143,18 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mNavigationDrawerFragment.onOptionsItemSelected(item)) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.main, menu);
-            MenuItem item = menu.getItem(0);
-            item.setVisible(true);
             restoreActionBar();
             return true;
         }
@@ -163,11 +185,7 @@ public class MainActivity extends ActionBarActivity implements
         }
 
         @Override
-        public void onAccessDenied(final VKError authorizationError) {
-            new AlertDialog.Builder(Constants.mainActivity)
-                    .setMessage(authorizationError.toString())
-                    .show();
-    }
+        public void onAccessDenied(final VKError authorizationError) {}
 
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
@@ -220,6 +238,7 @@ public class MainActivity extends ActionBarActivity implements
             case 1:
             case 2:
             case 3:
+            case 4:
                 vkGroupId = setGroupId(groupPosition);
                 Constants.GROUP_ID = vkGroupId;
                 onSectionAttached(groupPosition);
@@ -231,9 +250,9 @@ public class MainActivity extends ActionBarActivity implements
                 }
 
                 break;
-            case 4:
-                Constants.toastInProgress.show();
-                break;
+//            case 4:
+//                Constants.toastInProgress.show();
+//                break;
             case 5:
                 if (VKSdk.isLoggedIn()) {
                     VKSdk.logout();
@@ -247,7 +266,7 @@ public class MainActivity extends ActionBarActivity implements
                 break;
         }
 
-        if (groupPosition != 6 && groupPosition != 5 && groupPosition != 4) {
+        if (groupPosition != 6 && groupPosition != 5) {
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                 fragmentManager.popBackStack();
             }
@@ -264,6 +283,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            getSupportActionBar().show();
             mNavigationDrawerFragment.openDrawer();
         } else {
             super.onBackPressed();

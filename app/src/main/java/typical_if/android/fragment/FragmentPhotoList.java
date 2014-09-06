@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -29,11 +28,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
-import typical_if.android.Dialogs;
 import typical_if.android.MyApplication;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.PhotoListAdapter;
 
 public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollListener {
@@ -63,17 +62,16 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     public FragmentPhotoList() {
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-        setHasOptionsMenu(true);
-    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
+
         final View rootView = inflater.inflate(R.layout.fragment_photo_list, container, false);
         setRetainInstance(true);
+
         doRequest(rootView);
         return rootView;
     }
@@ -93,27 +91,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
-        MenuItem item = menu.getItem(0).setEnabled(true);
-        //MenuItem item1 = menu.getItem(1).setEnabled(true);
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Dialogs.addPhotoFrom().show();
-                return true;
-            }
-        });
-
-        //super.onCreateOptionsMenu(menu, inflater);
     }
-
-//    final Thread t = new Thread(new Runnable() {
-//        @Override
-//        public void run() {
-////            Offset = Offset + 100;
-////            endlessGet(Offset);
-//        }
-//    });
-
     boolean temp = false;
     boolean updated = false;
     int yPos;
@@ -127,9 +105,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     public void onScroll(final AbsListView view, int firstVisibleItem, final int visibleItemCount, int totalItemCount) {
 
         _lastInScreen = firstVisibleItem + visibleItemCount;
-
-
-        if (firstVisibleItem + visibleItemCount >= totalItemCount) {
+        if (_lastInScreen >= totalItemCount & totalItemCount>=100  & totalItemCount!=VKHelper.countOfPhotos) {
 
             if (_lastInScreen < VKHelper.countOfPhotos) {
                 _substract = VKHelper.countOfPhotos - _lastInScreen;
@@ -152,11 +128,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
 
         }
-
-
-
     }
-
     int _lastInScreen;
     int _substract;
     float _ratio;
@@ -174,23 +146,13 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                     super.onComplete(response);
                     OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
                     handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
-
-
-                    Log.d("PhotoList has Updated", totalItemCount + "");
                 }
 
             });
             updated=true;
-
-
-
-
-
         }
 
     }
-
-
 
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
@@ -303,6 +265,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
             gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    getActivity().getSupportFragmentManager().popBackStack();
                     getActivity().getSupportFragmentManager().popBackStack();
                     Constants.tempPostAttachCounter++;
                     Constants.tempPhotoPostAttach.add(photos.get(position));

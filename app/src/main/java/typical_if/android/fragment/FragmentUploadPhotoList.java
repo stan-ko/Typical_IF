@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import typical_if.android.Constants;
+import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.UploadPhotoService;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.PhotoUploadAdapter;
 import typical_if.android.model.UploadPhotos;
 
@@ -60,11 +62,14 @@ public class FragmentUploadPhotoList extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
+
         float scalefactor = getResources().getDisplayMetrics().density * 100;
         int number = getActivity().getWindowManager().getDefaultDisplay().getWidth();
         final int columns = (int) ((float) number / (float) scalefactor);
@@ -84,6 +89,7 @@ public class FragmentUploadPhotoList extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
+        FragmentWall.setDisabledMenu();
         super.onAttach(activity);
     }
 
@@ -93,8 +99,7 @@ public class FragmentUploadPhotoList extends Fragment {
     }
 
     public static void refreshCheckBoxes() {
-        CheckBox checkBox;
-        Toast.makeText(Constants.mainActivity, "Lo" + Constants.tempCurrentPhotoAttachCounter, Toast.LENGTH_SHORT).show();
+        CheckBox checkBox = null;
 
         if (Constants.tempCurrentPhotoAttachCounter == (Constants.tempMaxPostAttachCounter - Constants.tempPostAttachCounter)) {
             for (int i = 0; i < photos.getCount(); i++) {
@@ -105,7 +110,11 @@ public class FragmentUploadPhotoList extends Fragment {
             }
         } else {
             for (int i = 0; i < photos.getCount(); i++) {
-                checkBox = (CheckBox) photos.getChildAt(i).findViewById(R.id.checkBox_for_upload);
+                try {
+                    checkBox = (CheckBox) photos.getChildAt(i).findViewById(R.id.checkBox_for_upload);
+                } catch (NullPointerException e) {
+
+                }
                 if (!checkBox.isChecked()) {
                     checkBox.setEnabled(true);
                 }
@@ -128,8 +137,10 @@ public class FragmentUploadPhotoList extends Fragment {
     }
 
     private AtomicInteger decrementer;
+    private int counter = 1;
 
     public void decrementThreadsCounter() {
+        Toast.makeText(ItemDataSetter.context, ItemDataSetter.context.getString(R.string.upload_progress) + " " + counter++ + "/" + Constants.tempCurrentPhotoAttachCounter, Toast.LENGTH_SHORT).show();
         if (decrementer.decrementAndGet() == 0) {
             getActivity().getSupportFragmentManager().popBackStack();
             getActivity().getSupportFragmentManager().popBackStack();
@@ -139,7 +150,7 @@ public class FragmentUploadPhotoList extends Fragment {
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.upload_captured_photo, menu);
         MenuItem item = menu.getItem(0);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -150,6 +161,7 @@ public class FragmentUploadPhotoList extends Fragment {
                     decrementer = new AtomicInteger(Constants.tempCurrentPhotoAttachCounter);
 
                     for (int j = 0; j < photolist.size(); j++) {
+                        getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
                         if (photolist.get(j).isChecked) {
                             VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photoSrc), Constants.USER_ID, (int) gid).executeWithListener(new VKRequest.VKRequestListener() {
                                 @Override

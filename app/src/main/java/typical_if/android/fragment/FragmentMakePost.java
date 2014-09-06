@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -32,6 +33,7 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.activity.MainActivity;
 
 /**
  * Created by admin on 18.08.2014.
@@ -75,11 +77,10 @@ public class FragmentMakePost extends Fragment {
     static ImageView imgPostAttachAudio;
     static ImageView imgPostAttachDoc;
 
-    public static final String TOO_MANY_ATTACHES = "Too many attaches!";
     private static final View.OnClickListener tooManyAttachments = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Toast.makeText(ItemDataSetter.context, TOO_MANY_ATTACHES, Toast.LENGTH_SHORT).show();
+            Toast.makeText(ItemDataSetter.context, ItemDataSetter.context.getString(R.string.max_attaches), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -123,8 +124,13 @@ public class FragmentMakePost extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
+
         View rootView = inflater.inflate(R.layout.fragment_make_post, container, false);
         setRetainInstance(true);
+
         activity = getActivity();
 
         textField = (EditText) rootView.findViewById(R.id.etxt_make_post_field);
@@ -162,7 +168,7 @@ public class FragmentMakePost extends Fragment {
                                 super.onComplete(response);
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 ItemDataSetter.fragmentManager.popBackStack();
-                                Toast.makeText(getActivity(), "Posted", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(VKUIHelper.getApplicationContext(), ItemDataSetter.context.getString(R.string.post_added), Toast.LENGTH_SHORT).show();
                             }
                             @Override
                             public void onError(VKError error) {
@@ -186,7 +192,6 @@ public class FragmentMakePost extends Fragment {
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
-                                Toast.makeText(getActivity(), "Edited", Toast.LENGTH_SHORT).show();
                             }
                             @Override
                             public void onError(VKError error) {

@@ -1,11 +1,11 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -31,6 +32,7 @@ import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.activity.SplashActivity;
@@ -81,7 +83,9 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
 
-            @Override
+        int mLastFirstVisibleItem = 0;
+
+        @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
             temp = true;
         }
@@ -91,6 +95,18 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                              int totalItemCount) {
 
             final int lastItem = firstVisibleItem + visibleItemCount;
+
+            if (absListView.getId() == wallListView.getId()) {
+                final int currentFirstVisibleItem = wallListView.getFirstVisiblePosition();
+                if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+                    actionBar.hide();
+                }
+                else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+                    actionBar.show();
+                }
+
+                mLastFirstVisibleItem = currentFirstVisibleItem;
+            }
 
             if (lastItem == totalItemCount - 20 & temp2) {
                 t.start();
@@ -127,6 +143,17 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     @Override
+    public void onDetach() {
+        if (isSuggested) {
+            ((MainActivity)getActivity()).getSupportActionBar().show();
+            ItemDataSetter.fragmentManager.beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
+            setDisabledMenu();
+        }
+
+        super.onDetach();
+    }
+
+    @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
         spinnerLayout = (RelativeLayout) rootView.findViewById(R.id.spinner_layout);
@@ -139,6 +166,12 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         pauseOnScrollListener = new PauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerObject);
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
 
+        wallListView = (ListView) rootView.findViewById(R.id.listViewWall);
+        TextView padding = new TextView(getApplicationContext());
+        padding.setBackgroundColor(Color.WHITE);
+        padding.setHeight(ItemDataSetter.setInDp(48));
+        wallListView.addHeaderView(padding);
+
         if (!isSuggested) {
             jsonObjectOld = OfflineMode.loadJSON(Constants.GROUP_ID);
             initGroupWall(jsonObjectOld, inflater);
@@ -146,6 +179,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             swipeView.setOnRefreshListener(this);
             swipeView.setColorScheme(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_light);
         } else {
+            setDisabledMenu();
             VKHelper.getSuggestedPosts(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {
@@ -172,7 +206,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         Wall wall = VKHelper.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
         adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
-        wallListView = (ListView) rootView.findViewById(R.id.listViewWall);
         wallListView.setAdapter(adapter);
         wallListView.setOnScrollListener(pauseOnScrollListener);
         spinnerLayout.setVisibility(View.GONE);
@@ -189,10 +222,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         super.onAttach(activity);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -205,11 +234,22 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
+        ((MainActivity)getActivity()).getSupportActionBar().show();
         super.onCreate(savedInstanceState);
     }
 
+
     @Override
     public void onPrepareOptionsMenu(final Menu menu) {
+        Constants.makePostMenu = menu;
+
+        if (OfflineMode.isOnline(getApplicationContext())) {
+            setEnabledMenu();
+        } else {
+            setDisabledMenu();
+        }
+
         super.onPrepareOptionsMenu(menu);
         VKHelper.isMember(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
             @Override
@@ -218,9 +258,17 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 isMember = response.json.optInt("response");
                 if (VKSdk.isLoggedIn()) {
                     if (isMember == 0) {
-                        menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_join));
+                        try {
+                            menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_join));
+                        } catch (Exception e) {
+
+                        }
                     } else {
-                        menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_leave));
+                        try {
+                            menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_leave));
+                        } catch (Exception e) {
+
+                        }
                     }
                 } else {
                     menu.findItem(R.id.join_leave_group).setVisible(false);
@@ -235,9 +283,35 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         });
     }
 
+    public static void setEnabledMenu() {
+        if (Constants.makePostMenu.size() == 3) {
+            Constants.makePostMenu.getItem(0).setVisible(true);
+            Constants.makePostMenu.getItem(1).setVisible(true);
+            Constants.makePostMenu.getItem(2).setVisible(true);
+        }
+    }
+
+    public static void setDisabledMenu() {
+        if (Constants.makePostMenu.size() == 3) {
+            Constants.makePostMenu.getItem(0).setVisible(false);
+            Constants.makePostMenu.getItem(1).setVisible(false);
+            Constants.makePostMenu.getItem(2).setVisible(false);
+        }
+    }
+
     @Override
     public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.make_post, menu);
+        if (VKSdk.isLoggedIn()) {
+            Constants.makePostMenu = menu;
+            inflater.inflate(R.menu.make_post, menu);
+
+            if (!isSuggested) {
+                setEnabledMenu();
+            } else {
+                setDisabledMenu();
+            }
+
+        }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -283,12 +357,17 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         return super.onOptionsItemSelected(item);
     }
 
-    ;
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("curChoice", wallListView.getScrollY());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

@@ -57,6 +57,7 @@ import typical_if.android.MyApplication;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Wall.VKWallPostWrapper;
@@ -121,11 +122,11 @@ public class FragmentWithComments extends Fragment {
 
 
         item_id = photo.id;
-        group_id=photo.owner_id;
-        if (photo.user_id==0){
-            photo.user_id=photo.owner_id;
+        group_id = photo.owner_id;
+        if (photo.user_id == 0) {
+            photo.user_id = photo.owner_id;
         }
-        from_user=photo.user_id;
+        from_user = photo.user_id;
 
 
         return fragment;
@@ -151,8 +152,8 @@ public class FragmentWithComments extends Fragment {
         Constants.GET_COMMENTS_METHOD_NAME = "wall.getComments";
         Constants.PARAM_NAME2 = "post_id";
         item_id = post.post.id;
-        group_id=post.post.from_id;
-        from_user=post.post.from_id;
+        group_id = post.post.from_id;
+        from_user = post.post.from_id;
         return fragment;
     }
 
@@ -171,7 +172,6 @@ public class FragmentWithComments extends Fragment {
 
     private void loadPhotoPosts() {
         final VKApiPhoto photo = this.photo;
-
 
 
         listOfComments = ((ListView) this.rootView.findViewById(R.id.listOfComments));
@@ -209,6 +209,7 @@ public class FragmentWithComments extends Fragment {
                 postPhotoUserDateOfComment.setText(ItemDataSetter.getFormattedDate(photo.date));
 
             }
+
             @Override
             public void onError(VKError error) {
                 super.onError(error);
@@ -221,7 +222,7 @@ public class FragmentWithComments extends Fragment {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse("http://vk.com/id" + postSender.id + "");
-                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
+                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -259,6 +260,7 @@ public class FragmentWithComments extends Fragment {
 
 
                         }
+
                         @Override
                         public void onError(VKError error) {
                             super.onError(error);
@@ -277,6 +279,7 @@ public class FragmentWithComments extends Fragment {
                             likePostPhoto.setChecked(false);
 
                         }
+
                         @Override
                         public void onError(VKError error) {
                             super.onError(error);
@@ -326,6 +329,10 @@ public class FragmentWithComments extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
+
         this.inflater = inflater;
         rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
 
@@ -352,10 +359,10 @@ public class FragmentWithComments extends Fragment {
                             @Override
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
-                                Toast.makeText(getActivity().getApplicationContext(), "POSTED", Toast.LENGTH_SHORT).show();
                                 commentMessage.setText("");
                                 updateCommentList(group_id, item_id, listOfComments, inflater);
                             }
+
                             @Override
                             public void onError(VKError error) {
                                 super.onError(error);
@@ -370,10 +377,10 @@ public class FragmentWithComments extends Fragment {
                             @Override
                             public void onComplete(VKResponse response) {
                                 super.onComplete(response);
-                                Toast.makeText(getActivity().getApplicationContext(), POSTED, Toast.LENGTH_SHORT).show();
                                 commentMessage.setText("");
                                 updateCommentList(group_id, item_id, listOfComments, inflater);
                             }
+
                             @Override
                             public void onError(VKError error) {
                                 super.onError(error);
@@ -391,6 +398,7 @@ public class FragmentWithComments extends Fragment {
                             commentMessage.setText("");
                             edit_status = false;
                         }
+
                         @Override
                         public void onError(VKError error) {
                             super.onError(error);
@@ -424,6 +432,7 @@ public class FragmentWithComments extends Fragment {
                     }
                 }).start();
             }
+
             @Override
             public void onError(VKError error) {
                 super.onError(error);
@@ -527,7 +536,7 @@ public class FragmentWithComments extends Fragment {
                 switch (item) {
                     case 0: {
                         Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).from_id + "");
-                        getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
+                        getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                     break;
@@ -555,11 +564,12 @@ public class FragmentWithComments extends Fragment {
                                 @Override
                                 public void onComplete(VKResponse response) {
                                     super.onComplete(response);
-                                ++comments.get(position).likes;
+                                    ++comments.get(position).likes;
                                     comments.get(position).user_likes = true;
-                                    adapter.changeStateLikeForComment(true,String.valueOf(comments.get(position).likes));
+                                    adapter.changeStateLikeForComment(true, String.valueOf(comments.get(position).likes));
                                     Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
                                 }
+
                                 @Override
                                 public void onError(VKError error) {
                                     super.onError(error);
@@ -574,9 +584,10 @@ public class FragmentWithComments extends Fragment {
                                     super.onComplete(response);
                                     --comments.get(position).likes;
                                     comments.get(position).user_likes = false;
-                                    adapter.changeStateLikeForComment(false,String.valueOf(comments.get(position).likes));
+                                    adapter.changeStateLikeForComment(false, String.valueOf(comments.get(position).likes));
                                     Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
                                 }
+
                                 @Override
                                 public void onError(VKError error) {
                                     super.onError(error);
@@ -599,6 +610,7 @@ public class FragmentWithComments extends Fragment {
                                     super.onComplete(response);
                                     updateCommentList(group_id, item_id, listOfComments, inflater);
                                 }
+
                                 @Override
                                 public void onError(VKError error) {
                                     super.onError(error);
@@ -609,7 +621,7 @@ public class FragmentWithComments extends Fragment {
                             });
                         } else {
                             Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).reply_to_user + "");
-                            getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
+                            getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
                                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         }
 
@@ -627,7 +639,7 @@ public class FragmentWithComments extends Fragment {
                     case 7: {
 
                         Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).reply_to_user + "");
-                        getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
+                        getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
 

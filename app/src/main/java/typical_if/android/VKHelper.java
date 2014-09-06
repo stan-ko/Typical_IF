@@ -163,18 +163,6 @@ public class VKHelper {
 
     }
 
-    public static void getFixedPostId(String gid, VKRequest.VKRequestListener listener) {
-  
-        VKParameters params = new VKParameters();
-        params.put("group_id", gid);
-        params.put("fields", "fixed_post");
-        final VKRequest request = new VKRequest("groups.getById", params);
-        request.executeWithListener(listener);
-    }
-    
-
-
-
     public static void getUserAudios(VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put("owner_id", Constants.USER_ID);
@@ -197,17 +185,6 @@ public class VKHelper {
 
         final VKRequest request = new VKRequest("docs.get", params);
         request.executeWithListener(vkRequestListener);
-    }
-
-
-
-    public static void getFixedPost(String pid, VKRequest.VKRequestListener listener) {
-        VKParameters params = new VKParameters();
-        params.put("posts", pid);
-        params.put("extended", 1);
-        params.put("copy_history_depth", 1);
-        final VKRequest request = new VKRequest("wall.getById", params);
-        request.executeWithListener(listener);
     }
 
     public static void doRepost(String pid, String message, VKRequest.VKRequestListener listener) {
@@ -406,13 +383,13 @@ public class VKHelper {
         try {
             posts.parse(jsonObject);
         } catch (JSONException e) {
-            e.printStackTrace();
         }
 
         ArrayList<VKWallPostWrapper> wallPosts = new ArrayList<VKWallPostWrapper>();
         for (int i = 0; i < posts.size(); i++) {
             wallPosts.add(new VKWallPostWrapper(posts.get(i)));
         }
+
         wall.posts = wallPosts;
 
         // groups

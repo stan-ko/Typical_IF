@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import typical_if.android.R;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.ExpandableListAdapter;
 import typical_if.android.view.AnimatedExpandableListView;
 
@@ -87,13 +88,6 @@ public class NavigationDrawerFragment extends Fragment {
 
     public void refreshNavigationDrawer() {
         mExpandapleListAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Indicate that this fragment would like to influence the set of actions in the action bar.
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -235,8 +229,13 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
+
                 if (!isAdded()) {
                     return;
+                } else {
+                    showGlobalContextActionBar();
+                    ((MainActivity)getActivity()).getSupportActionBar().show();
+                    FragmentWall.setDisabledMenu();
                 }
 
                 if (!mUserLearnedDrawer) {
@@ -247,8 +246,6 @@ public class NavigationDrawerFragment extends Fragment {
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).commit();
                 }
-
-                getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
 
@@ -286,10 +283,12 @@ public class NavigationDrawerFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
+            ((MainActivity)getActivity()).getSupportActionBar().show();
             mCallbacks = (NavigationDrawerCallbacks) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
         }
+
     }
 
     @Override
@@ -315,35 +314,42 @@ public class NavigationDrawerFragment extends Fragment {
         // If the drawer is open, show the global app actions in the action bar. See also
         // showGlobalContextActionBar, which controls the top-left area of the action bar.
         if (mDrawerLayout != null && isDrawerOpen()) {
-            inflater.inflate(R.menu.global, menu);
+            inflater.inflate(R.menu.main, menu);
             showGlobalContextActionBar();
         } else {
 
         }
+
         super.onCreateOptionsMenu(menu, inflater);
     }
-
+//
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
-        if (item.getItemId() == R.id.action_example) {
-            // Toast.makeText(getActivity(), "Example action.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        FragmentWall.setDisabledMenu();
+        super.onPrepareOptionsMenu(menu);
+        if (mDrawerLayout != null && isDrawerOpen()) {
+            showGlobalContextActionBar();
+        } else {
+
+        }
+    }
     /**
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
      * 'context', rather than just what's in the current screen.
      */
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.menu_group_title_tf);
         actionBar.setIcon(R.drawable.tf_logo);
