@@ -109,6 +109,8 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
         counterOfPhotos = (TextView) rootView.findViewById(R.id.counterOfPhotos);
         albumSize = (TextView) rootView.findViewById(R.id.amountOfPhotos);
         panel = ((RelativeLayout) rootView.findViewById(R.id.fullscreen_action_panel));
+        cb_like = ((CheckBox) rootView.findViewById(R.id.cb_photo_like));
+        cb_comment= ((CheckBox) rootView.findViewById(R.id.cb_photo_comment));
 
         FragmentManager manager = getFragmentManager();
         imagepager = (ViewPager) rootView.findViewById(R.id.pager);
