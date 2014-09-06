@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#ffe6e6e6">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,7 +13,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:id="@+id/postParentLayout">
+            android:id="@+id/postParentLayout"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/post_shape">
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -63,7 +68,7 @@
                     android:id="@+id/postAlbumLayout"
                     android:orientation="vertical"
                     android:padding="5dp"
-                    android:background="#ffffffff"
+                    android:background="#ffc0c0c0"
                     android:dividerPadding="5dp"
                     android:divider="@drawable/copy_history_divider"
                     android:showDividers="middle" />
@@ -140,7 +145,8 @@
                         android:textSize="15dp"
                         android:layout_centerVertical="true"
                         android:layout_toLeftOf="@+id/cb_repost"
-                        android:layout_toRightOf="@+id/img_fixed_post" />
+                        android:layout_toRightOf="@+id/img_fixed_post"
+                        android:layout_marginRight="5dip"/>
 
                     <CheckBox
                         android:layout_width="wrap_content"
@@ -165,7 +171,8 @@
                         android:enabled="true"
                         android:layout_centerVertical="true"
                         android:layout_toLeftOf="@+id/cb_like"
-                        android:layout_toStartOf="@+id/cb_like" />
+                        android:layout_toStartOf="@+id/cb_like"
+                        android:layout_marginRight="5dip"/>
 
                     <CheckBox
                         android:layout_width="wrap_content"
@@ -177,7 +184,8 @@
                         android:enabled="true"
                         android:layout_centerVertical="true"
                         android:layout_toLeftOf="@+id/cb_comment"
-                        android:layout_toStartOf="@+id/cb_comment" />
+                        android:layout_toStartOf="@+id/cb_comment"
+                        android:layout_marginRight="5dip"/>
 
                     <Button
                         android:layout_width="wrap_content"
@@ -230,6 +238,17 @@
             </RelativeLayout>
 
         </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/post_user_comment_text"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/postParentLayout"
+            android:layout_alignStart="@+id/postParentLayout"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

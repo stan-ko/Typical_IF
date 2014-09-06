@@ -327,6 +327,15 @@ public class VKHelper {
         request.executeWithListener(vkRequestListener);
     }
 
+
+    public static void getPhotoByID(String photos,VKRequest.VKRequestListener listener){
+        VKParameters params = new VKParameters();
+        params.put("photos",photos);
+        params.put("extended", 1);
+        final VKRequest request = new VKRequest("photos.getById", params);
+        request.executeWithListener(listener);
+    }
+
     public static  ArrayList<VKApiPhotoAlbum> getAlbumFromJSONArray(JSONObject jsonArray) {
         JSONObject object = jsonArray.optJSONObject("response");
         JSONArray array = object.optJSONArray("items");

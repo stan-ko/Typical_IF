@@ -5,10 +5,14 @@
     <color name="vk_white">#fff</color>
     <color name="tf_red">#D22A23</color>
     <color name="vk_smoke_white">#ddd</color>
-    <color name="vk_light_color">#A7C2DF</color>
+    <color name="vk_light_color">#ffc6dcdf</color>
     <color name="greenStart">#ff33dd44</color>
     <color name="greenMid">#ff0A8815</color>
     <color name="greenEnd">#ff1da130</color>
     <color name="startBlue">#ff6a6fff</color>
+    <color name="pressed_reaction">#49f0f4ff</color>
+    <color name="transparent">#00000000</color>
     <color name="endBlue">#ffc6c6ff</color>
+    <color name="partly_transparent">#5a000000</color>
+    <color name="white_transparent">#c8ffffff</color>
 </resources>

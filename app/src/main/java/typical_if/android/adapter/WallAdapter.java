@@ -272,6 +272,7 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);
             if (postWrapper.postTextChecker) {
                 ItemDataSetter.setText(post.text, viewHolder.postTextLayout);
+               // viewHolder.postUserComment.setText(post.text);
             }
 
             viewHolder.copyHistoryLayout.setVisibility(postWrapper.copyHistoryContainerVisibility);
@@ -413,6 +414,7 @@ public class WallAdapter extends BaseAdapter {
         public final RelativeLayout postLinkLayout;
         public final RelativeLayout postSignedLayout;
         public final RelativeLayout postPollLayout;
+        public final TextView postUserComment;
 
         public final CheckBox cb_post_like;
         public final CheckBox cb_post_repost;
@@ -450,6 +452,7 @@ public class WallAdapter extends BaseAdapter {
             this.button_comment = ((Button) convertView.findViewById(R.id.button_comment));
             this.button_repost = ((Button) convertView.findViewById(R.id.button_repost));
             this.txt_post_date = ((TextView) convertView.findViewById(R.id.txt_post_date_of_comment));
+            this.postUserComment = (TextView)convertView.findViewById(R.id.post_user_comment_text);
 
         }
     }

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item  android:state_pressed="true">
+
+    <shape xmlns:android="http://schemas.android.com/apk/res/android">
+        <gradient android:startColor="@color/pressed_reaction"
+            android:endColor="@color/pressed_reaction"
+            android:angle="90">
+        </gradient>
+
+        <corners
+
+            android:bottomLeftRadius="5dp"
+            android:bottomRightRadius="5dp"
+            android:topLeftRadius="5dp"
+            android:topRightRadius="5dp">
+        </corners>
+
+    </shape>
+
+        <set
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:fillAfter="true">
+
+            <alpha
+                android:duration="1000"
+                android:fromAlpha="0.0"
+                android:interpolator="@android:anim/linear_interpolator"
+                android:toAlpha="1.0"
+                />
+        </set>
+
+</item>
+
+    <item  android:state_pressed="false">
+
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <gradient android:startColor="@color/transparent"
+                android:endColor="@color/transparent"
+                android:angle="90">
+            </gradient>
+
+            <corners
+
+                android:bottomLeftRadius="5dp"
+                android:bottomRightRadius="5dp"
+                android:topLeftRadius="5dp"
+                android:topRightRadius="5dp">
+            </corners>
+
+        </shape>
+
+        <objectAnimator
+            android:propertyName="alpha"
+            android:duration="500"/>
+
+
+    </item>
+
+</selector>

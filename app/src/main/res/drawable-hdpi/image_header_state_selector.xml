@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-<item android:drawable="@color/vk_white" android:state_pressed="false" android:state_selected="false" ></item>
-<item android:drawable="@color/startBlue" android:state_pressed="true" android:state_selected="false"></item>
-<item  android:drawable="@color/startBlue" android:state_pressed="false" android:state_selected="true" ></item>
+<item android:drawable="@color/transparent" android:state_pressed="false" android:state_selected="false" />
+
+<item android:drawable="@color/startBlue" android:state_pressed="true" android:state_selected="false"/>
+
+<item  android:drawable="@color/startBlue" android:state_pressed="false" android:state_selected="true" />
 </selector>

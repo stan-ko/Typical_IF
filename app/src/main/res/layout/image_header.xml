@@ -2,63 +2,40 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:weightSum="1"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:visibility="visible">
+    android:visibility="visible"
+    android:background="@color/transparent">
 
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="80dp"
-        android:id="@+id/user_photo_sender"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.32"
         android:visibility="visible"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:focusable="false"
-        android:focusableInTouchMode="true"
-        android:clickable="true"
-        android:background="@drawable/image_header_state_selector">
+        android:clickable="false"
+        android:layout_below="@+id/list_header_image"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:id="@+id/post_user_avatar"
-            android:layout_marginLeft="10dp"
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:text="171"
+            android:id="@+id/like_post_photo_checkbox"
+            android:button="@drawable/like_or_not_liked_selector"
+            android:checked="true"
+            android:clickable="true"
+            android:enabled="true"
+            android:layout_marginLeft="10dip"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="15dp"
-            android:visibility="visible" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Віра Трощук"
-            android:id="@+id/post_user_name"
-            android:layout_marginLeft="12dp"
-            android:layout_alignTop="@+id/post_user_avatar"
-            android:layout_toRightOf="@+id/post_user_avatar"
-            android:layout_marginTop="5dp"
-            android:textSize="15dp"
-            android:textColor="#ff000000"
-            android:visibility="visible" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="12 листопада о 15:16"
-            android:id="@+id/post_user_date_of_comment"
-            android:textColor="#b06a696c"
-            android:layout_below="@+id/post_user_name"
-            android:layout_alignLeft="@+id/post_user_name"
-            android:layout_alignStart="@+id/post_user_name"
-            android:layout_marginTop="5dp"
-            android:visibility="visible" />
+            android:textColor="#ffffffff" />
 
     </RelativeLayout>
 
@@ -70,47 +47,61 @@
         android:layout_below="@+id/user_photo_sender"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:scaleType="fitCenter" />
 
     <RelativeLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_weight="0.32"
-        android:background="@drawable/attach_overlay"
-        android:layout_below="@+id/list_header_image"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
+        android:layout_width="fill_parent"
+        android:layout_height="80dp"
+        android:id="@+id/user_photo_sender"
         android:visibility="visible"
-        android:clickable="false">
+        android:focusable="false"
+        android:focusableInTouchMode="true"
+        android:clickable="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/image_header_state_selector">
 
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="37dp"
-            android:text="171"
-            android:id="@+id/like_post_photo_checkbox"
-            android:button="@drawable/like_or_not_liked_selector"
+        <typical_if.android.view.RoundedImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/post_user_avatar"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
-            android:checked="true"
-            android:clickable="true"
-            android:enabled="true"/>
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="37dp"
-            android:id="@+id/repost_checkbox"
-            android:button="@drawable/repost_selector"
-            android:checked="false"
-            android:clickable="true"
-            android:enabled="true"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="5dp" />
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="15dp"
+            android:visibility="visible"
+         />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="DELETED DELETED"
+            android:id="@+id/post_user_name"
+            android:layout_marginLeft="5dp"
+            android:layout_alignTop="@+id/post_user_avatar"
+            android:layout_toRightOf="@+id/post_user_avatar"
+            android:layout_marginTop="5dp"
+            android:textSize="15dp"
+            android:textColor="#ffffffff"
+            android:visibility="visible" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/post_user_date_of_comment"
+            android:textColor="#ffffffff"
+            android:layout_below="@+id/post_user_name"
+            android:layout_alignLeft="@+id/post_user_name"
+            android:layout_alignStart="@+id/post_user_name"
+            android:layout_marginTop="5dp"
+            android:visibility="visible"
+            android:text="23"
+            android:layout_marginLeft="5dp" />
 
     </RelativeLayout>
 

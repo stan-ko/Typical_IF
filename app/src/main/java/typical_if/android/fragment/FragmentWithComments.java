@@ -7,7 +7,12 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Shader;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -57,6 +62,7 @@ import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 import typical_if.android.util.PhotoUrlHelper;
+import typical_if.android.view.RoundedImageView;
 
 public class FragmentWithComments extends Fragment {
 
@@ -176,7 +182,8 @@ public class FragmentWithComments extends Fragment {
 
 
         final RelativeLayout photoUserSender = ((RelativeLayout) rootView.findViewById(R.id.user_photo_sender));
-        final ImageView postPhotoUserAvatar = (ImageView) rootView.findViewById(R.id.post_user_avatar);
+        final RoundedImageView postPhotoUserAvatar = (RoundedImageView) rootView.findViewById(R.id.post_user_avatar);
+
         final TextView postPhotoUserName = ((TextView) rootView.findViewById(R.id.post_user_name));
         final TextView postPhotoUserDateOfComment = ((TextView) rootView.findViewById(R.id.post_user_date_of_comment));
 
@@ -229,12 +236,12 @@ public class FragmentWithComments extends Fragment {
 
             likePostPhoto.setChecked(false);
             likePostPhoto.setText(String.valueOf(photo.likes));
-            likePostPhoto.setTextColor(Color.GRAY);
+
         } else {
 
             likePostPhoto.setChecked(true);
             likePostPhoto.setText(String.valueOf(photo.likes));
-            likePostPhoto.setTextColor(Color.GRAY);
+
         }
 
         likePostPhoto.setOnClickListener(new View.OnClickListener() {
@@ -426,7 +433,7 @@ public class FragmentWithComments extends Fragment {
         });
         if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(item_id)) {
             parseCommentList(OfflineMode.loadJSON(item_id));
-            // If IsOnline and response from preferenses not null then load Json from preferenses
+            // If IsOnline and response from preferences not null then load JSON from preferences
         }
 
         listOfComments.setOnItemClickListener(
@@ -449,7 +456,7 @@ public class FragmentWithComments extends Fragment {
 
         String name = Identify(comments, profiles, position);
         if (name == "" || name == null) {
-            name = comment.text.substring(0, 2);
+            name = "Відправник";
         }
         CharSequence[] items;
 

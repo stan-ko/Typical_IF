@@ -165,6 +165,7 @@ public class ItemDataSetter {
                 link = (VKApiLink) attachment;
             }
         }
+        //VKHelper.getPhotoByID();
 
         RelativeLayout mediaLayout = null;
         LinearLayout audioLayout = null;

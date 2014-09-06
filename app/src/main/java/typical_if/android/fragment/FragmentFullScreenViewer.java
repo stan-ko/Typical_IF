@@ -41,6 +41,7 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
     public static ArrayList<VKApiPhoto> photos;
     private ViewPager imagepager;
     public static int currentPosition;
+    public FullScreenImageAdapter adapter;
 
     public static final String ARG_VK_GROUP_ID = "vk_group_id";
     public static final String ARG_VK_ALBUM_ID = "vk_album_id";
@@ -52,14 +53,16 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
 
     long user_id;
 
-    TextView countLikes;
-    TextView countComments;
-    ImageView like;
-    ImageView comment;
+  //  TextView countLikes;
+  //  TextView countComments;
+    ImageView addLike;
+    ImageView goToComments;
     TextView photoHeader;
-    CheckBox likedOrNotLikedBox;
+   // CheckBox likedOrNotLikedBox;
     TextView counterOfPhotos;
     TextView albumSize;
+    CheckBox cb_like;
+    CheckBox cb_comment;
    public static RelativeLayout panel;
 
     public static FragmentFullScreenViewer newInstance(ArrayList<VKApiPhoto> photos, int currentposition) {
@@ -92,12 +95,15 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
 
 
         rootView = inflater.inflate(R.layout.fragment_fullscreen_list, container, false);
+        cb_like= ((CheckBox) rootView.findViewById(R.id.cb_photo_like));
+        cb_comment= ((CheckBox) rootView.findViewById(R.id.cb_photo_comment));
 
-        countLikes = (TextView) rootView.findViewById(R.id.count_of_likes);
-        countComments = (TextView) rootView.findViewById(R.id.count_of_comments);
-        like = (ImageView) rootView.findViewById(R.id.image_not_liked);
-        comment = (ImageView) rootView.findViewById(R.id.image_comment);
-        likedOrNotLikedBox = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox));
+
+       // countLikes = (TextView) rootView.findViewById(R.id.count_of_likes);
+        //countComments = (TextView) rootView.findViewById(R.id.count_of_comments);
+        addLike = (ImageView) rootView.findViewById(R.id.add_like);
+        goToComments = (ImageView) rootView.findViewById(R.id.go_to_comments);
+       // likedOrNotLikedBox = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox));
         photoHeader = (TextView) rootView.findViewById(R.id.photoHeader);
         counterOfPhotos = (TextView) rootView.findViewById(R.id.counterOfPhotos);
         albumSize = (TextView) rootView.findViewById(R.id.amountOfPhotos);
@@ -107,11 +113,13 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
         imagepager = (ViewPager) rootView.findViewById(R.id.pager);
         imagepager.setOnPageChangeListener(this);
         onPageSelected(0);
+        adapter= new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,Constants.GROUP_ID,
+                Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
+        adapter.notifyDataSetChanged();
+        imagepager.setAdapter(adapter);
 
-        imagepager.setAdapter(new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,Constants.GROUP_ID,
-                Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView));
         imagepager.setCurrentItem(currentPosition);
-
+        adapter.notifyDataSetChanged();
 
         //Log.d("Current VIEW", photos.get(imagepager.getCurrentItem()).text);
         VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
@@ -131,6 +139,7 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }
         });
+
 
 
         setRetainInstance(true);
@@ -178,9 +187,10 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
     public void onPageSelected(final int position) {
 
 
+
         photoHeader.setText(photos.get(position).text);
-        countLikes.setText(String.valueOf(photos.get(position).likes));
-        countComments.setText(String.valueOf(photos.get(position).comments));
+        cb_like.setText(String.valueOf(photos.get(position).likes));
+        cb_comment.setText(String.valueOf(photos.get(position).comments));
         counterOfPhotos.setText(String.valueOf(position + 1));
       if (VKHelper.countOfPhotos==0)
           albumSize.setText(String.valueOf(Constants.COUNT_OF_PHOTOS));
@@ -208,22 +218,14 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }
                 });
-
         if (photos.get(position).user_likes == 0) {
-
-            countLikes.setText(String.valueOf(photos.get(position).likes));
-            countComments.setText(String.valueOf(photos.get(position).comments));
-            like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
-            likedOrNotLikedBox.setChecked(false);
+            cb_like.setChecked(false);
         }
         else{
-            countLikes.setText(String.valueOf(photos.get(position).likes));
-            countComments.setText(String.valueOf(photos.get(position).comments));
-            like.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
-            likedOrNotLikedBox.setChecked(true);
+            cb_like.setChecked(true);
         }
 
-        like.setOnClickListener(new View.OnClickListener() {
+        addLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (photos.get(position).user_likes == 0) {
@@ -231,10 +233,10 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
-                            like.setBackgroundResource((R.drawable.ic_post_btn_like_selected));
-                            likedOrNotLikedBox.setChecked(true);
 
-                            countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString()) + 1));
+                            cb_like.setChecked(true);
+
+                            cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) + 1));
                             ++photos.get(position).likes;
                             Toast.makeText(VKUIHelper.getApplicationContext(), LIKED, Toast.LENGTH_SHORT).show();
                             photos.get(position).user_likes = 1;
@@ -252,14 +254,12 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
-                            likedOrNotLikedBox.setChecked(false);
+                            cb_like.setChecked(false);
 
-                            like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
-                            countLikes.setText(String.valueOf(Integer.parseInt(countLikes.getText().toString()) - 1));
+                            //like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
+                            cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) - 1));
                             --photos.get(position).likes;
                             photos.get(position).user_likes = 0;
-
-
                             Toast.makeText(VKUIHelper.getApplicationContext(), LIKE_DELETED, Toast.LENGTH_SHORT).show();
 
                         }
@@ -274,7 +274,7 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
             }
         });
 
-        comment.setOnClickListener(new View.OnClickListener() {
+        goToComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

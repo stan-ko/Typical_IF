@@ -146,9 +146,10 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                     _count = (int) (_ratio * 100);
 
                 }
+                getElsePhotos(firstVisibleItem,visibleItemCount,totalItemCount, view);
+                scrollPhotoListToBottom(gridOfPhotos,_lastInScreen);
             }
-            getElsePhotos(firstVisibleItem,visibleItemCount,totalItemCount, view);
-            scrollPhotoListToBottom(gridOfPhotos,_lastInScreen);
+
 
         }
 
@@ -293,7 +294,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         gridOfPhotos.setNumColumns(columns);
         PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
         photoListAdapter.notifyDataSetChanged();
-        gridOfPhotos.invalidateViews();
+        //gridOfPhotos.invalidateViews();
         gridOfPhotos.setAdapter(photoListAdapter);
         updated=false;
         gridOfPhotos.setOnScrollListener(this);

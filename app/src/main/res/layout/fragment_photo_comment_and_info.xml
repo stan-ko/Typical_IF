@@ -13,13 +13,18 @@
         android:id="@+id/listOfComments"
 
 
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingTop="5dp"
-    android:layout_above="@+id/field_of_message_for_comment"/>
+    android:paddingTop="2dp"
+    android:background="@drawable/blur2"
+    android:paddingLeft="2dp"
+    android:paddingRight="2dp"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentRight="true"
+    android:layout_alignParentEnd="true"
+    android:layout_above="@+id/field_of_message_for_comment"
+    android:divider="#87ffffff"
+    android:dividerHeight="1px"
+    android:drawSelectorOnTop="true"
+    android:headerDividersEnabled="true" />
     <!--android:background="@drawable/image_header_state_selector" -->
 
 
@@ -34,34 +39,37 @@
         android:id="@+id/field_of_message_for_comment"
         android:textColor="#ff000000"
         android:background="@drawable/message_text_shape"
+
         android:maxLines="5"
-        android:minHeight="50dp"
+        android:minHeight="40dp"
         android:phoneNumber="false"
         android:selectAllOnFocus="false"
         android:paddingRight="2dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="2dp"
-        android:layout_toLeftOf="@+id/buttonSendComment"
-        android:layout_marginRight="2dp"
+        android:layout_marginLeft="5dp"
         android:hint="Ваше повідомлення"
-        android:paddingLeft="15dp"/>
+        android:paddingLeft="15dp"
+        android:autoText="false"
+        android:layout_toStartOf="@+id/buttonSendComment"
+        android:layout_toLeftOf="@+id/buttonSendComment"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp" />
         <!--android:visibility="visible"-->
 
 
     <Button
         android:layout_width="70dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:text="Відпр."
         android:id="@+id/buttonSendComment"
-        android:layout_alignParentBottom="true"
+        android:visibility="visible"
+        android:background="@drawable/send_comment_button_shape"
+        android:layout_alignBottom="@+id/field_of_message_for_comment"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:background="@drawable/send_comment_button_shape"
-        android:layout_marginBottom="2dp"
-        android:layout_marginRight="2dp"
-        android:visibility="visible" />
+        android:layout_marginRight="5dp" />
 
 </RelativeLayout>
