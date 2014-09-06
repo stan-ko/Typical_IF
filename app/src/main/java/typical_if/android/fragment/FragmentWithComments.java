@@ -215,7 +215,7 @@ public class FragmentWithComments extends Fragment {
             @Override
             public void onClick(View v) {
                 Uri uri = Uri.parse("http://vk.com/id" + postSender.id + "");
-                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
+                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
                         .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
@@ -324,6 +324,7 @@ public class FragmentWithComments extends Fragment {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
 
         this.inflater = inflater;
         rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
@@ -528,7 +529,7 @@ public class FragmentWithComments extends Fragment {
                 switch (item) {
                     case 0: {
                         Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).from_id + "");
-                        getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
+                        getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                     break;
@@ -613,7 +614,7 @@ public class FragmentWithComments extends Fragment {
                             });
                         } else {
                             Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).reply_to_user + "");
-                            getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
+                            getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
                                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         }
 
@@ -631,7 +632,7 @@ public class FragmentWithComments extends Fragment {
                     case 7: {
 
                         Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).reply_to_user + "");
-                        getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), "Відкрити за допомогою")
+                        getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
 

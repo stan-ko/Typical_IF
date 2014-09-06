@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -72,20 +70,18 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
         FragmentFullScreenViewer.photos = photos;
         FragmentFullScreenViewer.currentPosition = currentposition;
 
-
-
         return fragment;
     }
 
-    public FragmentFullScreenViewer() {
+    public FragmentFullScreenViewer() {}
 
-    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final Bundle arguments = getArguments();
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
 
         rootView = inflater.inflate(R.layout.fragment_fullscreen_list, container, false);
 
@@ -136,11 +132,6 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
 
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        menu.clear();
-    }
 
     @Override
     public void onResume() {

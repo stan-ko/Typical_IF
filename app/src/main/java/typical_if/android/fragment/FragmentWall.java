@@ -147,6 +147,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         if (isSuggested) {
             ((MainActivity)getActivity()).getSupportActionBar().show();
             ItemDataSetter.fragmentManager.beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
+            setDisabledMenu();
         }
 
         super.onDetach();
@@ -178,6 +179,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             swipeView.setOnRefreshListener(this);
             swipeView.setColorScheme(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_light);
         } else {
+            setDisabledMenu();
             VKHelper.getSuggestedPosts(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {
@@ -230,10 +232,9 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
-
-
     public void onCreate(Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+
         ((MainActivity)getActivity()).getSupportActionBar().show();
         super.onCreate(savedInstanceState);
     }
@@ -241,6 +242,14 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onPrepareOptionsMenu(final Menu menu) {
+        Constants.makePostMenu = menu;
+
+        if (OfflineMode.isOnline(getApplicationContext())) {
+            setEnabledMenu();
+        } else {
+            setDisabledMenu();
+        }
+
         super.onPrepareOptionsMenu(menu);
         VKHelper.isMember(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
             @Override
@@ -274,10 +283,34 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         });
     }
 
+    public static void setEnabledMenu() {
+        if (Constants.makePostMenu.size() == 3) {
+            Constants.makePostMenu.getItem(0).setVisible(true);
+            Constants.makePostMenu.getItem(1).setVisible(true);
+            Constants.makePostMenu.getItem(2).setVisible(true);
+        }
+    }
+
+    public static void setDisabledMenu() {
+        if (Constants.makePostMenu.size() == 3) {
+            Constants.makePostMenu.getItem(0).setVisible(false);
+            Constants.makePostMenu.getItem(1).setVisible(false);
+            Constants.makePostMenu.getItem(2).setVisible(false);
+        }
+    }
+
     @Override
     public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
         if (VKSdk.isLoggedIn()) {
+            Constants.makePostMenu = menu;
             inflater.inflate(R.menu.make_post, menu);
+
+            if (!isSuggested) {
+                setEnabledMenu();
+            } else {
+                setDisabledMenu();
+            }
+
         }
     }
 

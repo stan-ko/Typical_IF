@@ -91,13 +91,6 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        // Indicate that this fragment would like to influence the set of actions in the action bar.
-        setHasOptionsMenu(true);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         setRetainInstance(true);
@@ -237,10 +230,12 @@ public class NavigationDrawerFragment extends Fragment {
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
 
-                ((MainActivity)getActivity()).getSupportActionBar().show();
-
                 if (!isAdded()) {
                     return;
+                } else {
+                    showGlobalContextActionBar();
+                    ((MainActivity)getActivity()).getSupportActionBar().show();
+                    FragmentWall.setDisabledMenu();
                 }
 
                 if (!mUserLearnedDrawer) {
@@ -251,8 +246,6 @@ public class NavigationDrawerFragment extends Fragment {
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).commit();
                 }
-
-                getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };
 
@@ -295,6 +288,7 @@ public class NavigationDrawerFragment extends Fragment {
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
         }
+
     }
 
     @Override
@@ -325,20 +319,10 @@ public class NavigationDrawerFragment extends Fragment {
         } else {
 
         }
+
         super.onCreateOptionsMenu(menu, inflater);
     }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-        if (mDrawerLayout != null && isDrawerOpen()) {
-            menu.setGroupVisible(0, false);
-            showGlobalContextActionBar();
-        } else {
-
-        }
-    }
-
+//
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -348,13 +332,24 @@ public class NavigationDrawerFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        FragmentWall.setDisabledMenu();
+        super.onPrepareOptionsMenu(menu);
+        if (mDrawerLayout != null && isDrawerOpen()) {
+            showGlobalContextActionBar();
+        } else {
+
+        }
+    }
     /**
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
      * 'context', rather than just what's in the current screen.
      */
     private void showGlobalContextActionBar() {
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.menu_group_title_tf);
         actionBar.setIcon(R.drawable.tf_logo);

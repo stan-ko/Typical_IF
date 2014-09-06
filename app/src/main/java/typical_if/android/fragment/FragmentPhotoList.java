@@ -62,17 +62,12 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     public FragmentPhotoList() {
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setRetainInstance(true);
-        setHasOptionsMenu(true);
-    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
+        FragmentWall.setDisabledMenu();
 
         final View rootView = inflater.inflate(R.layout.fragment_photo_list, container, false);
         setRetainInstance(true);
@@ -150,9 +145,6 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                     super.onComplete(response);
                     OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
                     handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
-
-
-                    Log.d("PhotoList has Updated", totalItemCount + "");
                 }
 
             });

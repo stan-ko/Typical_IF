@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.media.MediaPlayer;
+import android.view.Menu;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -43,7 +44,7 @@ public class Constants {
     };
 
     public static final long TF_ID = -36573302;
-    //public static final long TF_ID = -42709618;
+    public static final long ZF_ID = -24818281;
     public static final long TZ_ID = -26363301;
     public static final long FB_ID = -39253850;
     public static final long FN_ID = -38380107;
@@ -64,6 +65,8 @@ public class Constants {
     public static long GROUP_ID;
     public static long ALBUM_ID;
     public static long TEMP_OWNER_ID;
+
+    public static Menu makePostMenu;
 
     public static ArrayList<VKApiPhoto> tempPhotoPostAttach = new ArrayList<VKApiPhoto>();
     public static ArrayList<VKApiVideo> tempVideoPostAttach = new ArrayList<VKApiVideo>();

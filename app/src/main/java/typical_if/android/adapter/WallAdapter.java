@@ -175,11 +175,11 @@ public class WallAdapter extends BaseAdapter {
 //
                             View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
                             dialog.setView(view);
-                            dialog.setTitle("Ваш коментар");
+                            dialog.setTitle(context.getString(R.string.comment_background));
 //
                             final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
 //
-                            dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            dialog.setPositiveButton(context.getString(R.string.okay), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     final String pidFull = "wall" + Constants.GROUP_ID + "_" + post.id;
@@ -219,7 +219,7 @@ public class WallAdapter extends BaseAdapter {
 
                                 }
                             });
-                            dialog.setNegativeButton("Відміна", new DialogInterface.OnClickListener() {
+                            dialog.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
                                     dialog.setCancelable(true);

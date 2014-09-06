@@ -872,8 +872,8 @@ public class ItemDataSetter {
                 if (!(layout_i instanceof LinearLayout)) {
                     continue;
                 } else {
-                    if (videos.size() == 1 && photos.size() == 0) {
-                        if (videos.size() == 1 && photos.size() == 0) {
+                    if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
+                        if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
                             int newWidth;
                             if (getScreenOrientation() == 1) {
                                 newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
@@ -1069,8 +1069,10 @@ public class ItemDataSetter {
             return "#D5902FA7";
         } else if (groupIndex == Constants.FB_ID) {
             return "#1799CD";
-        } else {
+        } else if (groupIndex == Constants.FN_ID) {
             return "#DE9C0E";
+        } else {
+            return "#84134800";
         }
     }
 
