@@ -96,27 +96,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
-//        MenuItem item = menu.getItem(0).setEnabled(true);
-//        //MenuItem item1 = menu.getItem(1).setEnabled(true);
-//        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                Dialogs.addPhotoFrom().show();
-//                return true;
-//            }
-//        });
-
-        //super.onCreateOptionsMenu(menu, inflater);
     }
-
-//    final Thread t = new Thread(new Runnable() {
-//        @Override
-//        public void run() {
-////            Offset = Offset + 100;
-////            endlessGet(Offset);
-//        }
-//    });
-
     boolean temp = false;
     boolean updated = false;
     int yPos;
