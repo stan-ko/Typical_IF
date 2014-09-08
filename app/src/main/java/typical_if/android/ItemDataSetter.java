@@ -8,6 +8,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -24,6 +25,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -39,6 +41,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.VKUIHelper;
+import com.vk.sdk.api.VKApi;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKApiDocument;
 import com.vk.sdk.api.model.VKApiLink;
@@ -50,6 +55,8 @@ import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKApiWikiPage;
 import com.vk.sdk.api.model.VKAttachments;
+
+import org.json.JSONException;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -135,11 +142,12 @@ public class ItemDataSetter {
     }
 
     public static void setAttachemnts(VKAttachments attachments, LinearLayout parentLayout, int type) {
-        ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
-        ArrayList<VKApiVideo> videos = new ArrayList<VKApiVideo>();
-        ArrayList<VKApiAudio> audios = new ArrayList<VKApiAudio>();
-        ArrayList<VKApiDocument> docs = new ArrayList<VKApiDocument>();
-        ArrayList<VKApiPhotoAlbum> albums = new ArrayList<VKApiPhotoAlbum>();
+        final ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
+//        final ArrayList<VKApiPhoto> photos2= new ArrayList<VKApiPhoto>();
+        final ArrayList<VKApiVideo> videos = new ArrayList<VKApiVideo>();
+        final ArrayList<VKApiAudio> audios = new ArrayList<VKApiAudio>();
+        final ArrayList<VKApiDocument> docs = new ArrayList<VKApiDocument>();
+        final ArrayList<VKApiPhotoAlbum> albums = new ArrayList<VKApiPhotoAlbum>();
         VKApiWikiPage wikiPage = null;
         VKApiLink link = null;
         VKApiPoll poll = null;
@@ -148,7 +156,7 @@ public class ItemDataSetter {
 
         for (VKAttachments.VKApiAttachment attachment : attachments) {
             if (attachment.getType().equals(VKAttachments.TYPE_PHOTO)) {
-                photos.add( (VKApiPhoto)attachment);
+                photos.add((VKApiPhoto) attachment);
             } else if (attachment.getType().equals(VKAttachments.TYPE_VIDEO)) {
                 videos.add((VKApiVideo) attachment);
             } else if (attachment.getType().equals(VKAttachments.TYPE_AUDIO)) {
@@ -165,7 +173,7 @@ public class ItemDataSetter {
                 link = (VKApiLink) attachment;
             }
         }
-        //VKHelper.getPhotoByID();
+
 
         RelativeLayout mediaLayout = null;
         LinearLayout audioLayout = null;
@@ -245,6 +253,23 @@ public class ItemDataSetter {
         } else {
             pollLayout.setVisibility(View.GONE);
         }
+//        final RelativeLayout mediaLayout1= mediaLayout;
+//
+//        for(i=0 ; i<photos.size(); i++){
+//            VKHelper.getPhotoByID(photos.get(i).owner_id+"_"+photos.get(i).id,new VKRequest.VKRequestListener() {
+//                @Override
+//                public void onComplete(VKResponse response) {
+//                    super.onComplete(response);
+//                    try {
+//                        photos2.add(VKHelper.getPhotoFromJSONArray(response.json));
+//
+//                        setMedia(mediaLayout1, photos2, videos);
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            });
+//        }
     }
 
     public static void setPoll(RelativeLayout parent, VKApiPoll poll) {
@@ -387,8 +412,8 @@ public class ItemDataSetter {
         }
 
         final Matcher matReply = Pattern.compile("\\[(club|id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\w)(\\W)_]+?\\]").matcher(text);
-            while (matReply.find()) {
-                start = stringB.indexOf(matReply.group());
+        while (matReply.find()) {
+            start = stringB.indexOf(matReply.group());
             end = start + matReply.group().length();
 
             final String[] replier = matReply.group().replaceFirst("\\[", "").replaceFirst("\\]", "").split("\\|");
@@ -573,12 +598,11 @@ public class ItemDataSetter {
             final CheckBox play_pause_music = (CheckBox) tempAudioContainer.getChildAt(0);
             SeekBar progressBar = (SeekBar) tempAudioContainer.getChildAt(1);
 
-            if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPlayed == true){
+            if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPlayed == true) {
                 play_pause_music.setChecked(true);
                 try {
                     Constants.tempThread.interrupt();
-                }
-                catch (NullPointerException e){
+                } catch (NullPointerException e) {
 
                 }
                 AudioPlayer.progressBar(progressBar).start();
@@ -587,13 +611,12 @@ public class ItemDataSetter {
                 Constants.previousSeekBarState = progressBar;
                 progressBar.setVisibility(View.VISIBLE);
             }
-            if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPaused == true){
+            if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPaused == true) {
 
                 AudioPlayer.progressBar(progressBar).start();
                 try {
                     Constants.tempThread.interrupt();
-                }
-                catch (NullPointerException e){
+                } catch (NullPointerException e) {
                 }
                 progressBar.setVisibility(View.VISIBLE);
                 Constants.tempThread = AudioPlayer.progressBar(progressBar);
@@ -820,12 +843,15 @@ public class ItemDataSetter {
 
                             ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img);
 
+
                             img.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     Constants.COUNT_OF_PHOTOS = photosCount;
-                                    Fragment fragment = FragmentFullScreenViewer.newInstance(photos, finalJ);
-                                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                                    makeSaveTransaction(photos, finalJ);
+
+//                                    Fragment fragment = FragmentFullScreenViewer.newInstance(photos, finalJ);
+//                                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                 }
                             });
                             if (photoPointer == photos.size()) {
@@ -854,9 +880,10 @@ public class ItemDataSetter {
                                     @Override
                                     public void onClick(View v) {
                                         Constants.COUNT_OF_PHOTOS = photosCount;
-                                        position=9;
-                                        Fragment fragment = FragmentFullScreenViewer.newInstance(photos, finalL);
-                                        fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                                        makeSaveTransaction(photos, finalL);
+
+//                                        Fragment fragment = FragmentFullScreenViewer.newInstance(photos, finalL);
+//                                        fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                     }
                                 });
                             }
@@ -1006,6 +1033,44 @@ public class ItemDataSetter {
     }
 
 
+    static int g;
+    static String photosParam = "";
+    static ArrayList<VKApiPhoto> finalPhotos;
+
+    public static void makeSaveTransaction(final ArrayList<VKApiPhoto> photos, final int position) {
+        for (g = 0; g < photos.size(); g++) {
+            photosParam = photosParam.concat(photos.get(g).owner_id + "_" + photos.get(g).id + ",");
+        }
+        if (OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())) {
+            VKHelper.getPhotoByID(photosParam, new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    OfflineMode.saveJSON(response.json, photosParam);
+                    finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosParam));
+                    Fragment fragment = FragmentFullScreenViewer.newInstance(finalPhotos, position);
+                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                }
+            });
+        }
+        if (!OfflineMode.isOnline(Constants.mainActivity.getApplicationContext()) &
+                OfflineMode.isJsonNull(photosParam)) {
+           finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosParam));
+            Fragment fragment = FragmentFullScreenViewer.newInstance(finalPhotos, position);
+            fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+        } else {
+            showAlertNoInternet(WallAdapter.wallAdapterView);
+        }
+        System.gc();
+        photosParam = "";
+    }
+
+
+    static void showAlertNoInternet(final View view) {
+        Toast.makeText(Constants.mainActivity.getApplicationContext(), "Виникли проблеми із інтернетом, спробуйте ще раз...", Toast.LENGTH_SHORT);
+    }
+
+
     public static String readableFileSize(long size) {
         if (size <= 0) return "0";
         final String[] units = new String[]{Constants.SIZE_IN_B, Constants.SIZE_IN_KB, Constants.SIZE_IN_MB, Constants.SIZE_IN_GB, Constants.SIZE_IN_TB};
@@ -1047,16 +1112,15 @@ public class ItemDataSetter {
         return (int) (dps * scale + 0.5f);
     }
 
-    public static int getScreenOrientation()
-    {
+    public static int getScreenOrientation() {
         Display getOrient = Constants.mainActivity.getWindowManager().getDefaultDisplay();
         int orientation = Configuration.ORIENTATION_UNDEFINED;
-        if(getOrient.getWidth()==getOrient.getHeight()){
+        if (getOrient.getWidth() == getOrient.getHeight()) {
             orientation = Configuration.ORIENTATION_SQUARE;
-        } else{
-            if(getOrient.getWidth() < getOrient.getHeight()){
+        } else {
+            if (getOrient.getWidth() < getOrient.getHeight()) {
                 orientation = Configuration.ORIENTATION_PORTRAIT;
-            }else {
+            } else {
                 orientation = Configuration.ORIENTATION_LANDSCAPE;
             }
         }
@@ -1077,7 +1141,7 @@ public class ItemDataSetter {
         }
     }
 
-    public static int getPlayingLogo (long groupIndex) {
+    public static int getPlayingLogo(long groupIndex) {
         if (groupIndex == Constants.TF_ID) {
             return R.drawable.tf_logo;
         } else if (groupIndex == Constants.TZ_ID) {
@@ -1098,7 +1162,7 @@ public class ItemDataSetter {
         ed.commit();
     }
 
-    public static void loadUserId()  {
+    public static void loadUserId() {
         final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
         final String long_key = "uid";
         final long user_id = sPref.getLong(long_key, 0);
@@ -1120,21 +1184,20 @@ public class ItemDataSetter {
     private static int textOriginalHeight;
 
     public static void expand(final View v, final SpannableStringBuilder text) {
-        int ANIMATION_DURATION=500;//in milisecond
+        int ANIMATION_DURATION = 500;//in milisecond
         v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         final int targtetHeight = v.getMeasuredHeight();
         textOriginalHeight = v.getHeight();
 
         v.getLayoutParams().height = textOriginalHeight;
         v.setVisibility(View.VISIBLE);
-        Animation a = new Animation()
-        {
+        Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                    v.getLayoutParams().height = interpolatedTime == 1
-                            ? ViewGroup.LayoutParams.WRAP_CONTENT
-                            : textOriginalHeight + (int)(targtetHeight * interpolatedTime);
-                    v.requestLayout();
+                v.getLayoutParams().height = interpolatedTime == 1
+                        ? ViewGroup.LayoutParams.WRAP_CONTENT
+                        : textOriginalHeight + (int) (targtetHeight * interpolatedTime);
+                v.requestLayout();
             }
 
             @Override
@@ -1148,7 +1211,7 @@ public class ItemDataSetter {
         a.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
-                ((TextView)v).setText(text);
+                ((TextView) v).setText(text);
             }
 
             @Override
@@ -1167,17 +1230,16 @@ public class ItemDataSetter {
 
     public static void collapse(final View v, final SpannableStringBuilder text) {
         final int initialHeight = v.getMeasuredHeight();
-        int ANIMATION_DURATION=500;
+        int ANIMATION_DURATION = 500;
 
-        final Animation a = new Animation()
-        {
+        final Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().height = interpolatedTime == 1 || initialHeight * (1 - interpolatedTime) <= textOriginalHeight
                         ? ViewGroup.LayoutParams.WRAP_CONTENT
-                        : initialHeight - (int)(initialHeight * interpolatedTime);
+                        : initialHeight - (int) (initialHeight * interpolatedTime);
                 if (initialHeight * (1 - interpolatedTime) <= textOriginalHeight) {
-                    ((TextView)v).setText(text);
+                    ((TextView) v).setText(text);
                 }
 
                 v.requestLayout();

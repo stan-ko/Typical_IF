@@ -112,22 +112,18 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                 _ratio = (_substract / 100f);
                 if (_ratio < 2) {
                     _count = 0;
-
-                }
+                 }
                 if (_ratio > 1) {
                     _count = 100;
                     --_ratio;
-
-                } else {
+             } else {
                     _count = (int) (_ratio * 100);
-
-                }
-                getElsePhotos(firstVisibleItem,visibleItemCount,totalItemCount, view);
-                scrollPhotoListToBottom(gridOfPhotos,_lastInScreen);
             }
-
-
-        }
+               if (OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())){
+                getElsePhotos(firstVisibleItem,visibleItemCount,totalItemCount, view);
+                scrollPhotoListToBottom(gridOfPhotos,_lastInScreen); }
+            }
+         }
     }
     int _lastInScreen;
     int _substract;
@@ -164,6 +160,9 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
     public boolean doRequest(final View view) {
         this.view = view;
+
+
+
 
         float scaleFactor = getResources().getDisplayMetrics().density * 80;
 
@@ -234,7 +233,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
     public static int albumSize;
     GridView gridOfPhotos;
-
+   PhotoListAdapter adapter;
     protected void handleResponse(JSONObject jsonObject, final int columns, View view) {
 
         final ArrayList<VKApiPhoto> photos = VKHelper.getPhotosFromJSONArray(jsonObject);
@@ -255,6 +254,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
         gridOfPhotos.setNumColumns(columns);
         PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
+        adapter= photoListAdapter;
         photoListAdapter.notifyDataSetChanged();
         //gridOfPhotos.invalidateViews();
         gridOfPhotos.setAdapter(photoListAdapter);

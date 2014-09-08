@@ -92,6 +92,7 @@ public class FragmentAlbumsList extends Fragment {
         if (OfflineMode.isOnline(getActivity().getApplicationContext())) {
             temp = false;
             if (type == 0) {
+
                 VKHelper.getAlbumList(Constants.USER_ID, new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {

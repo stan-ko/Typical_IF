@@ -81,7 +81,7 @@ public class WallAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return posts.get(position).id;
     }
-
+    public static View wallAdapterView;
 
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
@@ -89,6 +89,7 @@ public class WallAdapter extends BaseAdapter {
 
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.wall_lv_item, null);
+            wallAdapterView=convertView;
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {

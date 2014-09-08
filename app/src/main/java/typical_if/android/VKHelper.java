@@ -333,11 +333,18 @@ public class VKHelper {
         return profiles;
     }
 
+    public static VKApiPhoto getPhotoFromJSONArray(JSONObject jsonObject) throws JSONException {
+        JSONArray array = jsonObject.optJSONArray("response");
+        JSONObject o = (JSONObject)array.get(0);
+        VKApiPhoto photo = new VKApiPhoto().parse(o);
+        return photo;
+    }
+
     public static ArrayList<VKApiPhoto> getPhotosFromJSONArray(JSONObject jsonArray) {
         JSONObject object = jsonArray.optJSONObject("response");
         try {
             countOfPhotos = object.getInt("count");
-        } catch (JSONException e) {}
+        } catch (Exception e) {}
         JSONArray array = object.optJSONArray("items");
 
         final ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
@@ -348,6 +355,16 @@ public class VKHelper {
         return photos;
     }
     public static int countOfPhotos;
+
+    public static ArrayList<VKApiPhoto> getPhotosByIdFromJSON(JSONObject json) {
+        JSONArray array = json.optJSONArray("response");
+        final ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
+        for (int i=0; i<array.length(); i++){
+            final VKApiPhoto photo = new VKApiPhoto().parse(array.optJSONObject(i));
+            photos.add(photo);
+        }
+        return photos;
+    }
 
     public static void isMember(long gid, VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
