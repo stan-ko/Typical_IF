@@ -7,12 +7,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Shader;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -567,7 +561,6 @@ public class FragmentWithComments extends Fragment {
                                     ++comments.get(position).likes;
                                     comments.get(position).user_likes = true;
                                     adapter.changeStateLikeForComment(true, String.valueOf(comments.get(position).likes));
-                                    Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
                                 }
 
                                 @Override
@@ -585,7 +578,6 @@ public class FragmentWithComments extends Fragment {
                                     --comments.get(position).likes;
                                     comments.get(position).user_likes = false;
                                     adapter.changeStateLikeForComment(false, String.valueOf(comments.get(position).likes));
-                                    Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
                                 }
 
                                 @Override
@@ -595,8 +587,6 @@ public class FragmentWithComments extends Fragment {
                                 }
                             });
                         }
-
-                        Toast.makeText(getActivity().getApplicationContext(), comments.get(position).likes + "", Toast.LENGTH_LONG).show();
                     }
                     break;
                     case 4:
@@ -641,7 +631,6 @@ public class FragmentWithComments extends Fragment {
                         Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).reply_to_user + "");
                         getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
                                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-
 
                         Toast.makeText(getActivity().getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
                     }

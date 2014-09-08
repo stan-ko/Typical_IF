@@ -59,8 +59,9 @@
     <string name="photo_from_sd">З карти пам\'яті</string>
 
     <string name="add_photo_from_title">Завантажити фото </string>
-    <string name="no_internet_message_toast_en">Інтернет відсутній. Ви знаходитесь в режимі офлайн</string>
+    <string name="no_internet_message_toast_en">Інтернет відсутній. Ви знаходитесь в режимі офлайн.</string>
     <string name="no_internet_chooser">Інтернет відсутній. Оберіть наступну дію.</string>
+    <string name="no_internet_retry">Інтернет відсутній. Спробуйте ще раз.</string>
 
     <string name="retry">Повторити</string>
     <string name="cancel">Скасувати</string>

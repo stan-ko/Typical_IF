@@ -13,7 +13,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
@@ -240,7 +239,6 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
 
                             cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) + 1));
                             ++photos.get(position).likes;
-                            Toast.makeText(VKUIHelper.getApplicationContext(), LIKED, Toast.LENGTH_SHORT).show();
                             photos.get(position).user_likes = 1;
 
                         }
@@ -262,7 +260,6 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
                             cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) - 1));
                             --photos.get(position).likes;
                             photos.get(position).user_likes = 0;
-                            Toast.makeText(VKUIHelper.getApplicationContext(), LIKE_DELETED, Toast.LENGTH_SHORT).show();
 
                         }
 

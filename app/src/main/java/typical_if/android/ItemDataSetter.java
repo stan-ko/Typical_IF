@@ -8,7 +8,6 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -25,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Transformation;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -41,7 +39,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.VKUIHelper;
-import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
@@ -55,8 +52,6 @@ import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKApiWikiPage;
 import com.vk.sdk.api.model.VKAttachments;
-
-import org.json.JSONException;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -294,12 +289,7 @@ public class ItemDataSetter {
         parent.addView(pollContainer);
     }
 
-    public static void setText(String text, RelativeLayout parent) {
-        ViewGroup textContainer = getPreparedView(parent, R.layout.post_text_layout);
-
-        final TextView mainText = ((TextView) textContainer.getChildAt(0));
-        final CheckBox showAll = ((CheckBox) textContainer.getChildAt(1));
-
+    public static SpannableStringBuilder getParsedText(String text) {
         final Matcher matTags = Pattern.compile("#\\w+").matcher(text);
 
         StringBuilder stringB = new StringBuilder(text);
@@ -431,6 +421,16 @@ public class ItemDataSetter {
                 }
             }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
+        return spannable;
+    }
+
+    public static void setText(String text, RelativeLayout parent) {
+        ViewGroup textContainer = getPreparedView(parent, R.layout.post_text_layout);
+
+        final TextView mainText = ((TextView) textContainer.getChildAt(0));
+        final CheckBox showAll = ((CheckBox) textContainer.getChildAt(1));
+
+        final SpannableStringBuilder spannable = getParsedText(text);
 
         mainText.setText(spannable);
         mainText.setMovementMethod(LinkMovementMethod.getInstance());
@@ -654,7 +654,8 @@ public class ItemDataSetter {
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(context, doc.url, Toast.LENGTH_SHORT).show();
+                        Uri uri = Uri.parse(doc.url);
+                        context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.DOWNLOADER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                 });
             } else if (doc.isGif()) {
@@ -1055,7 +1056,7 @@ public class ItemDataSetter {
         }
         if (!OfflineMode.isOnline(Constants.mainActivity.getApplicationContext()) &
                 OfflineMode.isJsonNull(photosParam)) {
-           finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosParam));
+            finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosParam));
             Fragment fragment = FragmentFullScreenViewer.newInstance(finalPhotos, position);
             fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
         } else {
@@ -1067,7 +1068,7 @@ public class ItemDataSetter {
 
 
     static void showAlertNoInternet(final View view) {
-        Toast.makeText(Constants.mainActivity.getApplicationContext(), "Виникли проблеми із інтернетом, спробуйте ще раз...", Toast.LENGTH_SHORT);
+        Toast.makeText(Constants.mainActivity.getApplicationContext(), context.getString(R.string.no_internet_retry), Toast.LENGTH_SHORT);
     }
 
 

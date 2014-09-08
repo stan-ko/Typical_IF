@@ -2,14 +2,12 @@ package typical_if.android.adapter;
 
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -23,7 +21,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.MyApplication;
 import typical_if.android.R;
@@ -151,9 +148,9 @@ public class CommentsListAdapter extends BaseAdapter {
         viewHolder.user_name.setText(last_name + " " + first_name);
 
         if (comment.text.length() != 0) {
-           // ItemDataSetter.setText(comment.text, viewHolder.commentTextLayout);
             viewHolder.commentTextLayout.setVisibility(View.GONE);
-            viewHolder.userCommentText.setText(comment.text);
+            viewHolder.userCommentText.setText(ItemDataSetter.getParsedText(comment.text));
+            viewHolder.userCommentText.setMovementMethod(LinkMovementMethod.getInstance());
             viewHolder.userCommentText.setVisibility(View.VISIBLE);
             //viewHolder.commentTextLayout.setBackgroundColor(Color.TRANSPARENT);
         } else {

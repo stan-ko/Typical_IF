@@ -250,9 +250,6 @@ public class MainActivity extends ActionBarActivity implements
                 }
 
                 break;
-//            case 4:
-//                Constants.toastInProgress.show();
-//                break;
             case 5:
                 if (VKSdk.isLoggedIn()) {
                     VKSdk.logout();
