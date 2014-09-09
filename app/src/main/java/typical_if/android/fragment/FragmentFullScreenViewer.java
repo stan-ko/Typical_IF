@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,20 +25,21 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
+import typical_if.android.ExtendedViewPager;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.FullScreenImageAdapter;
 
-public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPageChangeListener {
+public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPager.OnPageChangeListener {
 
 
     public static final String LIKED = "LIKED: ";
     public static final String LIKE_DELETED = "LIKE DELETED";
     private FragmentFullScreenViewer.OnFragmentInteractionListener mListener;
     public static ArrayList<VKApiPhoto> photos;
-    private ViewPager imagepager;
+    private ExtendedViewPager imagepager;
     public static int currentPosition;
     public FullScreenImageAdapter adapter;
 
@@ -105,7 +105,6 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
         goToComments = (ImageView) rootView.findViewById(R.id.go_to_comments);
        // likedOrNotLikedBox = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox));
         photoHeader = (TextView) rootView.findViewById(R.id.photoHeader);
-        photoHeader.setVisibility(View.GONE);
         counterOfPhotos = (TextView) rootView.findViewById(R.id.counterOfPhotos);
         albumSize = (TextView) rootView.findViewById(R.id.amountOfPhotos);
         panel = ((RelativeLayout) rootView.findViewById(R.id.fullscreen_action_panel));
@@ -113,7 +112,7 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
         cb_comment= ((CheckBox) rootView.findViewById(R.id.cb_photo_comment));
 
         FragmentManager manager = getFragmentManager();
-        imagepager = (ViewPager) rootView.findViewById(R.id.pager);
+        imagepager = (ExtendedViewPager) rootView.findViewById(R.id.pager);
         imagepager.setOnPageChangeListener(this);
         onPageSelected(0);
         adapter= new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,Constants.GROUP_ID,
@@ -190,7 +189,7 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
     public void onPageSelected(final int position) {
 
 
-//        photoHeader.setText(photos.get(position).text);
+        photoHeader.setText(photos.get(position).text);
         cb_like.setText(String.valueOf(photos.get(position).likes));
         cb_comment.setText(String.valueOf(photos.get(position).comments));
         counterOfPhotos.setText(String.valueOf(position + 1));
