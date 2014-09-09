@@ -105,6 +105,7 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
         goToComments = (ImageView) rootView.findViewById(R.id.go_to_comments);
        // likedOrNotLikedBox = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox));
         photoHeader = (TextView) rootView.findViewById(R.id.photoHeader);
+        photoHeader.setVisibility(View.GONE);
         counterOfPhotos = (TextView) rootView.findViewById(R.id.counterOfPhotos);
         albumSize = (TextView) rootView.findViewById(R.id.amountOfPhotos);
         panel = ((RelativeLayout) rootView.findViewById(R.id.fullscreen_action_panel));
@@ -189,7 +190,7 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
     public void onPageSelected(final int position) {
 
 
-        photoHeader.setText(photos.get(position).text);
+//        photoHeader.setText(photos.get(position).text);
         cb_like.setText(String.valueOf(photos.get(position).likes));
         cb_comment.setText(String.valueOf(photos.get(position).comments));
         counterOfPhotos.setText(String.valueOf(position + 1));
@@ -277,7 +278,7 @@ public class FragmentFullScreenViewer extends Fragment implements ViewPager.OnPa
             @Override
             public void onClick(View v) {
 
-                FragmentWithComments fragment = FragmentWithComments.newInstanceForPhoto(
+                FragmentComments fragment = FragmentComments.newInstanceForPhoto(
 
                         photos.get(position), Constants.USER_ID);
                 getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();

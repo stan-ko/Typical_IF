@@ -37,17 +37,17 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.fragment.FragmentAlbumsList;
+import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
 import typical_if.android.fragment.FragmentWall;
-import typical_if.android.fragment.FragmentWithComments;
 import typical_if.android.fragment.NavigationDrawerFragment;
 
 
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         FragmentFullScreenViewer.OnFragmentInteractionListener,
-        FragmentWithComments.OnFragmentInteractionListener{
+        FragmentComments.OnFragmentInteractionListener{
 
 
     private Drawable mIcon;

@@ -59,7 +59,7 @@ import typical_if.android.model.Wall.Wall;
 import typical_if.android.util.PhotoUrlHelper;
 import typical_if.android.view.RoundedImageView;
 
-public class FragmentWithComments extends Fragment {
+public class FragmentComments extends Fragment {
 
     public static final String POSTED = "POSTED";
     final int displayHeight = MyApplication.getDisplayHeight();
@@ -96,15 +96,15 @@ public class FragmentWithComments extends Fragment {
     static long item_id;
     static long from_user;
 
-    public static FragmentWithComments newInstanceForPhoto(VKApiPhoto photo, long vk_user_id) {
+    public static FragmentComments newInstanceForPhoto(VKApiPhoto photo, long vk_user_id) {
         loadFromWall = false;
-        FragmentWithComments fragment = new FragmentWithComments();
+        FragmentComments fragment = new FragmentComments();
         Bundle args = new Bundle();
 
 
         args.putLong(ARG_VK_USER_ID, vk_user_id);
         fragment.setArguments(args);
-        FragmentWithComments.photo = photo;
+        FragmentComments.photo = photo;
 
         TYPE = "photo_comment";
         Constants.DELETE_COMMENT_METHOD_NAME = "photos.deleteComment";
@@ -122,20 +122,19 @@ public class FragmentWithComments extends Fragment {
         }
         from_user = photo.user_id;
 
-
         return fragment;
     }
 
-    public static FragmentWithComments newInstanceForWall(String postColor, int position, Wall wall, VKWallPostWrapper post) {
+    public static FragmentComments newInstanceForWall(String postColor, int position, Wall wall, VKWallPostWrapper post) {
         loadFromWall = true;
 
-        FragmentWithComments fragment = new FragmentWithComments();
+        FragmentComments fragment = new FragmentComments();
         //Bundle args = new Bundle();
 
         fragment.postColor = postColor;
         fragment.wall = wall;
         fragment.position = position;
-        FragmentWithComments.post = post;
+        FragmentComments.post = post;
 
 
         TYPE = "comment";
@@ -152,7 +151,7 @@ public class FragmentWithComments extends Fragment {
     }
 
 
-    public FragmentWithComments() {
+    public FragmentComments() {
     }
 
     @Override
@@ -171,8 +170,9 @@ public class FragmentWithComments extends Fragment {
         listOfComments = ((ListView) this.rootView.findViewById(R.id.listOfComments));
         View listHeaderView = rootView.inflate(getActivity().getApplicationContext(), R.layout.image_header, null);
         ImageView headerView = (ImageView) listHeaderView.findViewById(R.id.list_header_image);
+        TextView textView = (TextView) listHeaderView.findViewById(R.id.txt_photo_text);
         listOfComments.addHeaderView(listHeaderView);
-        loadImage(photo, headerView);
+        loadImage(photo, headerView, textView);
 
 
         final RelativeLayout photoUserSender = ((RelativeLayout) rootView.findViewById(R.id.user_photo_sender));
@@ -698,8 +698,13 @@ public class FragmentWithComments extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    public void loadImage(VKApiPhoto photo, ImageView imageView) {
-
+    public void loadImage(VKApiPhoto photo, ImageView imageView, TextView textView) {
+        if (!photo.text.equals("") && !(photo.text.length() == 0)) {
+            textView.setVisibility(View.VISIBLE);
+            textView.setText(photo.text);
+        } else {
+            textView.setVisibility(View.GONE);
+        }
         ImageLoader.getInstance().displayImage(PhotoUrlHelper.getFullScreenUrl(photo), imageView);
     }
 }

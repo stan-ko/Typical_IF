@@ -37,7 +37,7 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
-import typical_if.android.fragment.FragmentWithComments;
+import typical_if.android.fragment.FragmentComments;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 
@@ -368,7 +368,7 @@ public class WallAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         ParamsHolder paramsHolder = (ParamsHolder) v.getTag();
-                        FragmentWithComments fragment = FragmentWithComments.newInstanceForWall(postColor, paramsHolder.position, wall, paramsHolder.post);
+                        FragmentComments fragment = FragmentComments.newInstanceForWall(postColor, paramsHolder.position, wall, paramsHolder.post);
                         fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                     }
                 });
