@@ -125,4 +125,8 @@ public class Constants {
     public static final String POLL_NOT_ANONYMOUS = RESOURCES.getString(R.string.poll_not_anonymous);
     public static final String txt_dialog_comment = RESOURCES.getString(R.string.txt_dialog_comment);
 
+    public static final String TIF_VK_API_KEY_TOKEN = "VK_ACCESS_TOKEN";
+    public static final int TIF_VK_PRELOAD_POSTS_COUNT = 100;
+
+
 }

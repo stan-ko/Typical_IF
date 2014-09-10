@@ -91,13 +91,13 @@ public class FragmentPhotoFromCamera extends Fragment {
                 final VKRequest req = VKApi.uploadAlbumPhotoRequest(tempFile, Constants.ALBUM_ID, (int)(Constants.GROUP_ID*(-1)));
                 req.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
-                    public void onComplete(VKResponse response) {
+                    public void onComplete(final VKResponse response) {
                         super.onComplete(response);
                         Log.d("MY response", response.responseString);
                         //getActivity().stopService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
                     }
                     @Override
-                    public void onError(VKError error) {
+                    public void onError(final VKError error) {
                         super.onError(error);
                         OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }

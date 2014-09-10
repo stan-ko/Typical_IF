@@ -127,7 +127,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         //Log.d("Current VIEW", photos.get(imagepager.getCurrentItem()).text);
         VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
             @Override
-            public void onComplete(VKResponse response) {
+            public void onComplete(final VKResponse response) {
                 super.onComplete(response);
 
                 JSONArray arr = response.json.optJSONArray("response");
@@ -137,7 +137,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
             }
             @Override
-            public void onError(VKError error) {
+            public void onError(final VKError error) {
                 super.onError(error);
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }
@@ -201,7 +201,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
         VKHelper.isLiked("photo",Constants.GROUP_ID, photos.get(position).id, new VKRequest.VKRequestListener() {
                     @Override
-                    public void onComplete(VKResponse response) {
+                    public void onComplete(final VKResponse response) {
                         super.onComplete(response);
                         try {
                             JSONObject j = response.json.optJSONObject("response");
@@ -214,7 +214,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
                     }
             @Override
-            public void onError(VKError error) {
+            public void onError(final VKError error) {
                 super.onError(error);
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }
@@ -232,7 +232,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                 if (photos.get(position).user_likes == 0) {
                     VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
                         @Override
-                        public void onComplete(VKResponse response) {
+                        public void onComplete(final VKResponse response) {
                             super.onComplete(response);
 
                             cb_like.setChecked(true);
@@ -243,7 +243,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
                         }
                         @Override
-                        public void onError(VKError error) {
+                        public void onError(final VKError error) {
                             super.onError(error);
                             OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }
@@ -252,7 +252,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                 else {
                     VKHelper.deleteLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
                         @Override
-                        public void onComplete(VKResponse response) {
+                        public void onComplete(final VKResponse response) {
                             super.onComplete(response);
                             cb_like.setChecked(false);
 
@@ -264,7 +264,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                         }
 
                         @Override
-                        public void onError(VKError error) {
+                        public void onError(final VKError error) {
                             super.onError(error);
                             OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }

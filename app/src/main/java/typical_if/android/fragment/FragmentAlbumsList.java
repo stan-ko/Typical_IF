@@ -95,14 +95,14 @@ public class FragmentAlbumsList extends Fragment {
 
                 VKHelper.getAlbumList(Constants.USER_ID, new VKRequest.VKRequestListener() {
                     @Override
-                    public void onComplete(VKResponse response) {
+                    public void onComplete(final VKResponse response) {
                         super.onComplete(response);
                         OfflineMode.saveJSON(response.json, Constants.GROUP_ID + "albums");
                         handleResponse(OfflineMode.loadJSON(Constants.GROUP_ID + "albums"), view);
 
                     }
                     @Override
-                    public void onError(VKError error) {
+                    public void onError(final VKError error) {
                         super.onError(error);
                         OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }
@@ -110,13 +110,13 @@ public class FragmentAlbumsList extends Fragment {
             } else {
                 VKHelper.getAlbumList(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
                     @Override
-                    public void onComplete(VKResponse response) {
+                    public void onComplete(final VKResponse response) {
                         super.onComplete(response);
                         OfflineMode.saveJSON(response.json, Constants.GROUP_ID + "albums");
                         handleResponse(OfflineMode.loadJSON(Constants.GROUP_ID + "albums"), view);
                     }
                     @Override
-                    public void onError(VKError error) {
+                    public void onError(final VKError error) {
                         super.onError(error);
                         OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }

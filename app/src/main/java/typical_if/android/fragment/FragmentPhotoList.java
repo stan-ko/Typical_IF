@@ -137,7 +137,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
             VKHelper.getPhotoList(Constants.GROUP_ID,Constants.ALBUM_ID, 1, _count, new VKRequest.VKRequestListener() {
                 @Override
-                public void onComplete(VKResponse response) {
+                public void onComplete(final VKResponse response) {
 
                     super.onComplete(response);
                     OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
@@ -177,7 +177,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                     VKHelper.getPhotoList(Constants.USER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
 
                     @Override
-                    public void onComplete(VKResponse response) {
+                    public void onComplete(final VKResponse response) {
                         super.onComplete(response);
                         OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
                         handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
@@ -187,7 +187,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                 VKHelper.getPhotoList(Constants.TEMP_OWNER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
 
                     @Override
-                    public void onComplete(VKResponse response) {
+                    public void onComplete(final VKResponse response) {
                         super.onComplete(response);
                         OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
                         handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);

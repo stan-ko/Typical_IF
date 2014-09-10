@@ -186,7 +186,7 @@ public class FragmentComments extends Fragment {
 //        }
         VKHelper.getWhoIsPosted(from_user, "photo_50", new VKRequest.VKRequestListener() {
             @Override
-            public void onComplete(VKResponse response) {
+            public void onComplete(final VKResponse response) {
                 super.onComplete(response);
 
                 try {
@@ -205,7 +205,7 @@ public class FragmentComments extends Fragment {
             }
 
             @Override
-            public void onError(VKError error) {
+            public void onError(final VKError error) {
                 super.onError(error);
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
 
@@ -245,7 +245,7 @@ public class FragmentComments extends Fragment {
                 if (photo.user_likes == 0) {
                     VKHelper.setLike("photo", group_id, photo.id, new VKRequest.VKRequestListener() {
                         @Override
-                        public void onComplete(VKResponse response) {
+                        public void onComplete(final VKResponse response) {
                             super.onComplete(response);
                             photo.user_likes = 1;
                             ++photo.likes;
@@ -256,7 +256,7 @@ public class FragmentComments extends Fragment {
                         }
 
                         @Override
-                        public void onError(VKError error) {
+                        public void onError(final VKError error) {
                             super.onError(error);
                             OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }
@@ -265,7 +265,7 @@ public class FragmentComments extends Fragment {
                 } else {
                     VKHelper.deleteLike("photo", group_id, photo.id, new VKRequest.VKRequestListener() {
                         @Override
-                        public void onComplete(VKResponse response) {
+                        public void onComplete(final VKResponse response) {
                             super.onComplete(response);
                             photo.user_likes = 0;
                             --photo.likes;
@@ -275,7 +275,7 @@ public class FragmentComments extends Fragment {
                         }
 
                         @Override
-                        public void onError(VKError error) {
+                        public void onError(final VKError error) {
                             super.onError(error);
                             OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }
@@ -351,14 +351,14 @@ public class FragmentComments extends Fragment {
                         VKHelper.createComment(group_id, item_id, message + "\n@club26363301 (fromMobileIF)", 0, new VKRequest.VKRequestListener() {
 
                             @Override
-                            public void onComplete(VKResponse response) {
+                            public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
                                 commentMessage.setText("");
                                 updateCommentList(group_id, item_id, listOfComments, inflater);
                             }
 
                             @Override
-                            public void onError(VKError error) {
+                            public void onError(final VKError error) {
                                 super.onError(error);
                                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }
@@ -369,14 +369,14 @@ public class FragmentComments extends Fragment {
                         VKHelper.createComment(group_id, item_id, message + "\n@club26363301 (fromMobileIF)", reply_to_comment, new VKRequest.VKRequestListener() {
 
                             @Override
-                            public void onComplete(VKResponse response) {
+                            public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
                                 commentMessage.setText("");
                                 updateCommentList(group_id, item_id, listOfComments, inflater);
                             }
 
                             @Override
-                            public void onError(VKError error) {
+                            public void onError(final VKError error) {
                                 super.onError(error);
                                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }
@@ -386,7 +386,7 @@ public class FragmentComments extends Fragment {
                 } else
                     VKHelper.editComment(group_id, comments.get(positionOfComment).id, message, null, new VKRequest.VKRequestListener() {
                         @Override
-                        public void onComplete(VKResponse response) {
+                        public void onComplete(final VKResponse response) {
                             super.onComplete(response);
                             updateCommentList(group_id, item_id, listOfComments, inflater);
                             commentMessage.setText("");
@@ -394,7 +394,7 @@ public class FragmentComments extends Fragment {
                         }
 
                         @Override
-                        public void onError(VKError error) {
+                        public void onError(final VKError error) {
                             super.onError(error);
                             OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }
@@ -428,7 +428,7 @@ public class FragmentComments extends Fragment {
             }
 
             @Override
-            public void onError(VKError error) {
+            public void onError(final VKError error) {
                 super.onError(error);
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }
@@ -556,7 +556,7 @@ public class FragmentComments extends Fragment {
 
                             VKHelper.setLike(TYPE, group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
                                 @Override
-                                public void onComplete(VKResponse response) {
+                                public void onComplete(final VKResponse response) {
                                     super.onComplete(response);
                                     ++comments.get(position).likes;
                                     comments.get(position).user_likes = true;
@@ -564,7 +564,7 @@ public class FragmentComments extends Fragment {
                                 }
 
                                 @Override
-                                public void onError(VKError error) {
+                                public void onError(final VKError error) {
                                     super.onError(error);
                                     OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                                 }
@@ -573,7 +573,7 @@ public class FragmentComments extends Fragment {
                         } else {
                             VKHelper.deleteLike(TYPE, group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
                                 @Override
-                                public void onComplete(VKResponse response) {
+                                public void onComplete(final VKResponse response) {
                                     super.onComplete(response);
                                     --comments.get(position).likes;
                                     comments.get(position).user_likes = false;
@@ -581,7 +581,7 @@ public class FragmentComments extends Fragment {
                                 }
 
                                 @Override
-                                public void onError(VKError error) {
+                                public void onError(final VKError error) {
                                     super.onError(error);
                                     OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                                 }
@@ -596,13 +596,13 @@ public class FragmentComments extends Fragment {
                         if (myComment) {
                             VKHelper.deleteComment(group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
                                 @Override
-                                public void onComplete(VKResponse response) {
+                                public void onComplete(final VKResponse response) {
                                     super.onComplete(response);
                                     updateCommentList(group_id, item_id, listOfComments, inflater);
                                 }
 
                                 @Override
-                                public void onError(VKError error) {
+                                public void onError(final VKError error) {
                                     super.onError(error);
                                     OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                                 }

@@ -252,7 +252,7 @@ public class ItemDataSetter {
 //        for(i=0 ; i<photos.size(); i++){
 //            VKHelper.getPhotoByID(photos.get(i).owner_id+"_"+photos.get(i).id,new VKRequest.VKRequestListener() {
 //                @Override
-//                public void onComplete(VKResponse response) {
+//                public void onComplete(final VKResponse response) {
 //                    super.onComplete(response);
 //                    try {
 //                        photos2.add(VKHelper.getPhotoFromJSONArray(response.json));
@@ -956,7 +956,7 @@ public class ItemDataSetter {
 //
 //                                    VKHelper.doPlayerRequest(videoID, new VKRequest.VKRequestListener() {
 //                                        @Override
-//                                        public void onComplete(VKResponse response) {
+//                                        public void onComplete(final VKResponse response) {
 //                                            super.onComplete(response);
 //                                            JSONObject mainResponse = response.json.optJSONObject("response");
 //                                            JSONArray item = mainResponse.optJSONArray("items");
@@ -998,7 +998,7 @@ public class ItemDataSetter {
 //                                            Log.d("", videoID);
 //                                            VKHelper.doPlayerRequest(videoID, new VKRequest.VKRequestListener() {
 //                                                @Override
-//                                                public void onComplete(VKResponse response) {
+//                                                public void onComplete(final VKResponse response) {
 //                                                    super.onComplete(response);
 //                                                    JSONObject mainResponse = response.json.optJSONObject("response");
 //                                                    JSONArray item = mainResponse.optJSONArray("items");
@@ -1045,7 +1045,7 @@ public class ItemDataSetter {
         if (OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())) {
             VKHelper.getPhotoByID(photosParam, new VKRequest.VKRequestListener() {
                 @Override
-                public void onComplete(VKResponse response) {
+                public void onComplete(final VKResponse response) {
                     super.onComplete(response);
                     OfflineMode.saveJSON(response.json, photosParam);
                     finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosParam));

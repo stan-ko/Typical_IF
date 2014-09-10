@@ -35,7 +35,6 @@ import typical_if.android.R;
 import typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
-import typical_if.android.activity.SplashActivity;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Wall.Wall;
 
@@ -64,7 +63,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     String postColor;
     JSONObject jsonObjectOld;
 
-    int Offset = SplashActivity.getCountOfPosts();
+    int Offset = Constants.TIF_VK_PRELOAD_POSTS_COUNT;//SplashActivity.getCountOfPosts();
     static boolean isSuggested;
     static int isMember;
     boolean temp = true;
@@ -182,7 +181,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             setDisabledMenu();
             VKHelper.getSuggestedPosts(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
                 @Override
-                public void onComplete(VKResponse response) {
+                public void onComplete(final VKResponse response) {
                     super.onComplete(response);
                     initGroupWall(response.json, inflater);
                     wallListView.setOnScrollListener(null);
@@ -192,7 +191,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                     swipeView.setRefreshing(false);
                 }
                 @Override
-                public void onError(VKError error) {
+                public void onError(final VKError error) {
                     super.onError(error);
                     OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                 }
@@ -253,7 +252,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         super.onPrepareOptionsMenu(menu);
         VKHelper.isMember(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
             @Override
-            public void onComplete(VKResponse response) {
+            public void onComplete(final VKResponse response) {
                 super.onComplete(response);
                 isMember = response.json.optInt("response");
                 if (VKSdk.isLoggedIn()) {
@@ -276,7 +275,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
             }
             @Override
-            public void onError(VKError error) {
+            public void onError(final VKError error) {
                 super.onError(error);
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }
@@ -326,13 +325,13 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 if (isMember == 0) {
                     VKHelper.groupJoin(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
                         @Override
-                        public void onComplete(VKResponse response) {
+                        public void onComplete(final VKResponse response) {
                             super.onComplete(response);
                             Toast.makeText(getActivity(), getString(R.string.group_joined), Toast.LENGTH_SHORT).show();
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
                         }
                         @Override
-                        public void onError(VKError error) {
+                        public void onError(final VKError error) {
                             super.onError(error);
                             OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }
@@ -340,13 +339,13 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 } else {
                     VKHelper.groupLeave(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
                         @Override
-                        public void onComplete(VKResponse response) {
+                        public void onComplete(final VKResponse response) {
                             super.onComplete(response);
                             Toast.makeText(getActivity(), getString(R.string.group_leaved), Toast.LENGTH_SHORT).show();
                             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
                         }
                         @Override
-                        public void onError(VKError error) {
+                        public void onError(final VKError error) {
                             super.onError(error);
                             OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }
@@ -380,13 +379,13 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             public void run() {
                 VKHelper.doGroupWallRequest(offsetO, Offset, Constants.GROUP_ID, new VKRequest.VKRequestListener() {
                     @Override
-                    public void onComplete(VKResponse response) {
+                    public void onComplete(final VKResponse response) {
                         super.onComplete(response);
                         OfflineMode.saveJSON(response.json, Constants.GROUP_ID);
                         initGroupWall(OfflineMode.loadJSON(Constants.GROUP_ID), inflaterGlobal);
                     }
                     @Override
-                    public void onError(VKError error) {
+                    public void onError(final VKError error) {
                         super.onError(error);
                         OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }
@@ -406,12 +405,12 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     private void endlessGet(final int Offset) {
         VKHelper.doGroupWallRequest(Offset, countPostDefaultForOffset, Constants.GROUP_ID, new VKRequest.VKRequestListener() {
             @Override
-            public void onComplete(VKResponse response) {
+            public void onComplete(final VKResponse response) {
                 super.onComplete(response);
                 OfflineMode.saveJSON(OfflineMode.jsonPlus(jsonObjectOld, response.json), Constants.GROUP_ID);
             }
             @Override
-            public void onError(VKError error) {
+            public void onError(final VKError error) {
                 super.onError(error);
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }

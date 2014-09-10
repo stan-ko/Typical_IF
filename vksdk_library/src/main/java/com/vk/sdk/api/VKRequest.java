@@ -608,7 +608,7 @@ public class VKRequest extends VKObject {
          *
          * @param response response from VKRequest
          */
-        public void onComplete(VKResponse response) {
+        public void onComplete(final VKResponse response) {
         }
 
         /**
@@ -626,7 +626,7 @@ public class VKRequest extends VKObject {
          *
          * @param error error for VKRequest
          */
-        public void onError(VKError error) {
+        public void onError(final VKError error) {
         }
 
         /**

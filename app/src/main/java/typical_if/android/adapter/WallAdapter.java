@@ -140,7 +140,7 @@ public class WallAdapter extends BaseAdapter {
                     if (!post.user_likes) {
                         VKHelper.setLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
                             @Override
-                            public void onComplete(VKResponse response) {
+                            public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
                                 viewHolder.cb_post_like.setText(String.valueOf(++post.likes_count));
                                 viewHolder.cb_post_like.setChecked(true);
@@ -151,7 +151,7 @@ public class WallAdapter extends BaseAdapter {
 
                         VKHelper.deleteLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
                             @Override
-                            public void onComplete(VKResponse response) {
+                            public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
                                 viewHolder.cb_post_like.setText(String.valueOf(--post.likes_count));
                                 viewHolder.cb_post_like.setChecked(false);
@@ -186,7 +186,7 @@ public class WallAdapter extends BaseAdapter {
                                     final String pidFull = "wall" + Constants.GROUP_ID + "_" + post.id;
                                     VKHelper.doRepost(pidFull, text.getText().toString(), new VKRequest.VKRequestListener() {
                                         @Override
-                                        public void onComplete(VKResponse response) {
+                                        public void onComplete(final VKResponse response) {
                                             super.onComplete(response);
                                             JSONObject object = response.json.optJSONObject("response");
                                             int isSuccessed = object.optInt("success");
@@ -200,7 +200,7 @@ public class WallAdapter extends BaseAdapter {
 
                                                     VKHelper.setLike("post", (wall.group.id * (-1)), post.id, new VKRequest.VKRequestListener() {
                                                         @Override
-                                                        public void onComplete(VKResponse response) {
+                                                        public void onComplete(final VKResponse response) {
                                                             super.onComplete(response);
 
                                                             viewHolder.cb_post_like.setText(String.valueOf(++post.likes_count));

@@ -79,7 +79,7 @@ public abstract class VKUploadPhotoBase extends VKRequest {
 
             VKUploadPhotoBase.this.requestListener = new VKRequestListener() {
                 @Override
-                public void onComplete(VKResponse response) {
+                public void onComplete(final VKResponse response) {
                     setState(VKOperationState.Finished);
                     response.request = VKUploadPhotoBase.this;
                     if (originalListener != null)
@@ -87,7 +87,7 @@ public abstract class VKUploadPhotoBase extends VKRequest {
                 }
 
                 @Override
-                public void onError(VKError error) {
+                public void onError(final VKError error) {
                     setState(VKOperationState.Finished);
                     error.request = VKUploadPhotoBase.this;
                     if (originalListener != null)
@@ -107,7 +107,7 @@ public abstract class VKUploadPhotoBase extends VKRequest {
 
             serverRequest.setRequestListener(new VKRequestListener() {
                 @Override
-                public void onComplete(VKResponse response) {
+                public void onComplete(final VKResponse response) {
                     try {
                         VKJsonOperation postFileRequest = new VKJsonOperation(
                                 VKHttpClient.fileUploadRequest(response.json.getJSONObject("response").getString("upload_url"), mImage));
@@ -119,13 +119,13 @@ public abstract class VKUploadPhotoBase extends VKRequest {
                                 VKRequest saveRequest = getSaveRequest(response);
                                 saveRequest.setRequestListener(new VKRequestListener() {
                                     @Override
-                                    public void onComplete(VKResponse response) {
+                                    public void onComplete(final VKResponse response) {
                                         requestListener.onComplete(response);
                                         setState(VKOperationState.Finished);
                                     }
 
                                     @Override
-                                    public void onError(VKError error) {
+                                    public void onError(final VKError error) {
                                         requestListener.onError(error);
                                     }
                                 });
@@ -153,7 +153,7 @@ public abstract class VKUploadPhotoBase extends VKRequest {
                 }
 
                 @Override
-                public void onError(VKError error) {
+                public void onError(final VKError error) {
                     if (requestListener != null)
                         requestListener.onError(error);
                 }

@@ -355,7 +355,7 @@ public class VKSdk {
      *
      * @param error description of error while authorizing user
      */
-    public static void setAccessTokenError(VKError error) {
+    public static void setAccessTokenError(final VKError error) {
         if (sInstance.mListener != null) {
             sInstance.mListener.onAccessDenied(error);
         }

@@ -165,13 +165,13 @@ public class FragmentUploadPhotoList extends Fragment {
                         if (photolist.get(j).isChecked) {
                             VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photoSrc), Constants.USER_ID, (int) gid).executeWithListener(new VKRequest.VKRequestListener() {
                                 @Override
-                                public void onComplete(VKResponse response) {
+                                public void onComplete(final VKResponse response) {
                                     super.onComplete(response);
                                     Constants.tempPhotoPostAttach.add(((VKPhotoArray) response.parsedModel).get(0));
                                     decrementThreadsCounter();
                                 }
                                 @Override
-                                public void onError(VKError error) {
+                                public void onError(final VKError error) {
                                     super.onError(error);
                                     OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                                 }
@@ -193,11 +193,11 @@ public class FragmentUploadPhotoList extends Fragment {
                             req = VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photoSrc), Constants.ALBUM_ID, (int) gid);
                             req.executeWithListener(new VKRequest.VKRequestListener() {
                                 @Override
-                                public void onComplete(VKResponse response) {
+                                public void onComplete(final VKResponse response) {
                                     super.onComplete(response);
                                 }
                                 @Override
-                                public void onError(VKError error) {
+                                public void onError(final VKError error) {
                                     super.onError(error);
                                     OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                                 }

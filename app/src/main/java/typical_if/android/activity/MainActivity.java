@@ -1,8 +1,10 @@
 package typical_if.android.activity;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,14 +27,12 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import typical_if.android.AudioPlayer;
 import typical_if.android.AudioPlayerService;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
+import typical_if.android.MyApplication;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -47,7 +47,7 @@ import typical_if.android.fragment.NavigationDrawerFragment;
 public class MainActivity extends ActionBarActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         FragmentFullScreenViewer.OnFragmentInteractionListener,
-        FragmentComments.OnFragmentInteractionListener{
+        FragmentComments.OnFragmentInteractionListener {
 
 
     private Drawable mIcon;
@@ -95,21 +95,25 @@ public class MainActivity extends ActionBarActivity implements
         Dialogs.fragmentManager = getSupportFragmentManager();
     }
 
-    public long setGroupId(int clickedPosition) {
-        if (clickedPosition == 0) {
-            return Constants.TF_ID;
-        } else if (clickedPosition == 1) {
-            return Constants.TZ_ID;
-        } else if (clickedPosition == 2) {
-            return Constants.FB_ID;
-        } else if (clickedPosition == 3) {
-            return Constants.FN_ID;
-        } else {
-            return Constants.ZF_ID;
+    public long setGroupId(final int clickedPosition) {
+        switch (clickedPosition) {
+            case 0:
+                return Constants.TF_ID;
+            case 1:
+                return Constants.TZ_ID;
+            case 2:
+                return Constants.FB_ID;
+            case 3:
+                return Constants.FN_ID;
+            case 4:
+            default:
+                return Constants.ZF_ID;
         }
+
     }
 
-    public void onSectionAttached(long groupIndex) {
+
+    public void onSectionAttached(final long groupIndex) {
         switch ((int) groupIndex) {
             case 0:
                 mTitle = getString(R.string.menu_group_title_tf);
@@ -165,11 +169,12 @@ public class MainActivity extends ActionBarActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         VKUIHelper.onActivityResult(this, requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
-            if (requestCode == PICK_FROM_CAMERA) {
-                FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance(Constants.tempCameraPhotoFile);
-                getSupportFragmentManager().beginTransaction().add(R.id.container, fragmentPhotoFromCamera).addToBackStack(null).commit();
-            }
+        if (resultCode != RESULT_OK)
+            return;
+
+        if (requestCode == PICK_FROM_CAMERA) {
+            FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance(Constants.tempCameraPhotoFile);
+            getSupportFragmentManager().beginTransaction().add(R.id.container, fragmentPhotoFromCamera).addToBackStack(null).commit();
         }
     }
 
@@ -185,22 +190,29 @@ public class MainActivity extends ActionBarActivity implements
         }
 
         @Override
-        public void onAccessDenied(final VKError authorizationError) {}
+        public void onAccessDenied(final VKError authorizationError) {
+        }
 
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
             mNavigationDrawerFragment.refreshNavigationDrawer();
             VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
                 @Override
-                public void onComplete(VKResponse response) {
+                public void onComplete(final VKResponse response) {
                     super.onComplete(response);
-                    JSONArray arr = response.json.optJSONArray("response");
-                    JSONObject jsonObject = arr.optJSONObject(0);
-                    Constants.USER_ID = jsonObject.optLong("id");
+                    long userId = VKHelper.getUserIdFromResponse(response);
+                    if (userId == 0) {
+                        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+                        userId = sPref.getLong("uid",0); //TODO че делать если нулл?
+                        Constants.USER_ID = userId;
+                        return;
+                    }
+                    Constants.USER_ID = userId;
                     ItemDataSetter.saveUserId(Constants.USER_ID);
                 }
+
                 @Override
-                public void onError(VKError error) {
+                public void onError(final VKError error) {
                     super.onError(error);
                     OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                 }
@@ -212,15 +224,21 @@ public class MainActivity extends ActionBarActivity implements
             mNavigationDrawerFragment.refreshNavigationDrawer();
             VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
                 @Override
-                public void onComplete(VKResponse response) {
+                public void onComplete(final VKResponse response) {
                     super.onComplete(response);
-                    JSONArray arr = response.json.optJSONArray("response");
-                    JSONObject jsonObject = arr.optJSONObject(0);
-                    Constants.USER_ID = jsonObject.optLong("id");
+                    long userId = VKHelper.getUserIdFromResponse(response);
+                    if (userId == 0) {
+                        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+                        userId = sPref.getLong("uid",0); //TODO че делать если нулл?
+                        Constants.USER_ID = userId;
+                        return;
+                    }
+                    Constants.USER_ID = userId;
                     ItemDataSetter.saveUserId(Constants.USER_ID);
                 }
+
                 @Override
-                public void onError(VKError error) {
+                public void onError(final VKError error) {
                     super.onError(error);
                     OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                 }
@@ -232,7 +250,7 @@ public class MainActivity extends ActionBarActivity implements
     public void onNavigationDrawerItemSelected(int groupPosition, int childPosition) {
         Fragment fragment = null;
         FragmentManager fragmentManager = getSupportFragmentManager();
-        long vkGroupId ;
+        long vkGroupId;
         switch (groupPosition) {
             case 0:
             case 1:
@@ -288,7 +306,7 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         super.onDestroy();
 
         if (this.isFinishing()) {

@@ -6,6 +6,7 @@ import android.util.Log;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKParameters;
 import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
 import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiPhoto;
@@ -424,4 +425,10 @@ public class VKHelper {
         return wall;
     }
 
+    public static String TIF_VK_API_KEY_RESPONSE = "response";
+    public static long getUserIdFromResponse(final VKResponse response){
+        final JSONArray arr = response.json.optJSONArray(TIF_VK_API_KEY_RESPONSE);
+        final JSONObject jsonObject = arr==null ? null : arr.optJSONObject(0);
+        return jsonObject!=null ? jsonObject.optLong("id") : 0;
+    }
 }

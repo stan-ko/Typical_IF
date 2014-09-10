@@ -164,14 +164,14 @@ public class FragmentMakePost extends Fragment {
                     public void onClick(View v) {
                         VKHelper.doWallPost(gid, textField.getText(), getAttachesForPost(), new VKRequest.VKRequestListener() {
                             @Override
-                            public void onComplete(VKResponse response) {
+                            public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 Toast.makeText(VKUIHelper.getApplicationContext(), ItemDataSetter.context.getString(R.string.post_added), Toast.LENGTH_SHORT).show();
                             }
                             @Override
-                            public void onError(VKError error) {
+                            public void onError(final VKError error) {
                                 super.onError(error);
                                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }
@@ -187,14 +187,14 @@ public class FragmentMakePost extends Fragment {
                     public void onClick(View v) {
                         VKHelper.editSuggestedPost(gid, pid, textField.getText(), getAttachesForPost(), new VKRequest.VKRequestListener() {
                             @Override
-                            public void onComplete(VKResponse response) {
+                            public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
                             }
                             @Override
-                            public void onError(VKError error) {
+                            public void onError(final VKError error) {
                                 super.onError(error);
                                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }

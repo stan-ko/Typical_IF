@@ -12,7 +12,6 @@ import android.provider.MediaStore;
 import android.text.ClipboardManager;
 import android.widget.Toast;
 
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -68,16 +67,16 @@ public class Dialogs {
                 }
                 VKHelper.doReportPost(gid, id, reason, new VKRequest.VKRequestListener() {
                     @Override
-                    public void onComplete(VKResponse response) {
+                    public void onComplete(final VKResponse response) {
                         super.onComplete(response);
-                        int isSuccessed = response.json.optInt("response");
+                        final int isSucceed = response.json.optInt("response");
 
-                        if (isSuccessed == 1) {
+                        if (isSucceed == 1) {
                             Toast.makeText(context, resources.getString(R.string.post_reported), Toast.LENGTH_SHORT).show();
                         }
                     }
                     @Override
-                    public void onError(VKError error) {
+                    public void onError(final VKError error) {
                         super.onError(error);
                         OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }
@@ -129,14 +128,14 @@ public class Dialogs {
                     case 1:
                         VKHelper.deleteSuggestedPost(gid, post.id, new VKRequest.VKRequestListener() {
                             @Override
-                            public void onComplete(VKResponse response) {
+                            public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
                                 fragmentManager.popBackStack();
                                 fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
                                 Toast.makeText(context, resources.getString(R.string.post_deleted), Toast.LENGTH_SHORT).show();
                             }
                             @Override
-                            public void onError(VKError error) {
+                            public void onError(final VKError error) {
                                 super.onError(error);
                                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }

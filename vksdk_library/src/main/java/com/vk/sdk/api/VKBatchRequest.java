@@ -54,14 +54,14 @@ public class VKBatchRequest extends VKObject {
             final VKRequest.VKRequestListener originalListener = request.requestListener;
             request.setRequestListener(new VKRequest.VKRequestListener() {
                 @Override
-                public void onComplete(VKResponse response) {
+                public void onComplete(final VKResponse response) {
                     if (originalListener != null)
                         originalListener.onComplete(response);
                     provideResponse(response);
                 }
 
                 @Override
-                public void onError(VKError error) {
+                public void onError(final VKError error) {
                     if (originalListener != null)
                         originalListener.onError(error);
                     provideError(error);
@@ -89,7 +89,7 @@ public class VKBatchRequest extends VKObject {
 
     }
 
-    protected void provideResponse(VKResponse response) {
+    protected void provideResponse(final VKResponse response) {
         mResponses[indexOfRequest(response.request)] = response;
         for (VKResponse resp : mResponses)
             if (resp == null) return;
@@ -104,7 +104,7 @@ public class VKBatchRequest extends VKObject {
         return -1;
     }
 
-    protected void provideError(VKError error) {
+    protected void provideError(final VKError error) {
         if (mCanceled)
             return;
         if (requestListener != null)
@@ -129,7 +129,7 @@ public class VKBatchRequest extends VKObject {
          *
          * @param error error for VKRequest
          */
-        public void onError(VKError error) {
+        public void onError(final VKError error) {
         }
     }
 }

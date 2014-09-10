@@ -59,7 +59,7 @@ public class FragmentAttachPostList extends Fragment {
             case 2:
                 VKHelper.getUserAudios(new VKRequest.VKRequestListener() {
                     @Override
-                    public void onComplete(VKResponse response) {
+                    public void onComplete(final VKResponse response) {
                         super.onComplete(response);
                         JSONObject responseObject = response.json.optJSONObject("response");
                         JSONArray items = responseObject.optJSONArray("items");
@@ -79,7 +79,7 @@ public class FragmentAttachPostList extends Fragment {
                     }
 
                     @Override
-                    public void onError(VKError error) {
+                    public void onError(final VKError error) {
                         super.onError(error);
                         OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }
@@ -88,7 +88,7 @@ public class FragmentAttachPostList extends Fragment {
             case 1:
                 VKHelper.getUserVideos(new VKRequest.VKRequestListener() {
                     @Override
-                    public void onComplete(VKResponse response) {
+                    public void onComplete(final VKResponse response) {
                         super.onComplete(response);
                         JSONObject responseObject = response.json.optJSONObject("response");
                         JSONArray items = responseObject.optJSONArray("items");
@@ -108,7 +108,7 @@ public class FragmentAttachPostList extends Fragment {
                         spinnerLayout.setVisibility(View.GONE);
                     }
                     @Override
-                    public void onError(VKError error) {
+                    public void onError(final VKError error) {
                         super.onError(error);
                         OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }
@@ -117,7 +117,7 @@ public class FragmentAttachPostList extends Fragment {
             case 3:
                 VKHelper.getUserDocs(new VKRequest.VKRequestListener() {
                     @Override
-                    public void onComplete(VKResponse response) {
+                    public void onComplete(final VKResponse response) {
                         super.onComplete(response);
                         JSONObject responseObject = response.json.optJSONObject("response");
                         JSONArray items = responseObject.optJSONArray("items");
@@ -137,7 +137,7 @@ public class FragmentAttachPostList extends Fragment {
                         spinnerLayout.setVisibility(View.GONE);
                     }
                     @Override
-                    public void onError(VKError error) {
+                    public void onError(final VKError error) {
                         super.onError(error);
                         OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                     }

@@ -25,6 +25,8 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 
+import org.json.JSONObject;
+
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -45,14 +47,12 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     Locale locale;
     int counter = 5;
     Configuration config;
-    private static String sTokenKey = "VK_ACCESS_TOKEN";
     SharedPreferences firstOpenPref = null;
 
-    public static int getCountOfPosts() {
-        return countOfPosts;
-    }
+//    public static int getCountOfPosts() {
+//        return countOfPosts;
+//    }
 
-    private final static int countOfPosts = 100;
     final int offsetDefault = 0;
 
     @Override
@@ -61,7 +61,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         setContentView(R.layout.activity_splash);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         VKUIHelper.onCreate(this);
-        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
+        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
 
         firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
 
@@ -84,6 +84,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         ItemDataSetter.loadUserId();
     }
+
     void showAlertNoInternet() {
         //Log.d("----------------Internet conection Error", "------------------------");
         counter--;
@@ -136,91 +137,110 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         }
     }
 
+
+    AtomicInteger threadsCounter;
+    private Boolean isRequestErrorToastShown;
     private void makeRequests() {
         threadsCounter = new AtomicInteger(4);
+        isRequestErrorToastShown = false;
+        final AtomicInteger requestSessionThreadsCounter = threadsCounter; 
         //   --------------------START------------- all Request from internet before start APP----------------------
-        VKHelper.doGroupWallRequest(offsetDefault, countOfPosts, Constants.TF_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.TF_ID, new VKRequest.VKRequestListener() {
             @Override
-            public void onComplete(VKResponse response) {
+            public void onComplete(final VKResponse response) {
                 super.onComplete(response);
-                OfflineMode.saveJSON(response.json, Constants.TF_ID);
-                decrementThreadsCounter();
+                handleRequestComplete(response.json, Constants.TF_ID, requestSessionThreadsCounter);
             }
 
             @Override
-            public void onError(VKError error) {
+            public void onError(final VKError error) {
                 super.onError(error);
-                decrementThreadsCounter();
-                OfflineMode.onErrorToast(getApplicationContext());
+                handleRequestError(requestSessionThreadsCounter);
             }
         });
-        VKHelper.doGroupWallRequest(offsetDefault, countOfPosts, Constants.TZ_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.TZ_ID, new VKRequest.VKRequestListener() {
             @Override
-            public void onComplete(VKResponse response) {
+            public void onComplete(final VKResponse response) {
                 super.onComplete(response);
-                OfflineMode.saveJSON(response.json, Constants.TZ_ID);
-                decrementThreadsCounter();
+                handleRequestComplete(response.json, Constants.TZ_ID,requestSessionThreadsCounter);
             }
 
             @Override
-            public void onError(VKError error) {
+            public void onError(final VKError error) {
                 super.onError(error);
-                decrementThreadsCounter();
-                OfflineMode.onErrorToast(getApplicationContext());
+                handleRequestError(requestSessionThreadsCounter);
             }
         });
-        VKHelper.doGroupWallRequest(offsetDefault, countOfPosts, Constants.FB_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.FB_ID, new VKRequest.VKRequestListener() {
             @Override
-            public void onComplete(VKResponse response) {
+            public void onComplete(final VKResponse response) {
                 super.onComplete(response);
-                OfflineMode.saveJSON(response.json, Constants.FB_ID);
-                decrementThreadsCounter();
+                handleRequestComplete(response.json, Constants.FB_ID,requestSessionThreadsCounter);
             }
 
             @Override
-            public void onError(VKError error) {
+            public void onError(final VKError error) {
                 super.onError(error);
-                decrementThreadsCounter();
-                OfflineMode.onErrorToast(getApplicationContext());
+                handleRequestError(requestSessionThreadsCounter);
             }
         });
-        VKHelper.doGroupWallRequest(offsetDefault, countOfPosts, Constants.FN_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.FN_ID, new VKRequest.VKRequestListener() {
             @Override
-            public void onComplete(VKResponse response) {
+            public void onComplete(final VKResponse response) {
                 super.onComplete(response);
-                OfflineMode.saveJSON(response.json, Constants.FN_ID);
-                decrementThreadsCounter();
+                handleRequestComplete(response.json, Constants.FN_ID,requestSessionThreadsCounter);
             }
 
             @Override
-            public void onError(VKError error) {
+            public void onError(final VKError error) {
                 super.onError(error);
-                decrementThreadsCounter();
-                OfflineMode.onErrorToast(getApplicationContext());
+                handleRequestError(requestSessionThreadsCounter);
             }
         });
-        VKHelper.doGroupWallRequest(offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.ZF_ID, new VKRequest.VKRequestListener() {
             @Override
-            public void onComplete(VKResponse response) {
+            public void onComplete(final VKResponse response) {
                 super.onComplete(response);
-                OfflineMode.saveJSON(response.json, Constants.ZF_ID);
-                decrementThreadsCounter();
+                handleRequestComplete(response.json, Constants.ZF_ID,requestSessionThreadsCounter);
             }
 
             @Override
-            public void onError(VKError error) {
+            public void onError(final VKError error) {
                 super.onError(error);
-                decrementThreadsCounter();
-                OfflineMode.onErrorToast(getApplicationContext());
+                handleRequestError(requestSessionThreadsCounter);
             }
         });
         //-------------------------END-------- all Request from internet before start APP----------------------
     }
 
-    AtomicInteger threadsCounter;
+    void handleRequestComplete(final JSONObject json, final long tfId, final AtomicInteger requestSessionThreadsCounter) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (threadsCounter!=requestSessionThreadsCounter)
+                    return;
+                OfflineMode.saveJSON(json, Constants.TF_ID);
+                decrementThreadsCounter(requestSessionThreadsCounter);
+            }
+        }).start();
+    }
 
-    void decrementThreadsCounter() {
-        if (threadsCounter.decrementAndGet() == 0)
+    void handleRequestError(final AtomicInteger requestSessionThreadsCounter) {
+        if (threadsCounter!=requestSessionThreadsCounter)
+            return;
+        decrementThreadsCounter(requestSessionThreadsCounter);
+        synchronized (isRequestErrorToastShown) {
+            if (!isRequestErrorToastShown) {
+                isRequestErrorToastShown = true;
+                OfflineMode.onErrorToast(getApplicationContext());
+            }
+        }
+    }
+
+    void decrementThreadsCounter(final AtomicInteger requestSessionThreadsCounter) {
+        if (threadsCounter!=requestSessionThreadsCounter)
+            return;
+        if (requestSessionThreadsCounter.decrementAndGet() == 0 && !isFinishing())
             startNextActivity();
     }
 
