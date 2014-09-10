@@ -68,7 +68,7 @@ public class FragmentUploadPhotoList extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        ((MainActivity) getActivity()).getSupportActionBar().hide();
         FragmentWall.setDisabledMenu();
 
         float scalefactor = getResources().getDisplayMetrics().density * 100;
@@ -133,29 +133,58 @@ public class FragmentUploadPhotoList extends Fragment {
     protected void handleResponse(View rootView, LayoutInflater inflater, final ArrayList<UploadPhotos> photolist, int columns) {
 
         final ImageView uploadPhotoFromSd = (ImageView) rootView.findViewById(R.id.upload_photo_from_sd);
-        uploadPhotoFromSd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VKRequest req;
-                for (int j = 0; j < photolist.size(); j++) {
-                    getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
-                    if (photolist.get(j).isChecked) {
-                        req = VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photoSrc), Constants.ALBUM_ID, (int) gid);
-                        req.executeWithListener(new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(VKResponse response) {
-                                super.onComplete(response);
-                            }
-                            @Override
-                            public void onError(VKError error) {
-                                super.onError(error);
-                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                            }
-                        });
+
+        if (which == 0) {
+            uploadPhotoFromSd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    decrementer = new AtomicInteger(Constants.tempCurrentPhotoAttachCounter);
+
+                    for (int j = 0; j < photolist.size(); j++) {
+                        getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
+                        if (photolist.get(j).isChecked) {
+                            VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photoSrc), Constants.USER_ID, (int) gid).executeWithListener(new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(final VKResponse response) {
+                                    super.onComplete(response);
+                                    Constants.tempPhotoPostAttach.add(((VKPhotoArray) response.parsedModel).get(0));
+                                    decrementThreadsCounter();
+                                }
+
+                                @Override
+                                public void onError(final VKError error) {
+                                    super.onError(error);
+                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                }
+                            });
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            uploadPhotoFromSd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    for (int j = 0; j < photolist.size(); j++) {
+                        getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
+                        if (photolist.get(j).isChecked) {
+                            VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photoSrc), Constants.ALBUM_ID, (int) gid).executeWithListener(new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(final VKResponse response) {
+                                    super.onComplete(response);
+                                }
+
+                                @Override
+                                public void onError(final VKError error) {
+                                    super.onError(error);
+                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
 
         photos = (GridView) rootView.findViewById(R.id.adding_photo_upload);
         PhotoUploadAdapter photoUploadAdapter = new PhotoUploadAdapter(category, inflater, photolist, getActivity().getSupportFragmentManager(), which);
@@ -177,7 +206,7 @@ public class FragmentUploadPhotoList extends Fragment {
     }
 
     @Override
-     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.upload_captured_photo, menu);
         MenuItem item = menu.getItem(0);
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
@@ -197,6 +226,7 @@ public class FragmentUploadPhotoList extends Fragment {
                                     Constants.tempPhotoPostAttach.add(((VKPhotoArray) response.parsedModel).get(0));
                                     decrementThreadsCounter();
                                 }
+
                                 @Override
                                 public void onError(final VKError error) {
                                     super.onError(error);
@@ -223,6 +253,7 @@ public class FragmentUploadPhotoList extends Fragment {
                                 public void onComplete(final VKResponse response) {
                                     super.onComplete(response);
                                 }
+
                                 @Override
                                 public void onError(final VKError error) {
                                     super.onError(error);

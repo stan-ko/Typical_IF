@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,7 +69,7 @@ public class FragmentMakePost extends Fragment {
     static EditText textField;
     static TextView txtPostAttachCounter;
 
-    Button btSendPost;
+    static Button btSendPost;
     static LinearLayout makePostAttachmentsContainer;
     static LinearLayout makePostAudioContainer;
     static LinearLayout makePostDocContainer;
@@ -107,6 +109,7 @@ public class FragmentMakePost extends Fragment {
             ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAttachPostList.newDocAttachInstance()).addToBackStack(null).commit();
         }
     };
+
 
     @Override
     public void onDestroy() {
@@ -155,7 +158,6 @@ public class FragmentMakePost extends Fragment {
         makePostAudioContainer = (LinearLayout) rootView.findViewById(R.id.make_post_audio_container);
         makePostDocContainer = (LinearLayout) rootView.findViewById(R.id.make_post_doc_container);
         makePostMediaContainer = (RelativeLayout) rootView.findViewById(R.id.make_post_media_container);
-
         btSendPost = (Button) rootView.findViewById(R.id.bt_post_send);
 
         switch (type) {
@@ -206,6 +208,37 @@ public class FragmentMakePost extends Fragment {
         }
 
         txtPostAttachCounter.setText(": " + Constants.tempPostAttachCounter + "/" + + Constants.tempMaxPostAttachCounter);
+
+        btSendPost.setVisibility(View.INVISIBLE);
+
+        textField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (textField.getText().length() == 0 || Constants.tempPostAttachCounter == 0) {
+                    btSendPost.setVisibility(View.INVISIBLE);
+                } else {
+                    btSendPost.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (textField.getText().length()  == 0) {
+                    btSendPost.setVisibility(View.INVISIBLE);
+                } else {
+                    btSendPost.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (textField.getText().length()  == 0) {
+                    btSendPost.setVisibility(View.INVISIBLE);
+                } else {
+                    btSendPost.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         return rootView;
     }
@@ -258,6 +291,12 @@ public class FragmentMakePost extends Fragment {
     }
 
     public static void refreshMakePostFragment(int which) {
+        if (Constants.tempPostAttachCounter >= 1 || textField.getText().length() != 0) {
+            btSendPost.setVisibility(View.VISIBLE);
+        } else {
+            btSendPost.setVisibility(View.INVISIBLE);
+        }
+
         txtPostAttachCounter.setText(": " + Constants.tempPostAttachCounter + "/" + Constants.tempMaxPostAttachCounter);
 
         if (Constants.tempPostAttachCounter == 0) {
@@ -441,12 +480,26 @@ public class FragmentMakePost extends Fragment {
 
         if (photos != null) {
             final int photosCount = photos.size();
+
             for (int i = 0; i < photosCount; i++) {
                 final ViewGroup layout_i = (ViewGroup) mediaContainer.getChildAt(i);
+
                 if (!(layout_i instanceof LinearLayout)) {
                     continue;
+                } else {
+                    if (photosCount > 1) {
+                        int newWidth;
+                        if (ItemDataSetter.getScreenOrientation() == 1) {
+                            newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
+                        } else {
+                            newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
+                        }
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
+                        layout_i.setLayoutParams(params);
+                    }
                 }
                 layout_i.setVisibility(View.VISIBLE);
+
                 linearBreak:
                 for (int j = 0, photoPointer = 0; j < photos.size(); j++) {
                     final ViewGroup layout_i_j = (ViewGroup) layout_i.getChildAt(j);
@@ -459,7 +512,21 @@ public class FragmentMakePost extends Fragment {
                         if (view_i_j_k instanceof ImageView) {
                             img = (ImageView) view_i_j_k;
                             final int finalJ = photoPointer++;
-                            ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img, ItemDataSetter.animationLoader);
+                            if (photosCount == 1 && videos.size() == 0) {
+                                int newWidth;
+                                if (ItemDataSetter.getScreenOrientation() == 1) {
+                                    newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
+                                } else {
+                                    newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
+                                }
+                                float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width);
+                                int newHeight = (int) (photos.get(finalJ).height * scaleFactor);
+                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
+                                img.setLayoutParams(params);
+                                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            }
+
+                            ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img);
                             img.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -484,7 +551,8 @@ public class FragmentMakePost extends Fragment {
                                 }
                                 img = (ImageView) layout_i_j_k_l.getChildAt(0);
                                 final int finalL = photoPointer++;
-                                ImageLoader.getInstance().displayImage(photos.get(finalL).photo_130, img, ItemDataSetter.animationLoader);
+
+                                ImageLoader.getInstance().displayImage(photos.get(finalL).photo_130, img);
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -504,6 +572,30 @@ public class FragmentMakePost extends Fragment {
                 final ViewGroup layout_i = (ViewGroup) mediaContainer.getChildAt(i);
                 if (!(layout_i instanceof LinearLayout)) {
                     continue;
+                } else {
+                    if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
+                        if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
+                            int newWidth;
+                            if (ItemDataSetter.getScreenOrientation() == 1) {
+                                newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
+                            } else {
+                                newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
+                            }
+                            float scaleFactor = (float) newWidth / 320;
+                            int newHeight = (int) (240 * scaleFactor);
+                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
+                            layout_i.setLayoutParams(params);
+                        }
+                    } else if (photos.size() == 0 && videos.size() > 1) {
+                        int newWidth;
+                        if (ItemDataSetter.getScreenOrientation() == 1) {
+                            newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
+                        } else {
+                            newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
+                        }
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
+                        layout_i.setLayoutParams(params);
+                    }
                 }
                 layout_i.setVisibility(View.VISIBLE);
                 final int jMax = layout_i.getChildCount();
@@ -520,12 +612,12 @@ public class FragmentMakePost extends Fragment {
                                 break;
                             }
                             img = (ImageView) view_i_j_k;
-                            if (videosCount == 1) {
-                                img.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, ItemDataSetter.setInDp(250)));
-                                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            }
+
                             final int finalJ = videoPointer++;
-                            ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img, ItemDataSetter.animationLoader);
+
+                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                            img.setLayoutParams(params);
+                            ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img);
 
                             relativeLayout = (RelativeLayout) layout_i_j.getChildAt(k + 1);
                             relativeLayout.setVisibility(View.VISIBLE);
@@ -550,7 +642,7 @@ public class FragmentMakePost extends Fragment {
                                     }
                                     final int finalJ = videoPointer++;
                                     img = (ImageView) layout_i_j_k_l.getChildAt(0);
-                                    ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_130, img, ItemDataSetter.animationLoader);
+                                    ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_130, img);
 
                                     relativeLayout = (RelativeLayout) layout_i_j_k_l.getChildAt(1);
                                     relativeLayout.setVisibility(View.VISIBLE);

@@ -214,8 +214,13 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
         spinnerLayout.setVisibility(View.GONE);
         if (wall.posts.size() == 0) {
-            fragmentManager.popBackStack();
-            Toast.makeText(getApplicationContext(), getString(R.string.no_suggested_posts), Toast.LENGTH_SHORT).show();
+            try {
+                fragmentManager.popBackStack();
+                Toast.makeText(getApplicationContext(), getString(R.string.no_suggested_posts), Toast.LENGTH_SHORT).show();
+            } catch (NullPointerException e) {
+
+            }
+
         }
     }
 

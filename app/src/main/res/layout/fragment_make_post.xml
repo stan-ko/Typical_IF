@@ -58,7 +58,8 @@
                 android:layout_height="wrap_content"
                 android:text="Send"
                 android:id="@+id/bt_post_send"
-                android:layout_weight=".30" />
+                android:layout_weight=".30"
+                android:visibility="visible" />
         </LinearLayout>
 
         <EditText
@@ -76,7 +77,6 @@
             android:id="@+id/make_post_attachments_container_new"
             android:orientation="vertical"
             android:visibility="gone"
-            android:background="@android:drawable/editbox_background_normal"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/etxt_make_post_field">

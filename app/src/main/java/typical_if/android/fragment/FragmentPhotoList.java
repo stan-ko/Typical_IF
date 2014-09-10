@@ -17,6 +17,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.vk.sdk.api.VKRequest;
@@ -28,9 +29,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
-import typical_if.android.TIFApp;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.PhotoListAdapter;
@@ -40,15 +41,14 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     public ArrayList<VKApiPhoto> photos2 = new ArrayList<VKApiPhoto>();
     int height = TIFApp.getDisplayHeight();
     private OnFragmentInteractionListener mListener;
- private int counter = 5;
+    private int counter = 5;
 
-     private  boolean isRequestNull;
+    private boolean isRequestNull;
     //private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private static final int PICK_FROM_CAMERA = 1;
     int type;
     final int PIC_CROP = 2;
     private static Uri mImageCaptureUri;
-
 
 
     public static FragmentPhotoList newInstance(int type) {
@@ -66,7 +66,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        ((MainActivity) getActivity()).getSupportActionBar().hide();
         FragmentWall.setDisabledMenu();
 
         final View rootView = inflater.inflate(R.layout.fragment_photo_list, container, false);
@@ -92,6 +92,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.main, menu);
     }
+
     boolean temp = false;
     boolean updated = false;
     int yPos;
@@ -105,37 +106,39 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     public void onScroll(final AbsListView view, int firstVisibleItem, final int visibleItemCount, int totalItemCount) {
 
         _lastInScreen = firstVisibleItem + visibleItemCount;
-        if (_lastInScreen >= totalItemCount & totalItemCount>=100  & totalItemCount!=VKHelper.countOfPhotos) {
+        if (_lastInScreen >= totalItemCount & totalItemCount >= 100 & totalItemCount != VKHelper.countOfPhotos) {
 
             if (_lastInScreen < VKHelper.countOfPhotos) {
                 _substract = VKHelper.countOfPhotos - _lastInScreen;
                 _ratio = (_substract / 100f);
                 if (_ratio < 2) {
                     _count = 0;
-                 }
+                }
                 if (_ratio > 1) {
                     _count = 100;
                     --_ratio;
-             } else {
+                } else {
                     _count = (int) (_ratio * 100);
+                }
+                if (OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())) {
+                    getElsePhotos(firstVisibleItem, visibleItemCount, totalItemCount, view);
+                    scrollPhotoListToBottom(gridOfPhotos, _lastInScreen);
+                }
             }
-               if (OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())){
-                getElsePhotos(firstVisibleItem,visibleItemCount,totalItemCount, view);
-                scrollPhotoListToBottom(gridOfPhotos,_lastInScreen); }
-            }
-         }
+        }
     }
+
     int _lastInScreen;
     int _substract;
     float _ratio;
-    int _count=100;
+    int _count = 100;
 
-    private void getElsePhotos(int firstVisibleItem, final int visibleItemCount, final int totalItemCount,final AbsListView view ){
+    private void getElsePhotos(int firstVisibleItem, final int visibleItemCount, final int totalItemCount, final AbsListView view) {
 
         if (firstVisibleItem + visibleItemCount >= totalItemCount & !updated) {
 
 
-            VKHelper.getPhotoList(Constants.GROUP_ID,Constants.ALBUM_ID, 1, _count, new VKRequest.VKRequestListener() {
+            VKHelper.getPhotoList(Constants.GROUP_ID, Constants.ALBUM_ID, 1, _count, new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(final VKResponse response) {
 
@@ -145,7 +148,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                 }
 
             });
-            updated=true;
+            updated = true;
         }
 
     }
@@ -162,8 +165,6 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         this.view = view;
 
 
-
-
         float scaleFactor = getResources().getDisplayMetrics().density * 80;
 
         int number = getActivity().getWindowManager().getDefaultDisplay().getWidth();
@@ -171,10 +172,10 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         this.columns = columns;
         VKHelper.offsetCounter = 0;
 
-            if (OfflineMode.isOnline(getActivity().getApplicationContext())) {
-                temp = false;
-                if (type == 0) {
-                    VKHelper.getPhotoList(Constants.USER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
+        if (OfflineMode.isOnline(getActivity().getApplicationContext())) {
+            temp = false;
+            if (type == 0) {
+                VKHelper.getPhotoList(Constants.USER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
 
                     @Override
                     public void onComplete(final VKResponse response) {
@@ -195,12 +196,12 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                 });
 
             }
-            isRequestNull =true;
+            isRequestNull = true;
         }
         if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(Constants.ALBUM_ID)) {
-            handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID),columns, view);
-            isRequestNull =true;
-        }else {
+            handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
+            isRequestNull = true;
+        } else {
             if (temp) {
                 isRequestNull = false;
                 showAlertNoInternet(view);
@@ -233,7 +234,8 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
     public static int albumSize;
     GridView gridOfPhotos;
-   PhotoListAdapter adapter;
+    PhotoListAdapter adapter;
+
     protected void handleResponse(JSONObject jsonObject, final int columns, View view) {
 
         final ArrayList<VKApiPhoto> photos = VKHelper.getPhotosFromJSONArray(jsonObject);
@@ -249,16 +251,21 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
             Log.d("Loading failed", "Not complete");
         }
 
-
-
+        final ImageView addPhoto = (ImageView) view.findViewById(R.id.add_photo_from);
+        addPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).addPhotoFrom();
+            }
+        });
 
         gridOfPhotos.setNumColumns(columns);
         PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
-        adapter= photoListAdapter;
+        adapter = photoListAdapter;
         photoListAdapter.notifyDataSetChanged();
         //gridOfPhotos.invalidateViews();
         gridOfPhotos.setAdapter(photoListAdapter);
-        updated=false;
+        updated = false;
         gridOfPhotos.setOnScrollListener(this);
 
         if (type == 0) {
@@ -272,6 +279,8 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                     FragmentMakePost.refreshMakePostFragment(0);
                 }
             });
+
+            addPhoto.setVisibility(View.GONE);
         } else {
             gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -284,6 +293,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                     transaction.add(R.id.container, fragment).addToBackStack("String").commit();
                 }
             });
+            addPhoto.setVisibility(View.VISIBLE);
         }
 
     }
