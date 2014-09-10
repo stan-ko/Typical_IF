@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#64c3c3c3"
+    android:paddingBottom="5dp">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/txt_poll_title"
-        android:textColor="#ff515151"
+        android:textColor="#ffffffff"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/img_fixed_post"
         android:layout_toEndOf="@+id/img_fixed_post"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:text="Jgbnedfyyz"
+        android:textSize="18dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,8 +26,11 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/txt_poll_votes"
         android:layout_toEndOf="@+id/img_fixed_post"
-        android:layout_alignBottom="@+id/img_fixed_post"
-        android:layout_toRightOf="@+id/img_fixed_post" />
+        android:text="dfghsdfghsfgs"
+        android:textColor="#ffffffff"
+        android:layout_below="@+id/txt_poll_title"
+        android:layout_alignLeft="@+id/txt_poll_title"
+        android:layout_alignStart="@+id/txt_poll_title" />
 
     <ImageView
         android:layout_width="50dp"
@@ -31,5 +40,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="5dp" />
 </RelativeLayout>

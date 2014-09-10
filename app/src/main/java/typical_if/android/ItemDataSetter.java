@@ -37,6 +37,7 @@ import com.koushikdutta.ion.Ion;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
@@ -420,6 +421,9 @@ public class ItemDataSetter {
         }
         return spannable;
     }
+
+
+
 
     public static void setText(String text, RelativeLayout parent) {
         ViewGroup textContainer = getPreparedView(parent, R.layout.post_text_layout);
@@ -984,19 +988,26 @@ public class ItemDataSetter {
         if (OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())) {
             VKHelper.getPhotoByID(photosParam, new VKRequest.VKRequestListener() {
                 @Override
-                public void onComplete(final VKResponse response) {
+                public void onComplete(VKResponse response) {
                     super.onComplete(response);
                     OfflineMode.saveJSON(response.json, photosParam);
                     finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosParam));
                     Fragment fragment = FragmentFullScreenViewer.newInstance(finalPhotos, position);
                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 }
+
+                @Override
+                public void onError(VKError error) {
+                    super.onError(error);
+                    Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
+                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();}
+
             });
         }
         if (!OfflineMode.isOnline(Constants.mainActivity.getApplicationContext()) &
                 OfflineMode.isJsonNull(photosParam)) {
             finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosParam));
-            Fragment fragment = FragmentFullScreenViewer.newInstance(finalPhotos, position);
+            Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
             fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
         } else {
             showAlertNoInternet(WallAdapter.wallAdapterView);

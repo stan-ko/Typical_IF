@@ -4,7 +4,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:divider="@drawable/post_divider"
-    android:background="#ffffffff">
+    android:background="@drawable/element_selector">
 
     <LinearLayout
         android:orientation="vertical"
@@ -13,21 +13,29 @@
         android:layout_toEndOf="@+id/leftLine"
         android:layout_toRightOf="@+id/leftLine"
         android:visibility="visible"
-        android:id="@+id/linearLayout">
+        android:id="@+id/linearLayout"
+        android:background="@drawable/element_selector"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="#ffffffff"
+            android:background="@drawable/element_selector"
             android:visibility="visible"
             android:paddingTop="5dp">
 
-            <ImageView
+            <typical_if.android.view.RoundedImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:id="@+id/img_copy_history_logo"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -37,10 +45,10 @@
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/img_copy_history_logo"
                 android:layout_toEndOf="@+id/img_copy_history_logo"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
                 android:singleLine="true"
-                android:textColor="#ff4c4c4c" />
+                android:textColor="#ff4c4c4c"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -50,7 +58,9 @@
                 android:layout_below="@+id/txt_copy_history_title"
                 android:layout_alignLeft="@+id/txt_copy_history_title"
                 android:layout_alignStart="@+id/txt_copy_history_title"
-                android:textColor="#ff717171" />
+                android:textColor="#ff717171"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp" />
 
         </RelativeLayout>
 
@@ -58,27 +68,33 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            android:id="@+id/copyHistorySignedLayout"></RelativeLayout>
+            android:id="@+id/copyHistorySignedLayout"
+            android:background="@drawable/element_selector"
+            android:layout_marginRight="5dp"></RelativeLayout>
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/copyHistoryTextLayout"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:background="@color/transparent"
+            android:layout_marginRight="5dp" />
 
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/copyHistoryAttachmentsLayout"
             android:orientation="vertical"
-            android:visibility="gone" >
+            android:visibility="gone"
+            android:baselineAligned="false"
+            android:background="@drawable/element_selector">
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/copyHistoryMediaLayout"
-                android:background="#ffffffff"
+                android:background="@drawable/element_selector"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp" />
 
@@ -87,14 +103,16 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/copyHistoryAudioLayout"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:background="@color/transparent" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/copyHistoryDocumentLayout"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:background="@drawable/element_selector" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -105,34 +123,39 @@
                 android:showDividers="middle"
                 android:divider="@drawable/copy_history_divider"
                 android:dividerPadding="5dp"
-                android:padding="5dp" />
+                android:padding="5dp"
+                android:background="@color/transparent" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/copyHistoryWikiPageLayout"
-                android:visibility="gone"></RelativeLayout>
+                android:visibility="gone"
+                android:background="@drawable/element_selector"></RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/copyHistoryLinkLayout"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:background="@drawable/element_selector" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:id="@+id/copyHistoryPollLayout" />
+                android:id="@+id/copyHistoryPollLayout"
+                android:background="@drawable/element_selector" />
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
-            android:background="#ffffffff"
+            android:background="@drawable/element_selector"
             android:visibility="gone"
-            android:id="@+id/copyHistoryGeoLayout"></RelativeLayout>
+            android:id="@+id/copyHistoryGeoLayout"
+            android:layout_marginRight="5dp"/>
 
     </LinearLayout>
 
@@ -140,9 +163,9 @@
         android:layout_width="4dp"
         android:layout_height="fill_parent"
         android:id="@+id/leftLine"
-        android:layout_marginLeft="5dp"
         android:visibility="gone"
-        android:layout_marginTop="5dp"
-        android:layout_alignBottom="@+id/linearLayout"></RelativeLayout>
+        android:layout_alignBottom="@+id/linearLayout"
+        android:background="@color/transparent"
+        android:layout_marginRight="5dp"/>
 
 </RelativeLayout>

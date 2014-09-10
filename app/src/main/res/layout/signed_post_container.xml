@@ -3,17 +3,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffffff"
-    android:paddingBottom="5dp">
+    android:background="@drawable/element_selector">
 
-    <ImageView
+    <typical_if.android.view.RoundedImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:id="@+id/img_signed_post"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:background="@color/transparent"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:paddingBottom="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -21,7 +25,7 @@
         android:id="@+id/txt_signed_post_name"
         android:layout_toRightOf="@+id/img_signed_post"
         android:layout_toEndOf="@+id/img_sigend_post"
-        android:textColor="#ff737373"
+        android:textColor="#ffffffff"
         android:textSize="14dp"
         android:singleLine="true"
         android:layout_alignBottom="@+id/img_signed_post"
@@ -29,5 +33,10 @@
         android:gravity="center"
         android:layout_alignTop="@+id/img_signed_post"
         android:text="sad asd asdad a d"
-        android:textIsSelectable="false" />
+        android:textIsSelectable="false"
+        android:background="@color/transparent"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp" />
 </RelativeLayout>

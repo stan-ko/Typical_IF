@@ -3,13 +3,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ffffff">
+    android:background="@color/transparent">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txt_post"
-        android:textColor="#ff404040"
+        android:textColor="#ffffffff"
         android:textSize="17dp"
         android:clickable="true"
         android:layout_alignParentTop="true"

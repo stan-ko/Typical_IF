@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="#ffffffff"
+    android:background="@drawable/element_selector"
     android:paddingTop="5dp"
     android:paddingBottom="5dp">
 
@@ -13,7 +13,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -28,7 +29,9 @@
         android:textStyle="bold"
         android:textSize="15dp"
         android:padding="5dp"
-        android:maxLines="3" />
+        android:maxLines="3"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -42,7 +45,9 @@
         android:layout_below="@+id/txt_link_title"
         android:layout_toRightOf="@+id/img_link"
         android:layout_alignBottom="@+id/img_link"
-        android:maxLines="2" />
+        android:maxLines="2"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -53,5 +58,7 @@
         android:padding="5dp"
         android:textColor="#ff535353"
         android:textSize="15dp"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 </RelativeLayout>

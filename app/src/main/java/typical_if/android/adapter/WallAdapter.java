@@ -139,6 +139,7 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.cb_post_comment.setText(valueOf(post.comments_count));
             viewHolder.cb_post_like.setText(valueOf(post.likes_count));
             viewHolder.cb_post_repost.setText(String.valueOf(post.reposts_count));
+
             viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
 
             viewHolder.postFeatureLayout.setBackgroundColor(Color.parseColor(postColor));
@@ -492,7 +493,7 @@ public class WallAdapter extends BaseAdapter {
             this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
             this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other_actions);
             this.postFeatureLayout = (RelativeLayout) convertView.findViewById(R.id.postFeaturesLayout);
-            this.extendedMenuItems = (CheckBox) convertView.findViewById(R.id.checkBox4);
+            this.extendedMenuItems = (CheckBox) convertView.findViewById(R.id.expand_post_action_bar);
 
             this.cb_post_like = (CheckBox) convertView.findViewById(R.id.cb_like);
             this.cb_post_comment = (CheckBox) convertView.findViewById(R.id.cb_comment);

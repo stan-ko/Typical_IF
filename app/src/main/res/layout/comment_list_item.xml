@@ -12,8 +12,8 @@
     android:focusableInTouchMode="false"
     android:background="@color/transparent">
 
- 
-   
+
+
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -27,7 +27,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_margin="5dp"
-        android:background="@drawable/sample_background" />
+        android:background="@drawable/sample_background" >
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -41,7 +43,7 @@
         android:background="@drawable/message_text_shape"
 
         android:layout_toEndOf="@+id/img_user_avatar"
-        android:layout_below="@+id/commentTextLayout"
+        android:layout_below="@+id/user_comment_text"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 

@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#ffe6e6e6">
+    android:padding="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -14,52 +14,59 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/postParentLayout"
-            android:layout_marginLeft="7dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginRight="7dp"
             android:background="@drawable/post_shape">
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:id="@+id/postSignedLayout" />
+                android:id="@+id/postSignedLayout"
+                android:background="@drawable/element_selector" />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:id="@+id/postTextLayout"></RelativeLayout>
+                android:id="@+id/postTextLayout"
+                android:background="@color/transparent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/postAttachmentsLayout"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:background="@drawable/element_selector"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp">>
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postMediaLayout"
-                    android:background="#ffffffff"
+                    android:background="@drawable/element_selector"
                     android:paddingBottom="5dp"
-                    android:paddingTop="5dp" />
+                    android:paddingTop="5dp"  />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postAudioLayout"
-                    android:orientation="vertical" />
+                    android:orientation="vertical"
+                    android:background="@color/transparent"/>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postDocumentLayout"
-                    android:orientation="vertical" />
+                    android:orientation="vertical"
+                    android:background="@drawable/element_selector"/>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -68,7 +75,7 @@
                     android:id="@+id/postAlbumLayout"
                     android:orientation="vertical"
                     android:padding="5dp"
-                    android:background="#ffc0c0c0"
+                    android:background="@drawable/element_selector"
                     android:dividerPadding="5dp"
                     android:divider="@drawable/copy_history_divider"
                     android:showDividers="middle" />
@@ -77,19 +84,23 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/postWikiPageLayout"
-                    android:visibility="gone"></RelativeLayout>
+                    android:visibility="gone"
+                    android:background="@drawable/element_selector"
+                    />
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    android:id="@+id/postLinkLayout" />
+                    android:id="@+id/postLinkLayout"
+                    android:background="@drawable/element_selector"/>
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
-                    android:id="@+id/postPollLayout" />
+                    android:id="@+id/postPollLayout"
+                    android:background="@drawable/element_selector"/>
 
             </LinearLayout>
 
@@ -97,14 +108,73 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/postGeoLayout"
-                android:visibility="gone"></RelativeLayout>
+                android:visibility="gone"
+                android:background="@drawable/element_selector"
+                />
 
             <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:id="@+id/copyHistoryLayout" />
+                android:id="@+id/copyHistoryLayout"
+                android:background="@drawable/element_selector"
+                android:layout_marginTop="5dp"/>
 
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="50dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignTop="@+id/expand_post_action_bar"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/partly_transparent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="5dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/img_fixed_post"
+                        android:src="@drawable/custom_fixed_post_black"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/txt_post_date_of_comment"
+                        android:singleLine="true"
+                        android:layout_toStartOf="@+id/cb_repost"
+                        android:layout_toEndOf="@+id/img_fixed_post"
+                        android:visibility="visible"
+                        android:text="Сьогодні о 16:18"
+                        android:textSize="15dp"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/img_fixed_post"
+                        android:layout_toLeftOf="@+id/button_repost"
+                        android:layout_marginLeft="10dp"
+                        android:background="@color/transparent"
+                        android:textColor="#ffffffff" />
+
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/expand_post_action_bar"
+                        android:button="@drawable/slide_up_down_selector"
+                        android:checked="false"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginRight="5dp" />
+                </RelativeLayout>
+
+            </RelativeLayout>
 
 
         </LinearLayout>
@@ -112,46 +182,14 @@
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="50dp"
-            android:layout_below="@+id/postParentLayout"
-            android:background="#ffffffff"
-            android:layout_marginLeft="7dp"
-            android:layout_marginRight="7dp">
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/img_fixed_post"
-                android:src="@drawable/custom_fixed_post_black"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:visibility="invisible" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/txt_post_date_of_comment"
-                android:singleLine="true"
-                android:layout_toStartOf="@+id/cb_repost"
-                android:layout_toEndOf="@+id/img_fixed_post"
-                android:visibility="visible"
-                android:text="Сьогодні о 16:18"
-                android:textSize="15dp"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/img_fixed_post"
-                android:layout_toLeftOf="@+id/button_repost"
-                android:layout_marginLeft="10dp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
             android:id="@+id/postFeaturesLayout"
             android:visibility="gone"
-            android:padding="5dp"
-            android:background="#3DA2A9"
             android:layout_below="@+id/postParentLayout"
-            android:layout_marginLeft="7dp"
-            android:layout_marginRight="7dp">
+            android:background="#cb2bd3a3"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -160,7 +198,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/img_post_other_actions"
                 android:layout_toRightOf="@+id/img_post_other_actions"
-                android:visibility="visible">
+                android:visibility="visible"
+                android:background="#ff2bd3a3">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -212,6 +251,7 @@
                     android:layout_alignParentLeft="false"
                     android:layout_alignParentStart="false"
                     android:layout_marginLeft="25dp"
+                    android:layout_marginTop="-5dp"
                     android:layout_toRightOf="@+id/img_post_other_actions" />
 
                 <Button
@@ -236,7 +276,8 @@
                     android:layout_toRightOf="@+id/cb_repost"
                     android:layout_alignRight="@+id/cb_comment"
                     android:layout_alignEnd="@+id/cb_comment"
-                    android:layout_marginLeft="25dp" />
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginTop="-5dp"/>
 
                 <Button
                     android:layout_width="wrap_content"
@@ -254,30 +295,17 @@
 
         </RelativeLayout>
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/checkBox4"
-            android:button="@drawable/slide_up_down_selector"
-            android:checked="false"
-            android:layout_below="@+id/postParentLayout"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="false"
-            android:layout_marginTop="-15dp"
-            android:layout_marginBottom="30dp"
-            android:layout_marginRight="15dp"
-            android:layout_alignParentBottom="false" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Medium Text"
             android:id="@+id/post_user_comment_text"
             android:layout_alignParentTop="true"
             android:layout_alignLeft="@+id/postParentLayout"
             android:layout_alignStart="@+id/postParentLayout"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp" />
 
     </RelativeLayout>
 

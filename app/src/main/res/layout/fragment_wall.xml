@@ -14,10 +14,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/listViewWall"
-            android:dividerHeight="2dp"
             android:layout_centerHorizontal="true"
-            android:background="#ffd6d6d6"
+            android:background="@drawable/blur1"
             android:divider="#ffd6d6d6"
+            android:dividerHeight="0px"
             android:smoothScrollbar="true"
             android:scrollingCache="false"
             android:animationCache="false"/>
@@ -42,5 +42,6 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
 
 </typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout>
