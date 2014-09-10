@@ -901,6 +901,8 @@ public class ItemDataSetter {
 
                             final int finalJ = videoPointer++;
 
+                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                            img.setLayoutParams(params);
                             ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img);
 
                             relativeLayout = (RelativeLayout) layout_i_j.getChildAt(k + 1);

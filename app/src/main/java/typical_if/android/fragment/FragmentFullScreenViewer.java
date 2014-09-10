@@ -105,6 +105,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         goToComments = (ImageView) rootView.findViewById(R.id.go_to_comments);
        // likedOrNotLikedBox = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox));
         photoHeader = (TextView) rootView.findViewById(R.id.photoHeader);
+        photoHeader.setVisibility(View.GONE);
         counterOfPhotos = (TextView) rootView.findViewById(R.id.counterOfPhotos);
         albumSize = (TextView) rootView.findViewById(R.id.amountOfPhotos);
         panel = ((RelativeLayout) rootView.findViewById(R.id.fullscreen_action_panel));
