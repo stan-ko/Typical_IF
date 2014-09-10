@@ -4,14 +4,14 @@ import android.text.TextUtils;
 
 import com.vk.sdk.api.model.VKApiPhoto;
 
-import typical_if.android.MyApplication;
+import typical_if.android.TIFApp;
 
 /**
  * Created by Стас on 20.08.2014.
  */
 public class PhotoUrlHelper {
 
-    private final static int displayHeight = MyApplication.getDisplayHeight();
+    private final static int displayHeight = TIFApp.getDisplayHeight();
 
     public static String getFullScreenUrl(final VKApiPhoto photo) {
         final String urlOfFullScreenPhoto;
@@ -35,7 +35,7 @@ public class PhotoUrlHelper {
 
     public static String getPreviewUrl(final VKApiPhoto photo) {
         final String urlOfPreviewPhoto;
-        if (MyApplication.getDisplayHeight() < 500)
+        if (TIFApp.getDisplayHeight() < 500)
             urlOfPreviewPhoto = photo.photo_75;
         else
             urlOfPreviewPhoto = photo.photo_130;

@@ -15,7 +15,7 @@ import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 /**
  * Created by LJ on 14.07.2014.
  */
-public class MyApplication extends Application {
+public class TIFApp extends Application {
 
     private static Context appContext;
 

@@ -29,7 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -47,7 +46,7 @@ import java.util.Collections;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
-import typical_if.android.MyApplication;
+import typical_if.android.TIFApp;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -62,7 +61,7 @@ import typical_if.android.view.RoundedImageView;
 public class FragmentComments extends Fragment {
 
     public static final String POSTED = "POSTED";
-    final int displayHeight = MyApplication.getDisplayHeight();
+    final int displayHeight = TIFApp.getDisplayHeight();
     private OnFragmentInteractionListener mListener;
 
 
@@ -590,7 +589,7 @@ public class FragmentComments extends Fragment {
                     }
                     break;
                     case 4:
-                        Dialogs.reportListDialog(VKUIHelper.getApplicationContext(), group_id, comments.get(position).id);
+                        Dialogs.reportListDialog(TIFApp.getAppContext(), group_id, comments.get(position).id);
                         break;
                     case 5: {
                         if (myComment) {

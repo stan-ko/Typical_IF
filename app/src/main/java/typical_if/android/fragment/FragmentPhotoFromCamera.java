@@ -27,7 +27,7 @@ import com.vk.sdk.api.VKResponse;
 import java.io.File;
 
 import typical_if.android.Constants;
-import typical_if.android.MyApplication;
+import typical_if.android.TIFApp;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.UploadPhotoService;
@@ -39,8 +39,8 @@ public class FragmentPhotoFromCamera extends Fragment {
 
     private static String path;
     private ImageView photofromcamera;
-    private int displayWidth = MyApplication.getDisplayWidth();
-    private int displayHeight = MyApplication.getDisplayHeight();
+    private int displayWidth = TIFApp.getDisplayWidth();
+    private int displayHeight = TIFApp.getDisplayHeight();
 
     public static FragmentPhotoFromCamera newInstance(String path) {
         FragmentPhotoFromCamera fragment = new FragmentPhotoFromCamera();

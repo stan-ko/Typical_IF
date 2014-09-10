@@ -11,7 +11,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
-import typical_if.android.MyApplication;
+import typical_if.android.TIFApp;
 import typical_if.android.R;
 import typical_if.android.model.Album;
 
@@ -24,7 +24,7 @@ public class AlbumCoverAdapter extends BaseAdapter {
     public AlbumCoverAdapter(List<Album> list, LayoutInflater inflater) {
         albumList = list;
         layoutInflater = inflater;
-        imageHeight = MyApplication.getDisplayHeight() / 3;
+        imageHeight = TIFApp.getDisplayHeight() / 3;
     }
 
 

@@ -16,7 +16,7 @@
         android:allowBackup="true"
         android:icon="@drawable/tf_logo"
         android:theme="@style/AppTheme"
-        android:name="MyApplication">
+        android:name=".TIFApp">
         <service
             android:enabled="true"
             android:name=".UploadPhotoService">

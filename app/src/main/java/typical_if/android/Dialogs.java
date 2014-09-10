@@ -100,7 +100,7 @@ public class Dialogs {
                         reportListDialog(context, gid, id);
                         break;
                     case 1:
-                        ClipboardManager clipboard = (ClipboardManager) MyApplication.getAppContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipboardManager clipboard = (ClipboardManager) TIFApp.getAppContext().getSystemService(Context.CLIPBOARD_SERVICE);
                         clipboard.setText("http://vk.com/wall-" + gid + "_" + id);
                         break;
                 }

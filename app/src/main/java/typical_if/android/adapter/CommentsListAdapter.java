@@ -22,7 +22,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import typical_if.android.ItemDataSetter;
-import typical_if.android.MyApplication;
+import typical_if.android.TIFApp;
 import typical_if.android.R;
 import typical_if.android.view.RoundedImageView;
 
@@ -36,7 +36,7 @@ public class CommentsListAdapter extends BaseAdapter {
     final ArrayList<VKApiUser> profilesList;
 
     private final LayoutInflater layoutInflater;
-    private static final Context appContext = MyApplication.getAppContext();
+    private static final Context appContext = TIFApp.getAppContext();
 
     public ViewHolder viewHolder;
     String first_name = "";

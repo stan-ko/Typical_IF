@@ -20,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiCommunity;
@@ -34,6 +33,7 @@ import java.util.ArrayList;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
+import typical_if.android.TIFApp;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -56,13 +56,12 @@ public class WallAdapter extends BaseAdapter {
     public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, String postColor, boolean isSuggested) {
         this.wall = wall;
         this.layoutInflater = inflater;
-        this.context = VKUIHelper.getApplicationContext();
+        this.context = TIFApp.getAppContext();
         this.fragmentManager = fragmentManager;
         this.postColor = postColor;
         this.wall = wall;
         this.posts = wall.posts;
         this.layoutInflater = inflater;
-        this.context = VKUIHelper.getApplicationContext();
         this.postColor = postColor;
         this.isSuggested = isSuggested;
     }

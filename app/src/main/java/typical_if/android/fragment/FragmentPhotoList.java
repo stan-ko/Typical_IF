@@ -28,7 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
-import typical_if.android.MyApplication;
+import typical_if.android.TIFApp;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -38,7 +38,7 @@ import typical_if.android.adapter.PhotoListAdapter;
 public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollListener {
 
     public ArrayList<VKApiPhoto> photos2 = new ArrayList<VKApiPhoto>();
-    int height = MyApplication.getDisplayHeight();
+    int height = TIFApp.getDisplayHeight();
     private OnFragmentInteractionListener mListener;
  private int counter = 5;
 

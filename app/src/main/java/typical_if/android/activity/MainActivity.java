@@ -32,7 +32,7 @@ import typical_if.android.AudioPlayerService;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
-import typical_if.android.MyApplication;
+import typical_if.android.TIFApp;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -202,7 +202,7 @@ public class MainActivity extends ActionBarActivity implements
                     super.onComplete(response);
                     long userId = VKHelper.getUserIdFromResponse(response);
                     if (userId == 0) {
-                        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+                        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
                         userId = sPref.getLong("uid",0); //TODO че делать если нулл?
                         Constants.USER_ID = userId;
                         return;
@@ -228,7 +228,7 @@ public class MainActivity extends ActionBarActivity implements
                     super.onComplete(response);
                     long userId = VKHelper.getUserIdFromResponse(response);
                     if (userId == 0) {
-                        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+                        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
                         userId = sPref.getLong("uid",0); //TODO че делать если нулл?
                         Constants.USER_ID = userId;
                         return;

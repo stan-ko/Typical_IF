@@ -37,7 +37,6 @@ import com.koushikdutta.ion.Ion;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
@@ -73,7 +72,7 @@ import static java.lang.String.valueOf;
  */
 public class ItemDataSetter {
 
-    public static Context context = VKUIHelper.getApplicationContext();
+    public static Context context = TIFApp.getAppContext();
     public static LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     public final static Animation animationFadeIn = AnimationUtils.loadAnimation(context, R.anim.fade_in);
@@ -772,9 +771,9 @@ public class ItemDataSetter {
                     if (photosCount > 1) {
                         int newWidth;
                         if (getScreenOrientation() == 1) {
-                            newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                            newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
                         } else {
-                            newWidth = MyApplication.getDisplayHeight(); //this method should return the width of device screen.
+                            newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
                         }
                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
                         layout_i.setLayoutParams(params);
@@ -797,9 +796,9 @@ public class ItemDataSetter {
                             if (photosCount == 1 && videos.size() == 0) {
                                 int newWidth;
                                 if (getScreenOrientation() == 1) {
-                                    newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                                    newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
                                 } else {
-                                    newWidth = MyApplication.getDisplayHeight(); //this method should return the width of device screen.
+                                    newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
                                 }
                                 float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width);
                                 int newHeight = (int) (photos.get(finalJ).height * scaleFactor);
@@ -905,9 +904,9 @@ public class ItemDataSetter {
                         if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
                             int newWidth;
                             if (getScreenOrientation() == 1) {
-                                newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                                newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
                             } else {
-                                newWidth = MyApplication.getDisplayHeight(); //this method should return the width of device screen.
+                                newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
                             }
                             float scaleFactor = (float) newWidth / 320;
                             int newHeight = (int) (240 * scaleFactor);
@@ -917,9 +916,9 @@ public class ItemDataSetter {
                     } else if (photos.size() == 0 && videos.size() > 1) {
                         int newWidth;
                         if (getScreenOrientation() == 1) {
-                            newWidth = MyApplication.getDisplayWidth(); //this method should return the width of device screen.
+                            newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
                         } else {
-                            newWidth = MyApplication.getDisplayHeight(); //this method should return the width of device screen.
+                            newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
                         }
                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
                         layout_i.setLayoutParams(params);
@@ -1155,7 +1154,7 @@ public class ItemDataSetter {
     }
 
     public static void saveUserId(long uid) {
-        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
         final SharedPreferences.Editor ed = sPref.edit();
         final long user_id = uid;
         final String long_key = "uid";
@@ -1164,7 +1163,7 @@ public class ItemDataSetter {
     }
 
     public static void loadUserId() {
-        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
         final String long_key = "uid";
         final long user_id = sPref.getLong(long_key, 0);
         Constants.USER_ID = user_id;

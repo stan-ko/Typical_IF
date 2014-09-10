@@ -1,7 +1,6 @@
 package typical_if.android.adapter;
 
 import android.graphics.Bitmap;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,6 @@ import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.util.List;
 
-import typical_if.android.MyApplication;
 import typical_if.android.R;
 import typical_if.android.util.PhotoUrlHelper;
 

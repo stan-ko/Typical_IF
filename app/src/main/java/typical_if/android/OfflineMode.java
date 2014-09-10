@@ -19,7 +19,7 @@ public class OfflineMode {
 
 
     public static void saveJSON(JSONObject jsonObject, long gid) {
-        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences(String.valueOf(gid),Activity.MODE_PRIVATE);
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(gid),Activity.MODE_PRIVATE);
         final SharedPreferences.Editor ed = sPref.edit();
         final String JsonString = jsonObject.toString();
         final String JsonKey = String.valueOf(gid);
@@ -28,7 +28,7 @@ public class OfflineMode {
         ed.commit();
     }
     public static void saveJSON(JSONObject jsonObject, String id) {
-        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences(String.valueOf(id),Activity.MODE_PRIVATE);
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id),Activity.MODE_PRIVATE);
         final SharedPreferences.Editor ed = sPref.edit();
         final String JsonString = jsonObject.toString();
         final String JsonKey = id;
@@ -38,7 +38,7 @@ public class OfflineMode {
     }
 
     public static JSONObject loadJSON(long gid)  {
-        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences(String.valueOf(gid), Activity.MODE_PRIVATE);
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(gid), Activity.MODE_PRIVATE);
         final String JsonKey = String.valueOf(gid);
         final String savedText = sPref.getString(JsonKey, "");
         JSONObject jsonObj = null;
@@ -51,7 +51,7 @@ public class OfflineMode {
         return jsonObj;
     }
     public static JSONObject loadJSON(String id)  {
-        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
         final String JsonKey = String.valueOf(id);
         final String savedText = sPref.getString(JsonKey, "");
         JSONObject jsonObj = null;
@@ -74,7 +74,7 @@ public class OfflineMode {
         }
     }
     public static boolean isJsonNull(long id) {
-        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
         final String JsonKey = String.valueOf(id);
         final String savedText = sPref.getString(JsonKey, "");
         try {
@@ -85,7 +85,7 @@ public class OfflineMode {
         }
     }
     public static boolean isJsonNull(String id) {
-        final SharedPreferences sPref = MyApplication.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
         final String JsonKey = id;
         final String savedText = sPref.getString(JsonKey, "");
         try {

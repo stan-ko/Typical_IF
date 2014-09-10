@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -30,6 +29,7 @@ import java.util.ArrayList;
 import typical_if.android.Constants;
 import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
+import typical_if.android.TIFApp;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -168,7 +168,7 @@ public class FragmentMakePost extends Fragment {
                                 super.onComplete(response);
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 ItemDataSetter.fragmentManager.popBackStack();
-                                Toast.makeText(VKUIHelper.getApplicationContext(), ItemDataSetter.context.getString(R.string.post_added), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(TIFApp.getAppContext(), ItemDataSetter.context.getString(R.string.post_added), Toast.LENGTH_SHORT).show();
                             }
                             @Override
                             public void onError(final VKError error) {

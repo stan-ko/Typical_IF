@@ -93,9 +93,9 @@ public class Constants {
 
     public static String tempTextSuggestPost = "";
 
-    public static final Resources RESOURCES = MyApplication.getAppContext().getResources();
+    public static final Resources RESOURCES = TIFApp.getAppContext().getResources();
 
-    public static Toast toastInProgress = Toast.makeText(MyApplication.getAppContext(), RESOURCES.getString(R.string.in_progress), Toast.LENGTH_SHORT);
+    public static Toast toastInProgress = Toast.makeText(TIFApp.getAppContext(), RESOURCES.getString(R.string.in_progress), Toast.LENGTH_SHORT);
 
     public static final String TIME_FORMAT_STRING = "kk:mm";
     public static final String DATE_TIME_FORMAT_STRING = "d MMMM о kk:mm";

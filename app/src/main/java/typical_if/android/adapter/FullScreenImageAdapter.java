@@ -21,7 +21,7 @@ import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.util.ArrayList;
 
-import typical_if.android.MyApplication;
+import typical_if.android.TIFApp;
 import typical_if.android.R;
 import typical_if.android.util.PhotoUrlHelper;
 
@@ -29,7 +29,7 @@ import typical_if.android.util.PhotoUrlHelper;
  * Created by LJ on 21.07.2014.
  */
 public class FullScreenImageAdapter extends PagerAdapter {
-    final int displayHeight = MyApplication.getDisplayHeight();
+    final int displayHeight = TIFApp.getDisplayHeight();
     LayoutInflater inflater;
 
     public static ArrayList<VKApiPhoto> photos;
