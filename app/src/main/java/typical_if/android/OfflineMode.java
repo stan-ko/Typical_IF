@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -147,7 +146,7 @@ public class OfflineMode {
         return wall;
     }
     public  static void onErrorToast(Context ApplicationContext){
-        Toast.makeText(ApplicationContext, ApplicationContext.getString(R.string.error), Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(ApplicationContext, ApplicationContext.getString(R.string.error), Toast.LENGTH_SHORT).show();
 
     }
 

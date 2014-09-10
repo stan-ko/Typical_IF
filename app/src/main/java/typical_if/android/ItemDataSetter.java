@@ -978,47 +978,48 @@ public class ItemDataSetter {
 
 
     static int g;
-    static String photosParam = "";
     static ArrayList<VKApiPhoto> finalPhotos;
 
     public static void makeSaveTransaction(final ArrayList<VKApiPhoto> photos, final int position) {
-        for (g = 0; g < photos.size(); g++) {
-            photosParam = photosParam.concat(photos.get(g).owner_id + "_" + photos.get(g).id + ",");
-        }
+
         if (OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())) {
-            VKHelper.getPhotoByID(photosParam, new VKRequest.VKRequestListener() {
+            VKHelper.getPhotoByID(photosKeyGen(photos), new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {
                     super.onComplete(response);
-                    OfflineMode.saveJSON(response.json, photosParam);
-                    finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosParam));
+                    //photosParam1=photosParam;
+                    OfflineMode.saveJSON(response.json, photosKeyGen(photos));
+                    finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKeyGen(photos)));
                     Fragment fragment = FragmentFullScreenViewer.newInstance(finalPhotos, position);
                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                    OfflineMode.saveJSON(response.json, photosKeyGen(photos));
                 }
-
                 @Override
                 public void onError(VKError error) {
                     super.onError(error);
                     Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
-                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();}
-
+                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                }
             });
-        }
-        if (!OfflineMode.isOnline(Constants.mainActivity.getApplicationContext()) &
-                OfflineMode.isJsonNull(photosParam)) {
-            finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosParam));
-            Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
+        } else if(OfflineMode.isJsonNull(photosKeyGen(photos))) {
+            finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKeyGen(photos)));
+            Fragment fragment = FragmentFullScreenViewer.newInstance(finalPhotos, position);
             fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
         } else {
             showAlertNoInternet(WallAdapter.wallAdapterView);
         }
-        System.gc();
-        photosParam = "";
+    }
+    private static String photosKeyGen(final ArrayList<VKApiPhoto> photos){
+        String photosParam = "";
+        for (g = 0; g < photos.size(); g++) {
+            photosParam = photosParam.concat(photos.get(g).owner_id + "_" + photos.get(g).id + ",");
+        }
+        return photosParam;
     }
 
 
     static void showAlertNoInternet(final View view) {
-        Toast.makeText(Constants.mainActivity.getApplicationContext(), context.getString(R.string.no_internet_retry), Toast.LENGTH_SHORT);
+        Toast.makeText(Constants.mainActivity.getApplicationContext(), context.getString(R.string.no_internet_retry), Toast.LENGTH_SHORT).show();
     }
 
 

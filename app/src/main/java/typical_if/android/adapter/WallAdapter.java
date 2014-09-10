@@ -263,7 +263,7 @@ public class WallAdapter extends BaseAdapter {
                                 }
                             });
                             dialog.create().show();
-//
+
                         } catch (NullPointerException npe) {
                             Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }
