@@ -205,11 +205,11 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         Wall wall = VKHelper.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
         if (adapter == null) {
-            wallListView.setOnScrollListener(pauseOnScrollListener);
             adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
             wallListView.setAdapter(adapter);
+            wallListView.setOnScrollListener(pauseOnScrollListener);
         } else {
-            adapter.notifyDataSetChanged();
+            adapter.setWall(wall);
         }
 
         spinnerLayout.setVisibility(View.GONE);

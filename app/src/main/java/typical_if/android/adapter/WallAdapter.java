@@ -51,7 +51,7 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 import static java.lang.String.valueOf;
 
 public class WallAdapter extends BaseAdapter {
-    private final Wall wall;
+    private Wall wall;
     private final ArrayList<VKWallPostWrapper> posts;
     private final LayoutInflater layoutInflater;
     private final Context context;
@@ -69,6 +69,13 @@ public class WallAdapter extends BaseAdapter {
         this.posts = wall.posts;
         this.postColor = postColor;
         WallAdapter.isSuggested = isSuggested;
+    }
+
+    public void setWall(Wall wall) {
+        this.wall = wall;
+        this.posts.clear();
+        this.posts.addAll(wall.posts);
+        notifyDataSetChanged();
     }
 
     @Override
