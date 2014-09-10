@@ -4,14 +4,18 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -136,6 +140,44 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.cb_post_like.setText(valueOf(post.likes_count));
             viewHolder.cb_post_repost.setText(String.valueOf(post.reposts_count));
             viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
+
+            viewHolder.postFeatureLayout.setBackgroundColor(Color.parseColor(postColor));
+
+            final Animation.AnimationListener animationListener = new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    viewHolder.postFeatureLayout.clearAnimation();
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            };
+
+            viewHolder.extendedMenuItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        final Animation slideDown = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_down_animation);
+                        slideDown.setAnimationListener(animationListener);
+                        viewHolder.postFeatureLayout.startAnimation(slideDown);
+                        viewHolder.postFeatureLayout.setVisibility(View.VISIBLE);
+                        viewHolder.postFeatureLayout.setEnabled(true);
+                    } else {
+                        final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
+                        slideUp.setAnimationListener(animationListener);
+                        viewHolder.postFeatureLayout.startAnimation(slideUp);
+                        viewHolder.postFeatureLayout.setVisibility(View.INVISIBLE);
+                        viewHolder.postFeatureLayout.setEnabled(false);
+                    }
+                }
+            });
 
 
             viewHolder.button_like.setOnClickListener(new View.OnClickListener() {
@@ -418,6 +460,8 @@ public class WallAdapter extends BaseAdapter {
         public final RelativeLayout postSignedLayout;
         public final RelativeLayout postPollLayout;
         public final TextView postUserComment;
+        public final RelativeLayout postFeatureLayout;
+        public final CheckBox extendedMenuItems;
 
         public final CheckBox cb_post_like;
         public final CheckBox cb_post_repost;
@@ -447,6 +491,8 @@ public class WallAdapter extends BaseAdapter {
             this.postPollLayout = (RelativeLayout) convertView.findViewById(R.id.postPollLayout);
             this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
             this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other_actions);
+            this.postFeatureLayout = (RelativeLayout) convertView.findViewById(R.id.postFeaturesLayout);
+            this.extendedMenuItems = (CheckBox) convertView.findViewById(R.id.checkBox4);
 
             this.cb_post_like = (CheckBox) convertView.findViewById(R.id.cb_like);
             this.cb_post_comment = (CheckBox) convertView.findViewById(R.id.cb_comment);

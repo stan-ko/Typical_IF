@@ -592,7 +592,7 @@ public class ItemDataSetter {
         for (final VKApiAudio audio : audios) {
             tempAudioContainer = (ViewGroup) inflater.inflate(R.layout.audio_container, parent, false);
             tempAudioContainer.setVisibility(View.VISIBLE);
-            tempAudioContainer.getChildAt(0).setBackgroundColor(Color.parseColor(postColor));
+            //tempAudioContainer.getChildAt(0).setBackgroundColor(Color.parseColor(postColor));
             final CheckBox play_pause_music = (CheckBox) tempAudioContainer.getChildAt(0);
             SeekBar progressBar = (SeekBar) tempAudioContainer.getChildAt(1);
 

@@ -232,6 +232,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void onCreate(Bundle savedInstanceState) {
+        setRetainInstance(true);
         setHasOptionsMenu(true);
 
         ((MainActivity)getActivity()).getSupportActionBar().show();

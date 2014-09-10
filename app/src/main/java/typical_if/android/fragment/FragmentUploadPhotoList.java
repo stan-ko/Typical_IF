@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.vk.sdk.api.VKApi;
@@ -130,6 +131,32 @@ public class FragmentUploadPhotoList extends Fragment {
     }
 
     protected void handleResponse(View rootView, LayoutInflater inflater, final ArrayList<UploadPhotos> photolist, int columns) {
+
+        final ImageView uploadPhotoFromSd = (ImageView) rootView.findViewById(R.id.upload_photo_from_sd);
+        uploadPhotoFromSd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VKRequest req;
+                for (int j = 0; j < photolist.size(); j++) {
+                    getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
+                    if (photolist.get(j).isChecked) {
+                        req = VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photoSrc), Constants.ALBUM_ID, (int) gid);
+                        req.executeWithListener(new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(VKResponse response) {
+                                super.onComplete(response);
+                            }
+                            @Override
+                            public void onError(VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                            }
+                        });
+                    }
+                }
+            }
+        });
+
         photos = (GridView) rootView.findViewById(R.id.adding_photo_upload);
         PhotoUploadAdapter photoUploadAdapter = new PhotoUploadAdapter(category, inflater, photolist, getActivity().getSupportFragmentManager(), which);
         photos.setAdapter(photoUploadAdapter);

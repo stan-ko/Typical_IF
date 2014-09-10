@@ -67,4 +67,13 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/add_photo_from"
+        android:layout_gravity="right|bottom"
+        android:src="@drawable/custom_add_photo_from_icon_small"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="16dp" />
 </FrameLayout>

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_checked="false"
-        android:drawable="@drawable/custom_unliked_icon_med" />
+        android:drawable="@drawable/slide_down_icon" />
 
     <item
         android:state_checked="true"
-        android:drawable="@drawable/custom_liked_icon_med" />
+        android:drawable="@drawable/slide_up_icon" />
 </selector>

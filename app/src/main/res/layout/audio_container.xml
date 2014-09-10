@@ -4,7 +4,8 @@
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="60dp"
     android:background="#ffffffff"
-    android:paddingTop="5dp">
+    android:paddingTop="5dp"
+    android:paddingLeft="10sp">
 
     <CheckBox
         android:layout_width="wrap_content"
@@ -43,23 +44,24 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="false"
         android:layout_alignParentBottom="true"
-        android:gravity="right" />
+        android:gravity="right"
+        android:layout_marginRight="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txt_audio_artist"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentTop="false"
         android:layout_toRightOf="@+id/cb_audio_play_or_stop"
         android:layout_toEndOf="@+id/cb_audio_play_or_stop"
         android:textStyle="bold"
         android:layout_marginLeft="5dp"
         android:singleLine="true"
         android:paddingRight="5dp"
-        android:layout_marginTop="-4dp"
         android:layout_alignRight="@+id/progress_audio"
         android:layout_alignEnd="@+id/progress_audio"
-        android:layout_marginRight="50dp" />
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="0dp" />
 
     <TextView
         android:layout_width="wrap_content"

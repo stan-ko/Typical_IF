@@ -303,7 +303,7 @@ public class MainActivity extends DialogActivity implements
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onDestroy(){
         super.onDestroy();
 
         if (this.isFinishing()) {
@@ -315,7 +315,10 @@ public class MainActivity extends DialogActivity implements
                 Constants.playedPausedRecord.isPaused = true;
                 Constants.playedPausedRecord.isPlayed = false;
                 Constants.previousSeekBarState.setVisibility(View.INVISIBLE);
-                Constants.tempThread.interrupt();
+                try {
+                    Constants.tempThread.interrupt();
+                } catch (NullPointerException e) {
+                }
                 AudioPlayer.progressBar(Constants.previousSeekBarState).interrupt();
             }
         }

@@ -3,8 +3,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_checked="true"
-        android:drawable="@android:drawable/ic_media_pause"/>
+        android:drawable="@drawable/play_button_medium"/>
     <item
         android:state_checked="false"
-        android:drawable="@android:drawable/ic_media_play"/>
+        android:drawable="@drawable/pause_button_medium"/>
 </selector>

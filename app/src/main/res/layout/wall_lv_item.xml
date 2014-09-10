@@ -105,139 +105,168 @@
                 android:visibility="gone"
                 android:id="@+id/copyHistoryLayout" />
 
-            <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
-                android:id="@+id/postFeaturesLayout"
+
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:layout_below="@+id/postParentLayout"
+            android:background="#ffffffff"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/img_fixed_post"
+                android:src="@drawable/custom_fixed_post_black"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:visibility="invisible" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_post_date_of_comment"
+                android:singleLine="true"
+                android:layout_toStartOf="@+id/cb_repost"
+                android:layout_toEndOf="@+id/img_fixed_post"
                 android:visibility="visible"
-                android:padding="10dp"
-                android:background="#ffffffff">
+                android:text="Сьогодні о 16:18"
+                android:textSize="15dp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/img_fixed_post"
+                android:layout_toLeftOf="@+id/button_repost"
+                android:layout_marginLeft="10dp" />
+        </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:id="@+id/postFeaturesLayout"
+            android:visibility="gone"
+            android:padding="5dp"
+            android:background="#3DA2A9"
+            android:layout_below="@+id/postParentLayout"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp">
 
-                    android:id="@+id/relativeLayout"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/img_post_other_actions"
-                    android:layout_toRightOf="@+id/img_post_other_actions">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/img_fixed_post"
-                        android:src="@android:drawable/ic_lock_lock"
-                        android:visibility="invisible"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="-5dp"
-                        android:layout_marginRight="5dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txt_post_date_of_comment"
-                        android:textColor="#ff535353"
-                        android:singleLine="true"
-                        android:layout_toStartOf="@+id/cb_repost"
-                        android:layout_toEndOf="@+id/img_fixed_post"
-                        android:visibility="visible"
-                        android:text="Сьогодні о 16:18"
-                        android:textSize="15dp"
-                        android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@+id/cb_repost"
-                        android:layout_toRightOf="@+id/img_fixed_post"
-                        android:layout_marginRight="5dip"/>
-
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:id="@+id/cb_like"
-                        android:button="@drawable/like_or_not_liked_selector"
-                        android:checked="false"
-                        android:clickable="false"
-                        android:enabled="true"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:visibility="visible" />
-
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:id="@+id/cb_comment"
-                        android:button="@android:drawable/ic_notification_clear_all"
-                        android:checked="false"
-                        android:clickable="false"
-                        android:enabled="true"
-                        android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@+id/cb_like"
-                        android:layout_toStartOf="@+id/cb_like"
-                        android:layout_marginRight="5dip"/>
-
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
-                        android:id="@+id/cb_repost"
-                        android:button="@drawable/repost_or_not_selector"
-                        android:checked="false"
-                        android:clickable="false"
-                        android:enabled="true"
-                        android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@+id/cb_comment"
-                        android:layout_toStartOf="@+id/cb_comment"
-                        android:layout_marginRight="5dip" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/button_like"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_toRightOf="@+id/cb_comment"
-                        android:layout_toEndOf="@+id/cb_comment"
-                        android:visibility="visible"
-                        android:background="#00000000" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/button_comment"
-                        android:background="#00000000"
-                        android:layout_toEndOf="@+id/cb_repost"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/cb_repost"
-                        android:layout_toLeftOf="@+id/cb_like"
-                        android:layout_toStartOf="@+id/cb_like" />
-
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/button_repost"
-                        android:background="#00000000"
-                        android:layout_toEndOf="@+id/cb_comment"
-                        android:layout_centerVertical="true"
-                        android:layout_alignLeft="@+id/cb_repost"
-                        android:layout_alignStart="@+id/cb_repost"
-                        android:layout_toLeftOf="@+id/cb_comment"
-                        android:layout_toStartOf="@+id/cb_comment" />
-
-                </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/relativeLayout"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/img_post_other_actions"
+                android:layout_toRightOf="@+id/img_post_other_actions"
+                android:visibility="visible">
 
                 <ImageView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="30dp"
                     android:id="@+id/img_post_other_actions"
                     android:layout_centerVertical="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:src="@drawable/abc_ic_menu_moreoverflow_normal_holo_light"
-                    android:layout_marginLeft="-10dp" />
+                    android:src="@drawable/custom_img_post_other_actions_sm" />
 
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:id="@+id/cb_like"
+                    android:button="@drawable/like_or_not_liked_selector"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:enabled="true"
+                    android:textColor="#ffffffff"
+                    android:layout_centerVertical="true"
+                    android:visibility="visible"
+                    android:layout_toRightOf="@+id/cb_comment"
+                    android:layout_marginLeft="25dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:id="@+id/cb_comment"
+                    android:button="@drawable/custom_comment_icon_med"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:textColor="#ffffffff"
+                    android:enabled="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/cb_repost"
+                    android:layout_marginLeft="25dp" />
+
+
+                <CheckBox
+                    android:layout_width="30dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/cb_repost"
+                    android:button="@drawable/repost_or_not_selector"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:textColor="#ffffffff"
+                    android:enabled="true"
+                    android:layout_alignParentTop="false"
+                    android:layout_alignParentLeft="false"
+                    android:layout_alignParentStart="false"
+                    android:layout_marginLeft="25dp"
+                    android:layout_toRightOf="@+id/img_post_other_actions" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_like"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/button_comment"
+                    android:layout_toEndOf="@+id/cb_comment"
+                    android:visibility="visible"
+                    android:background="#00000000"
+                    android:layout_alignRight="@+id/cb_like"
+                    android:layout_alignEnd="@+id/cb_like"
+                    android:layout_marginLeft="25dp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_comment"
+                    android:background="#00000000"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/cb_repost"
+                    android:layout_alignRight="@+id/cb_comment"
+                    android:layout_alignEnd="@+id/cb_comment"
+                    android:layout_marginLeft="25dp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_repost"
+                    android:background="#00000000"
+                    android:layout_toEndOf="@+id/cb_comment"
+                    android:layout_centerVertical="true"
+                    android:layout_alignStart="@+id/cb_repost"
+                    android:layout_toStartOf="@+id/button_comment"
+                    android:layout_toRightOf="@+id/img_post_other_actions" />
 
             </RelativeLayout>
 
-        </LinearLayout>
+
+        </RelativeLayout>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkBox4"
+            android:button="@drawable/slide_up_down_selector"
+            android:checked="false"
+            android:layout_below="@+id/postParentLayout"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="false"
+            android:layout_marginTop="-15dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentBottom="false" />
 
         <TextView
             android:layout_width="wrap_content"

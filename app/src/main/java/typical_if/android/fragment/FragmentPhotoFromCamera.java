@@ -39,6 +39,7 @@ public class FragmentPhotoFromCamera extends Fragment {
 
     private static String path;
     private ImageView photofromcamera;
+    private ImageView uploadPhotoFromCamera;
     private int displayWidth = TIFApp.getDisplayWidth();
     private int displayHeight = TIFApp.getDisplayHeight();
 
@@ -63,6 +64,28 @@ public class FragmentPhotoFromCamera extends Fragment {
         File imageFile = new File(path);
         photofromcamera = (ImageView) rootView.findViewById(R.id.image_from_photocamera);
         photofromcamera.setImageBitmap(rotate(shrinkmethod(path, displayWidth, displayHeight), getCameraPhotoOrientation(getActivity().getApplicationContext(), Uri.fromFile(imageFile), path)));
+        uploadPhotoFromCamera = (ImageView) rootView.findViewById(R.id.upload_photo_from_camera);
+        uploadPhotoFromCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final File tempFile = new File(path);
+                getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
+                final VKRequest req = VKApi.uploadAlbumPhotoRequest(tempFile, Constants.ALBUM_ID, (int)(Constants.GROUP_ID*(-1)));
+                req.executeWithListener(new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+                        Log.d("MY response", response.responseString);
+                        //getActivity().stopService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
+                    }
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                    }
+                });
+            }
+        });
         return rootView;
     }
 
