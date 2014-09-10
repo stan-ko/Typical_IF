@@ -45,10 +45,11 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 import static java.lang.String.valueOf;
 
 public class WallAdapter extends BaseAdapter {
-    private Wall wall;
-    private ArrayList<VKWallPostWrapper> posts;
-    private static LayoutInflater layoutInflater;
-    private Context context;
+    private final Wall wall;
+    private final ArrayList<VKWallPostWrapper> posts;
+    private final LayoutInflater layoutInflater;
+    private final Context context;
+
     private String postColor;
     private FragmentManager fragmentManager;
     private static boolean isSuggested;
@@ -59,11 +60,9 @@ public class WallAdapter extends BaseAdapter {
         this.context = TIFApp.getAppContext();
         this.fragmentManager = fragmentManager;
         this.postColor = postColor;
-        this.wall = wall;
         this.posts = wall.posts;
-        this.layoutInflater = inflater;
         this.postColor = postColor;
-        this.isSuggested = isSuggested;
+        WallAdapter.isSuggested = isSuggested;
     }
 
     @Override
@@ -98,7 +97,7 @@ public class WallAdapter extends BaseAdapter {
 
         final VKWallPostWrapper post = posts.get(position);
 
-        initViewHolder(viewHolder, postColor, wall, position, fragmentManager, post, context);
+        initViewHolder(viewHolder, postColor, wall, position, fragmentManager, post, context, layoutInflater);
 
         return convertView;
     }
@@ -108,7 +107,13 @@ public class WallAdapter extends BaseAdapter {
     static String copy_history_name = "";
     static AlertDialog.Builder dialog;
 
-    public static void initViewHolder(final ViewHolder viewHolder, final String postColor, final Wall wall, int position, final FragmentManager fragmentManager, final VKWallPostWrapper postWrapper, final Context context) {
+    public static void initViewHolder(final ViewHolder viewHolder,
+                                      final String postColor,
+                                      final Wall wall, int position,
+                                      final FragmentManager fragmentManager,
+                                      final VKWallPostWrapper postWrapper,
+                                      final Context context,
+                                      final LayoutInflater layoutInflater) {
         try {
             ItemDataSetter.wallViewHolder = viewHolder;
             ItemDataSetter.postColor = postColor;

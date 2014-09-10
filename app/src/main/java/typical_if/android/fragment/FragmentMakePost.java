@@ -43,7 +43,8 @@ public class FragmentMakePost extends Fragment {
     private static long gid;
     private long pid;
     private int type;
-    private static Activity activity;
+    //private Activity activity;
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -60,8 +61,7 @@ public class FragmentMakePost extends Fragment {
         return fragment;
     }
 
-    public FragmentMakePost() {
-    }
+    public FragmentMakePost() {}
 
     static EditText textField;
     static TextView txtPostAttachCounter;
@@ -80,35 +80,30 @@ public class FragmentMakePost extends Fragment {
     private static final View.OnClickListener tooManyAttachments = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Toast.makeText(ItemDataSetter.context, ItemDataSetter.context.getString(R.string.max_attaches), Toast.LENGTH_SHORT).show();
+            Toast.makeText(TIFApp.getAppContext(), ItemDataSetter.context.getString(R.string.max_attaches), Toast.LENGTH_SHORT).show();
         }
     };
 
-    private static final View.OnClickListener photoAttachClick = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Dialogs.photoAttachDialog(activity, gid * (-1), 0);
-        }
-    };
+    private static View.OnClickListener photoAttachClick;
 
     private static final View.OnClickListener audioAttachClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAttachPostList.newInstance(2)).addToBackStack(null).commit();
+            ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAttachPostList.newAudioAttachInstance()).addToBackStack(null).commit();
         }
     };
 
     private static final View.OnClickListener videoAttachClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAttachPostList.newInstance(1)).addToBackStack(null).commit();
+            ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAttachPostList.newVideoAttachInstance()).addToBackStack(null).commit();
         }
     };
 
     private static final View.OnClickListener docAttachClick = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAttachPostList.newInstance(3)).addToBackStack(null).commit();
+            ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentAttachPostList.newDocAttachInstance()).addToBackStack(null).commit();
         }
     };
 
@@ -131,7 +126,13 @@ public class FragmentMakePost extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_make_post, container, false);
         setRetainInstance(true);
 
-        activity = getActivity();
+        //activity = getActivity();
+        photoAttachClick = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialogs.photoAttachDialog(getActivity(), gid * (-1), 0);
+            }
+        };
 
         textField = (EditText) rootView.findViewById(R.id.etxt_make_post_field);
 
@@ -263,7 +264,6 @@ public class FragmentMakePost extends Fragment {
         } else {
             makePostAttachmentsContainer.setVisibility(View.VISIBLE);
         }
-
 
         if (Constants.tempPostAttachCounter != 10) {
             imgPostAttachPhoto.setOnClickListener(photoAttachClick);

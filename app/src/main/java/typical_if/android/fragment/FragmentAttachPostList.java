@@ -3,8 +3,6 @@ package typical_if.android.fragment;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -39,6 +37,18 @@ public class FragmentAttachPostList extends Fragment {
     ListView attachList;
     RelativeLayout spinnerLayout;
     private static int type;
+
+    public static FragmentAttachPostList newAudioAttachInstance() {
+        return FragmentAttachPostList.newInstance(2);
+    }
+
+    public static FragmentAttachPostList newVideoAttachInstance() {
+        return FragmentAttachPostList.newInstance(1);
+    }
+
+    public static FragmentAttachPostList newDocAttachInstance() {
+        return FragmentAttachPostList.newInstance(3);
+    }
 
     public static FragmentAttachPostList newInstance(int typeParam) {
         FragmentAttachPostList fragment = new FragmentAttachPostList();
