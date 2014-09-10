@@ -213,13 +213,13 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         //-------------------------END-------- all Request from internet before start APP----------------------
     }
 
-    void handleRequestComplete(final JSONObject json, final long tfId, final AtomicInteger requestSessionThreadsCounter) {
+    void handleRequestComplete(final JSONObject json, final long id, final AtomicInteger requestSessionThreadsCounter) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 if (threadsCounter!=requestSessionThreadsCounter)
                     return;
-                OfflineMode.saveJSON(json, Constants.TF_ID);
+                OfflineMode.saveJSON(json, id);
                 decrementThreadsCounter(requestSessionThreadsCounter);
             }
         }).start();
