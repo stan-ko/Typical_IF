@@ -25,7 +25,7 @@
         android:layout_height="35dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.32"
-        android:visibility="visible"
+        android:visibility="gone"
         android:clickable="false"
         android:layout_below="@+id/txt_photo_text"
         android:layout_alignParentLeft="true"

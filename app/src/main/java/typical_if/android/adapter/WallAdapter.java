@@ -92,6 +92,7 @@ public class WallAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return posts.get(position).id;
     }
+
     public static View wallAdapterView;
 
     @Override
@@ -100,7 +101,7 @@ public class WallAdapter extends BaseAdapter {
 
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.wall_lv_item, null);
-            wallAdapterView=convertView;
+            wallAdapterView = convertView;
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
@@ -168,26 +169,6 @@ public class WallAdapter extends BaseAdapter {
                 }
             };
 
-            viewHolder.extendedMenuItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        final Animation slideDown = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_down_animation);
-                        slideDown.setAnimationListener(animationListener);
-                        viewHolder.postFeatureLayout.startAnimation(slideDown);
-                        viewHolder.postFeatureLayout.setVisibility(View.VISIBLE);
-                        viewHolder.postFeatureLayout.setEnabled(true);
-                    } else {
-                        final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
-                        slideUp.setAnimationListener(animationListener);
-                        viewHolder.postFeatureLayout.startAnimation(slideUp);
-                        viewHolder.postFeatureLayout.setVisibility(View.INVISIBLE);
-                        viewHolder.postFeatureLayout.setEnabled(false);
-                    }
-                }
-            });
-
-
             viewHolder.button_like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -247,7 +228,7 @@ public class WallAdapter extends BaseAdapter {
                                             int isSuccessed = object.optInt("success");
 //
                                             if (isSuccessed == 1) {
-                                                post.user_reposted=true;
+                                                post.user_reposted = true;
                                                 viewHolder.cb_post_repost.setChecked(true);
                                                 viewHolder.cb_post_repost.setText(String.valueOf(++post.reposts_count));
 //
@@ -299,6 +280,25 @@ public class WallAdapter extends BaseAdapter {
                     }
                 });
 
+                viewHolder.extendedMenuItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            final Animation slideDown = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_down_animation);
+                            slideDown.setAnimationListener(animationListener);
+                            viewHolder.postFeatureLayout.startAnimation(slideDown);
+                            viewHolder.postFeatureLayout.setVisibility(View.VISIBLE);
+                            viewHolder.postFeatureLayout.setEnabled(true);
+                        } else {
+                            final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
+                            slideUp.setAnimationListener(animationListener);
+                            viewHolder.postFeatureLayout.startAnimation(slideUp);
+                            viewHolder.postFeatureLayout.setVisibility(View.INVISIBLE);
+                            viewHolder.postFeatureLayout.setEnabled(false);
+                        }
+                    }
+                });
+
                 viewHolder.button_comment.setVisibility(View.VISIBLE);
                 viewHolder.button_repost.setVisibility(View.VISIBLE);
                 viewHolder.button_like.setVisibility(View.VISIBLE);
@@ -307,9 +307,10 @@ public class WallAdapter extends BaseAdapter {
                 viewHolder.cb_post_like.setVisibility(View.VISIBLE);
 
             } else {
-                viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
+                viewHolder.extendedMenuItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        buttonView.setChecked(false);
                         EventBus.getDefault().post(new EventShowSuggestPostDialog(wall.group.id * -1, post));
                     }
                 });
@@ -325,7 +326,6 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);
             if (postWrapper.postTextChecker) {
                 ItemDataSetter.setText(post.text, viewHolder.postTextLayout);
-               // viewHolder.postUserComment.setText(post.text);
             }
 
             viewHolder.copyHistoryLayout.setVisibility(postWrapper.copyHistoryContainerVisibility);
@@ -470,6 +470,7 @@ public class WallAdapter extends BaseAdapter {
         public final TextView postUserComment;
         public final RelativeLayout postFeatureLayout;
         public final CheckBox extendedMenuItems;
+        public final RelativeLayout postExpandButtonLayout;
 
         public final CheckBox cb_post_like;
         public final CheckBox cb_post_repost;
@@ -501,6 +502,7 @@ public class WallAdapter extends BaseAdapter {
             this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other_actions);
             this.postFeatureLayout = (RelativeLayout) convertView.findViewById(R.id.postFeaturesLayout);
             this.extendedMenuItems = (CheckBox) convertView.findViewById(R.id.expand_post_action_bar);
+            this.postExpandButtonLayout = (RelativeLayout) convertView.findViewById(R.id.postExpandButtonLayout);
 
             this.cb_post_like = (CheckBox) convertView.findViewById(R.id.cb_like);
             this.cb_post_comment = (CheckBox) convertView.findViewById(R.id.cb_comment);
@@ -509,7 +511,7 @@ public class WallAdapter extends BaseAdapter {
             this.button_comment = ((Button) convertView.findViewById(R.id.button_comment));
             this.button_repost = ((Button) convertView.findViewById(R.id.button_repost));
             this.txt_post_date = ((TextView) convertView.findViewById(R.id.txt_post_date_of_comment));
-            this.postUserComment = (TextView)convertView.findViewById(R.id.post_user_comment_text);
+            this.postUserComment = (TextView) convertView.findViewById(R.id.post_user_comment_text);
 
         }
     }

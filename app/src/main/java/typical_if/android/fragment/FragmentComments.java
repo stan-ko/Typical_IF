@@ -293,6 +293,9 @@ public class FragmentComments extends Fragment {
         viewHolder.cb_post_comment.setVisibility(View.GONE);
         viewHolder.button_comment.setVisibility(View.GONE);
         viewHolder.img_post_other.setVisibility(View.GONE);
+        viewHolder.extendedMenuItems.setVisibility(View.GONE);
+        viewHolder.postFeatureLayout.setVisibility(View.GONE);
+        viewHolder.postExpandButtonLayout.setVisibility(View.GONE);
 
         final VKWallPostWrapper post = this.post;
 

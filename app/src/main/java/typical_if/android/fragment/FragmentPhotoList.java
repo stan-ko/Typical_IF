@@ -255,7 +255,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         addPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).addPhotoFrom();
+                ((MainActivity)getActivity()).addPhotoFrom().show();
             }
         });
 

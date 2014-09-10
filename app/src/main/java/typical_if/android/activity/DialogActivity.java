@@ -37,7 +37,6 @@ import typical_if.android.event.EventShowSuggestPostDialog;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentUploadAlbumList;
-import typical_if.android.fragment.FragmentWall;
 
 /**
  * Created by admin on 10.09.2014.
@@ -163,7 +162,6 @@ public class DialogActivity extends ActionBarActivity {
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
                                 getSupportFragmentManager().popBackStack();
-                                addFragment(FragmentWall.newInstance(true));
                                 Toast.makeText(getApplicationContext(), resources.getString(R.string.post_deleted), Toast.LENGTH_SHORT).show();
                             }
                             @Override
