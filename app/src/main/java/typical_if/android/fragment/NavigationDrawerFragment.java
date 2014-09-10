@@ -56,9 +56,9 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBarDrawerToggle mDrawerToggle;
     private ExpandableListAdapter mExpandapleListAdapter;
 
-    public static DrawerLayout mDrawerLayout;
+    public DrawerLayout mDrawerLayout;
     private AnimatedExpandableListView mDrawerListView;
-    public static View mFragmentContainerView;
+    public View mFragmentContainerView;
 
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;

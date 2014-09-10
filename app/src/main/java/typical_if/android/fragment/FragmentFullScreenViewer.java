@@ -280,7 +280,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                 FragmentComments fragment = FragmentComments.newInstanceForPhoto(
 
                         photos.get(position), Constants.USER_ID);
-                getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                ((MainActivity)getActivity()).addFragment(fragment);
             }
         });
 

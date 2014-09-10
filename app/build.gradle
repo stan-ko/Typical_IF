@@ -29,6 +29,7 @@ dependencies {
     compile project(':jazzy_lib')
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.+'
     compile 'com.koushikdutta.ion:ion:1.+'
+    compile 'de.greenrobot:eventbus:2.2.1'
     compile files('libs/endless-1.2.3.jar')
 }
 

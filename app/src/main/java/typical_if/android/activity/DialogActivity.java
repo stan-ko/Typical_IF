@@ -1,4 +1,4 @@
-package typical_if.android;
+package typical_if.android.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -7,8 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.text.ClipboardManager;
 import android.widget.Toast;
 
@@ -22,22 +25,50 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 
+import de.greenrobot.event.EventBus;
+import typical_if.android.Constants;
+import typical_if.android.ItemDataSetter;
+import typical_if.android.OfflineMode;
+import typical_if.android.R;
+import typical_if.android.VKHelper;
+import typical_if.android.event.EventShowPhotoAttachDialog;
+import typical_if.android.event.EventShowReportDialog;
+import typical_if.android.event.EventShowSuggestPostDialog;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentUploadAlbumList;
 import typical_if.android.fragment.FragmentWall;
 
 /**
- * Created by admin on 06.08.2014.
+ * Created by admin on 10.09.2014.
  */
-public class Dialogs {
+public class DialogActivity extends ActionBarActivity {
 
-    public static android.support.v4.app.FragmentManager fragmentManager = null;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
 
-    public static void reportListDialog(final Context context, final long gid, final long id) {
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    public void replaceFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+    }
+
+    public void addFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+    }
+
+
+    public void reportListDialog(final long gid, final long id) {
         final AlertDialog.Builder builderIn = new AlertDialog.Builder(Constants.mainActivity);
         builderIn.setTitle(R.string.post_report);
-        final Resources resources = context.getResources();
+        final Resources resources = getResources();
 
         final String[] items = resources.getStringArray(R.array.post_report_types);
 
@@ -72,9 +103,10 @@ public class Dialogs {
                         final int isSucceed = response.json.optInt("response");
 
                         if (isSucceed == 1) {
-                            Toast.makeText(context, resources.getString(R.string.post_reported), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), resources.getString(R.string.post_reported), Toast.LENGTH_SHORT).show();
                         }
                     }
+
                     @Override
                     public void onError(final VKError error) {
                         super.onError(error);
@@ -86,9 +118,9 @@ public class Dialogs {
         builderIn.show();
     }
 
-    public static void reportDialog(final Context context, final long gid, final long id) {
+    public void reportDialog(final long gid, final long id) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
-        final Resources resources = context.getResources();
+        final Resources resources = getResources();
 
         final String[] items = {resources.getString(R.string.post_report), resources.getString(R.string.post_copy_link)};
 
@@ -97,10 +129,10 @@ public class Dialogs {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        reportListDialog(context, gid, id);
+                        reportListDialog(gid, id);
                         break;
                     case 1:
-                        ClipboardManager clipboard = (ClipboardManager) TIFApp.getAppContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipboardManager clipboard = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
                         clipboard.setText("http://vk.com/wall-" + gid + "_" + id);
                         break;
                 }
@@ -110,9 +142,9 @@ public class Dialogs {
         builder.show();
     }
 
-    public static void suggestPostDialog(final Context context, final long gid, final VKApiPost post) {
+    public void suggestPostDialog(final long gid, final VKApiPost post) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
-        final Resources resources = context.getResources();
+        final Resources resources = getResources();
 
         final String[] items = {resources.getString(R.string.post_edit), resources.getString(R.string.post_delete)};
 
@@ -123,16 +155,16 @@ public class Dialogs {
                     case 0:
                         ItemDataSetter.setSuggestAttachments(post.attachments);
                         Constants.tempTextSuggestPost = post.text;
-                        fragmentManager.beginTransaction().add(R.id.container, FragmentMakePost.newInstance(gid, post.id, 1)).addToBackStack(null).commit();
+                        addFragment(FragmentMakePost.newInstance(gid, post.id, 1));
                         break;
                     case 1:
                         VKHelper.deleteSuggestedPost(gid, post.id, new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
-                                fragmentManager.popBackStack();
-                                fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
-                                Toast.makeText(context, resources.getString(R.string.post_deleted), Toast.LENGTH_SHORT).show();
+                                getSupportFragmentManager().popBackStack();
+                                addFragment(FragmentWall.newInstance(true));
+                                Toast.makeText(getApplicationContext(), resources.getString(R.string.post_deleted), Toast.LENGTH_SHORT).show();
                             }
                             @Override
                             public void onError(final VKError error) {
@@ -148,9 +180,9 @@ public class Dialogs {
         builder.show();
     }
 
-    public static void photoAttachDialog(final Context context, final long gid, final int type) {
+    public void photoAttachDialog(final long gid, final int type) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
-        final Resources resources = context.getResources();
+        final Resources resources = getResources();
 
         final String[] items = {resources.getString(R.string.photo_from_own), resources.getString(R.string.photo_from_sd)};
 
@@ -159,10 +191,10 @@ public class Dialogs {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        fragmentManager.beginTransaction().add(R.id.container, FragmentAlbumsList.newInstance(type)).addToBackStack(null).commit();
+                        addFragment(FragmentAlbumsList.newInstance(type));
                         break;
                     case 1:
-                        fragmentManager.beginTransaction().add(R.id.container, FragmentUploadAlbumList.newInstance(gid, type)).addToBackStack(null).commit();
+                        addFragment(FragmentUploadAlbumList.newInstance(gid, type));
                         break;
                 }
             }
@@ -171,9 +203,9 @@ public class Dialogs {
         builder.show();
     }
 
-    public static void videoResolutionDialog(final Context context, JSONObject jsonObject) {
+    public void videoResolutionDialog(JSONObject jsonObject) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
-        final Resources resources = context.getResources();
+        final Resources resources = getResources();
 
         ArrayList<String> items = new ArrayList<String>();
         final ArrayList<String> links = new ArrayList<String>();
@@ -204,7 +236,7 @@ public class Dialogs {
                     case 1:
                     case 2:
                     case 3:
-                        Toast.makeText(context, links.get(which), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), links.get(which), Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -212,7 +244,7 @@ public class Dialogs {
         builder.show();
     }
 
-    public static Dialog addPhotoFrom() {
+    public Dialog addPhotoFrom() {
         final String[] items =  Constants.mainActivity.getResources().getStringArray(R.array.add_photo_from);
         AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
         builder.setTitle(Constants.mainActivity.getResources().getString(R.string.add_photo_from_title));
@@ -221,7 +253,7 @@ public class Dialogs {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        fragmentManager.beginTransaction().add(R.id.container, FragmentUploadAlbumList.newInstance(Constants.GROUP_ID * (-1), 1)).addToBackStack(null).commit();
+                        addFragment(FragmentUploadAlbumList.newInstance(Constants.GROUP_ID * (-1), 1));
                         dialog.cancel();
                         break;
                     case 1:
@@ -238,7 +270,7 @@ public class Dialogs {
         return builder.create();
     }
 
-    public static void takePhotoFromCamera() {
+    public void takePhotoFromCamera() {
         final int PICK_FROM_CAMERA = 1;
         File file = new File(Environment.getExternalStorageDirectory(),
                 "pic_" + String.valueOf(System.currentTimeMillis()) + ".jpg");
@@ -251,4 +283,17 @@ public class Dialogs {
         Constants.mainActivity.startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
     }
 
+    //-----------------------------------EVENTS---------------------------------------
+
+    public void onEventMainThread(EventShowPhotoAttachDialog event) {
+        photoAttachDialog(event.gid,event.which);
+    }
+
+    public void onEventMainThread(EventShowReportDialog event) {
+        reportDialog(event.gid,event.which);
+    }
+
+    public void onEventMainThread(EventShowSuggestPostDialog event) {
+        suggestPostDialog(event.gid,event.post);
+    }
 }

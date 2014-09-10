@@ -44,11 +44,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import typical_if.android.Constants;
-import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
-import typical_if.android.TIFApp;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.CommentsListAdapter;
@@ -589,7 +588,7 @@ public class FragmentComments extends Fragment {
                     }
                     break;
                     case 4:
-                        Dialogs.reportListDialog(TIFApp.getAppContext(), group_id, comments.get(position).id);
+                        ((MainActivity)getActivity()).reportListDialog(group_id, comments.get(position).id);
                         break;
                     case 5: {
                         if (myComment) {

@@ -136,7 +136,6 @@ public class ItemDataSetter {
 
     public static void setAttachemnts(VKAttachments attachments, LinearLayout parentLayout, int type) {
         final ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
-//        final ArrayList<VKApiPhoto> photos2= new ArrayList<VKApiPhoto>();
         final ArrayList<VKApiVideo> videos = new ArrayList<VKApiVideo>();
         final ArrayList<VKApiAudio> audios = new ArrayList<VKApiAudio>();
         final ArrayList<VKApiDocument> docs = new ArrayList<VKApiDocument>();
@@ -806,40 +805,6 @@ public class ItemDataSetter {
                                 img.setLayoutParams(params);
                                 img.setScaleType(ImageView.ScaleType.CENTER_CROP);
                             }
-//                            else if (photosCount == 2 && videos.size() == 0 && finalJ == 0) {
-//                                int totalWidth = MyApplication.getDisplayWidth();
-//                                boolean firstIsPortrait;
-//                                boolean secondIsPortrait;
-//
-//                                if (photos.get(finalJ).height >= photos.get(finalJ).width) {
-//                                    firstIsPortrait = true;
-//                                } else {
-//                                    firstIsPortrait = false;
-//                                }
-//
-//                                if (photos.get(finalJ + 1).height >= photos.get(finalJ + 1).width) {
-//                                    secondIsPortrait = true;
-//                                } else {
-//                                    secondIsPortrait = false;
-//                                }
-//
-//                                int newWidth = 0;
-//                                float scaleFactor = 0;
-//                                int newHeight = 0;
-//                                if (firstIsPortrait && !secondIsPortrait) {
-//                                    newWidth = MyApplication.getDisplayWidth() - photos.get(finalJ).width;
-//                                    scaleFactor = (float) newWidth / photos.get(finalJ).width;
-//                                    newHeight = (int) (photos.get(finalJ).height * scaleFactor);
-//                                } else if (!firstIsPortrait && secondIsPortrait){
-//                                    newWidth = MyApplication.getDisplayWidth() - photos.get(finalJ + 1).width;
-//                                    scaleFactor = (float) newWidth / photos.get(finalJ + 1).width;
-//                                    newHeight = (int) (photos.get(finalJ).height * scaleFactor);
-//                                }
-//
-//                                //layout_i_j.setLayoutParams(new LinearLayout.LayoutParams(photos.get(finalJ).width, photos.get(finalJ).height));
-//                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(totalWidth, newHeight);
-//                                layout_i.setLayoutParams(params);
-//                            }
 
                             ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img);
 
@@ -849,9 +814,6 @@ public class ItemDataSetter {
                                 public void onClick(View v) {
                                     Constants.COUNT_OF_PHOTOS = photosCount;
                                     makeSaveTransaction(photos, finalJ);
-
-//                                    Fragment fragment = FragmentFullScreenViewer.newInstance(photos, finalJ);
-//                                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                 }
                             });
                             if (photoPointer == photos.size()) {
@@ -881,9 +843,6 @@ public class ItemDataSetter {
                                     public void onClick(View v) {
                                         Constants.COUNT_OF_PHOTOS = photosCount;
                                         makeSaveTransaction(photos, finalL);
-
-//                                        Fragment fragment = FragmentFullScreenViewer.newInstance(photos, finalL);
-//                                        fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                                     }
                                 });
                             }
@@ -949,27 +908,6 @@ public class ItemDataSetter {
                             relativeLayout.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-//                                    String videoID = videos.get(finalJ).toAttachmentString().toString();
-//                                    videoID = videoID.replaceFirst("video", "");
-//
-//
-//                                    VKHelper.doPlayerRequest(videoID, new VKRequest.VKRequestListener() {
-//                                        @Override
-//                                        public void onComplete(final VKResponse response) {
-//                                            super.onComplete(response);
-//                                            JSONObject mainResponse = response.json.optJSONObject("response");
-//                                            JSONArray item = mainResponse.optJSONArray("items");
-//                                            JSONObject files = item.optJSONObject(0).optJSONObject("files");
-//                                            Toast.makeText(context, files.toString(), Toast.LENGTH_SHORT).show();
-//                                            if (files != null && files.has("external")) {
-//                                                String url = files.optString("external");
-//                                                Uri uri = Uri.parse(url);
-//                                                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-//                                            } else {
-//                                                Dialogs.videoResolutionDialog(context, files);
-//                                            }
-//                                        }
-//                                    });
                                     Constants.toastInProgress.show();
                                 }
                             });

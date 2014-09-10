@@ -30,13 +30,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import de.greenrobot.event.EventBus;
 import typical_if.android.Constants;
-import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
-import typical_if.android.TIFApp;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
+import typical_if.android.event.EventShowReportDialog;
+import typical_if.android.event.EventShowSuggestPostDialog;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
@@ -105,7 +107,6 @@ public class WallAdapter extends BaseAdapter {
     static String copy_history_title = "";
     static String copy_history_logo = "";
     static String copy_history_name = "";
-    static AlertDialog.Builder dialog;
 
     public static void initViewHolder(final ViewHolder viewHolder,
                                       final String postColor,
@@ -176,7 +177,7 @@ public class WallAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         try {
-                            dialog = new AlertDialog.Builder(Constants.mainActivity);
+                            final AlertDialog.Builder dialog = new AlertDialog.Builder(Constants.mainActivity);
 //
                             View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
                             dialog.setView(view);
@@ -244,7 +245,7 @@ public class WallAdapter extends BaseAdapter {
                 viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Dialogs.reportDialog(Constants.mainActivity, wall.group.id, post.id);
+                        EventBus.getDefault().post(new EventShowReportDialog(wall.group.id, post.id));
                     }
                 });
 
@@ -259,7 +260,7 @@ public class WallAdapter extends BaseAdapter {
                 viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Dialogs.suggestPostDialog(Constants.mainActivity, wall.group.id * -1, post);
+                        EventBus.getDefault().post(new EventShowSuggestPostDialog(wall.group.id * -1, post));
                     }
                 });
 

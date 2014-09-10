@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,11 +29,10 @@ import com.vk.sdk.api.VKResponse;
 import typical_if.android.AudioPlayer;
 import typical_if.android.AudioPlayerService;
 import typical_if.android.Constants;
-import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
-import typical_if.android.TIFApp;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentComments;
@@ -44,7 +42,7 @@ import typical_if.android.fragment.FragmentWall;
 import typical_if.android.fragment.NavigationDrawerFragment;
 
 
-public class MainActivity extends ActionBarActivity implements
+public class MainActivity extends DialogActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         FragmentFullScreenViewer.OnFragmentInteractionListener,
         FragmentComments.OnFragmentInteractionListener {
@@ -57,7 +55,7 @@ public class MainActivity extends ActionBarActivity implements
     private static final int PERIOD = 2000;
     private static final int PICK_FROM_CAMERA = 1;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
-    public static NavigationDrawerFragment mNavigationDrawerFragment;
+    public NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -92,7 +90,6 @@ public class MainActivity extends ActionBarActivity implements
                 }
             }
         });
-        Dialogs.fragmentManager = getSupportFragmentManager();
     }
 
     public long setGroupId(final int clickedPosition) {
@@ -174,7 +171,7 @@ public class MainActivity extends ActionBarActivity implements
 
         if (requestCode == PICK_FROM_CAMERA) {
             FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance(Constants.tempCameraPhotoFile);
-            getSupportFragmentManager().beginTransaction().add(R.id.container, fragmentPhotoFromCamera).addToBackStack(null).commit();
+            addFragment(fragmentPhotoFromCamera);
         }
     }
 
@@ -285,7 +282,7 @@ public class MainActivity extends ActionBarActivity implements
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                 fragmentManager.popBackStack();
             }
-            fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+            replaceFragment(fragment);
         }
         restoreActionBar();
     }

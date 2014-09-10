@@ -174,8 +174,7 @@ public class FragmentAlbumsList extends Fragment {
                 Constants.ALBUM_ID = albums.get(position).id;
                 Constants.TEMP_OWNER_ID = albums.get(position).owner_id;
                 Fragment fragment = FragmentPhotoList.newInstance(type);
-                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack("AlbumList").commit();
+                ((MainActivity)getActivity()).addFragment(fragment);
             }
         });
     }

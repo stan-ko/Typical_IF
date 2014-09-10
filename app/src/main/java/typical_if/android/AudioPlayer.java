@@ -15,8 +15,6 @@ import java.io.IOException;
  */
 public class AudioPlayer {
 
-
-    static String next = null;
     public static void getOwnMediaPlayer(final String stream, final CheckBox play, final SeekBar progress, final String songTitle, final String singer) {
 
         //final AudioManager audioManager = (AudioManager) activity.getSystemService(Context.AUDIO_SERVICE);

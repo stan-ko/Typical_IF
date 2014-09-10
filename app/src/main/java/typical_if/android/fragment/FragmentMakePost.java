@@ -26,14 +26,15 @@ import com.vk.sdk.api.model.VKApiVideo;
 
 import java.util.ArrayList;
 
+import de.greenrobot.event.EventBus;
 import typical_if.android.Constants;
-import typical_if.android.Dialogs;
 import typical_if.android.ItemDataSetter;
-import typical_if.android.TIFApp;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
+import typical_if.android.event.EventShowPhotoAttachDialog;
 
 /**
  * Created by admin on 18.08.2014.
@@ -130,7 +131,7 @@ public class FragmentMakePost extends Fragment {
         photoAttachClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialogs.photoAttachDialog(getActivity(), gid * (-1), 0);
+                EventBus.getDefault().post(new EventShowPhotoAttachDialog(gid * (-1), 0));
             }
         };
 

@@ -82,8 +82,7 @@ public class FragmentUploadAlbumList extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = null;
                 fragment = FragmentUploadPhotoList.newInstance(String.valueOf(albumtitles.get(position)), arrPath, gid,which);
-                android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                ((MainActivity)getActivity()).addFragment(fragment);
             }
         });
 

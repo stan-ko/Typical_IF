@@ -290,13 +290,11 @@ package typical_if.android.view;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -423,34 +421,34 @@ public class TouchImageView extends ImageView {
     public void setOnDoubleTapListener(GestureDetector.OnDoubleTapListener l) {
         doubleTapListener = l;
     }
-
-    @Override
-    public void setImageResource(int resId) {
-        super.setImageResource(resId);
-        savePreviousImageValues();
-        fitImageToView();
-    }
-
-    @Override
-    public void setImageBitmap(Bitmap bm) {
-        super.setImageBitmap(bm);
-        savePreviousImageValues();
-        fitImageToView();
-    }
-
-    @Override
-    public void setImageDrawable(Drawable drawable) {
-        super.setImageDrawable(drawable);
-        savePreviousImageValues();
-        fitImageToView();
-    }
-
-    @Override
-    public void setImageURI(Uri uri) {
-        super.setImageURI(uri);
-        savePreviousImageValues();
-        fitImageToView();
-    }
+//
+//    @Override
+//    public void setImageResource(int resId) {
+//        super.setImageResource(resId);
+//        savePreviousImageValues();
+//        fitImageToView();
+//    }
+//
+//    @Override
+//    public void setImageBitmap(Bitmap bm) {
+//        super.setImageBitmap(bm);
+//        savePreviousImageValues();
+//        fitImageToView();
+//    }
+//
+//    @Override
+//    public void setImageDrawable(Drawable drawable) {
+//        super.setImageDrawable(drawable);
+//        savePreviousImageValues();
+//        fitImageToView();
+//    }
+//
+//    @Override
+//    public void setImageURI(Uri uri) {
+//        super.setImageURI(uri);
+//        savePreviousImageValues();
+//        fitImageToView();
+//    }
 
     @Override
     public void setScaleType(ScaleType type) {

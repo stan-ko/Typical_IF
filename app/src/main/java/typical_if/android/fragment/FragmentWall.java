@@ -145,7 +145,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onDetach() {
         if (isSuggested) {
             ((MainActivity)getActivity()).getSupportActionBar().show();
-            ItemDataSetter.fragmentManager.beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
+            ((MainActivity)getActivity()).replaceFragment(FragmentWall.newInstance(false));
             setDisabledMenu();
         }
 
@@ -316,10 +316,10 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.make_post:
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container, FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0)).addToBackStack("makePostFragment").commit();
+                ((MainActivity)getActivity()).addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
                 break;
             case R.id.suggested_posts:
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
+                ((MainActivity)getActivity()).addFragment(FragmentWall.newInstance(true));
                 break;
             case R.id.join_leave_group:
                 if (isMember == 0) {
@@ -328,7 +328,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                         public void onComplete(final VKResponse response) {
                             super.onComplete(response);
                             Toast.makeText(getActivity(), getString(R.string.group_joined), Toast.LENGTH_SHORT).show();
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
+                            ((MainActivity)getActivity()).replaceFragment(FragmentWall.newInstance(false));
                         }
                         @Override
                         public void onError(final VKError error) {
@@ -342,7 +342,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                         public void onComplete(final VKResponse response) {
                             super.onComplete(response);
                             Toast.makeText(getActivity(), getString(R.string.group_leaved), Toast.LENGTH_SHORT).show();
-                            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, FragmentWall.newInstance(false)).commit();
+                            ((MainActivity)getActivity()).replaceFragment(FragmentWall.newInstance(false));
                         }
                         @Override
                         public void onError(final VKError error) {

@@ -25,7 +25,7 @@ public class AudioPlayerService extends Service {
     long when = System.currentTimeMillis();
     Notification notification = new Notification(icon, Constants.title, when);
     PendingIntent pendingIntent;
-    public static RemoteViews contentView;
+    public RemoteViews contentView;
 
     @Override
     public void onCreate() {
