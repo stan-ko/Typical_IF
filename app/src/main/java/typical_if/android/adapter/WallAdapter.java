@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vk.sdk.VKScope;
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiCommunity;
@@ -204,6 +206,7 @@ public class WallAdapter extends BaseAdapter {
                 viewHolder.cb_post_repost.setOnClickListener(null);
             } else {
                 viewHolder.cb_post_repost.setChecked(false);
+               if (VKSdk.isLoggedIn())
                 viewHolder.button_repost.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -263,7 +266,7 @@ public class WallAdapter extends BaseAdapter {
                                 }
                             });
                             dialog.create().show();
-
+//
                         } catch (NullPointerException npe) {
                             Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
                         }

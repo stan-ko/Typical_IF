@@ -29,7 +29,8 @@
         android:textStyle="bold"
         android:singleLine="true"
         android:paddingRight="5dp"
-        android:layout_marginLeft="105dp" />
+        android:layout_marginLeft="105dp"
+        android:textColor="#ffffffff" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,6 +38,7 @@
         android:id="@+id/txt_document_size"
         android:singleLine="true"
         android:layout_below="@+id/txt_document_title"
-        android:layout_marginLeft="105dp" />
+        android:layout_marginLeft="105dp"
+        android:textColor="#ffffff" />
 
 </RelativeLayout>

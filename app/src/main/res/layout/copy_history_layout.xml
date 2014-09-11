@@ -25,7 +25,9 @@
             android:layout_height="wrap_content"
             android:background="@drawable/element_selector"
             android:visibility="visible"
-            android:paddingTop="5dp">
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            >
 
             <typical_if.android.view.RoundedImageView
                 android:layout_width="60dp"
@@ -46,7 +48,7 @@
                 android:layout_toRightOf="@+id/img_copy_history_logo"
                 android:layout_toEndOf="@+id/img_copy_history_logo"
                 android:singleLine="true"
-                android:textColor="#ff4c4c4c"
+                android:textColor="#ffffffff"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp" />
 
@@ -58,7 +60,7 @@
                 android:layout_below="@+id/txt_copy_history_title"
                 android:layout_alignLeft="@+id/txt_copy_history_title"
                 android:layout_alignStart="@+id/txt_copy_history_title"
-                android:textColor="#ff717171"
+                android:textColor="#ffffffff"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp" />
 

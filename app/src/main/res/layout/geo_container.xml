@@ -19,5 +19,5 @@
         android:layout_below="@+id/img_geo"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:textColor="#ff2b2b2b" />
+        android:textColor="#ffffff" />
 </RelativeLayout>

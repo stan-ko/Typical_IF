@@ -52,24 +52,27 @@
         android:hint="Ваше повідомлення"
         android:paddingLeft="15dp"
         android:autoText="false"
-        android:layout_toStartOf="@+id/buttonSendComment"
-        android:layout_toLeftOf="@+id/buttonSendComment"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginRight="5dp" />
+        android:layout_toLeftOf="@+id/buttonSendComment"
+        android:layout_toStartOf="@+id/buttonSendComment" />
         <!--android:visibility="visible"-->
 
 
     <Button
-        android:layout_width="70dp"
-        android:layout_height="40dp"
-        android:text="Відпр."
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/buttonSendComment"
+        android:layout_weight=".30"
         android:visibility="visible"
-        android:background="@drawable/send_comment_button_shape"
-        android:layout_alignBottom="@+id/field_of_message_for_comment"
+        android:textColor="#ffffffff"
+        android:background="#dc464646"
+        android:layout_alignTop="@+id/field_of_message_for_comment"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="5dp" />
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:text="Відпр." />
 
 </RelativeLayout>

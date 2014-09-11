@@ -12,7 +12,9 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
@@ -190,14 +192,20 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     public void onPageSelected(final int position) {
 
 
-        photoHeader.setText(photos.get(position).text);
-        cb_like.setText(String.valueOf(photos.get(position).likes));
-        cb_comment.setText(String.valueOf(photos.get(position).comments));
+        if (photos.get(position).likes==0){
+            cb_like.setText("");
+        } else  cb_like.setText(String.valueOf(photos.get(position).likes));
+
+        if (photos.get(position).comments==0){
+            cb_comment.setText("");
+        }else
+            cb_comment.setText(String.valueOf(photos.get(position).comments));
+
         counterOfPhotos.setText(String.valueOf(position + 1));
-      if (VKHelper.countOfPhotos==0)
-          albumSize.setText(String.valueOf(Constants.COUNT_OF_PHOTOS));
-      else
-        albumSize.setText(String.valueOf(VKHelper.countOfPhotos));
+        if (VKHelper.countOfPhotos==0)
+            albumSize.setText(String.valueOf(Constants.COUNT_OF_PHOTOS));
+        else
+            albumSize.setText(String.valueOf(VKHelper.countOfPhotos));
 
 
         VKHelper.isLiked("photo",Constants.GROUP_ID, photos.get(position).id, new VKRequest.VKRequestListener() {
@@ -230,6 +238,9 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         addLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                  if (VKSdk.isLoggedIn()){
+
                 if (photos.get(position).user_likes == 0) {
                     VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
                         @Override
@@ -243,14 +254,14 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                             photos.get(position).user_likes = 1;
 
                         }
+
                         @Override
                         public void onError(final VKError error) {
                             super.onError(error);
                             OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                         }
                     });
-                }
-                else {
+                } else {
                     VKHelper.deleteLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(final VKResponse response) {
@@ -271,17 +282,26 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                         }
                     });
                 }
+
+            }else {
+                      Toast.makeText(Constants.mainActivity.getApplicationContext(),"Ви не залогінені",Toast.LENGTH_SHORT);
+                  }
             }
         });
 
         goToComments.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (VKSdk.isLoggedIn()){
+                    FragmentComments fragment = FragmentComments.newInstanceForPhoto(
 
-                FragmentComments fragment = FragmentComments.newInstanceForPhoto(
+                            photos.get(position), Constants.USER_ID);
+                    getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                }else {
+                    Toast.makeText(Constants.mainActivity.getApplicationContext(), "Ви не залогінені", Toast.LENGTH_SHORT);
+                }
 
-                        photos.get(position), Constants.USER_ID);
-                ((MainActivity)getActivity()).addFragment(fragment);
+
             }
         });
 

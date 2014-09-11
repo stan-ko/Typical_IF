@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="typical_if.android.activity.SplashActivity"
-    android:background="#ffffffff">
+    android:background="@drawable/blur1">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -28,7 +28,7 @@
         android:text="Типовий\nМобільний\nФранківськ"
         android:id="@+id/splash_title"
         android:gravity="center"
-        android:textColor="#ff606060"
+        android:textColor="#ffffff"
         android:textSize="20dp"
         android:layout_centerHorizontal="true" />
 

@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/refresh"
-    android:background="@color/vk_white"
+    android:background="@drawable/blur1"
     android:focusableInTouchMode="true">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@drawable/blur1"
         android:layout_width="match_parent" android:layout_height="match_parent">
 
         <ListView
@@ -26,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:id="@+id/spinner_layout"
+            android:background="@color/transparent"
             android:visibility="visible"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"

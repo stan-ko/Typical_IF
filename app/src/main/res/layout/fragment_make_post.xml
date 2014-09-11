@@ -2,7 +2,8 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="#ffffffff">
+    android:background="@drawable/blur1"
+    android:fillViewport="false">
     <RelativeLayout android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -20,29 +21,41 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/img_post_attach_photo"
-                android:src="@android:drawable/ic_menu_camera"
-                android:layout_weight="0.12" />
+                android:src="@drawable/ic_msg_attach_photo_up"
+                android:layout_weight="0.12"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingRight="8dp"
+                android:paddingLeft="5dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/img_post_attach_video"
-                android:src="@android:drawable/ic_menu_slideshow"
-                android:layout_weight="0.12" />
+                android:src="@drawable/ic_msg_attach_video_up"
+                android:layout_weight="0.12"
+                android:layout_marginTop="5dp"
+                android:paddingTop="9dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/img_post_attach_audio"
-                android:src="@android:drawable/ic_lock_silent_mode"
-                android:layout_weight="0.12" />
+                android:src="@drawable/ic_msg_attach_audio_up"
+                android:layout_weight="0.12"
+                android:layout_marginTop="7dp"
+                android:paddingTop="7dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="7dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/img_post_attach_doc"
-                android:src="@android:drawable/ic_menu_manage"
-                android:layout_weight="0.12" />
+                android:src="@drawable/ic_doc_up"
+                android:layout_weight="0.12"
+                android:layout_marginTop="5dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -51,15 +64,23 @@
                 android:gravity="center"
                 android:textStyle="bold"
                 android:textSize="20dp"
-                android:layout_weight="0.20" />
+                android:layout_weight="0.20"
+                android:textColor="#ffeeffef"
+                android:layout_marginTop="10dp" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Send"
+                android:text="Відпр."
                 android:id="@+id/bt_post_send"
                 android:layout_weight=".30"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:textColor="#ffffffff"
+                android:background="@color/partly_transparent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="10dp" />
         </LinearLayout>
 
         <EditText
@@ -69,7 +90,8 @@
             android:layout_below="@+id/make_post_buttons_container"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:maxHeight="300dp" />
+            android:maxHeight="300dp"
+            android:textColor="#FFEEFFEF" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,14 +101,15 @@
             android:visibility="gone"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/etxt_make_post_field">
+            android:layout_below="@+id/etxt_make_post_field"
+            android:background="@color/transparent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/make_post_media_container"
-                android:background="#ffffffff"
+                android:background="@color/transparent"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp" />
 
@@ -95,14 +118,16 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/make_post_audio_container"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:background="@color/transparent" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/make_post_doc_container"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                android:background="@color/transparent" />
 
         </LinearLayout>
 

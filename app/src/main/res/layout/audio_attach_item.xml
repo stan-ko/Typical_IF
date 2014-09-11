@@ -2,7 +2,9 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:background="@drawable/element_selector"
+   >
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,7 +16,8 @@
         android:textSize="20dp"
         android:padding="3dp"
         android:text="ssad sa das d "
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:textColor="#ffffffff" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -26,5 +29,6 @@
         android:textSize="16dp"
         android:text="sa dsa dsa das d as"
         android:padding="3dp"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:textColor="#ffffffff" />
 </RelativeLayout>

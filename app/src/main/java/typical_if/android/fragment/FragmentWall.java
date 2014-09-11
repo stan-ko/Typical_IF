@@ -167,7 +167,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
         wallListView = (ListView) rootView.findViewById(R.id.listViewWall);
         TextView padding = new TextView(getApplicationContext());
-        padding.setBackgroundColor(Color.WHITE);
+        padding.setBackgroundColor(Color.TRANSPARENT);
         padding.setHeight(ItemDataSetter.setInDp(48));
         wallListView.addHeaderView(padding);
 

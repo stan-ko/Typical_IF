@@ -1,6 +1,7 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     private int counter = 5;
 
     private boolean isRequestNull;
+    ImageView addPhoto;
     //private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private static final int PICK_FROM_CAMERA = 1;
     int type;
@@ -71,6 +73,19 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
         final View rootView = inflater.inflate(R.layout.fragment_photo_list, container, false);
         setRetainInstance(true);
+
+        addPhoto = (ImageView) rootView.findViewById(R.id.add_photo_from);
+        addPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog=((MainActivity)getActivity()).addPhotoFrom();
+                if (dialog==null){
+                    return;
+                }else {
+                    dialog.show();
+                }
+            }
+        });
 
         doRequest(rootView);
         return rootView;
@@ -234,7 +249,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
     public static int albumSize;
     GridView gridOfPhotos;
-    PhotoListAdapter adapter;
+    PhotoListAdapter photoListAdapter;
 
     protected void handleResponse(JSONObject jsonObject, final int columns, View view) {
 
@@ -243,25 +258,11 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         for (int i = 0; i < photos.size(); i++) {
             photos2.add(photos.get(i));
         }
-
-        try {
-            gridOfPhotos = (GridView) view.findViewById(R.id.gridOfPhotos);
-            // gridOfPhotos.setTransitionEffect(mCurrentTransitionEffect);
-        } catch (NullPointerException e) {
-            Log.d("Loading failed", "Not complete");
-        }
-
-        final ImageView addPhoto = (ImageView) view.findViewById(R.id.add_photo_from);
-        addPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity)getActivity()).addPhotoFrom().show();
-            }
-        });
+        gridOfPhotos = (GridView) view.findViewById(R.id.gridOfPhotos);
 
         gridOfPhotos.setNumColumns(columns);
-        PhotoListAdapter photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
-        adapter = photoListAdapter;
+        if(photoListAdapter ==null){
+        photoListAdapter= new PhotoListAdapter(photos2, getActivity().getLayoutInflater());}else
         photoListAdapter.notifyDataSetChanged();
         //gridOfPhotos.invalidateViews();
         gridOfPhotos.setAdapter(photoListAdapter);

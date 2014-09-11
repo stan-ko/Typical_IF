@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/postParentLayout"
+            android:paddingBottom="5dp"
             android:background="@drawable/post_shape">
 
             <RelativeLayout
@@ -30,8 +31,8 @@
                 android:id="@+id/postTextLayout"
                 android:background="@color/transparent"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -39,9 +40,9 @@
                 android:id="@+id/postAttachmentsLayout"
                 android:orientation="vertical"
                 android:visibility="gone"
-                android:background="@drawable/element_selector"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp">>
+                android:layout_marginRight="5dp"
+                android:background="@drawable/element_selector">>
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
@@ -132,7 +133,6 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignTop="@+id/expand_post_action_bar"
-                    android:layout_marginTop="5dp"
                     android:background="@color/partly_transparent"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
@@ -142,9 +142,9 @@
                         android:layout_width="20dp"
                         android:layout_height="wrap_content"
                         android:id="@+id/img_fixed_post"
-                        android:src="@drawable/custom_fixed_post_black"
+                        android:src="@drawable/custom_fixed_post"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
+                        android:layout_marginLeft="10dp"
                         android:visibility="invisible" />
 
                     <TextView
@@ -164,6 +164,119 @@
                         android:background="@color/transparent"
                         android:textColor="#ffffffff" />
 
+                    <RelativeLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="50dp"
+                        android:id="@+id/postFeaturesLayout"
+                        android:visibility="gone"
+                        android:background="#cb2bd3a3"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/relativeLayout"
+                            android:layout_centerVertical="true"
+                            android:layout_toEndOf="@+id/img_post_other_actions"
+                            android:layout_toRightOf="@+id/img_post_other_actions"
+                            android:visibility="visible"
+                            android:background="#ff2bd3a3">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:id="@+id/img_post_other_actions"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:src="@drawable/custom_img_post_other_actions_sm" />
+
+                            <CheckBox
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/cb_like"
+                                android:button="@drawable/like_or_not_liked_selector"
+                                android:checked="false"
+                                android:clickable="false"
+                                android:enabled="true"
+                                android:textColor="#ffffffff"
+                                android:layout_centerVertical="true"
+                                android:visibility="visible"
+                                android:layout_toRightOf="@+id/cb_comment"
+                                android:layout_marginLeft="5dp" />
+
+                            <CheckBox
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/cb_comment"
+                                android:button="@drawable/custom_comment_icon_med"
+                                android:checked="false"
+                                android:clickable="false"
+                                android:textColor="#ffffffff"
+                                android:enabled="true"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/cb_repost"
+                                android:layout_marginLeft="5dp" />
+
+
+                            <CheckBox
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/cb_repost"
+                                android:button="@drawable/repost_or_not_selector"
+                                android:checked="false"
+                                android:clickable="false"
+                                android:textColor="#ffffffff"
+                                android:enabled="true"
+                                android:layout_alignParentTop="false"
+                                android:layout_alignParentLeft="false"
+                                android:layout_alignParentStart="false"
+                                android:layout_toRightOf="@+id/img_post_other_actions"
+                                android:layout_marginTop="5dp" />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/button_like"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/button_comment"
+                                android:layout_toEndOf="@+id/cb_comment"
+                                android:visibility="visible"
+                                android:background="#00000000"
+                                android:layout_alignRight="@+id/cb_like"
+                                android:layout_alignEnd="@+id/cb_like"
+                                android:layout_marginLeft="25dp" />
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/button_comment"
+                                android:background="#00000000"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/cb_repost"
+                                android:layout_alignRight="@+id/cb_comment"
+                                android:layout_alignEnd="@+id/cb_comment"
+                                android:layout_marginLeft="10dp"
+                                android:layout_marginTop="-5dp"/>
+
+                            <Button
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/button_repost"
+                                android:background="#00000000"
+                                android:layout_toEndOf="@+id/cb_comment"
+                                android:layout_centerVertical="true"
+                                android:layout_alignStart="@+id/cb_repost"
+                                android:layout_toStartOf="@+id/button_comment"
+                                android:layout_toRightOf="@+id/img_post_other_actions" />
+
+                        </RelativeLayout>
+
+
+                    </RelativeLayout>
+
                     <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -180,122 +293,6 @@
 
 
         </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:id="@+id/postFeaturesLayout"
-            android:visibility="gone"
-            android:layout_below="@+id/postParentLayout"
-            android:background="#cb2bd3a3"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginBottom="5dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/relativeLayout"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/img_post_other_actions"
-                android:layout_toRightOf="@+id/img_post_other_actions"
-                android:visibility="visible"
-                android:background="#ff2bd3a3">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:id="@+id/img_post_other_actions"
-                    android:layout_centerVertical="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:src="@drawable/custom_img_post_other_actions_sm" />
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:id="@+id/cb_like"
-                    android:button="@drawable/like_or_not_liked_selector"
-                    android:checked="false"
-                    android:clickable="false"
-                    android:enabled="true"
-                    android:textColor="#ffffffff"
-                    android:layout_centerVertical="true"
-                    android:visibility="visible"
-                    android:layout_toRightOf="@+id/cb_comment"
-                    android:layout_marginLeft="25dp" />
-
-                <CheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:id="@+id/cb_comment"
-                    android:button="@drawable/custom_comment_icon_med"
-                    android:checked="false"
-                    android:clickable="false"
-                    android:textColor="#ffffffff"
-                    android:enabled="true"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/cb_repost"
-                    android:layout_marginLeft="25dp" />
-
-
-                <CheckBox
-                    android:layout_width="30dp"
-                    android:layout_height="40dp"
-                    android:id="@+id/cb_repost"
-                    android:button="@drawable/repost_or_not_selector"
-                    android:checked="false"
-                    android:clickable="false"
-                    android:textColor="#ffffffff"
-                    android:enabled="true"
-                    android:layout_alignParentTop="false"
-                    android:layout_alignParentLeft="false"
-                    android:layout_alignParentStart="false"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginTop="-5dp"
-                    android:layout_toRightOf="@+id/img_post_other_actions" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/button_like"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/button_comment"
-                    android:layout_toEndOf="@+id/cb_comment"
-                    android:visibility="visible"
-                    android:background="#00000000"
-                    android:layout_alignRight="@+id/cb_like"
-                    android:layout_alignEnd="@+id/cb_like"
-                    android:layout_marginLeft="25dp" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/button_comment"
-                    android:background="#00000000"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/cb_repost"
-                    android:layout_alignRight="@+id/cb_comment"
-                    android:layout_alignEnd="@+id/cb_comment"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginTop="-5dp"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/button_repost"
-                    android:background="#00000000"
-                    android:layout_toEndOf="@+id/cb_comment"
-                    android:layout_centerVertical="true"
-                    android:layout_alignStart="@+id/cb_repost"
-                    android:layout_toStartOf="@+id/button_comment"
-                    android:layout_toRightOf="@+id/img_post_other_actions" />
-
-            </RelativeLayout>
-
-
-        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"

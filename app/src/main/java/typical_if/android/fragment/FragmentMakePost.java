@@ -365,7 +365,6 @@ public class FragmentMakePost extends Fragment {
             tempAudioContainer = (ViewGroup) ItemDataSetter.inflater.inflate(R.layout.audio_container, parent, false);
             tempAudioContainer.setVisibility(View.VISIBLE);
 
-            tempAudioContainer.getChildAt(0).setBackgroundColor(Color.parseColor(ItemDataSetter.postColor));
             tempAudioContainer.getChildAt(0).setEnabled(false);
             ((TextView) tempAudioContainer.getChildAt(2)).setText(ItemDataSetter.getMediaTime(audio.duration));
             ((TextView) tempAudioContainer.getChildAt(3)).setText(audio.artist);

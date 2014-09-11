@@ -106,7 +106,7 @@
             android:layout_height="wrap_content"
             android:text="171"
             android:id="@+id/cb_photo_like"
-            android:button="@drawable/like_or_not_liked_selector"
+            android:button="@drawable/like_or_not_liked_selector_vk_style"
             android:checked="false"
             android:clickable="true"
             android:enabled="true"

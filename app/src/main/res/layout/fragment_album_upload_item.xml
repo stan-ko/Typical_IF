@@ -4,7 +4,8 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/transparent">
 
     <ImageView
         android:layout_width="100dp"
@@ -27,7 +28,8 @@
             android:id="@+id/album_title_for_upload"
             android:textSize="20dp"
             android:layout_marginTop="15dp"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="5dp"
+            android:textColor="#ffffff" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -35,7 +37,8 @@
             android:id="@+id/count_of_photos"
             android:textSize="20dp"
             android:layout_marginTop="15dp"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="5dp"
+            android:textColor="#ffffff" />
     </LinearLayout>
 
 </LinearLayout>
