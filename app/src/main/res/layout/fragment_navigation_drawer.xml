@@ -9,7 +9,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="90dp"
-        android:id="@+id/copyHistoryLayout"
+        android:id="@+id/aboutUsLayout"
         android:background="#ff2c3641">
 
         <ImageView
@@ -46,7 +46,7 @@
         android:background="@drawable/action_panel_gradient_shape"
         tools:context=".NavigationDrawerFragment"
         android:id="@+id/navigation_drawer_exp_list"
-        android:layout_below="@+id/copyHistoryLayout" />
+        android:layout_below="@+id/aboutUsLayout" />
 
 </RelativeLayout>
 

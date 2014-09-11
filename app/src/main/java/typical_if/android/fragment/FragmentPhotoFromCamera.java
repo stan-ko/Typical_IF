@@ -12,9 +12,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -27,9 +24,9 @@ import com.vk.sdk.api.VKResponse;
 import java.io.File;
 
 import typical_if.android.Constants;
-import typical_if.android.TIFApp;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.UploadPhotoService;
 
 /**
@@ -53,7 +50,7 @@ public class FragmentPhotoFromCamera extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        setHasOptionsMenu(false);
     }
 
     @Override
@@ -100,36 +97,6 @@ public class FragmentPhotoFromCamera extends Fragment {
         getActivity().stopService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-        inflater.inflate(R.menu.upload_captured_photo, menu);
-        MenuItem item =  menu.findItem(R.id.upload_captured_photo_to_album);
-        item.setEnabled(true);
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                final File tempFile = new File(path);
-                getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
-                final VKRequest req = VKApi.uploadAlbumPhotoRequest(tempFile, Constants.ALBUM_ID, (int)(Constants.GROUP_ID*(-1)));
-                req.executeWithListener(new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
-                        Log.d("MY response", response.responseString);
-                        //getActivity().stopService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
-                    }
-                    @Override
-                    public void onError(final VKError error) {
-                        super.onError(error);
-                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                    }
-                });
-                return true;
-            }
-        });
-        super.onCreateOptionsMenu(menu,inflater);
-    }
 
     public static Bitmap rotate(Bitmap b, int degrees) {
         if (degrees != 0 && b != null) {

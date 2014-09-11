@@ -83,10 +83,12 @@ public class MainActivity extends DialogActivity implements
             @Override
             public void onBackStackChanged() {
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                    if (Constants.makePostMenu.size() == 3) {
-                        FragmentWall.setEnabledMenu();
-                        getSupportActionBar().show();
-                    }
+                    try {
+                        if (Constants.makePostMenu.size() == 3) {
+                            FragmentWall.setEnabledMenu();
+                            getSupportActionBar().show();
+                        }
+                    } catch (NullPointerException e) {}
                 }
             }
         });

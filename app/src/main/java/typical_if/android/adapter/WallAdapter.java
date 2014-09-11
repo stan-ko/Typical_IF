@@ -24,7 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -146,9 +145,9 @@ public class WallAdapter extends BaseAdapter {
                 viewHolder.cb_post_like.setChecked(false);
             }
 
-            viewHolder.cb_post_comment.setText(valueOf(post.comments_count));
-            viewHolder.cb_post_like.setText(valueOf(post.likes_count));
-            viewHolder.cb_post_repost.setText(String.valueOf(post.reposts_count));
+            viewHolder.cb_post_comment.setText(" " + valueOf(post.comments_count));
+            viewHolder.cb_post_like.setText(" " + valueOf(post.likes_count));
+            viewHolder.cb_post_repost.setText(" " + String.valueOf(post.reposts_count));
 
             viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
 
@@ -180,7 +179,7 @@ public class WallAdapter extends BaseAdapter {
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
-                                viewHolder.cb_post_like.setText(String.valueOf(++post.likes_count));
+                                viewHolder.cb_post_like.setText(" " + String.valueOf(++post.likes_count));
                                 viewHolder.cb_post_like.setChecked(true);
                                 post.user_likes = true;
                             }
@@ -191,7 +190,7 @@ public class WallAdapter extends BaseAdapter {
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
-                                viewHolder.cb_post_like.setText(String.valueOf(--post.likes_count));
+                                viewHolder.cb_post_like.setText(" " + String.valueOf(--post.likes_count));
                                 viewHolder.cb_post_like.setChecked(false);
                                 post.user_likes = false;
                             }
@@ -233,7 +232,7 @@ public class WallAdapter extends BaseAdapter {
                                             if (isSuccessed == 1) {
                                                 post.user_reposted = true;
                                                 viewHolder.cb_post_repost.setChecked(true);
-                                                viewHolder.cb_post_repost.setText(String.valueOf(++post.reposts_count));
+                                                viewHolder.cb_post_repost.setText(" " + String.valueOf(++post.reposts_count));
 //
                                                 if (!post.user_likes) {
 
@@ -242,7 +241,7 @@ public class WallAdapter extends BaseAdapter {
                                                         public void onComplete(final VKResponse response) {
                                                             super.onComplete(response);
 
-                                                            viewHolder.cb_post_like.setText(String.valueOf(++post.likes_count));
+                                                            viewHolder.cb_post_like.setText(" " + String.valueOf(++post.likes_count));
                                                             viewHolder.cb_post_like.setChecked(true);
                                                             post.user_likes = true;
 

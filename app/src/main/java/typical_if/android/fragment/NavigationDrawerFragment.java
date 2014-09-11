@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +68,8 @@ public class NavigationDrawerFragment extends Fragment {
     List<String> listDataHeader;
     SparseArray<List<String>> listDataChild;
 
+    RelativeLayout aboutUs;
+
     public NavigationDrawerFragment() {
     }
 
@@ -78,6 +81,8 @@ public class NavigationDrawerFragment extends Fragment {
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
+
+
 
         if (savedInstanceState != null) {
             mFromSavedInstanceState = true;
@@ -99,9 +104,26 @@ public class NavigationDrawerFragment extends Fragment {
 
         prepareListData();
 
+        aboutUs = (RelativeLayout) v.findViewById(R.id.aboutUsLayout);
+        aboutUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity mainActivity = ((MainActivity)getActivity());
+                mainActivity.addFragment(FragmentAboutUs.newInstance());
+                closeDrawer();
+            }
+        });
+
+//        ImageView imageView = (ImageView) v.findViewById(R.id.photo1);
+//        imageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                ((MainActivity)getActivity()).addFragment(FragmentAboutUs.newInstance());
+//            }
+//        });
+
         mExpandapleListAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
         mDrawerListView.setAdapter(mExpandapleListAdapter);
-
         mDrawerListView.setOnGroupClickListener(new AnimatedExpandableListView.OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
