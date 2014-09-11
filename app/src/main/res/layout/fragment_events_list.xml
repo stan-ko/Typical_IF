@@ -4,4 +4,36 @@
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:background="@drawable/blur1">
 
+    <ImageButton
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:id="@+id/DevLightBtn"
+        android:background="@drawable/devlightlogo"
+        android:layout_marginTop="50dp" />
+
+    <ImageButton
+        android:layout_width="200dp"
+        android:layout_height="300dp"
+        android:id="@+id/stantsiya"
+        android:background="@drawable/stantsiya_logo"
+        android:layout_alignTop="@+id/tf_btn"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/tf_btn" />
+
+    <ImageButton
+        android:layout_width="200dp"
+        android:layout_height="150dp"
+        android:id="@+id/tf_btn"
+        android:background="@drawable/tf_white_logo"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="right"
+        android:layout_below="@+id/DevLightBtn" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton4" />
+
 </RelativeLayout>
