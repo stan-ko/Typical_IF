@@ -132,7 +132,6 @@
                     android:layout_height="50dp"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignTop="@+id/expand_post_action_bar"
                     android:background="@color/partly_transparent"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
@@ -152,14 +151,12 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/txt_post_date_of_comment"
                         android:singleLine="true"
-                        android:layout_toStartOf="@+id/cb_repost"
                         android:layout_toEndOf="@+id/img_fixed_post"
                         android:visibility="visible"
                         android:text="Сьогодні о 16:18"
                         android:textSize="15dp"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/img_fixed_post"
-                        android:layout_toLeftOf="@+id/button_repost"
                         android:layout_marginLeft="10dp"
                         android:background="@color/transparent"
                         android:textColor="#ffffffff" />
@@ -179,8 +176,6 @@
                             android:layout_height="match_parent"
                             android:id="@+id/relativeLayout"
                             android:layout_centerVertical="true"
-                            android:layout_toEndOf="@+id/img_post_other_actions"
-                            android:layout_toRightOf="@+id/img_post_other_actions"
                             android:visibility="visible"
                             android:background="#ff2bd3a3">
 

@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/txt_signed_post_name"
         android:layout_toRightOf="@+id/img_signed_post"
-        android:layout_toEndOf="@+id/img_sigend_post"
+        android:layout_toEndOf="@+id/img_signed_post"
         android:textColor="#ffffffff"
         android:textSize="14dp"
         android:singleLine="true"

@@ -49,7 +49,6 @@
             android:button="@drawable/like_or_not_liked_selector"
             android:clickable="false"
             android:enabled="false"
-            android:layout_above="@+id/photoHeader"
             android:layout_alignRight="@+id/image_not_liked"
             android:layout_alignEnd="@+id/image_not_liked"
             android:visibility="gone" />
