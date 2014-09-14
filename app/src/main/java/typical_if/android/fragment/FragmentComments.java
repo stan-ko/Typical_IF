@@ -349,7 +349,7 @@ public class FragmentComments extends Fragment {
                 if (!edit_status) {
                     if (reply_to_comment == 0) {
 
-                        VKHelper.createComment(group_id, item_id, message + "\n@club76879491 (від DevLight)", 0, new VKRequest.VKRequestListener() {
+                        VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", 0, new VKRequest.VKRequestListener() {
 
                             @Override
                             public void onComplete(final VKResponse response) {
@@ -367,7 +367,7 @@ public class FragmentComments extends Fragment {
                         });
 
                     } else {
-                        VKHelper.createComment(group_id, item_id, message + "\n@club76879491 (від DevLight)", reply_to_comment, new VKRequest.VKRequestListener() {
+                        VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", reply_to_comment, new VKRequest.VKRequestListener() {
 
                             @Override
                             public void onComplete(final VKResponse response) {

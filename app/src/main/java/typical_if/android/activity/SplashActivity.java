@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCaptchaDialog;
@@ -81,7 +82,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         config = new Configuration();
         config.locale = locale;
         getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
-
+        Toast.makeText(getApplicationContext(), "Слава Україні! Героям слава!", Toast.LENGTH_SHORT).show();
         ItemDataSetter.loadUserId();
     }
 
