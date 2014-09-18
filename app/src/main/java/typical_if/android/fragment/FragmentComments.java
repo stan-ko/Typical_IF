@@ -33,6 +33,7 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
+import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiUser;
 
@@ -72,6 +73,7 @@ public class FragmentComments extends Fragment {
     ListView listOfComments = null;
     ArrayList<VKApiComment> comments = null;
     ArrayList<VKApiUser> profiles = null;
+    ArrayList<VKApiCommunity> groups = null;
     CommentsListAdapter adapter = null;
     VKApiUser postSender = null;
 
@@ -179,9 +181,6 @@ public class FragmentComments extends Fragment {
         final TextView postPhotoUserName = ((TextView) rootView.findViewById(R.id.post_user_name));
         final TextView postPhotoUserDateOfComment = ((TextView) rootView.findViewById(R.id.post_user_date_of_comment));
 
-//        if (from_user==0){
-//            from_user=photo.owner_id;
-//        }
         VKHelper.getWhoIsPosted(from_user, "photo_50", new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(final VKResponse response) {
@@ -458,9 +457,9 @@ public class FragmentComments extends Fragment {
     public void showContextMenu(int position) {
         VKApiComment comment = comments.get(position);
 
-        String name = Identify(comments, profiles, position);
+        String name = Identify(comments, profiles,groups, position);
         if (name == "" || name == null) {
-            name = "Відправник";
+            name = "Адресат";
         }
         CharSequence[] items;
 
@@ -503,6 +502,7 @@ public class FragmentComments extends Fragment {
         comments = VKHelper.getCommentsFromJSON(arrayOfComments[0]);
         Collections.sort(comments);
         profiles = VKHelper.getProfilesFromJSONArray(arrayOfComments[1]);
+        groups = VKHelper.getGroupsFromJSONArray(arrayOfComments[2]);
 
 
         getActivity().runOnUiThread(new Runnable() {
@@ -510,10 +510,10 @@ public class FragmentComments extends Fragment {
             public void run() {
                 if (adapter == null) {
                     String postColor = ItemDataSetter.getPostColor(Constants.GROUP_ID);
-                    adapter = new CommentsListAdapter(comments, profiles, inflater, postColor);
+                    adapter = new CommentsListAdapter(comments, profiles,groups, inflater, postColor);
                     listOfComments.setAdapter(adapter);
                 } else {
-                    adapter.UpdateCommentList(comments, profiles, listOfComments);
+                    adapter.UpdateCommentList(comments, profiles,groups, listOfComments);
 
 
                 }
@@ -540,7 +540,7 @@ public class FragmentComments extends Fragment {
                             @Override
                             public void run() {
                                 reply_to_comment = comments.get(position).id;
-                                commentMessage.setText(Identify(comments, profiles, -1) + ", ");
+                                commentMessage.setText(Identify(comments, profiles,groups, -1) + ", ");
 
                             }
                         });
@@ -646,25 +646,30 @@ public class FragmentComments extends Fragment {
 
     }
 
-    public String Identify(ArrayList<VKApiComment> commentsList, ArrayList<VKApiUser> profilesList, int position) {
+    public String Identify(ArrayList<VKApiComment> commentsList, ArrayList<VKApiUser> profilesList, ArrayList<VKApiCommunity> groupsList, int position) {
         String name = "";
         if (position >= 0) {
             reply_to_comment = commentsList.get(position).reply_to_comment;
         }
+
         for (int i = 0; i < commentsList.size(); i++) {
             if (commentsList.get(i).id == reply_to_comment) {
                 for (int j = 0; j < profilesList.size(); j++) {
                     if (commentsList.get(i).from_id == profilesList.get(j).id) {
-                        name = profilesList.get(j).first_name;
+                        for (int k = 0; k < groupsList.size(); k++) {
+                            if (commentsList.get(i).from_id == groupsList.get(k).id) {
 
+                                name = profilesList.get(j).first_name;
+
+                            }
+                        }
                     }
+
                 }
 
             }
 
         }
-
-
         return name;
     }
 

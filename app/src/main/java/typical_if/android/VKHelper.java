@@ -223,11 +223,11 @@ public class VKHelper {
 
 
     public static JSONArray[] getResponseArrayOfComment(JSONObject response) {
-       // if (response == null || response.json == null) return null;
-       Log.d("getResponseArrayOfComment-00000000000000000000000000000000000000000000000",response+"");
-        JSONArray[] array = new JSONArray[2];
+
+        JSONArray[] array = new JSONArray[3];
         array[0] = response.optJSONObject("response").optJSONArray("items");
         array[1] = response.optJSONObject("response").optJSONArray("profiles");
+        array[2] = response.optJSONObject("response").optJSONArray("groups");
         return array;
     }
 
@@ -332,6 +332,15 @@ public class VKHelper {
             profiles.add(profile);
         }
         return profiles;
+    }
+
+    public static ArrayList<VKApiCommunity> getGroupsFromJSONArray(JSONArray array) {
+        final ArrayList<VKApiCommunity> groups = new ArrayList<VKApiCommunity>();
+        for (int i=0; i<array.length(); i++) {
+            final VKApiCommunity community = new VKApiCommunity().parse(array.optJSONObject(i));
+            groups.add(community);
+        }
+        return groups;
     }
 
     public static VKApiPhoto getPhotoFromJSONArray(JSONObject jsonObject) throws JSONException {

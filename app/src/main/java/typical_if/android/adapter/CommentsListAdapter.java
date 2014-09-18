@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.api.model.VKApiComment;
+import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiUser;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class CommentsListAdapter extends BaseAdapter {
 
     final ArrayList<VKApiComment> commentList;
     final ArrayList<VKApiUser> profilesList;
+    final ArrayList<VKApiCommunity> groupsList;
 
     private final LayoutInflater layoutInflater;
     private static final Context appContext = TIFApp.getAppContext();
@@ -48,18 +50,21 @@ public class CommentsListAdapter extends BaseAdapter {
 
     final static Pattern matPattern = Pattern.compile("\\[(id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]");
 
-    public CommentsListAdapter(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList, LayoutInflater inflater, String postColor) {
+    public CommentsListAdapter(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList,ArrayList<VKApiCommunity> groupsList, LayoutInflater inflater, String postColor) {
         this.commentList = commentList;
         this.profilesList = profilesList;
+        this.groupsList=groupsList;
         layoutInflater = inflater;
         this.postColor = postColor;
     }
 
-    public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList, ListView listView) {
+    public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList,ArrayList<VKApiCommunity> groupsList, ListView listView) {
         this.profilesList.clear();
         this.profilesList.addAll(profilesList);
         this.commentList.clear();
         this.commentList.addAll(commentList);
+        this.groupsList.clear();
+        this.groupsList.addAll(groupsList);
         this.notifyDataSetChanged();
         scrollCommentsToBottom(listView);
     }
@@ -76,15 +81,33 @@ public class CommentsListAdapter extends BaseAdapter {
     public void userIdentifier(VKApiComment comment) {
         final int profilesListCount = profilesList.size();
         VKApiUser profile;
+        VKApiCommunity community;
+
         for (int i = 0; i < profilesListCount; i++) {
             profile = profilesList.get(i);
-            if (comment.from_id == profile.id) {
-                first_name = profile.first_name;
-                last_name = profile.last_name;
-                url = profile.photo_100;
+            for (int j = 0; j < groupsList.size(); j++) {
+                community = groupsList.get(j);
+
+                if (comment.from_id == community.id*(-1)){
+                    first_name = community.name;
+                       last_name = "";
+                       url = community.photo_100;
+                }
+                else {
+                    if (comment.from_id == profile.id) {
+                        first_name = profile.first_name;
+                        last_name = profile.last_name;
+                        url = profile.photo_100;
+
+                    }
+                }
 
             }
+
+
+
         }
+
 
         final int commentListCount = commentList.size();
         VKApiComment vkApiComment;
