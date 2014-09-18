@@ -16,11 +16,10 @@
             android:layout_width="wrap_content"
             android:layout_height="95dp"
             android:id="@+id/relativeLayout"
-            android:layout_marginBottom="23dp"
-            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/DevLightBtn"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginLeft="15dp">
+            android:layout_marginLeft="30dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -51,7 +50,7 @@
                 android:layout_toEndOf="@+id/textView4"
                 android:layout_alignTop="@+id/textView4"
                 android:layout_toRightOf="@+id/textView4"
-                android:textColor="#ff5659ff" />
+                android:textColor="#ff797dff" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -59,7 +58,7 @@
                 android:text="Yurij Vasilkiv"
                 android:id="@+id/yurij_ref"
                 android:layout_toEndOf="@+id/textView4"
-                android:textColor="#ff5659ff"
+                android:textColor="#ff797dff"
                 android:layout_below="@+id/vasil_ref"
                 android:layout_toRightOf="@+id/textView4" />
 
@@ -69,7 +68,7 @@
                 android:text="Vasil Melnik"
                 android:id="@+id/vasil_ref"
                 android:layout_toEndOf="@+id/textView4"
-                android:textColor="#ff5659ff"
+                android:textColor="#ff797dff"
                 android:layout_below="@+id/lyubomir_ref"
                 android:layout_alignLeft="@+id/lyubomir_ref"
                 android:layout_alignStart="@+id/lyubomir_ref" />
@@ -80,7 +79,7 @@
                 android:text="Lyubomir Melnik"
                 android:id="@+id/lyubomir_ref"
                 android:layout_toEndOf="@+id/textView4"
-                android:textColor="#ff5659ff"
+                android:textColor="#ff797dff"
                 android:layout_below="@+id/viktor_ref"
                 android:layout_toRightOf="@+id/textView4" />
 
@@ -107,32 +106,37 @@
         </RelativeLayout>
 
         <ImageView
-            android:layout_width="170dp"
-            android:layout_height="75dp"
+            android:layout_width="200dp"
+            android:layout_height="105dp"
             android:id="@+id/DevLightBtn"
             android:background="@drawable/devlightlogo"
-            android:layout_above="@+id/relativeLayout"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="15dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="http://typical.if.ua"
-            android:id="@+id/typical_if_ua_ref"
-            android:textColor="#ffffffff"
-            android:layout_above="@+id/DevLightBtn"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp" />
+            android:layout_marginTop="100dp" />
 
         <ImageView
-            android:layout_width="200dp"
-            android:layout_height="180dp"
+            android:layout_width="50dp"
+            android:layout_height="40dp"
             android:id="@+id/stantsiya"
             android:background="@drawable/stantsiya_logo"
-            android:layout_above="@+id/typical_if_ua_ref"
-            android:layout_centerHorizontal="true" />
+            android:layout_toEndOf="@+id/DevLightBtn"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="23dp"
+            android:layout_marginLeft="15dp" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/tf_site"
+            android:src="@drawable/tf_white_logo"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="15dp" />
+
     </RelativeLayout>
 
 

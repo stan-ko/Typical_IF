@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,12 +45,32 @@ public class FragmentAboutUs extends Fragment{
         setRetainInstance(true);
         final ImageView devLight = (ImageView) rootView.findViewById(R.id.DevLightBtn);
         final ImageView stantsiya = (ImageView) rootView.findViewById(R.id.stantsiya);
-        final TextView tf = (TextView) rootView.findViewById(R.id.typical_if_ua_ref);
+        final ImageView tf = (ImageView) rootView.findViewById(R.id.tf_site);
+
         final TextView viktor = (TextView)rootView.findViewById(R.id.viktor_ref);
+        final SpannableString content = new SpannableString(viktor.getText());
+        content.setSpan(new UnderlineSpan(), 0, viktor.length(), 0);
+        viktor.setText(content);
+
         final TextView yura = (TextView)rootView.findViewById(R.id.yurij_ref);
+        final SpannableString content1 = new SpannableString(yura.getText());
+        content1.setSpan(new UnderlineSpan(), 0, yura.length(), 0);
+        yura.setText(content1);
+
         final TextView lyubomir= (TextView)rootView.findViewById(R.id.lyubomir_ref);
+        final SpannableString content2 = new SpannableString(lyubomir.getText());
+        content2.setSpan(new UnderlineSpan(), 0, lyubomir.length(), 0);
+        lyubomir.setText(content2);
+
         final TextView vasil = (TextView)rootView.findViewById(R.id.vasil_ref);
+        final SpannableString content3 = new SpannableString(vasil.getText());
+        content3.setSpan(new UnderlineSpan(), 0, vasil.length(), 0);
+        vasil.setText(content3);
+
         final TextView our_site_ref = (TextView)rootView.findViewById(R.id.devlight_com_ua_ref);
+        final SpannableString content4 = new SpannableString(our_site_ref.getText());
+        content4.setSpan(new UnderlineSpan(), 0, our_site_ref.length(), 0);
+        our_site_ref.setText(content4);
 
         devLight.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -85,28 +85,29 @@ public class CommentsListAdapter extends BaseAdapter {
 
         for (int i = 0; i < profilesListCount; i++) {
             profile = profilesList.get(i);
+
             for (int j = 0; j < groupsList.size(); j++) {
                 community = groupsList.get(j);
 
-                if (comment.from_id == community.id*(-1)){
+                if (comment.from_id == community.id * (-1)) {
                     first_name = community.name;
-                       last_name = "";
-                       url = community.photo_100;
+                    last_name = "";
+                    url = community.photo_100;
                 }
-                else {
-                    if (comment.from_id == profile.id) {
+            }
+
+            if (comment.from_id == profile.id) {
                         first_name = profile.first_name;
                         last_name = profile.last_name;
                         url = profile.photo_100;
-
                     }
                 }
 
-            }
 
 
 
-        }
+
+
         final int commentListCount = commentList.size();
         VKApiComment vkApiComment;
         for (int k = 0; k < commentListCount; k++) {
