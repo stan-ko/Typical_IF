@@ -9,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import typical_if.android.Constants;
 import typical_if.android.R;
 
 
@@ -38,32 +41,87 @@ public class FragmentAboutUs extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_events_list, container, false);
         setRetainInstance(true);
-        final   ImageButton devLight = (ImageButton) rootView.findViewById(R.id.DevLightBtn);
-        final   ImageButton stantsiya = (ImageButton) rootView.findViewById(R.id.stantsiya);
-        final   ImageButton tf = (ImageButton) rootView.findViewById(R.id.tf_btn);
+        final ImageView devLight = (ImageView) rootView.findViewById(R.id.DevLightBtn);
+        final ImageView stantsiya = (ImageView) rootView.findViewById(R.id.stantsiya);
+        final TextView tf = (TextView) rootView.findViewById(R.id.typical_if_ua_ref);
+        final TextView viktor = (TextView)rootView.findViewById(R.id.viktor_ref);
+        final TextView yura = (TextView)rootView.findViewById(R.id.yurij_ref);
+        final TextView lyubomir= (TextView)rootView.findViewById(R.id.lyubomir_ref);
+        final TextView vasil = (TextView)rootView.findViewById(R.id.vasil_ref);
+        final TextView our_site_ref = (TextView)rootView.findViewById(R.id.devlight_com_ua_ref);
 
         devLight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://devLight.com.ua"));
-                startActivity(browserIntent);
+                Uri uri = Uri.parse("http://devLight.com.ua");
+                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+             }
+        });
+
+        viktor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("http://vk.com/sokeoner");
+                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
 
-        stantsiya.setOnClickListener(new View.OnClickListener() {
+        yura.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://vk.com/stantsiya_if"));
-                startActivity(browserIntent);
+                Uri uri = Uri.parse("http://vk.com/yura0202");
+                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
+
+        lyubomir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("http://vk.com/lubomiru4");
+                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
+        vasil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("http://vk.com/gigamole");
+                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            }
+        });
+
+         stantsiya.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("https://vk.com/stantsiya_if");
+                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+              }
+        });
+
         tf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://typical.if.ua"));
-                startActivity(browserIntent);
+                Uri uri = Uri.parse("http://typical.if.ua");
+                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                 }
+        });
+
+        our_site_ref.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Uri uri = Uri.parse("http://devLight.com.ua");
+                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
+
         return rootView;
 
     }

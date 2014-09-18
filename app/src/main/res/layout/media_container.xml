@@ -58,7 +58,7 @@
                     android:layout_width="90dp"
                     android:layout_height="22dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/textView5"
+                    android:id="@+id/viktor_ref"
                     android:background="#ff404040"
                     android:textColor="#ffffffff"
                     android:textSize="18dp"

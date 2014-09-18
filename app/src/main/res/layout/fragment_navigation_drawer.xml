@@ -34,6 +34,18 @@
             android:layout_marginLeft="10dp"
             android:textColor="#ffffff"
             android:textSize="17dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="About"
+            android:id="@+id/textView"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textColor="#ffb1b1b1"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp" />
     </RelativeLayout>
 
     <typical_if.android.view.AnimatedExpandableListView

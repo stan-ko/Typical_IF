@@ -107,8 +107,6 @@ public class CommentsListAdapter extends BaseAdapter {
 
 
         }
-
-
         final int commentListCount = commentList.size();
         VKApiComment vkApiComment;
         for (int k = 0; k < commentListCount; k++) {
