@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -147,6 +148,9 @@ public class FragmentComments extends Fragment {
         item_id = post.post.id;
         group_id = post.post.from_id;
         from_user = post.post.from_id;
+
+
+
         return fragment;
     }
 
@@ -333,6 +337,18 @@ public class FragmentComments extends Fragment {
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
         sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
+
+        if (!VKSdk.isLoggedIn()){
+            sendComment.setVisibility(View.GONE);
+            commentMessage.setVisibility(View.GONE);
+            final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1);
+            listOfComments.setLayoutParams(layoutParams);
+            }
+
+
         if (loadFromWall) {
             loadWallPosts();
         } else {
