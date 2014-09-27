@@ -136,10 +136,13 @@ public class VKSdk {
      * @param appId    your application id (if you haven't, you can create standalone application here https://vk.com/editapp?act=create )
      * @param token    custom-created access token
      */
+   public static Activity topActivity;
+
     public static void initialize(VKSdkListener listener, String appId, VKAccessToken token) {
         initialize(listener, appId);
         sInstance.mAccessToken = token;
         sInstance.performTokenCheck(token, true);
+        topActivity=VKUIHelper.getTopActivity();
     }
 
     /**
@@ -186,13 +189,13 @@ public class VKSdk {
 
         final Intent intent;
 
-        if (!forceOAuth
-                && VKUtil.isAppInstalled(sInstance.getContext(), VK_APP_PACKAGE_ID)
-                && VKUtil.isIntentAvailable(sInstance.getContext(), VK_APP_AUTH_ACTION)) {
-            intent = new Intent(VK_APP_AUTH_ACTION, null);
-        } else {
-            intent = new Intent(sInstance.getContext(), VKOpenAuthActivity.class);
-        }
+//        if (!forceOAuth
+//                && VKUtil.isAppInstalled(sInstance.getContext(), VK_APP_PACKAGE_ID)
+//                && VKUtil.isIntentAvailable(sInstance.getContext(), VK_APP_AUTH_ACTION)) {
+//            intent = new Intent(VK_APP_AUTH_ACTION, null);
+//        } else {
+           intent = new Intent(sInstance.getContext(), VKOpenAuthActivity.class);
+//        }
 
         intent.putExtra(VKOpenAuthActivity.VK_EXTRA_API_VERSION, VKSdkVersion.API_VERSION);
         intent.putExtra(VKOpenAuthActivity.VK_EXTRA_CLIENT_ID, Integer.parseInt(sInstance.mCurrentAppId));
@@ -205,6 +208,9 @@ public class VKSdk {
 
         if (VKUIHelper.getTopActivity() != null) {
             VKUIHelper.getTopActivity().startActivityForResult(intent, VK_SDK_REQUEST_CODE);
+        }
+        else{
+            topActivity.startActivityForResult(intent, VK_SDK_REQUEST_CODE);
         }
     }
 
