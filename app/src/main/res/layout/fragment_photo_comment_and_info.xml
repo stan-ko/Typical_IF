@@ -84,4 +84,11 @@
         android:layout_alignParentStart="true"
         android:background="#0073adff" />
 
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/listOfComments"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"></RelativeLayout>
+
 </RelativeLayout>

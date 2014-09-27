@@ -10,6 +10,13 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <supports-screens android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="false"
+        android:xlargeScreens="false"
+        android:anyDensity="true"
+        android:requiresSmallestWidthDp="600"
+        />
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />

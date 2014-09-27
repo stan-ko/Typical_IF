@@ -359,18 +359,54 @@ public class FragmentComments extends Fragment {
         sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                    if (!commentMessage.getText().toString().isEmpty()) {
+                    message = commentMessage.getText().toString();
+                    if (!edit_status) {
+                        if (reply_to_comment == 0) {
 
-                message = commentMessage.getText().toString();
-                if (!edit_status) {
-                    if (reply_to_comment == 0) {
+                            VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", 0, new VKRequest.VKRequestListener() {
 
-                        VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", 0, new VKRequest.VKRequestListener() {
+                                @Override
+                                public void onComplete(final VKResponse response) {
+                                    super.onComplete(response);
+                                    commentMessage.setText("");
+                                    updateCommentList(group_id, item_id, listOfComments, inflater);
+                                }
 
+                                @Override
+                                public void onError(final VKError error) {
+                                    super.onError(error);
+                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                }
+
+                            });
+
+                        } else {
+                            VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", reply_to_comment, new VKRequest.VKRequestListener() {
+
+                                @Override
+                                public void onComplete(final VKResponse response) {
+                                    super.onComplete(response);
+                                    commentMessage.setText("");
+                                    updateCommentList(group_id, item_id, listOfComments, inflater);
+                                }
+
+                                @Override
+                                public void onError(final VKError error) {
+                                    super.onError(error);
+                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                }
+                            });
+
+                        }
+                    } else
+                        VKHelper.editComment(group_id, comments.get(positionOfComment).id, message, null, new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
-                                commentMessage.setText("");
                                 updateCommentList(group_id, item_id, listOfComments, inflater);
+                                commentMessage.setText("");
+                                edit_status = false;
                             }
 
                             @Override
@@ -378,47 +414,13 @@ public class FragmentComments extends Fragment {
                                 super.onError(error);
                                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }
-
                         });
 
-                    } else {
-                        VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", reply_to_comment, new VKRequest.VKRequestListener() {
-
-                            @Override
-                            public void onComplete(final VKResponse response) {
-                                super.onComplete(response);
-                                commentMessage.setText("");
-                                updateCommentList(group_id, item_id, listOfComments, inflater);
-                            }
-
-                            @Override
-                            public void onError(final VKError error) {
-                                super.onError(error);
-                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                            }
-                        });
-
-                    }
-                } else
-                    VKHelper.editComment(group_id, comments.get(positionOfComment).id, message, null, new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(final VKResponse response) {
-                            super.onComplete(response);
-                            updateCommentList(group_id, item_id, listOfComments, inflater);
-                            commentMessage.setText("");
-                            edit_status = false;
-                        }
-
-                        @Override
-                        public void onError(final VKError error) {
-                            super.onError(error);
-                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                        }
-                    });
-
-                edit_status = false;
+                    edit_status = false;
+                }
             }
-        });
+            });
+
         setRetainInstance(true);
         return rootView;
     }
@@ -638,8 +640,6 @@ public class FragmentComments extends Fragment {
                         edit_status = true;
                         positionOfComment = position;
                         commentMessage.setText(comments.get(position).text);
-
-
                     }
 
                     break;

@@ -14,8 +14,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/postParentLayout"
-            android:paddingBottom="5dp"
-            android:background="@drawable/post_shape">
+            android:background="@drawable/post_shape"
+            android:layout_marginBottom="2dp">
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -166,7 +166,7 @@
                         android:layout_height="50dp"
                         android:id="@+id/postFeaturesLayout"
                         android:visibility="gone"
-                        android:background="#cb2bd3a3"
+                        android:background="#9c6298c6"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true">
