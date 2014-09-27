@@ -816,7 +816,7 @@ public class ItemDataSetter {
                             img.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Constants.COUNT_OF_PHOTOS = photosCount;
+                                    VKHelper.countOfPhotos = photosCount;
                                     makeSaveTransaction(photos, finalJ);
                                 }
                             });
@@ -845,7 +845,7 @@ public class ItemDataSetter {
                                 img.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        Constants.COUNT_OF_PHOTOS = photosCount;
+                                        VKHelper.countOfPhotos = photosCount;
                                         makeSaveTransaction(photos, finalL);
                                     }
                                 });

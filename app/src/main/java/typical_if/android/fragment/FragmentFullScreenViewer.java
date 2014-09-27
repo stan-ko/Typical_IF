@@ -202,10 +202,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             cb_comment.setText(String.valueOf(photos.get(position).comments));
 
         counterOfPhotos.setText(String.valueOf(position + 1));
-        if (VKHelper.countOfPhotos==0)
-            albumSize.setText(String.valueOf(Constants.COUNT_OF_PHOTOS));
-        else
-            albumSize.setText(String.valueOf(VKHelper.countOfPhotos));
+       albumSize.setText(String.valueOf(VKHelper.countOfPhotos));
 
 
         VKHelper.isLiked("photo",Constants.GROUP_ID, photos.get(position).id, new VKRequest.VKRequestListener() {
