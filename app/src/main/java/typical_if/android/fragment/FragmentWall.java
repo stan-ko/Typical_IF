@@ -18,7 +18,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.annotation.NonNull;
 
+import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.SwipeDismissAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.vk.sdk.VKSdk;
@@ -47,6 +51,9 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 
 public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+
+    private static final int INITIAL_DELAY_MILLIS = 300;
+
 
 
     static ListView wallListView;
@@ -166,6 +173,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
 
         wallListView = (ListView) rootView.findViewById(R.id.listViewWall);
+
         TextView padding = new TextView(getApplicationContext());
         padding.setBackgroundColor(Color.TRANSPARENT);
         padding.setHeight(ItemDataSetter.setInDp(48));
@@ -212,7 +220,13 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
         if (adapter == null) {
             adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
-            wallListView.setAdapter(adapter);
+
+            SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(new SwipeDismissAdapter(adapter, onDismissCallback));
+            swingBottomInAnimationAdapter.setAbsListView(wallListView);
+            assert swingBottomInAnimationAdapter.getViewAnimator() != null;
+            swingBottomInAnimationAdapter.getViewAnimator().setInitialDelayMillis(INITIAL_DELAY_MILLIS);
+
+            wallListView.setAdapter(swingBottomInAnimationAdapter);
             wallListView.setOnScrollListener(pauseOnScrollListener);
         } else {
             adapter.setWall(wall);
@@ -435,4 +449,10 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         });
 
     }
+    OnDismissCallback onDismissCallback = new OnDismissCallback() {
+         @Override
+        public void onDismiss(@NonNull ViewGroup viewGroup, @NonNull int[] ints) {
+
+        }
+    };
 }

@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"
-                android:id="@+id/relativeLayout"
+                android:id="@+id/root_layout_show_hide"
                 android:layout_alignParentBottom="true">
 
                 <ImageView

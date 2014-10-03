@@ -1,0 +1,133 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+
+<resources>
+
+        <string name = "app_name">Типичный Франковск</string>
+
+        <string name = "menu_group_title_tf">Типичный Франковск</string>
+        <string name = "menu_group_title_tz">Типичное Признание</string>
+        <string name = "menu_group_title_fb">Франковская Барахолка</string>
+        <string name = "menu_group_title_fn">Франковские Новости</string>
+        <string name = "menu_group_title_events">Афиша Франковская</string>
+        <string name = "menu_group_exit">Выйти из программы</string>
+
+        <string name = "profile">Профиль</string>
+        <string name = "reply">Ответить</string>
+        <string name = "copy_text">Копировать текст</string>
+        <string name = "comment_like">Мне нравится</string>
+        <string name = "comment_unlike">Мне не нравится</string>
+        <string name = "comment_report">Пожаловаться</string>
+        <string name = "comment_delete">Удалить</string>
+        <string name = "comment_edit">Изменить</string>
+        <string name = "comment_receiver">Получатель</string>
+
+
+
+        <string name = "title_login">залогиниться</string>
+        <string name = "title_logout">Розлогинитись</string>
+        <string name = "look_wall">Стена</string>
+        <string name = "look_albums">Альбомы</string>
+        <string name = "navigation_drawer_open">Открыть боковое меню</string>
+        <string name = "navigation_drawer_close">Закрыть боковое меню</string>
+
+        <string name = "date_today">Сегодня в% s</string>
+        <string name = "date_yesterday">Вчера в% s</string>
+
+        <string name = "doc_type_animation">Анимация</string>
+        <string name = "doc_type_document">Документ</string>
+        <string name = "doc_type_image">Изображение</string>
+
+        <string name = "size_in_b">байт</string>
+        <string name = "size_in_kb">килобайт</string>
+        <string name = "size_in_mb">мегабайт</string>
+        <string name = "size_in_gb">гигабайт</string>
+        <string name = "size_in_tb">терабайт</string>
+
+        <string name = "wiki_page">Вики-страница</string>
+
+        <string name = "browser_chooser">Выберите браузер</string>
+        <string name = "downloader_chooser">Выберите загрузчик</string>
+        <string name = "viewer_chooser">Выберите браузер</string>
+
+        <string name = "show_all_text">Показать полностью ...</string>
+        <string name = "show_min_text">Показать сокращенно ...</string>
+
+        <string name = "poll_anonymous">Анонимный голосования, голосов:</string>
+        <string name = "poll_not_anonymous">Публичное голосование, голосов:</string>
+
+        <string name = "txt_dialog_comment">Ваш комментарий ...</string>
+
+        <string name = "post_report">Пожаловаться</string>
+        <string name = "post_copy_link">Копировать ссылку</string>
+
+        <string name = "in_progress">В разработке</string>
+        <string name = "no_suggested_posts">Нет предложений новостей</string>
+        <string name = "post_deleted">Новость удалена</string>
+        <string name = "post_added">Новость предложена</string>
+        <string name = "post_reported">Вы пожаловались на запись</string>
+        <string name = "post_edit">Изменить новость</string>
+        <string name = "post_delete">Удалить новость</string>
+
+        <string name = "photo_from_own">С альбомов</string>
+        <string name = "photo_from_sd">С карты памяти</string>
+
+        <string name = "add_photo_from_title">Загрузить фото</string>
+        <string name = "no_internet_message_toast_en">Интернет отсутствует. Вы находитесь в режиме.</string>
+        <string name = "no_internet_chooser">Интернет отсутствует. Выберите следующее действие.</string>
+        <string name = "no_internet_retry">Интернет отсутствует. Попробуйте еще ​​раз.</string>
+
+        <string name = "retry">Повторить</string>
+        <string name = "cancel">Отменить</string>
+        <string name = "offline">Автономный</string>
+        <string name = "okay">ОК</string>
+        <string name = "comment_background">Ваш комментарий</string>
+
+        <string name = "ab_title_make_post">Предложить новость</string>
+        <string name = "ab_title_suggested_posts">Предложенные новости</string>
+        <string name = "ab_title_group_join">Вступить в сообщество</string>
+        <string name = "ab_title_group_leave">Выйти сообщество</string>
+        <string name = "group_joined">Вы вступили в сообщество</string>
+        <string name = "group_leaved">Вы покинули сообщество</string>
+
+        <string name = "error">Ошибка</string>
+        <string name = "max_attaches">Максимальное количество прикреплений</string>
+
+        <string name = "upload_progress">Выгружено</string>
+        <string name = "upload">Выгружается ...</string>
+
+        <string name = "albums">Альбомы</string>
+
+        <string name = "upload_photo_server">Загрузка изображений на сервер</string>
+        <string name = "upload_photo_progress">Загрузка</string>
+        <string name = "upload_photo_finish">Загрузка завершена</string>
+
+        <string name = "ab_title_upload_photo">Выгрузить фото</string>
+
+
+        <array name = "post_report_types">
+            <item>Спам</item>
+            <item>Оскорбление</item>
+            <item>Материал для взрослых</item>
+            <item>Пропаганда наркотиков</item>
+            <item>Детская порнография</item>
+            <item>Насилие</item>
+        </array>
+
+        <array name = "add_photo_from">
+            <item>С карты памяти</item>
+            <item>Из камеры</item>
+        </array>
+
+        <string-array name = "comment_attachment_list">
+            <item>Photo</item>
+            <item>Video</item>
+            <item>Audio</item>
+            <item>Audio</item>
+            <item>Document</item>
+        </string-array>
+
+
+
+
+
+</resources>

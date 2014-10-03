@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -47,11 +48,17 @@ import typical_if.android.event.EventShowSuggestPostDialog;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
+import typical_if.android.util.BitmapCache;
+
+import typical_if.android.R;
+
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
 import static java.lang.String.valueOf;
 
-public class WallAdapter extends BaseAdapter {
+public class WallAdapter extends BaseAdapter    {
+    private final Context mContext;
+    private final BitmapCache mMemoryCache;
     private Wall wall;
     private final ArrayList<VKWallPostWrapper> posts;
     private final LayoutInflater layoutInflater;
@@ -60,6 +67,9 @@ public class WallAdapter extends BaseAdapter {
     private String postColor;
     private FragmentManager fragmentManager;
     private static boolean isSuggested;
+
+
+
 
     public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, String postColor, boolean isSuggested) {
         this.wall = wall;
@@ -70,8 +80,14 @@ public class WallAdapter extends BaseAdapter {
         this.posts = wall.posts;
         this.postColor = postColor;
         WallAdapter.isSuggested = isSuggested;
+        mContext= Constants.mainActivity.getApplicationContext();
+        mMemoryCache=new BitmapCache();
     }
 
+//    public WallAdapter(final Context context) {
+//        mContext = context;
+//      mMemoryCache = new BitmapCache();
+//    }
     public void setWall(Wall wall) {
         this.wall = wall;
         this.posts.clear();
@@ -129,6 +145,8 @@ public class WallAdapter extends BaseAdapter {
                                       final Context context,
                                       final LayoutInflater layoutInflater) {
         try {
+
+            viewHolder.comment_like_repost_panel.setBackgroundColor(Color.parseColor(postColor));
             ItemDataSetter.wallViewHolder = viewHolder;
             ItemDataSetter.postColor = postColor;
             ItemDataSetter.wall = wall;
@@ -481,6 +499,7 @@ public class WallAdapter extends BaseAdapter {
         public final Button button_repost;
         public final Button button_comment;
         public final TextView txt_post_date;
+        public final RelativeLayout comment_like_repost_panel;
 
         public final ImageView img_fixed_post;
 
@@ -514,6 +533,7 @@ public class WallAdapter extends BaseAdapter {
             this.button_repost = ((Button) convertView.findViewById(R.id.button_repost));
             this.txt_post_date = ((TextView) convertView.findViewById(R.id.txt_post_date_of_comment));
             this.postUserComment = (TextView) convertView.findViewById(R.id.post_user_comment_text);
+            this.comment_like_repost_panel = (RelativeLayout) convertView.findViewById(R.id.comment_like_repost_panel);
 
         }
     }

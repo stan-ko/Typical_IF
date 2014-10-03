@@ -1,59 +1,21 @@
-<?xml version ="1.0" encoding="utf-8"?>
-<RelativeLayout
+<?xml version="1.0" encoding="utf-8"?>
 
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#ffffffff">
-
-
-<ListView
-        android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:id="@+id/listOfComments"
-
-
-    android:paddingTop="2dp"
-    android:background="@drawable/blur2"
-    android:paddingLeft="2dp"
-    android:paddingRight="2dp"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentRight="true"
-    android:layout_alignParentEnd="true"
-    android:divider="#87ffffff"
-    android:dividerHeight="1px"
-    android:drawSelectorOnTop="true"
-    android:headerDividersEnabled="true"
-    android:layout_alignBottom="@+id/imageView" />
-    <!--android:background="@drawable/image_header_state_selector" -->
-
-
-    <!--android:visibility="visible"-->
-
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="#0073adff" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#ff000000">
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:id="@+id/root_layout_show_hide"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:visibility="gone">
+        android:id="@+id/comment_send_footer_root_layout"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true">
 
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/field_of_message_for_comment"
-            android:textColor="#ff000000"
+            android:textColor="#ffd3d3d3"
             android:background="@drawable/message_text_shape"
             android:maxLines="5"
             android:minHeight="40dp"
@@ -70,7 +32,8 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:layout_toLeftOf="@+id/buttonSendComment"
-            android:layout_toStartOf="@+id/buttonSendComment" />
+            android:layout_toStartOf="@+id/buttonSendComment"
+            android:textColorHint="#ff2f392f" />
 
         <Button
             android:layout_width="wrap_content"
@@ -88,5 +51,4 @@
             android:layout_marginBottom="5dp"
             android:text="Відпр." />
     </RelativeLayout>
-
 </RelativeLayout>

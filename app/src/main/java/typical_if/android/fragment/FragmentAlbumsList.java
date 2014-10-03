@@ -11,10 +11,13 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.nhaarman.listviewanimations.appearance.AnimationAdapter;
+import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -58,6 +61,19 @@ public class FragmentAlbumsList extends Fragment {
     }
 
     public FragmentAlbumsList() {
+    }
+
+
+
+    private AnimationAdapter mAnimAdapter;
+
+    private void setBottomAdapter(ListView list, AlbumCoverAdapter mAdapter)
+    {
+        if (!(mAnimAdapter instanceof SwingBottomInAnimationAdapter)) {
+            mAnimAdapter = new SwingBottomInAnimationAdapter(mAdapter);
+            mAnimAdapter.setAbsListView(list);
+            list.setAdapter(mAnimAdapter);
+        }
     }
 
     @Override
@@ -167,7 +183,8 @@ public class FragmentAlbumsList extends Fragment {
         } catch (NullPointerException e) {
         }
         //listOfAlbums.setTransitionEffect(mCurrentTransitionEffect);
-        listOfAlbums.setAdapter(albumCoverAdapter);
+        setBottomAdapter(listOfAlbums,albumCoverAdapter);
+       // listOfAlbums.setAdapter(albumCoverAdapter);
         listOfAlbums.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

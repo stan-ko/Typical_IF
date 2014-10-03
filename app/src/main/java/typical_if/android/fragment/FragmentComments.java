@@ -7,7 +7,10 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
+import android.nfc.tech.Ndef;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -29,7 +32,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -44,6 +46,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Locale;
 
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
@@ -58,6 +61,7 @@ import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 import typical_if.android.util.PhotoUrlHelper;
 import typical_if.android.view.RoundedImageView;
+
 
 public class FragmentComments extends Fragment {
 
@@ -148,9 +152,6 @@ public class FragmentComments extends Fragment {
         item_id = post.post.id;
         group_id = post.post.from_id;
         from_user = post.post.from_id;
-
-
-
         return fragment;
     }
 
@@ -322,9 +323,12 @@ public class FragmentComments extends Fragment {
         listOfComments.addHeaderView(wallItem);
 
         updateCommentList(group_id, post.post.id, listOfComments, inflater);
+
+
+
     }
 
-
+   View footer;
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -334,19 +338,22 @@ public class FragmentComments extends Fragment {
         this.inflater = inflater;
         rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
 
+
+        RelativeLayout rootLayoutShowHide = (RelativeLayout)rootView.findViewById(R.id.root_layout_show_hide);
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
+        View listFooterView = rootView.inflate(getActivity().getApplicationContext(), R.layout.send_comment_footer, null);
+        footer=listFooterView;
+//        if (listOfComments.getBottom()>TIFApp.getDisplayHeight())
+//        {
+            listOfComments.addFooterView(listFooterView);
+//            rootLayoutShowHide.setVisibility(View.GONE);
+//        }else {
+//
+//            rootLayoutShowHide.setVisibility(View.VISIBLE);
+//        }
+
         sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
-
-        if (!VKSdk.isLoggedIn()){
-            sendComment.setVisibility(View.GONE);
-            commentMessage.setVisibility(View.GONE);
-            final RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.MATCH_PARENT);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1);
-            listOfComments.setLayoutParams(layoutParams);
-            }
 
 
         if (loadFromWall) {
@@ -359,54 +366,36 @@ public class FragmentComments extends Fragment {
         sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    if (!commentMessage.getText().toString().isEmpty()) {
-                    message = commentMessage.getText().toString();
-                    if (!edit_status) {
-                        if (reply_to_comment == 0) {
 
-                            VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", 0, new VKRequest.VKRequestListener() {
+                message = commentMessage.getText().toString();
+                if (!edit_status) {
+                    if (reply_to_comment == 0) {
 
-                                @Override
-                                public void onComplete(final VKResponse response) {
-                                    super.onComplete(response);
-                                    commentMessage.setText("");
-                                    updateCommentList(group_id, item_id, listOfComments, inflater);
-                                }
+                        VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", 0, new VKRequest.VKRequestListener() {
 
-                                @Override
-                                public void onError(final VKError error) {
-                                    super.onError(error);
-                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                                }
-
-                            });
-
-                        } else {
-                            VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", reply_to_comment, new VKRequest.VKRequestListener() {
-
-                                @Override
-                                public void onComplete(final VKResponse response) {
-                                    super.onComplete(response);
-                                    commentMessage.setText("");
-                                    updateCommentList(group_id, item_id, listOfComments, inflater);
-                                }
-
-                                @Override
-                                public void onError(final VKError error) {
-                                    super.onError(error);
-                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                                }
-                            });
-
-                        }
-                    } else
-                        VKHelper.editComment(group_id, comments.get(positionOfComment).id, message, null, new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
-                                updateCommentList(group_id, item_id, listOfComments, inflater);
                                 commentMessage.setText("");
-                                edit_status = false;
+                                updateCommentList(group_id, item_id, listOfComments, inflater);
+                            }
+
+                            @Override
+                            public void onError(final VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                            }
+
+                        });
+
+                    } else {
+                        VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", reply_to_comment, new VKRequest.VKRequestListener() {
+
+                            @Override
+                            public void onComplete(final VKResponse response) {
+                                super.onComplete(response);
+                                commentMessage.setText("");
+                                updateCommentList(group_id, item_id, listOfComments, inflater);
                             }
 
                             @Override
@@ -416,11 +405,27 @@ public class FragmentComments extends Fragment {
                             }
                         });
 
-                    edit_status = false;
-                }
-            }
-            });
+                    }
+                } else
+                    VKHelper.editComment(group_id, comments.get(positionOfComment).id, message, null, new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(final VKResponse response) {
+                            super.onComplete(response);
+                            updateCommentList(group_id, item_id, listOfComments, inflater);
+                            commentMessage.setText("");
+                            edit_status = false;
+                        }
 
+                        @Override
+                        public void onError(final VKError error) {
+                            super.onError(error);
+                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                        }
+                    });
+
+                edit_status = false;
+            }
+        });
         setRetainInstance(true);
         return rootView;
     }
@@ -473,6 +478,8 @@ public class FragmentComments extends Fragment {
     public boolean myComment = false;
 
     public void showContextMenu(int position) {
+
+
         VKApiComment comment = comments.get(position);
 
         String name = Identify(comments, profiles,groups, position);
@@ -486,25 +493,25 @@ public class FragmentComments extends Fragment {
             myComment = true;
             if (comment.reply_to_comment != 0) {
                 if (!comment.user_likes)
-                    items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись", "Видалити", "Редагувати", name};
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report),getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit), name};
                 else
-                    items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені не подобається", "Поскаржитись", "Видалити", "Редагувати", name};
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text),getResources().getString(R.string.comment_unlike),  getResources().getString(R.string.comment_report),getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit), name};
             } else if (!comment.user_likes) {
-                items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись", "Видалити", "Редагувати"};
+                items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete),getResources().getString(R.string.comment_edit)};
             } else {
-                items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені не подобається", "Поскаржитись", "Видалити", "Редагувати"};
+                items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete),getResources().getString(R.string.comment_edit)};
             }
         } else {
             myComment = false;
             if (comment.reply_to_comment != 0) {
                 if (!comment.user_likes)
-                    items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись", name};
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report), name};
                 else
-                    items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені не подобається", "Поскаржитись", name};
+                    items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report, name)};
             } else if (!comment.user_likes) {
-                items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені подобається", "Поскаржитись"};
+                items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report)};
             } else {
-                items = new CharSequence[]{"Профіль", "Відповісти", "Копіювати текст", "Мені не подобається", "Поскаржитись"};
+                items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report)};
             }
 
         }
@@ -640,6 +647,8 @@ public class FragmentComments extends Fragment {
                         edit_status = true;
                         positionOfComment = position;
                         commentMessage.setText(comments.get(position).text);
+
+
                     }
 
                     break;
@@ -672,12 +681,19 @@ public class FragmentComments extends Fragment {
             if (commentsList.get(i).id == reply_to_comment) {
                 for (int j = 0; j < profilesList.size(); j++) {
                     if (commentsList.get(i).from_id == profilesList.get(j).id) {
-                        for (int k = 0; k < groupsList.size(); k++) {
-                            if (commentsList.get(i).from_id == groupsList.get(k).id) {
+                        if (groupsList.size()==0){
+                            name = profilesList.get(j).first_name;
+                        }
+                        else {
+                            for (int k = 0; k < groupsList.size(); k++) {
 
-                                name = profilesList.get(j).first_name;
+                                if (commentsList.get(i).from_id == groupsList.get(k).id) {
 
+                                    name = profilesList.get(j).first_name;
+
+                                }
                             }
+
                         }
                     }
 

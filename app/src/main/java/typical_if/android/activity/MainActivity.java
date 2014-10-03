@@ -5,6 +5,8 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +27,8 @@ import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+
+import java.util.Locale;
 
 import typical_if.android.AudioPlayer;
 import typical_if.android.AudioPlayerService;
@@ -48,11 +52,9 @@ public class MainActivity extends DialogActivity implements
         FragmentComments.OnFragmentInteractionListener {
 
 
+
     private Drawable mIcon;
     private CharSequence mTitle;
-    private long lastPressedTime;
-    private static Uri mImageCaptureUri;
-    private static final int PERIOD = 2000;
     private static final int PICK_FROM_CAMERA = 1;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     public NavigationDrawerFragment mNavigationDrawerFragment;
@@ -60,6 +62,21 @@ public class MainActivity extends DialogActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//
+//        String languageToLoad  = "en"; // your language
+//        Locale locale = new Locale(languageToLoad);
+//        Locale.setDefault(locale);
+//        Configuration config = new Configuration();
+//        config.locale = locale;
+//        getBaseContext().getResources().updateConfiguration(config,
+//                getBaseContext().getResources().getDisplayMetrics());
+//
+//
+//        SharedPreferences languagepref = getSharedPreferences("language",MODE_PRIVATE);
+//        SharedPreferences.Editor editor = languagepref.edit();
+//        editor.putString("languageToLoad",languageToLoad );
+//        editor.commit();
+
 
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 

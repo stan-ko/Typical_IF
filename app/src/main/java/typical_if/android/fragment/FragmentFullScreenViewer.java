@@ -55,17 +55,17 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
     long user_id;
 
-  //  TextView countLikes;
-  //  TextView countComments;
+    //  TextView countLikes;
+    //  TextView countComments;
     ImageView addLike;
     ImageView goToComments;
     TextView photoHeader;
-  //  CheckBox likedOrNotLikedBox;
+    //  CheckBox likedOrNotLikedBox;
     TextView counterOfPhotos;
     TextView albumSize;
     CheckBox cb_like;
     CheckBox cb_comment;
-   public static RelativeLayout panel;
+    public static RelativeLayout panel;
 
     public static FragmentFullScreenViewer newInstance(ArrayList<VKApiPhoto> photos, int currentposition) {
 
@@ -101,11 +101,11 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         rootView = inflater.inflate(R.layout.fragment_fullscreen_list, container, false);
 
 
-       // countLikes = (TextView) rootView.findViewById(R.id.count_of_likes);
+        // countLikes = (TextView) rootView.findViewById(R.id.count_of_likes);
         //countComments = (TextView) rootView.findViewById(R.id.count_of_comments);
         addLike = (ImageView) rootView.findViewById(R.id.add_like);
         goToComments = (ImageView) rootView.findViewById(R.id.go_to_comments);
-       // likedOrNotLikedBox = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox));
+        // likedOrNotLikedBox = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox));
         photoHeader = (TextView) rootView.findViewById(R.id.photoHeader);
         photoHeader.setVisibility(View.GONE);
         counterOfPhotos = (TextView) rootView.findViewById(R.id.counterOfPhotos);
@@ -202,29 +202,32 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             cb_comment.setText(String.valueOf(photos.get(position).comments));
 
         counterOfPhotos.setText(String.valueOf(position + 1));
-       albumSize.setText(String.valueOf(VKHelper.countOfPhotos));
+        if (VKHelper.countOfPhotos==0)
+            albumSize.setText(String.valueOf(Constants.COUNT_OF_PHOTOS));
+        else
+            albumSize.setText(String.valueOf(VKHelper.countOfPhotos));
 
 
         VKHelper.isLiked("photo",Constants.GROUP_ID, photos.get(position).id, new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
-                        try {
-                            JSONObject j = response.json.optJSONObject("response");
+            @Override
+            public void onComplete(final VKResponse response) {
+                super.onComplete(response);
+                try {
+                    JSONObject j = response.json.optJSONObject("response");
 
-                            photos.get(position).user_likes = j.optInt("liked");;
-                        }catch (NullPointerException ex){
+                    photos.get(position).user_likes = j.optInt("liked");;
+                }catch (NullPointerException ex){
 
 
-                        }
+                }
 
-                    }
+            }
             @Override
             public void onError(final VKError error) {
                 super.onError(error);
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }
-                });
+        });
         if (photos.get(position).user_likes == 0) {
             cb_like.setChecked(false);
         }
@@ -236,53 +239,54 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             @Override
             public void onClick(View v) {
 
-                  if (VKSdk.isLoggedIn()){
+                if (VKSdk.isLoggedIn()){
 
-                if (photos.get(position).user_likes == 0) {
-                    VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(final VKResponse response) {
-                            super.onComplete(response);
+                    if (photos.get(position).user_likes == 0) {
+                        VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(final VKResponse response) {
+                                super.onComplete(response);
 
-                            cb_like.setChecked(true);
+                                cb_like.setChecked(true);
+                                if(cb_like.getText().toString()==""){cb_like.setText("0");}
+                                cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) + 1));
+                                ++photos.get(position).likes;
+                                photos.get(position).user_likes = 1;
 
-                            cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) + 1));
-                            ++photos.get(position).likes;
-                            photos.get(position).user_likes = 1;
+                            }
 
-                        }
+                            @Override
+                            public void onError(final VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                            }
+                        });
+                    } else {
+                        VKHelper.deleteLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(final VKResponse response) {
+                                super.onComplete(response);
+                                cb_like.setChecked(false);
 
-                        @Override
-                        public void onError(final VKError error) {
-                            super.onError(error);
-                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                        }
-                    });
-                } else {
-                    VKHelper.deleteLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(final VKResponse response) {
-                            super.onComplete(response);
-                            cb_like.setChecked(false);
+                                //like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
+                                cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) - 1));
+                                if (cb_like.getText().toString()=="0"){cb_like.setText("");}
+                                --photos.get(position).likes;
+                                photos.get(position).user_likes = 0;
 
-                            //like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
-                            cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) - 1));
-                            --photos.get(position).likes;
-                            photos.get(position).user_likes = 0;
+                            }
 
-                        }
+                            @Override
+                            public void onError(final VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                            }
+                        });
+                    }
 
-                        @Override
-                        public void onError(final VKError error) {
-                            super.onError(error);
-                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                        }
-                    });
+                }else {
+                    Toast.makeText(Constants.mainActivity.getApplicationContext(),"Ви не залогінені",Toast.LENGTH_SHORT);
                 }
-
-            }else {
-                      Toast.makeText(Constants.mainActivity.getApplicationContext(),"Ви не залогінені",Toast.LENGTH_SHORT);
-                  }
             }
         });
 

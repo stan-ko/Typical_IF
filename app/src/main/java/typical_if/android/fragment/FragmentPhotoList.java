@@ -21,6 +21,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
@@ -250,6 +251,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     public static int albumSize;
     GridView gridOfPhotos;
     PhotoListAdapter photoListAdapter;
+    private static final int INITIAL_DELAY_MILLIS = 10;
 
     protected void handleResponse(JSONObject jsonObject, final int columns, View view) {
 
@@ -262,10 +264,13 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
         gridOfPhotos.setNumColumns(columns);
         if(photoListAdapter ==null){
-        photoListAdapter= new PhotoListAdapter(photos2, getActivity().getLayoutInflater());}else
-        photoListAdapter.notifyDataSetChanged();
-        //gridOfPhotos.invalidateViews();
-        gridOfPhotos.setAdapter(photoListAdapter);
+        photoListAdapter= new PhotoListAdapter(photos2, getActivity().getLayoutInflater());}
+        else { photoListAdapter.notifyDataSetChanged();}
+        SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(photoListAdapter);
+        swingBottomInAnimationAdapter.setAbsListView(gridOfPhotos);
+        assert swingBottomInAnimationAdapter.getViewAnimator() != null;
+        swingBottomInAnimationAdapter.getViewAnimator().setInitialDelayMillis(INITIAL_DELAY_MILLIS);
+        gridOfPhotos.setAdapter(swingBottomInAnimationAdapter);
         updated = false;
         gridOfPhotos.setOnScrollListener(this);
 

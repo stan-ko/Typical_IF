@@ -1,18 +1,32 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.XmlResourceParser;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
+import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.Locator;
+import org.xml.sax.SAXException;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import typical_if.android.Constants;
 import typical_if.android.R;
@@ -37,12 +51,23 @@ public class FragmentAboutUs extends Fragment{
     }
 
     public FragmentAboutUs() {
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_events_list, container, false);
         setRetainInstance(true);
+        String licences = "licenses.xml";
+        Context ctx = Constants.mainActivity.getApplicationContext();
+
+
+        TextView lic = (TextView)getView().findViewById(R.id.licences);
+
+
+        lic.setText("");
+
         final ImageView devLight = (ImageView) rootView.findViewById(R.id.DevLightBtn);
         final ImageView stantsiya = (ImageView) rootView.findViewById(R.id.stantsiya);
         final ImageView tf = (ImageView) rootView.findViewById(R.id.tf_site);

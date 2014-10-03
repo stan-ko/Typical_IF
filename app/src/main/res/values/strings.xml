@@ -10,6 +10,18 @@
     <string name="menu_group_title_events">Афіша Франківська</string>
     <string name="menu_group_exit">Покинути програму</string>
 
+    <string name="profile">Профіль</string>
+    <string name="reply">Відповісти</string>
+    <string name="copy_text">Копіювати текст</string>
+    <string name="comment_like">Мені подобається</string>
+    <string name="comment_unlike">Мені не подобається</string>
+    <string name="comment_report">Поскаржитись</string>
+    <string name="comment_delete">Видалити</string>
+    <string name="comment_edit">Редагувати</string>
+    <string name="comment_receiver">Адресат</string>
+
+
+
     <string name="title_login">Залогінитись</string>
     <string name="title_logout">Розлогінитись</string>
     <string name="look_wall">Стіна</string>
@@ -65,7 +77,7 @@
 
     <string name="retry">Повторити</string>
     <string name="cancel">Скасувати</string>
-    <string name="offline">Офлайн</string>
+    <string name="offline">Оффлайн</string>
     <string name="okay">ОК</string>
     <string name="comment_background">Ваш коментар</string>
 
@@ -112,5 +124,9 @@
         <item>Audio</item>
         <item>Document</item>
     </string-array>
+
+
+
+
 
 </resources>

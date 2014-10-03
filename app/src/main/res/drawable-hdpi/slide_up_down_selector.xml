@@ -3,9 +3,9 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_checked="false"
-        android:drawable="@drawable/slide_down_icon" />
+        android:drawable="@drawable/button_down" />
 
     <item
         android:state_checked="true"
-        android:drawable="@drawable/slide_up_icon" />
+        android:drawable="@drawable/button_up" />
 </selector>
