@@ -24,7 +24,7 @@
     android:dividerHeight="1px"
     android:drawSelectorOnTop="true"
     android:headerDividersEnabled="true"
-    android:layout_alignBottom="@+id/imageView" />
+    android:layout_above="@+id/comment_bar_layout" />
     <!--android:background="@drawable/image_header_state_selector" -->
 
 
@@ -43,11 +43,12 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="50dp"
-        android:id="@+id/root_layout_show_hide"
+        android:id="@+id/comment_bar_layout"
+        android:visibility="visible"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:visibility="gone">
+        android:background="#ff363636">
 
         <EditText
             android:layout_width="wrap_content"
@@ -60,17 +61,16 @@
             android:phoneNumber="false"
             android:selectAllOnFocus="false"
             android:paddingRight="2dp"
-            android:layout_alignParentBottom="true"
+            android:hint="@string/your_message"
+            android:paddingLeft="15dp"
+            android:autoText="false"
+            android:layout_toStartOf="@+id/buttonSendComment"
+            android:visibility="visible"
+            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="5dp"
-            android:hint="Ваше повідомлення..."
-            android:paddingLeft="15dp"
-            android:autoText="false"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_toLeftOf="@+id/buttonSendComment"
-            android:layout_toStartOf="@+id/buttonSendComment" />
+            android:alpha="0.8" />
 
         <Button
             android:layout_width="wrap_content"
@@ -79,14 +79,14 @@
             android:layout_weight=".30"
             android:visibility="visible"
             android:textColor="#ffffffff"
-            android:background="#dc464646"
+            android:background="@drawable/send_comment_button_shape"
             android:layout_alignTop="@+id/field_of_message_for_comment"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="8dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
-            android:text="Відпр." />
+            android:text="@string/send_comment" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -7,14 +7,18 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.util.List;
 
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.util.PhotoUrlHelper;
 
 /**
@@ -27,6 +31,7 @@ public class PhotoListAdapter extends BaseAdapter {
     public PhotoListAdapter(List<VKApiPhoto> list, LayoutInflater inflater) {
         this.photoList = list;
         this.layoutInflater = inflater;
+
     }
 
 
@@ -60,7 +65,7 @@ public class PhotoListAdapter extends BaseAdapter {
        // final ProgressBar pbPreviewImageIsLoading = viewHolder.pbPreviewImageIsLoading;
 
 
-        ImageLoader.getInstance().displayImage(PhotoUrlHelper.getPreviewUrl(photo), viewHolder.photo, new ImageLoadingListener() {
+        ImageLoader.getInstance().displayImage(PhotoUrlHelper.getPreviewUrl(photo), viewHolder.photo,TIFApp.additionalOptions, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 //pbPreviewImageIsLoading.setVisibility(View.VISIBLE);

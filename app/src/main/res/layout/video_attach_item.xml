@@ -11,7 +11,8 @@
         android:id="@+id/img_video_attach"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:adjustViewBounds="true" />
+        android:adjustViewBounds="true"
+        android:background="@color/transparent" />
 
     <TextView
         android:layout_width="match_parent"
@@ -21,7 +22,8 @@
         android:padding="5dp"
         android:background="@drawable/element_selector"
         android:textColor="#ffeeeeee"
-        android:layout_below="@+id/img_video_attach" />
+        android:layout_below="@+id/img_video_attach"
+        android:paddingBottom="5dp" />
 
     <TextView
         android:layout_width="wrap_content"

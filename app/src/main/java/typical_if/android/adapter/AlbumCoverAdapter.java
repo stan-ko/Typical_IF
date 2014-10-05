@@ -65,7 +65,7 @@ public class AlbumCoverAdapter extends BaseAdapter {
         viewHolder.photos_count.setText(album.size + "");
 
         String url = album.sizes.optJSONObject(2).optString("src");
-        ImageLoader.getInstance().displayImage(url, viewHolder.album_cover);
+        ImageLoader.getInstance().displayImage(url, viewHolder.album_cover,TIFApp.additionalOptions);
 
         return convertView;
     }

@@ -266,11 +266,12 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         if(photoListAdapter ==null){
         photoListAdapter= new PhotoListAdapter(photos2, getActivity().getLayoutInflater());}
         else { photoListAdapter.notifyDataSetChanged();}
-        SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(photoListAdapter);
-        swingBottomInAnimationAdapter.setAbsListView(gridOfPhotos);
-        assert swingBottomInAnimationAdapter.getViewAnimator() != null;
-        swingBottomInAnimationAdapter.getViewAnimator().setInitialDelayMillis(INITIAL_DELAY_MILLIS);
-        gridOfPhotos.setAdapter(swingBottomInAnimationAdapter);
+//        SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(photoListAdapter);
+//        swingBottomInAnimationAdapter.setAbsListView(gridOfPhotos);
+//        assert swingBottomInAnimationAdapter.getViewAnimator() != null;
+//        swingBottomInAnimationAdapter.getViewAnimator().setInitialDelayMillis(INITIAL_DELAY_MILLIS);
+//        gridOfPhotos.setAdapter(swingBottomInAnimationAdapter);
+        gridOfPhotos.setAdapter(photoListAdapter);
         updated = false;
         gridOfPhotos.setOnScrollListener(this);
 

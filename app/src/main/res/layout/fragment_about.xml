@@ -15,7 +15,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="95dp"
-            android:id="@+id/root_layout_show_hide"
+            android:id="@+id/developers_layout"
             android:layout_toStartOf="@+id/tf_site"
             android:layout_below="@+id/DevLightBtn"
             android:layout_alignRight="@+id/DevLightBtn"
@@ -113,17 +113,15 @@
             android:layout_height="50dp"
             android:id="@+id/tf_site"
             android:src="@drawable/tf_white_logo"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="15dp" />
+            android:layout_above="@+id/stantsiya"
+            android:layout_alignLeft="@+id/stantsiya"
+            android:layout_alignStart="@+id/stantsiya" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/licences"
-            android:layout_below="@+id/root_layout_show_hide"
+            android:layout_below="@+id/developers_layout"
             android:layout_alignLeft="@+id/stantsiya"
             android:layout_alignStart="@+id/stantsiya" />
 
@@ -146,8 +144,20 @@
             android:layout_toStartOf="@+id/typical_if_ua_ref"
             android:textColor="#ffffffff"
             android:layout_alignTop="@+id/devlight_com_ua_ref"
-            android:layout_alignLeft="@+id/root_layout_show_hide"
-            android:layout_alignStart="@+id/root_layout_show_hide" />
+            android:layout_alignLeft="@+id/developers_layout"
+            android:layout_alignStart="@+id/developers_layout" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/libraries_info"
+            android:id="@+id/go_to_license"
+            android:textColor="#ff797dff"
+            android:layout_toEndOf="@+id/stantsiya"
+            android:layout_alignBottom="@+id/stantsiya"
+            android:layout_alignLeft="@+id/devlight_com_ua_ref"
+            android:layout_alignStart="@+id/devlight_com_ua_ref"
+            android:layout_marginLeft="71dp" />
 
     </RelativeLayout>
 

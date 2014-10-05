@@ -3,7 +3,9 @@ package typical_if.android;
 import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -11,6 +13,9 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.vk.sdk.api.model.VKApiPhoto;
+
+import java.util.List;
 
 /**
  * Created by LJ on 14.07.2014.
@@ -34,6 +39,18 @@ public class TIFApp extends Application {
         return displayWidth;
     }
 
+   public static  DisplayImageOptions additionalOptions = new DisplayImageOptions.Builder()
+            .cacheOnDisc(true)
+            .cacheInMemory(true)
+                    //           .showImageOnLoading(R.drawable.pre_load_image_background) // TODO resource or drawable
+//                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
+//                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
+            .resetViewBeforeLoading(true)
+            .bitmapConfig(Bitmap.Config.RGB_565)
+            .imageScaleType(ImageScaleType.EXACTLY)
+            .displayer(new FadeInBitmapDisplayer(1600)).build();
+
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -47,7 +64,7 @@ public class TIFApp extends Application {
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheOnDisc(true)
                 .cacheInMemory(true)
-//                .showImageOnLoading(R.drawable.grey) // TODO resource or drawable
+                .showImageOnLoading(R.drawable.pre_load_image_background) // TODO resource or drawable
 //                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
 //                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
                 .resetViewBeforeLoading(true)

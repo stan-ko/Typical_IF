@@ -481,7 +481,9 @@ public class ItemDataSetter {
         }
 
         ViewGroup signedContainer = getPreparedView(parent, R.layout.signed_post_container);
-        ImageLoader.getInstance().displayImage(image, (ImageView) signedContainer.getChildAt(0));
+        ImageLoader.getInstance().displayImage(image, (ImageView) signedContainer.getChildAt(0),TIFApp.additionalOptions);
+
+
 
         TextView txt_name = ((TextView) signedContainer.getChildAt(1));
         txt_name.setText(name);

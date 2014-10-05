@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -112,6 +114,14 @@ public class WallAdapter extends BaseAdapter    {
 
     public static View wallAdapterView;
 
+    public void setGradientColors(int topColor,View post) {
+        GradientDrawable gradient = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[]
+                {Color.parseColor("#ffafa084"),Color.parseColor("#ff89a790"),topColor});
+        gradient.setShape(GradientDrawable.RECTANGLE);
+        gradient.setCornerRadius(0.f);
+       post.setBackgroundDrawable(gradient);
+    }
+
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         ViewHolder viewHolder = null;
@@ -119,6 +129,9 @@ public class WallAdapter extends BaseAdapter    {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.wall_lv_item, null);
             wallAdapterView = convertView;
+            LinearLayout postWrapper = (LinearLayout)convertView.findViewById(R.id.postParentLayout);
+            setGradientColors((Color.parseColor(postColor)+5005005),postWrapper);
+
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
         } else {
@@ -137,6 +150,7 @@ public class WallAdapter extends BaseAdapter    {
     static String copy_history_logo = "";
     static String copy_history_name = "";
 
+
     public static void initViewHolder(final ViewHolder viewHolder,
                                       final String postColor,
                                       final Wall wall, int position,
@@ -146,6 +160,7 @@ public class WallAdapter extends BaseAdapter    {
                                       final LayoutInflater layoutInflater) {
         try {
 
+            viewHolder.extendedMenuItems.setChecked(false);
             viewHolder.comment_like_repost_panel.setBackgroundColor(Color.parseColor(postColor));
             ItemDataSetter.wallViewHolder = viewHolder;
             ItemDataSetter.postColor = postColor;
@@ -309,6 +324,8 @@ public class WallAdapter extends BaseAdapter    {
                             viewHolder.postFeatureLayout.startAnimation(slideDown);
                             viewHolder.postFeatureLayout.setVisibility(View.VISIBLE);
                             viewHolder.postFeatureLayout.setEnabled(true);
+
+
                         } else {
                             final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
                             slideUp.setAnimationListener(animationListener);
@@ -316,8 +333,12 @@ public class WallAdapter extends BaseAdapter    {
                             viewHolder.postFeatureLayout.setVisibility(View.INVISIBLE);
                             viewHolder.postFeatureLayout.setEnabled(false);
                         }
-                    }
+                      }
+
                 });
+
+
+
 
                 viewHolder.button_comment.setVisibility(View.VISIBLE);
                 viewHolder.button_repost.setVisibility(View.VISIBLE);
@@ -392,7 +413,7 @@ public class WallAdapter extends BaseAdapter    {
                 ((TextView) copyHistoryLayout.getChildAt(2)).setText(ItemDataSetter.getFormattedDate(copyHistory.date));
 
 
-                ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)));
+                ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)),TIFApp.additionalOptions);
 
                 RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryTextLayout);
                 parentCopyHistoryTextContainer.setVisibility(postWrapper.copyHistoryTextContainerVisibility);

@@ -15,8 +15,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/postParentLayout"
-            android:background="@drawable/post_shape"
-            android:layout_marginBottom="2dp">
+            android:background="@drawable/post_shape">
 
             <RelativeLayout
                 android:layout_width="fill_parent"
@@ -43,16 +42,14 @@
                 android:visibility="gone"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/element_selector">>
+                android:background="@color/transparent">>
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postMediaLayout"
-                    android:background="@drawable/element_selector"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp"  />
+                    android:background="@color/transparent" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -68,7 +65,7 @@
                     android:visibility="gone"
                     android:id="@+id/postDocumentLayout"
                     android:orientation="vertical"
-                    android:background="@drawable/element_selector"/>
+                    android:background="@color/transparent"/>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -76,8 +73,7 @@
                     android:visibility="gone"
                     android:id="@+id/postAlbumLayout"
                     android:orientation="vertical"
-                    android:padding="5dp"
-                    android:background="@drawable/element_selector"
+                    android:background="@color/transparent"
                     android:dividerPadding="5dp"
                     android:divider="@drawable/copy_history_divider"
                     android:showDividers="middle" />
@@ -87,7 +83,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/postWikiPageLayout"
                     android:visibility="gone"
-                    android:background="@drawable/element_selector"
+                    android:background="@color/transparent"
                     />
 
                 <RelativeLayout
@@ -95,14 +91,14 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postLinkLayout"
-                    android:background="@drawable/element_selector"/>
+                    android:background="@color/transparent"/>
 
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     android:id="@+id/postPollLayout"
-                    android:background="@drawable/element_selector"/>
+                    android:background="@color/transparent"/>
 
             </LinearLayout>
 
@@ -119,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/copyHistoryLayout"
-                android:background="@drawable/element_selector"
+                android:background="@color/transparent"
                 android:layout_marginTop="5dp"/>
 
             <RelativeLayout
@@ -136,8 +132,7 @@
                     android:layout_alignParentEnd="true"
                     android:background="@color/partly_transparent"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="5dp">
+                    android:layout_marginRight="5dp">
 
                     <ImageView
                         android:layout_width="20dp"
@@ -189,7 +184,8 @@
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
                                 android:src="@drawable/custom_img_post_other_actions_sm"
-                                android:layout_marginRight="15dp" />
+                                android:layout_marginRight="15dp"
+                                android:layout_marginLeft="5dp" />
 
                             <CheckBox
                                 android:layout_width="wrap_content"
@@ -232,20 +228,22 @@
                                 android:layout_alignParentLeft="false"
                                 android:layout_alignParentStart="false"
                                 android:layout_toRightOf="@+id/img_post_other_actions"
-                                android:layout_centerVertical="true" />
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="0dp" />
 
                             <Button
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/button_like"
                                 android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/button_comment"
                                 android:layout_toEndOf="@+id/cb_comment"
                                 android:visibility="visible"
                                 android:background="#00000000"
                                 android:layout_alignRight="@+id/cb_like"
                                 android:layout_alignEnd="@+id/cb_like"
-                                android:layout_marginLeft="25dp" />
+                                android:layout_alignLeft="@+id/cb_like"
+                                android:layout_alignStart="@+id/cb_like"
+                                android:layout_marginLeft="5dp" />
 
                             <Button
                                 android:layout_width="wrap_content"
@@ -253,11 +251,11 @@
                                 android:id="@+id/button_comment"
                                 android:background="#00000000"
                                 android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/cb_repost"
                                 android:layout_alignRight="@+id/cb_comment"
                                 android:layout_alignEnd="@+id/cb_comment"
-                                android:layout_marginLeft="10dp"
-                                android:layout_marginTop="-5dp"/>
+                                android:layout_marginTop="-5dp"
+                                android:layout_alignLeft="@+id/cb_comment"
+                                android:layout_alignStart="@+id/cb_comment" />
 
                             <Button
                                 android:layout_width="wrap_content"

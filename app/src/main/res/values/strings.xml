@@ -2,6 +2,9 @@
 <resources>
 
     <string name="app_name">Типовий Франківськ</string>
+    <string name="logo_name">Типовий\nМобільний\nФранківськ</string>
+    <string name="main_creed">Слава Україні! Героям слава!</string>
+
 
     <string name="menu_group_title_tf">Типовий Франківськ</string>
     <string name="menu_group_title_tz">Типове Зізнання</string>
@@ -19,15 +22,19 @@
     <string name="comment_delete">Видалити</string>
     <string name="comment_edit">Редагувати</string>
     <string name="comment_receiver">Адресат</string>
+    <string name="libraries_info">About used libraries</string>
 
 
 
-    <string name="title_login">Залогінитись</string>
-    <string name="title_logout">Розлогінитись</string>
+
+    <string name="title_login">Увійти в профіль</string>
+    <string name="title_logout">Вийти з профілю</string>
     <string name="look_wall">Стіна</string>
     <string name="look_albums">Альбоми</string>
     <string name="navigation_drawer_open">Відкрити бокове меню</string>
     <string name="navigation_drawer_close">Закрити бокове меню</string>
+    <string name="send_comment">Відпр.</string>
+    <string name="your_message">Ваше повідомлення...</string>
 
     <string name="date_today">Сьогодні о %s</string>
     <string name="date_yesterday">Вчора о %s</string>
@@ -71,7 +78,7 @@
     <string name="photo_from_sd">З карти пам\'яті</string>
 
     <string name="add_photo_from_title">Завантажити фото </string>
-    <string name="no_internet_message_toast_en">Інтернет відсутній. Ви знаходитесь в режимі офлайн.</string>
+    <string name="no_internet_message_toast_en">Інтернет відсутній. Ви знаходитесь в режимі оффлайн.</string>
     <string name="no_internet_chooser">Інтернет відсутній. Оберіть наступну дію.</string>
     <string name="no_internet_retry">Інтернет відсутній. Спробуйте ще раз.</string>
 

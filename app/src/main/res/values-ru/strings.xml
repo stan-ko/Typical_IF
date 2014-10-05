@@ -3,6 +3,8 @@
 <resources>
 
         <string name = "app_name">Типичный Франковск</string>
+        <string name="logo_name">Типичный\nМобильный\nФранковск</string>
+        <string name="main_creed">Слава Украине!Героям слава! </string>
 
         <string name = "menu_group_title_tf">Типичный Франковск</string>
         <string name = "menu_group_title_tz">Типичное Признание</string>
@@ -20,18 +22,21 @@
         <string name = "comment_delete">Удалить</string>
         <string name = "comment_edit">Изменить</string>
         <string name = "comment_receiver">Получатель</string>
+    <string name="libraries_info">About used libraries</string>
 
 
 
-        <string name = "title_login">залогиниться</string>
-        <string name = "title_logout">Розлогинитись</string>
+        <string name = "title_login">Войти в профиль</string>
+        <string name = "title_logout">Выйти с профиля</string>
         <string name = "look_wall">Стена</string>
         <string name = "look_albums">Альбомы</string>
         <string name = "navigation_drawer_open">Открыть боковое меню</string>
         <string name = "navigation_drawer_close">Закрыть боковое меню</string>
+    <string name="send_comment">Отпр.</string>
+    <string name="your_message">Ваше сообщение...</string>
 
-        <string name = "date_today">Сегодня в% s</string>
-        <string name = "date_yesterday">Вчера в% s</string>
+        <string name = "date_today">Сегодня в %s</string>
+        <string name = "date_yesterday">Вчера в %s</string>
 
         <string name = "doc_type_animation">Анимация</string>
         <string name = "doc_type_document">Документ</string>

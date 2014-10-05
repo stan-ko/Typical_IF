@@ -62,20 +62,6 @@ public class MainActivity extends DialogActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//
-//        String languageToLoad  = "en"; // your language
-//        Locale locale = new Locale(languageToLoad);
-//        Locale.setDefault(locale);
-//        Configuration config = new Configuration();
-//        config.locale = locale;
-//        getBaseContext().getResources().updateConfiguration(config,
-//                getBaseContext().getResources().getDisplayMetrics());
-//
-//
-//        SharedPreferences languagepref = getSharedPreferences("language",MODE_PRIVATE);
-//        SharedPreferences.Editor editor = languagepref.edit();
-//        editor.putString("languageToLoad",languageToLoad );
-//        editor.commit();
 
 
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
@@ -167,14 +153,22 @@ public class MainActivity extends DialogActivity implements
         if (mNavigationDrawerFragment.onOptionsItemSelected(item)) {
             return true;
         }
+        switch (item.getItemId()) {
+            case R.id.action_go_home:
 
-        return super.onOptionsItemSelected(item);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.main, menu);
+
             restoreActionBar();
             return true;
         }

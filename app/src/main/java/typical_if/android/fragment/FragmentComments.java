@@ -7,10 +7,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.Uri;
-import android.nfc.tech.Ndef;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
@@ -20,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -32,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -46,7 +45,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Locale;
 
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
@@ -100,6 +98,51 @@ public class FragmentComments extends Fragment {
     LayoutInflater inflater;
     static long item_id;
     static long from_user;
+    int mLastFirstVisibleItem = 0;
+
+//    AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener(){
+//        @Override
+//        public void onScrollStateChanged(AbsListView view, int scrollState) {
+//
+//        }
+//
+//        @Override
+//        public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount,
+//                             int totalItemCount) {
+//            if (absListView.getId() == listOfComments.getId()) {
+//                final int currentFirstVisibleItem = listOfComments.getFirstVisiblePosition();
+//                if (currentFirstVisibleItem > mLastFirstVisibleItem) {
+//
+//
+//                  //  root.setVisibility(View.GONE);
+//                    //                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+////                            RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+////                    lp.addRule(RelativeLayout.BELOW,R.id.comment_bar_layout);
+////
+////                     RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+////                    RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+////                    lp.addRule(RelativeLayout.BELOW,R.id.developers_layout);
+////                    listOfComments.removeViewInLayout(listFooterView);
+////                    listOfComments.setLayoutParams(lp);
+//
+//
+//
+//                }
+//                else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
+//                    //root.setVisibility(View.VISIBLE);
+////
+////                                        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+////                            RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+////                    lp.addRule(RelativeLayout.ABOVE,R.id.developers_layout);
+////                    listOfComments.setLayoutParams(lp);
+////                    listOfComments.addView(listFooterView,lp);
+//                }
+//
+//                mLastFirstVisibleItem = currentFirstVisibleItem;
+//            }
+//
+//        }
+//    };
 
     public static FragmentComments newInstanceForPhoto(VKApiPhoto photo, long vk_user_id) {
         loadFromWall = false;
@@ -168,6 +211,8 @@ public class FragmentComments extends Fragment {
         }
     }
 
+
+
     private void loadPhotoPosts() {
         final VKApiPhoto photo = this.photo;
 
@@ -224,6 +269,7 @@ public class FragmentComments extends Fragment {
         });
 
         updateCommentList(group_id, photo.id, listOfComments, inflater);
+//        listOfComments.setOnScrollListener(onScrollListenerObject);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
 
 
@@ -324,11 +370,14 @@ public class FragmentComments extends Fragment {
 
         updateCommentList(group_id, post.post.id, listOfComments, inflater);
 
+     //   listOfComments.setOnScrollListener(onScrollListenerObject);
+
 
 
     }
 
-   View footer;
+    RelativeLayout root;
+    View listFooterView;
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -337,20 +386,22 @@ public class FragmentComments extends Fragment {
 
         this.inflater = inflater;
         rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
-
-
-        RelativeLayout rootLayoutShowHide = (RelativeLayout)rootView.findViewById(R.id.root_layout_show_hide);
+       RelativeLayout rootLayoutShowHide = (RelativeLayout)rootView.findViewById(R.id.comment_bar_layout);
+        root=rootLayoutShowHide;
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
-        View listFooterView = rootView.inflate(getActivity().getApplicationContext(), R.layout.send_comment_footer, null);
-        footer=listFooterView;
-//        if (listOfComments.getBottom()>TIFApp.getDisplayHeight())
-//        {
-            listOfComments.addFooterView(listFooterView);
-//            rootLayoutShowHide.setVisibility(View.GONE);
-//        }else {
-//
-//            rootLayoutShowHide.setVisibility(View.VISIBLE);
-//        }
+      //  View listFooterView = rootView.inflate(getActivity().getApplicationContext(), R.layout.send_comment_footer, null);
+
+        if (VKSdk.isLoggedIn()){
+        rootLayoutShowHide.setVisibility(View.VISIBLE);}
+        else{
+            rootLayoutShowHide.setVisibility(View.GONE);
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            lp.addRule(RelativeLayout.BELOW,R.id.developers_layout);
+            listOfComments.setLayoutParams(lp);
+
+        }
+
 
         sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
@@ -366,7 +417,7 @@ public class FragmentComments extends Fragment {
         sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+            if (!commentMessage.getText().toString().isEmpty()){
                 message = commentMessage.getText().toString();
                 if (!edit_status) {
                     if (reply_to_comment == 0) {
@@ -425,7 +476,7 @@ public class FragmentComments extends Fragment {
 
                 edit_status = false;
             }
-        });
+        }});
         setRetainInstance(true);
         return rootView;
     }

@@ -7,37 +7,34 @@
     android:paddingBottom="5dp">
 
     <typical_if.android.view.RoundedImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:id="@+id/img_signed_post"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginRight="5dp"
         android:background="@color/transparent"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="8dp"
         android:paddingBottom="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txt_signed_post_name"
-        android:layout_toRightOf="@+id/img_signed_post"
         android:layout_toEndOf="@+id/img_signed_post"
         android:textColor="#ffffffff"
         android:textSize="18dp"
         android:singleLine="true"
-        android:layout_alignBottom="@+id/img_signed_post"
         android:textStyle="normal"
         android:gravity="center"
-        android:layout_alignTop="@+id/img_signed_post"
         android:text="sad asd asdad a d"
         android:textIsSelectable="false"
         android:background="@color/transparent"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/img_signed_post"
+        android:paddingLeft="5dp"
+        android:paddingTop="7dp" />
 </RelativeLayout>

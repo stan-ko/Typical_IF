@@ -75,14 +75,24 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         imageView.startAnimation(animFadeIn);
+if (Locale.getDefault().getLanguage()=="ru") {
+    locale = new Locale("ru");
+    Locale.setDefault(locale);
 
-        locale = new Locale("uk");
-        Locale.setDefault(locale);
+    config = new Configuration();
+    config.locale = locale;
+    getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
 
-        config = new Configuration();
-        config.locale = locale;
-        getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
-        Toast.makeText(getApplicationContext(), "Слава Україні! Героям слава!", Toast.LENGTH_SHORT).show();
+}else {
+    locale = new Locale("ru");
+    Locale.setDefault(locale);
+
+    config = new Configuration();
+    config.locale = locale;
+    getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
+
+}
+        Toast.makeText(getApplicationContext(),getString(R.string.main_creed), Toast.LENGTH_SHORT).show();
         ItemDataSetter.loadUserId();
     }
 

@@ -103,7 +103,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="171"
+            android:text="1714"
             android:id="@+id/cb_photo_like"
             android:button="@drawable/like_or_not_liked_selector_vk_style"
             android:checked="false"
@@ -117,9 +117,8 @@
             android:layout_marginRight="59dp"
 
             android:layout_marginLeft="10dip"
-            android:paddingLeft="25dip"
-            android:paddingRight="10dip"
-            />
+            android:paddingLeft="5dip"
+            android:paddingRight="10dip" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -136,7 +135,8 @@
             android:clickable="true"
             android:layout_alignBottom="@+id/go_to_comments"
             android:layout_alignTop="@+id/go_to_comments"
-            android:layout_marginLeft="-10dip" />
+            android:layout_marginLeft="-10dip"
+            android:layout_marginRight="-8dp" />
 
         <CheckBox
             android:layout_width="wrap_content"
@@ -153,7 +153,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/strut"
             android:textColor="#ffffffff"
-            android:paddingLeft="35dip"
+            android:paddingLeft="5dip"
             android:paddingRight="10dip"
             android:layout_marginRight="5dip" />
 
@@ -171,7 +171,10 @@
             android:layout_alignEnd="@+id/cb_photo_comment"
             android:layout_alignBottom="@+id/cb_photo_comment"
             android:layout_alignTop="@+id/cb_photo_comment"
-            android:layout_marginLeft="-10dip" />
+            android:layout_marginLeft="-10dip"
+            android:layout_marginRight="-8dp"
+            android:layout_marginBottom="-8dp"
+            android:layout_marginTop="-8dp" />
 
 
     </RelativeLayout>

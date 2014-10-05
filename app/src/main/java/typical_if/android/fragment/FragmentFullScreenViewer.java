@@ -241,7 +241,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
                 if (VKSdk.isLoggedIn()){
 
-                    if (photos.get(position).user_likes == 0) {
+                    if (photos.get(position).user_likes == 0 & !cb_like.isChecked()) {
                         VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(final VKResponse response) {
@@ -267,8 +267,6 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
                                 cb_like.setChecked(false);
-
-                                //like.setBackgroundResource((R.drawable.ic_post_btn_like_up));
                                 cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) - 1));
                                 if (cb_like.getText().toString()=="0"){cb_like.setText("");}
                                 --photos.get(position).likes;
