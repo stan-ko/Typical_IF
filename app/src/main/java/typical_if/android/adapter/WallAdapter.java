@@ -5,9 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -51,9 +49,6 @@ import typical_if.android.fragment.FragmentComments;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 import typical_if.android.util.BitmapCache;
-
-import typical_if.android.R;
-
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
 import static java.lang.String.valueOf;
@@ -130,7 +125,7 @@ public class WallAdapter extends BaseAdapter    {
             convertView = layoutInflater.inflate(R.layout.wall_lv_item, null);
             wallAdapterView = convertView;
             LinearLayout postWrapper = (LinearLayout)convertView.findViewById(R.id.postParentLayout);
-            setGradientColors((Color.parseColor(postColor)+5005005),postWrapper);
+            setGradientColors((Color.parseColor("#FF7C7A7E")),postWrapper);
 
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
