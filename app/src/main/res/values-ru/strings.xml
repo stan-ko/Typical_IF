@@ -66,7 +66,7 @@
         <string name = "post_copy_link">Копировать ссылку</string>
 
         <string name = "in_progress">В разработке</string>
-        <string name = "no_suggested_posts">Нет предложений новостей</string>
+        <string name = "no_suggested_posts">У вас нет предложенных новостей</string>
         <string name = "post_deleted">Новость удалена</string>
         <string name = "post_added">Новость предложена</string>
         <string name = "post_reported">Вы пожаловались на запись</string>
@@ -90,7 +90,7 @@
         <string name = "ab_title_make_post">Предложить новость</string>
         <string name = "ab_title_suggested_posts">Предложенные новости</string>
         <string name = "ab_title_group_join">Вступить в сообщество</string>
-        <string name = "ab_title_group_leave">Выйти сообщество</string>
+        <string name = "ab_title_group_leave">Покинуть сообщество</string>
         <string name = "group_joined">Вы вступили в сообщество</string>
         <string name = "group_leaved">Вы покинули сообщество</string>
 

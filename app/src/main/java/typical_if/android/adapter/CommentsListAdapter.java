@@ -139,7 +139,7 @@ public class CommentsListAdapter extends BaseAdapter {
         viewHolder.likes.setVisibility(View.VISIBLE);
 
         viewHolder.likes.setChecked(state);
-        viewHolder.likes.setText(count);
+        viewHolder.likes.setText(" "+count);
         viewHolder.likes.setEnabled(false);
         notifyDataSetChanged();
 
@@ -156,7 +156,7 @@ public class CommentsListAdapter extends BaseAdapter {
             viewHolder.likes.setVisibility(View.GONE);
         } else {
             viewHolder.likes.setVisibility(View.VISIBLE);
-            viewHolder.likes.setText(String.valueOf(comment.likes));
+            viewHolder.likes.setText(" "+String.valueOf(comment.likes));
             viewHolder.likes.setEnabled(false);
 
             if (comment.user_likes == false) {

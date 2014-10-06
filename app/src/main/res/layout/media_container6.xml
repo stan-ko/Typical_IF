@@ -28,7 +28,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight=".30"
-                    android:layout_marginRight="5dp" >
+                    android:layout_marginRight="2dp" >
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -92,7 +92,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight=".30"
                     android:id="@+id/relativeLayout19"
-                    android:layout_marginRight="5dp" >
+                    android:layout_marginRight="2dp" >
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -219,7 +219,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight=".50"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="2dp"
             android:id="@+id/relativeLayout17" >
 
             <LinearLayout
@@ -234,7 +234,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight=".30"
-                    android:layout_marginRight="5dp" >
+                    android:layout_marginRight="2dp" >
 
                     <ImageView
                         android:layout_width="match_parent"
@@ -298,7 +298,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight=".30"
-                    android:layout_marginRight="5dp" >
+                    android:layout_marginRight="2dp" >
 
                     <ImageView
                         android:layout_width="match_parent"

@@ -23,7 +23,7 @@
     <string name="comment_edit">Редагувати</string>
     <string name="comment_receiver">Адресат</string>
     <string name="libraries_info">About used libraries</string>
-
+    <string name="you_have_no_suggested_posts">У вас немає запропонованих новин</string>
 
 
 
@@ -67,7 +67,7 @@
     <string name="post_copy_link">Копіювати посилання</string>
 
     <string name="in_progress">В розробці</string>
-    <string name="no_suggested_posts">Немає запропонованих новин</string>
+    <string name="no_suggested_posts">У вас немає запропонованих новин</string>
     <string name="post_deleted">Новина видалена</string>
     <string name="post_added">Новина запропонована</string>
     <string name="post_reported">Ви поскаржились на запис</string>

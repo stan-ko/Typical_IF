@@ -114,11 +114,9 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/image_comment"
             android:textColor="#ffffffff"
-            android:layout_marginRight="59dp"
+            android:layout_marginRight="60dp"
 
-            android:layout_marginLeft="10dip"
-            android:paddingLeft="5dip"
-            android:paddingRight="10dip" />
+            android:paddingLeft="10dip" />
 
         <ImageButton
             android:layout_width="wrap_content"

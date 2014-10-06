@@ -774,12 +774,8 @@ public class ItemDataSetter {
                     continue;
                 } else {
                     if (photosCount > 1) {
-                        int newWidth;
-                        if (getScreenOrientation() == 1) {
-                            newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
-                        } else {
-                            newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
-                        }
+                        int newWidth = TIFApp.getDisplayWidth();
+
                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
                         layout_i.setLayoutParams(params);
                     }
@@ -799,12 +795,8 @@ public class ItemDataSetter {
                             img = (ImageView) view_i_j_k;
                             final int finalJ = photoPointer++;
                             if (photosCount == 1 && videos.size() == 0) {
-                                int newWidth;
-                                if (getScreenOrientation() == 1) {
-                                    newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
-                                } else {
-                                    newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
-                                }
+                                int newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
+
                                 float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width);
                                 int newHeight = (int) (photos.get(finalJ).height * scaleFactor);
                                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
@@ -866,25 +858,15 @@ public class ItemDataSetter {
                     continue;
                 } else {
                     if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
-                        if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
-                            int newWidth;
-                            if (getScreenOrientation() == 1) {
-                                newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
-                            } else {
-                                newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
-                            }
-                            float scaleFactor = (float) newWidth / 320;
-                            int newHeight = (int) (240 * scaleFactor);
-                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
-                            layout_i.setLayoutParams(params);
-                        }
+                        int newWidth = TIFApp.getDisplayWidth();
+
+                        float scaleFactor = (float) newWidth / 320;
+                        int newHeight = (int) (240 * scaleFactor);
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
+                        layout_i.setLayoutParams(params);
                     } else if (photos.size() == 0 && videos.size() > 1) {
-                        int newWidth;
-                        if (getScreenOrientation() == 1) {
-                            newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
-                        } else {
-                            newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
-                        }
+                        int newWidth = TIFApp.getDisplayWidth();
+
                         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
                         layout_i.setLayoutParams(params);
                     }
@@ -936,28 +918,6 @@ public class ItemDataSetter {
                                     img = (ImageView) layout_i_j_k_l.getChildAt(0);
                                     ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_130, img);
 
-//                                    img.setOnClickListener(new View.OnClickListener() {
-//                                        @Override
-//                                        public void onClick(View v) {
-//                                            String videoID = videos.get(finalJ).toAttachmentString().toString();
-//                                            videoID = videoID.replaceFirst("video", "");
-//                                            Log.d("", videoID);
-//                                            VKHelper.doPlayerRequest(videoID, new VKRequest.VKRequestListener() {
-//                                                @Override
-//                                                public void onComplete(final VKResponse response) {
-//                                                    super.onComplete(response);
-//                                                    JSONObject mainResponse = response.json.optJSONObject("response");
-//                                                    JSONArray item = mainResponse.optJSONArray("items");
-//                                                    try {
-//                                                        videos.get(finalJ).player = ((JSONObject) item.get(0)).optString("player");
-//                                                    } catch (JSONException e) {
-//                                                        e.printStackTrace();
-//                                                    }
-//                                                    Toast.makeText(context, videos.get(finalJ).player, Toast.LENGTH_SHORT).show();
-//                                                }
-//                                            });
-//                                        }
-//                                    });
                                     relativeLayout = (RelativeLayout) layout_i_j_k_l.getChildAt(1);
                                     relativeLayout.setVisibility(View.VISIBLE);
                                     relativeLayout.setOnClickListener(new View.OnClickListener() {
@@ -990,7 +950,6 @@ public class ItemDataSetter {
                 @Override
                 public void onComplete(VKResponse response) {
                     super.onComplete(response);
-                    //photosParam1=photosParam;
                     OfflineMode.saveJSON(response.json, photosKeyGen(photos));
                     finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKeyGen(photos)));
                     Fragment fragment = FragmentFullScreenViewer.newInstance(finalPhotos, position);

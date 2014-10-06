@@ -55,9 +55,7 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:id="@+id/commentMediaLayout"
-            android:background="#ffffffff"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp" />
+            android:background="@color/transparent"/>
 
         <LinearLayout
             android:clickable="false"
@@ -181,7 +179,8 @@
         android:clickable="false"
         android:enabled="false"
         android:visibility="visible"
-        android:textColor="#fff0f4ff" />
+        android:textColor="#fff0f4ff"
+        android:layout_marginLeft="5dip" />
 
     <TextView
         android:layout_width="wrap_content"

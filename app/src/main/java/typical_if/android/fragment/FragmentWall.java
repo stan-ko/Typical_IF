@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,15 +19,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.support.annotation.NonNull;
 
 import com.nhaarman.listviewanimations.appearance.AnimationAdapter;
 import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
-import com.nhaarman.listviewanimations.appearance.simple.SwingRightInAnimationAdapter;
-import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.DragAndDropHandler;
-import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.DragAndDropListViewWrapper;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
-import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.SwipeDismissAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.vk.sdk.VKSdk;
@@ -44,7 +39,6 @@ import typical_if.android.R;
 import typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
-import typical_if.android.adapter.AlbumCoverAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Wall.Wall;
 
@@ -185,11 +179,13 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         wallListView.addHeaderView(padding);
 
         if (!isSuggested) {
+
             jsonObjectOld = OfflineMode.loadJSON(Constants.GROUP_ID);
             initGroupWall(jsonObjectOld, inflater);
 
             swipeView.setOnRefreshListener(this);
             swipeView.setColorScheme(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_light);
+            Toast.makeText(getApplicationContext(),getString(R.string.no_suggested_posts),Toast.LENGTH_SHORT).show();
         } else {
             setDisabledMenu();
             VKHelper.getSuggestedPosts(Constants.GROUP_ID, new VKRequest.VKRequestListener() {

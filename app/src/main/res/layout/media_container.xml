@@ -29,7 +29,8 @@
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
                 android:visibility="gone"
-                android:layout_alignParentTop="false">
+                android:layout_alignParentTop="false"
+                android:layout_alignBottom="@+id/img_photo_1">
 
                 <ImageView
                     android:layout_width="30dp"

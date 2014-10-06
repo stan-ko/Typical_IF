@@ -66,11 +66,11 @@
             android:autoText="false"
             android:layout_toStartOf="@+id/buttonSendComment"
             android:visibility="visible"
+            android:alpha="0.8"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginLeft="5dp"
-            android:alpha="0.8" />
+            android:layout_marginLeft="5dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
             android:layout_alignTop="@+id/field_of_message_for_comment"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginBottom="5dp"
             android:text="@string/send_comment" />

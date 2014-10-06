@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -637,7 +636,7 @@ public class FragmentComments extends Fragment {
                                     super.onComplete(response);
                                     ++comments.get(position).likes;
                                     comments.get(position).user_likes = true;
-                                    adapter.changeStateLikeForComment(true, String.valueOf(comments.get(position).likes));
+                                    adapter.changeStateLikeForComment(true,String.valueOf(comments.get(position).likes));
                                 }
 
                                 @Override
@@ -654,7 +653,7 @@ public class FragmentComments extends Fragment {
                                     super.onComplete(response);
                                     --comments.get(position).likes;
                                     comments.get(position).user_likes = false;
-                                    adapter.changeStateLikeForComment(false, String.valueOf(comments.get(position).likes));
+                                    adapter.changeStateLikeForComment(false,String.valueOf(comments.get(position).likes));
                                 }
 
                                 @Override
