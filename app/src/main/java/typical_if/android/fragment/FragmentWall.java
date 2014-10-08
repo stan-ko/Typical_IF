@@ -77,14 +77,16 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     boolean enable = false;
     Bundle arguments;
     SwipeRefreshLayout swipeView;
+    boolean threadIsStarted;
 
-    final Thread t = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            Offset = Offset + 100;
-            endlessGet(Offset);
-        }
-    });
+//    final Thread t = new Thread(new Runnable() {
+//        @Override
+//        public void run() {
+//            while(threadIsStarted){
+//            Offset = Offset + 100;
+//            endlessGet(Offset);}
+//        }
+//    });
 
     AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
 
@@ -114,8 +116,13 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             }
 
             if (lastItem == totalItemCount - 20 & temp2) {
-                t.start();
-                temp2 = false;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                     Offset = Offset + 100;
+                     endlessGet(Offset);}
+                  }).start();
+                     temp2 = false;
             }
 
             if (lastItem == totalItemCount & temp) {
@@ -185,7 +192,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
             swipeView.setOnRefreshListener(this);
             swipeView.setColorScheme(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_light);
-            Toast.makeText(getApplicationContext(),getString(R.string.no_suggested_posts),Toast.LENGTH_SHORT).show();
+
         } else {
             setDisabledMenu();
             VKHelper.getSuggestedPosts(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
@@ -269,9 +276,8 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onCreate(Bundle savedInstanceState) {
         setRetainInstance(true);
         setHasOptionsMenu(true);
-
-        ((MainActivity) getActivity()).getSupportActionBar().show();
-        super.onCreate(savedInstanceState);
+// ((MainActivity) getActivity()).getSupportActionBar().show();
+  super.onCreate(savedInstanceState);
     }
 
 

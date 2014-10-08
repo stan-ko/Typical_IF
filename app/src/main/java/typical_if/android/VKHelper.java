@@ -1,5 +1,9 @@
 package typical_if.android;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.text.Editable;
 import android.util.Log;
 
@@ -21,6 +25,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import typical_if.android.activity.SplashActivity;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 
@@ -402,8 +407,11 @@ public class VKHelper {
 
     public static Wall getGroupWallFromJSON(final JSONObject jsonObject) {
         final Wall wall = new Wall();
-        final JSONObject object = jsonObject.optJSONObject(Wall.JSON_KEY_RESPONSE);
-        wall.count = object.optInt(Wall.JSON_KEY_COUNT);
+  try {
+      final JSONObject object = jsonObject.optJSONObject(Wall.JSON_KEY_RESPONSE);
+
+      wall.count = object.optInt(Wall.JSON_KEY_COUNT);
+
         Log.d(wall.TAG, String.valueOf(wall.count));
         // items
         final VKPostArray posts = new VKPostArray();
@@ -422,6 +430,7 @@ public class VKHelper {
         // groups
         final JSONArray groups = object.optJSONArray(Wall.JSON_KEY_GROUPS);
         //Log.d(wall.TAG, "Wall groups: " + groups.toString());
+
         VKApiCommunity group;
         VKApi.users().get();
         for (int i = 0; i < groups.length(); i++) {
@@ -431,8 +440,18 @@ public class VKHelper {
         wall.group = new VKApiCommunity().parse(groups.optJSONObject(0));
         // profiles
         wall.profiles=getProfilesFromJSONArray(object.optJSONArray(Wall.JSON_KEY_PROFILES));
+  } catch(Exception npe){
+
+      Intent mStartActivity = new Intent(Constants.mainActivity.getApplicationContext(), SplashActivity.class);
+      int mPendingIntentId = 123456;
+      PendingIntent mPendingIntent = PendingIntent.getActivity(Constants.mainActivity.getApplicationContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+      AlarmManager mgr = (AlarmManager)Constants.mainActivity.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+      mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+      System.exit(0);
+  }
         return wall;
-    }
+
+  }
 
     public static String TIF_VK_API_KEY_RESPONSE = "response";
     public static long getUserIdFromResponse(final VKResponse response){

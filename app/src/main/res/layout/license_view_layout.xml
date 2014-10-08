@@ -11,14 +11,19 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/blur2">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/license_text"
-            android:paddingLeft="5dp"
-            android:paddingTop="5dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="10dp"
-            android:textColor="#ffffffff" />
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/license_text"
+                android:paddingLeft="5dp"
+                android:paddingTop="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="10dp"
+                android:textColor="#ffffffff" />
+        </RelativeLayout>
     </ScrollView>
 </LinearLayout>

@@ -42,6 +42,7 @@ public class Constants {
             VKScope.MESSAGES,
             VKScope.NOTIFICATIONS
     };
+    public static int COUNTER;
 
     public static final long TF_ID = -36573302;
     public static final long ZF_ID = -24818281;
