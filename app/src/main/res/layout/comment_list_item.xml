@@ -142,7 +142,7 @@
         android:textColor="#ffffffff"
         android:textSize="15dp" />
 
-    <typical_if.android.view.RoundedImageView
+    <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/img_user_avatar"
@@ -156,7 +156,8 @@
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:src="@drawable/abc_ab_solid_dark_holo" />
+        android:src="@drawable/abc_ab_solid_dark_holo"
+        android:layout_marginBottom="5dp" />
 
     <TextView
         android:layout_width="wrap_content"

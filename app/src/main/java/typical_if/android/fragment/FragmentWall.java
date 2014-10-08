@@ -105,6 +105,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             final int lastItem = firstVisibleItem + visibleItemCount;
 
             if (absListView.getId() == wallListView.getId()) {
+
                 final int currentFirstVisibleItem = wallListView.getFirstVisiblePosition();
                 if (currentFirstVisibleItem > mLastFirstVisibleItem) {
                 actionBar.hide();

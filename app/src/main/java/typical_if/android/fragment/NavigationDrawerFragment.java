@@ -83,7 +83,6 @@ public class NavigationDrawerFragment extends Fragment {
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
 
-
         if (savedInstanceState != null) {
             mFromSavedInstanceState = true;
         }
@@ -108,7 +107,7 @@ public class NavigationDrawerFragment extends Fragment {
         aboutUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity mainActivity = ((MainActivity)getActivity());
+                MainActivity mainActivity = ((MainActivity) getActivity());
                 mainActivity.addFragment(FragmentAboutUs.newInstance());
                 closeDrawer();
             }
@@ -147,6 +146,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         mDrawerListView.setOnGroupExpandListener(new AnimatedExpandableListView.OnGroupExpandListener() {
             int previousGroup = -1;
+
             @Override
             public void onGroupExpand(int groupPosition) {
                 if (groupPosition != previousGroup) {
@@ -161,7 +161,13 @@ public class NavigationDrawerFragment extends Fragment {
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 List<String> list = listDataChild.get(groupPosition);
                 if (mDrawerLayout != null) {
-                    mDrawerLayout.closeDrawer(mFragmentContainerView);
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDrawerLayout.closeDrawer(mFragmentContainerView);
+                        }
+                    });
+
                     mCallbacks.onNavigationDrawerItemSelected(groupPosition, childPosition);
                 }
                 return false;
@@ -256,7 +262,7 @@ public class NavigationDrawerFragment extends Fragment {
                     return;
                 } else {
                     showGlobalContextActionBar();
-                    ((MainActivity)getActivity()).getSupportActionBar().show();
+                    ((MainActivity) getActivity()).getSupportActionBar().show();
                     FragmentWall.setDisabledMenu();
                 }
 
@@ -305,7 +311,7 @@ public class NavigationDrawerFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            ((MainActivity)getActivity()).getSupportActionBar().show();
+            ((MainActivity) getActivity()).getSupportActionBar().show();
             mCallbacks = (NavigationDrawerCallbacks) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
@@ -344,7 +350,8 @@ public class NavigationDrawerFragment extends Fragment {
 
         super.onCreateOptionsMenu(menu, inflater);
     }
-//
+
+    //
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -364,6 +371,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         }
     }
+
     /**
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
      * 'context', rather than just what's in the current screen.

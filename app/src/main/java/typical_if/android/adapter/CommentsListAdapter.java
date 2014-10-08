@@ -151,7 +151,7 @@ public class CommentsListAdapter extends BaseAdapter {
         ItemDataSetter.commentViewHolder = viewHolder;
         ItemDataSetter.postColor = postColor;
 
-        ImageLoader.getInstance().displayImage(url, viewHolder.user_avatar);
+        ImageLoader.getInstance().displayImage(url, viewHolder.user_avatar, TIFApp.additionalOptions);
         if (comment.likes == 0) {
             viewHolder.likes.setVisibility(View.GONE);
         } else {

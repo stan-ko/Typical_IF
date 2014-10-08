@@ -5,8 +5,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,8 +25,6 @@ import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-
-import java.util.Locale;
 
 import typical_if.android.AudioPlayer;
 import typical_if.android.AudioPlayerService;
@@ -255,10 +251,10 @@ public class MainActivity extends DialogActivity implements
             });
         }
     };
-
+    Fragment fragment = null;
     @Override
     public void onNavigationDrawerItemSelected(int groupPosition, int childPosition) {
-        Fragment fragment = null;
+
         FragmentManager fragmentManager = getSupportFragmentManager();
         long vkGroupId;
         switch (groupPosition) {
@@ -272,9 +268,14 @@ public class MainActivity extends DialogActivity implements
                 onSectionAttached(groupPosition);
 
                 if (childPosition == 0) {
-                    fragment = FragmentWall.newInstance(false);
+
+                           fragment = FragmentWall.newInstance(false);
+
+
                 } else if (childPosition == 1) {
+
                     fragment = FragmentAlbumsList.newInstance(1);
+
                 }
 
                 break;

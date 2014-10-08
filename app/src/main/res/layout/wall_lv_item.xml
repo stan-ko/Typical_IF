@@ -160,6 +160,19 @@
                         android:background="@color/transparent"
                         android:textColor="#ffffffff" />
 
+                    <CheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/expand_post_action_bar"
+                        android:button="@drawable/slide_up_down_selector"
+                        android:checked="false"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true" />
+
                     <RelativeLayout
                         android:layout_width="fill_parent"
                         android:layout_height="40dp"
@@ -275,16 +288,6 @@
 
                     </RelativeLayout>
 
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/expand_post_action_bar"
-                        android:button="@drawable/slide_up_down_selector"
-                        android:checked="false"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginRight="5dp" />
                 </RelativeLayout>
 
             </RelativeLayout>

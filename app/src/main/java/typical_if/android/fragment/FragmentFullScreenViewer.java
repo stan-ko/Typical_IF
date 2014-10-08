@@ -282,8 +282,8 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                         });
                     }
 
-                }else {
-                    Toast.makeText(Constants.mainActivity.getApplicationContext(),"Ви не залогінені",Toast.LENGTH_SHORT);
+                }else if (!VKSdk.isLoggedIn()){
+                    Toast.makeText(Constants.mainActivity.getApplicationContext(),getString(R.string.you_are_not_logged_in),Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -296,8 +296,8 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
                             photos.get(position), Constants.USER_ID);
                     getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-                }else {
-                    Toast.makeText(Constants.mainActivity.getApplicationContext(), "Ви не залогінені", Toast.LENGTH_SHORT);
+                }else if (!VKSdk.isLoggedIn()){
+                    Toast.makeText(Constants.mainActivity.getApplicationContext(),getString(R.string.you_are_not_logged_in), Toast.LENGTH_SHORT).show();
                 }
 
 

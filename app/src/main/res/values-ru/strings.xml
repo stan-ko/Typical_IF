@@ -56,6 +56,7 @@
 
         <string name = "show_all_text">Показать полностью ...</string>
         <string name = "show_min_text">Показать сокращенно ...</string>
+    <string name="you_are_not_logged_in">Ви не вошли в профиль</string>
 
         <string name = "poll_anonymous">Анонимный голосования, голосов:</string>
         <string name = "poll_not_anonymous">Публичное голосование, голосов:</string>
@@ -77,15 +78,16 @@
         <string name = "photo_from_sd">С карты памяти</string>
 
         <string name = "add_photo_from_title">Загрузить фото</string>
-        <string name = "no_internet_message_toast_en">Интернет отсутствует. Вы находитесь в режиме.</string>
+        <string name = "no_internet_message_toast_en">Интернет отсутствует. Вы находитесь в режиме оффлайн.</string>
         <string name = "no_internet_chooser">Интернет отсутствует. Выберите следующее действие.</string>
         <string name = "no_internet_retry">Интернет отсутствует. Попробуйте еще ​​раз.</string>
 
         <string name = "retry">Повторить</string>
         <string name = "cancel">Отменить</string>
-        <string name = "offline">Автономный</string>
+        <string name = "offline">Оффлайн</string>
         <string name = "okay">ОК</string>
         <string name = "comment_background">Ваш комментарий</string>
+    <string name="text_has_been_copied_to_the_buffer">Текст был скопирован в буфер</string>
 
         <string name = "ab_title_make_post">Предложить новость</string>
         <string name = "ab_title_suggested_posts">Предложенные новости</string>

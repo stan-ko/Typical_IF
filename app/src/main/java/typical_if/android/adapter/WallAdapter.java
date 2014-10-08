@@ -53,7 +53,7 @@ import typical_if.android.util.BitmapCache;
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
 import static java.lang.String.valueOf;
 
-public class WallAdapter extends BaseAdapter    {
+public class WallAdapter extends BaseAdapter {
     private final Context mContext;
     private final BitmapCache mMemoryCache;
     private Wall wall;
@@ -64,8 +64,7 @@ public class WallAdapter extends BaseAdapter    {
     private String postColor;
     private FragmentManager fragmentManager;
     private static boolean isSuggested;
-
-
+    static boolean flag;
 
 
     public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, String postColor, boolean isSuggested) {
@@ -77,11 +76,11 @@ public class WallAdapter extends BaseAdapter    {
         this.posts = wall.posts;
         this.postColor = postColor;
         WallAdapter.isSuggested = isSuggested;
-        mContext= Constants.mainActivity.getApplicationContext();
-        mMemoryCache=new BitmapCache();
+        mContext = Constants.mainActivity.getApplicationContext();
+        mMemoryCache = new BitmapCache();
     }
 
-//    public WallAdapter(final Context context) {
+    //    public WallAdapter(final Context context) {
 //        mContext = context;
 //      mMemoryCache = new BitmapCache();
 //    }
@@ -109,12 +108,12 @@ public class WallAdapter extends BaseAdapter    {
 
     public static View wallAdapterView;
 
-    public void setGradientColors(int topColor,View post) {
+    public void setGradientColors(int topColor, View post) {
         GradientDrawable gradient = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[]
-                {Color.parseColor("#ffafa084"),Color.parseColor("#ff89a790"),topColor});
+                {Color.parseColor("#ffafa084"), Color.parseColor("#ff89a790"), topColor});
         gradient.setShape(GradientDrawable.RECTANGLE);
         gradient.setCornerRadius(0.f);
-       post.setBackgroundDrawable(gradient);
+        post.setBackgroundDrawable(gradient);
     }
 
     @Override
@@ -124,8 +123,8 @@ public class WallAdapter extends BaseAdapter    {
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.wall_lv_item, null);
             wallAdapterView = convertView;
-            LinearLayout postWrapper = (LinearLayout)convertView.findViewById(R.id.postParentLayout);
-            setGradientColors((Color.parseColor("#FF7C7A7E")),postWrapper);
+            LinearLayout postWrapper = (LinearLayout) convertView.findViewById(R.id.postParentLayout);
+            setGradientColors((Color.parseColor("#FF7C7A7E")), postWrapper);
 
             viewHolder = new ViewHolder(convertView);
             convertView.setTag(viewHolder);
@@ -233,72 +232,72 @@ public class WallAdapter extends BaseAdapter    {
                 viewHolder.cb_post_repost.setOnClickListener(null);
             } else {
                 viewHolder.cb_post_repost.setChecked(false);
-               if (VKSdk.isLoggedIn())
-                viewHolder.button_repost.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            final AlertDialog.Builder dialog = new AlertDialog.Builder(Constants.mainActivity);
+                if (VKSdk.isLoggedIn())
+                    viewHolder.button_repost.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            try {
+                                final AlertDialog.Builder dialog = new AlertDialog.Builder(Constants.mainActivity);
 //
-                            View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
-                            dialog.setView(view);
-                            dialog.setTitle(context.getString(R.string.comment_background));
+                                View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
+                                dialog.setView(view);
+                                dialog.setTitle(context.getString(R.string.comment_background));
 //
-                            final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
+                                final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
 //
-                            dialog.setPositiveButton(context.getString(R.string.okay), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    final String pidFull = "wall" + Constants.GROUP_ID + "_" + post.id;
-                                    VKHelper.doRepost(pidFull, text.getText().toString(), new VKRequest.VKRequestListener() {
-                                        @Override
-                                        public void onComplete(final VKResponse response) {
-                                            super.onComplete(response);
-                                            JSONObject object = response.json.optJSONObject("response");
-                                            int isSuccessed = object.optInt("success");
+                                dialog.setPositiveButton(context.getString(R.string.okay), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        final String pidFull = "wall" + Constants.GROUP_ID + "_" + post.id;
+                                        VKHelper.doRepost(pidFull, text.getText().toString(), new VKRequest.VKRequestListener() {
+                                            @Override
+                                            public void onComplete(final VKResponse response) {
+                                                super.onComplete(response);
+                                                JSONObject object = response.json.optJSONObject("response");
+                                                int isSuccessed = object.optInt("success");
 //
-                                            if (isSuccessed == 1) {
-                                                post.user_reposted = true;
-                                                viewHolder.cb_post_repost.setChecked(true);
-                                                viewHolder.cb_post_repost.setText(" " + String.valueOf(++post.reposts_count));
+                                                if (isSuccessed == 1) {
+                                                    post.user_reposted = true;
+                                                    viewHolder.cb_post_repost.setChecked(true);
+                                                    viewHolder.cb_post_repost.setText(" " + String.valueOf(++post.reposts_count));
 //
-                                                if (!post.user_likes) {
+                                                    if (!post.user_likes) {
 
-                                                    VKHelper.setLike("post", (wall.group.id * (-1)), post.id, new VKRequest.VKRequestListener() {
-                                                        @Override
-                                                        public void onComplete(final VKResponse response) {
-                                                            super.onComplete(response);
+                                                        VKHelper.setLike("post", (wall.group.id * (-1)), post.id, new VKRequest.VKRequestListener() {
+                                                            @Override
+                                                            public void onComplete(final VKResponse response) {
+                                                                super.onComplete(response);
 
-                                                            viewHolder.cb_post_like.setText(" " + String.valueOf(++post.likes_count));
-                                                            viewHolder.cb_post_like.setChecked(true);
-                                                            post.user_likes = true;
+                                                                viewHolder.cb_post_like.setText(" " + String.valueOf(++post.likes_count));
+                                                                viewHolder.cb_post_like.setChecked(true);
+                                                                post.user_likes = true;
 
-                                                        }
-                                                    });
+                                                            }
+                                                        });
+                                                    }
+                                                    viewHolder.cb_post_repost.setChecked(true);
+                                                    viewHolder.cb_post_repost.setEnabled(false);
+                                                } else {
+                                                    viewHolder.cb_post_repost.setChecked(false);
                                                 }
-                                                viewHolder.cb_post_repost.setChecked(true);
-                                                viewHolder.cb_post_repost.setEnabled(false);
-                                            } else {
-                                                viewHolder.cb_post_repost.setChecked(false);
                                             }
-                                        }
-                                    });
+                                        });
 
-                                }
-                            });
-                            dialog.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialog.setCancelable(true);
-                                }
-                            });
-                            dialog.create().show();
+                                    }
+                                });
+                                dialog.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialog.setCancelable(true);
+                                    }
+                                });
+                                dialog.create().show();
 //
-                        } catch (NullPointerException npe) {
-                            Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
+                            } catch (NullPointerException npe) {
+                                Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
+                    });
             }
 
 
@@ -310,10 +309,50 @@ public class WallAdapter extends BaseAdapter    {
                     }
                 });
 
+//                viewHolder.openActions.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        if (flag) {
+//                            viewHolder.extendedMenuItems.setChecked(true);
+//                            final Animation slideDown = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_down_animation);
+//                            slideDown.setAnimationListener(animationListener);
+//                            viewHolder.postFeatureLayout.startAnimation(slideDown);
+//                            viewHolder.postFeatureLayout.setVisibility(View.VISIBLE);
+//                            viewHolder.postFeatureLayout.setEnabled(true);
+//                        }else {
+//                            viewHolder.extendedMenuItems.setChecked(false);
+//                            final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
+//                            slideUp.setAnimationListener(animationListener);
+//                            viewHolder.postFeatureLayout.startAnimation(slideUp);
+//                            viewHolder.postFeatureLayout.setVisibility(View.INVISIBLE);
+//                            viewHolder.postFeatureLayout.setEnabled(false);
+//                        }
+//
+//                    }
+//                });
+//                if (flag) {
+//                    viewHolder.extendedMenuItems.setChecked(true);
+//                    final Animation slideDown = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_down_animation);
+//                    slideDown.setAnimationListener(animationListener);
+//                    viewHolder.postFeatureLayout.startAnimation(slideDown);
+//                    viewHolder.postFeatureLayout.setVisibility(View.VISIBLE);
+//                    viewHolder.postFeatureLayout.setEnabled(true);
+//                }else {
+//                    viewHolder.extendedMenuItems.setChecked(false);
+//                    final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
+//                    slideUp.setAnimationListener(animationListener);
+//                    viewHolder.postFeatureLayout.startAnimation(slideUp);
+//                    viewHolder.postFeatureLayout.setVisibility(View.INVISIBLE);
+//                    viewHolder.postFeatureLayout.setEnabled(false);
+//                }
+
                 viewHolder.extendedMenuItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
+
+                          //  flag=isChecked;
+////
                             final Animation slideDown = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_down_animation);
                             slideDown.setAnimationListener(animationListener);
                             viewHolder.postFeatureLayout.startAnimation(slideDown);
@@ -322,17 +361,17 @@ public class WallAdapter extends BaseAdapter    {
 
 
                         } else {
+                           // flag=isChecked;
                             final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
                             slideUp.setAnimationListener(animationListener);
                             viewHolder.postFeatureLayout.startAnimation(slideUp);
                             viewHolder.postFeatureLayout.setVisibility(View.INVISIBLE);
                             viewHolder.postFeatureLayout.setEnabled(false);
                         }
-                      }
+                    }
 
                 });
-
-
+              //  flag=false;
 
 
                 viewHolder.button_comment.setVisibility(View.VISIBLE);
@@ -408,7 +447,7 @@ public class WallAdapter extends BaseAdapter    {
                 ((TextView) copyHistoryLayout.getChildAt(2)).setText(ItemDataSetter.getFormattedDate(copyHistory.date));
 
 
-                ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)),TIFApp.additionalOptions);
+                ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)), TIFApp.additionalOptions);
 
                 RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryTextLayout);
                 parentCopyHistoryTextContainer.setVisibility(postWrapper.copyHistoryTextContainerVisibility);
@@ -506,6 +545,7 @@ public class WallAdapter extends BaseAdapter    {
         public final TextView postUserComment;
         public final RelativeLayout postFeatureLayout;
         public final CheckBox extendedMenuItems;
+
         public final RelativeLayout postExpandButtonLayout;
 
         public final CheckBox cb_post_like;
@@ -539,6 +579,8 @@ public class WallAdapter extends BaseAdapter    {
             this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other_actions);
             this.postFeatureLayout = (RelativeLayout) convertView.findViewById(R.id.postFeaturesLayout);
             this.extendedMenuItems = (CheckBox) convertView.findViewById(R.id.expand_post_action_bar);
+
+
             this.postExpandButtonLayout = (RelativeLayout) convertView.findViewById(R.id.postExpandButtonLayout);
 
             this.cb_post_like = (CheckBox) convertView.findViewById(R.id.cb_like);

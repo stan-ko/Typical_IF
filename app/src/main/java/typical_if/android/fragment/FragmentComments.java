@@ -392,7 +392,7 @@ public class FragmentComments extends Fragment {
 
         if (VKSdk.isLoggedIn()){
         rootLayoutShowHide.setVisibility(View.VISIBLE);}
-        else{
+       else if (!VKSdk.isLoggedIn()){
             rootLayoutShowHide.setVisibility(View.GONE);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -532,24 +532,26 @@ public class FragmentComments extends Fragment {
 
         VKApiComment comment = comments.get(position);
 
-        String name = Identify(comments, profiles,groups, position);
+
+        String name = Identify(comments, profiles, groups, position);
         if (name == "" || name == null) {
             name = "Адресат";
         }
-        CharSequence[] items;
+        CharSequence[] items=null;
 
-
+          if(VKSdk.isLoggedIn()){
         if (comment.from_id == Constants.USER_ID) {
             myComment = true;
+
             if (comment.reply_to_comment != 0) {
                 if (!comment.user_likes)
-                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report),getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit), name};
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit), name};
                 else
-                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text),getResources().getString(R.string.comment_unlike),  getResources().getString(R.string.comment_report),getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit), name};
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit), name};
             } else if (!comment.user_likes) {
-                items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete),getResources().getString(R.string.comment_edit)};
+                items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit)};
             } else {
-                items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete),getResources().getString(R.string.comment_edit)};
+                items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit)};
             }
         } else {
             myComment = false;
@@ -557,17 +559,50 @@ public class FragmentComments extends Fragment {
                 if (!comment.user_likes)
                     items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report), name};
                 else
-                    items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report, name)};
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report, name)};
             } else if (!comment.user_likes) {
-                items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report)};
+                items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report)};
             } else {
-                items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report)};
+                items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report)};
             }
 
         }
 
+           } else if (!VKSdk.isLoggedIn()) {
+               if (comment.from_id == Constants.USER_ID) {
+                   myComment = true;
+
+                   if (comment.reply_to_comment != 0) {
+                       if (!comment.user_likes)
+                           items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text), name};
+                       else
+                           items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text), name};
+                   } else if (!comment.user_likes) {
+                       items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text)};
+                   } else {
+                       items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text)};
+                   }
+               } else {
+                   myComment = false;
+                   if (comment.reply_to_comment != 0) {
+                       if (!comment.user_likes)
+                           items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text),name};
+                       else
+                           items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text)};
+                   } else if (!comment.user_likes) {
+                       items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text)};
+                   } else {
+                       items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text),};
+                   }
+
+               }
+
+
+           }
 
         onInitContextMenu(items, position);
+
+
     }
 
 
@@ -599,127 +634,160 @@ public class FragmentComments extends Fragment {
     public void onInitContextMenu(final CharSequence[] items, final int position) {
 
         final LayoutInflater inflater = getActivity().getLayoutInflater();
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-            public void onClick(DialogInterface dialog, int item) {
-                switch (item) {
-                    case 0: {
-                        Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).from_id + "");
-                        getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
-                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    }
-                    break;
-                    case 1: {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                reply_to_comment = comments.get(position).id;
-                                commentMessage.setText(Identify(comments, profiles,groups, -1) + ", ");
-
-                            }
-                        });
-
-                    }
-                    break;
-                    case 2: {
-                        ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
-                        clipboard.setText(comments.get(position).text);
-                    }
-                    break;
-                    case 3: {
-                        if (!comments.get(position).user_likes) {
-
-                            VKHelper.setLike(TYPE, group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
-                                @Override
-                                public void onComplete(final VKResponse response) {
-                                    super.onComplete(response);
-                                    ++comments.get(position).likes;
-                                    comments.get(position).user_likes = true;
-                                    adapter.changeStateLikeForComment(true,String.valueOf(comments.get(position).likes));
-                                }
-
-                                @Override
-                                public void onError(final VKError error) {
-                                    super.onError(error);
-                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                                }
-                            });
-
-                        } else {
-                            VKHelper.deleteLike(TYPE, group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
-                                @Override
-                                public void onComplete(final VKResponse response) {
-                                    super.onComplete(response);
-                                    --comments.get(position).likes;
-                                    comments.get(position).user_likes = false;
-                                    adapter.changeStateLikeForComment(false,String.valueOf(comments.get(position).likes));
-                                }
-
-                                @Override
-                                public void onError(final VKError error) {
-                                    super.onError(error);
-                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                                }
-                            });
+         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+       if (VKSdk.isLoggedIn()){
+            builder.setItems(items, new DialogInterface.OnClickListener() {
+                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+                public void onClick(DialogInterface dialog, int item) {
+                    switch (item) {
+                        case 0: {
+                            Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).from_id + "");
+                            getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
+                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         }
-                    }
-                    break;
-                    case 4:
-                        ((MainActivity)getActivity()).reportListDialog(group_id, comments.get(position).id);
                         break;
-                    case 5: {
-                        if (myComment) {
-                            VKHelper.deleteComment(group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
+                        case 1: {
+                            getActivity().runOnUiThread(new Runnable() {
                                 @Override
-                                public void onComplete(final VKResponse response) {
-                                    super.onComplete(response);
-                                    updateCommentList(group_id, item_id, listOfComments, inflater);
+                                public void run() {
+                                    reply_to_comment = comments.get(position).id;
+                                    commentMessage.setText(Identify(comments, profiles, groups, -1) + ", ");
+
                                 }
-
-                                @Override
-                                public void onError(final VKError error) {
-                                    super.onError(error);
-                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                                }
-
-
                             });
-                        } else {
+
+                        }
+                        break;
+                        case 2: {
+                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                            clipboard.setText(comments.get(position).text);
+                            Toast.makeText(getActivity().getApplicationContext(),getString(R.string.text_has_been_copied_to_the_buffer),Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                        case 3: {
+                            if (!comments.get(position).user_likes) {
+
+                                VKHelper.setLike(TYPE, group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
+                                    @Override
+                                    public void onComplete(final VKResponse response) {
+                                        super.onComplete(response);
+                                        ++comments.get(position).likes;
+                                        comments.get(position).user_likes = true;
+                                        adapter.changeStateLikeForComment(true, String.valueOf(comments.get(position).likes));
+                                    }
+
+                                    @Override
+                                    public void onError(final VKError error) {
+                                        super.onError(error);
+                                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                    }
+                                });
+
+                            } else {
+                                VKHelper.deleteLike(TYPE, group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
+                                    @Override
+                                    public void onComplete(final VKResponse response) {
+                                        super.onComplete(response);
+                                        --comments.get(position).likes;
+                                        comments.get(position).user_likes = false;
+                                        adapter.changeStateLikeForComment(false, String.valueOf(comments.get(position).likes));
+                                    }
+
+                                    @Override
+                                    public void onError(final VKError error) {
+                                        super.onError(error);
+                                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                    }
+                                });
+                            }
+                        }
+                        break;
+                        case 4:
+                            ((MainActivity) getActivity()).reportListDialog(group_id, comments.get(position).id);
+                            break;
+                        case 5: {
+                            if (myComment) {
+                                VKHelper.deleteComment(group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
+                                    @Override
+                                    public void onComplete(final VKResponse response) {
+                                        super.onComplete(response);
+                                        updateCommentList(group_id, item_id, listOfComments, inflater);
+                                    }
+
+                                    @Override
+                                    public void onError(final VKError error) {
+                                        super.onError(error);
+                                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                    }
+
+
+                                });
+                            } else {
+                                Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).reply_to_user + "");
+                                getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
+                                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                            }
+
+                        }
+                        break;
+                        case 6: {
+                            edit_status = true;
+                            positionOfComment = position;
+                            commentMessage.setText(comments.get(position).text);
+
+
+                        }
+
+                        break;
+                        case 7: {
+
+                            Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).reply_to_user + "");
+                            getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
+                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+                            Toast.makeText(getActivity().getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+                        }
+
+                        default:
+                            Toast.makeText(getActivity().getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+    }else if (!VKSdk.isLoggedIn()){
+            builder.setItems(items, new DialogInterface.OnClickListener() {
+                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+                public void onClick(DialogInterface dialog, int item) {
+                    switch (item) {
+                        case 0: {
+                            Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).from_id + "");
+                            getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
+                                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        }
+                        break;
+                        case 1: {
+                            ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                            clipboard.setText(comments.get(position).text);
+                            Toast.makeText(getActivity().getApplicationContext(),getString(R.string.text_has_been_copied_to_the_buffer),Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                        case 2: {
                             Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).reply_to_user + "");
                             getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
                                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         }
-
-                    }
-                    break;
-                    case 6: {
-                        edit_status = true;
-                        positionOfComment = position;
-                        commentMessage.setText(comments.get(position).text);
-
+                        break;
 
                     }
 
-                    break;
-                    case 7: {
 
-                        Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).reply_to_user + "");
-                        getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
-                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
-                        Toast.makeText(getActivity().getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
-                    }
+                };
+            });
+        }
 
-                    default:
-                        Toast.makeText(getActivity().getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
         builder.show();
-
-    }
+}
 
     public String Identify(ArrayList<VKApiComment> commentsList, ArrayList<VKApiUser> profilesList, ArrayList<VKApiCommunity> groupsList, int position) {
         String name = "";
