@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
@@ -75,6 +76,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         final View rootView = inflater.inflate(R.layout.fragment_photo_list, container, false);
         setRetainInstance(true);
 
+
         addPhoto = (ImageView) rootView.findViewById(R.id.add_photo_from);
         addPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +89,8 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                 }
             }
         });
+        if (!VKSdk.isLoggedIn()){
+            addPhoto.setVisibility(View.GONE);}
 
         doRequest(rootView);
         return rootView;
@@ -300,7 +304,9 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                     transaction.add(R.id.container, fragment).addToBackStack("String").commit();
                 }
             });
-            addPhoto.setVisibility(View.VISIBLE);
+            if (VKSdk.isLoggedIn()){   addPhoto.setVisibility(View.VISIBLE);}
+
+
         }
 
     }

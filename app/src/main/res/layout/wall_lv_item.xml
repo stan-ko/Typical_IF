@@ -136,29 +136,51 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp">
 
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/img_fixed_post"
-                        android:src="@drawable/custom_fixed_post"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="10dp"
-                        android:visibility="invisible" />
+                    <!--<ImageView-->
+                        <!--android:layout_width="20dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:id="@+id/img_fixed_post"-->
+                        <!--android:src="@drawable/custom_fixed_post"-->
+                        <!--android:layout_centerVertical="true"-->
+                        <!--android:layout_marginLeft="10dp"-->
+                        <!--android:visibility="invisible" />-->
+
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/txt_post_date_of_comment"
                         android:singleLine="true"
-                        android:layout_toEndOf="@+id/img_fixed_post"
                         android:visibility="visible"
                         android:text="Сьогодні о 16:18"
                         android:textSize="15dp"
-                        android:layout_centerVertical="true"
-                        android:layout_toRightOf="@+id/img_fixed_post"
-                        android:layout_marginLeft="10dp"
                         android:background="@color/transparent"
-                        android:textColor="#ffffffff" />
+                        android:textColor="#ffffffff"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp" />
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:id="@+id/img_fixed_post"
+                        android:layout_alignTop="@+id/txt_post_date_of_comment"
+                        android:layout_toLeftOf="@+id/txt_post_date_of_comment"
+                        android:layout_toStartOf="@+id/txt_post_date_of_comment"
+                        android:src="@drawable/custom_fixed_post"
+                        android:layout_marginRight="5dp"
+                        android:layout_alignBottom="@+id/txt_post_date_of_comment"
+                        android:layout_marginTop="1dp"
+                        android:paddingBottom="2dp" />
+
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="5dp"
+                        android:id="@+id/imageView2"
+                        android:src="@drawable/dots"
+                        android:layout_below="@+id/txt_post_date_of_comment"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="2dp" />
 
                     <CheckBox
                         android:layout_width="wrap_content"
@@ -166,12 +188,13 @@
                         android:id="@+id/expand_post_action_bar"
                         android:button="@drawable/slide_up_down_selector"
                         android:checked="false"
+                        android:visibility="visible"
+                        android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_alignParentTop="true"
                         android:layout_alignParentRight="true"
-                        android:layout_alignParentEnd="true" />
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true" />
 
                     <RelativeLayout
                         android:layout_width="fill_parent"

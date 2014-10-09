@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -388,18 +389,23 @@ public class FragmentComments extends Fragment {
        RelativeLayout rootLayoutShowHide = (RelativeLayout)rootView.findViewById(R.id.comment_bar_layout);
         root=rootLayoutShowHide;
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
+        RelativeLayout wrapper = (RelativeLayout)rootView.findViewById(R.id.list_of_comments_wrapper_layout);
+
       //  View listFooterView = rootView.inflate(getActivity().getApplicationContext(), R.layout.send_comment_footer, null);
 
         if (VKSdk.isLoggedIn()){
-        rootLayoutShowHide.setVisibility(View.VISIBLE);}
+
+            rootLayoutShowHide.setVisibility(View.VISIBLE);}
        else if (!VKSdk.isLoggedIn()){
             rootLayoutShowHide.setVisibility(View.GONE);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lp.addRule(RelativeLayout.BELOW,R.id.developers_layout);
-            listOfComments.setLayoutParams(lp);
+            lp.addRule(RelativeLayout.ALIGN_BOTTOM,R.id.binding_iv);
+            wrapper.setLayoutParams(lp);
 
         }
+
+
 
 
         sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
@@ -511,6 +517,7 @@ public class FragmentComments extends Fragment {
             parseCommentList(OfflineMode.loadJSON(item_id));
             // If IsOnline and response from preferences not null then load JSON from preferences
         }
+
 
         listOfComments.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {

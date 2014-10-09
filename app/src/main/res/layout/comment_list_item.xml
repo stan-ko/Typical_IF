@@ -142,7 +142,7 @@
         android:textColor="#ffffffff"
         android:textSize="15dp" />
 
-    <ImageView
+    <typical_if.android.view.RoundedImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/img_user_avatar"
