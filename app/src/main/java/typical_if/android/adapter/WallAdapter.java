@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,14 +44,17 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.event.EventShowReportDialog;
 import typical_if.android.event.EventShowSuggestPostDialog;
 import typical_if.android.fragment.FragmentComments;
+import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 import typical_if.android.util.BitmapCache;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
+import static com.vk.sdk.VKUIHelper.getTopActivity;
 import static java.lang.String.valueOf;
 
 public class WallAdapter extends BaseAdapter {
@@ -65,6 +69,8 @@ public class WallAdapter extends BaseAdapter {
     private FragmentManager fragmentManager;
     private static boolean isSuggested;
     static boolean flag;
+    public static int surpriseCounter = 0;
+
 
 
     public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, String postColor, boolean isSuggested) {
@@ -200,6 +206,34 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.button_like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d("----------liked---------","77787878788787833");
+
+                    try{
+                        if (OfflineMode.loadInt("surprise")!=0){
+                            surpriseCounter =  OfflineMode.loadInt("surprise");
+                        }
+                    } catch (Exception e){
+                        Log.d("Exeption"," shaeed  = 0");
+                        surpriseCounter = 0;
+                    }
+
+                    if (VKSdk.isLoggedIn()){
+                        surpriseCounter++;
+                        OfflineMode.saveInt(surpriseCounter, "surprise");
+                    }else {
+                        surpriseCounter=0;
+                    }
+                    try{
+                    if (OfflineMode.loadInt("surprise")==15){
+                       Log.d("5 counters", "---------------");
+                        ((MainActivity) getTopActivity()).addFragment(FragmentMakePost.newInstance(-77149556, 0, 0));
+                    }
+                    } catch (Exception e){
+                        Log.d("Exeption"," shaeed  = 0");
+                        surpriseCounter = 0;
+                    }
+
+
 
                     if (!post.user_likes) {
                         VKHelper.setLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {

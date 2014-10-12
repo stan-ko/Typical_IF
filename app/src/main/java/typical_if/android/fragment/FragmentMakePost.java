@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -36,6 +38,7 @@ import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
+import typical_if.android.adapter.WallAdapter;
 import typical_if.android.event.EventShowPhotoAttachDialog;
 
 /**
@@ -63,6 +66,9 @@ public class FragmentMakePost extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+
+
 
     public FragmentMakePost() {}
 
@@ -123,8 +129,8 @@ public class FragmentMakePost extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        Log.d("Make post","  Fragment");
+        ((MainActivity) getActivity()).getSupportActionBar().hide();
         FragmentWall.setDisabledMenu();
 
         View rootView = inflater.inflate(R.layout.fragment_make_post, container, false);
@@ -137,8 +143,14 @@ public class FragmentMakePost extends Fragment {
                 EventBus.getDefault().post(new EventShowPhotoAttachDialog(gid * (-1), 0));
             }
         };
-
         textField = (EditText) rootView.findViewById(R.id.etxt_make_post_field);
+        if (WallAdapter.surpriseCounter!=0 && WallAdapter.surpriseCounter==15 && VKSdk.isLoggedIn()){
+            textField.setText("Вітаємо ви стали учасником розіграшу 10 годин у антикафе STANTSIYA," +
+                    " для того щоб підтвердити вашу участь в розіграші виберіть свою фотографію і натисніть кнопку 'Відправити' " );
+
+
+        }
+
 
         txtPostAttachCounter = (TextView) rootView.findViewById(R.id.txt_post_attach_counter);
 

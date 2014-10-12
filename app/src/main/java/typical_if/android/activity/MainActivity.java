@@ -34,6 +34,7 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
+import typical_if.android.adapter.WallAdapter;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentFullScreenViewer;
@@ -58,7 +59,9 @@ public class MainActivity extends DialogActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (WallAdapter.surpriseCounter<15){
+            OfflineMode.saveInt(0, "surprise");
+        }
 
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
 

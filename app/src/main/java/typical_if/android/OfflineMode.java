@@ -94,7 +94,24 @@ public class OfflineMode {
             return false;
         }
     }
+    public static void saveInt(int surprise, String id) {
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id),Activity.MODE_PRIVATE);
+        final SharedPreferences.Editor ed = sPref.edit();
+        final String JsonString = Integer.toString(surprise);
+        final String JsonKey = id;
+        ed.clear();
+        ed.putString(JsonKey, JsonString);
+        ed.commit();
+    }
 
+    public static int loadInt(String id)  {
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
+        final String JsonKey = String.valueOf(id);
+        final String savedText = sPref.getString(JsonKey, "");
+            // e.printStackTrace();
+
+        return Integer.parseInt(savedText);
+    }
     public static synchronized JSONObject jsonPlus (final JSONObject jsonObject, final JSONObject jsonObjectOffset) {
 
         //---------------1-----------------------------
