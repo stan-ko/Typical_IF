@@ -98,7 +98,7 @@
         <string name = "group_joined">Вы вступили в сообщество</string>
         <string name = "group_leaved">Вы покинули сообщество</string>
     <string name="go_to_start_page">Перейти на стартовую страницу</string>
-    <string name="settings">Настройки</string>
+    <string name="settings">Сменить язык</string>
 
         <string name = "error">Ошибка</string>
         <string name = "max_attaches">Максимальное количество прикреплений</string>
