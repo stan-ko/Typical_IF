@@ -65,6 +65,7 @@
 
         <string name = "post_report">Пожаловаться</string>
         <string name = "post_copy_link">Копировать ссылку</string>
+        <string name="change_lan">Сменить язык</string>
 
         <string name = "in_progress">В разработке</string>
         <string name = "no_suggested_posts">У вас нет предложенных новостей</string>
@@ -88,6 +89,7 @@
         <string name = "okay">ОК</string>
         <string name = "comment_background">Ваш комментарий</string>
     <string name="text_has_been_copied_to_the_buffer">Текст был скопирован в буфер</string>
+    <string name="restart_app_dialog">Перезапустить?</string>
 
         <string name = "ab_title_make_post">Предложить новость</string>
         <string name = "ab_title_suggested_posts">Предложенные новости</string>
@@ -95,6 +97,8 @@
         <string name = "ab_title_group_leave">Покинуть сообщество</string>
         <string name = "group_joined">Вы вступили в сообщество</string>
         <string name = "group_leaved">Вы покинули сообщество</string>
+    <string name="go_to_start_page">Перейти на стартовую страницу</string>
+    <string name="settings">Настройки</string>
 
         <string name = "error">Ошибка</string>
         <string name = "max_attaches">Максимальное количество прикреплений</string>
@@ -119,6 +123,12 @@
             <item>Детская порнография</item>
             <item>Насилие</item>
         </array>
+
+    <array name="app_languages">
+        <item>Украиский</item>
+        <item>Русский</item>
+
+    </array>
 
         <array name = "add_photo_from">
             <item>С карты памяти</item>

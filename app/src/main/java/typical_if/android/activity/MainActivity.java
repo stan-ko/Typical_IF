@@ -149,15 +149,15 @@ public class MainActivity extends DialogActivity implements
         if (mNavigationDrawerFragment.onOptionsItemSelected(item)) {
             return true;
         }
-        switch (item.getItemId()) {
-            case R.id.action_go_home:
-
-                return true;
-
-            default:
+//        switch (item.getItemId()) {
+//            case R.id.action_go_home:
+//
+//                return true;
+//
+//            default:
                 return super.onOptionsItemSelected(item);
 
-        }
+      //  }
     }
 
     @Override
@@ -288,6 +288,9 @@ public class MainActivity extends DialogActivity implements
                 }
                 break;
             case 6:
+                changeLanguage();
+                break;
+            case 7:
                 finish();
                 break;
         }

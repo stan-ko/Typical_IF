@@ -1,10 +1,12 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -240,6 +242,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             public void onClick(View v) {
 
                 if (VKSdk.isLoggedIn()){
+                    Toast.makeText(Constants.mainActivity.getApplicationContext(),"runOnAnotherThread:  "+Thread.currentThread().toString(),Toast.LENGTH_SHORT).show();
 
                     if (photos.get(position).user_likes == 0 & !cb_like.isChecked()) {
                         VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
@@ -283,8 +286,10 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                     }
 
                 }else if (!VKSdk.isLoggedIn()){
-                    Toast.makeText(Constants.mainActivity.getApplicationContext(),getString(R.string.you_are_not_logged_in),Toast.LENGTH_SHORT).show();
+                 Toast.makeText(getActivity().getApplicationContext(),getString(R.string.you_are_not_logged_in),Toast.LENGTH_SHORT).show();
+
                 }
+
             }
         });
 

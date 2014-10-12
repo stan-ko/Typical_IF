@@ -5,10 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -55,14 +57,19 @@ import com.vk.sdk.api.model.VKAttachments;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import typical_if.android.activity.SplashActivity;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoList;
+import typical_if.android.fragment.NavigationDrawerFragment;
 import typical_if.android.model.Wall.Wall;
 
 import static java.lang.String.format;
@@ -286,23 +293,29 @@ public class ItemDataSetter {
 
         parent.addView(pollContainer);
     }
-
+    static int startTag = 0;
+    static int endTag = 0;
+    static int startLink = 0;
+    static int endLink = 0;
+    static int startSite = 0;
+    static int endSite = 0;
+    static int startReply = 0;
+    static int endReply = 0;
     public static SpannableStringBuilder getParsedText(String text) {
         final Matcher matTags = Pattern.compile("#\\w+").matcher(text);
 
         StringBuilder stringB = new StringBuilder(text);
         final SpannableStringBuilder spannable = new SpannableStringBuilder(text);
 
-        int start = 0;
-        int end = 0;
+
 
         while (matTags.find()) {
-            start = stringB.indexOf(matTags.group());
-            end = start + matTags.group().length();
+            startTag = stringB.indexOf(matTags.group());
+            endTag = startTag + matTags.group().length();
 
-            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            //spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+           spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startTag, endTag, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+           spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startTag, endTag,0);
+           spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), startTag, endTag, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             final String temp = matTags.group();
 
@@ -312,7 +325,7 @@ public class ItemDataSetter {
                     Uri uri = Uri.parse("http://vk.com/feed?q=%23" + temp.replaceFirst("#", "") + "&section=search");
                     context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
-            }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }, startTag, endTag, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         final Matcher matLinks = Pattern.compile(
@@ -360,13 +373,16 @@ public class ItemDataSetter {
         ).matcher(text);
 
         while (matLinks.find()) {
-            start = stringB.indexOf(matLinks.group());
-            end = start + matLinks.group().length();
+            startLink = stringB.indexOf(matLinks.group());
+            endLink = startLink + matLinks.group().length();
 
-            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            //spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
+           //spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startLink, endLink,0);
+           spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startLink, endLink,0);
+           spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), startLink, endLink, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+           TextPaint t = new TextPaint();
+            t.linkColor= Color.RED;
+            t.setColor(Color.RED);
+          spannable.setSpan(t,startLink,endLink,0);
             final String temp = matLinks.group();
 
             spannable.setSpan(new NonUnderlinedClickableSpan() {
@@ -375,49 +391,49 @@ public class ItemDataSetter {
                     Uri uri = Uri.parse(temp);
                     context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
-            }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }, startLink, endLink, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         final Matcher matSite = Pattern.compile("@club26363301 \\(fromMobileIF\\)").matcher(text);
-        while (matSite.find()) {
-            start = stringB.indexOf(matSite.group());
-            end = start + matSite.group().length();
+        while (matSite.find()) {///////////////////////////////
+            startSite = stringB.indexOf(matSite.group());
+            endSite = startSite + matSite.group().length();
 
             final String replier = "fromMobileIF";
-            stringB.replace(start, end, replier);
-            spannable.replace(start, end, replier);
+            stringB.replace(startSite, endSite, replier);
+            spannable.replace(startSite, endSite, replier);
 
-            end = start + replier.length();
-            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            endSite = startSite + replier.length();
+           spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startSite, endSite, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+           spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startSite, endSite, 0);
             spannable.setSpan(new NonUnderlinedClickableSpan() {
                 @Override
                 public void onClick(View textView) {
                     Uri uri = Uri.parse(replier);
                     context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
-            }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }, startSite, endSite, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         final Matcher matReply = Pattern.compile("\\[(club|id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\w)(\\W)_]+?\\]").matcher(text);
         while (matReply.find()) {
-            start = stringB.indexOf(matReply.group());
-            end = start + matReply.group().length();
+            startReply = stringB.indexOf(matReply.group());
+            endReply = startReply + matReply.group().length();
 
             final String[] replier = matReply.group().replaceFirst("\\[", "").replaceFirst("\\]", "").split("\\|");
-            stringB.replace(start, end, replier[1]);
-            spannable.replace(start, end, replier[1]);
+            stringB.replace(startReply, endReply, replier[1]);
+            spannable.replace(startReply, endReply, replier[1]);
 
-            end = start + replier[1].length();
-            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            endReply = startReply + replier[1].length();
+            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startReply, endReply, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startReply, endReply,0);
             spannable.setSpan(new NonUnderlinedClickableSpan() {
                 @Override
                 public void onClick(View textView) {
                     Uri uri = Uri.parse("http://vk.com/" + replier[0]);
                     context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 }
-            }, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }, startReply, endReply, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         return spannable;
     }
@@ -432,8 +448,8 @@ public class ItemDataSetter {
         final CheckBox showAll = ((CheckBox) textContainer.getChildAt(1));
 
         final SpannableStringBuilder spannable = getParsedText(text);
+        mainText.setText(spannable, TextView.BufferType.SPANNABLE);
 
-        mainText.setText(spannable);
         mainText.setMovementMethod(LinkMovementMethod.getInstance());
 
         if (spannable.length() > 300) {
@@ -599,7 +615,7 @@ public class ItemDataSetter {
             tempAudioContainer = (ViewGroup) inflater.inflate(R.layout.audio_container, parent, false);
             tempAudioContainer.setVisibility(View.VISIBLE);
             //tempAudioContainer.getChildAt(0).setBackgroundColor(Color.parseColor(postColor));
-            final CheckBox play_pause_music = (CheckBox) tempAudioContainer.getChildAt(0);
+            CheckBox play_pause_music = (CheckBox) tempAudioContainer.getChildAt(0);
             SeekBar progressBar = (SeekBar) tempAudioContainer.getChildAt(1);
 
             if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPlayed == true) {
@@ -1068,13 +1084,52 @@ public class ItemDataSetter {
     }
 
     public static void saveUserId(long uid) {
+
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
         final SharedPreferences.Editor ed = sPref.edit();
         final long user_id = uid;
         final String long_key = "uid";
         ed.putLong(long_key, user_id);
         ed.commit();
+
     }
+
+    public static void saveUserLanguage(int id, String lan) {
+
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+        final SharedPreferences.Editor ed = sPref.edit();
+        final int key= id;
+        final String value = lan;
+        ed.putString(String.valueOf(key),value);
+        ed.commit();
+        Locale locale = new Locale(value);
+        Locale.setDefault(locale);
+        final Resources res = Constants.mainActivity.getResources();
+        final Configuration conf = res.getConfiguration();
+        conf.locale= locale;
+        res.updateConfiguration(conf, null);
+
+
+    }
+
+
+    public static Locale loadUserLanguage() {
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+        final String key = "user_lan";
+        final String app_lan = sPref.getString(String.valueOf(0),"");
+        Constants.USER_LANGUAGE = app_lan;
+        Locale locale = new Locale(app_lan);
+        Locale.setDefault(locale);
+        Constants.LOCALE.setDefault(locale);
+        return locale;
+    }
+
+    public static String getUserLan(){
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+        String lang = sPref.getString(String.valueOf(0),"");
+        return lang;
+    }
+
 
     public static void loadUserId() {
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);

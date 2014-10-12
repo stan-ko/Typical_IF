@@ -37,7 +37,7 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 
-public class SplashActivity extends Activity implements Animation.AnimationListener {
+public class SplashActivity extends Activity implements Animation.AnimationListener{
 
     Animation animMoveDown;
     Animation animFadeIn;
@@ -47,7 +47,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
     Locale locale;
     int counter = 5;
-    Configuration config;
+    static public Configuration config;
     SharedPreferences firstOpenPref = null;
 
 //    public static int getCountOfPosts() {
@@ -75,16 +75,17 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
         imageView.startAnimation(animFadeIn);
-if (Locale.getDefault().getLanguage()=="ru") {
-    locale = new Locale("ru");
-    Locale.setDefault(locale);
-
+//if (Locale.getDefault().getLanguage()=="ru") {
+//    locale = new Locale("ru");
+//    Locale.setDefault(locale);
+//
     config = new Configuration();
-    config.locale = locale;
+       if( ItemDataSetter.getUserLan()!=""){
+config.locale = ItemDataSetter.loadUserLanguage();
     getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
 
 }else {
-    locale = new Locale("ru");
+     locale = new Locale("ua");
     Locale.setDefault(locale);
 
     config = new Configuration();
@@ -94,6 +95,18 @@ if (Locale.getDefault().getLanguage()=="ru") {
 }
         Toast.makeText(getApplicationContext(),getString(R.string.main_creed), Toast.LENGTH_SHORT).show();
         ItemDataSetter.loadUserId();
+        ItemDataSetter.loadUserLanguage();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig){
+        super.onConfigurationChanged(newConfig);
+        Locale myLocale =ItemDataSetter.loadUserLanguage();
+        if (myLocale != null){
+            newConfig.locale = myLocale;
+            Locale.setDefault(myLocale);
+            getApplicationContext().getResources().updateConfiguration(newConfig, getApplicationContext().getResources().getDisplayMetrics());
+        }
     }
 
     void showAlertNoInternet() {

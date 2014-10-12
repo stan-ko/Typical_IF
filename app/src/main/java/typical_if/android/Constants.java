@@ -17,6 +17,8 @@ import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiVideo;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Miller on 17.07.2014.
@@ -52,8 +54,10 @@ public class Constants {
 
     public static Activity mainActivity;
     public static final String APP_ID = "4456259";
+    public static Locale LOCALE;
 
     public static long USER_ID;
+    public static String USER_LANGUAGE;
 
     public static String PARAM_NAME;
     public static String PARAM_NAME2;
@@ -80,6 +84,8 @@ public class Constants {
     public static int COUNT_OF_PHOTOS=0;
 
     public static Intent myIntent;
+    public static int refresherDrawerCounter;
+
     public static long timerForNotif = 0;
     public static int notifID = 2048;
     public static NotificationManager notificationManager;

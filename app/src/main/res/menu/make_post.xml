@@ -13,4 +13,13 @@
             android:visible="false"
             android:title=""
             android:icon="@android:drawable/ic_menu_edit"/>
+        <!--<item android:id="@+id/action_go_home"-->
+             <!--android:icon="@drawable/home"-->
+             <!--android:title="@string/go_to_start_page"-->
+             <!--android:showAsAction="always" />-->
+      <!--<item android:id="@+id/settings"-->
+            <!--android:icon="@drawable/gear"-->
+            <!--android:title="@string/settings"-->
+             <!--android:showAsAction="always" />-->
+
 </menu>

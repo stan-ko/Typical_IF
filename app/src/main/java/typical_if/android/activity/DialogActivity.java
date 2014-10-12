@@ -1,7 +1,9 @@
 package typical_if.android.activity;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -37,6 +39,7 @@ import typical_if.android.event.EventShowSuggestPostDialog;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentUploadAlbumList;
+import typical_if.android.fragment.NavigationDrawerFragment;
 
 /**
  * Created by admin on 10.09.2014.
@@ -62,6 +65,66 @@ public class DialogActivity extends ActionBarActivity {
     public void addFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
     }
+
+    public void changeLanguage(){
+        final AlertDialog.Builder builderIn = new AlertDialog.Builder(Constants.mainActivity);
+        builderIn.setTitle(R.string.change_lan);
+
+        final Resources resources = getResources();
+        final String[] items = resources.getStringArray(R.array.app_languages);
+        final String lang = ItemDataSetter.getUserLan();
+        builderIn.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which) {
+                    case 0:
+                        if(lang!="ua"){
+                        restartAfterChanges(0,"ua");}
+                        ++Constants.refresherDrawerCounter;
+                         break;
+                    case 1:
+                        if(lang!="ru"){
+                        restartAfterChanges(0,"ru");}
+                        ++Constants.refresherDrawerCounter;
+
+                        break;
+
+                }
+            }
+        });
+        builderIn.show();
+
+    }
+
+
+    public void restartAfterChanges(final int key ,final String lan){
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(Constants.mainActivity);
+         dialog.setTitle(Constants.mainActivity.getApplicationContext().getString(R.string.restart_app_dialog));
+
+        dialog.setPositiveButton(Constants.mainActivity.getApplicationContext().getString(R.string.okay),
+            new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ItemDataSetter.saveUserLanguage(key,lan);
+                Intent mStartActivity = new Intent(Constants.mainActivity.getApplicationContext(), SplashActivity.class);
+                int mPendingIntentId = 123456;
+                PendingIntent mPendingIntent = PendingIntent.getActivity(Constants.mainActivity.getApplicationContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                AlarmManager mgr = (AlarmManager)Constants.mainActivity.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                System.exit(0);
+            }
+        });
+        dialog.setNegativeButton(Constants.mainActivity.getApplicationContext().getString(R.string.cancel)
+                ,new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialog.setCancelable(true);
+            }
+        });
+        dialog.create().show();
+    }
+
+
 
 
     public void reportListDialog(final long gid, final long id) {
@@ -200,6 +263,7 @@ public class DialogActivity extends ActionBarActivity {
 
         builder.show();
     }
+
 
     public void videoResolutionDialog(JSONObject jsonObject) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);

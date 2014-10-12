@@ -67,6 +67,7 @@
 
     <string name="post_report">Поскаржитись</string>
     <string name="post_copy_link">Копіювати посилання</string>
+    <string name="change_lan">Змінити мову</string>
 
     <string name="in_progress">В розробці</string>
     <string name="no_suggested_posts">У вас немає запропонованих новин</string>
@@ -90,6 +91,7 @@
     <string name="okay">ОК</string>
     <string name="comment_background">Ваш коментар</string>
     <string name="text_has_been_copied_to_the_buffer">Текст був скопійований у буфер</string>
+    <string name="restart_app_dialog">Перезапустити?</string>
 
     <string name="ab_title_make_post">Запропонувати новину</string>
     <string name="ab_title_suggested_posts">Запропоновані новини</string>
@@ -97,6 +99,8 @@
     <string name="ab_title_group_leave">Покинути спільноту</string>
     <string name="group_joined">Ви вступили до спільноти</string>
     <string name="group_leaved">Ви покинули спільноту</string>
+    <string name="go_to_start_page">Перейти на стартову сторінку</string>
+    <string name="settings">Налаштування</string>
 
     <string name="error">Помилка</string>
     <string name="max_attaches">Максимальна кількість прикріплень</string>
@@ -120,6 +124,12 @@
         <item>Пропаганда наркотиків</item>
         <item>Дитяча порнографія</item>
         <item>Насильство</item>
+    </array>
+
+    <array name="app_languages">
+        <item>Українська</item>
+        <item>Російська</item>
+
     </array>
 
     <array name="add_photo_from">

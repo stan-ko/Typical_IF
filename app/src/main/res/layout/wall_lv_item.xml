@@ -180,7 +180,8 @@
                         android:src="@drawable/dots"
                         android:layout_below="@+id/txt_post_date_of_comment"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="2dp" />
+                        android:layout_marginTop="2dp"
+                        android:visibility="visible" />
 
                     <CheckBox
                         android:layout_width="wrap_content"
@@ -222,8 +223,9 @@
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentStart="true"
                                 android:src="@drawable/custom_img_post_other_actions_sm"
-                                android:layout_marginRight="15dp"
-                                android:layout_marginLeft="5dp" />
+                                android:layout_marginLeft="5dp"
+                                android:visibility="visible"
+                                android:paddingRight="15dp" />
 
                             <CheckBox
                                 android:layout_width="wrap_content"
@@ -234,10 +236,11 @@
                                 android:clickable="false"
                                 android:enabled="true"
                                 android:textColor="#ffffffff"
-                                android:layout_centerVertical="true"
                                 android:visibility="visible"
-                                android:layout_toRightOf="@+id/cb_comment"
-                                android:layout_marginLeft="5dp" />
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_marginRight="30dp" />
 
                             <CheckBox
                                 android:layout_width="wrap_content"
@@ -248,9 +251,10 @@
                                 android:clickable="false"
                                 android:textColor="#ffffffff"
                                 android:enabled="true"
-                                android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/cb_repost"
-                                android:layout_marginLeft="5dp" />
+                                android:layout_toStartOf="@+id/cb_like"
+                                android:layout_alignTop="@+id/cb_like"
+                                android:layout_toLeftOf="@+id/cb_like"
+                                android:layout_marginRight="15dp" />
 
 
                             <CheckBox
@@ -262,49 +266,50 @@
                                 android:clickable="false"
                                 android:textColor="#ffffffff"
                                 android:enabled="true"
-                                android:layout_alignParentTop="false"
-                                android:layout_alignParentLeft="false"
-                                android:layout_alignParentStart="false"
-                                android:layout_toRightOf="@+id/img_post_other_actions"
-                                android:layout_centerVertical="true"
-                                android:layout_marginLeft="0dp" />
+                                android:visibility="visible"
+                                android:layout_alignTop="@+id/cb_comment"
+                                android:layout_toLeftOf="@+id/cb_comment"
+                                android:layout_toStartOf="@+id/cb_comment"
+                                android:layout_marginRight="15dp" />
 
                             <Button
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/button_like"
-                                android:layout_centerVertical="true"
                                 android:layout_toEndOf="@+id/cb_comment"
                                 android:visibility="visible"
                                 android:background="#00000000"
+                                android:layout_alignParentBottom="true"
                                 android:layout_alignRight="@+id/cb_like"
                                 android:layout_alignEnd="@+id/cb_like"
-                                android:layout_alignLeft="@+id/cb_like"
-                                android:layout_alignStart="@+id/cb_like"
-                                android:layout_marginLeft="5dp" />
+                                android:layout_toRightOf="@+id/cb_comment" />
 
                             <Button
-                                android:layout_width="wrap_content"
+                                android:layout_width="85dp"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/button_comment"
                                 android:background="#00000000"
-                                android:layout_centerVertical="true"
+                                android:visibility="visible"
+                                android:layout_toStartOf="@+id/cb_like"
+                                android:layout_toEndOf="@+id/cb_repost"
+                                android:layout_alignParentTop="true"
                                 android:layout_alignRight="@+id/cb_comment"
-                                android:layout_alignEnd="@+id/cb_comment"
-                                android:layout_marginTop="-5dp"
-                                android:layout_alignLeft="@+id/cb_comment"
-                                android:layout_alignStart="@+id/cb_comment" />
+                                android:layout_alignEnd="@+id/cb_comment" />
 
                             <Button
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_weight=".30"
                                 android:id="@+id/button_repost"
                                 android:background="#00000000"
                                 android:layout_toEndOf="@+id/cb_comment"
-                                android:layout_centerVertical="true"
+                                android:layout_toStartOf="@+id/cb_comment"
+                                android:visibility="visible"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignLeft="@+id/cb_repost"
                                 android:layout_alignStart="@+id/cb_repost"
-                                android:layout_toStartOf="@+id/button_comment"
-                                android:layout_toRightOf="@+id/img_post_other_actions" />
+                                android:layout_alignRight="@+id/cb_repost"
+                                android:layout_alignEnd="@+id/cb_repost" />
 
                         </RelativeLayout>
 
@@ -328,7 +333,8 @@
             android:layout_alignStart="@+id/postParentLayout"
             android:visibility="gone"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp" />
+            android:layout_marginRight="5dp"
+            />
 
     </RelativeLayout>
 

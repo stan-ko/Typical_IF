@@ -394,8 +394,9 @@ public class FragmentComments extends Fragment {
       //  View listFooterView = rootView.inflate(getActivity().getApplicationContext(), R.layout.send_comment_footer, null);
 
         if (VKSdk.isLoggedIn()){
+            if(OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())){
 
-            rootLayoutShowHide.setVisibility(View.VISIBLE);}
+            rootLayoutShowHide.setVisibility(View.VISIBLE);}}
        else if (!VKSdk.isLoggedIn()){
             rootLayoutShowHide.setVisibility(View.GONE);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(

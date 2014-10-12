@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import typical_if.android.Constants;
 import typical_if.android.R;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.ExpandableListAdapter;
@@ -58,7 +59,7 @@ public class NavigationDrawerFragment extends Fragment {
     private ExpandableListAdapter mExpandapleListAdapter;
 
     public static DrawerLayout mDrawerLayout;
-    private AnimatedExpandableListView mDrawerListView;
+    public static AnimatedExpandableListView mDrawerListView;
     public static View mFragmentContainerView;
 
     private boolean mFromSavedInstanceState;
@@ -100,6 +101,7 @@ public class NavigationDrawerFragment extends Fragment {
         setRetainInstance(true);
         mDrawerListView = (AnimatedExpandableListView) v.findViewById(R.id.navigation_drawer_exp_list);
         mDrawerListView.setGroupIndicator(null);
+
 
         prepareListData();
 
@@ -196,6 +198,8 @@ public class NavigationDrawerFragment extends Fragment {
 
         List<String> fn = new ArrayList<String>();
         setChildItems(fn, 3);
+       // int y=0 ;
+
 
         listDataHeader.add(getString(R.string.menu_group_title_tf));
         listDataHeader.add(getString(R.string.menu_group_title_tz));
@@ -203,9 +207,28 @@ public class NavigationDrawerFragment extends Fragment {
         listDataHeader.add(getString(R.string.menu_group_title_fn));
         listDataHeader.add(getString(R.string.menu_group_title_events));
         listDataHeader.add("");
+        listDataHeader.add(getString(R.string.settings));
         listDataHeader.add(getString(R.string.menu_group_exit));
+        if (Constants.refresherDrawerCounter>0){
+            refreshDrawer();
+            Constants.refresherDrawerCounter=0;
+        }
 
+ }
+
+    public void refreshDrawer (){
+        listDataHeader.clear();
+        listDataHeader.add(getString(R.string.menu_group_title_tf));
+        listDataHeader.add(getString(R.string.menu_group_title_tz));
+        listDataHeader.add(getString(R.string.menu_group_title_fb));
+        listDataHeader.add(getString(R.string.menu_group_title_fn));
+        listDataHeader.add(getString(R.string.menu_group_title_events));
+        listDataHeader.add("");
+        listDataHeader.add(getString(R.string.settings));
+        listDataHeader.add(getString(R.string.menu_group_exit));
     }
+
+
 
     public void setChildItems(List<String> list, Integer groupIndex) {
         list.add(getString(R.string.look_wall));
@@ -405,5 +428,7 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int groupPosition, int childPosition);
+
+        ;
     }
 }
