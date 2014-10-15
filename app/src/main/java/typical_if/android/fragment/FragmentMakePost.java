@@ -145,8 +145,10 @@ public class FragmentMakePost extends Fragment {
         };
         textField = (EditText) rootView.findViewById(R.id.etxt_make_post_field);
         if (WallAdapter.surpriseCounter!=0 && WallAdapter.surpriseCounter==15 && VKSdk.isLoggedIn()){
+            OfflineMode.saveInt(15, "surprise");
             textField.setText("Вітаємо ви стали учасником розіграшу 10 годин у антикафе STANTSIYA," +
-                    " для того щоб підтвердити вашу участь в розіграші виберіть свою фотографію і натисніть кнопку 'Відправити' " );
+                    " для того щоб підтвердити вашу участь в розіграші виберіть свою фотографію і " +
+                    "натисніть кнопку 'Відправити' " );
 
 
         }

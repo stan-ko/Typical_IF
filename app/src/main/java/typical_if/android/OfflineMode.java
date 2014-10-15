@@ -94,6 +94,7 @@ public class OfflineMode {
             return false;
         }
     }
+
     public static void saveInt(int surprise, String id) {
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id),Activity.MODE_PRIVATE);
         final SharedPreferences.Editor ed = sPref.edit();
@@ -111,6 +112,18 @@ public class OfflineMode {
             // e.printStackTrace();
 
         return Integer.parseInt(savedText);
+    }
+
+    public static boolean isIntNul(String id) {
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
+        final String JsonKey = id;
+        final String savedText = sPref.getString(JsonKey, "");
+        try {
+            final JSONObject jsonObj = new JSONObject(savedText);
+            return true;
+        } catch (JSONException e) {
+            return false;
+        }
     }
     public static synchronized JSONObject jsonPlus (final JSONObject jsonObject, final JSONObject jsonObjectOffset) {
 

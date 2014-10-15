@@ -11,12 +11,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,7 +33,6 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -46,6 +48,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import de.greenrobot.event.EventBus;
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
@@ -55,6 +58,7 @@ import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
+import typical_if.android.event.EventSpinnerLayout;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 import typical_if.android.util.PhotoUrlHelper;
@@ -204,11 +208,14 @@ public class FragmentComments extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
 
         }
+        EventBus.getDefault().register(this);
+
     }
 
 
@@ -377,9 +384,11 @@ public class FragmentComments extends Fragment {
     }
 
     RelativeLayout root;
-    View listFooterView;
+
+    RelativeLayout coverGlobal;
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //EventBus.getDefault().register(this);
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
         FragmentWall.setDisabledMenu();
@@ -390,6 +399,10 @@ public class FragmentComments extends Fragment {
         root=rootLayoutShowHide;
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
         RelativeLayout wrapper = (RelativeLayout)rootView.findViewById(R.id.list_of_comments_wrapper_layout);
+        coverGlobal = (RelativeLayout)rootView.findViewById(R.id.while_loading_view_layout);
+
+
+
 
       //  View listFooterView = rootView.inflate(getActivity().getApplicationContext(), R.layout.send_comment_footer, null);
 
@@ -531,6 +544,17 @@ public class FragmentComments extends Fragment {
                     }
                 }
         );
+        EventBus.getDefault().post(new EventSpinnerLayout());
+    }
+public static boolean isViewLoaded;
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        super.onViewCreated(view, savedInstanceState);
+        isViewLoaded=true;
+       // coverGlobal.setVisibility(View.GONE);
+
+
     }
 
     public boolean myComment = false;
@@ -854,6 +878,7 @@ public class FragmentComments extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -871,4 +896,13 @@ public class FragmentComments extends Fragment {
         }
         ImageLoader.getInstance().displayImage(PhotoUrlHelper.getFullScreenUrl(photo), imageView);
     }
+
+    public final static Animation animationFadeIn = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.fade_in);
+
+
+    public void onEventMainThread(EventSpinnerLayout event) {
+
+        coverGlobal.startAnimation(animationFadeIn);
+    }
+
 }

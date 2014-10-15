@@ -23,8 +23,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import typical_if.android.ItemDataSetter;
-import typical_if.android.TIFApp;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.view.RoundedImageView;
 
 
@@ -66,6 +66,7 @@ public class CommentsListAdapter extends BaseAdapter {
         this.groupsList.clear();
         this.groupsList.addAll(groupsList);
         this.notifyDataSetChanged();
+
         scrollCommentsToBottom(listView);
     }
 
@@ -219,6 +220,7 @@ public class CommentsListAdapter extends BaseAdapter {
 
         userIdentifier(comment);
         holderInitialize(viewHolder, comment);
+
         return convertView;
     }
 

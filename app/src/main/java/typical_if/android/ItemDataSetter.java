@@ -57,19 +57,15 @@ import com.vk.sdk.api.model.VKAttachments;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import typical_if.android.activity.SplashActivity;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoList;
-import typical_if.android.fragment.NavigationDrawerFragment;
 import typical_if.android.model.Wall.Wall;
 
 import static java.lang.String.format;

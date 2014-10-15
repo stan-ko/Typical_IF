@@ -72,7 +72,6 @@ public class WallAdapter extends BaseAdapter {
     public static int surpriseCounter = 0;
 
 
-
     public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, String postColor, boolean isSuggested) {
         this.wall = wall;
         this.layoutInflater = inflater;
@@ -206,33 +205,36 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.button_like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("----------liked---------","77787878788787833");
-
-                    try{
-                        if (OfflineMode.loadInt("surprise")!=0){
-                            surpriseCounter =  OfflineMode.loadInt("surprise");
+                  //  Log.d("----------liked----surpriseCounter--2---", OfflineMode.loadInt("surprise")+"");
+                   // Log.d("----------liked----surpriseCounter-1----", surpriseCounter+"");
+                    try {
+                        if (!OfflineMode.isIntNul("surprise")) {
+                            surpriseCounter = OfflineMode.loadInt("surprise");
+                           // Log.d("----------liked----surpriseCounter--2---", OfflineMode.loadInt("surprise") + "");
+                        } else {
+                            surpriseCounter = 0;
+                            //Log.d("----------liked----surpriseCounter--3---", surpriseCounter + "");
                         }
-                    } catch (Exception e){
-                        Log.d("Exeption"," shaeed  = 0");
-                        surpriseCounter = 0;
-                    }
 
-                    if (VKSdk.isLoggedIn()){
+                    } catch (Exception e){}
+                    if (VKSdk.isLoggedIn()) {
                         surpriseCounter++;
+                       // Log.d("----------liked----surpriseCounter-4----", surpriseCounter + "");
                         OfflineMode.saveInt(surpriseCounter, "surprise");
-                    }else {
-                        surpriseCounter=0;
-                    }
-                    try{
-                    if (OfflineMode.loadInt("surprise")==15){
-                       Log.d("5 counters", "---------------");
-                        ((MainActivity) getTopActivity()).addFragment(FragmentMakePost.newInstance(-77149556, 0, 0));
-                    }
-                    } catch (Exception e){
-                        Log.d("Exeption"," shaeed  = 0");
-                        surpriseCounter = 0;
-                    }
+                        //  Log.d("----------liked----surpriseCounter-488----", OfflineMode.loadInt("surprise")+"");
 
+                    }
+                    try {
+
+                        if (OfflineMode.loadInt("surprise") == 15 && VKSdk.isLoggedIn()) {
+                            Log.d("----------liked----surpriseCounter---5--", surpriseCounter+"");
+                            ((MainActivity) getTopActivity()).addFragment(FragmentMakePost.newInstance(-77149556, 0, 0));
+                        }
+                    } catch (Exception e) {
+                        Log.d("Exeption", " shaeed  = 0");
+                        surpriseCounter = 0;
+                        Log.d("----------liked----surpriseCounter---6--", surpriseCounter+"");
+                    }
 
 
                     if (!post.user_likes) {
@@ -385,7 +387,7 @@ public class WallAdapter extends BaseAdapter {
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
 
-                          //  flag=isChecked;
+                            //  flag=isChecked;
 ////
                             final Animation slideDown = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_down_animation);
                             slideDown.setAnimationListener(animationListener);
@@ -395,7 +397,7 @@ public class WallAdapter extends BaseAdapter {
 
 
                         } else {
-                           // flag=isChecked;
+                            // flag=isChecked;
                             final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
                             slideUp.setAnimationListener(animationListener);
                             viewHolder.postFeatureLayout.startAnimation(slideUp);
@@ -405,7 +407,7 @@ public class WallAdapter extends BaseAdapter {
                     }
 
                 });
-              //  flag=false;
+                //  flag=false;
 
 
                 viewHolder.button_comment.setVisibility(View.VISIBLE);

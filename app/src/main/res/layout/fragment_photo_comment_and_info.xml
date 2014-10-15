@@ -96,6 +96,16 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:visibility="gone" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/there_are_no_comments_here_tv"
+            android:layout_toRightOf="@+id/there_are_no_comments_here_tv"
+            android:layout_toEndOf="@+id/there_are_no_comments_here_tv"
+            android:id="@+id/while_loading_view_layout"
+            android:background="#ff000000"
+            android:visibility="visible"></RelativeLayout>
     </RelativeLayout>
 
     <!--android:background="@drawable/image_header_state_selector" -->
