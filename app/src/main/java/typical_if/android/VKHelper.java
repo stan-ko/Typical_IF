@@ -388,6 +388,14 @@ public class VKHelper {
         final VKRequest request = new VKRequest("groups.isMember", params);
         request.executeWithListener(vkRequestListener);
     }
+    public static void exec (VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+
+
+        final VKRequest request = new VKRequest("https://api.vk.com/method/execute.winTheGame", params);
+        request.executeWithListener(vkRequestListener);
+    }
+
 
     public static void groupJoin(long gid, VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();

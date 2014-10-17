@@ -120,11 +120,22 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         onPageSelected(0);
         adapter= new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,Constants.GROUP_ID,
                 Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
-        adapter.notifyDataSetChanged();
-        imagepager.setAdapter(adapter);
 
-        imagepager.setCurrentItem(currentPosition);
-        adapter.notifyDataSetChanged();
+        if (adapter==null|imagepager.getAdapter()==null){
+            adapter= new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,Constants.GROUP_ID,
+                    Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
+
+        }else {
+            adapter = new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, Constants.GROUP_ID,
+                    Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
+        }
+            adapter.notifyDataSetChanged();
+            imagepager.setAdapter(adapter);
+
+            imagepager.setCurrentItem(currentPosition);
+            adapter.notifyDataSetChanged();
+
+
 
 
         //Log.d("Current VIEW", photos.get(imagepager.getCurrentItem()).text);

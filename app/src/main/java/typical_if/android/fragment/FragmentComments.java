@@ -48,7 +48,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import de.greenrobot.event.EventBus;
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
@@ -214,7 +213,7 @@ public class FragmentComments extends Fragment {
         if (getArguments() != null) {
 
         }
-        EventBus.getDefault().register(this);
+        //EventBus.getDefault().register(this);
 
     }
 
@@ -399,7 +398,7 @@ public class FragmentComments extends Fragment {
         root=rootLayoutShowHide;
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
         RelativeLayout wrapper = (RelativeLayout)rootView.findViewById(R.id.list_of_comments_wrapper_layout);
-        coverGlobal = (RelativeLayout)rootView.findViewById(R.id.while_loading_view_layout);
+        //coverGlobal = (RelativeLayout)rootView.findViewById(R.id.while_loading_view_layout);
 
 
 
@@ -544,7 +543,7 @@ public class FragmentComments extends Fragment {
                     }
                 }
         );
-        EventBus.getDefault().post(new EventSpinnerLayout());
+        //EventBus.getDefault().post(new EventSpinnerLayout());
     }
 public static boolean isViewLoaded;
     @Override
@@ -878,7 +877,7 @@ public static boolean isViewLoaded;
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        EventBus.getDefault().unregister(this);
+        //EventBus.getDefault().unregister(this);
     }
 
 

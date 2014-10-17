@@ -151,6 +151,9 @@ public class FragmentMakePost extends Fragment {
                     "натисніть кнопку 'Відправити' " );
 
 
+
+
+
         }
 
 
