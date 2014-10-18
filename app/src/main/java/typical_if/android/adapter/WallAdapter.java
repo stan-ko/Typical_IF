@@ -205,38 +205,29 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.button_like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                  //  Log.d("----------liked----surpriseCounter--2---", OfflineMode.loadInt("surprise")+"");
-                   // Log.d("----------liked----surpriseCounter-1----", surpriseCounter+"");
                     try {
+                        Log.d("----------liked----surpriseCounter---5--", surpriseCounter + "");
                         if (!OfflineMode.isIntNul("surprise")) {
                             surpriseCounter = OfflineMode.loadInt("surprise");
-                           // Log.d("----------liked----surpriseCounter--2---", OfflineMode.loadInt("surprise") + "");
                         } else {
                             surpriseCounter = 0;
-                            //Log.d("----------liked----surpriseCounter--3---", surpriseCounter + "");
                         }
-
-                    } catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                     if (VKSdk.isLoggedIn()) {
                         surpriseCounter++;
-                       // Log.d("----------liked----surpriseCounter-4----", surpriseCounter + "");
                         OfflineMode.saveInt(surpriseCounter, "surprise");
-                        //  Log.d("----------liked----surpriseCounter-488----", OfflineMode.loadInt("surprise")+"");
-
                     }
                     try {
-
                         if (OfflineMode.loadInt("surprise") == 15 && VKSdk.isLoggedIn()) {
-                            Log.d("----------liked----surpriseCounter---5--", surpriseCounter+"");
+                            Log.d("----------liked----surpriseCounter---5--", surpriseCounter + "");
                             ((MainActivity) getTopActivity()).addFragment(FragmentMakePost.newInstance(-77149556, 0, 0));
                         }
                     } catch (Exception e) {
-                        Log.d("Exeption", " shaeed  = 0");
+                        Log.d("Exception", " shaeed  = 0");
                         surpriseCounter = 0;
-                        Log.d("----------liked----surpriseCounter---6--", surpriseCounter+"");
+                        Log.d("----------liked----surpriseCounter---6--", surpriseCounter + "");
                     }
-
-
                     if (!post.user_likes) {
                         VKHelper.setLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
                             @Override
@@ -345,59 +336,19 @@ public class WallAdapter extends BaseAdapter {
                     }
                 });
 
-//                viewHolder.openActions.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        if (flag) {
-//                            viewHolder.extendedMenuItems.setChecked(true);
-//                            final Animation slideDown = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_down_animation);
-//                            slideDown.setAnimationListener(animationListener);
-//                            viewHolder.postFeatureLayout.startAnimation(slideDown);
-//                            viewHolder.postFeatureLayout.setVisibility(View.VISIBLE);
-//                            viewHolder.postFeatureLayout.setEnabled(true);
-//                        }else {
-//                            viewHolder.extendedMenuItems.setChecked(false);
-//                            final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
-//                            slideUp.setAnimationListener(animationListener);
-//                            viewHolder.postFeatureLayout.startAnimation(slideUp);
-//                            viewHolder.postFeatureLayout.setVisibility(View.INVISIBLE);
-//                            viewHolder.postFeatureLayout.setEnabled(false);
-//                        }
-//
-//                    }
-//                });
-//                if (flag) {
-//                    viewHolder.extendedMenuItems.setChecked(true);
-//                    final Animation slideDown = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_down_animation);
-//                    slideDown.setAnimationListener(animationListener);
-//                    viewHolder.postFeatureLayout.startAnimation(slideDown);
-//                    viewHolder.postFeatureLayout.setVisibility(View.VISIBLE);
-//                    viewHolder.postFeatureLayout.setEnabled(true);
-//                }else {
-//                    viewHolder.extendedMenuItems.setChecked(false);
-//                    final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
-//                    slideUp.setAnimationListener(animationListener);
-//                    viewHolder.postFeatureLayout.startAnimation(slideUp);
-//                    viewHolder.postFeatureLayout.setVisibility(View.INVISIBLE);
-//                    viewHolder.postFeatureLayout.setEnabled(false);
-//                }
 
                 viewHolder.extendedMenuItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
 
-                            //  flag=isChecked;
-////
                             final Animation slideDown = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_down_animation);
                             slideDown.setAnimationListener(animationListener);
                             viewHolder.postFeatureLayout.startAnimation(slideDown);
                             viewHolder.postFeatureLayout.setVisibility(View.VISIBLE);
                             viewHolder.postFeatureLayout.setEnabled(true);
-
-
                         } else {
-                            // flag=isChecked;
+
                             final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
                             slideUp.setAnimationListener(animationListener);
                             viewHolder.postFeatureLayout.startAnimation(slideUp);
@@ -407,8 +358,6 @@ public class WallAdapter extends BaseAdapter {
                     }
 
                 });
-                //  flag=false;
-
 
                 viewHolder.button_comment.setVisibility(View.VISIBLE);
                 viewHolder.button_repost.setVisibility(View.VISIBLE);

@@ -48,10 +48,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import de.greenrobot.event.EventBus;
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
@@ -75,6 +77,7 @@ public class FragmentComments extends Fragment {
     public static VKApiPhoto photo = null;
 
     public static String TYPE;
+
 
     ListView listOfComments = null;
     ArrayList<VKApiComment> comments = null;
@@ -101,51 +104,7 @@ public class FragmentComments extends Fragment {
     LayoutInflater inflater;
     static long item_id;
     static long from_user;
-    int mLastFirstVisibleItem = 0;
 
-//    AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener(){
-//        @Override
-//        public void onScrollStateChanged(AbsListView view, int scrollState) {
-//
-//        }
-//
-//        @Override
-//        public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount,
-//                             int totalItemCount) {
-//            if (absListView.getId() == listOfComments.getId()) {
-//                final int currentFirstVisibleItem = listOfComments.getFirstVisiblePosition();
-//                if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-//
-//
-//                  //  root.setVisibility(View.GONE);
-//                    //                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-////                            RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-////                    lp.addRule(RelativeLayout.BELOW,R.id.comment_bar_layout);
-////
-////                     RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-////                    RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-////                    lp.addRule(RelativeLayout.BELOW,R.id.developers_layout);
-////                    listOfComments.removeViewInLayout(listFooterView);
-////                    listOfComments.setLayoutParams(lp);
-//
-//
-//
-//                }
-//                else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-//                    //root.setVisibility(View.VISIBLE);
-////
-////                                        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
-////                            RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-////                    lp.addRule(RelativeLayout.ABOVE,R.id.developers_layout);
-////                    listOfComments.setLayoutParams(lp);
-////                    listOfComments.addView(listFooterView,lp);
-//                }
-//
-//                mLastFirstVisibleItem = currentFirstVisibleItem;
-//            }
-//
-//        }
-//    };
 
     public static FragmentComments newInstanceForPhoto(VKApiPhoto photo, long vk_user_id) {
         loadFromWall = false;
@@ -213,7 +172,7 @@ public class FragmentComments extends Fragment {
         if (getArguments() != null) {
 
         }
-        //EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
 
     }
 
@@ -396,16 +355,11 @@ public class FragmentComments extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
        RelativeLayout rootLayoutShowHide = (RelativeLayout)rootView.findViewById(R.id.comment_bar_layout);
         root=rootLayoutShowHide;
+        coverGlobal = (RelativeLayout)rootView.findViewById(R.id.while_loading_view_layout);
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
         RelativeLayout wrapper = (RelativeLayout)rootView.findViewById(R.id.list_of_comments_wrapper_layout);
-        //coverGlobal = (RelativeLayout)rootView.findViewById(R.id.while_loading_view_layout);
 
-
-
-
-      //  View listFooterView = rootView.inflate(getActivity().getApplicationContext(), R.layout.send_comment_footer, null);
-
-        if (VKSdk.isLoggedIn()){
+if (VKSdk.isLoggedIn()){
             if(OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())){
 
             rootLayoutShowHide.setVisibility(View.VISIBLE);}}
@@ -415,23 +369,15 @@ public class FragmentComments extends Fragment {
                     RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             lp.addRule(RelativeLayout.ALIGN_BOTTOM,R.id.binding_iv);
             wrapper.setLayoutParams(lp);
-
         }
-
-
-
-
         sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
-
-
         if (loadFromWall) {
             loadWallPosts();
         } else {
 
             loadPhotoPosts();
         }
-
         sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -515,6 +461,7 @@ public class FragmentComments extends Fragment {
                         Looper.prepare();
 
                         parseCommentList(OfflineMode.loadJSON(item_id));
+                        EventBus.getDefault().post(new EventSpinnerLayout());
                     }
                 }).start();
             }
@@ -543,7 +490,7 @@ public class FragmentComments extends Fragment {
                     }
                 }
         );
-        //EventBus.getDefault().post(new EventSpinnerLayout());
+
     }
 public static boolean isViewLoaded;
     @Override
@@ -877,7 +824,7 @@ public static boolean isViewLoaded;
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        //EventBus.getDefault().unregister(this);
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -896,12 +843,11 @@ public static boolean isViewLoaded;
         ImageLoader.getInstance().displayImage(PhotoUrlHelper.getFullScreenUrl(photo), imageView);
     }
 
-    public final static Animation animationFadeIn = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.fade_in);
+    public final static Animation animationFadeOut = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.fade_out);
 
 
     public void onEventMainThread(EventSpinnerLayout event) {
-
-        coverGlobal.startAnimation(animationFadeIn);
+             coverGlobal.startAnimation(animationFadeOut);
     }
 
 }

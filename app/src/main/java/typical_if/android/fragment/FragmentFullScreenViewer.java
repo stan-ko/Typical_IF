@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -95,6 +96,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final Bundle arguments = getArguments();
 
+
         ((MainActivity)getActivity()).getSupportActionBar().hide();
         FragmentWall.setDisabledMenu();
 
@@ -135,10 +137,6 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             imagepager.setCurrentItem(currentPosition);
             adapter.notifyDataSetChanged();
 
-
-
-
-        //Log.d("Current VIEW", photos.get(imagepager.getCurrentItem()).text);
         VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(final VKResponse response) {
@@ -156,6 +154,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }
         });
+
 
 
         setRetainInstance(true);
@@ -197,12 +196,11 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
 
 
+
     @Override
     public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) { }
     @Override
     public void onPageSelected(final int position) {
-
-
         if (photos.get(position).likes==0){
             cb_like.setText("");
         } else  cb_like.setText(String.valueOf(photos.get(position).likes));
@@ -212,7 +210,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         }else
             cb_comment.setText(String.valueOf(photos.get(position).comments));
 
-        counterOfPhotos.setText(String.valueOf(position + 1));
+      counterOfPhotos.setText(String.valueOf(position + 1));
         if (VKHelper.countOfPhotos==0)
             albumSize.setText(String.valueOf(Constants.COUNT_OF_PHOTOS));
         else
@@ -322,8 +320,10 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
 
     @Override
-    public void onPageScrollStateChanged(int state) {
+    public void onPageScrollStateChanged(int state ) {
+
         //Log.d("stateOnPageScrollStateChanged^---------------------------------------------------------------->" + "   ", state + "");
+
     }
 
     public interface OnFragmentInteractionListener {
@@ -331,23 +331,6 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         public void onFragmentInteraction(Uri uri);
     }
 
-
-//        fullScreenPhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                clickCounter++;
-//                if(clickCounter%2==0) {
-//                    { likePhoto.startAnimation(animTextViewUp);
-//                    commentPhoto.startAnimation(animTextViewUp);}
-//                }else{
-//                    {commentPhoto.startAnimation(animTextViewDown);
-//                    likePhoto.startAnimation(animTextViewDown);}
-//                }
-//
-//int clickCounter = -1;
-//
-//            }
-//        });
 
 
 }

@@ -1,4 +1,12 @@
 <?xml version ="1.0" encoding="utf-8"?>
+<!--<typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:id="@+id/refresh_comment_list"-->
+    <!--android:background="@drawable/blur1"-->
+    <!--android:focusableInTouchMode="true">-->
+
 <RelativeLayout
 
     android:layout_width="fill_parent"
@@ -59,13 +67,14 @@
                 android:hint="@string/your_message"
                 android:paddingLeft="15dp"
                 android:autoText="false"
-                android:layout_toStartOf="@+id/buttonSendComment"
                 android:visibility="visible"
                 android:alpha="0.8"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginLeft="5dp" />
+                android:layout_marginLeft="5dp"
+                android:layout_toLeftOf="@+id/buttonSendComment"
+                android:layout_toStartOf="@+id/buttonSendComment" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -114,5 +123,25 @@
         android:layout_alignParentStart="true"
         android:background="#0073adff" />
 
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/there_are_no_comments_here_tv"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/blur1"
+            android:id="@+id/while_loading_view_layout">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:id="@+id/spinner_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:indeterminate="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+
+    </RelativeLayout>
 </RelativeLayout>
-</RelativeLayout>
+<!--</typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout>-->
