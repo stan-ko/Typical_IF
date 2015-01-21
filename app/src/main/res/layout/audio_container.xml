@@ -3,50 +3,52 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="wrap_content"
     android:layout_height="60dp"
-    android:background="@color/transparent"
-    android:paddingTop="5dp"
-    android:paddingLeft="10sp">
+    android:background="@color/menu_popup"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="5dp">
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cb_audio_play_or_stop"
         android:button="@drawable/play_or_stop_audio_selector"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="false"
         android:singleLine="false"
         android:checked="false"
-        android:layout_above="@+id/txt_audio_duration" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <SeekBar
         style="@style/Theme.Base.AppCompat.Light.DialogWhenLarge"
-        android:layout_width="100dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progress_audio"
-        android:layout_below="@+id/cb_audio_play_or_stop"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:visibility="invisible"
-        android:layout_toLeftOf="@+id/txt_audio_duration"
-        android:layout_marginRight="5dp"
         android:indeterminate="false"
         android:max="100"
-        android:progress="0"
-        android:layout_marginTop="3dp"
-        android:thumb="@drawable/abc_ab_stacked_transparent_dark_holo" />
+        android:thumb="@drawable/sliders_playl"
+        android:layout_toRightOf="@+id/cb_audio_play_or_stop"
+        android:layout_marginLeft="15dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/txt_audio_title"
+        android:progressDrawable="@drawable/music_progress"
+        android:thumbOffset="1dp"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/txt_audio_duration"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentBottom="true"
         android:gravity="right"
-        android:layout_marginRight="5dp"
-        android:textColor="#ffffffff" />
+        android:textColor="#ffffffff"
+        android:layout_below="@+id/txt_audio_artist"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:alpha="0.75" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -55,15 +57,13 @@
         android:layout_alignParentTop="false"
         android:layout_toRightOf="@+id/cb_audio_play_or_stop"
         android:layout_toEndOf="@+id/cb_audio_play_or_stop"
-        android:textStyle="bold"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="15dp"
         android:singleLine="true"
         android:paddingRight="5dp"
-        android:layout_alignRight="@+id/progress_audio"
-        android:layout_alignEnd="@+id/progress_audio"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="0dp"
-        android:textColor="#ffffffff" />
+        android:textColor="#ffffffff"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:alpha="0.85" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -73,9 +73,11 @@
         android:layout_below="@+id/txt_audio_artist"
         android:layout_toRightOf="@+id/cb_audio_play_or_stop"
         android:singleLine="true"
-        android:layout_marginLeft="5dp"
-        android:layout_alignRight="@+id/progress_audio"
-        android:layout_alignEnd="@+id/progress_audio"
-        android:layout_marginRight="50dp"
-        android:textColor="#ffffffff" />
+        android:layout_marginLeft="15dp"
+        android:textColor="#ffffffff"
+        android:layout_marginBottom="3dp"
+        android:layout_toLeftOf="@+id/txt_audio_duration"
+        android:layout_toStartOf="@+id/txt_audio_duration"
+        android:layout_marginRight="25dp"
+        android:alpha="0.6" />
 </RelativeLayout>

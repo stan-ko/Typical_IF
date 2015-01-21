@@ -5,18 +5,27 @@
     android:layout_height="wrap_content"
     android:background="@color/transparent">
 
-    <TextView
+    <com.devspark.robototextview.widget.RobotoTextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txt_post"
-        android:textColor="#ffffffff"
+        android:textColor="#afffffff"
         android:textSize="17dp"
         android:clickable="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:visibility="visible"
+        app:typeface="roboto_regular"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp" />
 
-    <CheckBox
+    <com.devspark.robototextview.widget.RobotoTextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/cb_show_all_text"
@@ -24,11 +33,12 @@
         android:button="@android:color/transparent"
         android:gravity="center"
         android:visibility="gone"
-        android:textStyle="italic"
+        android:textStyle="normal"
         android:text="@string/show_all_text"
         android:layout_below="@+id/txt_post"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="2dp"
+        android:textColor="#7dffffff" />
 
 </RelativeLayout>

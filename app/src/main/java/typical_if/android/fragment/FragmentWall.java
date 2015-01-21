@@ -192,7 +192,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             initGroupWall(jsonObjectOld, inflater);
 
             swipeView.setOnRefreshListener(this);
-            swipeView.setColorScheme(android.R.color.holo_blue_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light, android.R.color.holo_green_light);
+            swipeView.setColorScheme(R.color.ab_text_color, android.R.color.holo_green_light, android.R.color.holo_orange_dark, R.color.music_progress);
 
         } else {
             setDisabledMenu();
@@ -327,6 +327,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public static void setEnabledMenu() {
+//        Constants.makePostMenu.
         if (Constants.makePostMenu.size() == 3) {
             Constants.makePostMenu.getItem(0).setVisible(true);
             Constants.makePostMenu.getItem(1).setVisible(true);
@@ -335,11 +336,14 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public static void setDisabledMenu() {
+
+
         if (Constants.makePostMenu.size() == 3) {
             Constants.makePostMenu.getItem(0).setVisible(false);
             Constants.makePostMenu.getItem(1).setVisible(false);
             Constants.makePostMenu.getItem(2).setVisible(false);
         }
+        Constants.makePostMenu.close();
     }
 
     @Override

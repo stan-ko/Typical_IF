@@ -21,7 +21,7 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="96dp"
             android:background="@drawable/element_selector"
             android:visibility="visible"
             android:paddingTop="5dp">
@@ -30,36 +30,46 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:id="@+id/img_copy_history_logo"
+                android:layout_marginLeft="24dp"
+                android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginLeft="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginStart="21dp"
+                android:visibility="visible" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:id="@+id/txt_copy_history_title"
-                android:layout_alignParentTop="true"
+                android:singleLine="true"
+                android:textColor="#aaffffff"
+                android:layout_alignTop="@+id/img_copy_history_logo"
                 android:layout_toRightOf="@+id/img_copy_history_logo"
                 android:layout_toEndOf="@+id/img_copy_history_logo"
-                android:singleLine="true"
-                android:textColor="#ffffffff"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp" />
+                android:layout_marginLeft="23dp"
+                android:textSize="15dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:id="@+id/txt_copy_history_date"
+                android:textColor="#ffffffff"
                 android:layout_below="@+id/txt_copy_history_title"
                 android:layout_alignLeft="@+id/txt_copy_history_title"
-                android:layout_alignStart="@+id/txt_copy_history_title"
-                android:textColor="#ffffffff"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_alignStart="@+id/txt_copy_history_title" />
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:id="@+id/imageView96"
+                android:src="@drawable/ic_retweet"
+                android:layout_alignTop="@+id/txt_copy_history_title"
+                android:layout_toLeftOf="@+id/txt_copy_history_date"
+                android:layout_toStartOf="@+id/txt_copy_history_date"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="2dp" />
 
         </RelativeLayout>
 

@@ -190,7 +190,7 @@ public class FragmentAlbumsList extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Constants.ALBUM_ID = albums.get(position).id;
                 Constants.TEMP_OWNER_ID = albums.get(position).owner_id;
-                Fragment fragment = FragmentPhotoList.newInstance(type);
+                Fragment fragment = FragmentPhotoList.newInstance(type, albums.get(position).size);
                 ((MainActivity)getActivity()).addFragment(fragment);
             }
         });

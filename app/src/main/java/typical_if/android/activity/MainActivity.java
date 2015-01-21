@@ -58,11 +58,11 @@ public class MainActivity extends DialogActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-try {
-    if (OfflineMode.loadInt("surprise")<15){
-        OfflineMode.saveInt(0, "surprise");
-    }
-} catch (Exception e){}
+        try {
+            if (OfflineMode.loadInt("surprise")<15){
+                OfflineMode.saveInt(0, "surprise");
+            }
+        } catch (Exception e){}
 
 
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
@@ -160,9 +160,9 @@ try {
 //                return true;
 //
 //            default:
-                return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected(item);
 
-      //  }
+        //  }
     }
 
     @Override
@@ -274,7 +274,7 @@ try {
 
                 if (childPosition == 0) {
 
-                           fragment = FragmentWall.newInstance(false);
+                    fragment = FragmentWall.newInstance(false);
 
 
                 } else if (childPosition == 1) {
@@ -318,7 +318,7 @@ try {
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             getSupportActionBar().show();
-            mNavigationDrawerFragment.openDrawer();
+            mNavigationDrawerFragment.toggle();
         } else {
             super.onBackPressed();
         }

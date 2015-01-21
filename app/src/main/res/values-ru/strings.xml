@@ -3,7 +3,7 @@
 <resources>
 
         <string name = "app_name">Типичный Франковск</string>
-        <string name="logo_name">Типичный\nМобильный\nФранковск</string>
+        <string name="logo_name">Типичный Франковск</string>
         <string name="main_creed">Слава Украине!Героям слава! </string>
 
         <string name = "menu_group_title_tf">Типичный Франковск</string>
@@ -11,6 +11,7 @@
         <string name = "menu_group_title_fb">Франковская Барахолка</string>
         <string name = "menu_group_title_fn">Франковские Новости</string>
         <string name = "menu_group_title_events">Афиша Франковская</string>
+        <string name="menu_group_about_us">О приложении</string>
         <string name = "menu_group_exit">Выйти из программы</string>
 
         <string name = "profile">Профиль</string>
@@ -54,7 +55,7 @@
         <string name = "downloader_chooser">Выберите загрузчик</string>
         <string name = "viewer_chooser">Выберите браузер</string>
 
-        <string name = "show_all_text">Показать полностью ...</string>
+        <string name = "show_all_text">Читать далее...</string>
         <string name = "show_min_text">Показать сокращенно ...</string>
     <string name="you_are_not_logged_in">Ви не вошли в профиль</string>
 

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="typical_if.android.activity.SplashActivity"
-    android:background="@drawable/blur1">
+    android:background="@color/app_bg">
 
     <ImageView
         android:layout_width="wrap_content"

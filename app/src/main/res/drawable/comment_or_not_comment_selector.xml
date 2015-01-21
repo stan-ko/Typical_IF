@@ -3,8 +3,8 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:state_checked="true"
-        android:drawable="@drawable/ic_player_pause"/>
+        android:drawable="@drawable/ic_news_comments"/>
     <item
         android:state_checked="false"
-        android:drawable="@drawable/ic_player_play"/>
+        android:drawable="@drawable/ic_news_comments_0"/>
 </selector>

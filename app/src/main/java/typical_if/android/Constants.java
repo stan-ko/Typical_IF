@@ -17,8 +17,14 @@ import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiVideo;
 
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Queue;
+
+import typical_if.android.adapter.FullScreenImageAdapter;
 
 /**
  * Created by Miller on 17.07.2014.
@@ -72,6 +78,11 @@ public class Constants {
     public static long TEMP_OWNER_ID;
 
     public static Menu makePostMenu;
+
+ public static FullScreenImageAdapter tempAdapter ;
+    //public static HashMap<String,FullScreenImageAdapter> ADAPTERS_ARRAY = new HashMap<String, FullScreenImageAdapter>();
+    public static Deque<FullScreenImageAdapter> queueOfAdapters=new LinkedList<FullScreenImageAdapter>();
+
 
     public static ArrayList<VKApiPhoto> tempPhotoPostAttach = new ArrayList<VKApiPhoto>();
     public static ArrayList<VKApiVideo> tempVideoPostAttach = new ArrayList<VKApiVideo>();

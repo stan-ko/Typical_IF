@@ -5,7 +5,6 @@ package typical_if.android.adapter;
  */
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,7 +85,6 @@ public class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedEx
             convertView = inflater.inflate(R.layout.navigation_drawer_group_item, null);
         }
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.groupItem);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
 
         if (groupPosition == 5) {
             if (VKSdk.isLoggedIn()) {

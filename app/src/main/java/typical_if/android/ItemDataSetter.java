@@ -43,6 +43,7 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
+import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiDocument;
 import com.vk.sdk.api.model.VKApiLink;
 import com.vk.sdk.api.model.VKApiPhoto;
@@ -75,6 +76,7 @@ import static java.lang.String.valueOf;
  * Created by admin on 05.08.2014.
  */
 public class ItemDataSetter {
+    public int sizeOfAlbum;
 
     public static Context context = TIFApp.getAppContext();
     public static LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -266,6 +268,7 @@ public class ItemDataSetter {
 //                }
 //            });
 //        }
+
     }
 
     public static void setPoll(RelativeLayout parent, VKApiPoll poll) {
@@ -289,6 +292,7 @@ public class ItemDataSetter {
 
         parent.addView(pollContainer);
     }
+
     static int startTag = 0;
     static int endTag = 0;
     static int startLink = 0;
@@ -297,6 +301,7 @@ public class ItemDataSetter {
     static int endSite = 0;
     static int startReply = 0;
     static int endReply = 0;
+
     public static SpannableStringBuilder getParsedText(String text) {
         final Matcher matTags = Pattern.compile("#\\w+").matcher(text);
 
@@ -304,14 +309,13 @@ public class ItemDataSetter {
         final SpannableStringBuilder spannable = new SpannableStringBuilder(text);
 
 
-
         while (matTags.find()) {
             startTag = stringB.indexOf(matTags.group());
             endTag = startTag + matTags.group().length();
 
-           spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startTag, endTag, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-           spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startTag, endTag,0);
-           spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), startTag, endTag, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startTag, endTag, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startTag, endTag, 0);
+            spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), startTag, endTag, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             final String temp = matTags.group();
 
@@ -372,13 +376,13 @@ public class ItemDataSetter {
             startLink = stringB.indexOf(matLinks.group());
             endLink = startLink + matLinks.group().length();
 
-           //spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startLink, endLink,0);
-           spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startLink, endLink,0);
-           spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), startLink, endLink, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-           TextPaint t = new TextPaint();
-            t.linkColor= Color.RED;
+            //spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startLink, endLink,0);
+            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startLink, endLink, 0);
+            spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), startLink, endLink, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            TextPaint t = new TextPaint();
+            t.linkColor = Color.RED;
             t.setColor(Color.RED);
-          spannable.setSpan(t,startLink,endLink,0);
+            spannable.setSpan(t, startLink, endLink, 0);
             final String temp = matLinks.group();
 
             spannable.setSpan(new NonUnderlinedClickableSpan() {
@@ -400,8 +404,8 @@ public class ItemDataSetter {
             spannable.replace(startSite, endSite, replier);
 
             endSite = startSite + replier.length();
-           spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startSite, endSite, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-           spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startSite, endSite, 0);
+            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startSite, endSite, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startSite, endSite, 0);
             spannable.setSpan(new NonUnderlinedClickableSpan() {
                 @Override
                 public void onClick(View textView) {
@@ -422,7 +426,7 @@ public class ItemDataSetter {
 
             endReply = startReply + replier[1].length();
             spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startReply, endReply, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startReply, endReply,0);
+            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startReply, endReply, 0);
             spannable.setSpan(new NonUnderlinedClickableSpan() {
                 @Override
                 public void onClick(View textView) {
@@ -433,8 +437,6 @@ public class ItemDataSetter {
         }
         return spannable;
     }
-
-
 
 
     public static void setText(String text, RelativeLayout parent) {
@@ -450,7 +452,7 @@ public class ItemDataSetter {
 
         if (spannable.length() > 300) {
             showAll.setVisibility(View.VISIBLE);
-            showAll.setBackgroundColor(Color.parseColor(postColor));
+           // showAll.setBackgroundColor(Color.parseColor(postColor));
             final SpannableStringBuilder originalSpannable = spannable;
             final SpannableStringBuilder tempSpannable = new SpannableStringBuilder();
             tempSpannable.append(spannable);
@@ -479,6 +481,22 @@ public class ItemDataSetter {
         parent.addView(textContainer);
     }
 
+    public static String setNameOfPostAuthor(int id) {
+       VKApiUser profile;
+       String name = null;
+        for (int i = 0; i < wall.profiles.size(); i++) {
+            profile = wall.profiles.get(i);
+
+            if (id == profile.id) {
+                name = profile.last_name + " " + profile.first_name;
+            }
+        }
+        if (id == 0) {
+            name = wall.group.name;
+        }
+        return name;
+    }
+
     public static void setSigned(final int id, RelativeLayout parent) {
         VKApiUser profile;
         String name = null;
@@ -493,11 +511,12 @@ public class ItemDataSetter {
         }
 
         ViewGroup signedContainer = getPreparedView(parent, R.layout.signed_post_container);
-        ImageLoader.getInstance().displayImage(image, (ImageView) signedContainer.getChildAt(0),TIFApp.additionalOptions);
-
+        ImageLoader.getInstance().displayImage(image, (ImageView) signedContainer.getChildAt(0), TIFApp.additionalOptions);
 
 
         TextView txt_name = ((TextView) signedContainer.getChildAt(1));
+
+
         txt_name.setText(name);
 
         signedContainer.setOnClickListener(new View.OnClickListener() {
@@ -507,8 +526,10 @@ public class ItemDataSetter {
                 context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
             }
         });
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        // parent.addView(signedContainer);
 
-        parent.addView(signedContainer);
+
     }
 
     public static void setLink(RelativeLayout parent, final VKApiLink link) {
@@ -595,7 +616,7 @@ public class ItemDataSetter {
                 public void onClick(View v) {
                     Constants.ALBUM_ID = album.id;
                     Constants.TEMP_OWNER_ID = album.owner_id;
-                    fragmentManager.beginTransaction().add(R.id.container, FragmentPhotoList.newInstance(1)).addToBackStack(null).commit();
+                    fragmentManager.beginTransaction().add(R.id.container, FragmentPhotoList.newInstance(1, album.size)).addToBackStack(null).commit();
                 }
             });
 
@@ -964,26 +985,28 @@ public class ItemDataSetter {
                     super.onComplete(response);
                     OfflineMode.saveJSON(response.json, photosKeyGen(photos));
                     finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKeyGen(photos)));
-                    Fragment fragment = FragmentFullScreenViewer.newInstance(finalPhotos, position);
+                    Fragment fragment = new FragmentFullScreenViewer(finalPhotos, position, 0);
                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                     OfflineMode.saveJSON(response.json, photosKeyGen(photos));
                 }
+
                 @Override
                 public void onError(VKError error) {
                     super.onError(error);
-                    Fragment fragment = FragmentFullScreenViewer.newInstance(photos, position);
+                    Fragment fragment = new FragmentFullScreenViewer(photos, position, 0);
                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 }
             });
-        } else if(OfflineMode.isJsonNull(photosKeyGen(photos))) {
+        } else if (OfflineMode.isJsonNull(photosKeyGen(photos))) {
             finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKeyGen(photos)));
-            Fragment fragment = FragmentFullScreenViewer.newInstance(finalPhotos, position);
+            Fragment fragment = new FragmentFullScreenViewer(finalPhotos, position, 0);
             fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
         } else {
             showAlertNoInternet(WallAdapter.wallAdapterView);
         }
     }
-    private static String photosKeyGen(final ArrayList<VKApiPhoto> photos){
+
+    private static String photosKeyGen(final ArrayList<VKApiPhoto> photos) {
         String photosParam = "";
         for (g = 0; g < photos.size(); g++) {
             photosParam = photosParam.concat(photos.get(g).owner_id + "_" + photos.get(g).id + ",");
@@ -1094,15 +1117,15 @@ public class ItemDataSetter {
 
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
         final SharedPreferences.Editor ed = sPref.edit();
-        final int key= id;
+        final int key = id;
         final String value = lan;
-        ed.putString(String.valueOf(key),value);
+        ed.putString(String.valueOf(key), value);
         ed.commit();
         Locale locale = new Locale(value);
         Locale.setDefault(locale);
         final Resources res = Constants.mainActivity.getResources();
         final Configuration conf = res.getConfiguration();
-        conf.locale= locale;
+        conf.locale = locale;
         res.updateConfiguration(conf, null);
 
 
@@ -1112,7 +1135,7 @@ public class ItemDataSetter {
     public static Locale loadUserLanguage() {
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
         final String key = "user_lan";
-        final String app_lan = sPref.getString(String.valueOf(0),"");
+        final String app_lan = sPref.getString(String.valueOf(0), "");
         Constants.USER_LANGUAGE = app_lan;
         Locale locale = new Locale(app_lan);
         Locale.setDefault(locale);
@@ -1120,9 +1143,9 @@ public class ItemDataSetter {
         return locale;
     }
 
-    public static String getUserLan(){
+    public static String getUserLan() {
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
-        String lang = sPref.getString(String.valueOf(0),"");
+        String lang = sPref.getString(String.valueOf(0), "");
         return lang;
     }
 

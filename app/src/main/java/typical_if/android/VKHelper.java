@@ -373,6 +373,11 @@ public class VKHelper {
 
     public static ArrayList<VKApiPhoto> getPhotosByIdFromJSON(JSONObject json) {
         JSONArray array = json.optJSONArray("response");
+        try {
+            countOfPhotos = json.getInt("count");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         final ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
         for (int i=0; i<array.length(); i++){
             final VKApiPhoto photo = new VKApiPhoto().parse(array.optJSONObject(i));
