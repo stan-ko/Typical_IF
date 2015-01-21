@@ -32,11 +32,11 @@ public class FullScreenImageAdapter extends PagerAdapter {
     final int displayHeight = TIFApp.getDisplayHeight();
     LayoutInflater inflater;
 
-    public static ArrayList<VKApiPhoto> photos;
-
+    public ArrayList<VKApiPhoto> photos;
+//    public int count ;
     public FragmentManager fragmentManager;
     public Bundle arguments;
-    private View rootView;
+    public View rootView;
     private DisplayImageOptions options = new DisplayImageOptions.Builder()
             .cacheOnDisc(true)
             .cacheInMemory(true)
@@ -50,6 +50,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
         this.inflater = inflater;
         this.arguments = arguments;
         this.fragmentManager = fragmentManager;
+       // count = photos.size();
     }
 
 

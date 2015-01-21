@@ -53,7 +53,6 @@ import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
-import typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
@@ -106,6 +105,7 @@ public class FragmentComments extends Fragment {
     static long from_user;
 
 
+
     public static FragmentComments newInstanceForPhoto(VKApiPhoto photo, long vk_user_id) {
         loadFromWall = false;
         FragmentComments fragment = new FragmentComments();
@@ -123,6 +123,7 @@ public class FragmentComments extends Fragment {
         Constants.PARAM_NAME = "message";
         Constants.GET_COMMENTS_METHOD_NAME = "photos.getComments";
         Constants.PARAM_NAME2 = "photo_id";
+
 
 
         item_id = photo.id;
@@ -303,14 +304,14 @@ public class FragmentComments extends Fragment {
     private void loadWallPosts() {
         final View wallItem = inflater.inflate(R.layout.wall_lv_item, null);
         viewHolder = new WallAdapter.ViewHolder(wallItem);
-        WallAdapter.initViewHolder(viewHolder, postColor, wall, position, getFragmentManager(), post, getActivity().getBaseContext(),inflater);
+        WallAdapter.initViewHolder(viewHolder, postColor, wall, position, getFragmentManager(), post, getActivity().getBaseContext(),inflater,true);
 
         viewHolder.cb_post_comment.setVisibility(View.GONE);
         viewHolder.button_comment.setVisibility(View.GONE);
-        viewHolder.img_post_other.setVisibility(View.GONE);
-        viewHolder.extendedMenuItems.setVisibility(View.GONE);
+      //  viewHolder.img_post_other.setVisibility(View.GONE);
+       // viewHolder.extendedMenuItems.setVisibility(View.GONE);
         viewHolder.postFeatureLayout.setVisibility(View.GONE);
-        viewHolder.postExpandButtonLayout.setVisibility(View.GONE);
+        //viewHolder.postExpandButtonLayout.setVisibility(View.GONE);
 
         final VKWallPostWrapper post = this.post;
 
@@ -806,7 +807,7 @@ public static boolean isViewLoaded;
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.context_menu_device_item_remove, menu);
+        inflater.inflate(R.menu.main, menu);
     }
 
     @Override

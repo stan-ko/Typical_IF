@@ -2,15 +2,15 @@
 <resources>
 
     <string name="app_name">Типовий Франківськ</string>
-    <string name="logo_name">Типовий\nМобільний\nФранківськ</string>
+    <string name="logo_name">Типовий Франківськ</string>
     <string name="main_creed">Слава Україні! Героям слава!</string>
-
 
     <string name="menu_group_title_tf">Типовий Франківськ</string>
     <string name="menu_group_title_tz">Типове Зізнання</string>
     <string name="menu_group_title_fb">Франківська Барахолка</string>
     <string name="menu_group_title_fn">Франківські Новини</string>
     <string name="menu_group_title_events">Афіша Франківська</string>
+    <string name="menu_group_about_us">Про додаток</string>
     <string name="menu_group_exit">Покинути програму</string>
 
     <string name="profile">Профіль</string>
@@ -55,7 +55,7 @@
     <string name="downloader_chooser">Оберіть завантажувач</string>
     <string name="viewer_chooser">Оберіть переглядач</string>
 
-    <string name="show_all_text">Показати повністю…</string>
+    <string name="show_all_text">Читати далі...</string>
     <string name="show_min_text">Показати скорочено…</string>
     <string name="you_are_not_logged_in">Ви не увійшли в профіль</string>
 

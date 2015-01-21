@@ -61,9 +61,10 @@ public class DialogActivity extends ActionBarActivity {
     public void replaceFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
     }
-
+int index;
     public void addFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack("").commit();
+        index=getSupportFragmentManager().getBackStackEntryCount();
     }
 
     public void changeLanguage(){

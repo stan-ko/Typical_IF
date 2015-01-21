@@ -53,17 +53,19 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     int type;
     final int PIC_CROP = 2;
     private static Uri mImageCaptureUri;
+    public int sizeOfAlbum;
 
-
-    public static FragmentPhotoList newInstance(int type) {
-        FragmentPhotoList fragment = new FragmentPhotoList();
+    public static FragmentPhotoList newInstance(int type,int albumOriginalSize) {
+        FragmentPhotoList fragment = new FragmentPhotoList(albumOriginalSize);
         Bundle args = new Bundle();
         fragment.type = type;
         fragment.setArguments(args);
         return fragment;
     }
 
-    public FragmentPhotoList() {
+    public FragmentPhotoList(){}
+    public FragmentPhotoList(int albumOriginalSize) {
+        this.sizeOfAlbum=albumOriginalSize;
     }
 
 
@@ -260,6 +262,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     protected void handleResponse(JSONObject jsonObject, final int columns, View view) {
 
         final ArrayList<VKApiPhoto> photos = VKHelper.getPhotosFromJSONArray(jsonObject);
+
         albumSize = VKHelper.countOfPhotos;
         for (int i = 0; i < photos.size(); i++) {
             photos2.add(photos.get(i));
@@ -296,7 +299,8 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
             gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Fragment fragment = FragmentFullScreenViewer.newInstance(photos2, position);
+                   // Fragment fragment = FragmentFullScreenViewer.newInstance(photos2, position);
+                    Fragment fragment = new FragmentFullScreenViewer(photos2, position,sizeOfAlbum);
                     android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
                     final FragmentTransaction transaction = fragmentManager.beginTransaction();
 

@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import de.greenrobot.event.EventBus;
 import typical_if.android.Constants;
 import typical_if.android.ExtendedViewPager;
 import typical_if.android.OfflineMode;
@@ -34,6 +35,7 @@ import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.FullScreenImageAdapter;
+import typical_if.android.event.EventReturnNeedAdapter;
 
 public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPager.OnPageChangeListener {
 
@@ -41,9 +43,9 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     public static final String LIKED = "LIKED: ";
     public static final String LIKE_DELETED = "LIKE DELETED";
     private FragmentFullScreenViewer.OnFragmentInteractionListener mListener;
-    public static ArrayList<VKApiPhoto> photos;
+    public  ArrayList<VKApiPhoto> photos;
     private ExtendedViewPager imagepager;
-    public static int currentPosition;
+    public int currentPosition;
     public FullScreenImageAdapter adapter;
 
     public static final String ARG_VK_GROUP_ID = "vk_group_id";
@@ -66,23 +68,29 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     TextView albumSize;
     CheckBox cb_like;
     CheckBox cb_comment;
+    public int originalSizeOfAlbum;
     public static RelativeLayout panel;
 
-    public static FragmentFullScreenViewer newInstance(ArrayList<VKApiPhoto> photos, int currentposition) {
+//    public static FragmentFullScreenViewer newInstance(ArrayList<VKApiPhoto> photos, int currentposition) {
+//
+//        FragmentFullScreenViewer fragment = new FragmentFullScreenViewer();
+//        args = new Bundle();
+//        fragment.setArguments(args);
+//        FragmentFullScreenViewer.photos = photos;
+//        FragmentFullScreenViewer.currentPosition = currentposition;
+//
+//
+//
+//        return fragment;
+//    }
 
-        FragmentFullScreenViewer fragment = new FragmentFullScreenViewer();
-        args = new Bundle();
-        fragment.setArguments(args);
-        FragmentFullScreenViewer.photos = photos;
-        FragmentFullScreenViewer.currentPosition = currentposition;
 
 
-
-        return fragment;
-    }
-
-    public FragmentFullScreenViewer() {
-
+    public FragmentFullScreenViewer(ArrayList<VKApiPhoto> photos, int currentposition, int sizeOfAlbum) {
+    this.photos = photos;
+    this.currentPosition = currentposition;
+        this.originalSizeOfAlbum = sizeOfAlbum;
+     setArguments(new Bundle());
     }
 
     @Override
@@ -95,19 +103,14 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final Bundle arguments = getArguments();
-
+        EventBus.getDefault().register(this);
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
         FragmentWall.setDisabledMenu();
 
         rootView = inflater.inflate(R.layout.fragment_fullscreen_list, container, false);
-
-
-        // countLikes = (TextView) rootView.findViewById(R.id.count_of_likes);
-        //countComments = (TextView) rootView.findViewById(R.id.count_of_comments);
         addLike = (ImageView) rootView.findViewById(R.id.add_like);
         goToComments = (ImageView) rootView.findViewById(R.id.go_to_comments);
-        // likedOrNotLikedBox = ((CheckBox) rootView.findViewById(R.id.liked_or_not_liked_checkbox));
         photoHeader = (TextView) rootView.findViewById(R.id.photoHeader);
         photoHeader.setVisibility(View.GONE);
         counterOfPhotos = (TextView) rootView.findViewById(R.id.counterOfPhotos);
@@ -120,20 +123,23 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         imagepager = (ExtendedViewPager) rootView.findViewById(R.id.pager);
         imagepager.setOnPageChangeListener(this);
         onPageSelected(0);
-        adapter= new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,Constants.GROUP_ID,
+
+        adapter = new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, Constants.GROUP_ID,
                 Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
 
-        if (adapter==null|imagepager.getAdapter()==null){
-            adapter= new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,Constants.GROUP_ID,
-                    Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
 
-        }else {
-            adapter = new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, Constants.GROUP_ID,
-                    Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
-        }
+
+        //if (adapter==null|imagepager.getAdapter()==null){
+         //   adapter= new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,Constants.GROUP_ID,
+              //      Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
+
+       // }else {
+          //  adapter = new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, Constants.GROUP_ID,
+            //        Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
+      //  }
+
             adapter.notifyDataSetChanged();
             imagepager.setAdapter(adapter);
-
             imagepager.setCurrentItem(currentPosition);
             adapter.notifyDataSetChanged();
 
@@ -158,7 +164,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
 
         setRetainInstance(true);
-
+        Constants.queueOfAdapters.add(adapter);
         return rootView;
 
 
@@ -174,6 +180,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     public void onDestroy() {
         super.onDestroy();
         VKUIHelper.onDestroy(getActivity());
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -186,12 +193,14 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+
     }
 
 
@@ -211,10 +220,13 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             cb_comment.setText(String.valueOf(photos.get(position).comments));
 
       counterOfPhotos.setText(String.valueOf(position + 1));
-        if (VKHelper.countOfPhotos==0)
-            albumSize.setText(String.valueOf(Constants.COUNT_OF_PHOTOS));
-        else
-            albumSize.setText(String.valueOf(VKHelper.countOfPhotos));
+
+           // albumSize.setText(String.valueOf(Constants.COUNT_OF_PHOTOS));
+        if (originalSizeOfAlbum==0){
+            albumSize.setText(String.valueOf(photos.size()));
+        }
+else
+        albumSize.setText(String.valueOf(originalSizeOfAlbum));
 
 
         VKHelper.isLiked("photo",Constants.GROUP_ID, photos.get(position).id, new VKRequest.VKRequestListener() {
@@ -223,7 +235,6 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                 super.onComplete(response);
                 try {
                     JSONObject j = response.json.optJSONObject("response");
-
                     photos.get(position).user_likes = j.optInt("liked");;
                 }catch (NullPointerException ex){
 
@@ -307,6 +318,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
                             photos.get(position), Constants.USER_ID);
                     getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+
                 }else if (!VKSdk.isLoggedIn()){
                     Toast.makeText(Constants.mainActivity.getApplicationContext(),getString(R.string.you_are_not_logged_in), Toast.LENGTH_SHORT).show();
                 }
@@ -331,6 +343,13 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         public void onFragmentInteraction(Uri uri);
     }
 
+    public void onEventMainThread(EventReturnNeedAdapter event) {
+        adapter = event.adapter;
+        adapter.notifyDataSetChanged();
+        imagepager.setAdapter(adapter);
+        imagepager.setCurrentItem(currentPosition);
+        adapter.notifyDataSetChanged();
 
+    }
 
 }

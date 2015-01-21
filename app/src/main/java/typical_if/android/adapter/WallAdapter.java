@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
@@ -72,6 +73,7 @@ public class WallAdapter extends BaseAdapter {
     public static int surpriseCounter = 0;
 
 
+
     public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, String postColor, boolean isSuggested) {
         this.wall = wall;
         this.layoutInflater = inflater;
@@ -118,7 +120,11 @@ public class WallAdapter extends BaseAdapter {
                 {Color.parseColor("#ffafa084"), Color.parseColor("#ff89a790"), topColor});
         gradient.setShape(GradientDrawable.RECTANGLE);
         gradient.setCornerRadius(0.f);
-        post.setBackgroundDrawable(gradient);
+        int decode = Integer.decode("303030");
+        ColorDrawable colorDrawable = new ColorDrawable(decode);
+        post.setBackgroundDrawable(colorDrawable);
+
+//        post.setBackgroundDrawable(gradient);
     }
 
     @Override
@@ -140,7 +146,7 @@ public class WallAdapter extends BaseAdapter {
 
         final VKWallPostWrapper post = posts.get(position);
 
-        initViewHolder(viewHolder, postColor, wall, position, fragmentManager, post, context, layoutInflater);
+        initViewHolder(viewHolder, postColor, wall, position, fragmentManager, post, context, layoutInflater,false);
 
         return convertView;
     }
@@ -156,14 +162,16 @@ public class WallAdapter extends BaseAdapter {
                                       final FragmentManager fragmentManager,
                                       final VKWallPostWrapper postWrapper,
                                       final Context context,
-                                      final LayoutInflater layoutInflater) {
+                                      final LayoutInflater layoutInflater,
+                                      boolean loadSigner) {
         try {
 
-            viewHolder.extendedMenuItems.setChecked(false);
-            viewHolder.comment_like_repost_panel.setBackgroundColor(Color.parseColor(postColor));
-            ItemDataSetter.wallViewHolder = viewHolder;
+            //     viewHolder.extendedMenuItems.setChecked(false);
+            //viewHolder.comment_like_repost_panel.setBackgroundColor(Color.parseColor(postColor));
+              ItemDataSetter.wallViewHolder = viewHolder;
             ItemDataSetter.postColor = postColor;
             ItemDataSetter.wall = wall;
+
             ItemDataSetter.position = position;
             ItemDataSetter.fragmentManager = fragmentManager;
 
@@ -182,8 +190,10 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.cb_post_repost.setText(" " + String.valueOf(post.reposts_count));
 
             viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
+           // if ()
+            viewHolder.author_of_post.setText(ItemDataSetter.setNameOfPostAuthor(post.signer_id));
 
-            viewHolder.postFeatureLayout.setBackgroundColor(Color.parseColor(postColor));
+            //   viewHolder.postFeatureLayout.setBackgroundColor(Color.parseColor(postColor));
 
             final Animation.AnimationListener animationListener = new Animation.AnimationListener() {
                 @Override
@@ -329,179 +339,181 @@ public class WallAdapter extends BaseAdapter {
 
 
             if (!isSuggested) {
-                viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        EventBus.getDefault().post(new EventShowReportDialog(wall.group.id, post.id));
-                    }
-                });
+//                viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        EventBus.getDefault().post(new EventShowReportDialog(wall.group.id, post.id));
+//                    }
+//                });
 
 
-                viewHolder.extendedMenuItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked) {
+//                viewHolder.extendedMenuItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                    @Override
+//                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                        if (isChecked) {
+//
+//                            final Animation slideDown = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_down_animation);
+//                            slideDown.setAnimationListener(animationListener);
+//                            viewHolder.postFeatureLayout.startAnimation(slideDown);
+//                            viewHolder.postFeatureLayout.setVisibility(View.VISIBLE);
+//                            viewHolder.postFeatureLayout.setEnabled(true);
+//                        } else {
+//
+//                            final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
+//                            slideUp.setAnimationListener(animationListener);
+//                            viewHolder.postFeatureLayout.startAnimation(slideUp);
+//                            viewHolder.postFeatureLayout.setVisibility(View.INVISIBLE);
+//                            viewHolder.postFeatureLayout.setEnabled(false);
+//                        }
+//                    }
 
-                            final Animation slideDown = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_down_animation);
-                            slideDown.setAnimationListener(animationListener);
-                            viewHolder.postFeatureLayout.startAnimation(slideDown);
-                            viewHolder.postFeatureLayout.setVisibility(View.VISIBLE);
-                            viewHolder.postFeatureLayout.setEnabled(true);
-                        } else {
+                //   });
 
-                            final Animation slideUp = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.slide_up_animation);
-                            slideUp.setAnimationListener(animationListener);
-                            viewHolder.postFeatureLayout.startAnimation(slideUp);
-                            viewHolder.postFeatureLayout.setVisibility(View.INVISIBLE);
-                            viewHolder.postFeatureLayout.setEnabled(false);
+//                viewHolder.button_comment.setVisibility(View.VISIBLE);
+//                viewHolder.button_repost.setVisibility(View.VISIBLE);
+//                viewHolder.button_like.setVisibility(View.VISIBLE);
+//                viewHolder.cb_post_repost.setVisibility(View.VISIBLE);
+//                viewHolder.cb_post_comment.setVisibility(View.VISIBLE);
+//                viewHolder.cb_post_like.setVisibility(View.VISIBLE);
+
+                //} else {
+//                viewHolder.extendedMenuItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//                    @Override
+//                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                        buttonView.setChecked(false);
+//                        EventBus.getDefault().post(new EventShowSuggestPostDialog(wall.group.id * -1, post));
+//                    }
+//                });
+
+//                viewHolder.button_comment.setVisibility(View.INVISIBLE);
+//                viewHolder.button_repost.setVisibility(View.INVISIBLE);
+//                viewHolder.button_like.setVisibility(View.INVISIBLE);
+//                viewHolder.cb_post_repost.setVisibility(View.INVISIBLE);
+//                viewHolder.cb_post_comment.setVisibility(View.INVISIBLE);
+//                viewHolder.cb_post_like.setVisibility(View.INVISIBLE);
+                // }
+
+                viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);
+                if (postWrapper.postTextChecker) {
+                    ItemDataSetter.setText(post.text, viewHolder.postTextLayout);
+                }
+
+                viewHolder.copyHistoryLayout.setVisibility(postWrapper.copyHistoryContainerVisibility);
+                if (postWrapper.copyHistoryChecker) {
+                    final VKApiPost copyHistory = post.copy_history.get(0);
+                    VKApiCommunity group;
+                    for (int i = 0; i < wall.groups.size(); i++) {
+                        group = wall.groups.get(i);
+                        if (copyHistory.from_id * (-1) == group.id) {
+                            copy_history_title = group.name;
+                            copy_history_logo = group.photo_100;
+                            copy_history_name = group.screen_name;
                         }
                     }
 
-                });
-
-                viewHolder.button_comment.setVisibility(View.VISIBLE);
-                viewHolder.button_repost.setVisibility(View.VISIBLE);
-                viewHolder.button_like.setVisibility(View.VISIBLE);
-                viewHolder.cb_post_repost.setVisibility(View.VISIBLE);
-                viewHolder.cb_post_comment.setVisibility(View.VISIBLE);
-                viewHolder.cb_post_like.setVisibility(View.VISIBLE);
-
-            } else {
-                viewHolder.extendedMenuItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        buttonView.setChecked(false);
-                        EventBus.getDefault().post(new EventShowSuggestPostDialog(wall.group.id * -1, post));
-                    }
-                });
-
-                viewHolder.button_comment.setVisibility(View.INVISIBLE);
-                viewHolder.button_repost.setVisibility(View.INVISIBLE);
-                viewHolder.button_like.setVisibility(View.INVISIBLE);
-                viewHolder.cb_post_repost.setVisibility(View.INVISIBLE);
-                viewHolder.cb_post_comment.setVisibility(View.INVISIBLE);
-                viewHolder.cb_post_like.setVisibility(View.INVISIBLE);
-            }
-
-            viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);
-            if (postWrapper.postTextChecker) {
-                ItemDataSetter.setText(post.text, viewHolder.postTextLayout);
-            }
-
-            viewHolder.copyHistoryLayout.setVisibility(postWrapper.copyHistoryContainerVisibility);
-            if (postWrapper.copyHistoryChecker) {
-                final VKApiPost copyHistory = post.copy_history.get(0);
-                VKApiCommunity group;
-                for (int i = 0; i < wall.groups.size(); i++) {
-                    group = wall.groups.get(i);
-                    if (copyHistory.from_id * (-1) == group.id) {
-                        copy_history_title = group.name;
-                        copy_history_logo = group.photo_100;
-                        copy_history_name = group.screen_name;
-                    }
-                }
-
-                if (copy_history_title.equals("") && copy_history_logo.equals("")) {
-                    VKApiUser profile;
-                    for (int i = 0; i < wall.profiles.size(); i++) {
-                        profile = wall.profiles.get(i);
-                        if (copyHistory.from_id == profile.id) {
-                            copy_history_title = profile.last_name + " " + profile.first_name;
-                            copy_history_logo = profile.photo_100;
-                            copy_history_name = profile.screen_name;
+                    if (copy_history_title.equals("") && copy_history_logo.equals("")) {
+                        VKApiUser profile;
+                        for (int i = 0; i < wall.profiles.size(); i++) {
+                            profile = wall.profiles.get(i);
+                            if (copyHistory.from_id == profile.id) {
+                                copy_history_title = profile.last_name + " " + profile.first_name;
+                                copy_history_logo = profile.photo_100;
+                                copy_history_name = profile.screen_name;
+                            }
                         }
                     }
-                }
 
-                ViewGroup copyHistoryContainer = ItemDataSetter.getPreparedView(viewHolder.copyHistoryLayout, R.layout.copy_history_layout);
-                //RelativeLayout leftLine = (RelativeLayout) copyHistoryContainer.findViewById(R.id.leftLine);
-                //leftLine.setVisibility(View.VISIBLE);
-                //leftLine.setBackgroundColor(Color.parseColor(postColor));
+                    ViewGroup copyHistoryContainer = ItemDataSetter.getPreparedView(viewHolder.copyHistoryLayout, R.layout.copy_history_layout);
+                    //RelativeLayout leftLine = (RelativeLayout) copyHistoryContainer.findViewById(R.id.leftLine);
+                    //leftLine.setVisibility(View.VISIBLE);
+                    //leftLine.setBackgroundColor(Color.parseColor(postColor));
 
-                LinearLayout copyHistoryList = (LinearLayout) copyHistoryContainer.getChildAt(0);
-                RelativeLayout copyHistoryLayout = (RelativeLayout) copyHistoryList.getChildAt(0);
-                final String finalCopy_history_name = copy_history_name;
-                copyHistoryLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Uri uri = Uri.parse("http://vk.com/" + finalCopy_history_name);
-                        context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    LinearLayout copyHistoryList = (LinearLayout) copyHistoryContainer.getChildAt(0);
+                    RelativeLayout copyHistoryLayout = (RelativeLayout) copyHistoryList.getChildAt(0);
+                    final String finalCopy_history_name = copy_history_name;
+                    copyHistoryLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Uri uri = Uri.parse("http://vk.com/" + finalCopy_history_name);
+                            context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        }
+                    });
+                    ((TextView) copyHistoryLayout.getChildAt(1)).setText(copy_history_title);
+                    ((TextView) copyHistoryLayout.getChildAt(2)).setText(ItemDataSetter.getFormattedDate(copyHistory.date));
+
+
+                    ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)), TIFApp.additionalOptions);
+
+                    RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryTextLayout);
+                    parentCopyHistoryTextContainer.setVisibility(postWrapper.copyHistoryTextContainerVisibility);
+                    if (postWrapper.copyHistoryTextChecker) {
+                        ItemDataSetter.setText(copyHistory.text, parentCopyHistoryTextContainer);
                     }
-                });
-                ((TextView) copyHistoryLayout.getChildAt(1)).setText(copy_history_title);
-                ((TextView) copyHistoryLayout.getChildAt(2)).setText(ItemDataSetter.getFormattedDate(copyHistory.date));
 
-
-                ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)), TIFApp.additionalOptions);
-
-                RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryTextLayout);
-                parentCopyHistoryTextContainer.setVisibility(postWrapper.copyHistoryTextContainerVisibility);
-                if (postWrapper.copyHistoryTextChecker) {
-                    ItemDataSetter.setText(copyHistory.text, parentCopyHistoryTextContainer);
-                }
-
-                LinearLayout parentCopyHistoryAttachmentsContainer = (LinearLayout) copyHistoryList.findViewById(R.id.copyHistoryAttachmentsLayout);
-                parentCopyHistoryAttachmentsContainer.setVisibility(postWrapper.copyHistoryAttachmentsContainerVisibility);
-                if (postWrapper.copyHistoryAttachmentsChecker) {
-                    ItemDataSetter.setAttachemnts(copyHistory.attachments, parentCopyHistoryAttachmentsContainer, 0);
-                }
-
-                RelativeLayout copyHistoryGeoContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryGeoLayout);
-                copyHistoryGeoContainer.setVisibility(postWrapper.copyHistoryGeoContainerVisibility);
-                if (postWrapper.copyHistoryGeoChecker) {
-                    ItemDataSetter.setGeo(copyHistory.geo, copyHistoryGeoContainer);
-                }
-
-                RelativeLayout copyHistorySignedContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistorySignedLayout);
-                copyHistorySignedContainer.setVisibility(postWrapper.copyHistorySignedContainerVisibility);
-                if (postWrapper.copyHistorySignedChecker) {
-                    ItemDataSetter.setSigned(copyHistory.signer_id, copyHistorySignedContainer);
-                }
-
-                viewHolder.copyHistoryLayout.addView(copyHistoryContainer);
-            }
-
-            viewHolder.postAttachmentsLayout.setVisibility(postWrapper.postAttachmentsVisibility);
-            if (postWrapper.postAttachmentsChecker) {
-                ItemDataSetter.setAttachemnts(post.attachments, viewHolder.postAttachmentsLayout, 1);
-            }
-
-            viewHolder.postGeoLayout.setVisibility(postWrapper.postGeoVisibility);
-            if (postWrapper.postGeoChecker) {
-                ItemDataSetter.setGeo(post.geo, viewHolder.postGeoLayout);
-            }
-
-            viewHolder.postSignedLayout.setVisibility(postWrapper.postSignedVisibility);
-            if (postWrapper.postSignedChecker) {
-                ItemDataSetter.setSigned(post.signer_id, viewHolder.postSignedLayout);
-            }
-
-            viewHolder.button_comment.setTag(new ParamsHolder(position, postWrapper));
-
-            if (OfflineMode.isOnline(getApplicationContext()) | OfflineMode.isJsonNull(post.id)) {
-                viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        ParamsHolder paramsHolder = (ParamsHolder) v.getTag();
-                        FragmentComments fragment = FragmentComments.newInstanceForWall(postColor, paramsHolder.position, wall, paramsHolder.post);
-                        fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                    LinearLayout parentCopyHistoryAttachmentsContainer = (LinearLayout) copyHistoryList.findViewById(R.id.copyHistoryAttachmentsLayout);
+                    parentCopyHistoryAttachmentsContainer.setVisibility(postWrapper.copyHistoryAttachmentsContainerVisibility);
+                    if (postWrapper.copyHistoryAttachmentsChecker) {
+                        ItemDataSetter.setAttachemnts(copyHistory.attachments, parentCopyHistoryAttachmentsContainer, 0);
                     }
-                });
-            } else {
-                viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
+
+                    RelativeLayout copyHistoryGeoContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryGeoLayout);
+                    copyHistoryGeoContainer.setVisibility(postWrapper.copyHistoryGeoContainerVisibility);
+                    if (postWrapper.copyHistoryGeoChecker) {
+                        ItemDataSetter.setGeo(copyHistory.geo, copyHistoryGeoContainer);
                     }
-                });
+
+                    RelativeLayout copyHistorySignedContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistorySignedLayout);
+                    copyHistorySignedContainer.setVisibility(postWrapper.copyHistorySignedContainerVisibility);
+                    if (postWrapper.copyHistorySignedChecker) {
+                        ItemDataSetter.setSigned(copyHistory.signer_id, copyHistorySignedContainer);
+                    }
+
+                    viewHolder.copyHistoryLayout.addView(copyHistoryContainer);
+                }
+
+                viewHolder.postAttachmentsLayout.setVisibility(postWrapper.postAttachmentsVisibility);
+                if (postWrapper.postAttachmentsChecker) {
+                    ItemDataSetter.setAttachemnts(post.attachments, viewHolder.postAttachmentsLayout, 1);
+                }
+
+                viewHolder.postGeoLayout.setVisibility(postWrapper.postGeoVisibility);
+                if (postWrapper.postGeoChecker) {
+                    ItemDataSetter.setGeo(post.geo, viewHolder.postGeoLayout);
+                }
+
+                viewHolder.postSignedLayout.setVisibility(postWrapper.postSignedVisibility);
+                if (postWrapper.postSignedChecker) {
+                    ItemDataSetter.setSigned(post.signer_id, viewHolder.postSignedLayout);
+                }
+
+                viewHolder.button_comment.setTag(new ParamsHolder(position, postWrapper));
+
+                if (OfflineMode.isOnline(getApplicationContext()) | OfflineMode.isJsonNull(post.id)) {
+                    viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            ParamsHolder paramsHolder = (ParamsHolder) v.getTag();
+                            FragmentComments fragment = FragmentComments.newInstanceForWall(postColor, paramsHolder.position, wall, paramsHolder.post);
+
+                            fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                        }
+                    });
+                } else {
+                    viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+
+
             }
-
-
-        } catch (Throwable a) {
+        } catch(Throwable a){
 
         }
     }
-
     public static class ParamsHolder {
         public final int position;
         public final VKWallPostWrapper post;
@@ -529,9 +541,9 @@ public class WallAdapter extends BaseAdapter {
         public final RelativeLayout postPollLayout;
         public final TextView postUserComment;
         public final RelativeLayout postFeatureLayout;
-        public final CheckBox extendedMenuItems;
+     //   public final CheckBox extendedMenuItems;
 
-        public final RelativeLayout postExpandButtonLayout;
+      //  public final RelativeLayout postExpandButtonLayout;
 
         public final CheckBox cb_post_like;
         public final CheckBox cb_post_repost;
@@ -540,12 +552,13 @@ public class WallAdapter extends BaseAdapter {
         public final Button button_repost;
         public final Button button_comment;
         public final TextView txt_post_date;
-        public final RelativeLayout comment_like_repost_panel;
+      //  public final RelativeLayout comment_like_repost_panel;
 
         public final ImageView img_fixed_post;
+        public final TextView author_of_post;
 
 
-        public final ImageView img_post_other;
+       // public final ImageView img_post_other;
 
         public ViewHolder(View convertView) {
             this.postAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.postAttachmentsLayout);
@@ -561,12 +574,13 @@ public class WallAdapter extends BaseAdapter {
             this.postSignedLayout = (RelativeLayout) convertView.findViewById(R.id.postSignedLayout);
             this.postPollLayout = (RelativeLayout) convertView.findViewById(R.id.postPollLayout);
             this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
-            this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other_actions);
+        //    this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other_actions);
             this.postFeatureLayout = (RelativeLayout) convertView.findViewById(R.id.postFeaturesLayout);
-            this.extendedMenuItems = (CheckBox) convertView.findViewById(R.id.expand_post_action_bar);
+           // this.extendedMenuItems = (CheckBox) convertView.findViewById(R.id.expand_post_action_bar);
+            this.author_of_post = (TextView)convertView.findViewById(R.id.autor_post_text);
 
 
-            this.postExpandButtonLayout = (RelativeLayout) convertView.findViewById(R.id.postExpandButtonLayout);
+          //  this.postExpandButtonLayout = (RelativeLayout) convertView.findViewById(R.id.postExpandButtonLayout);
 
             this.cb_post_like = (CheckBox) convertView.findViewById(R.id.cb_like);
             this.cb_post_comment = (CheckBox) convertView.findViewById(R.id.cb_comment);
@@ -576,7 +590,7 @@ public class WallAdapter extends BaseAdapter {
             this.button_repost = ((Button) convertView.findViewById(R.id.button_repost));
             this.txt_post_date = ((TextView) convertView.findViewById(R.id.txt_post_date_of_comment));
             this.postUserComment = (TextView) convertView.findViewById(R.id.post_user_comment_text);
-            this.comment_like_repost_panel = (RelativeLayout) convertView.findViewById(R.id.comment_like_repost_panel);
+           // this.comment_like_repost_panel = (RelativeLayout) convertView.findViewById(R.id.comment_like_repost_panel);
 
         }
     }

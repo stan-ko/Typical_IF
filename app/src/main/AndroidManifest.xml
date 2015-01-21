@@ -17,12 +17,27 @@
         android:anyDensity="true"
         android:requiresSmallestWidthDp="600"
         />
+
+    <compatible-screens>
+        <!-- all small size screens -->
+        <screen android:screenSize="small" android:screenDensity="ldpi" />
+        <screen android:screenSize="small" android:screenDensity="mdpi" />
+        <screen android:screenSize="small" android:screenDensity="hdpi" />
+        <screen android:screenSize="small" android:screenDensity="xhdpi" />
+        <!-- all normal size screens -->
+        <screen android:screenSize="normal" android:screenDensity="ldpi" />
+        <screen android:screenSize="normal" android:screenDensity="mdpi" />
+        <screen android:screenSize="normal" android:screenDensity="hdpi" />
+        <screen android:screenSize="normal" android:screenDensity="xhdpi" />
+    </compatible-screens>
+
+
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
     <application
         android:allowBackup="true"
-        android:icon="@drawable/old_logo"
+        android:icon="@drawable/image_actionbar_if"
         android:theme="@style/AppTheme"
         android:name=".TIFApp">
         <service

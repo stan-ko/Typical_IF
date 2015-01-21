@@ -53,7 +53,7 @@ public class FragmentVideoView extends Fragment {
         // Execute StreamVideo AsyncTask
         // Create a progressbar
         pDialog = new ProgressDialog(getActivity());
-        // Set progressbar title
+        // Set progressbar navDrawTitle
         pDialog.setTitle("Android Video Streaming Tutorial");
         // Set progressbar message
         pDialog.setMessage("Buffering...");

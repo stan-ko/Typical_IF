@@ -3,6 +3,7 @@ package typical_if.android.fragment;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +68,7 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
 
     View v;
+    TextView navDrawTitle;
     List<String> listDataHeader;
     SparseArray<List<String>> listDataChild;
 
@@ -73,6 +76,8 @@ public class NavigationDrawerFragment extends Fragment {
 
     public NavigationDrawerFragment() {
     }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -102,6 +107,9 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView = (AnimatedExpandableListView) v.findViewById(R.id.navigation_drawer_exp_list);
         mDrawerListView.setGroupIndicator(null);
 
+        navDrawTitle = (TextView) v.findViewById(R.id.navigation_drawer_title);
+        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/segoescb.ttf");
+        navDrawTitle.setTypeface(font);
 
         prepareListData();
 
@@ -208,6 +216,7 @@ public class NavigationDrawerFragment extends Fragment {
         listDataHeader.add(getString(R.string.menu_group_title_events));
         listDataHeader.add("");
         listDataHeader.add(getString(R.string.settings));
+        listDataHeader.add(getString(R.string.menu_group_about_us));
         listDataHeader.add(getString(R.string.menu_group_exit));
         if (Constants.refresherDrawerCounter>0){
             refreshDrawer();
@@ -225,6 +234,7 @@ public class NavigationDrawerFragment extends Fragment {
         listDataHeader.add(getString(R.string.menu_group_title_events));
         listDataHeader.add("");
         listDataHeader.add(getString(R.string.settings));
+        listDataHeader.add(getString(R.string.menu_group_about_us));
         listDataHeader.add(getString(R.string.menu_group_exit));
     }
 
@@ -411,6 +421,17 @@ public class NavigationDrawerFragment extends Fragment {
     private ActionBar getActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
     }
+
+    public void toggle() {
+        if (isDrawerOpen()) {
+            closeDrawer();
+        } else {
+            openDrawer();
+        }
+    }
+
+
+
 
     public void openDrawer() {
         mDrawerLayout.openDrawer(mFragmentContainerView);
