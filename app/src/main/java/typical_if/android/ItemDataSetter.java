@@ -458,20 +458,25 @@ public class ItemDataSetter {
             tempSpannable.append(spannable);
             final SpannableStringBuilder tempModifySpannable = tempSpannable.insert(297, "...").delete(300, tempSpannable.length());
             mainText.setText(tempModifySpannable);
+
+
+
             showAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        if (mainText.onPreDraw()) {
-                            mainText.setText(originalSpannable);
-                        }
-//                        expand(mainText, originalSpannable);
-                        showAll.setText(Constants.SHOW_MIN_TEXT);
-                    } else {
-                        mainText.setText(tempModifySpannable);
-                        showAll.setText(Constants.SHOW_ALL_TEXT);
-//                        collapse(mainText, tempModifySpannable);
-                    }
+
+
+//                    if (isChecked) {
+//                        if (mainText.onPreDraw()) {
+//                            mainText.setText(originalSpannable);
+//                        }
+////                        expand(mainText, originalSpannable);
+//                        showAll.setText(Constants.SHOW_MIN_TEXT);
+//                    } else {
+//                        mainText.setText(tempModifySpannable);
+//                        showAll.setText(Constants.SHOW_ALL_TEXT);
+////                        collapse(mainText, tempModifySpannable);
+//                    }
                 }
             });
         } else {

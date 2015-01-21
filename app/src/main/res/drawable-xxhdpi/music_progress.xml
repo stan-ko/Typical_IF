@@ -1,0 +1,13 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@android:id/background"
+        android:drawable="@drawable/music_progress_bg"/>
+    <item android:id="@android:id/progress">
+        <!--<clip android:drawable="@drawable/music_progress_tint" />-->
+        <scale
+            android:drawable="@drawable/music_progress_tint"
+            android:scaleWidth="100%" />
+    </item>
+
+</layer-list>
