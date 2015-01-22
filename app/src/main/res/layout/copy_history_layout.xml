@@ -10,32 +10,31 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/leftLine"
-        android:layout_toRightOf="@+id/leftLine"
         android:visibility="visible"
         android:id="@+id/linearLayout"
-        android:background="@drawable/element_selector"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp">
+        android:layout_marginBottom="5dp">
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="96dp"
+            android:layout_height="wrap_content"
             android:background="@drawable/element_selector"
             android:visibility="visible"
-            android:paddingTop="5dp">
+            android:paddingTop="5dp"
+            android:layout_marginBottom="5dp">
 
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:id="@+id/img_copy_history_logo"
-                android:layout_marginLeft="24dp"
+                android:visibility="visible"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="21dp"
-                android:visibility="visible" />
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="7dp"
+                android:layout_marginBottom="5dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -48,7 +47,8 @@
                 android:layout_toRightOf="@+id/img_copy_history_logo"
                 android:layout_toEndOf="@+id/img_copy_history_logo"
                 android:layout_marginLeft="23dp"
-                android:textSize="15dp" />
+                android:textSize="15dp"
+                android:layout_marginRight="5dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -93,7 +93,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/copyHistoryAttachmentsLayout"
             android:orientation="vertical"
-            android:visibility="gone"
+            android:visibility="visible"
             android:baselineAligned="false"
             android:background="@drawable/element_selector">
 
@@ -167,13 +167,5 @@
             android:layout_marginRight="5dp"/>
 
     </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="4dp"
-        android:layout_height="fill_parent"
-        android:id="@+id/leftLine"
-        android:visibility="gone"
-        android:layout_alignBottom="@+id/linearLayout"
-        android:background="@color/transparent" />
 
 </RelativeLayout>
