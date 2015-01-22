@@ -41,13 +41,13 @@
                         android:visibility="gone" >
 
                         <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             android:id="@+id/imageView7"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
-                            android:src="@android:drawable/ic_media_play"
-                            android:background="#ff404040"
+                            android:src="@drawable/ic_video_post_play"
+
                             android:padding="2dp" />
 
                         <TextView
@@ -55,7 +55,7 @@
                             android:layout_height="22dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:id="@+id/textView13"
-                            android:background="#ff404040"
+                            android:background="@color/transparent"
                             android:gravity="bottom|right"
                             android:textColor="#ffffffff"
                             android:textSize="18dp"
@@ -69,7 +69,7 @@
                             android:layout_height="22dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:id="@+id/textView14"
-                            android:background="#ff404040"
+                            android:background="@color/transparent"
                             android:textColor="#ffffffff"
                             android:textSize="18dp"
                             android:layout_alignParentTop="false"
@@ -105,13 +105,13 @@
                         android:visibility="gone" >
 
                         <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             android:id="@+id/imageView8"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
-                            android:src="@android:drawable/ic_media_play"
-                            android:background="#ff404040"
+                            android:src="@drawable/ic_video_post_play"
+
                             android:padding="2dp" />
 
                         <TextView
@@ -119,7 +119,7 @@
                             android:layout_height="22dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:id="@+id/textView15"
-                            android:background="#ff404040"
+                            android:background="@color/transparent"
                             android:gravity="bottom|right"
                             android:textColor="#ffffffff"
                             android:textSize="18dp"
@@ -133,7 +133,7 @@
                             android:layout_height="22dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:id="@+id/textView16"
-                            android:background="#ff404040"
+                            android:background="@color/transparent"
                             android:textColor="#ffffffff"
                             android:textSize="18dp"
                             android:layout_alignParentTop="false"
@@ -183,13 +183,13 @@
                         android:layout_alignEnd="@+id/img_photo_4_3" >
 
                         <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             android:id="@+id/imageView37"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
-                            android:src="@android:drawable/ic_media_play"
-                            android:background="#ff404040"
+                            android:src="@drawable/ic_video_post_play"
+
                             android:padding="2dp" />
 
                         <TextView
@@ -197,7 +197,7 @@
                             android:layout_height="22dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:id="@+id/textView17"
-                            android:background="#ff404040"
+                            android:background="@color/transparent"
                             android:gravity="bottom|right"
                             android:textColor="#ffffffff"
                             android:textSize="18dp"
@@ -211,7 +211,7 @@
                             android:layout_height="22dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:id="@+id/textView18"
-                            android:background="#ff404040"
+                            android:background="@color/transparent"
                             android:textColor="#ffffffff"
                             android:textSize="18dp"
                             android:layout_alignParentTop="false"
@@ -247,13 +247,13 @@
                         android:layout_alignEnd="@+id/img_photo_4_4" >
 
                         <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
                             android:id="@+id/imageView38"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
-                            android:src="@android:drawable/ic_media_play"
-                            android:background="#ff404040"
+                            android:src="@drawable/ic_video_post_play"
+
                             android:padding="2dp" />
 
                         <TextView
@@ -261,7 +261,7 @@
                             android:layout_height="22dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:id="@+id/textView19"
-                            android:background="#ff404040"
+                            android:background="@color/transparent"
                             android:gravity="bottom|right"
                             android:textColor="#ffffffff"
                             android:textSize="18dp"
@@ -275,7 +275,7 @@
                             android:layout_height="22dp"
                             android:textAppearance="?android:attr/textAppearanceMedium"
                             android:id="@+id/textView20"
-                            android:background="#ff404040"
+                            android:background="@color/transparent"
                             android:textColor="#ffffffff"
                             android:textSize="18dp"
                             android:layout_alignParentTop="false"

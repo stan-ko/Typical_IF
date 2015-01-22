@@ -32,13 +32,13 @@
                 android:layout_alignParentBottom="true">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:id="@+id/imageView6"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:src="@android:drawable/ic_media_play"
-                    android:background="#ff404040"
+                    android:src="@drawable/ic_video_post_play"
+
                     android:padding="2dp" />
 
                 <TextView
@@ -46,7 +46,7 @@
                     android:layout_height="22dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:id="@+id/textView6"
-                    android:background="#ff404040"
+                    android:background="@color/transparent"
                     android:gravity="bottom|right"
                     android:textColor="#ffffffff"
                     android:textSize="18dp"
@@ -60,7 +60,7 @@
                     android:layout_height="22dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:id="@+id/vasil_ref"
-                    android:background="#ff404040"
+
                     android:textColor="#ffffffff"
                     android:textSize="18dp"
                     android:layout_alignParentTop="false"
@@ -98,13 +98,13 @@
                 android:id="@+id/relativeLayout4" >
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:id="@+id/imageView4"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
-                    android:src="@android:drawable/ic_media_play"
-                    android:background="#ff404040"
+                    android:src="@drawable/ic_video_post_play"
+
                     android:padding="2dp" />
 
                 <TextView
@@ -112,7 +112,7 @@
                     android:layout_height="22dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:id="@+id/lyubomir_ref"
-                    android:background="#ff404040"
+                    android:background="@color/transparent"
                     android:gravity="bottom|right"
                     android:textColor="#ffffffff"
                     android:textSize="18dp"
@@ -126,7 +126,7 @@
                     android:layout_height="22dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:id="@+id/textView11"
-                    android:background="#ff404040"
+                    android:background="@color/transparent"
                     android:textColor="#ffffffff"
                     android:textSize="18dp"
                     android:layout_alignParentTop="false"
