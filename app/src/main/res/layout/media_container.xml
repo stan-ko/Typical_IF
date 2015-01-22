@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="false"
                 android:layout_alignParentEnd="false"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:layout_alignParentTop="false"
                 android:layout_alignBottom="@+id/img_photo_1">
 
@@ -43,36 +43,38 @@
                     android:padding="2dp" />
 
                 <TextView
-                    android:layout_width="90dp"
-                    android:layout_height="22dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:background="@color/transparent"
                     android:gravity="bottom|right"
                     android:textColor="#ffffffff"
-                    android:textSize="18dp"
+                    android:textSize="13dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
-                    android:paddingRight="8dp"/>
+                    android:paddingRight="5dp"/>
 
                 <TextView
-                    android:layout_width="90dp"
-                    android:layout_height="22dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:id="@+id/viktor_ref"
                     android:background="@color/transparent"
                     android:textColor="#ffffffff"
-                    android:textSize="18dp"
+                    android:textSize="13dp"
                     android:layout_alignParentTop="false"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="false"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:paddingLeft="8dp"
+                    android:paddingLeft="5dp"
                     android:singleLine="true"
-                    android:gravity="left"
-                    android:paddingRight="8dp" />
+                    android:gravity="left|bottom"
+                    android:paddingRight="5dp"
+                    android:layout_marginRight="5dp"
+                    android:visibility="visible" />
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
