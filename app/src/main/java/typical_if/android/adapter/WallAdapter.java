@@ -146,7 +146,7 @@ public class WallAdapter extends BaseAdapter {
 
         final VKWallPostWrapper post = posts.get(position);
 
-        initViewHolder(viewHolder, postColor, wall, position, fragmentManager, post, context, layoutInflater,false);
+        initViewHolder(viewHolder, postColor, wall, position, fragmentManager, post, context, layoutInflater);
 
         return convertView;
     }
@@ -162,9 +162,9 @@ public class WallAdapter extends BaseAdapter {
                                       final FragmentManager fragmentManager,
                                       final VKWallPostWrapper postWrapper,
                                       final Context context,
-                                      final LayoutInflater layoutInflater,
-                                      boolean loadSigner) {
-        try {
+                                      final LayoutInflater layoutInflater
+                                      ) {
+        //try {
 
             //     viewHolder.extendedMenuItems.setChecked(false);
             //viewHolder.comment_like_repost_panel.setBackgroundColor(Color.parseColor(postColor));
@@ -275,7 +275,9 @@ public class WallAdapter extends BaseAdapter {
                 viewHolder.cb_post_repost.setOnClickListener(null);
             } else {
                 viewHolder.cb_post_repost.setChecked(false);
-                if (VKSdk.isLoggedIn())
+                if (VKSdk.isLoggedIn()) {
+
+
                     viewHolder.button_repost.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -341,10 +343,10 @@ public class WallAdapter extends BaseAdapter {
                             }
                         }
                     });
+                }
             }
 
-
-            if (!isSuggested) {
+//            if (!isSuggested) {
 //                viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
@@ -398,6 +400,8 @@ public class WallAdapter extends BaseAdapter {
 //                viewHolder.cb_post_comment.setVisibility(View.INVISIBLE);
 //                viewHolder.cb_post_like.setVisibility(View.INVISIBLE);
                 // }
+//            }else {}
+
 
                 viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);
                 if (postWrapper.postTextChecker) {
@@ -489,12 +493,13 @@ public class WallAdapter extends BaseAdapter {
 
                 viewHolder.postSignedLayout.setVisibility(postWrapper.postSignedVisibility);
                 if (postWrapper.postSignedChecker) {
-                    ItemDataSetter.setSigned(post.signer_id, viewHolder.postSignedLayout);
+                    ItemDataSetter.setNameOfPostAuthor(post.signer_id);
                 }
 
-                viewHolder.button_comment.setTag(new ParamsHolder(position, postWrapper));
+               viewHolder.button_comment.setTag(new ParamsHolder(position, postWrapper));
 
                 if (OfflineMode.isOnline(getApplicationContext()) | OfflineMode.isJsonNull(post.id)) {
+                    String flag = "true";
                     viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -505,7 +510,8 @@ public class WallAdapter extends BaseAdapter {
                         }
                     });
                 } else {
-                    viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
+                    String flag = "false";
+                    viewHolder.button_comment.setOnClickListener (new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
@@ -515,10 +521,11 @@ public class WallAdapter extends BaseAdapter {
 
 
 
-            }
-        } catch(Throwable a){
 
-        }
+//        } catch(NullPointerException a){
+//            a.printStackTrace();
+//            throw new NullPointerException(a.getCause().toString());
+//        }
     }
     public static class ParamsHolder {
         public final int position;

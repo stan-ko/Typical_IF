@@ -145,6 +145,12 @@
         <item>Document</item>
     </string-array>
 
+    <string-array name="menu">
+        <item>Menu</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 
 
 

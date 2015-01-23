@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCaptchaDialog;
@@ -45,7 +46,7 @@ import typical_if.android.fragment.NavigationDrawerFragment;
 public class MainActivity extends DialogActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         FragmentFullScreenViewer.OnFragmentInteractionListener,
-        FragmentComments.OnFragmentInteractionListener {
+        FragmentComments.OnFragmentInteractionListener,ActionBar.OnNavigationListener {
 
 
 
@@ -54,10 +55,14 @@ public class MainActivity extends DialogActivity implements
     private static final int PICK_FROM_CAMERA = 1;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     public NavigationDrawerFragment mNavigationDrawerFragment;
+    String[] data = new String[] { "one", "two", "three" };
+    ArrayAdapter<String> adapter ;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         try {
             if (OfflineMode.loadInt("surprise")<15){
                 OfflineMode.saveInt(0, "surprise");
@@ -66,8 +71,10 @@ public class MainActivity extends DialogActivity implements
 
 
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+         setContentView(R.layout.activity_main);
 
-        setContentView(R.layout.activity_main);
+
+
 
         Constants.mainActivity = this;
         Constants.myIntent = new Intent(this, AudioPlayerService.class);
@@ -96,6 +103,9 @@ public class MainActivity extends DialogActivity implements
                 }
             }
         });
+
+
+
     }
 
     public long setGroupId(final int clickedPosition) {
@@ -143,10 +153,14 @@ public class MainActivity extends DialogActivity implements
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
         actionBar.setIcon(mIcon);
+        adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, data);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        actionBar.setListNavigationCallbacks(adapter, this);
     }
 
     @Override
@@ -344,6 +358,11 @@ public class MainActivity extends DialogActivity implements
                 AudioPlayer.progressBar(Constants.previousSeekBarState).interrupt();
             }
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(int i, long l) {
+        return false;
     }
 }
 
