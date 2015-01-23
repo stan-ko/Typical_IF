@@ -1,5 +1,6 @@
 package typical_if.android;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -282,7 +283,7 @@ public class ItemDataSetter {
         } else {
             ((TextView) pollContainer.getChildAt(1)).setText(Constants.POLL_ANONYMOUS + " " + poll.votes);
         }
-        ((ImageView) pollContainer.getChildAt(2)).setBackgroundColor(Color.parseColor(postColor));
+
 
         pollContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -594,7 +595,7 @@ public class ItemDataSetter {
     public static void setWikiPage(RelativeLayout parent, final VKApiWikiPage wikiPage) {
         ViewGroup wikiPageContainer = getPreparedView(parent, R.layout.wiki_page_container);
 
-        wikiPageContainer.getChildAt(0).setBackgroundColor(Color.parseColor(postColor));
+   //     wikiPageContainer.getChildAt(0).setBackgroundColor(Color.parseColor(postColor));
         ((TextView) wikiPageContainer.getChildAt(1)).setText(wikiPage.title);
 
         wikiPageContainer.setOnClickListener(new View.OnClickListener() {
@@ -727,7 +728,7 @@ public class ItemDataSetter {
                             public void onClick(View v) {
                                 spinner.setVisibility(View.GONE);
                                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                                image.setLayoutParams(new RelativeLayout.LayoutParams(setInDp(100), setInDp(60)));
+                                image.setLayoutParams(new RelativeLayout.LayoutParams(setInDp(60), setInDp(60)));
                                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
                                 title.setVisibility(View.VISIBLE);
                                 size.setVisibility(View.VISIBLE);
@@ -738,17 +739,17 @@ public class ItemDataSetter {
                     }
                 });
             } else {
-                image.setImageDrawable(Constants.RESOURCES.getDrawable(android.R.drawable.ic_menu_save));
-                image.setBackgroundColor(Color.parseColor(postColor));
-                image.setLayoutParams(new RelativeLayout.LayoutParams(setInDp(50), setInDp(50)));
+                image.setImageDrawable(Constants.RESOURCES.getDrawable(R.drawable.ic_attach_document));
+               // image.setBackgroundColor(Color.parseColor(postColor));
+                image.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
-                RelativeLayout.LayoutParams paramsForTitle = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                paramsForTitle.setMargins(setInDp(55), 0, 0, 0);
-                title.setLayoutParams(paramsForTitle);
+                //RelativeLayout.LayoutParams paramsForTitle = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+              //  paramsForTitle.setMargins(setInDp(5), 0, 0, 0);
+              //  title.setLayoutParams(paramsForTitle);
 
-                RelativeLayout.LayoutParams paramsForSize = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                paramsForSize.setMargins(setInDp(55), setInDp(20), 0, 0);
-                size.setLayoutParams(paramsForSize);
+                //RelativeLayout.LayoutParams paramsForSize = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+               // paramsForSize.setMargins(setInDp(5), setInDp(20), 0, 0);
+               // size.setLayoutParams(paramsForSize);
                 size.setText(Constants.DOC_TYPE_DOCUMENT + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override

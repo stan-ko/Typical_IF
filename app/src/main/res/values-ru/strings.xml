@@ -49,7 +49,7 @@
         <string name = "size_in_gb">гигабайт</string>
         <string name = "size_in_tb">терабайт</string>
 
-        <string name = "wiki_page">Вики-страница</string>
+        <string name = "wiki_page">Страница</string>
 
         <string name = "browser_chooser">Выберите браузер</string>
         <string name = "downloader_chooser">Выберите загрузчик</string>

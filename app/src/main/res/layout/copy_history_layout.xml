@@ -43,33 +43,35 @@
                 android:id="@+id/txt_copy_history_title"
                 android:singleLine="true"
                 android:textColor="#aaffffff"
-                android:layout_alignTop="@+id/img_copy_history_logo"
-                android:layout_toRightOf="@+id/img_copy_history_logo"
-                android:layout_toEndOf="@+id/img_copy_history_logo"
-                android:layout_marginLeft="23dp"
                 android:textSize="15dp"
-                android:layout_marginRight="5dp" />
+                android:layout_alignTop="@+id/img_copy_history_logo"
+                android:layout_toRightOf="@+id/imageView96"
+                android:layout_toEndOf="@+id/imageView96"
+                android:layout_marginLeft="4dp"
+                android:text="jhv,jhvmxf" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:id="@+id/txt_copy_history_date"
-                android:textColor="#ffffffff"
+                android:textColor="#8cffffff"
                 android:layout_below="@+id/txt_copy_history_title"
                 android:layout_alignLeft="@+id/txt_copy_history_title"
-                android:layout_alignStart="@+id/txt_copy_history_title" />
+                android:layout_alignStart="@+id/txt_copy_history_title"
+                android:layout_marginTop="3dp"
+                android:textSize="13dp" />
 
             <ImageView
                 android:layout_width="15dp"
                 android:layout_height="15dp"
                 android:id="@+id/imageView96"
                 android:src="@drawable/ic_retweet"
-                android:layout_alignTop="@+id/txt_copy_history_title"
-                android:layout_toLeftOf="@+id/txt_copy_history_date"
-                android:layout_toStartOf="@+id/txt_copy_history_date"
-                android:layout_marginTop="2dp"
-                android:layout_marginRight="2dp" />
+                android:layout_above="@+id/txt_copy_history_date"
+                android:layout_toRightOf="@+id/img_copy_history_logo"
+                android:layout_toEndOf="@+id/img_copy_history_logo"
+                android:layout_marginLeft="7dp"
+                android:layout_marginBottom="3dp" />
 
         </RelativeLayout>
 

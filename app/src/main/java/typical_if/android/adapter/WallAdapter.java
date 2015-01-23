@@ -189,7 +189,13 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.cb_post_like.setText(" " + valueOf(post.likes_count));
             viewHolder.cb_post_repost.setText(" " + String.valueOf(post.reposts_count));
 
-            viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
+            String s = String.valueOf(ItemDataSetter.getFormattedDate(post.date));
+            if (s.contains("2014,")){
+
+            viewHolder.txt_post_date. setText(String.valueOf(s.replace(" 2014,",",")));}
+            else{
+            viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));}
+
            // if ()
             viewHolder.author_of_post.setText(ItemDataSetter.setNameOfPostAuthor(post.signer_id));
 

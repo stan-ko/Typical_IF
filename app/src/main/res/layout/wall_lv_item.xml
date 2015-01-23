@@ -277,7 +277,8 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginLeft="10dp"
-                    app:typeface="roboto_regular"/>/>
+                    app:typeface="roboto_regular"
+                    android:textIsSelectable="true" />/>
 
                 <Button
                     android:layout_width="85dp"
