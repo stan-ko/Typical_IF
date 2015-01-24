@@ -4,21 +4,17 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,19 +22,23 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.daimajia.swipe.SwipeLayout;
+import com.devspark.robototextview.widget.RobotoTextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiCommunity;
+import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKApiUser;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import de.greenrobot.event.EventBus;
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
@@ -46,13 +46,12 @@ import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
-import typical_if.android.event.EventShowReportDialog;
-import typical_if.android.event.EventShowSuggestPostDialog;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 import typical_if.android.util.BitmapCache;
+import typical_if.android.view.ResizableImageView;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
 import static com.vk.sdk.VKUIHelper.getTopActivity;
@@ -61,8 +60,8 @@ import static java.lang.String.valueOf;
 public class WallAdapter extends BaseAdapter {
     private final Context mContext;
     private final BitmapCache mMemoryCache;
-    private Wall wall;
-    private final ArrayList<VKWallPostWrapper> posts;
+    public Wall wall;
+    private ArrayList<VKWallPostWrapper> posts;
     private final LayoutInflater layoutInflater;
     private final Context context;
 
@@ -72,7 +71,7 @@ public class WallAdapter extends BaseAdapter {
     static boolean flag;
     public static int surpriseCounter = 0;
 
-
+    public ArrayList<EventObject> eventObjects;
 
     public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, String postColor, boolean isSuggested) {
         this.wall = wall;
@@ -87,10 +86,18 @@ public class WallAdapter extends BaseAdapter {
         mMemoryCache = new BitmapCache();
     }
 
-    //    public WallAdapter(final Context context) {
-//        mContext = context;
-//      mMemoryCache = new BitmapCache();
-//    }
+    public WallAdapter(ArrayList<EventObject> eventObjects, Wall wall, LayoutInflater inflater, FragmentManager fragmentManager) {
+        this.wall = wall;
+        this.posts = wall.posts;
+        this.layoutInflater = inflater;
+        this.context = TIFApp.getAppContext();
+        this.fragmentManager = fragmentManager;
+        mContext = Constants.mainActivity.getApplicationContext();
+        mMemoryCache = new BitmapCache();
+
+        this.eventObjects = eventObjects;
+    }
+
     public void setWall(Wall wall) {
         this.wall = wall;
         this.posts.clear();
@@ -98,55 +105,71 @@ public class WallAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void setEvent(ArrayList<EventObject> events) {
+        this.eventObjects.clear();
+        this.eventObjects.addAll(events);
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
-        return posts.size();
+        return Constants.GROUP_ID != Constants.ZF_ID ? posts.size() : eventObjects.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return posts.get(position);
+        return Constants.GROUP_ID != Constants.ZF_ID ? posts.get(position) : eventObjects.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return posts.get(position).id;
+        return Constants.GROUP_ID != Constants.ZF_ID ? posts.get(position).id : position;
     }
 
-    public static View wallAdapterView;
-
-    public void setGradientColors(int topColor, View post) {
-        GradientDrawable gradient = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[]
-                {Color.parseColor("#ffafa084"), Color.parseColor("#ff89a790"), topColor});
-        gradient.setShape(GradientDrawable.RECTANGLE);
-        gradient.setCornerRadius(0.f);
-        int decode = Integer.decode("303030");
-        ColorDrawable colorDrawable = new ColorDrawable(decode);
-        post.setBackgroundDrawable(colorDrawable);
-
-//        post.setBackgroundDrawable(gradient);
-    }
+//    public void setGradientColors(int topColor, View post) {
+//        GradientDrawable gradient = new GradientDrawable(GradientDrawable.Orientation.BOTTOM_TOP, new int[]
+//                {Color.parseColor("#ffafa084"), Color.parseColor("#ff89a790"), topColor});
+//        gradient.setShape(GradientDrawable.RECTANGLE);
+//        gradient.setCornerRadius(0.f);
+//        int decode = Integer.decode("303030");
+//        ColorDrawable colorDrawable = new ColorDrawable(decode);
+//        post.setBackgroundDrawable(colorDrawable);
+//
+////        post.setBackgroundDrawable(gradient);
+//    }
 
     @Override
-    public View getView(final int position, View convertView, final ViewGroup parent) {
-        ViewHolder viewHolder = null;
+    public View getView(int position, View convertView, final ViewGroup parent) {
+        if (Constants.GROUP_ID == Constants.ZF_ID) {
+            EventViewHolder viewHolder = null;
 
-        if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.wall_lv_item, null);
-            wallAdapterView = convertView;
-            LinearLayout postWrapper = (LinearLayout) convertView.findViewById(R.id.postParentLayout);
-            setGradientColors((Color.parseColor("#FF7C7A7E")), postWrapper);
+            if (convertView == null) {
+                convertView = layoutInflater.inflate(R.layout.event_item_layout, null);
+//                LinearLayout postWrapper = (LinearLayout) convertView.findViewById(R.id.postParentLayout);
+//                setGradientColors((Color.parseColor("#FF7C7A7E")), postWrapper);
+                viewHolder = new EventViewHolder(convertView);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (EventViewHolder) convertView.getTag();
+            }
 
-            viewHolder = new ViewHolder(convertView);
-            convertView.setTag(viewHolder);
+            initEventViewHolder(viewHolder, (EventObject) getItem(position));
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            final VKWallPostWrapper post = posts.get(position);
+            ViewHolder viewHolder = null;
+
+            if (convertView == null) {
+                convertView = layoutInflater.inflate(R.layout.wall_lv_item, null);
+//                LinearLayout postWrapper = (LinearLayout) convertView.findViewById(R.id.postParentLayout);
+//                setGradientColors((Color.parseColor("#FF7C7A7E")), postWrapper);
+                viewHolder = new ViewHolder(convertView);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
+            }
+
+            initViewHolder(viewHolder, postColor, wall, position, fragmentManager, post, context, layoutInflater, false);
         }
-
-
-        final VKWallPostWrapper post = posts.get(position);
-
-        initViewHolder(viewHolder, postColor, wall, position, fragmentManager, post, context, layoutInflater,false);
 
         return convertView;
     }
@@ -155,6 +178,109 @@ public class WallAdapter extends BaseAdapter {
     static String copy_history_logo = "";
     static String copy_history_name = "";
 
+    public final View.OnClickListener imgClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ArrayList<VKApiPhoto> photos = (ArrayList<VKApiPhoto>) v.getTag();
+            VKHelper.countOfPhotos = photos.size();
+            ItemDataSetter.makeSaveTransaction(photos, 0);
+        }
+    };
+
+    public final View.OnClickListener flClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(context, "Added", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    public final View.OnClickListener slClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ((SwipeLayout) v.getTag()).toggle(true);
+        }
+    };
+
+    public void initEventViewHolder(EventViewHolder viewHolder, EventObject item) {
+        ItemDataSetter.fragmentManager = fragmentManager;
+
+        if (!item.urlPhoto.get(0).photo_604.equals("fake_photo")) {
+            Glide.with(TIFApp.getAppContext())
+                    .load(item.urlPhoto.get(0).photo_604)
+                    .crossFade()
+                    .placeholder(R.drawable.event_stub)
+                    .into(viewHolder.imgPhoto);
+
+            viewHolder.btImgPhoto.setTag(item.urlPhoto);
+            viewHolder.btImgPhoto.setOnClickListener(imgClickListener);
+        } else {
+            Glide.with(TIFApp.getAppContext())
+                    .load(R.drawable.stub_null_event)
+                    .crossFade()
+                    .placeholder(R.drawable.event_stub)
+                    .into(viewHolder.imgPhoto);
+
+            viewHolder.btImgPhoto.setTag(null);
+            viewHolder.btImgPhoto.setOnClickListener(null);
+        }
+
+        viewHolder.txtDate.setText(item.formatDate);
+
+        LinearLayout tempLayout = null;
+
+        for (int i = 0; i < Constants.EVENT_COUNT; i++) {
+            switch (i) {
+                case Constants.TODAY_EVENT:
+                    tempLayout = viewHolder.fakeTodayListView;
+                    break;
+                case Constants.STATION_EVENT:
+                    tempLayout = viewHolder.fakeStationListView;
+                    break;
+                case Constants.PERIOD_EVENT:
+                    tempLayout = viewHolder.fakePeriodListView;
+                    break;
+            }
+
+            tempLayout.removeAllViews();
+
+            for (int j = 0; j < item.array.get(i).size(); j++) {
+                View eventView = layoutInflater.inflate(R.layout.events_list_item_layout, null, false);
+
+                RobotoTextView eventTextView = ((RobotoTextView) eventView.findViewById(R.id.txt_event_list_item));
+                eventTextView.setText(item.array.get(i).get(j));
+
+                SwipeLayout eventSwipeLayout = (SwipeLayout) eventView.findViewById(R.id.event_swipe_layout);
+
+                Log.d("TX", item.array.get(i).get(j) + "     " + context.getString(R.string.null_events));
+
+                if (ItemDataSetter.isToday(item.date)) {
+                    if (item.array.get(i).get(j).equals(context.getString(R.string.null_events))) {
+                        unsetSwipeLayout(eventSwipeLayout);
+                    } else {
+                        setSwipeLayout(eventSwipeLayout);
+                    }
+                } else {
+                    unsetSwipeLayout(eventSwipeLayout);
+                }
+
+                tempLayout.addView(eventView);
+            }
+        }
+    }
+
+    public void unsetSwipeLayout(SwipeLayout eventSwipeLayout) {
+        eventSwipeLayout.getBottomView().setOnClickListener(null);
+        eventSwipeLayout.getSurfaceView().setOnClickListener(null);
+        eventSwipeLayout.setSwipeEnabled(false);
+    }
+
+    public void setSwipeLayout(SwipeLayout eventSwipeLayout) {
+        eventSwipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
+        eventSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
+        eventSwipeLayout.getSurfaceView().setTag(eventSwipeLayout);
+        eventSwipeLayout.getSurfaceView().setOnClickListener(slClickListener);
+        eventSwipeLayout.getBottomView().setOnClickListener(flClickListener);
+    }
 
     public static void initViewHolder(final ViewHolder viewHolder,
                                       final String postColor,
@@ -168,7 +294,7 @@ public class WallAdapter extends BaseAdapter {
 
             //     viewHolder.extendedMenuItems.setChecked(false);
             //viewHolder.comment_like_repost_panel.setBackgroundColor(Color.parseColor(postColor));
-              ItemDataSetter.wallViewHolder = viewHolder;
+            ItemDataSetter.wallViewHolder = viewHolder;
             ItemDataSetter.postColor = postColor;
             ItemDataSetter.wall = wall;
 
@@ -190,7 +316,7 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.cb_post_repost.setText(" " + String.valueOf(post.reposts_count));
 
             viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
-           // if ()
+            // if ()
             viewHolder.author_of_post.setText(ItemDataSetter.setNameOfPostAuthor(post.signer_id));
 
             //   viewHolder.postFeatureLayout.setBackgroundColor(Color.parseColor(postColor));
@@ -506,14 +632,12 @@ public class WallAdapter extends BaseAdapter {
                         }
                     });
                 }
-
-
-
             }
-        } catch(Throwable a){
+        } catch (Throwable a) {
 
         }
     }
+
     public static class ParamsHolder {
         public final int position;
         public final VKWallPostWrapper post;
@@ -521,6 +645,38 @@ public class WallAdapter extends BaseAdapter {
         public ParamsHolder(int position, VKWallPostWrapper post) {
             this.position = position;
             this.post = post;
+        }
+    }
+
+    public static class EventObject {
+        public final SparseArray<List<String>> array;
+        public final String formatDate;
+        public final long date;
+        public final ArrayList<VKApiPhoto> urlPhoto;
+
+        public EventObject(SparseArray<List<String>> array, String formatDate, long date, ArrayList<VKApiPhoto> urlPhoto) {
+            this.array = array;
+            this.formatDate = formatDate;
+            this.date = date;
+            this.urlPhoto = urlPhoto;
+        }
+    }
+
+    public static class EventViewHolder {
+        public final ResizableImageView imgPhoto;
+        public final Button btImgPhoto;
+        public final LinearLayout fakeTodayListView;
+        public final LinearLayout fakeStationListView;
+        public final LinearLayout fakePeriodListView;
+        public final RobotoTextView txtDate;
+
+        EventViewHolder(View convertView) {
+            this.btImgPhoto = (Button) convertView.findViewById(R.id.bt_img_event);
+            this.imgPhoto = (ResizableImageView) convertView.findViewById(R.id.img_event_item);
+            this.fakeTodayListView = (LinearLayout) convertView.findViewById(R.id.fake_lv_today_event_item);
+            this.fakeStationListView = (LinearLayout) convertView.findViewById(R.id.fake_lv_yesterday_event_item);
+            this.fakePeriodListView = (LinearLayout) convertView.findViewById(R.id.fake_lv_period_event_item);
+            this.txtDate = (RobotoTextView) convertView.findViewById(R.id.txt_event_item);
         }
     }
 
@@ -541,9 +697,9 @@ public class WallAdapter extends BaseAdapter {
         public final RelativeLayout postPollLayout;
         public final TextView postUserComment;
         public final RelativeLayout postFeatureLayout;
-     //   public final CheckBox extendedMenuItems;
+        //   public final CheckBox extendedMenuItems;
 
-      //  public final RelativeLayout postExpandButtonLayout;
+        //  public final RelativeLayout postExpandButtonLayout;
 
         public final CheckBox cb_post_like;
         public final CheckBox cb_post_repost;
@@ -552,13 +708,13 @@ public class WallAdapter extends BaseAdapter {
         public final Button button_repost;
         public final Button button_comment;
         public final TextView txt_post_date;
-      //  public final RelativeLayout comment_like_repost_panel;
+        //  public final RelativeLayout comment_like_repost_panel;
 
         public final ImageView img_fixed_post;
         public final TextView author_of_post;
 
 
-       // public final ImageView img_post_other;
+        // public final ImageView img_post_other;
 
         public ViewHolder(View convertView) {
             this.postAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.postAttachmentsLayout);
@@ -574,13 +730,13 @@ public class WallAdapter extends BaseAdapter {
             this.postSignedLayout = (RelativeLayout) convertView.findViewById(R.id.postSignedLayout);
             this.postPollLayout = (RelativeLayout) convertView.findViewById(R.id.postPollLayout);
             this.img_fixed_post = (ImageView) convertView.findViewById(R.id.img_fixed_post);
-        //    this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other_actions);
+            //    this.img_post_other = (ImageView) convertView.findViewById(R.id.img_post_other_actions);
             this.postFeatureLayout = (RelativeLayout) convertView.findViewById(R.id.postFeaturesLayout);
-           // this.extendedMenuItems = (CheckBox) convertView.findViewById(R.id.expand_post_action_bar);
-            this.author_of_post = (TextView)convertView.findViewById(R.id.autor_post_text);
+            // this.extendedMenuItems = (CheckBox) convertView.findViewById(R.id.expand_post_action_bar);
+            this.author_of_post = (TextView) convertView.findViewById(R.id.autor_post_text);
 
 
-          //  this.postExpandButtonLayout = (RelativeLayout) convertView.findViewById(R.id.postExpandButtonLayout);
+            //  this.postExpandButtonLayout = (RelativeLayout) convertView.findViewById(R.id.postExpandButtonLayout);
 
             this.cb_post_like = (CheckBox) convertView.findViewById(R.id.cb_like);
             this.cb_post_comment = (CheckBox) convertView.findViewById(R.id.cb_comment);
@@ -590,7 +746,7 @@ public class WallAdapter extends BaseAdapter {
             this.button_repost = ((Button) convertView.findViewById(R.id.button_repost));
             this.txt_post_date = ((TextView) convertView.findViewById(R.id.txt_post_date_of_comment));
             this.postUserComment = (TextView) convertView.findViewById(R.id.post_user_comment_text);
-           // this.comment_like_repost_panel = (RelativeLayout) convertView.findViewById(R.id.comment_like_repost_panel);
+            // this.comment_like_repost_panel = (RelativeLayout) convertView.findViewById(R.id.comment_like_repost_panel);
 
         }
     }

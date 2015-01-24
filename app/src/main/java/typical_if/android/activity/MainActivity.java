@@ -136,7 +136,7 @@ public class MainActivity extends DialogActivity implements
                 break;
             case 4:
                 mTitle = getString(R.string.menu_group_title_events);
-                mIcon = getResources().getDrawable(R.drawable.abc_ic_cab_done_holo_dark);
+                mIcon = getResources().getDrawable(R.drawable.ic_zf);
                 break;
         }
     }
