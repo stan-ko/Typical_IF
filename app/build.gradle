@@ -37,11 +37,6 @@ dependencies {
     compile files('libs/listviewanimations_lib-core-slh_3.1.0.jar')
     compile files('libs/listviewanimations_lib-core_3.1.0.jar')
     compile files('libs/listviewanimations_lib-manipulation_3.1.0.jar')
-//    compile files('libs/nineoldandroids-2.4.0.jar')
-
-
-//  compile files ('libs/com.haarman.listviewanimations-2.6.0.jar')
-
 }
 
 dependencies {
