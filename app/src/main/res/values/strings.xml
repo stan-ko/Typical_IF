@@ -50,7 +50,7 @@
     <string name="size_in_gb">гігабайт</string>
     <string name="size_in_tb">терабайт</string>
 
-    <string name="wiki_page">Вікі-сторінка</string>
+    <string name="wiki_page">Сторінка</string>
 
     <string name="browser_chooser">Оберіть браузер</string>
     <string name="downloader_chooser">Оберіть завантажувач</string>
@@ -149,6 +149,12 @@
         <item>Audio</item>
         <item>Audio</item>
         <item>Document</item>
+    </string-array>
+
+    <string-array name="menu">
+        <item>Menu</item>
+        <item>1</item>
+        <item>2</item>
     </string-array>
 
 

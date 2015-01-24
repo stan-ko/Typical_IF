@@ -31,8 +31,8 @@
                 android:layout_alignEnd="@+id/img_photo_3_1" >
 
                 <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:id="@+id/imageView2"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
@@ -105,8 +105,8 @@
                         android:id="@+id/relativeLayout3" >
 
                         <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:id="@+id/imageView3"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
@@ -167,8 +167,8 @@
                         android:visibility="gone" >
 
                         <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:id="@+id/imageView5"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"

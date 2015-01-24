@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/txt_post"
         android:textColor="#afffffff"
-        android:textSize="17dp"
+        android:textSize="15dp"
         android:clickable="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"

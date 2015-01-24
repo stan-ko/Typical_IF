@@ -10,7 +10,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/img_wiki_page"
-        android:src="@android:drawable/ic_menu_view"
+        android:src="@drawable/ic_left_link"
         android:layout_marginRight="5dp" />
 
     <TextView

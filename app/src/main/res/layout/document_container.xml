@@ -16,29 +16,38 @@
         android:indeterminate="false" />
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/img_document"
         android:clickable="false"
-        android:adjustViewBounds="false" />
+        android:adjustViewBounds="false"
+        android:src="@drawable/ic_attach_document" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txt_document_title"
-        android:textStyle="bold"
+        android:textStyle="normal"
         android:singleLine="true"
         android:paddingRight="5dp"
-        android:layout_marginLeft="105dp"
-        android:textColor="#ffffffff" />
+        android:textColor="#ffffffff"
+        android:layout_alignTop="@+id/img_document"
+        android:layout_toRightOf="@+id/img_document"
+        android:layout_toEndOf="@+id/img_document"
+        android:layout_marginLeft="5dp"
+        android:paddingLeft="5dp"
+        android:textSize="15dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/txt_document_size"
         android:singleLine="true"
+        android:textColor="#8cffffff"
         android:layout_below="@+id/txt_document_title"
-        android:layout_marginLeft="105dp"
-        android:textColor="#ffffff" />
+        android:layout_toRightOf="@+id/img_document"
+        android:layout_toEndOf="@+id/img_document"
+        android:layout_marginLeft="10dp"
+        android:textSize="13dp" />
 
 </RelativeLayout>

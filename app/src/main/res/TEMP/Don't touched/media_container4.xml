@@ -41,8 +41,8 @@
                         android:visibility="gone" >
 
                         <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:id="@+id/imageView7"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
@@ -105,8 +105,8 @@
                         android:visibility="gone" >
 
                         <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:id="@+id/imageView8"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
@@ -183,8 +183,8 @@
                         android:layout_alignEnd="@+id/img_photo_4_3" >
 
                         <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:id="@+id/imageView37"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"
@@ -247,8 +247,8 @@
                         android:layout_alignEnd="@+id/img_photo_4_4" >
 
                         <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:id="@+id/imageView38"
                             android:layout_centerVertical="true"
                             android:layout_centerHorizontal="true"

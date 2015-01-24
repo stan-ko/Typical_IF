@@ -11,14 +11,12 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/txt_poll_title"
         android:textColor="#ffffffff"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/img_fixed_post"
-        android:layout_toEndOf="@+id/img_fixed_post"
         android:singleLine="true"
         android:text="Jgbnedfyyz"
-        android:textSize="18dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp" />
+        android:textSize="15dp"
+        android:layout_alignTop="@+id/img_fixed_post"
+        android:layout_toRightOf="@+id/img_fixed_post"
+        android:layout_toEndOf="@+id/img_fixed_post" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -30,13 +28,14 @@
         android:textColor="#ffffffff"
         android:layout_below="@+id/txt_poll_title"
         android:layout_alignLeft="@+id/txt_poll_title"
-        android:layout_alignStart="@+id/txt_poll_title" />
+        android:layout_alignStart="@+id/txt_poll_title"
+        android:visibility="gone" />
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/img_fixed_post"
-        android:src="@android:drawable/ic_menu_sort_by_size"
+        android:src="@drawable/survey_image"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

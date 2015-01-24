@@ -1,5 +1,6 @@
 package typical_if.android;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.text.Spannable;
@@ -280,7 +282,7 @@ public class ItemDataSetter {
         } else {
             ((TextView) pollContainer.getChildAt(1)).setText(Constants.POLL_ANONYMOUS + " " + poll.votes);
         }
-        ((ImageView) pollContainer.getChildAt(2)).setBackgroundColor(Color.parseColor(postColor));
+
 
         pollContainer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -311,10 +313,12 @@ public class ItemDataSetter {
         while (matTags.find()) {
             startTag = stringB.indexOf(matTags.group());
             endTag = startTag + matTags.group().length();
+        String fullTag =text.substring(startTag,endTag);
 
-            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startTag, endTag, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startTag, endTag, 0);
-            spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), startTag, endTag, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+           // spannable.setSpan(new BackgroundColorSpan(Color.BLUE),startTag, endTag, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(Color.BLUE), startTag, endTag, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), startTag, endTag, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             final String temp = matTags.group();
 
@@ -376,8 +380,9 @@ public class ItemDataSetter {
             endLink = startLink + matLinks.group().length();
 
             //spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startLink, endLink,0);
-            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startLink, endLink, 0);
-            spannable.setSpan(new android.text.style.StyleSpan(android.graphics.Typeface.BOLD), startLink, endLink, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startLink, endLink,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE );
+            spannable.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), startLink, endLink, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
             TextPaint t = new TextPaint();
             t.linkColor = Color.RED;
             t.setColor(Color.RED);
@@ -403,8 +408,9 @@ public class ItemDataSetter {
             spannable.replace(startSite, endSite, replier);
 
             endSite = startSite + replier.length();
-            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startSite, endSite, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(null, startSite, endSite, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startSite, endSite, 0);
+            spannable.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), startSite, endSite, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new NonUnderlinedClickableSpan() {
                 @Override
                 public void onClick(View textView) {
@@ -424,8 +430,9 @@ public class ItemDataSetter {
             spannable.replace(startReply, endReply, replier[1]);
 
             endReply = startReply + replier[1].length();
-            spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startReply, endReply, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(null, startReply, endReply, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startReply, endReply, 0);
+            spannable.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), startReply, endReply, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new NonUnderlinedClickableSpan() {
                 @Override
                 public void onClick(View textView) {
@@ -464,17 +471,17 @@ public class ItemDataSetter {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
 
-//                    if (isChecked) {
-//                        if (mainText.onPreDraw()) {
-//                            mainText.setText(originalSpannable);
-//                        }
-////                        expand(mainText, originalSpannable);
-//                        showAll.setText(Constants.SHOW_MIN_TEXT);
-//                    } else {
-//                        mainText.setText(tempModifySpannable);
-//                        showAll.setText(Constants.SHOW_ALL_TEXT);
-////                        collapse(mainText, tempModifySpannable);
-//                    }
+                    if (isChecked) {
+                        if (mainText.onPreDraw()) {
+                            mainText.setText(originalSpannable);
+                        }
+//                        expand(mainText, originalSpannable);
+                        showAll.setText(Constants.SHOW_MIN_TEXT);
+                    } else {
+                        mainText.setText(tempModifySpannable);
+                        showAll.setText(Constants.SHOW_ALL_TEXT);
+//                        collapse(mainText, tempModifySpannable);
+                    }
                 }
             });
         } else {
@@ -538,7 +545,7 @@ public class ItemDataSetter {
     public static void setLink(RelativeLayout parent, final VKApiLink link) {
         ViewGroup linkContainer = getPreparedView(parent, R.layout.link_container);
 
-        ImageLoader.getInstance().displayImage(link.image_src, (ImageView) linkContainer.getChildAt(0));
+    //    ImageLoader.getInstance().displayImage(link.image_src, (ImageView) linkContainer.getChildAt(0));
         ((TextView) linkContainer.getChildAt(1)).setText(link.title);
         ((TextView) linkContainer.getChildAt(2)).setText(link.url);
 
@@ -586,7 +593,7 @@ public class ItemDataSetter {
     public static void setWikiPage(RelativeLayout parent, final VKApiWikiPage wikiPage) {
         ViewGroup wikiPageContainer = getPreparedView(parent, R.layout.wiki_page_container);
 
-        wikiPageContainer.getChildAt(0).setBackgroundColor(Color.parseColor(postColor));
+   //     wikiPageContainer.getChildAt(0).setBackgroundColor(Color.parseColor(postColor));
         ((TextView) wikiPageContainer.getChildAt(1)).setText(wikiPage.title);
 
         wikiPageContainer.setOnClickListener(new View.OnClickListener() {
@@ -719,7 +726,7 @@ public class ItemDataSetter {
                             public void onClick(View v) {
                                 spinner.setVisibility(View.GONE);
                                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                                image.setLayoutParams(new RelativeLayout.LayoutParams(setInDp(100), setInDp(60)));
+                                image.setLayoutParams(new RelativeLayout.LayoutParams(setInDp(60), setInDp(60)));
                                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
                                 title.setVisibility(View.VISIBLE);
                                 size.setVisibility(View.VISIBLE);
@@ -730,17 +737,17 @@ public class ItemDataSetter {
                     }
                 });
             } else {
-                image.setImageDrawable(Constants.RESOURCES.getDrawable(android.R.drawable.ic_menu_save));
-                image.setBackgroundColor(Color.parseColor(postColor));
-                image.setLayoutParams(new RelativeLayout.LayoutParams(setInDp(50), setInDp(50)));
+                image.setImageDrawable(Constants.RESOURCES.getDrawable(R.drawable.ic_attach_document));
+               // image.setBackgroundColor(Color.parseColor(postColor));
+                image.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
 
-                RelativeLayout.LayoutParams paramsForTitle = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                paramsForTitle.setMargins(setInDp(55), 0, 0, 0);
-                title.setLayoutParams(paramsForTitle);
+                //RelativeLayout.LayoutParams paramsForTitle = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+              //  paramsForTitle.setMargins(setInDp(5), 0, 0, 0);
+              //  title.setLayoutParams(paramsForTitle);
 
-                RelativeLayout.LayoutParams paramsForSize = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                paramsForSize.setMargins(setInDp(55), setInDp(20), 0, 0);
-                size.setLayoutParams(paramsForSize);
+                //RelativeLayout.LayoutParams paramsForSize = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+               // paramsForSize.setMargins(setInDp(5), setInDp(20), 0, 0);
+               // size.setLayoutParams(paramsForSize);
                 size.setText(Constants.DOC_TYPE_DOCUMENT + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override

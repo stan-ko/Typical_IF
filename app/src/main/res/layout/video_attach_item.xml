@@ -3,7 +3,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:padding="5dp"
-    android:background="@color/transparent">
+    android:background="@color/transparent"
+    android:visibility="visible">
 
     <ImageView
         android:layout_width="match_parent"
@@ -12,18 +13,29 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
-        android:background="@color/transparent" />
+        android:background="@color/transparent"
+        android:visibility="visible" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txt_video_attach_title"
-        android:layout_centerHorizontal="true"
         android:padding="5dp"
         android:background="@drawable/element_selector"
-        android:textColor="#ffeeeeee"
-        android:layout_below="@+id/img_video_attach"
-        android:paddingBottom="5dp" />
+        android:textColor="#b4ffffff"
+        android:paddingBottom="5dp"
+        android:text="Bitch! Suck dixk!"
+        android:layout_alignBottom="@+id/img_video_attach"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/txt_video_attach_duration"
+        android:layout_toStartOf="@+id/txt_video_attach_duration"
+        android:maxLines="1"
+        android:maxLength="55"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="8dp"
+        android:textSize="8dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -31,8 +43,13 @@
         android:id="@+id/txt_video_attach_duration"
         android:padding="5dp"
         android:background="@drawable/element_selector"
-        android:textColor="#ffffffff"
-        android:layout_alignTop="@+id/img_video_attach"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:textColor="#b4ffffff"
+        android:text="16:45"
+        android:layout_alignTop="@+id/txt_video_attach_title"
+        android:layout_alignRight="@+id/img_video_attach"
+        android:layout_alignEnd="@+id/img_video_attach"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:textSize="8dp"
+        android:layout_marginTop="8dp" />
 </RelativeLayout>

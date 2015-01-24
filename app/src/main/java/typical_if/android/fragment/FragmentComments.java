@@ -304,7 +304,7 @@ public class FragmentComments extends Fragment {
     private void loadWallPosts() {
         final View wallItem = inflater.inflate(R.layout.wall_lv_item, null);
         viewHolder = new WallAdapter.ViewHolder(wallItem);
-        WallAdapter.initViewHolder(viewHolder, postColor, wall, position, getFragmentManager(), post, getActivity().getBaseContext(),inflater,true);
+        WallAdapter.initViewHolder(viewHolder, postColor, wall, position, getFragmentManager(), post, getActivity().getBaseContext(),inflater);
 
         viewHolder.cb_post_comment.setVisibility(View.GONE);
         viewHolder.button_comment.setVisibility(View.GONE);

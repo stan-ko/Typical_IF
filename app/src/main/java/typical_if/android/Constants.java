@@ -116,7 +116,7 @@ public class Constants {
 
     public static final String TIME_FORMAT_STRING = "kk:mm";
     public static final String DATE_TIME_FORMAT_STRING = "d MMMM о kk:mm";
-    public static final String OTHER_FORMAT_STRING = "MMMM dd yyyy, kk:mm";
+    public static final String OTHER_FORMAT_STRING = "dd MMMM yyyy, kk:mm";
 
     public static final String TODAY = RESOURCES.getString(R.string.date_today);
     public static final String YESTERDAY = RESOURCES.getString(R.string.date_yesterday);

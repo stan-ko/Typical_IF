@@ -180,7 +180,12 @@ public class CommentsListAdapter extends BaseAdapter {
             viewHolder.commentTextLayout.setVisibility(View.GONE);
         }
 
-        viewHolder.date_of_user_comment.setText(String.valueOf(ItemDataSetter.getFormattedDate(comment.date)));
+        String s = String.valueOf(ItemDataSetter.getFormattedDate(comment.date));
+      if (s.contains("2014,")){
+          viewHolder.date_of_user_comment.setText(String.valueOf(s.replace(" 2014,","")));
+      }else{
+
+        viewHolder.date_of_user_comment.setText(String.valueOf(ItemDataSetter.getFormattedDate(comment.date)));}
 
         if (comment.attachments != null && comment.attachments.size() != 0) {
             ItemDataSetter.setAttachemnts(comment.attachments, viewHolder.commentAttachmentsLayout, 2);
