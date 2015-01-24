@@ -263,7 +263,7 @@ public class WallAdapter extends BaseAdapter {
     }
 
     public void setSwipeLayout(SwipeLayout eventSwipeLayout) {
-        eventSwipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
+        eventSwipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         eventSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
         eventSwipeLayout.getSurfaceView().setTag(eventSwipeLayout);
         eventSwipeLayout.getSurfaceView().setOnClickListener(slClickListener);
