@@ -22,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.daimajia.swipe.SwipeLayout;
 import com.devspark.robototextview.widget.RobotoTextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -204,20 +203,12 @@ public class WallAdapter extends BaseAdapter {
         ItemDataSetter.fragmentManager = fragmentManager;
 
         if (!item.urlPhoto.get(0).photo_604.equals("fake_photo")) {
-            Glide.with(TIFApp.getAppContext())
-                    .load(item.urlPhoto.get(0).photo_604)
-                    .crossFade()
-                    .placeholder(R.drawable.event_stub)
-                    .into(viewHolder.imgPhoto);
+            ImageLoader.getInstance().displayImage(item.urlPhoto.get(0).photo_604, viewHolder.imgPhoto);
 
             viewHolder.btImgPhoto.setTag(item.urlPhoto);
             viewHolder.btImgPhoto.setOnClickListener(imgClickListener);
         } else {
-            Glide.with(TIFApp.getAppContext())
-                    .load(R.drawable.stub_null_event)
-                    .crossFade()
-                    .placeholder(R.drawable.event_stub)
-                    .into(viewHolder.imgPhoto);
+            ImageLoader.getInstance().displayImage("drawable://" + R.drawable.stub_null_event, viewHolder.imgPhoto);
 
             viewHolder.btImgPhoto.setTag(null);
             viewHolder.btImgPhoto.setOnClickListener(null);
@@ -574,7 +565,6 @@ public class WallAdapter extends BaseAdapter {
             });
             ((TextView) copyHistoryLayout.getChildAt(1)).setText(copy_history_title);
             ((TextView) copyHistoryLayout.getChildAt(2)).setText(ItemDataSetter.getFormattedDate(copyHistory.date));
-
 
             ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)), TIFApp.additionalOptions);
 
