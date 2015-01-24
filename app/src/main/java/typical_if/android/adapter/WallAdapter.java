@@ -168,9 +168,8 @@ public class WallAdapter extends BaseAdapter {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            initViewHolder(viewHolder, postColor, wall, position, fragmentManager, post, context, layoutInflater, false);
+            initViewHolder(viewHolder, postColor, wall, position, fragmentManager, post, context, layoutInflater);
         }
-
         return convertView;
     }
 
@@ -251,8 +250,6 @@ public class WallAdapter extends BaseAdapter {
 
                 SwipeLayout eventSwipeLayout = (SwipeLayout) eventView.findViewById(R.id.event_swipe_layout);
 
-                Log.d("TX", item.array.get(i).get(j) + "     " + context.getString(R.string.null_events));
-
                 if (ItemDataSetter.isToday(item.date)) {
                     if (item.array.get(i).get(j).equals(context.getString(R.string.null_events))) {
                         unsetSwipeLayout(eventSwipeLayout);
@@ -288,183 +285,192 @@ public class WallAdapter extends BaseAdapter {
                                       final FragmentManager fragmentManager,
                                       final VKWallPostWrapper postWrapper,
                                       final Context context,
-                                      final LayoutInflater layoutInflater,
-                                      boolean loadSigner) {
-        try {
+                                      final LayoutInflater layoutInflater
+    ) {
+        //try {
 
-            //     viewHolder.extendedMenuItems.setChecked(false);
-            //viewHolder.comment_like_repost_panel.setBackgroundColor(Color.parseColor(postColor));
-            ItemDataSetter.wallViewHolder = viewHolder;
-            ItemDataSetter.postColor = postColor;
-            ItemDataSetter.wall = wall;
+        //     viewHolder.extendedMenuItems.setChecked(false);
+        //viewHolder.comment_like_repost_panel.setBackgroundColor(Color.parseColor(postColor));
+        ItemDataSetter.wallViewHolder = viewHolder;
+        ItemDataSetter.postColor = postColor;
+        ItemDataSetter.wall = wall;
 
-            ItemDataSetter.position = position;
-            ItemDataSetter.fragmentManager = fragmentManager;
+        ItemDataSetter.position = position;
+        ItemDataSetter.fragmentManager = fragmentManager;
 
-            final VKApiPost post = postWrapper.post;
+        final VKApiPost post = postWrapper.post;
 
-            viewHolder.img_fixed_post.setVisibility(postWrapper.postPinnedVisibility);
+        viewHolder.img_fixed_post.setVisibility(postWrapper.postPinnedVisibility);
 
-            if (post.user_likes) {
-                viewHolder.cb_post_like.setChecked(true);
-            } else {
-                viewHolder.cb_post_like.setChecked(false);
+        if (post.user_likes) {
+            viewHolder.cb_post_like.setChecked(true);
+        } else {
+            viewHolder.cb_post_like.setChecked(false);
+        }
+
+        viewHolder.cb_post_comment.setText(" " + valueOf(post.comments_count));
+        viewHolder.cb_post_like.setText(" " + valueOf(post.likes_count));
+        viewHolder.cb_post_repost.setText(" " + String.valueOf(post.reposts_count));
+
+        String s = String.valueOf(ItemDataSetter.getFormattedDate(post.date));
+        if (s.contains("2014,")) {
+
+            viewHolder.txt_post_date.setText(String.valueOf(s.replace(" 2014,", ",")));
+        } else {
+            viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
+        }
+
+        // if ()
+        viewHolder.author_of_post.setText(ItemDataSetter.setNameOfPostAuthor(post.signer_id));
+
+        //   viewHolder.postFeatureLayout.setBackgroundColor(Color.parseColor(postColor));
+
+        final Animation.AnimationListener animationListener = new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
             }
 
-            viewHolder.cb_post_comment.setText(" " + valueOf(post.comments_count));
-            viewHolder.cb_post_like.setText(" " + valueOf(post.likes_count));
-            viewHolder.cb_post_repost.setText(" " + String.valueOf(post.reposts_count));
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                viewHolder.postFeatureLayout.clearAnimation();
+            }
 
-            viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
-            // if ()
-            viewHolder.author_of_post.setText(ItemDataSetter.setNameOfPostAuthor(post.signer_id));
+            @Override
+            public void onAnimationRepeat(Animation animation) {
 
-            //   viewHolder.postFeatureLayout.setBackgroundColor(Color.parseColor(postColor));
+            }
+        };
 
-            final Animation.AnimationListener animationListener = new Animation.AnimationListener() {
-                @Override
-                public void onAnimationStart(Animation animation) {
-
-                }
-
-                @Override
-                public void onAnimationEnd(Animation animation) {
-                    viewHolder.postFeatureLayout.clearAnimation();
-                }
-
-                @Override
-                public void onAnimationRepeat(Animation animation) {
-
-                }
-            };
-
-            viewHolder.button_like.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        Log.d("----------liked----surpriseCounter---5--", surpriseCounter + "");
-                        if (!OfflineMode.isIntNul("surprise")) {
-                            surpriseCounter = OfflineMode.loadInt("surprise");
-                        } else {
-                            surpriseCounter = 0;
-                        }
-                    } catch (Exception e) {
-                    }
-                    if (VKSdk.isLoggedIn()) {
-                        surpriseCounter++;
-                        OfflineMode.saveInt(surpriseCounter, "surprise");
-                    }
-                    try {
-                        if (OfflineMode.loadInt("surprise") == 15 && VKSdk.isLoggedIn()) {
-                            Log.d("----------liked----surpriseCounter---5--", surpriseCounter + "");
-                            ((MainActivity) getTopActivity()).addFragment(FragmentMakePost.newInstance(-77149556, 0, 0));
-                        }
-                    } catch (Exception e) {
-                        Log.d("Exception", " shaeed  = 0");
-                        surpriseCounter = 0;
-                        Log.d("----------liked----surpriseCounter---6--", surpriseCounter + "");
-                    }
-                    if (!post.user_likes) {
-                        VKHelper.setLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(final VKResponse response) {
-                                super.onComplete(response);
-                                viewHolder.cb_post_like.setText(" " + String.valueOf(++post.likes_count));
-                                viewHolder.cb_post_like.setChecked(true);
-                                post.user_likes = true;
-                            }
-                        });
+        viewHolder.button_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Log.d("----------liked----surpriseCounter---5--", surpriseCounter + "");
+                    if (!OfflineMode.isIntNul("surprise")) {
+                        surpriseCounter = OfflineMode.loadInt("surprise");
                     } else {
-
-                        VKHelper.deleteLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(final VKResponse response) {
-                                super.onComplete(response);
-                                viewHolder.cb_post_like.setText(" " + String.valueOf(--post.likes_count));
-                                viewHolder.cb_post_like.setChecked(false);
-                                post.user_likes = false;
-                            }
-                        });
+                        surpriseCounter = 0;
                     }
+                } catch (Exception e) {
                 }
-            });
-
-
-            if (post.user_reposted) {
-                viewHolder.cb_post_repost.setChecked(true);
-                viewHolder.cb_post_repost.setOnClickListener(null);
-            } else {
-                viewHolder.cb_post_repost.setChecked(false);
-                if (VKSdk.isLoggedIn())
-                    viewHolder.button_repost.setOnClickListener(new View.OnClickListener() {
+                if (VKSdk.isLoggedIn()) {
+                    surpriseCounter++;
+                    OfflineMode.saveInt(surpriseCounter, "surprise");
+                }
+                try {
+                    if (OfflineMode.loadInt("surprise") == 15 && VKSdk.isLoggedIn()) {
+                        Log.d("----------liked----surpriseCounter---5--", surpriseCounter + "");
+                        ((MainActivity) getTopActivity()).addFragment(FragmentMakePost.newInstance(-77149556, 0, 0));
+                    }
+                } catch (Exception e) {
+                    Log.d("Exception", " shaeed  = 0");
+                    surpriseCounter = 0;
+                    Log.d("----------liked----surpriseCounter---6--", surpriseCounter + "");
+                }
+                if (!post.user_likes) {
+                    VKHelper.setLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
                         @Override
-                        public void onClick(View v) {
-                            try {
-                                final AlertDialog.Builder dialog = new AlertDialog.Builder(Constants.mainActivity);
-//
-                                View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
-                                dialog.setView(view);
-                                dialog.setTitle(context.getString(R.string.comment_background));
-//
-                                final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
-//
-                                dialog.setPositiveButton(context.getString(R.string.okay), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        final String pidFull = "wall" + Constants.GROUP_ID + "_" + post.id;
-                                        VKHelper.doRepost(pidFull, text.getText().toString(), new VKRequest.VKRequestListener() {
-                                            @Override
-                                            public void onComplete(final VKResponse response) {
-                                                super.onComplete(response);
-                                                JSONObject object = response.json.optJSONObject("response");
-                                                int isSuccessed = object.optInt("success");
-//
-                                                if (isSuccessed == 1) {
-                                                    post.user_reposted = true;
-                                                    viewHolder.cb_post_repost.setChecked(true);
-                                                    viewHolder.cb_post_repost.setText(" " + String.valueOf(++post.reposts_count));
-//
-                                                    if (!post.user_likes) {
-
-                                                        VKHelper.setLike("post", (wall.group.id * (-1)), post.id, new VKRequest.VKRequestListener() {
-                                                            @Override
-                                                            public void onComplete(final VKResponse response) {
-                                                                super.onComplete(response);
-
-                                                                viewHolder.cb_post_like.setText(" " + String.valueOf(++post.likes_count));
-                                                                viewHolder.cb_post_like.setChecked(true);
-                                                                post.user_likes = true;
-
-                                                            }
-                                                        });
-                                                    }
-                                                    viewHolder.cb_post_repost.setChecked(true);
-                                                    viewHolder.cb_post_repost.setEnabled(false);
-                                                } else {
-                                                    viewHolder.cb_post_repost.setChecked(false);
-                                                }
-                                            }
-                                        });
-
-                                    }
-                                });
-                                dialog.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialog.setCancelable(true);
-                                    }
-                                });
-                                dialog.create().show();
-//
-                            } catch (NullPointerException npe) {
-                                Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
-                            }
+                        public void onComplete(final VKResponse response) {
+                            super.onComplete(response);
+                            viewHolder.cb_post_like.setText(" " + String.valueOf(++post.likes_count));
+                            viewHolder.cb_post_like.setChecked(true);
+                            post.user_likes = true;
                         }
                     });
+                } else {
+
+                    VKHelper.deleteLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
+                        @Override
+                        public void onComplete(final VKResponse response) {
+                            super.onComplete(response);
+                            viewHolder.cb_post_like.setText(" " + String.valueOf(--post.likes_count));
+                            viewHolder.cb_post_like.setChecked(false);
+                            post.user_likes = false;
+                        }
+                    });
+                }
             }
+        });
 
 
-            if (!isSuggested) {
+        if (post.user_reposted) {
+            viewHolder.cb_post_repost.setChecked(true);
+            viewHolder.cb_post_repost.setOnClickListener(null);
+        } else {
+            viewHolder.cb_post_repost.setChecked(false);
+            if (VKSdk.isLoggedIn()) {
+
+
+                viewHolder.button_repost.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            final AlertDialog.Builder dialog = new AlertDialog.Builder(Constants.mainActivity);
+//
+                            View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
+                            dialog.setView(view);
+                            dialog.setTitle(context.getString(R.string.comment_background));
+//
+                            final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
+//
+                            dialog.setPositiveButton(context.getString(R.string.okay), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    final String pidFull = "wall" + Constants.GROUP_ID + "_" + post.id;
+                                    VKHelper.doRepost(pidFull, text.getText().toString(), new VKRequest.VKRequestListener() {
+                                        @Override
+                                        public void onComplete(final VKResponse response) {
+                                            super.onComplete(response);
+                                            JSONObject object = response.json.optJSONObject("response");
+                                            int isSuccessed = object.optInt("success");
+//
+                                            if (isSuccessed == 1) {
+                                                post.user_reposted = true;
+                                                viewHolder.cb_post_repost.setChecked(true);
+                                                viewHolder.cb_post_repost.setText(" " + String.valueOf(++post.reposts_count));
+//
+                                                if (!post.user_likes) {
+
+                                                    VKHelper.setLike("post", (wall.group.id * (-1)), post.id, new VKRequest.VKRequestListener() {
+                                                        @Override
+                                                        public void onComplete(final VKResponse response) {
+                                                            super.onComplete(response);
+
+                                                            viewHolder.cb_post_like.setText(" " + String.valueOf(++post.likes_count));
+                                                            viewHolder.cb_post_like.setChecked(true);
+                                                            post.user_likes = true;
+
+                                                        }
+                                                    });
+                                                }
+                                                viewHolder.cb_post_repost.setChecked(true);
+                                                viewHolder.cb_post_repost.setEnabled(false);
+                                            } else {
+                                                viewHolder.cb_post_repost.setChecked(false);
+                                            }
+                                        }
+                                    });
+
+                                }
+                            });
+                            dialog.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialog.setCancelable(true);
+                                }
+                            });
+                            dialog.create().show();
+//
+                        } catch (NullPointerException npe) {
+                            Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        }
+
+//            if (!isSuggested) {
 //                viewHolder.img_post_other.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View v) {
@@ -493,7 +499,7 @@ public class WallAdapter extends BaseAdapter {
 //                        }
 //                    }
 
-                //   });
+        //   });
 
 //                viewHolder.button_comment.setVisibility(View.VISIBLE);
 //                viewHolder.button_repost.setVisibility(View.VISIBLE);
@@ -502,7 +508,7 @@ public class WallAdapter extends BaseAdapter {
 //                viewHolder.cb_post_comment.setVisibility(View.VISIBLE);
 //                viewHolder.cb_post_like.setVisibility(View.VISIBLE);
 
-                //} else {
+        //} else {
 //                viewHolder.extendedMenuItems.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //                    @Override
 //                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -517,125 +523,131 @@ public class WallAdapter extends BaseAdapter {
 //                viewHolder.cb_post_repost.setVisibility(View.INVISIBLE);
 //                viewHolder.cb_post_comment.setVisibility(View.INVISIBLE);
 //                viewHolder.cb_post_like.setVisibility(View.INVISIBLE);
-                // }
-
-                viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);
-                if (postWrapper.postTextChecker) {
-                    ItemDataSetter.setText(post.text, viewHolder.postTextLayout);
-                }
-
-                viewHolder.copyHistoryLayout.setVisibility(postWrapper.copyHistoryContainerVisibility);
-                if (postWrapper.copyHistoryChecker) {
-                    final VKApiPost copyHistory = post.copy_history.get(0);
-                    VKApiCommunity group;
-                    for (int i = 0; i < wall.groups.size(); i++) {
-                        group = wall.groups.get(i);
-                        if (copyHistory.from_id * (-1) == group.id) {
-                            copy_history_title = group.name;
-                            copy_history_logo = group.photo_100;
-                            copy_history_name = group.screen_name;
-                        }
-                    }
-
-                    if (copy_history_title.equals("") && copy_history_logo.equals("")) {
-                        VKApiUser profile;
-                        for (int i = 0; i < wall.profiles.size(); i++) {
-                            profile = wall.profiles.get(i);
-                            if (copyHistory.from_id == profile.id) {
-                                copy_history_title = profile.last_name + " " + profile.first_name;
-                                copy_history_logo = profile.photo_100;
-                                copy_history_name = profile.screen_name;
-                            }
-                        }
-                    }
-
-                    ViewGroup copyHistoryContainer = ItemDataSetter.getPreparedView(viewHolder.copyHistoryLayout, R.layout.copy_history_layout);
-                    //RelativeLayout leftLine = (RelativeLayout) copyHistoryContainer.findViewById(R.id.leftLine);
-                    //leftLine.setVisibility(View.VISIBLE);
-                    //leftLine.setBackgroundColor(Color.parseColor(postColor));
-
-                    LinearLayout copyHistoryList = (LinearLayout) copyHistoryContainer.getChildAt(0);
-                    RelativeLayout copyHistoryLayout = (RelativeLayout) copyHistoryList.getChildAt(0);
-                    final String finalCopy_history_name = copy_history_name;
-                    copyHistoryLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Uri uri = Uri.parse("http://vk.com/" + finalCopy_history_name);
-                            context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                        }
-                    });
-                    ((TextView) copyHistoryLayout.getChildAt(1)).setText(copy_history_title);
-                    ((TextView) copyHistoryLayout.getChildAt(2)).setText(ItemDataSetter.getFormattedDate(copyHistory.date));
+        // }
+//            }else {}
 
 
-                    ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)), TIFApp.additionalOptions);
+        viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);
+        if (postWrapper.postTextChecker) {
+            ItemDataSetter.setText(post.text, viewHolder.postTextLayout);
+        }
 
-                    RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryTextLayout);
-                    parentCopyHistoryTextContainer.setVisibility(postWrapper.copyHistoryTextContainerVisibility);
-                    if (postWrapper.copyHistoryTextChecker) {
-                        ItemDataSetter.setText(copyHistory.text, parentCopyHistoryTextContainer);
-                    }
-
-                    LinearLayout parentCopyHistoryAttachmentsContainer = (LinearLayout) copyHistoryList.findViewById(R.id.copyHistoryAttachmentsLayout);
-                    parentCopyHistoryAttachmentsContainer.setVisibility(postWrapper.copyHistoryAttachmentsContainerVisibility);
-                    if (postWrapper.copyHistoryAttachmentsChecker) {
-                        ItemDataSetter.setAttachemnts(copyHistory.attachments, parentCopyHistoryAttachmentsContainer, 0);
-                    }
-
-                    RelativeLayout copyHistoryGeoContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryGeoLayout);
-                    copyHistoryGeoContainer.setVisibility(postWrapper.copyHistoryGeoContainerVisibility);
-                    if (postWrapper.copyHistoryGeoChecker) {
-                        ItemDataSetter.setGeo(copyHistory.geo, copyHistoryGeoContainer);
-                    }
-
-                    RelativeLayout copyHistorySignedContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistorySignedLayout);
-                    copyHistorySignedContainer.setVisibility(postWrapper.copyHistorySignedContainerVisibility);
-                    if (postWrapper.copyHistorySignedChecker) {
-                        ItemDataSetter.setSigned(copyHistory.signer_id, copyHistorySignedContainer);
-                    }
-
-                    viewHolder.copyHistoryLayout.addView(copyHistoryContainer);
-                }
-
-                viewHolder.postAttachmentsLayout.setVisibility(postWrapper.postAttachmentsVisibility);
-                if (postWrapper.postAttachmentsChecker) {
-                    ItemDataSetter.setAttachemnts(post.attachments, viewHolder.postAttachmentsLayout, 1);
-                }
-
-                viewHolder.postGeoLayout.setVisibility(postWrapper.postGeoVisibility);
-                if (postWrapper.postGeoChecker) {
-                    ItemDataSetter.setGeo(post.geo, viewHolder.postGeoLayout);
-                }
-
-                viewHolder.postSignedLayout.setVisibility(postWrapper.postSignedVisibility);
-                if (postWrapper.postSignedChecker) {
-                    ItemDataSetter.setSigned(post.signer_id, viewHolder.postSignedLayout);
-                }
-
-                viewHolder.button_comment.setTag(new ParamsHolder(position, postWrapper));
-
-                if (OfflineMode.isOnline(getApplicationContext()) | OfflineMode.isJsonNull(post.id)) {
-                    viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            ParamsHolder paramsHolder = (ParamsHolder) v.getTag();
-                            FragmentComments fragment = FragmentComments.newInstanceForWall(postColor, paramsHolder.position, wall, paramsHolder.post);
-
-                            fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-                        }
-                    });
-                } else {
-                    viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+        viewHolder.copyHistoryLayout.setVisibility(postWrapper.copyHistoryContainerVisibility);
+        if (postWrapper.copyHistoryChecker) {
+            final VKApiPost copyHistory = post.copy_history.get(0);
+            VKApiCommunity group;
+            for (int i = 0; i < wall.groups.size(); i++) {
+                group = wall.groups.get(i);
+                if (copyHistory.from_id * (-1) == group.id) {
+                    copy_history_title = group.name;
+                    copy_history_logo = group.photo_100;
+                    copy_history_name = group.screen_name;
                 }
             }
-        } catch (Throwable a) {
 
+            if (copy_history_title.equals("") && copy_history_logo.equals("")) {
+                VKApiUser profile;
+                for (int i = 0; i < wall.profiles.size(); i++) {
+                    profile = wall.profiles.get(i);
+                    if (copyHistory.from_id == profile.id) {
+                        copy_history_title = profile.last_name + " " + profile.first_name;
+                        copy_history_logo = profile.photo_100;
+                        copy_history_name = profile.screen_name;
+                    }
+                }
+            }
+
+            ViewGroup copyHistoryContainer = ItemDataSetter.getPreparedView(viewHolder.copyHistoryLayout, R.layout.copy_history_layout);
+            //RelativeLayout leftLine = (RelativeLayout) copyHistoryContainer.findViewById(R.id.leftLine);
+            //leftLine.setVisibility(View.VISIBLE);
+            //leftLine.setBackgroundColor(Color.parseColor(postColor));
+
+            LinearLayout copyHistoryList = (LinearLayout) copyHistoryContainer.getChildAt(0);
+            RelativeLayout copyHistoryLayout = (RelativeLayout) copyHistoryList.getChildAt(0);
+            final String finalCopy_history_name = copy_history_name;
+            copyHistoryLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri uri = Uri.parse("http://vk.com/" + finalCopy_history_name);
+                    context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                }
+            });
+            ((TextView) copyHistoryLayout.getChildAt(1)).setText(copy_history_title);
+            ((TextView) copyHistoryLayout.getChildAt(2)).setText(ItemDataSetter.getFormattedDate(copyHistory.date));
+
+
+            ImageLoader.getInstance().displayImage(copy_history_logo, ((ImageView) copyHistoryLayout.getChildAt(0)), TIFApp.additionalOptions);
+
+            RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryTextLayout);
+            parentCopyHistoryTextContainer.setVisibility(postWrapper.copyHistoryTextContainerVisibility);
+            if (postWrapper.copyHistoryTextChecker) {
+                ItemDataSetter.setText(copyHistory.text, parentCopyHistoryTextContainer);
+            }
+
+            LinearLayout parentCopyHistoryAttachmentsContainer = (LinearLayout) copyHistoryList.findViewById(R.id.copyHistoryAttachmentsLayout);
+            parentCopyHistoryAttachmentsContainer.setVisibility(postWrapper.copyHistoryAttachmentsContainerVisibility);
+            if (postWrapper.copyHistoryAttachmentsChecker) {
+                ItemDataSetter.setAttachemnts(copyHistory.attachments, parentCopyHistoryAttachmentsContainer, 0);
+            }
+
+            RelativeLayout copyHistoryGeoContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistoryGeoLayout);
+            copyHistoryGeoContainer.setVisibility(postWrapper.copyHistoryGeoContainerVisibility);
+            if (postWrapper.copyHistoryGeoChecker) {
+                ItemDataSetter.setGeo(copyHistory.geo, copyHistoryGeoContainer);
+            }
+
+            RelativeLayout copyHistorySignedContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistorySignedLayout);
+            copyHistorySignedContainer.setVisibility(postWrapper.copyHistorySignedContainerVisibility);
+            if (postWrapper.copyHistorySignedChecker) {
+                ItemDataSetter.setSigned(copyHistory.signer_id, copyHistorySignedContainer);
+            }
+
+            viewHolder.copyHistoryLayout.addView(copyHistoryContainer);
         }
+
+        viewHolder.postAttachmentsLayout.setVisibility(postWrapper.postAttachmentsVisibility);
+        if (postWrapper.postAttachmentsChecker) {
+            ItemDataSetter.setAttachemnts(post.attachments, viewHolder.postAttachmentsLayout, 1);
+        }
+
+        viewHolder.postGeoLayout.setVisibility(postWrapper.postGeoVisibility);
+        if (postWrapper.postGeoChecker) {
+            ItemDataSetter.setGeo(post.geo, viewHolder.postGeoLayout);
+        }
+
+        viewHolder.postSignedLayout.setVisibility(postWrapper.postSignedVisibility);
+        if (postWrapper.postSignedChecker) {
+            ItemDataSetter.setNameOfPostAuthor(post.signer_id);
+        }
+
+        viewHolder.button_comment.setTag(new ParamsHolder(position, postWrapper));
+
+        if (OfflineMode.isOnline(getApplicationContext()) | OfflineMode.isJsonNull(post.id)) {
+            String flag = "true";
+            viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ParamsHolder paramsHolder = (ParamsHolder) v.getTag();
+                    FragmentComments fragment = FragmentComments.newInstanceForWall(postColor, paramsHolder.position, wall, paramsHolder.post);
+
+                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                }
+            });
+        } else {
+            String flag = "false";
+            viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+
+//        } catch(NullPointerException a){
+//            a.printStackTrace();
+//            throw new NullPointerException(a.getCause().toString());
+//        }
     }
 
     public static class ParamsHolder {
