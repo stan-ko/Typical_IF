@@ -310,7 +310,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
             events.add(new WallAdapter.EventObject(
                             eventData,
-                            ItemDataSetter.getFormattedDateForEvent(tempPost.date),
                             tempPost.date,
                             photo
                     )

@@ -214,8 +214,6 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.btImgPhoto.setOnClickListener(null);
         }
 
-        viewHolder.txtDate.setText(item.formatDate);
-
         LinearLayout tempLayout = null;
 
         for (int i = 0; i < Constants.EVENT_COUNT; i++) {
@@ -652,13 +650,11 @@ public class WallAdapter extends BaseAdapter {
 
     public static class EventObject {
         public final SparseArray<List<String>> array;
-        public final String formatDate;
         public final long date;
         public final ArrayList<VKApiPhoto> urlPhoto;
 
-        public EventObject(SparseArray<List<String>> array, String formatDate, long date, ArrayList<VKApiPhoto> urlPhoto) {
+        public EventObject(SparseArray<List<String>> array, long date, ArrayList<VKApiPhoto> urlPhoto) {
             this.array = array;
-            this.formatDate = formatDate;
             this.date = date;
             this.urlPhoto = urlPhoto;
         }
@@ -670,7 +666,6 @@ public class WallAdapter extends BaseAdapter {
         public final LinearLayout fakeTodayListView;
         public final LinearLayout fakeStationListView;
         public final LinearLayout fakePeriodListView;
-        public final RobotoTextView txtDate;
 
         EventViewHolder(View convertView) {
             this.btImgPhoto = (Button) convertView.findViewById(R.id.bt_img_event);
@@ -678,7 +673,6 @@ public class WallAdapter extends BaseAdapter {
             this.fakeTodayListView = (LinearLayout) convertView.findViewById(R.id.fake_lv_today_event_item);
             this.fakeStationListView = (LinearLayout) convertView.findViewById(R.id.fake_lv_yesterday_event_item);
             this.fakePeriodListView = (LinearLayout) convertView.findViewById(R.id.fake_lv_period_event_item);
-            this.txtDate = (RobotoTextView) convertView.findViewById(R.id.txt_event_item);
         }
     }
 

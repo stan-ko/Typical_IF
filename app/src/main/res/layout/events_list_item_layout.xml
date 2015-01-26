@@ -9,7 +9,7 @@
     android:background="@color/wall_background"
     android:minHeight="50dp"
     card_view:cardCornerRadius="0dp"
-    card_view:cardElevation="8dp"
+    card_view:cardElevation="4dp"
     card_view:contentPadding="0dp">
 
     <com.daimajia.swipe.SwipeLayout
