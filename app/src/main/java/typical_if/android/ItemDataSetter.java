@@ -1,6 +1,5 @@
 package typical_if.android;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,7 +17,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
-import android.text.style.BackgroundColorSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.view.Display;
@@ -1093,6 +1091,18 @@ public class ItemDataSetter {
             return DateFormat.format(Constants.DATE_TIME_FORMAT_STRING, smsTime).toString();
         } else
             return DateFormat.format(Constants.OTHER_FORMAT_STRING, smsTime).toString();
+    }
+    public static boolean checkNewPostResult(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+        smsTime.setTimeInMillis(smsTimeInMilis * 1000);
+
+        Calendar now = Calendar.getInstance();
+        now.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+
+        if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
+            return true;
+        } else return false;
     }
 
     public static int setInDp(int dps) {

@@ -155,7 +155,18 @@ public class VKHelper {
         final VKRequest request = new VKRequest("likes.delete", params);
         request.executeWithListener(listener);
     }
+    public static void doGroupWallRequest(int extended, int offset, int countPosts, long gid, VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put("owner_id", gid);
+        params.put("domain", gid);
+        params.put("offset", offset);
+        params.put("count", countPosts);
+        params.put("filter", "all");
+        params.put("extended", extended);
 
+        final VKRequest request = VKApi.wall().get(params);
+        request.executeWithListener(vkRequestListener);
+    }
 
 
     public static void isLiked(String type, long owner_id, long item_id, VKRequest.VKRequestListener listener) {
