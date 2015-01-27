@@ -1,147 +1,138 @@
 <?xml version ="1.0" encoding="utf-8"?>
-<!--<typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:id="@+id/refresh_comment_list"-->
-    <!--android:background="@drawable/blur1"-->
-    <!--android:focusableInTouchMode="true">-->
-
 <RelativeLayout
 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_of_comments_wrapper_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#ffffffff"
-    android:id="@+id/list_of_comments_wrapper_layout">
+    android:background="#ff000000">
 
 
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignParentTop="true"
+        android:background="#ff282828"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignBottom="@+id/binding_iv">
-
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:id="@+id/listOfComments"
-
-
-        android:paddingTop="2dp"
-        android:background="@drawable/blur2"
-        android:paddingLeft="2dp"
-        android:paddingRight="2dp"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="false"
-        android:divider="#87ffffff"
-        android:dividerHeight="1px"
-        android:drawSelectorOnTop="true"
-        android:headerDividersEnabled="true"
-        android:layout_above="@+id/comment_bar_layout" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true">
 
-        <RelativeLayout
+
+            <ListView
+                android:id="@+id/listOfComments"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:layout_above="@+id/comment_bar_layout"
+                android:layout_alignParentEnd="false"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="#ff424242"
+                android:divider="@drawable/list_divider"
+                android:dividerHeight="1px"
+                android:drawSelectorOnTop="true"
+                android:headerDividersEnabled="true" />
+  <RelativeLayout
+            android:id="@+id/comment_bar_layout"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
-            android:id="@+id/comment_bar_layout"
-            android:visibility="visible"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:background="#ff363636">
+            android:background="#ff363636"
+            android:visibility="visible">
 
             <EditText
+                android:id="@+id/field_of_message_for_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/field_of_message_for_comment"
-                android:textColor="#ff000000"
-                android:background="@drawable/message_text_shape"
-                android:maxLines="5"
-                android:minHeight="40dp"
-                android:phoneNumber="false"
-                android:selectAllOnFocus="false"
-                android:paddingRight="2dp"
-                android:hint="@string/your_message"
-                android:paddingLeft="15dp"
-                android:autoText="false"
-                android:visibility="visible"
-                android:alpha="0.8"
-                android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="5dp"
                 android:layout_toLeftOf="@+id/buttonSendComment"
-                android:layout_toStartOf="@+id/buttonSendComment" />
+                android:layout_toStartOf="@+id/buttonSendComment"
+                android:alpha="0.8"
+                android:autoText="false"
+                android:background="@drawable/message_text_shape"
+                android:hint="@string/your_message"
+                android:maxLines="5"
+                android:minHeight="40dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="2dp"
+                android:phoneNumber="false"
+                android:selectAllOnFocus="false"
+                android:textColor="#ff000000"
+                android:visibility="visible" />
 
             <Button
+                android:id="@+id/buttonSendComment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/buttonSendComment"
-                android:layout_weight=".30"
-                android:visibility="visible"
-                android:textColor="#ffffffff"
-                android:background="@drawable/send_comment_button_shape"
-                android:layout_alignTop="@+id/field_of_message_for_comment"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/field_of_message_for_comment"
+                android:layout_marginBottom="5dp"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"
-                android:text="@string/send_comment" />
+                android:layout_weight=".30"
+                android:background="@drawable/send_comment_button_shape"
+                android:text="@string/send_comment"
+                android:textColor="#ffffffff"
+                android:visibility="visible" />
 
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/there_are_no_comments_here_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="There are no comments here."
-            android:id="@+id/there_are_no_comments_here_tv"
-            android:textColor="#ff9abaee"
-            android:textSize="25dp"
-            android:layout_marginTop="71dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="71dp"
+            android:text="There are no comments here."
+            android:textColor="#ff9abaee"
+            android:textSize="25dp"
             android:visibility="gone" />
 
 
-
-    <!--android:background="@drawable/image_header_state_selector" -->
-
-
-    <!--android:visibility="visible"-->
+        <!--android:background="@drawable/image_header_state_selector" -->
 
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/binding_iv"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="#0073adff" />
+        <!--android:visibility="visible"-->
+
 
         <RelativeLayout
+            android:id="@+id/binding_iv"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@+id/there_are_no_comments_here_tv"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:background="@drawable/blur1"
-            android:id="@+id/while_loading_view_layout">
+            android:background="#0073adff" />
+
+        <RelativeLayout
+            android:id="@+id/while_loading_view_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/there_are_no_comments_here_tv"
+            android:background="#ff424242"
+            android:visibility="gone">
 
             <ProgressBar
-                style="?android:attr/progressBarStyleLarge"
                 android:id="@+id/spinner_progress"
+                style="?android:attr/progressBarStyleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:indeterminate="true"
+                android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
+                android:indeterminate="true" />
         </RelativeLayout>
 
     </RelativeLayout>
-</RelativeLayout>
-<!--</typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout>-->
+</RelativeLayout><!--</typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout>-->

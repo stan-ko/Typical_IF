@@ -50,9 +50,7 @@ public class Constants {
     public static int COUNTER;
 
     public static final long TF_ID = -36573302;
-//    public static final long ZF_ID = -24818281; //true
-    public static final long ZF_ID = -85319952; //test
-
+    public static final long ZF_ID = -24818281;
     public static final long TZ_ID = -26363301;
     public static final long FB_ID = -39253850;
     public static final long FN_ID = -38380107;
@@ -60,6 +58,10 @@ public class Constants {
     public static Activity mainActivity;
     public static final String APP_ID = "4456259";
     public static Locale LOCALE;
+
+
+   public static int isMember;
+
 
     public static long USER_ID;
     public static String USER_LANGUAGE;
@@ -100,6 +102,7 @@ public class Constants {
     public static int notifID = 2048;
     public static NotificationManager notificationManager;
     public static String title = "";
+    public static String Mtitle = "";
     public static String artist = "";
     public static String tempCameraPhotoFile = "";
     public static MediaPlayer mediaPlayer = null;
@@ -120,9 +123,6 @@ public class Constants {
 
     public static final String TODAY = RESOURCES.getString(R.string.date_today);
     public static final String YESTERDAY = RESOURCES.getString(R.string.date_yesterday);
-
-    public static final String TODAY_EVENT_DATE = RESOURCES.getString(R.string.today_event);
-    public static final String YESTERDAY_EVENT_DATE = RESOURCES.getString(R.string.yesterday_event);
 
     public static final String DOC_TYPE_ANIMATION = RESOURCES.getString(R.string.doc_type_animation);
     public static final String DOC_TYPE_DOCUMENT = RESOURCES.getString(R.string.doc_type_document);
@@ -148,9 +148,5 @@ public class Constants {
     public static final String TIF_VK_API_KEY_TOKEN = "VK_ACCESS_TOKEN";
     public static final int TIF_VK_PRELOAD_POSTS_COUNT = 100;
 
-    public static final int TODAY_EVENT = 0;
-    public static final int STATION_EVENT = 1;
-    public static final int PERIOD_EVENT = 2;
 
-    public static final int EVENT_COUNT = 3;
 }

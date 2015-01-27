@@ -460,7 +460,6 @@ if (VKSdk.isLoggedIn()){
                     @Override
                     public void run() {
                         Looper.prepare();
-
                         parseCommentList(OfflineMode.loadJSON(item_id));
                         EventBus.getDefault().post(new EventSpinnerLayout());
                     }
@@ -593,21 +592,26 @@ public static boolean isViewLoaded;
         profiles = VKHelper.getProfilesFromJSONArray(arrayOfComments[1]);
         groups = VKHelper.getGroupsFromJSONArray(arrayOfComments[2]);
 
+try {
+    getActivity().runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+            if (adapter == null) {
+                String postColor = ItemDataSetter.getPostColor(Constants.GROUP_ID);
+                adapter = new CommentsListAdapter(comments, profiles, groups, inflater, postColor);
+                listOfComments.setAdapter(adapter);
+            } else {
+                adapter.UpdateCommentList(comments, profiles, groups, listOfComments);
 
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (adapter == null) {
-                    String postColor = ItemDataSetter.getPostColor(Constants.GROUP_ID);
-                    adapter = new CommentsListAdapter(comments, profiles,groups, inflater, postColor);
-                    listOfComments.setAdapter(adapter);
-                } else {
-                    adapter.UpdateCommentList(comments, profiles,groups, listOfComments);
 
-
-                }
             }
-        });
+        }
+    });
+
+            }
+catch (NullPointerException npe){
+
+}
     }
 
     public void onInitContextMenu(final CharSequence[] items, final int position) {

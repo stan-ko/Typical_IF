@@ -3,7 +3,7 @@
 <resources>
 
         <string name = "app_name">Типичный Франковск</string>
-        <string name="logo_name">Типичный Франковск</string>
+        <string name="logo_name">Типичный\nМобильный\nФранковск</string>
         <string name="main_creed">Слава Украине!Героям слава! </string>
 
         <string name = "menu_group_title_tf">Типичный Франковск</string>
@@ -101,6 +101,9 @@
     <string name="go_to_start_page">Перейти на стартовую страницу</string>
     <string name="settings">Сменить язык</string>
 
+    <string name="something_went_wrong">Что-то пошло не так</string>
+
+
         <string name = "error">Ошибка</string>
         <string name = "max_attaches">Максимальное количество прикреплений</string>
 
@@ -155,6 +158,19 @@
             <item>Audio</item>
             <item>Document</item>
         </string-array>
+
+    <string-array name="menu_leave_group">
+
+        <item>Запропонувати новину</item>
+        <item>Запропоновані новини</item>
+        <item>Вступити до спільноти</item>
+    </string-array>
+
+    <string-array name="menu_join_group">
+        <item>Запропонувати новину</item>
+        <item>Запропоновані новини</item>
+        <item>Вступити до спільноти</item>
+    </string-array>
 
 
 

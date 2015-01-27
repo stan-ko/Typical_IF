@@ -456,12 +456,13 @@ public class ItemDataSetter {
 
         if (spannable.length() > 300) {
             showAll.setVisibility(View.VISIBLE);
-            // showAll.setBackgroundColor(Color.parseColor(postColor));
+           // showAll.setBackgroundColor(Color.parseColor(postColor));
             final SpannableStringBuilder originalSpannable = spannable;
             final SpannableStringBuilder tempSpannable = new SpannableStringBuilder();
             tempSpannable.append(spannable);
             final SpannableStringBuilder tempModifySpannable = tempSpannable.insert(297, "...").delete(300, tempSpannable.length());
             mainText.setText(tempModifySpannable);
+
 
 
             showAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -490,8 +491,8 @@ public class ItemDataSetter {
     }
 
     public static String setNameOfPostAuthor(int id) {
-        VKApiUser profile;
-        String name = null;
+       VKApiUser profile;
+       String name = null;
         for (int i = 0; i < wall.profiles.size(); i++) {
             profile = wall.profiles.get(i);
 
@@ -712,6 +713,8 @@ public class ItemDataSetter {
                     public void onClick(View v) {
                         image.setEnabled(true);
                         image.setClickable(true);
+
+
                         title.setVisibility(View.GONE);
                         size.setVisibility(View.GONE);
                         spinner.setVisibility(View.VISIBLE);
@@ -1010,7 +1013,7 @@ public class ItemDataSetter {
             Fragment fragment = new FragmentFullScreenViewer(finalPhotos, position, 0);
             fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
         } else {
-            showAlertNoInternet();
+            showAlertNoInternet(WallAdapter.wallAdapterView);
         }
     }
 
@@ -1023,7 +1026,7 @@ public class ItemDataSetter {
     }
 
 
-    static void showAlertNoInternet() {
+    static void showAlertNoInternet(final View view) {
         Toast.makeText(Constants.mainActivity.getApplicationContext(), context.getString(R.string.no_internet_retry), Toast.LENGTH_SHORT).show();
     }
 
@@ -1046,35 +1049,6 @@ public class ItemDataSetter {
         }
     }
 
-    public static String getFormattedDateForEvent(long smsTimeInMilis) {
-        Calendar smsTime = Calendar.getInstance();
-        smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
-        smsTime.setTimeInMillis(smsTimeInMilis * 1000);
-
-        Calendar now = Calendar.getInstance();
-        now.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
-
-        if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
-            return Constants.TODAY_EVENT_DATE;
-        } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1) {
-            return Constants.YESTERDAY_EVENT_DATE;
-        } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
-            return DateFormat.format(Constants.DATE_TIME_FORMAT_STRING, smsTime).toString();
-        } else
-            return DateFormat.format(Constants.OTHER_FORMAT_STRING, smsTime).toString();
-    }
-
-    public static boolean isToday(long smsTimeInMilis) {
-        Calendar smsTime = Calendar.getInstance();
-        smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
-        smsTime.setTimeInMillis(smsTimeInMilis * 1000);
-
-        Calendar now = Calendar.getInstance();
-        now.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
-
-        return now.get(Calendar.DATE) == smsTime.get(Calendar.DATE);
-    }
-
     public static String getFormattedDate(long smsTimeInMilis) {
         Calendar smsTime = Calendar.getInstance();
         smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
@@ -1091,18 +1065,6 @@ public class ItemDataSetter {
             return DateFormat.format(Constants.DATE_TIME_FORMAT_STRING, smsTime).toString();
         } else
             return DateFormat.format(Constants.OTHER_FORMAT_STRING, smsTime).toString();
-    }
-    public static boolean checkNewPostResult(long smsTimeInMilis) {
-        Calendar smsTime = Calendar.getInstance();
-        smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
-        smsTime.setTimeInMillis(smsTimeInMilis * 1000);
-
-        Calendar now = Calendar.getInstance();
-        now.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
-
-        if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
-            return true;
-        } else return false;
     }
 
     public static int setInDp(int dps) {

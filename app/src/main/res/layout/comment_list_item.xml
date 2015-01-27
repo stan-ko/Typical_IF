@@ -10,7 +10,7 @@
     android:descendantFocusability="blocksDescendants"
     android:focusable="false"
     android:focusableInTouchMode="false"
-    android:background="@color/transparent">
+    android:background="#ff424242">
 
 
 
@@ -133,18 +133,23 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/user_name_textView"
         android:layout_weight="0.08"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/img_user_avatar"
-        android:text="asd asd asd as dasd asd as"
+        android:text="Michael G."
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:textColor="#ffffffff"
-        android:textSize="15dp" />
+        android:textSize="15dp"
+
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/img_user_avatar"
+        android:layout_toEndOf="@+id/img_user_avatar"
+        android:layout_marginLeft="5dp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
 
     <typical_if.android.view.RoundedImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:id="@+id/img_user_avatar"
         android:cropToPadding="false"
         android:scaleType="fitStart"
@@ -152,58 +157,65 @@
         android:layout_alignTop="@+id/user_name_textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginRight="5dp"
+        android:layout_marginRight="10dp"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:src="@drawable/abc_ab_solid_dark_holo"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/text_date_of_comment"
-        android:textColor="#fff0f4ff"
-        android:text="asdas dasd asd as das da"
-        android:layout_below="@+id/user_name_textView"
-        android:layout_toRightOf="@+id/img_user_avatar"
-        android:layout_toEndOf="@+id/img_user_avatar"
+        android:textColor="#8cffffff"
+        android:text="6 days ago"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:textSize="15dp" />
+        android:textSize="12dp"
+        android:layout_alignBottom="@+id/user_name_textView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="15dp" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="9"
         android:id="@+id/post_comment_like_checkbox"
-        android:layout_alignBottom="@+id/img_user_avatar"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:button="@drawable/like_or_not_liked_selector"
         android:clickable="false"
         android:enabled="false"
-        android:visibility="visible"
+        android:visibility="gone"
         android:textColor="#fff0f4ff"
-        android:layout_marginLeft="5dip" />
+        android:shadowColor="#ff222222"
+        android:layout_alignTop="@+id/user_comment_text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/user_comment_text"
-        android:textColor="#fff0f4ff"
-        android:text="asdas d"
-        android:layout_toEndOf="@+id/commentTextLayout"
+        android:textColor="#d2ffffff"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:layout_below="@+id/img_user_avatar"
-        android:layout_toRightOf="@+id/commentTextLayout"
         android:textSize="15dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_below="@+id/img_user_avatar"
+        android:layout_alignLeft="@+id/user_name_textView"
+        android:layout_alignStart="@+id/user_name_textView"
+        android:layout_marginBottom="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="15dp" />
 
 
 </RelativeLayout>

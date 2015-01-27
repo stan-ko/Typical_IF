@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Типовий Франківськ</string>
-    <string name="logo_name">Типовий Франківськ</string>
+    <string name="logo_name">Типовий\nМобільний\nФранківськ</string>
     <string name="main_creed">Слава Україні! Героям слава!</string>
 
     <string name="menu_group_title_tf">Типовий Франківськ</string>
@@ -25,8 +25,7 @@
     <string name="libraries_info">About used libraries</string>
     <string name="you_have_no_suggested_posts">У вас немає запропонованих новин</string>
 
-    <string name="today_event">Сьогоднішні події</string>
-    <string name="yesterday_event">Вчорашні події</string>
+    <string name="something_went_wrong">Щось пішло не так</string>
 
     <string name="title_login">Увійти в профіль</string>
     <string name="title_logout">Вийти з профілю</string>
@@ -94,10 +93,12 @@
     <string name="text_has_been_copied_to_the_buffer">Текст був скопійований у буфер</string>
     <string name="restart_app_dialog">Перезапустити?</string>
 
+
     <string name="ab_title_make_post">Запропонувати новину</string>
     <string name="ab_title_suggested_posts">Запропоновані новини</string>
     <string name="ab_title_group_join">Вступити до спільноти</string>
     <string name="ab_title_group_leave">Покинути спільноту</string>
+
     <string name="group_joined">Ви вступили до спільноти</string>
     <string name="group_leaved">Ви покинули спільноту</string>
     <string name="go_to_start_page">Перейти на стартову сторінку</string>
@@ -117,11 +118,6 @@
 
     <string name="ab_title_upload_photo">Вивантажити фото</string>
 
-    <string name="today_events">Події Івано-Франківська</string>
-    <string name="station_events">Події антикафе "STANTSIYA"</string>
-    <string name="period_events">Тривалі події</string>
-
-    <string name="null_events">Немає</string>
 
     <array name="post_report_types">
         <item>Спам</item>
@@ -151,11 +147,19 @@
         <item>Document</item>
     </string-array>
 
-    <string-array name="menu">
-        <item>Menu</item>
-        <item>1</item>
-        <item>2</item>
+    <string-array name="menu_leave_group">
+
+        <item>Запропонувати новину</item>
+        <item>Запропоновані новини</item>
+        <item>Вступити до спільноти</item>
     </string-array>
+
+    <string-array name="menu_join_group">
+        <item>Запропонувати новину</item>
+        <item>Запропоновані новини</item>
+        <item>Вступити до спільноти</item>
+    </string-array>
+
 
 
 

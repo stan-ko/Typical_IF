@@ -16,7 +16,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ArrayAdapter;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCaptchaDialog;
@@ -35,6 +34,7 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
+import typical_if.android.adapter.ActionBarArrayAdapter;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentFullScreenViewer;
@@ -55,26 +55,19 @@ public class MainActivity extends DialogActivity implements
     private static final int PICK_FROM_CAMERA = 1;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     public NavigationDrawerFragment mNavigationDrawerFragment;
-    String[] data = new String[] { "one", "two", "three" };
-    ArrayAdapter<String> adapter ;
+   // String[] data = new String[] { "one", "two", "three" };
+    ActionBarArrayAdapter list ;
+    ActionBar actionBar ;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+         try {if (OfflineMode.loadInt("surprise")<15){OfflineMode.saveInt(0, "surprise");}} catch (Exception e){}
 
-
-        try {
-            if (OfflineMode.loadInt("surprise")<15){
-                OfflineMode.saveInt(0, "surprise");
-            }
-        } catch (Exception e){}
-
-
-        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
          setContentView(R.layout.activity_main);
-
-
-
+         ActionBar actionBar = getSupportActionBar();
 
         Constants.mainActivity = this;
         Constants.myIntent = new Intent(this, AudioPlayerService.class);
@@ -82,8 +75,14 @@ public class MainActivity extends DialogActivity implements
 
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
-        // Set up the drawer.
+
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+        if(mNavigationDrawerFragment.isDrawerOpen()){
+            actionBar.setDisplayShowTitleEnabled(true);
+        }
+        else {
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
 
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
@@ -124,44 +123,46 @@ public class MainActivity extends DialogActivity implements
         }
 
     }
-
-
     public void onSectionAttached(final long groupIndex) {
         switch ((int) groupIndex) {
             case 0:
                 mTitle = getString(R.string.menu_group_title_tf);
                 mIcon = getResources().getDrawable(R.drawable.tf_logo);
+                Constants.Mtitle=mTitle.toString();
                 break;
             case 1:
                 mTitle = getString(R.string.menu_group_title_tz);
                 mIcon = getResources().getDrawable(R.drawable.tz_logo);
+                Constants.Mtitle=mTitle.toString();
                 break;
             case 2:
                 mTitle = getString(R.string.menu_group_title_fb);
                 mIcon = getResources().getDrawable(R.drawable.fb_logo);
+                Constants.Mtitle=mTitle.toString();
+
                 break;
             case 3:
                 mTitle = getString(R.string.menu_group_title_fn);
                 mIcon = getResources().getDrawable(R.drawable.fn_logo);
+                Constants.Mtitle=mTitle.toString();
                 break;
             case 4:
                 mTitle = getString(R.string.menu_group_title_events);
-                mIcon = getResources().getDrawable(R.drawable.ic_zf);
+                mIcon = getResources().getDrawable(R.drawable.abc_ic_cab_done_holo_dark);
+                Constants.Mtitle=mTitle.toString();
                 break;
         }
     }
-
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        //actionBar.setDisplayShowTitleEnabled(true);
+        //actionBar.setTitle(mTitle);
         actionBar.setIcon(mIcon);
-        adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, data);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        actionBar.setListNavigationCallbacks(adapter, this);
-    }
+        list = new ActionBarArrayAdapter(getApplicationContext(),getResources().getStringArray(R.array.menu_join_group),mTitle);
+        list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        actionBar.setListNavigationCallbacks(list, this);
+     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -183,12 +184,13 @@ public class MainActivity extends DialogActivity implements
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             getMenuInflater().inflate(R.menu.main, menu);
-
             restoreActionBar();
             return true;
         }
         return super.onCreateOptionsMenu(menu);
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -282,8 +284,10 @@ public class MainActivity extends DialogActivity implements
             case 2:
             case 3:
             case 4:
-                vkGroupId = setGroupId(groupPosition);
+                vkGroupId = setGroupId(groupPosition);///////////////////////////////////////////////////////////////////////////////////////////////////
                 Constants.GROUP_ID = vkGroupId;
+
+
                 onSectionAttached(groupPosition);
 
                 if (childPosition == 0) {
@@ -323,6 +327,8 @@ public class MainActivity extends DialogActivity implements
         restoreActionBar();
     }
 
+
+
     @Override
     public void onFragmentInteraction(Uri uri) {
 
@@ -347,7 +353,6 @@ public class MainActivity extends DialogActivity implements
             AudioPlayerService.cancelNotification(this, Constants.notifID);
             if (Constants.mediaPlayer != null) {
                 Constants.mediaPlayer.stop();
-                //Constants.mediaPlayer.release();
                 Constants.playedPausedRecord.isPaused = true;
                 Constants.playedPausedRecord.isPlayed = false;
                 Constants.previousSeekBarState.setVisibility(View.INVISIBLE);
@@ -361,8 +366,8 @@ public class MainActivity extends DialogActivity implements
     }
 
     @Override
-    public boolean onNavigationItemSelected(int i, long l) {
-        return false;
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+    return true;
     }
 }
 

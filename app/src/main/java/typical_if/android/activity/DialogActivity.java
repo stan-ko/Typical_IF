@@ -39,7 +39,6 @@ import typical_if.android.event.EventShowSuggestPostDialog;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentUploadAlbumList;
-import typical_if.android.fragment.NavigationDrawerFragment;
 
 /**
  * Created by admin on 10.09.2014.
@@ -132,6 +131,7 @@ int index;
         final AlertDialog.Builder builderIn = new AlertDialog.Builder(Constants.mainActivity);
         builderIn.setTitle(R.string.post_report);
         final Resources resources = getResources();
+
 
         final String[] items = resources.getStringArray(R.array.post_report_types);
 

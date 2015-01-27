@@ -33,7 +33,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
-import typical_if.android.NotificationService;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -272,9 +271,6 @@ config.locale = ItemDataSetter.loadUserLanguage();
     private void startNextActivity() {
         final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
-        if (isFirstOpen()){
-            startService(new Intent(this, NotificationService.class));
-        }
         finish();
     }
 
