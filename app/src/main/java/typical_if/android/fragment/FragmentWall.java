@@ -241,23 +241,44 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             Toast.makeText(getApplicationContext(), getString(R.string.no_suggested_posts), Toast.LENGTH_SHORT).show();
         }
 
-        if (adapter == null) {
-            if (Constants.GROUP_ID == Constants.ZF_ID) {
+        if (Constants.GROUP_ID == Constants.ZF_ID) {
+            if (adapter == null) {
                 ArrayList<WallAdapter.EventObject> events = getEvents(wall);
                 adapter = new WallAdapter(events, wall, inflater, fragmentManager);
-            } else {
-                adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
-            }
 
-            wallListView.setAdapter(adapter);
-            wallListView.setOnScrollListener(pauseOnScrollListener);
-        } else {
-            if (Constants.GROUP_ID == Constants.ZF_ID) {
+                wallListView.setAdapter(adapter);
+                wallListView.setOnScrollListener(pauseOnScrollListener);
+            } else {
                 adapter.setEvent(getEvents(wall));
+            }
+        } else {
+            if (adapter == null) {
+                adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
+
+                wallListView.setAdapter(adapter);
+                wallListView.setOnScrollListener(pauseOnScrollListener);
             } else {
                 adapter.setWall(wall);
             }
         }
+//
+//        if (adapter == null) {
+//            adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
+//
+//            wallListView.setAdapter(adapter);
+//            wallListView.setOnScrollListener(pauseOnScrollListener);
+//        } else {
+//            if (Constants.GROUP_ID == Constants.ZF_ID) {
+//                if (adapter.eventObjects != null) {
+//                    ArrayList<WallAdapter.EventObject> events = getEvents(wall);
+//                    adapter = new WallAdapter(events, wall, inflater, fragmentManager);
+//                } else {
+//                    adapter.setEvent(getEvents(wall));
+//                }
+//            } else {
+//                adapter.setWall(wall);
+//            }
+//        }
 
         spinnerLayout.setVisibility(View.GONE);
 
