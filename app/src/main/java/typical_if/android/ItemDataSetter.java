@@ -1049,6 +1049,17 @@ public class ItemDataSetter {
         }
     }
 
+    public static boolean isToday(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+        smsTime.setTimeInMillis(smsTimeInMilis * 1000);
+
+        Calendar now = Calendar.getInstance();
+        now.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+
+        return now.get(Calendar.DATE) == smsTime.get(Calendar.DATE);
+    }
+
     public static String getFormattedDate(long smsTimeInMilis) {
         Calendar smsTime = Calendar.getInstance();
         smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));

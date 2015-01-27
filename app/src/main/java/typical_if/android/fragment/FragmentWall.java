@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,8 +30,16 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+import com.vk.sdk.api.model.VKApiPhoto;
+import com.vk.sdk.api.model.VKApiPost;
+import com.vk.sdk.api.model.VKAttachments;
 
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
@@ -235,23 +244,108 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         }
 
         if (adapter == null) {
-            adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
+            if (Constants.GROUP_ID == Constants.ZF_ID) {
+                ArrayList<WallAdapter.EventObject> events = getEvents(wall);
+                adapter = new WallAdapter(events, wall, inflater, fragmentManager);
+            } else {
+                adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
+            }
 
-//            SwingRightInAnimationAdapter swingBottomInAnimationAdapter = new SwingRightInAnimationAdapter(new SwipeDismissAdapter(adapter, onDismissCallback));
-//            swingBottomInAnimationAdapter.setAbsListView(wallListView);
-//            assert swingBottomInAnimationAdapter.getViewAnimator() != null;
-//            swingBottomInAnimationAdapter.getViewAnimator().setInitialDelayMillis(INITIAL_DELAY_MILLIS);
-//
-//            wallListView.setAdapter(swingBottomInAnimationAdapter);
-           // setBottomAdapter(wallListView, adapter);
             wallListView.setAdapter(adapter);
             wallListView.setOnScrollListener(pauseOnScrollListener);
         } else {
-            adapter.setWall(wall);
+            if (Constants.GROUP_ID == Constants.ZF_ID) {
+                adapter.setEvent(getEvents(wall));
+            } else {
+                adapter.setWall(wall);
+            }
         }
 
         spinnerLayout.setVisibility(View.GONE);
 
+    }
+
+    Pattern tempPattern;
+    Matcher tempMatcher;
+
+    public ArrayList<WallAdapter.EventObject> getEvents(Wall wall) {
+        ArrayList<WallAdapter.EventObject> events = new ArrayList<WallAdapter.EventObject>();
+
+        VKApiPhoto fakePhoto = new VKApiPhoto();
+        fakePhoto.photo_604 = "fake_photo";
+
+        VKApiPost tempPost;
+        String[] tempArray;
+
+        for (int i = 0; i < wall.posts.size(); i++) {
+            tempPost = wall.posts.get(i).post;
+
+            ArrayList<VKApiPhoto> photo = new ArrayList<VKApiPhoto>();
+
+            if (tempPost.attachments != null && tempPost.attachments.size() != 0) {
+                for (int j = 0; j < tempPost.attachments.size(); j++) {
+                    if (tempPost.attachments.get(j).getType().equals(VKAttachments.TYPE_PHOTO)) {
+                        photo.add((VKApiPhoto) tempPost.attachments.get(j));
+                    } else {
+                        photo.add(fakePhoto);
+                    }
+                }
+            } else {
+                photo.add(fakePhoto);
+            }
+
+            SparseArray<List<String>> eventData = new SparseArray<List<String>>();
+
+            ArrayList<String> today = new ArrayList<String>();
+            ArrayList<String> stantsiya = new ArrayList<String>();
+            ArrayList<String> period = new ArrayList<String>();
+
+            tempPost.text = tempPost.text.replaceFirst(":", "");
+            tempArray = tempPost.text.split("(.+):\n");
+
+
+            for (int j = 0; j < Constants.EVENT_COUNT; j++) {
+                switch (j) {
+                    case Constants.TODAY_EVENT:
+                        parseEvents(eventData, today, j, "(о ).+\n", tempArray[j]);
+                        break;
+                    case Constants.STATION_EVENT:
+                        parseEvents(eventData, stantsiya, j, "(о ).+\n", tempArray[j]);
+                        break;
+                    case Constants.PERIOD_EVENT:
+                        parseEvents(eventData, period, j, "- .+(\n|$)", tempArray[j]);
+                        break;
+                }
+            }
+
+            events.add(new WallAdapter.EventObject(
+                            eventData,
+                            tempPost.date,
+                            photo
+                    )
+            );
+        }
+
+        return events;
+    }
+
+    public void parseEvents(SparseArray<List<String>> data, ArrayList<String> list, int position, String regexp, String text) {
+        tempPattern = Pattern.compile(regexp);
+        tempMatcher = tempPattern.matcher(text);
+
+        if (!text.contains(getString(R.string.null_events))) {
+            while (tempMatcher.find()) {
+                if (tempMatcher.group().contains("\n")) {
+                    list.add(tempMatcher.group().replace("\n", ""));
+                } else {
+                    list.add(tempMatcher.group());
+                }
+            }
+        } else {
+            list.add(getString(R.string.null_events));
+        }
+
+        data.put(position, list);
     }
 
     int mCurCheckPosition = 0;
