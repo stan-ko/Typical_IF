@@ -133,8 +133,8 @@ public class NotificationService extends Service {
         VKWallPostWrapper postW =  posts.get(0);
         VKApiPost post = postW.post;
         if (ItemDataSetter.checkNewPostResult(post.date)){
-            sendNotif();
             updateStatus(true);
+            sendNotif();
         } else {
             updateStatus(false);
            // OfflineMode.saveBool(false, key);
@@ -150,7 +150,7 @@ public class NotificationService extends Service {
        // PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
 
-        notif.setLatestEventInfo(this, "Notification's title", "Notification's text", null);
+        notif.setLatestEventInfo(this, "Події на сьогодні", "Додай найцікавіше до календаря", null);
         notif.flags |= Notification.FLAG_AUTO_CANCEL;
 
         nm.notify(1, notif);

@@ -587,7 +587,7 @@ public class WallAdapter extends BaseAdapter {
             RelativeLayout copyHistorySignedContainer = (RelativeLayout) copyHistoryList.findViewById(R.id.copyHistorySignedLayout);
             copyHistorySignedContainer.setVisibility(postWrapper.copyHistorySignedContainerVisibility);
             if (postWrapper.copyHistorySignedChecker) {
-                ItemDataSetter.setSigned(copyHistory.signer_id, copyHistorySignedContainer);
+//                ItemDataSetter.setSigned(copyHistory.signer_id, copyHistorySignedContainer);
             }
 
             viewHolder.copyHistoryLayout.addView(copyHistoryContainer);
