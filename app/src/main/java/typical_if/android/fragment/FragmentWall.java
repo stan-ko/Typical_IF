@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
@@ -23,7 +22,6 @@ import android.widget.Toast;
 
 import com.nhaarman.listviewanimations.appearance.AnimationAdapter;
 import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
-import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.vk.sdk.VKSdk;
@@ -589,10 +587,10 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
     }
 
-    OnDismissCallback onDismissCallback = new OnDismissCallback() {
-        @Override
-        public void onDismiss(@NonNull ViewGroup viewGroup, @NonNull int[] ints) {
-
-        }
-    };
+//    OnDismissCallback onDismissCallback = new OnDismissCallback() {
+//        @Override
+//        public void onDismiss(@NonNull ViewGroup viewGroup, @NonNull int[] ints) {
+//
+//        }
+//    };
 }
