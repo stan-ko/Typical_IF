@@ -94,6 +94,23 @@ public class OfflineMode {
             return false;
         }
     }
+    public static void saveBool(boolean flag, String id) {
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id),Activity.MODE_PRIVATE);
+        final SharedPreferences.Editor ed = sPref.edit();
+        final String BoolString = Boolean.toString(flag);
+        final String BoolKey = id;
+        ed.clear();
+        ed.putString(BoolKey, BoolString);
+        ed.commit();
+    }
+    public static boolean loadBool(String id)  {
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
+        final String boolKey = String.valueOf(id);
+        final String savedText = sPref.getString(boolKey, "");
+        // e.printStackTrace();
+
+        return Boolean.valueOf(savedText);
+    }
 
     public static void saveInt(int surprise, String id) {
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id),Activity.MODE_PRIVATE);

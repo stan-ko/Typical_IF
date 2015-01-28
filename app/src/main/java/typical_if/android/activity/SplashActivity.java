@@ -33,6 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
+import typical_if.android.NotificationService;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
@@ -74,11 +75,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         textView.startAnimation(animMoveDown);
 
         animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
-        imageView.startAnimation(animFadeIn);
-//if (Locale.getDefault().getLanguage()=="ru") {
-//    locale = new Locale("ru");
-//    Locale.setDefault(locale);
-//
+
     config = new Configuration();
        if( ItemDataSetter.getUserLan()!=""){
 config.locale = ItemDataSetter.loadUserLanguage();
@@ -271,6 +268,9 @@ config.locale = ItemDataSetter.loadUserLanguage();
     private void startNextActivity() {
         final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
+        if (isFirstOpen()){
+            startService(new Intent(this, NotificationService.class));
+        }
         finish();
     }
 

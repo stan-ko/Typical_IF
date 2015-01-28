@@ -50,7 +50,8 @@ public class Constants {
     public static int COUNTER;
 
     public static final long TF_ID = -36573302;
-    public static final long ZF_ID = -24818281;
+    //    public static final long ZF_ID = -24818281; //true
+    public static final long ZF_ID = -85319952; //test
     public static final long TZ_ID = -26363301;
     public static final long FB_ID = -39253850;
     public static final long FN_ID = -38380107;
@@ -148,5 +149,9 @@ public class Constants {
     public static final String TIF_VK_API_KEY_TOKEN = "VK_ACCESS_TOKEN";
     public static final int TIF_VK_PRELOAD_POSTS_COUNT = 100;
 
+    public static final int TODAY_EVENT = 0;
+    public static final int STATION_EVENT = 1;
+    public static final int PERIOD_EVENT = 2;
 
+    public static final int EVENT_COUNT = 3;
 }

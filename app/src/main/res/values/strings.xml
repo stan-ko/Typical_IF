@@ -118,6 +118,11 @@
 
     <string name="ab_title_upload_photo">Вивантажити фото</string>
 
+    <string name="today_events">Події Івано-Франківська</string>
+    <string name="station_events">Події антикафе "STANTSIYA"</string>
+    <string name="period_events">Тривалі події</string>
+
+    <string name="null_events">Немає</string>
 
     <array name="post_report_types">
         <item>Спам</item>
@@ -159,10 +164,6 @@
         <item>Запропоновані новини</item>
         <item>Вступити до спільноти</item>
     </string-array>
-
-
-
-
 
 
 </resources>

@@ -1050,6 +1050,17 @@ public class ItemDataSetter {
         }
     }
 
+    public static boolean isToday(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+        smsTime.setTimeInMillis(smsTimeInMilis * 1000);
+
+        Calendar now = Calendar.getInstance();
+        now.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+
+        return now.get(Calendar.DATE) == smsTime.get(Calendar.DATE);
+    }
+
     public static String getFormattedDate(long smsTimeInMilis) {
         Calendar smsTime = Calendar.getInstance();
         smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
@@ -1067,7 +1078,18 @@ public class ItemDataSetter {
         } else
             return DateFormat.format(Constants.OTHER_FORMAT_STRING, smsTime).toString();
     }
+    public static boolean checkNewPostResult(long smsTimeInMilis) {
+        Calendar smsTime = Calendar.getInstance();
+        smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+        smsTime.setTimeInMillis(smsTimeInMilis * 1000);
 
+        Calendar now = Calendar.getInstance();
+        now.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
+
+        if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
+            return true;
+        } else return false;
+    }
     public static int setInDp(int dps) {
         final float scale = Constants.RESOURCES.getDisplayMetrics().density;
         return (int) (dps * scale + 0.5f);

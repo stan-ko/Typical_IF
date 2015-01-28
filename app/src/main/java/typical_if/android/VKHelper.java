@@ -418,6 +418,18 @@ public class VKHelper {
         request.executeWithListener(vkRequestListener);
     }
 
+    public static void doGroupWallRequest(int extended, int offset, int countPosts, long gid, VKRequest.VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put("owner_id", gid);
+        params.put("domain", gid);
+        params.put("offset", offset);
+        params.put("count", countPosts);
+        params.put("filter", "all");
+        params.put("extended", extended);
+
+        final VKRequest request = VKApi.wall().get(params);
+        request.executeWithListener(vkRequestListener);
+    }
     public static Wall getGroupWallFromJSON(final JSONObject jsonObject) {
         final Wall wall = new Wall();
   try {
