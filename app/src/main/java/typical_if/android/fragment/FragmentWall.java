@@ -261,27 +261,8 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 adapter.setWall(wall);
             }
         }
-//
-//        if (adapter == null) {
-//            adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
-//
-//            wallListView.setAdapter(adapter);
-//            wallListView.setOnScrollListener(pauseOnScrollListener);
-//        } else {
-//            if (Constants.GROUP_ID == Constants.ZF_ID) {
-//                if (adapter.eventObjects != null) {
-//                    ArrayList<WallAdapter.EventObject> events = getEvents(wall);
-//                    adapter = new WallAdapter(events, wall, inflater, fragmentManager);
-//                } else {
-//                    adapter.setEvent(getEvents(wall));
-//                }
-//            } else {
-//                adapter.setWall(wall);
-//            }
-//        }
 
         spinnerLayout.setVisibility(View.GONE);
-
     }
 
     Pattern tempPattern;

@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.provider.CalendarContract;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.util.SparseArray;
@@ -38,8 +39,12 @@ import com.vk.sdk.api.model.VKApiUser;
 
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
@@ -119,7 +124,12 @@ public class WallAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return Constants.GROUP_ID != Constants.ZF_ID ? posts.size() : eventObjects.size();
+        try {
+            return Constants.GROUP_ID != Constants.ZF_ID ? posts.size() : eventObjects.size();
+        } catch (NullPointerException e) {
+            Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
+            return 0;
+        }
     }
 
     @Override
@@ -185,7 +195,6 @@ public class WallAdapter extends BaseAdapter {
     static String copy_history_logo = "";
     static String copy_history_name = "";
 
-
     public final View.OnClickListener imgClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -195,10 +204,26 @@ public class WallAdapter extends BaseAdapter {
         }
     };
 
+    private static class CalendarData {
+        public final String timeStart;
+        public final String title;
+        public final String location;
+
+        private CalendarData(String timeStart, String title, String location) {
+            this.timeStart = timeStart;
+            this.title = title;
+            this.location = location;
+        }
+    }
+
     public final View.OnClickListener flClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Toast.makeText(context, "Added", Toast.LENGTH_SHORT).show();
+            SwipeLayout eventSwipeLayout = (SwipeLayout) v.getTag();
+            eventSwipeLayout.close(true);
+
+            CalendarData calendarData = (CalendarData) eventSwipeLayout.getTag();
+            pushAppointmentsToCalender(context, calendarData.title, calendarData.location, calendarData.timeStart);
         }
     };
 
@@ -208,6 +233,68 @@ public class WallAdapter extends BaseAdapter {
             ((SwipeLayout) v.getTag()).toggle(true);
         }
     };
+
+    public static long pushAppointmentsToCalender(Context context, String title, String place, String startTime) {
+
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.Events.TITLE, title)
+                .putExtra(CalendarContract.Events.DESCRIPTION, context.getString(R.string.today_event_description))
+                .putExtra(CalendarContract.Events.EVENT_LOCATION, place)
+                .putExtra(CalendarContract.Events.CALENDAR_TIME_ZONE, TimeZone.getDefault().getID());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMC"));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+        long currentDate = 0;
+        try {
+            currentDate = dateFormat.parse(dateFormat.format(new Date())).getTime();
+        } catch (ParseException e) {}
+
+        long startDate;
+        long endDate;
+
+        try {
+            startDate = currentDate + sdf.parse(startTime).getTime();
+            endDate = startDate + 2000 * 60 * 60;
+        } catch (ParseException e) {
+            startDate = currentDate + 60 * 60 * 1000 * 24;
+            endDate = startDate + 48 * 1000 * 60 * 60;
+
+            intent.putExtra(CalendarContract.Events.ALL_DAY, true);
+        }
+
+        intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, startDate)
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endDate);
+
+        context.startActivity(intent);
+
+//        .putExtra(CalendarContract.Reminders.METHOD, 4)
+//                .putExtra(CalendarContract.Reminders.MINUTES, 60);
+//
+//        Uri eventUri = context.getContentResolver().insert(Uri.parse(eventUriString), eventValues);
+//        long eventID = Long.parseLong(eventUri.getLastPathSegment());
+//
+//        /***************** Event: Reminder(with alert) Adding reminder to event *******************/
+//
+//        String reminderUriString = "content://com.android.calendar/reminders";
+//
+//        ContentValues reminderValues = new ContentValues();
+//
+//        reminderValues.put("event_id", eventID);
+//        reminderValues.put("minutes", 60); // Default value of the
+//        // system. Minutes is a
+//        // integer
+//        reminderValues.put("method", 1); // Alert Methods: Default(0),
+//        // Alert(1), Email(2),
+//        // SMS(3)
+//
+//        Uri reminderUri = context.getContentResolver().insert(Uri.parse(reminderUriString), reminderValues);
+
+        return 0;
+    }
 
     public void initEventViewHolder(EventViewHolder viewHolder, EventObject item) {
         ItemDataSetter.fragmentManager = fragmentManager;
@@ -253,7 +340,37 @@ public class WallAdapter extends BaseAdapter {
                     if (item.array.get(i).get(j).equals(context.getString(R.string.null_events))) {
                         unsetSwipeLayout(eventSwipeLayout);
                     } else {
-                        setSwipeLayout(eventSwipeLayout);
+                        StringBuilder text = new StringBuilder(eventTextView.getText());
+                        String startTime = "";
+                        String title;
+                        String location;
+
+                        switch (i) {
+                            case 0:
+                            case 1:
+                                startTime = text.substring(2, 7);
+
+                                text = text.replace(0, 8, "");
+
+                                break;
+                            case 2:
+                                startTime = "";
+
+                                text = text.replace(0, 2, "");
+
+                                break;
+                        }
+                        try {
+                            title = text.substring(0, text.indexOf(",") - 1);
+                            text = text.replace(0, text.indexOf(",") + 1, "");
+                        } catch (StringIndexOutOfBoundsException e) {
+                            title = text.substring(0, text.length());
+                            text = text.replace(0, text.length(), "");
+                        }
+
+                        location = text.toString();
+
+                        setSwipeLayout(eventSwipeLayout, new CalendarData(startTime, title, location));
                     }
                 } else {
                     unsetSwipeLayout(eventSwipeLayout);
@@ -270,11 +387,14 @@ public class WallAdapter extends BaseAdapter {
         eventSwipeLayout.setSwipeEnabled(false);
     }
 
-    public void setSwipeLayout(SwipeLayout eventSwipeLayout) {
+    public void setSwipeLayout(SwipeLayout eventSwipeLayout, CalendarData calendarData) {
         eventSwipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         eventSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
         eventSwipeLayout.getSurfaceView().setTag(eventSwipeLayout);
         eventSwipeLayout.getSurfaceView().setOnClickListener(slClickListener);
+
+        eventSwipeLayout.setTag(calendarData);
+        eventSwipeLayout.getBottomView().setTag(eventSwipeLayout);
         eventSwipeLayout.getBottomView().setOnClickListener(flClickListener);
     }
 
