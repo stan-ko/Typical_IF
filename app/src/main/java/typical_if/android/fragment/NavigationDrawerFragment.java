@@ -76,9 +76,6 @@ public class NavigationDrawerFragment extends Fragment {
 
     public NavigationDrawerFragment() {
     }
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +90,10 @@ public class NavigationDrawerFragment extends Fragment {
             mFromSavedInstanceState = true;
         }
         // Select either the default item (0) or the last selected item.
-        selectItem(0, 0);
+
+        if (getActivity().getIntent().getExtras()!= null && getActivity().getIntent().getExtras().getBoolean("isClickable")){
+            selectItem(4, 0);
+        }else selectItem(0, 0);
     }
 
     public void refreshNavigationDrawer() {
