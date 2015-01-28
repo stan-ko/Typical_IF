@@ -75,6 +75,7 @@ import static java.lang.String.valueOf;
  * Created by admin on 05.08.2014.
  */
 public class ItemDataSetter {
+
     public int sizeOfAlbum;
 
     public static Context context = TIFApp.getAppContext();
