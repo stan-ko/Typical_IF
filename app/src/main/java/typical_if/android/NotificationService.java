@@ -6,8 +6,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.os.Handler;
 import android.os.IBinder;
@@ -35,22 +33,28 @@ import typical_if.android.model.Wall.Wall;
 
 public class NotificationService extends Service {
 
-    private long mInterval ; // 5 seconds by default, can be changed later
+    private long mInterval ;
    final  private Handler mHandler = new Handler();;
     private final int offsetDefault = 0;
     private final int countOfPosts = 1;
     private final int extended = 1;
+    private  long timeToNewNotiff ;
+    private final static int ONE_HOUR_MILLISECONDS =  60 * 60 * 1000;
 
-    AtomicInteger threadsCounter;
-    Wall wall;
-    final static int ONE_DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
+    private AtomicInteger threadsCounter;
+   private  Wall wall;
+    private final static int ONE_DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
-        parseJson(OfflineMode.loadJSON(Constants.ZF_ID), false);
+        if (OfflineMode.isFirstRun("spleahFirstrun")){
+        parseJson(OfflineMode.loadJSON(Constants.ZF_ID), true);} else { parseJson(OfflineMode.loadJSON(Constants.ZF_ID), false);}
+        //mInterval=1000;
         Log.d("onCreateService", "----------------------");
     }
 
@@ -66,30 +70,36 @@ public class NotificationService extends Service {
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
-            makeRequests();
             mHandler.postDelayed(mStatusChecker, mInterval);
+            Log.d("run", "----------------------");
+                if (System.currentTimeMillis()>=timeToNewNotiff) makeRequests();
+                Log.d("Make Request", "----------------------");
+
+
         }
     };
 
-    void startRepeatingTask() {
+    private void startRepeatingTask() {
         mStatusChecker.run();
     }
 
-    void stopRepeatingTask() {
+    private void stopRepeatingTask() {
         mHandler.removeCallbacks(mStatusChecker);
     }
 
-    void updateStatus(boolean isNewPost, boolean sendNotif) {
+    private void updateStatus(boolean isNewPost, boolean sendNotif) {
         if (isNewPost == true ) {
-            long tomorrowTime = System.currentTimeMillis();
-            tomorrowTime = tomorrowTime - (tomorrowTime % ONE_DAY_MILLISECONDS) + 32 * 60 * 60 * 1000;
-            long intervalForNextServiceStart = tomorrowTime - System.currentTimeMillis();
-           mInterval = intervalForNextServiceStart;
-           // mInterval=10000;
-            if (sendNotif) sendNotif();
+            final long currentTime = System.currentTimeMillis();
+           final long tomorrowTime = currentTime - (currentTime % ONE_DAY_MILLISECONDS) + ONE_DAY_MILLISECONDS + ONE_HOUR_MILLISECONDS*8;
+            timeToNewNotiff = tomorrowTime;
+            mInterval = tomorrowTime - currentTime;
+            //mInterval = 20*1000;
+            if (sendNotif) { sendNotif();} ;
             Log.d("intervalForNextServiceStart ", " to 8 hours " + mInterval);
         } else {
             mInterval = 60 * 60 * 1000;
+            //mInterval = 10* 1000;
+
             // mInterval = 20000;
             Log.d("intervalForNextServiceStart ", " for 1 hour " + mInterval);
         }
@@ -113,27 +123,20 @@ public class NotificationService extends Service {
         });
     }
 
-    void handleRequestComplete(final JSONObject json, final AtomicInteger requestSessionThreadsCounter) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
+    private void handleRequestComplete(final JSONObject json, final AtomicInteger requestSessionThreadsCounter) {
                 if (threadsCounter != requestSessionThreadsCounter)
                     return;
-
                 decrementThreadsCounter(requestSessionThreadsCounter, json);
-            }
-        }).start();
     }
 
-    void decrementThreadsCounter(final AtomicInteger requestSessionThreadsCounter, final JSONObject newPostJson) {
+    private void decrementThreadsCounter(final AtomicInteger requestSessionThreadsCounter, final JSONObject newPostJson) {
         if (threadsCounter != requestSessionThreadsCounter)
             return;
         if (requestSessionThreadsCounter.decrementAndGet() == 0)
-            //OfflineMode.saveBool(false, key);
            parseJson(newPostJson, true);
     }
 
-    boolean parseJson(JSONObject newPostJson, boolean sendNotif) {
+    private  boolean parseJson(JSONObject newPostJson, boolean sendNotif) {
         wall = VKHelper.getGroupWallFromJSON(newPostJson);
         ArrayList<VKWallPostWrapper> posts;
         posts = wall.posts;
@@ -145,21 +148,17 @@ public class NotificationService extends Service {
         } else {
             updateStatus(false, sendNotif);
             return false;
-            // OfflineMode.saveBool(false, key);
         }
 
     }
-    void sendNotif() {
-        Bitmap bitmap = BitmapFactory.decodeResource(TIFApp.getAppContext().getResources(), R.drawable.ic_zf);
-
+    private  void sendNotif() {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_zf_mdpi)
                         .setContentTitle("Події Франківська")
                         .setContentText("Додай найцікавіше в календар")
                         .setAutoCancel(true)
-
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
         Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.putExtra("isClickable", true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

@@ -36,8 +36,8 @@ public class OfflineMode {
         ed.putString(JsonKey, JsonString);
         ed.commit();
     }
-    public static boolean isFirstRun() {
-        final SharedPreferences tfFirstRunSPref = TIFApp.getAppContext().getSharedPreferences("TFFirstRun",Activity.MODE_PRIVATE);
+    public static boolean isFirstRun(String prefName) {
+        final SharedPreferences tfFirstRunSPref = TIFApp.getAppContext().getSharedPreferences(prefName,Activity.MODE_PRIVATE);
         final SharedPreferences.Editor editor = tfFirstRunSPref.edit();
         String key = "isFirstRun";
         boolean isFirstRun =true;
