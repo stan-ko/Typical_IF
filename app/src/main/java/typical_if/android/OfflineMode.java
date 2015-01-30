@@ -35,6 +35,17 @@ public class OfflineMode {
         ed.putString(JsonKey, JsonString);
         ed.commit();
     }
+    public static boolean isfirstRun() {
+        final SharedPreferences tfFirstRunSPref = TIFApp.getAppContext().getSharedPreferences("TFFirstRun",Activity.MODE_PRIVATE);
+        final SharedPreferences.Editor editor = tfFirstRunSPref.edit();
+        String key = "isFirstRun";
+        Boolean isFirstRun = tfFirstRunSPref.getBoolean(key, true);
+        if (isFirstRun!=null){
+            editor.putBoolean(key, false);
+            return true;
+        } else return false;
+
+    }
 
     public static JSONObject loadJSON(long gid)  {
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(gid), Activity.MODE_PRIVATE);

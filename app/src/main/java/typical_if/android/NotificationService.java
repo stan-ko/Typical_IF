@@ -89,11 +89,11 @@ public class NotificationService extends Service {
            mInterval = intervalForNextServiceStart;
             //mInterval=10000;
             sendNotif();
-            Log.d("intervalForNextServiceStart ", " to 8 hours" + mInterval);
+            Log.d("intervalForNextServiceStart ", " to 8 hours " + mInterval);
         } else {
             mInterval = 60 * 60 * 1000;
             // mInterval = 20000;
-            Log.d("intervalForNextServiceStart ", " for 1 hour" + mInterval);
+            Log.d("intervalForNextServiceStart ", " for 1 hour " + mInterval);
         }
     }
 
@@ -153,10 +153,9 @@ public class NotificationService extends Service {
                         .setSmallIcon(R.drawable.ic_zf_mdpi)
                         .setContentTitle("Події Франківська")
                         .setContentText("Додай найцікавіше в календар")
-                         .setAutoCancel(false)
+                        .setAutoCancel(true)
 
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-
         Intent resultIntent = new Intent(this, MainActivity.class);
         resultIntent.putExtra("isClickable", true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -165,7 +164,7 @@ public class NotificationService extends Service {
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(
                         0,
-                        PendingIntent.FLAG_UPDATE_CURRENT
+                        PendingIntent.FLAG_CANCEL_CURRENT
                 );
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager =
