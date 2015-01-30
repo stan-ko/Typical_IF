@@ -36,11 +36,11 @@ import typical_if.android.model.Wall.Wall;
 public class NotificationService extends Service {
 
     private long mInterval ; // 5 seconds by default, can be changed later
-    private Handler mHandler;
+   final  private Handler mHandler = new Handler();;
     private final int offsetDefault = 0;
     private final int countOfPosts = 1;
     private final int extended = 1;
-    JSONObject newPostJson;
+
     AtomicInteger threadsCounter;
     Wall wall;
     final static int ONE_DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
@@ -49,26 +49,24 @@ public class NotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        mInterval=1000;
-        mHandler = new Handler();
+        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
+        parseJson(OfflineMode.loadJSON(Constants.ZF_ID), false);
         Log.d("onCreateService", "----------------------");
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
+//        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
         Log.d("onStartCommand", "----------------------");
         if (OfflineMode.isOnline(TIFApp.getAppContext())) {
             startRepeatingTask();
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
-            // if (!OfflineMode.loadBool(key)){
             makeRequests();
-            //}
             mHandler.postDelayed(mStatusChecker, mInterval);
         }
     };
@@ -81,14 +79,14 @@ public class NotificationService extends Service {
         mHandler.removeCallbacks(mStatusChecker);
     }
 
-    void updateStatus(boolean isNewPost) {
-        if (isNewPost == true) {
+    void updateStatus(boolean isNewPost, boolean sendNotif) {
+        if (isNewPost == true ) {
             long tomorrowTime = System.currentTimeMillis();
             tomorrowTime = tomorrowTime - (tomorrowTime % ONE_DAY_MILLISECONDS) + 32 * 60 * 60 * 1000;
             long intervalForNextServiceStart = tomorrowTime - System.currentTimeMillis();
            mInterval = intervalForNextServiceStart;
-            //mInterval=10000;
-            sendNotif();
+           // mInterval=10000;
+            if (sendNotif) sendNotif();
             Log.d("intervalForNextServiceStart ", " to 8 hours " + mInterval);
         } else {
             mInterval = 60 * 60 * 1000;
@@ -121,30 +119,36 @@ public class NotificationService extends Service {
             public void run() {
                 if (threadsCounter != requestSessionThreadsCounter)
                     return;
-                newPostJson = json;
-                decrementThreadsCounter(requestSessionThreadsCounter);
+
+                decrementThreadsCounter(requestSessionThreadsCounter, json);
             }
         }).start();
     }
 
-    void decrementThreadsCounter(final AtomicInteger requestSessionThreadsCounter) {
+    void decrementThreadsCounter(final AtomicInteger requestSessionThreadsCounter, final JSONObject newPostJson) {
         if (threadsCounter != requestSessionThreadsCounter)
             return;
         if (requestSessionThreadsCounter.decrementAndGet() == 0)
             //OfflineMode.saveBool(false, key);
-            wall = VKHelper.getGroupWallFromJSON(newPostJson);
+           parseJson(newPostJson, true);
+    }
+
+    boolean parseJson(JSONObject newPostJson, boolean sendNotif) {
+        wall = VKHelper.getGroupWallFromJSON(newPostJson);
         ArrayList<VKWallPostWrapper> posts;
         posts = wall.posts;
         VKWallPostWrapper postW = posts.get(0);
         VKApiPost post = postW.post;
         if (ItemDataSetter.checkNewPostResult(post.date)) {
-            updateStatus(true);
+            updateStatus(true , sendNotif);
+            return true;
         } else {
-            updateStatus(false);
+            updateStatus(false, sendNotif);
+            return false;
             // OfflineMode.saveBool(false, key);
         }
-    }
 
+    }
     void sendNotif() {
         Bitmap bitmap = BitmapFactory.decodeResource(TIFApp.getAppContext().getResources(), R.drawable.ic_zf);
 

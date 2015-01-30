@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,15 +36,20 @@ public class OfflineMode {
         ed.putString(JsonKey, JsonString);
         ed.commit();
     }
-    public static boolean isfirstRun() {
+    public static boolean isFirstRun() {
         final SharedPreferences tfFirstRunSPref = TIFApp.getAppContext().getSharedPreferences("TFFirstRun",Activity.MODE_PRIVATE);
         final SharedPreferences.Editor editor = tfFirstRunSPref.edit();
         String key = "isFirstRun";
-        Boolean isFirstRun = tfFirstRunSPref.getBoolean(key, true);
-        if (isFirstRun!=null){
-            editor.putBoolean(key, false);
-            return true;
-        } else return false;
+        boolean isFirstRun =true;
+        boolean notFirstRun = false;
+        Boolean FirstRun = tfFirstRunSPref.getBoolean(key, isFirstRun);
+        Log.d("firsRun----------------------------",""+FirstRun);
+        if (FirstRun==isFirstRun){
+            editor.clear();
+            editor.putBoolean(key, notFirstRun);
+            editor.commit();
+            return isFirstRun;
+        } else return notFirstRun;
 
     }
 

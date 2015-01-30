@@ -9,7 +9,6 @@ import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
@@ -271,9 +270,8 @@ config.locale = ItemDataSetter.loadUserLanguage();
         final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
 
-        if (OfflineMode.isfirstRun()){
-            Log.d("firstRun","---------------------///////-------------------");
-            startService(new Intent(this, NotificationService.class));
+        if (OfflineMode.isFirstRun()==true){
+           startService(new Intent(this, NotificationService.class));
         }
 
         finish();
