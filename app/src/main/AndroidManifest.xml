@@ -5,6 +5,8 @@
     android:versionCode="2"
     android:versionName="1.1">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_CALENDAR" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
     <!-- to allow UIL to cache images on SD card -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <activity android:name=".MyActivity" android:launchMode="singleTop"  />
@@ -48,6 +50,7 @@
             android:enabled="true"
             android:name=".AudioPlayerService">
             <intent-filter>
+                <action android:name="android.intent.action.EVENT_REMINDER" />
                 <action android:name="com.action.PAUSE"/>
                 <action android:name="com.action.PLAY"/>
             </intent-filter>
