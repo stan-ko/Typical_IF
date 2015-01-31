@@ -67,6 +67,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
 
+
         textView = (TextView) findViewById(R.id.splash_title);
         imageView = (ImageView) findViewById(R.id.splash_logo);
 
@@ -94,6 +95,8 @@ config.locale = ItemDataSetter.loadUserLanguage();
         ItemDataSetter.loadUserId();
         ItemDataSetter.loadUserLanguage();
     }
+
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig){
@@ -136,7 +139,6 @@ config.locale = ItemDataSetter.loadUserLanguage();
                     startNextActivity();
                 }
             });
-
         }
         builder.create().show();
     }
@@ -149,7 +151,6 @@ config.locale = ItemDataSetter.loadUserLanguage();
         }
         return temp;
     }
-
     void checkIfOnlineAndProceed() {
         if (OfflineMode.isOnline(getApplicationContext())) {
             makeRequests();
@@ -268,9 +269,11 @@ config.locale = ItemDataSetter.loadUserLanguage();
     private void startNextActivity() {
         final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
-        if (isFirstOpen()){
-            startService(new Intent(this, NotificationService.class));
+
+        if (OfflineMode.isFirstRun("SplashFirstRun")==true){
+           startService(new Intent(this, NotificationService.class));
         }
+
         finish();
     }
 

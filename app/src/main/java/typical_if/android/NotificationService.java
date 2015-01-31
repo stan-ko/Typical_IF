@@ -1,12 +1,16 @@
 package typical_if.android;
 
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.vk.sdk.VKAccessToken;
@@ -23,135 +27,154 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import typical_if.android.activity.MainActivity;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 
 public class NotificationService extends Service {
-    NotificationManager nm;
-    private long mInterval = 10000; // 5 seconds by default, can be changed later
-    private Handler mHandler;
+
+    private long mInterval ;
+   final  private Handler mHandler = new Handler();;
     private final int offsetDefault = 0;
     private final int countOfPosts = 1;
     private final int extended = 1;
-    JSONObject newPostJson;
-    AtomicInteger threadsCounter;
-    Wall wall;
-   private final String key= "isNotificationAlreadySended";
-     final static int ONE_DAY_MILLISECONDS = 24*60*60*1000;
-    public NotificationService() {
-    }
+    private  long timeToNewNotiff ;
+    private final static int ONE_HOUR_MILLISECONDS =  60 * 60 * 1000;
+
+    private AtomicInteger threadsCounter;
+   private  Wall wall;
+    private final static int ONE_DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
-        nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        mHandler = new Handler();
+
+
+        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
+        if (OfflineMode.isFirstRun("spleahFirstrun")){
+        parseJson(OfflineMode.loadJSON(Constants.ZF_ID), true);} else { parseJson(OfflineMode.loadJSON(Constants.ZF_ID), false);}
+        //mInterval=1000;
         Log.d("onCreateService", "----------------------");
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
+//        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
         Log.d("onStartCommand", "----------------------");
-        if (OfflineMode.isOnline(TIFApp.getAppContext())){
+        if (OfflineMode.isOnline(TIFApp.getAppContext())) {
             startRepeatingTask();
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
     Runnable mStatusChecker = new Runnable() {
         @Override
         public void run() {
-           // if (!OfflineMode.loadBool(key)){
-                makeRequests();
-            //}
             mHandler.postDelayed(mStatusChecker, mInterval);
+            Log.d("run", "----------------------");
+                if (System.currentTimeMillis()>=timeToNewNotiff) makeRequests();
+                Log.d("Make Request", "----------------------");
+
+
         }
     };
 
-    void startRepeatingTask() {
+    private void startRepeatingTask() {
         mStatusChecker.run();
     }
-    void stopRepeatingTask() {
+
+    private void stopRepeatingTask() {
         mHandler.removeCallbacks(mStatusChecker);
     }
 
-    void updateStatus(boolean isNewPost){
-        if (isNewPost == true){
-            long tomorrowTime = System.currentTimeMillis();
-            tomorrowTime = tomorrowTime - (tomorrowTime% ONE_DAY_MILLISECONDS)+32*60*60*1000;
-            long intervalForNextServiceStart = tomorrowTime-System.currentTimeMillis();
-            mInterval=intervalForNextServiceStart;
-            //mInterval=10000;
-
-            Log.d("intervalForNextServiceStart", ""+mInterval);
+    private void updateStatus(boolean isNewPost, boolean sendNotif) {
+        if (isNewPost == true ) {
+            final long currentTime = System.currentTimeMillis();
+           final long tomorrowTime = currentTime - (currentTime % ONE_DAY_MILLISECONDS) + ONE_DAY_MILLISECONDS + ONE_HOUR_MILLISECONDS*8;
+            timeToNewNotiff = tomorrowTime;
+            mInterval = tomorrowTime - currentTime;
+            //mInterval = 20*1000;
+            if (sendNotif) { sendNotif();} ;
+            Log.d("intervalForNextServiceStart ", " to 8 hours " + mInterval);
         } else {
-           mInterval =60*60*1000;
-           // mInterval = 20000;
-            Log.d("intervalForNextServiceStart", ""+mInterval);
+            mInterval = 60 * 60 * 1000;
+            //mInterval = 10* 1000;
+
+            // mInterval = 20000;
+            Log.d("intervalForNextServiceStart ", " for 1 hour " + mInterval);
         }
     }
 
     private void makeRequests() {
         threadsCounter = new AtomicInteger(1);
         final AtomicInteger requestSessionThreadsCounter = threadsCounter;
-       VKHelper.doGroupWallRequest(extended, offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequest.VKRequestListener() {
-           @Override
-           public void onComplete(final VKResponse response) {
-               super.onComplete(response);
-               handleRequestComplete(response.json, requestSessionThreadsCounter);
-               Log.d("Make", "Request");
-           }
-
-           @Override
-           public void onError(final VKError error) {
-               super.onError(error);
-           }
-       });
-    }
-
-    void handleRequestComplete(final JSONObject json, final AtomicInteger requestSessionThreadsCounter) {
-        new Thread(new Runnable() {
+        VKHelper.doGroupWallRequest(extended, offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequest.VKRequestListener() {
             @Override
-            public void run() {
-                if (threadsCounter!=requestSessionThreadsCounter)
-                    return;
-                newPostJson = json;
-                decrementThreadsCounter(requestSessionThreadsCounter);
+            public void onComplete(final VKResponse response) {
+                super.onComplete(response);
+                handleRequestComplete(response.json, requestSessionThreadsCounter);
+                Log.d("Make", "Request");
             }
-        }).start();
+
+            @Override
+            public void onError(final VKError error) {
+                super.onError(error);
+            }
+        });
     }
 
-    void decrementThreadsCounter(final AtomicInteger requestSessionThreadsCounter) {
-        if (threadsCounter!=requestSessionThreadsCounter)
+    private void handleRequestComplete(final JSONObject json, final AtomicInteger requestSessionThreadsCounter) {
+                if (threadsCounter != requestSessionThreadsCounter)
+                    return;
+                decrementThreadsCounter(requestSessionThreadsCounter, json);
+    }
+
+    private void decrementThreadsCounter(final AtomicInteger requestSessionThreadsCounter, final JSONObject newPostJson) {
+        if (threadsCounter != requestSessionThreadsCounter)
             return;
         if (requestSessionThreadsCounter.decrementAndGet() == 0)
-            //OfflineMode.saveBool(false, key);
-          wall = VKHelper.getGroupWallFromJSON(newPostJson);
-        ArrayList<VKWallPostWrapper> posts;
-        posts = wall.posts;
-        VKWallPostWrapper postW =  posts.get(0);
-        VKApiPost post = postW.post;
-        if (ItemDataSetter.checkNewPostResult(post.date)){
-            sendNotif();
-            updateStatus(true);
-        } else {
-            updateStatus(false);
-           // OfflineMode.saveBool(false, key);
-        }
+           parseJson(newPostJson, true);
     }
 
-    void sendNotif() {
-//          OfflineMode.saveBool(true, key);
-        Notification notif = new Notification(R.drawable.ic_launcher, "Text in status bar",
-                System.currentTimeMillis());
-        //Intent intent = new Intent(this, MainActivity.class);
-//      intent.putExtra(MainActivity.FILE_NAME, "somefile");
-       // PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent, 0);
+    private  boolean parseJson(JSONObject newPostJson, boolean sendNotif) {
+        wall = VKHelper.getGroupWallFromJSON(newPostJson);
+        ArrayList<VKWallPostWrapper> posts;
+        posts = wall.posts;
+        VKWallPostWrapper postW = posts.get(0);
+        VKApiPost post = postW.post;
+        if (ItemDataSetter.checkNewPostResult(post.date)) {
+            updateStatus(true , sendNotif);
+            return true;
+        } else {
+            updateStatus(false, sendNotif);
+            return false;
+        }
 
+    }
+    private  void sendNotif() {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_zf_mdpi)
+                        .setContentTitle("Події Франківська")
+                        .setContentText("Додай найцікавіше в календар")
+                        .setAutoCancel(true)
+                        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        Intent resultIntent = new Intent(this, MainActivity.class);
+        resultIntent.putExtra("isClickable", true);
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_CANCEL_CURRENT
+                );
+        mBuilder.setContentIntent(resultPendingIntent);
+        NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notif.setLatestEventInfo(this, "Notification's title", "Notification's text", null);
-        notif.flags |= Notification.FLAG_AUTO_CANCEL;
+        mNotificationManager.notify(1, mBuilder.build());
 
-        nm.notify(1, notif);
     }
 
     private final VKSdkListener sdkListener = new VKSdkListener() {

@@ -211,6 +211,8 @@
     <string name = "period_events"> Длительные события </string>
     <string name="null_events">Немає</string>
 
+    <string name = "today_event_description"> Еще одно замечательное событие прекрасного города! </string>
+
         
     <array name="post_report_types">
                 
