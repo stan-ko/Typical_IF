@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.api.model.VKApiComment;
 import com.vk.sdk.api.model.VKApiCommunity;
@@ -25,7 +26,6 @@ import java.util.regex.Pattern;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
-import typical_if.android.view.RoundedImageView;
 
 
 /**

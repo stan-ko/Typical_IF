@@ -159,7 +159,7 @@ public class WallAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         if (Constants.GROUP_ID == Constants.ZF_ID) {
-            EventViewHolder viewHolder = null;
+           EventViewHolder viewHolder;
 
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.event_item_layout, null);
@@ -174,7 +174,7 @@ public class WallAdapter extends BaseAdapter {
             initEventViewHolder(viewHolder, (EventObject) getItem(position));
         } else {
             final VKWallPostWrapper post = posts.get(position);
-            ViewHolder viewHolder = null;
+         final ViewHolder viewHolder ;
 
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.wall_lv_item, null);
@@ -185,8 +185,9 @@ public class WallAdapter extends BaseAdapter {
             } else {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-
             initViewHolder(viewHolder, postColor, wall, position, fragmentManager, post, context, layoutInflater);
+
+
         }
         return convertView;
     }
@@ -426,6 +427,18 @@ public class WallAdapter extends BaseAdapter {
         } else {
             viewHolder.cb_post_like.setChecked(false);
         }
+
+
+//        for (int i=0;i<post.comments_count;i++){
+//           if(post.co)
+//       }
+//        if (post.comments_count.) {
+//            viewHolder.cb_post_like.setChecked(true);
+//        } else {
+//            viewHolder.cb_post_like.setChecked(false);
+//        }
+
+
 
         viewHolder.cb_post_comment.setText(" " + valueOf(post.comments_count));
         viewHolder.cb_post_like.setText(" " + valueOf(post.likes_count));
