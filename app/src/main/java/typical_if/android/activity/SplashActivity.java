@@ -270,9 +270,9 @@ config.locale = ItemDataSetter.loadUserLanguage();
         final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
 
-        if (OfflineMode.isFirstRun("SplashFirstRun")==true){
+//        if (OfflineMode.isFirstRun("SplashFirstRun")==true){
            startService(new Intent(this, NotificationService.class));
-        }
+       // }
 
         finish();
     }
