@@ -56,7 +56,7 @@ public class MainActivity extends DialogActivity implements
     public NavigationDrawerFragment mNavigationDrawerFragment;
     // String[] data = new String[] { "one", "two", "three" };
     ActionBarArrayAdapter list;
-    ActionBar actionBar;
+
 
 
 
@@ -125,21 +125,7 @@ public class MainActivity extends DialogActivity implements
     protected void onNewIntent(Intent intent) {
         notifClick(mNavigationDrawerFragment,intent);
     }
-//
-//    private void processIntent(Intent intent) {
-//        int flag;
-////       mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-////        mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
-//        if (intent.getExtras() != null) {
-//            flag = (Integer) intent.getExtras().get("IsNotiffShow");
-//            if (flag == 1) {
-//                notification_status = true;
-//                mNavigationDrawerFragment.closeDrawer();
-//            }
-//        }
-//
-//
-//    }
+
     private void notifClick (NavigationDrawerFragment mNavigationDrawerFragment, Intent notifIntent){
         if (notifIntent.getExtras().getBoolean("isClickable")){
             mNavigationDrawerFragment.closeDrawer();
