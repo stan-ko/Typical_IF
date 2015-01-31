@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -31,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
@@ -62,7 +64,7 @@ import typical_if.android.event.EventSpinnerLayout;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 import typical_if.android.util.PhotoUrlHelper;
-import typical_if.android.view.RoundedImageView;
+
 
 
 public class FragmentComments extends Fragment {
@@ -303,6 +305,15 @@ public class FragmentComments extends Fragment {
 
     private void loadWallPosts() {
         final View wallItem = inflater.inflate(R.layout.wall_lv_item, null);
+
+
+        RelativeLayout panelWithSigner= ((RelativeLayout) wallItem.getRootView().findViewById(R.id.signer_panel));
+        panelWithSigner.setPadding(5, 0, 5, 5);
+
+        CardView cardView = (CardView) wallItem.getRootView().findViewById(R.id.card_view_wall_lv_Item);
+        cardView.setCardElevation(0);
+        cardView.setShadowPadding(0,0,0,0);
+
         viewHolder = new WallAdapter.ViewHolder(wallItem);
         WallAdapter.initViewHolder(viewHolder, postColor, wall, position, getFragmentManager(), post, getActivity().getBaseContext(),inflater);
 
