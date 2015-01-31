@@ -75,8 +75,8 @@
         <service
             android:name=".NotificationService"
             android:enabled="true"
-            android:exported="true">
-            <!--android:process=":notifyService" >-->
+            android:exported="true"
+            android:process=":notifyService" >
         </service>
 
         <receiver

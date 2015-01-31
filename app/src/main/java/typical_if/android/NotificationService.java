@@ -34,73 +34,73 @@ import typical_if.android.model.Wall.Wall;
 public class NotificationService extends Service {
 
     private long mInterval ;
-   final  private Handler mHandler = new Handler();;
+    final  private Handler mHandler = new Handler();;
     private final int offsetDefault = 0;
     private final int countOfPosts = 1;
     private final int extended = 1;
     private  long timeToNewNotiff ;
     private final static int ONE_HOUR_MILLISECONDS =  60 * 60 * 1000;
-
     private AtomicInteger threadsCounter;
-   private  Wall wall;
+    private  Wall wall;
     private final static int ONE_DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
+    private final long BUFFER = 1000*60*10;
 
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-
+        Log.d("onCreateService", "----------------------");
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
         if (OfflineMode.isFirstRun("spleahFirstrun")){
-        parseJson(OfflineMode.loadJSON(Constants.ZF_ID), true);} else { parseJson(OfflineMode.loadJSON(Constants.ZF_ID), false);}
+            parseJson(OfflineMode.loadJSON(Constants.ZF_ID), true);
+        } else {
+            parseJson(OfflineMode.loadJSON(Constants.ZF_ID), false);
+        }
         //mInterval=1000;
-        Log.d("onCreateService", "----------------------");
+
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
+
         Log.d("onStartCommand", "----------------------");
-        if (OfflineMode.isOnline(TIFApp.getAppContext())) {
-            startRepeatingTask();
+        if (OfflineMode.isOnline(TIFApp.getAppContext()) ) {
+                startRepeatingTask();
         }
         return START_STICKY;
     }
-
-    Runnable mStatusChecker = new Runnable() {
-        @Override
-        public void run() {
-            mHandler.postDelayed(mStatusChecker, mInterval);
-            Log.d("run", "----------------------");
-                if (System.currentTimeMillis()>=timeToNewNotiff) makeRequests();
+    Thread notifThread = new Thread(new Runnable() {
+    @Override
+    public void run() {
+            mHandler.postDelayed(this, mInterval);
+            Log.d("notifThread", "----------------------");
+            if ((System.currentTimeMillis()+BUFFER)>=timeToNewNotiff) {
+                makeRequests();
                 Log.d("Make Request", "----------------------");
-
-
-        }
-    };
-
-    private void startRepeatingTask() {
-        mStatusChecker.run();
+            }
     }
 
+    });
+        private void startRepeatingTask() {
+            notifThread.start();
+        }
     private void stopRepeatingTask() {
-        mHandler.removeCallbacks(mStatusChecker);
+       notifThread.interrupt();
     }
 
     private void updateStatus(boolean isNewPost, boolean sendNotif) {
         if (isNewPost == true ) {
             final long currentTime = System.currentTimeMillis();
            final long tomorrowTime = currentTime - (currentTime % ONE_DAY_MILLISECONDS) + ONE_DAY_MILLISECONDS + ONE_HOUR_MILLISECONDS*8;
-            timeToNewNotiff = tomorrowTime;
-            mInterval = tomorrowTime - currentTime;
-            //mInterval = 20*1000;
-            if (sendNotif) { sendNotif();} ;
+           timeToNewNotiff = tomorrowTime;
+            //timeToNewNotiff = currentTime+1000*10;
+           mInterval = tomorrowTime - currentTime;
+            //mInterval = 1000*10;
             Log.d("intervalForNextServiceStart ", " to 8 hours " + mInterval);
+            if (sendNotif) { sendNotif();} ;
+
         } else {
             mInterval = 60 * 60 * 1000;
-            //mInterval = 10* 1000;
-
-            // mInterval = 20000;
+            timeToNewNotiff = System.currentTimeMillis()+mInterval;
             Log.d("intervalForNextServiceStart ", " for 1 hour " + mInterval);
         }
     }
@@ -204,7 +204,6 @@ public class NotificationService extends Service {
         public void onAcceptUserToken(VKAccessToken token) {
         }
     };
-
     @Override
     public IBinder onBind(Intent intent) {
         // TODO: Return the communication channel to the service.
