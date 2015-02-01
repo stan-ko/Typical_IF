@@ -1,37 +1,31 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.pm.ActivityInfo;
-import android.graphics.Bitmap;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.FrameLayout;
+import android.widget.MediaController;
+import android.widget.VideoView;
 
-import typical_if.android.Constants;
 import typical_if.android.R;
+import typical_if.android.activity.MainActivity;
 
 /**
  * Created by LJ on 11.08.2014.
  */
-public class FragmentVideoView extends Fragment  {
+public class FragmentVideoView extends Fragment {
 
-//    ProgressDialog pDialog;
-//    WebView videoview;
+    ProgressDialog pDialog;
+    VideoView videoview;
 
-    private WebView webView;
-    private FrameLayout customViewContainer;
-    private WebChromeClient.CustomViewCallback customViewCallback;
-    private View mCustomView;
-    private myWebChromeClient mWebChromeClient;
-    private myWebViewClient mWebViewClient;
-
-    String videoURL = "https://www.youtube.com/embed/NeXMxuNNlE8";
+    String videoURL = "http://www.youtube.com/watch?v=6m91rRqn4UI";
 
     public static FragmentVideoView newInstance() {
         FragmentVideoView fragment = new FragmentVideoView();
@@ -42,13 +36,10 @@ public class FragmentVideoView extends Fragment  {
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_video_view, container, false);
         setRetainInstance(true);
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-
-        playVideo(videoURL, rootView);
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        playVideo("https://cs535407.vk.me/u187576549/videos/2fee4723dc.720.mp4?extra=TwMvIAYEi2AGmKdGapjDWKZOWv9zIXe7Zt92h36ZjGolrfmD63oOGGPyxkWJEHhqanKecSX2qld7gINOsEguR7taIsW0EYPueg", rootView);
         return rootView;
     }
-
 
 
     @Override
@@ -57,133 +48,43 @@ public class FragmentVideoView extends Fragment  {
     }
 
 
-
-
-
     public void playVideo(String url, View view){
-        customViewContainer = (FrameLayout) view.findViewById(R.id.customViewContainer);
-        webView = (WebView) view.findViewById(R.id.webView);
+        videoview = (VideoView) view.findViewById(R.id.videoView);
+        // Execute StreamVideo AsyncTask
+        // Create a progressbar
+        pDialog = new ProgressDialog(getActivity());
+        // Set progressbar navDrawTitle
+        pDialog.setTitle("Android Video Streaming Tutorial");
+        // Set progressbar message
+        pDialog.setMessage("Buffering...");
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+        // Show progressbar
+        pDialog.show();
 
-        mWebViewClient = new myWebViewClient();
-        webView.setWebViewClient(mWebViewClient);
+        try {
+            // Start the MediaController
+            MediaController mediacontroller = new MediaController(getActivity());
+            mediacontroller.setAnchorView(videoview);
+            // Get the URL from String VideoURL
+            Uri video = Uri.parse(url);
+            videoview.setMediaController(mediacontroller);
+            videoview.setVideoURI(video);
 
-        mWebChromeClient = new myWebChromeClient();
-        webView.setWebChromeClient(mWebChromeClient);
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setAppCacheEnabled(true);
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.getSettings().setSaveFormData(true);
-        webView.loadUrl(videoURL);
+        } catch (Exception e) {
+            Log.e("Error", e.getMessage());
+            e.printStackTrace();
+        }
+
+        videoview.requestFocus();
+        videoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            // Close the progress bar and play the video
+            public void onPrepared(MediaPlayer mp) {
+                pDialog.dismiss();
+                videoview.start();
+            }
+        });
+    }
+
+
 }
-
-    public boolean inCustomView() {
-        return (mCustomView != null);
-    }
-
-    public void hideCustomView() {
-        mWebChromeClient.onHideCustomView();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();    //To change body of overridden methods use File | Settings | File Templates.
-        webView.onPause();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();    //To change body of overridden methods use File | Settings | File Templates.
-        webView.onResume();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();    //To change body of overridden methods use File | Settings | File Templates.
-        if (inCustomView()) {
-            hideCustomView();
-        }
-    }
-
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//
-//            if (inCustomView()) {
-//                hideCustomView();
-//                return true;
-//            }
-//
-//            if ((mCustomView == null) && webView.canGoBack()) {
-//                webView.goBack();
-//                return true;
-//            }
-//        }
-//        return Constants.mainActivity.onKeyDown(keyCode, event);
-//    }
-
-
-    class myWebChromeClient extends WebChromeClient {
-        private Bitmap mDefaultVideoPoster;
-        private View mVideoProgressView;
-
-        @Override
-        public void onShowCustomView(View view, int requestedOrientation, CustomViewCallback callback) {
-            onShowCustomView(view, callback);    //To change body of overridden methods use File | Settings | File Templates.
-        }
-
-        @Override
-        public void onShowCustomView(View view,CustomViewCallback callback) {
-
-            // if a view already exists then immediately terminate the new one
-            if (mCustomView != null) {
-                callback.onCustomViewHidden();
-                return;
-            }
-            mCustomView = view;
-            webView.setVisibility(View.GONE);
-            customViewContainer.setVisibility(View.VISIBLE);
-            customViewContainer.addView(view);
-            customViewCallback = callback;
-        }
-
-        @Override
-        public View getVideoLoadingProgressView() {
-
-            if (mVideoProgressView == null) {
-                LayoutInflater inflater = LayoutInflater.from(Constants.mainActivity);
-                mVideoProgressView = inflater.inflate(R.layout.video_progress, null);
-            }
-            return mVideoProgressView;
-        }
-
-        @Override
-        public void onHideCustomView() {
-            super.onHideCustomView();    //To change body of overridden methods use File | Settings | File Templates.
-            if (mCustomView == null)
-                return;
-
-            webView.setVisibility(View.VISIBLE);
-            customViewContainer.setVisibility(View.GONE);
-
-            // Hide the custom view.
-            mCustomView.setVisibility(View.GONE);
-
-            // Remove the custom view from its container.
-            customViewContainer.removeView(mCustomView);
-            customViewCallback.onCustomViewHidden();
-
-            mCustomView = null;
-        }
-    }
-
-    class myWebViewClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return super.shouldOverrideUrlLoading(view, url);    //To change body of overridden methods use File | Settings | File Templates.
-        }
-    }
-
-    }
-
-
-

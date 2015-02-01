@@ -81,7 +81,9 @@ public class NotificationService extends Service {
 
     });
         private void startRepeatingTask() {
-            notifThread.start();
+            if (notifThread.isInterrupted()) {
+                notifThread.start();
+            }
         }
     private void stopRepeatingTask() {
        notifThread.interrupt();
