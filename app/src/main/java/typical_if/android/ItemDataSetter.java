@@ -19,6 +19,7 @@ import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,6 +67,7 @@ import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoList;
+import typical_if.android.fragment.FragmentVideoView;
 import typical_if.android.model.Wall.Wall;
 
 import static java.lang.String.format;
@@ -944,7 +946,19 @@ public class ItemDataSetter {
                             relativeLayout.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Constants.toastInProgress.show();
+
+                                    VKHelper.getVideoPlay("42325198_170100772", new VKRequest.VKRequestListener() {
+                                        @Override
+                                        public void onComplete(VKResponse response) {
+                                            super.onComplete(response);
+                                           // Constants.toastInProgress.show();
+                                            Log.d(response.json.toString(),"VIDEO_FILE");
+                                            Fragment fragment = new FragmentVideoView();
+                                            fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+
+
+                                        }
+                                    });
                                 }
                             });
                             ((TextView) relativeLayout.getChildAt(1)).setText(getMediaTime(videos.get(finalJ).duration));
@@ -968,7 +982,20 @@ public class ItemDataSetter {
                                     relativeLayout.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            Constants.toastInProgress.show();
+                                          //  Constants.toastInProgress.show();
+
+                                            VKHelper.getVideoPlay("42325198_170100772", new VKRequest.VKRequestListener() {
+                                                @Override
+                                                public void onComplete(VKResponse response) {
+                                                    super.onComplete(response);
+                                                    // Constants.toastInProgress.show();
+                                                    Log.d(response.json.toString(),"VIDEO_FILE");
+                                                    Fragment fragment = new FragmentVideoView();
+                                                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+
+
+                                                }
+                                            });
                                         }
                                     });
 

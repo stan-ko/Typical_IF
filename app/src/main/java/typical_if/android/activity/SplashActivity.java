@@ -1,4 +1,4 @@
-package typical_if.android.activity;
+ package typical_if.android.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;

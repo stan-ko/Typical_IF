@@ -301,7 +301,7 @@ public class VKHelper {
     }
 
 
-    public static void doPlayerRequest(String videos, VKRequest.VKRequestListener vkRequestListener) {
+    public static void getVideoPlay(String videos, VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put("videos", videos);
         params.put("extended", 1);
