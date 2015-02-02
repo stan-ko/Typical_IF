@@ -1,4 +1,4 @@
-package typical_if.android.activity;
+ package typical_if.android.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -95,6 +95,8 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         ItemDataSetter.loadUserLanguage();
     }
 
+
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -136,7 +138,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                     startNextActivity();
                 }
             });
-
         }
         builder.create().show();
     }
@@ -149,7 +150,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         }
         return temp;
     }
-
     void checkIfOnlineAndProceed() {
         if (OfflineMode.isOnline(getApplicationContext())) {
             makeRequests();
@@ -269,9 +269,11 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     private void startNextActivity() {
         final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
-        if (isFirstOpen()) {
-            startService(new Intent(this, NotificationService.class));
-        }
+
+//        if (OfflineMode.isFirstRun("SplashFirstRun")==true){
+           startService(new Intent(this, NotificationService.class));
+       // }
+
         finish();
     }
 

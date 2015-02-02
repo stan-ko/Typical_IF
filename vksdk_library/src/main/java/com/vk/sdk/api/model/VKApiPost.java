@@ -44,6 +44,7 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
      */
     public int id;
 
+
     /**
      * Wall owner ID.
      */
@@ -83,6 +84,7 @@ public class VKApiPost extends VKAttachments.VKApiAttachment implements Identifi
      * Number of comments.
      */
     public int comments_count;
+    public int user_comment;
 
     /**
      * Whether the current user can leave comments to the post (false — cannot, true — can)

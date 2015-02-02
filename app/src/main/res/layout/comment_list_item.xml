@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/commentParentLayout"
+    
+    android:orientation="horizontal" 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ff424242"
+    android:weightSum="1"
+    android:padding="5dp"
+    android:id="@+id/commentParentLayout"
     android:clickable="false"
     android:descendantFocusability="blocksDescendants"
     android:focusable="false"
     android:focusableInTouchMode="false"
-    android:orientation="horizontal"
-    android:padding="5dp"
-    android:weightSum="1">
+    android:background="@color/app_bg">
 
     <RelativeLayout
-        android:id="@+id/commentTextLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_below="@+id/img_user_avatar"
-        android:layout_margin="5dp"
-        android:background="@drawable/sample_background"
+        android:id="@+id/commentTextLayout"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_margin="5dp"
+        android:background="@drawable/sample_background" >
 
         <include
             layout="@layout/post_text_layout"
@@ -34,31 +35,30 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/commentAttachmentsLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/user_comment_text"
-        android:layout_toEndOf="@+id/img_user_avatar"
-        android:background="@drawable/sample_background"
-        android:baselineAligned="false"
-
+        android:id="@+id/commentAttachmentsLayout"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="gone"
+        android:background="@drawable/sample_background"
+        android:layout_toEndOf="@+id/img_user_avatar"
+        android:layout_below="@+id/user_comment_text"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:baselineAligned="false">
 
         <RelativeLayout
-            android:id="@+id/commentMediaLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/sample_background"
+            android:visibility="gone"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:visibility="gone" >
+            android:id="@+id/commentMediaLayout"
+            android:background="@drawable/sample_background"/>
 
             <include
                 layout="@layout/media_pager_container"
@@ -67,15 +67,15 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/commentAudioLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sample_background"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/commentAudioLayout"
             android:orientation="vertical"
-            android:visibility="gone" >
+            android:background="@drawable/sample_background">
 
             <include
                 layout="@layout/simple_listview_layout"
@@ -84,40 +84,40 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/commentAlbumLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sample_background"
             android:clickable="false"
-            android:divider="@drawable/copy_history_divider"
-            android:dividerPadding="5dp"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/commentAlbumLayout"
             android:orientation="vertical"
             android:padding="5dp"
-            android:showDividers="middle"
-            android:visibility="gone" />
+            android:background="@drawable/sample_background"
+            android:dividerPadding="5dp"
+            android:divider="@drawable/copy_history_divider"
+            android:showDividers="middle" />
 
         <LinearLayout
-            android:id="@+id/commentDocumentLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sample_background"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/commentDocumentLayout"
             android:orientation="vertical"
-            android:visibility="gone" />
+            android:background="@drawable/sample_background" />
 
         <RelativeLayout
-            android:id="@+id/commentWikiPageLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sample_background"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:visibility="gone" >
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/commentWikiPageLayout"
+            android:visibility="gone"
+            android:background="@drawable/sample_background">
 
             <include
                 layout="@layout/wiki_page_container"
@@ -126,14 +126,14 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/commentLinkLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/sample_background"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:visibility="gone" >
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:id="@+id/commentLinkLayout"
+            android:background="@drawable/sample_background">
 
             <include
                 layout="@layout/link_container"
@@ -142,14 +142,14 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/commentPollLayout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@drawable/sample_background"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:visibility="gone" >
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:visibility="gone"
+            android:id="@+id/commentPollLayout"
+            android:background="@drawable/sample_background">
 
             <include
                 layout="@layout/poll_container"
@@ -160,94 +160,91 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/user_name_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/img_user_avatar"
-        android:layout_toRightOf="@+id/img_user_avatar"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/user_name_textView"
         android:layout_weight="0.08"
+        android:text="Michael G."
         android:clickable="false"
         android:focusable="false"
-
         android:focusableInTouchMode="false"
-        android:text="Michael G."
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#ffffffff"
         android:textSize="15dp"
-        android:textStyle="bold" />
+
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/img_user_avatar"
+        android:layout_toEndOf="@+id/img_user_avatar"
+        android:layout_marginLeft="5dp"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp" />
 
     <typical_if.android.view.RoundedImageView
-        android:id="@+id/img_user_avatar"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:id="@+id/img_user_avatar"
+        android:cropToPadding="false"
+        android:scaleType="fitStart"
+        android:layout_weight="0.34"
+        android:layout_alignTop="@+id/user_name_textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/user_name_textView"
+        android:layout_marginRight="10dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/abc_ab_solid_dark_holo"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_weight="0.34"
-        android:clickable="false"
-        android:cropToPadding="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:scaleType="fitStart"
-        android:src="@drawable/abc_ab_solid_dark_holo" />
+        android:layout_marginTop="5dp" />
 
     <TextView
-        android:id="@+id/text_date_of_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/user_name_textView"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="15dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/text_date_of_comment"
+        android:textColor="#8cffffff"
+        android:text="6 days ago"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:text="6 days ago"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#8cffffff"
-        android:textSize="12dp" />
+        android:textSize="12dp"
+        android:layout_alignBottom="@+id/user_name_textView"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="15dp" />
 
     <CheckBox
-        android:id="@+id/post_comment_like_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/user_comment_text"
-        android:layout_marginRight="5dp"
+        android:text="9"
+        android:id="@+id/post_comment_like_checkbox"
         android:button="@drawable/like_or_not_liked_selector"
         android:clickable="false"
         android:enabled="false"
-        android:shadowColor="#ff222222"
-        android:text="9"
+        android:visibility="gone"
         android:textColor="#fff0f4ff"
-        android:visibility="gone" />
+        android:shadowColor="#ff222222"
+        android:layout_alignTop="@+id/user_comment_text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp" />
 
     <TextView
-        android:id="@+id/user_comment_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/user_name_textView"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignStart="@+id/user_name_textView"
-        android:layout_below="@+id/img_user_avatar"
-        android:layout_marginBottom="5dp"
-        android:layout_marginRight="15dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/user_comment_text"
+        android:textColor="#d2ffffff"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#d2ffffff"
         android:textSize="15dp"
-        android:visibility="gone" />
-
+        android:visibility="visible"
+        android:text="Who is there ?"
+        android:layout_below="@+id/text_date_of_comment"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp" />
 
 </RelativeLayout>

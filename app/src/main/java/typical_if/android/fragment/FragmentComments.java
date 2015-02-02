@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.Nullable;
+
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -30,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
@@ -61,7 +62,7 @@ import typical_if.android.event.EventSpinnerLayout;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 import typical_if.android.util.PhotoUrlHelper;
-import typical_if.android.view.RoundedImageView;
+
 
 
 public class FragmentComments extends Fragment {
@@ -90,6 +91,7 @@ public class FragmentComments extends Fragment {
     int reply_to_comment = 0;
     Wall wall = null;
     static VKWallPostWrapper post = null;
+    String postColor = null;
     public int positionOfComment = 0;
     public static int group_id;
 
@@ -296,6 +298,11 @@ public class FragmentComments extends Fragment {
 
     private void loadWallPosts() {
         final View wallItem = inflater.inflate(R.layout.wall_lv_item, null);
+
+        CardView cardView = (CardView) wallItem.getRootView().findViewById(R.id.card_view_wall_lv_Item);
+        cardView.setCardElevation(0);
+        cardView.setShadowPadding(0,0,0,0);
+
         viewHolder = new WallAdapter.ViewHolder(wallItem);
 
         WallAdapter.initViewHolder(viewHolder, wall, position, getFragmentManager(), post);
@@ -476,15 +483,13 @@ public class FragmentComments extends Fragment {
         );
 
     }
-
-    public static boolean isViewLoaded;
-
+//public static boolean isViewLoaded;
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        isViewLoaded = true;
-        // coverGlobal.setVisibility(View.GONE);
+       // isViewLoaded=true;
+       // coverGlobal.setVisibility(View.GONE);
 
 
     }
@@ -735,7 +740,7 @@ public class FragmentComments extends Fragment {
                         case 1: {
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                             clipboard.setText(comments.get(position).text);
-                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_has_been_copied_to_the_buffer), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity().getApplicationContext(),getString(R.string.text_has_been_copied_to_the_buffer),Toast.LENGTH_SHORT).show();
                         }
                         break;
                         case 2: {

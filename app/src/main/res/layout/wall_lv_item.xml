@@ -1,353 +1,329 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff272727">
+    android:background="@color/app_bg">
+
 
     <android.support.v7.widget.CardView
-        android:id="@+id/view"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        card_view:contentPadding="0dp"
         card_view:cardCornerRadius="0dp"
         card_view:cardElevation="8dp"
-        card_view:contentPadding="0dp">
+        android:id="@+id/card_view_wall_lv_Item">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/child_of_comment_list"
+        android:background="@color/app_bg">
 
-        <RelativeLayout
-            android:id="@+id/child_of_comment_list"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
+            android:id="@+id/postParentLayout"
             android:background="@color/app_bg">
 
-            <LinearLayout
-                android:id="@+id/postParentLayout"
+            <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/postTextLayout"
                 android:background="@color/app_bg"
-                android:orientation="vertical">
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="5dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/postAttachmentsLayout"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:background="@color/app_bg"
+                android:paddingTop="5dp">
 
                 <RelativeLayout
                     android:id="@+id/postTextLayout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@color/app_bg"
-                    android:visibility="gone">
-
-                    <include layout="@layout/post_text_layout" />
-
-                </RelativeLayout>
+                    android:visibility="gone"
+                    android:id="@+id/postMediaLayout"
+                    android:background="@color/transparent" />
 
                 <LinearLayout
-                    android:id="@+id/postAttachmentsLayout"
-                    android:layout_width="match_parent"
+                    android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:background="@color/app_bg"
+                    android:visibility="gone"
+                    android:id="@+id/postAudioLayout"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:background="@color/transparent"/>
 
-                    <RelativeLayout
-                        android:id="@+id/postMediaLayout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:visibility="gone" >
-
-                        <include layout="@layout/media_pager_container" />
-
-                    </RelativeLayout>
-
-                    <LinearLayout
-                        android:id="@+id/postAudioLayout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/transparent"
-                        android:visibility="gone" >
-
-                        <include layout="@layout/simple_listview_layout"/>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/postDocumentLayout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:orientation="vertical"
-                        android:visibility="gone" />
-
-                    <LinearLayout
-                        android:id="@+id/postAlbumLayout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:divider="@drawable/copy_history_divider"
-                        android:dividerPadding="5dp"
-                        android:orientation="vertical"
-                        android:showDividers="middle"
-                        android:visibility="gone" />
-
-                    <RelativeLayout
-                        android:id="@+id/postWikiPageLayout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:visibility="gone">
-
-                        <include layout="@layout/wiki_page_container" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/postLinkLayout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="5dp"
-                        android:background="@color/transparent"
-                        android:visibility="gone">
-
-                        <include layout="@layout/link_container" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/postPollLayout"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/transparent"
-                        android:visibility="gone">
-
-                        <include layout="@layout/poll_container" />
-
-                    </RelativeLayout>
-
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:id="@+id/postGeoLayout"
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/app_bg"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    android:id="@+id/postDocumentLayout"
+                    android:orientation="vertical"
+                    android:background="@color/transparent"/>
 
-                    <include layout="@layout/geo_container" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/copyHistoryLayout"
+                <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:background="@color/app_bg"
-                    android:visibility="gone">
-
-                    <include android:id="@+id/incl_copy_history_layout"
-                        layout="@layout/copy_history_layout"/>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/author_post_panel"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
-
-                    <RelativeLayout
-                        android:id="@+id/signer_panel"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="5dp"
-                        android:visibility="visible">
-
-                        <ImageView
-                            android:id="@+id/iv_post_autor"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_alignBottom="@+id/autor_post_text"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="2dp"
-                            android:src="@drawable/ic_newpost_mention_down" />
-
-                        <com.devspark.robototextview.widget.RobotoTextView xmlns:android="http://schemas.android.com/apk/res/android"
-                            xmlns:app="http://schemas.android.com/apk/res-auto"
-                            android:id="@+id/autor_post_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginTop="3dp"
-                            android:layout_toEndOf="@+id/iv_post_autor"
-                            android:layout_toRightOf="@+id/iv_post_autor"
-                            android:text="Простак Андрій"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="#8cffffff"
-                            android:textSize="13dp"
-                            app:typeface="roboto_regular" />
-
-                        <ImageView
-                            android:id="@+id/img_fixed_post"
-                            android:layout_width="15dp"
-                            android:layout_height="15dp"
-                            android:layout_alignBottom="@+id/autor_post_text"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginBottom="2dp"
-                            android:layout_marginRight="10dp"
-                            android:src="@drawable/ic_post_pinned"
-                            android:visibility="visible" />
-                    </RelativeLayout>
-
-                </RelativeLayout>
+                    android:visibility="gone"
+                    android:id="@+id/postAlbumLayout"
+                    android:orientation="vertical"
+                    android:background="@color/transparent"
+                    android:dividerPadding="5dp"
+                    android:divider="@drawable/copy_history_divider"
+                    android:showDividers="middle" />
 
                 <RelativeLayout
-                    android:id="@+id/postFeaturesLayout"
                     android:layout_width="fill_parent"
-                    android:layout_height="40dp"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:background="@color/app_bg"
-                    android:visibility="visible">
+                    android:layout_height="wrap_content"
+                    android:id="@+id/postWikiPageLayout"
+                    android:visibility="gone"
+                    android:background="@color/transparent"
+                    />
 
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:id="@+id/postLinkLayout"
+                    android:background="@color/transparent"
+                    android:layout_marginBottom="5dp" />
 
-                    <CheckBox
-                        android:id="@+id/cb_repost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="6dp"
-                        android:layout_toLeftOf="@+id/cb_comment"
-                        android:layout_toStartOf="@+id/cb_comment"
-                        android:button="@drawable/repost_or_not_selector"
-                        android:checked="false"
-                        android:clickable="false"
-                        android:enabled="true"
-                        android:textColor="#d2ffffff"
-                        android:textSize="13dp"
-                        android:visibility="visible" />
-
-                    <CheckBox
-                        android:id="@+id/cb_comment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/cb_repost"
-                        android:layout_marginRight="6dp"
-                        android:layout_toLeftOf="@+id/cb_like"
-                        android:layout_toStartOf="@+id/cb_like"
-                        android:button="@drawable/comment_or_not_comment_selector"
-                        android:checked="false"
-                        android:clickable="false"
-                        android:enabled="true"
-                        android:textColor="#d2ffffff"
-                        android:textSize="13dp" />
-
-                    <CheckBox
-                        android:id="@+id/cb_like"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignTop="@+id/cb_comment"
-                        android:layout_marginRight="12dp"
-                        android:button="@drawable/like_or_not_liked_selector"
-                        android:checked="false"
-                        android:clickable="false"
-                        android:enabled="true"
-                        android:textColor="#d2ffffff"
-                        android:textSize="13dp"
-                        android:visibility="visible" />
-
-                    <Button
-                        android:id="@+id/button_like"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/cb_like"
-                        android:layout_alignEnd="@+id/cb_like"
-                        android:layout_alignRight="@+id/cb_like"
-                        android:layout_alignTop="@+id/cb_comment"
-                        android:layout_toRightOf="@+id/cb_comment"
-                        android:background="#00000000"
-                        android:visibility="visible" />
-
-                    <com.devspark.robototextview.widget.RobotoTextView xmlns:android="http://schemas.android.com/apk/res/android"
-                        xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/txt_post_date_of_comment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="8dp"
-                        android:background="@color/transparent"
-                        android:paddingRight="5dp"
-                        android:singleLine="true"
-                        android:text="Сьогодні о 16:18"
-                        android:textColor="#d2ffffff"
-                        android:textIsSelectable="true"
-                        android:textSize="13dp"
-                        android:visibility="visible"
-                        app:typeface="roboto_regular" />/>
-
-                    <Button
-                        android:id="@+id/button_comment"
-                        android:layout_width="85dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/cb_comment"
-                        android:layout_alignTop="@+id/cb_repost"
-                        android:layout_marginRight="6dp"
-                        android:layout_toEndOf="@+id/cb_repost"
-                        android:layout_toLeftOf="@+id/cb_like"
-                        android:layout_toRightOf="@+id/cb_repost"
-                        android:background="#00000000"
-                        android:visibility="visible" />
-
-                    <Button
-                        android:id="@+id/button_repost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/cb_repost"
-                        android:layout_alignEnd="@+id/cb_repost"
-                        android:layout_alignLeft="@+id/cb_repost"
-                        android:layout_alignRight="@+id/cb_repost"
-                        android:layout_alignStart="@+id/cb_repost"
-                        android:layout_alignTop="@+id/cb_repost"
-                        android:layout_weight=".30"
-                        android:background="#00000000"
-                        android:visibility="visible" />
-
-                </RelativeLayout>
-
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:id="@+id/postPollLayout"
+                    android:background="@color/transparent"/>
 
             </LinearLayout>
 
-            <com.devspark.robototextview.widget.RobotoTextView xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/post_user_comment_text"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/postParentLayout"
-                android:layout_alignParentTop="true"
-                android:layout_alignStart="@+id/postParentLayout"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/postGeoLayout"
                 android:visibility="gone"
-                app:typeface="roboto_condensed_light" />
+                android:background="@color/app_bg"
+                />
 
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/copyHistoryLayout"
+                android:background="@color/app_bg"
+                android:layout_marginTop="5dp"/>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/author_post_panel">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:visibility="visible"
+                    android:id="@+id/signer_panel"
+                    android:layout_marginTop="5dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:id="@+id/iv_post_autor"
+                        android:src="@drawable/ic_newpost_mention_down"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_alignBottom="@+id/autor_post_text" />
+
+                    <com.devspark.robototextview.widget.RobotoTextView
+                        xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:app="http://schemas.android.com/apk/res-auto"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:id="@+id/autor_post_text"
+                        android:layout_alignParentTop="true"
+                        android:layout_toRightOf="@+id/iv_post_autor"
+                        android:layout_toEndOf="@+id/iv_post_autor"
+                        android:layout_marginTop="3dp"
+                        android:textColor="#8cffffff"
+                        android:textSize="13dp"
+                        android:text="Простак Андрій"
+                        app:typeface="roboto_regular"/>
+
+                    <ImageView
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:id="@+id/img_fixed_post"
+                        android:src="@drawable/ic_post_pinned"
+                        android:visibility="visible"
+                        android:layout_alignBottom="@+id/autor_post_text"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginBottom="2dp" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="60dp"
+                android:id="@+id/postFeaturesLayout"
+                android:visibility="visible"
+                android:background="@color/app_bg"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true">
+
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cb_repost"
+                    android:button="@drawable/repost_or_not_selector"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:textColor="#d2ffffff"
+                    android:enabled="true"
+                    android:visibility="visible"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/cb_comment"
+                    android:layout_toStartOf="@+id/cb_comment"
+                    android:layout_marginRight="6dp"
+                    android:textSize="13dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cb_comment"
+                    android:button="@drawable/comment_or_not_comment_selector"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:textColor="#d2ffffff"
+                    android:enabled="true"
+                    android:layout_alignTop="@+id/cb_repost"
+                    android:layout_toLeftOf="@+id/cb_like"
+                    android:layout_toStartOf="@+id/cb_like"
+                    android:layout_marginRight="6dp"
+                    android:textSize="13dp" />
+
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cb_like"
+                    android:button="@drawable/like_or_not_liked_selector"
+                    android:checked="false"
+                    android:clickable="false"
+                    android:enabled="true"
+                    android:textColor="#d2ffffff"
+                    android:visibility="visible"
+                    android:layout_alignTop="@+id/cb_comment"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="12dp"
+                    android:textSize="13dp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_like"
+                    android:visibility="visible"
+                    android:background="#00000000"
+                    android:layout_alignTop="@+id/cb_comment"
+                    android:layout_toRightOf="@+id/cb_comment"
+                    android:layout_alignBottom="@+id/cb_like"
+                    android:layout_alignRight="@+id/cb_like"
+                    android:layout_alignEnd="@+id/cb_like" />
+
+                <com.devspark.robototextview.widget.RobotoTextView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_post_date_of_comment"
+                    android:singleLine="true"
+                    android:visibility="visible"
+                    android:text="Сьогодні о 16:18"
+                    android:textSize="13dp"
+                    android:background="@color/transparent"
+                    android:textColor="#d2ffffff"
+                    app:typeface="roboto_regular"
+                    android:textIsSelectable="true"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="8dp"
+                    android:paddingRight="5dp" />/>
+
+                <Button
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button_comment"
+                    android:background="#00000000"
+                    android:visibility="visible"
+                    android:layout_alignBottom="@+id/cb_comment"
+                    android:layout_toLeftOf="@+id/cb_like"
+                    android:layout_toEndOf="@+id/cb_repost"
+                    android:layout_toRightOf="@+id/cb_repost"
+                    android:layout_alignTop="@+id/cb_repost"
+                    android:layout_marginRight="6dp" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight=".30"
+                    android:id="@+id/button_repost"
+                    android:background="#00000000"
+                    android:visibility="visible"
+                    android:layout_alignLeft="@+id/cb_repost"
+                    android:layout_alignStart="@+id/cb_repost"
+                    android:layout_alignBottom="@+id/cb_repost"
+                    android:layout_alignTop="@+id/cb_repost"
+                    android:layout_alignRight="@+id/cb_repost"
+                    android:layout_alignEnd="@+id/cb_repost" />
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/post_user_comment_text"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/postParentLayout"
+            android:layout_alignStart="@+id/postParentLayout"
+            android:visibility="gone"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            app:typeface="roboto_condensed_light"
+            />
+
+    </RelativeLayout>
 
     </android.support.v7.widget.CardView>
 

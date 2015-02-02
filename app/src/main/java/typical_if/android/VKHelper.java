@@ -1,10 +1,7 @@
 package typical_if.android;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.text.Editable;
+import android.util.Log;
 
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKParameters;
@@ -15,6 +12,7 @@ import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPhotoAlbum;
 import com.vk.sdk.api.model.VKApiUser;
+import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKAttachments;
 import com.vk.sdk.api.model.VKPostArray;
 
@@ -24,7 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import typical_if.android.activity.SplashActivity;
+import typical_if.android.activity.DialogActivity;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 
@@ -297,7 +295,7 @@ public class VKHelper {
     }
 
 
-    public static void doPlayerRequest(String videos, VKRequest.VKRequestListener vkRequestListener) {
+    public static void getVideoPlay(String videos, VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put("videos", videos);
         params.put("extended", 1);
@@ -349,6 +347,18 @@ public class VKHelper {
         JSONObject o = (JSONObject) array.get(0);
         VKApiPhoto photo = new VKApiPhoto().parse(o);
         return photo;
+    }
+
+    public static String getVideoSourceFromJson(JSONObject object) throws JSONException {
+
+       JSONObject response = object.optJSONObject("response");
+        JSONArray items = response.optJSONArray("items");
+        JSONObject video_object =  items.getJSONObject(0);
+        VKApiVideo video = new VKApiVideo().parse(video_object);
+        String link = DialogActivity.isShowDialogNedeed(video);
+
+
+        return link;
     }
 
     public static ArrayList<VKApiPhoto> getPhotosFromJSONArray(JSONObject jsonArray) {
@@ -432,11 +442,10 @@ public class VKHelper {
 
     public static Wall getGroupWallFromJSON(final JSONObject jsonObject) {
         final Wall wall = new Wall();
+ 
+        final JSONObject object = jsonObject.optJSONObject(Wall.JSON_KEY_RESPONSE);
 
-        try {
-            final JSONObject object = jsonObject.optJSONObject(Wall.JSON_KEY_RESPONSE);
-
-            wall.count = object.optInt(Wall.JSON_KEY_COUNT);
+        wall.count = object.optInt(Wall.JSON_KEY_COUNT);
 
             // groups
             final JSONArray groups = object.optJSONArray(Wall.JSON_KEY_GROUPS);
@@ -454,29 +463,18 @@ public class VKHelper {
 
             // items
             final VKPostArray posts = new VKPostArray();
-
             try {
                 posts.parse(jsonObject);
             } catch (JSONException e) {}
 
             ArrayList<VKWallPostWrapper> wallPosts = new ArrayList<VKWallPostWrapper>();
-
             for (int i = 0; i < posts.size(); i++) {
                 wallPosts.add(new VKWallPostWrapper(posts.get(i), wall));
             }
 
             wall.posts = wallPosts;
 
-        } catch (Exception npe) {
-            Intent mStartActivity = new Intent(Constants.mainActivity.getApplicationContext(), SplashActivity.class);
-            int mPendingIntentId = 123456;
-            PendingIntent mPendingIntent = PendingIntent.getActivity(Constants.mainActivity.getApplicationContext(), mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-            AlarmManager mgr = (AlarmManager) Constants.mainActivity.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-            mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-            System.exit(0);
-        }
         return wall;
-
     }
 
     public static String TIF_VK_API_KEY_RESPONSE = "response";

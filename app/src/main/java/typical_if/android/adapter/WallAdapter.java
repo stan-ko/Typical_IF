@@ -77,7 +77,7 @@ public class WallAdapter extends BaseAdapter {
 
     public ArrayList<EventObject> eventObjects;
 
-    public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, boolean isSuggested) {
+    public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, String postColor, boolean isSuggested) {
         this.wall = wall;
         this.layoutInflater = inflater;
         this.context = TIFApp.getAppContext();
@@ -150,7 +150,7 @@ public class WallAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
         if (Constants.GROUP_ID == Constants.ZF_ID) {
-            EventViewHolder viewHolder = null;
+           EventViewHolder viewHolder;
 
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.event_item_layout, null, false);
@@ -165,7 +165,7 @@ public class WallAdapter extends BaseAdapter {
             initEventViewHolder(viewHolder, (EventObject) getItem(position));
         } else {
             final VKWallPostWrapper post = posts.get(position);
-            ViewHolder viewHolder = null;
+         final ViewHolder viewHolder ;
 
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.wall_lv_item, null, false);
@@ -431,7 +431,7 @@ public class WallAdapter extends BaseAdapter {
                 dialog.setView(view);
                 dialog.setTitle(context.getString(R.string.comment_background));
 
-                final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
+        //   viewHolder.postFeatureLayout.setBackgroundColor(Color.parseColor(postColor));
 
                 dialog.setPositiveButton(context.getString(R.string.okay), new DialogInterface.OnClickListener() {
                     @Override
