@@ -16,6 +16,8 @@ import com.vk.sdk.api.model.VKApiDocument;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiVideo;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
@@ -49,7 +51,7 @@ public class Constants {
     };
     public static int COUNTER;
 
-    public static final long TF_ID = -36573302;
+    public static final long TF_ID = -76879491;
     //    public static final long ZF_ID = -24818281; //true
     public static final long ZF_ID = -85319952; //test
     public static final long TZ_ID = -26363301;
@@ -154,4 +156,11 @@ public class Constants {
     public static final int PERIOD_EVENT = 2;
 
     public static final int EVENT_COUNT = 3;
+
+
+
+
+
+    public static JSONObject files ;
+
 }

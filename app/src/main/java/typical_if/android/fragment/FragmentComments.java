@@ -11,7 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.Nullable;
+
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.ContextMenu;
@@ -503,12 +503,12 @@ if (VKSdk.isLoggedIn()){
         );
 
     }
-public static boolean isViewLoaded;
+//public static boolean isViewLoaded;
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        isViewLoaded=true;
+       // isViewLoaded=true;
        // coverGlobal.setVisibility(View.GONE);
 
 

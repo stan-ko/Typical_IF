@@ -1,9 +1,5 @@
 package typical_if.android;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.text.Editable;
 import android.util.Log;
 
@@ -16,6 +12,7 @@ import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPhotoAlbum;
 import com.vk.sdk.api.model.VKApiUser;
+import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKAttachments;
 import com.vk.sdk.api.model.VKPostArray;
 
@@ -25,7 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import typical_if.android.activity.SplashActivity;
+import typical_if.android.activity.DialogActivity;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 
@@ -355,6 +352,18 @@ public class VKHelper {
         return photo;
     }
 
+    public static String getVideoSourceFromJson(JSONObject object) throws JSONException {
+
+       JSONObject response = object.optJSONObject("response");
+        JSONArray items = response.optJSONArray("items");
+        JSONObject video_object =  items.getJSONObject(0);
+        VKApiVideo video = new VKApiVideo().parse(video_object);
+        String link = DialogActivity.isShowDialogNedeed(video);
+
+
+        return link;
+    }
+
     public static ArrayList<VKApiPhoto> getPhotosFromJSONArray(JSONObject jsonArray) {
         JSONObject object = jsonArray.optJSONObject("response");
         try {
@@ -432,7 +441,7 @@ public class VKHelper {
     }
     public static Wall getGroupWallFromJSON(final JSONObject jsonObject) {
         final Wall wall = new Wall();
-  try {
+ // try {
       final JSONObject object = jsonObject.optJSONObject(Wall.JSON_KEY_RESPONSE);
 
       wall.count = object.optInt(Wall.JSON_KEY_COUNT);
@@ -465,15 +474,15 @@ public class VKHelper {
         wall.group = new VKApiCommunity().parse(groups.optJSONObject(0));
         // profiles
         wall.profiles=getProfilesFromJSONArray(object.optJSONArray(Wall.JSON_KEY_PROFILES));
-  } catch(Exception npe){
+ // } catch(Exception npe){
 
-      Intent mStartActivity = new Intent(Constants.mainActivity.getApplicationContext(), SplashActivity.class);
-      int mPendingIntentId = 123456;
-      PendingIntent mPendingIntent = PendingIntent.getActivity(Constants.mainActivity.getApplicationContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-      AlarmManager mgr = (AlarmManager)Constants.mainActivity.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-      mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-      System.exit(0);
-  }
+//      Intent mStartActivity = new Intent(Constants.mainActivity.getApplicationContext(), SplashActivity.class);
+//      int mPendingIntentId = 123456;
+//      PendingIntent mPendingIntent = PendingIntent.getActivity(Constants.mainActivity.getApplicationContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+//      AlarmManager mgr = (AlarmManager)Constants.mainActivity.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+//      mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+//      System.exit(0);
+//  }
         return wall;
 
   }
@@ -484,4 +493,6 @@ public class VKHelper {
         final JSONObject jsonObject = arr==null ? null : arr.optJSONObject(0);
         return jsonObject!=null ? jsonObject.optLong("id") : 0;
     }
+
+
 }

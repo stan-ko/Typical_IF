@@ -55,6 +55,9 @@ import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKApiWikiPage;
 import com.vk.sdk.api.model.VKAttachments;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -943,21 +946,112 @@ public class ItemDataSetter {
 
                             relativeLayout = (RelativeLayout) layout_i_j.getChildAt(k + 1);
                             relativeLayout.setVisibility(View.VISIBLE);
+
+                            try {
+                                Constants.files = new JSONObject("{\n" +
+                                        "\n" +
+                                        "   \"response\": {\n" +
+                                        "\n" +
+                                        "      \"count\": 1,\n" +
+                                        "\n" +
+                                        "      \"items\": [\n" +
+                                        "\n" +
+                                        "         {\n" +
+                                        "\n" +
+                                        "            \"id\": 170595910,\n" +
+                                        "\n" +
+                                        "            \"owner_id\": 106880118,\n" +
+                                        "\n" +
+                                        "            \"title\": \"Hans Zimmer - Interstellar Main Theme Piano Cover\",\n" +
+                                        "\n" +
+                                        "            \"duration\": 281,\n" +
+                                        "\n" +
+                                        "            \"description\": \"\",\n" +
+                                        "\n" +
+                                        "            \"date\": 1416238922,\n" +
+                                        "\n" +
+                                        "            \"views\": 2185,\n" +
+                                        "\n" +
+                                        "            \"comments\": 12,\n" +
+                                        "\n" +
+                                        "            \"photo_130\": \"https://pp.vk.me/c634005/u106880118/video/s_47bc0893.jpg\",\n" +
+                                        "\n" +
+                                        "            \"photo_320\": \"https://pp.vk.me/c634005/u106880118/video/l_53618910.jpg\",\n" +
+                                        "\n" +
+                                        "            \"files\": {\n" +
+                                        "\n" +
+                                        "               \"mp4_240\": \"http://cs634005v4.vk.me/u106880118/videos/b892209e1d.240.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZw4zXWh910VoAjRwlna7MigJcXLmF3VREPx6u2UF2UQ\",\n" +
+                                        "\n" +
+                                        "               \"mp4_360\":\"http://cs634005v4.vk.me/u106880118/videos/b892209e1d.360.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZw4zXWh910VoAjRwlna7MigJcXLmF3VREPx6u2UF2UQ\",\n" +
+                                        "\n" +
+                                        "               \"mp4_480\": \"http://cs634005v4.vk.me/u106880118/videos/b892209e1d.480.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZw4zXWh910VoAjRwlna7MigJcXLmF3VREPx6u2UF2UQ\",\n" +
+                                        "\n" +
+                                        "               \"mp4_720\": \"http://cs634005v4.vk.me/u106880118/videos/b892209e1d.720.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZw4zXWh910VoAjRwlna7MigJcXLmF3VREPx6u2UF2UQ\"\n" +
+                                        "\n" +
+                                        "            },\n" +
+                                        "\n" +
+                                        "            \"player\": \"http://vk.com/video_ext.php?oid=106880118&id=170595910&hash=4cce98c2eea10294&api_hash=1422805710101e694253c964274f\",\n" +
+                                        "\n" +
+                                        "            \"can_comment\": 1,\n" +
+                                        "\n" +
+                                        "            \"can_repost\": 1,\n" +
+                                        "\n" +
+                                        "            \"likes\": {\n" +
+                                        "\n" +
+                                        "               \"user_likes\": 0,\n" +
+                                        "\n" +
+                                        "               \"count\": 298\n" +
+                                        "\n" +
+                                        "            },\n" +
+                                        "\n" +
+                                        "            \"repeat\": 0\n" +
+                                        "\n" +
+                                        "         }\n" +
+                                        "\n" +
+                                        "      ],\n" +
+                                        "\n" +
+                                        "      \"profiles\": [\n" +
+                                        "\n" +
+                                        "         {\n" +
+                                        "\n" +
+                                        "            \"id\": 106880118,\n" +
+                                        "\n" +
+                                        "            \"first_name\": \"Халим\",\n" +
+                                        "\n" +
+                                        "            \"last_name\": \"Атамурадов\"\n" +
+                                        "\n" +
+                                        "         }\n" +
+                                        "\n" +
+                                        "      ],\n" +
+                                        "\n" +
+                                        "      \"groups\": []\n" +
+                                        "\n" +
+                                        "   }\n" +
+                                        "\n" +
+                                        "}");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
                             relativeLayout.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
+                                    String key = (videos.get(finalJ).owner_id+"_"+videos.get(finalJ).id+"");
 
-                                    VKHelper.getVideoPlay("42325198_170100772", new VKRequest.VKRequestListener() {
+                                    VKHelper.getVideoPlay(key, new VKRequest.VKRequestListener() {
                                         @Override
                                         public void onComplete(VKResponse response) {
                                             super.onComplete(response);
                                            // Constants.toastInProgress.show();
                                             Log.d(response.json.toString(),"VIDEO_FILE");
-                                            Fragment fragment = new FragmentVideoView();
-                                            fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                                            try {
+                                                VKHelper.getVideoSourceFromJson(Constants.files);
+                                                //Fragment fragment = new FragmentWebView(url);
 
-
-                                        }
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                           }
+                                         }
                                     });
                                 }
                             });
@@ -979,26 +1073,32 @@ public class ItemDataSetter {
 
                                     relativeLayout = (RelativeLayout) layout_i_j_k_l.getChildAt(1);
                                     relativeLayout.setVisibility(View.VISIBLE);
+
                                     relativeLayout.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                          //  Constants.toastInProgress.show();
+                                            String key = (videos.get(finalJ).owner_id+"_"+videos.get(finalJ).id+"");
 
-                                            VKHelper.getVideoPlay("42325198_170100772", new VKRequest.VKRequestListener() {
+
+
+                                            VKHelper.getVideoPlay(key, new VKRequest.VKRequestListener() {
                                                 @Override
                                                 public void onComplete(VKResponse response) {
                                                     super.onComplete(response);
-                                                    // Constants.toastInProgress.show();
-                                                    Log.d(response.json.toString(),"VIDEO_FILE");
-                                                    Fragment fragment = new FragmentVideoView();
-                                                    fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                                                try {
+                                                       VKHelper.getVideoSourceFromJson(Constants.files);
+
+                                                    } catch (JSONException e) {
+                                                       e.printStackTrace();
+                                                    }
+
+
 
 
                                                 }
                                             });
                                         }
                                     });
-
                                     ((TextView) relativeLayout.getChildAt(1)).setText(getMediaTime(videos.get(finalJ).duration));
                                     ((TextView) relativeLayout.getChildAt(2)).setText(videos.get(finalJ).title);
                                 }
@@ -1010,6 +1110,14 @@ public class ItemDataSetter {
         }
         parent.addView(mediaContainer);
     }
+
+
+    public ItemDataSetter(FragmentVideoView fragment,String link){
+
+        fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+
+    }
+
 
 
     static int g;

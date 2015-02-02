@@ -1,5 +1,6 @@
 package typical_if.android.fragment;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -43,15 +44,16 @@ public class FragmentWebView extends Fragment  {
         this.videoURL=url;
     }
     public FragmentWebView(){}
+    ActionBar ab;
 
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_video_view, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_web_view, container, false);
         setRetainInstance(true);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-
-        playVideo(videoURL, rootView);
+         ab = getActivity().getActionBar();
+           playVideo(videoURL, rootView);
         return rootView;
     }
 
@@ -60,11 +62,29 @@ public class FragmentWebView extends Fragment  {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+       ab.hide();
+       activity.onBackPressed();
+        activity.getFragmentManager().addOnBackStackChangedListener(new android.app.FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+
+            }
+        });
+
+
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        ab.show();
+    }
 
-
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ab.show();
+    }
 
     public void playVideo(String url, View view){
         customViewContainer = (FrameLayout) view.findViewById(R.id.customViewContainer);
