@@ -1,84 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:id="@+id/media_container">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ImageView
+        android:id="@+id/img_media_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop" />
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible" >
+        android:layout_alignBottom="@+id/img_media_container"
+        android:layout_alignParentEnd="false"
+        android:layout_alignParentStart="false"
+        android:layout_alignParentTop="false"
+        android:id="@+id/video_media_container"
+        android:visibility="gone">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:background="@color/transparent"
+            android:padding="2dp"
+            android:src="@drawable/ic_video_post_play" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="visible">
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@android:color/black"
+            android:gravity="bottom|right"
+            android:paddingRight="5dp"
+            android:paddingTop="3dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffffff"
+            android:textSize="13dp"
+            android:id="@+id/txt_video_duration_media_container"
+            android:paddingBottom="3dp"
+            android:paddingLeft="5dp"
+            android:layout_marginTop="30dp" />
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/img_photo_1"
-                android:adjustViewBounds="true"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="false" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="false"
-                android:layout_alignParentEnd="false"
-                android:visibility="gone"
-                android:layout_alignParentTop="false"
-                android:layout_alignBottom="@+id/img_photo_1">
-
-                <ImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:id="@+id/imageView36"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/ic_video_post_play"
-                    android:background="@color/transparent"
-                    android:padding="2dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:background="@color/transparent"
-                    android:gravity="bottom|right"
-                    android:textColor="#ffffffff"
-                    android:textSize="13dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:paddingRight="5dp"
-                    android:paddingTop="3dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:id="@+id/viktor_ref"
-                    android:background="@color/transparent"
-                    android:textColor="#ffffffff"
-                    android:textSize="13dp"
-                    android:layout_alignParentTop="false"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="false"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:paddingLeft="5dp"
-                    android:singleLine="true"
-                    android:gravity="left|bottom"
-                    android:paddingRight="5dp"
-                    android:visibility="visible"
-                    android:layout_marginRight="5dp"
-                    android:paddingBottom="5dp" />
-            </RelativeLayout>
-        </RelativeLayout>
-    </LinearLayout>
+        <TextView
+            android:id="@+id/txt_video_title_media_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="false"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="false"
+            android:background="@android:color/black"
+            android:gravity="left|bottom"
+            android:paddingBottom="3dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffffff"
+            android:textSize="13dp"
+            android:visibility="visible"
+            android:paddingTop="3dp" />
+    </RelativeLayout>
 </RelativeLayout>

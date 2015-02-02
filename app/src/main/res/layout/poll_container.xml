@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent" android:layout_height="wrap_content"
     android:background="@color/transparent"
     android:paddingBottom="5dp">
 
@@ -14,33 +14,30 @@
         android:singleLine="true"
         android:text="Jgbnedfyyz"
         android:textSize="15dp"
-        android:layout_alignTop="@+id/img_fixed_post"
-        android:layout_toRightOf="@+id/img_fixed_post"
-        android:layout_toEndOf="@+id/img_fixed_post" />
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/img_poll_post"
+        android:layout_toEndOf="@+id/img_poll_post"
+        android:layout_marginLeft="15dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/txt_poll_votes"
-        android:layout_toEndOf="@+id/img_fixed_post"
         android:text="dfghsdfghsfgs"
         android:textColor="#ffffffff"
-        android:layout_below="@+id/txt_poll_title"
-        android:layout_alignLeft="@+id/txt_poll_title"
-        android:layout_alignStart="@+id/txt_poll_title"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:layout_toRightOf="@+id/img_poll_post"
+        android:layout_toEndOf="@+id/img_poll_post"
+        android:layout_below="@+id/txt_poll_title" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/img_fixed_post"
+        android:id="@+id/img_poll_post"
         android:src="@drawable/survey_image"
-        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp" />
+        android:layout_margin="5dp" />
 </RelativeLayout>

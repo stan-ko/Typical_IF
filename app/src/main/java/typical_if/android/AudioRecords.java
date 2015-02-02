@@ -8,7 +8,7 @@ import android.widget.SeekBar;
  */
 public class AudioRecords {
 
-    String audioUrl;
+    public String audioUrl;
     boolean isFirstTimePlayed;
     public boolean isPaused;
     public boolean isPlayed;

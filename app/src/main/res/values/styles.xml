@@ -8,6 +8,8 @@
         <item name="actionBarStyle">@style/MyActionBar</item>
         <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>
         <item name="android:actionMenuTextColor">@style/CustomDropDownListView</item>
+
+        <item name="vpiUnderlinePageIndicatorStyle">@style/CustomUnderlinePageIndicator</item>
     </style>
 
 
@@ -41,6 +43,17 @@
         <item name="android:textSize">10sp</item>
     </style>
 
+    <style name="CustomUnderlinePageIndicator">
+        <item name="selectedColor">#FF6600</item>
+        <item name="android:background">#303030</item>
+        <item name="fadeLength">1000</item>
+        <item name="fadeDelay">1000</item>
+    </style>
+
+    <style name="TwoWayView">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:scrollbars">horizontal</item>
+    </style>
 
     <!--<style name="CustomSherlockDropDownNav" parent="@style/Widget.Sherlock.Light.Spinner.DropDown.ActionBar">-->
         <!--<item name="android:popupBackground">@drawable/menu_dropdown_panel_customtab</item>-->

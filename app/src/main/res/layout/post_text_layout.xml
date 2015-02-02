@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/txt_post"
-        android:textColor="#d2ffffff"
+        android:textColor="@color/vk_white"
         android:textSize="15dp"
         android:clickable="true"
         android:layout_alignParentTop="true"
