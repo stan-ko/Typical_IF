@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -299,13 +298,12 @@ public class FragmentComments extends Fragment {
     private void loadWallPosts() {
         final View wallItem = inflater.inflate(R.layout.wall_lv_item, null);
 
-        CardView cardView = (CardView) wallItem.getRootView().findViewById(R.id.card_view_wall_lv_Item);
-        cardView.setCardElevation(0);
-        cardView.setShadowPadding(0,0,0,0);
-
         viewHolder = new WallAdapter.ViewHolder(wallItem);
 
         WallAdapter.initViewHolder(viewHolder, wall, position, getFragmentManager(), post);
+
+        viewHolder.postRootLayout.setCardElevation(0);
+        viewHolder.postRootLayout.setShadowPadding(0,0,0,0);
 
         viewHolder.postAuthorPanel.setVisibility(View.GONE);
         viewHolder.postFeatureLayout.setVisibility(View.GONE);

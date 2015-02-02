@@ -23,7 +23,6 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,9 +33,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,9 +59,6 @@ import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKApiWikiPage;
 import com.vk.sdk.api.model.VKAttachments;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,7 +73,6 @@ import typical_if.android.adapter.WallAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoList;
 import typical_if.android.fragment.FragmentVideoView;
-import typical_if.android.model.Wall.Wall;
 
 import static java.lang.String.format;
 import static java.lang.String.valueOf;

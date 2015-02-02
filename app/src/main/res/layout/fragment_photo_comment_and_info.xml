@@ -83,7 +83,6 @@
           android:layout_width="30dp"
           android:layout_height="30dp"
           android:layout_weight=".30"
-          android:background="@drawable/ic_message_box_send"
           android:textColor="#ffffffff"
           android:visibility="visible"
           android:layout_marginRight="10dp"

@@ -2,7 +2,6 @@ package typical_if.android.adapter;
 
 
 import android.support.v4.view.ViewPager;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,10 +153,8 @@ public class CommentsListAdapter extends BaseAdapter {
         viewHolder.user_name.setText(last_name + " " + first_name);
 
         if (comment.text.length() != 0) {
-            viewHolder.commentTextLayout.setVisibility(View.GONE);
-            viewHolder.userCommentText.setText(ItemDataSetter.getParsedText(comment.text));
-            viewHolder.userCommentText.setMovementMethod(LinkMovementMethod.getInstance());
-            viewHolder.userCommentText.setVisibility(View.VISIBLE);
+            viewHolder.commentTextLayout.setVisibility(View.VISIBLE);
+            ItemDataSetter.setText(ItemDataSetter.getParsedText(comment.text), viewHolder.commentTxtPost, viewHolder.commentCbPostAllText);
         } else {
             viewHolder.commentTextLayout.setVisibility(View.GONE);
         }
@@ -236,7 +233,6 @@ public class CommentsListAdapter extends BaseAdapter {
         public final CheckBox likes;
         public final RelativeLayout commentMediaLayout;
         private final RelativeLayout commentTextLayout;
-        private final TextView userCommentText;
         public final LinearLayout commentAudioLayout;
         private final LinearLayout commentAttachmentsLayout;
         public final LinearLayout commentDocumentLayout;
@@ -275,7 +271,6 @@ public class CommentsListAdapter extends BaseAdapter {
             this.commentPollLayout = (RelativeLayout) convertView.findViewById(R.id.commentPollLayout);
             this.commentParentLayout = (RelativeLayout) convertView.findViewById(R.id.commentParentLayout);
             this.commentDataLayout = (RelativeLayout) convertView.findViewById(R.id.commentDataLayout);
-            this.userCommentText = (TextView) convertView.findViewById(R.id.user_comment_text);
             this.commentTxtPost = (TextView) convertView.findViewById(R.id.txt_post);
             this.commentCbPostAllText = (CheckBox) convertView.findViewById(R.id.cb_show_all_text);
             this.commentImgWikiPage = (ImageView) convertView.findViewById(R.id.img_wiki_page);

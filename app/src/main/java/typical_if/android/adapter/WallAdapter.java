@@ -10,6 +10,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.provider.CalendarContract;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +78,7 @@ public class WallAdapter extends BaseAdapter {
 
     public ArrayList<EventObject> eventObjects;
 
-    public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, String postColor, boolean isSuggested) {
+    public WallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, boolean isSuggested) {
         this.wall = wall;
         this.layoutInflater = inflater;
         this.context = TIFApp.getAppContext();
@@ -431,7 +432,7 @@ public class WallAdapter extends BaseAdapter {
                 dialog.setView(view);
                 dialog.setTitle(context.getString(R.string.comment_background));
 
-        //   viewHolder.postFeatureLayout.setBackgroundColor(Color.parseColor(postColor));
+                final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
 
                 dialog.setPositiveButton(context.getString(R.string.okay), new DialogInterface.OnClickListener() {
                     @Override
@@ -676,6 +677,8 @@ public class WallAdapter extends BaseAdapter {
     public static class ViewHolder {
         public int position;
 
+        public final CardView postRootLayout;
+
         public final RelativeLayout postTextLayout;
         public final RelativeLayout postMediaLayout;
         public final LinearLayout postAudioLayout;
@@ -744,6 +747,8 @@ public class WallAdapter extends BaseAdapter {
         public final ListView copyHistoryAudioListView;
 
         public ViewHolder(View convertView) {
+            this.postRootLayout = (CardView) convertView.findViewById(R.id.card_view_wall_lv_item);
+
             this.postAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.postAttachmentsLayout);
             this.postTextLayout = (RelativeLayout) convertView.findViewById(R.id.postTextLayout);
             this.postMediaLayout = (RelativeLayout) convertView.findViewById(R.id.postMediaLayout);
