@@ -15,17 +15,16 @@ public class NotificationReceiver extends BroadcastReceiver {
         // TODO: This method is called when the BroadcastReceiver is receiving
         // an Intent broadcast.
         Bundle bundle = intent.getExtras();
-        if (bundle!=null) {
-            if (intent.getAction()==Constants.SCHEDULE_FOR_EIGHT_HOUR){
+        if (bundle != null) {
+            if (intent.getAction() == Constants.SCHEDULE_FOR_EIGHT_HOUR) {
                 context.startService(new Intent(context, NotificationService.class).setAction(Constants.REPEAT_ACTION));
-                Log.d("SCHEDULE_FOR_EIGHT_HOUR"," --------------------------- ");
+                Log.d("SCHEDULE_FOR_EIGHT_HOUR", " --------------------------- ");
             }
-            if (intent.getAction()==Constants.SCHEDULE_FOR_ONE_HOUR){
+            if (intent.getAction() == Constants.SCHEDULE_FOR_ONE_HOUR) {
                 context.startService(new Intent(context, NotificationService.class).setAction(Constants.REPEAT_ACTION));
-                Log.d("SCHEDULE_FOR_ONE_HOUR"," --------------------------- ");
+                Log.d("SCHEDULE_FOR_ONE_HOUR", " --------------------------- ");
+
             }
-
-
         }
     }
 }
