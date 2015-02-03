@@ -334,7 +334,6 @@ public class FragmentComments extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //EventBus.getDefault().register(this);
 
         ((MainActivity) getActivity()).getSupportActionBar().hide();
         FragmentWall.setDisabledMenu();

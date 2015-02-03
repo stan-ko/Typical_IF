@@ -42,6 +42,13 @@ public class MediaPagerAdapter extends PagerAdapter {
         }
     };
 
+    private View.OnClickListener openVideosListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            VKApiVideo video = (VKApiVideo) v.getTag();
+        }
+    };
+
     public enum RowType {
         PHOTO_ITEM, VIDEO_ITEM
     }
@@ -191,7 +198,9 @@ public class MediaPagerAdapter extends PagerAdapter {
             ImageLoader.getInstance().displayImage(video.photo_320, viewHolder.photo);
 
             viewHolder.videoContainer.setVisibility(View.VISIBLE);
-            viewHolder.videoContainer.setOnClickListener(ItemDataSetter.inProgressToastListener);
+
+            viewHolder.videoContainer.setTag(video);
+            viewHolder.videoContainer.setOnClickListener(openVideosListener);
 
             viewHolder.videoDuration.setText(ItemDataSetter.getMediaTime(video.duration));
             viewHolder.videoTitle.setText(video.title);
