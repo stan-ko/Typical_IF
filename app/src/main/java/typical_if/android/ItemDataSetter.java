@@ -72,7 +72,6 @@ import typical_if.android.adapter.MediaPagerAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoList;
-import typical_if.android.fragment.FragmentVideoView;
 
 import static java.lang.String.format;
 import static java.lang.String.valueOf;
@@ -614,9 +613,9 @@ public class ItemDataSetter {
         }
     }
 
-    public static void setMediaPager(ViewPager mediaPager, CirclePageIndicator mediaPagerIndicator, RelativeLayout mediaLayout, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
+    public static void setMediaPager(final ViewPager mediaPager, CirclePageIndicator mediaPagerIndicator, RelativeLayout mediaLayout, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
         int newWidth = TIFApp.getDisplayWidth();
-        int count = photos.size() + videos.size();
+        final int count = photos.size() + videos.size();
 
         mediaLayout.setVisibility(View.VISIBLE);
 
@@ -624,9 +623,9 @@ public class ItemDataSetter {
         mediaPager.setLayoutParams(params);
 
         MediaPagerAdapter mediaPagerAdapter = new MediaPagerAdapter(context, photos, videos);
+
         mediaPager.setOffscreenPageLimit(count);
         mediaPager.setAdapter(mediaPagerAdapter);
-//        mediaPager.setPageTransformer(true, new AccordionTransformer());
 
         final float density = context.getResources().getDisplayMetrics().density;
 
@@ -640,14 +639,6 @@ public class ItemDataSetter {
 
         ((RelativeLayout) mediaPagerIndicator.getParent()).setVisibility(count == 1 ? View.GONE : View.VISIBLE);
     }
-
-
-    public ItemDataSetter(FragmentVideoView fragment,String link){
-        fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-    }
-
-
-
 
 //    if (!(layout_i instanceof LinearLayout)) {
 //        continue;
