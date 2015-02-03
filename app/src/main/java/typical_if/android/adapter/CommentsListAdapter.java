@@ -1,13 +1,13 @@
 package typical_if.android.adapter;
 
 
-import android.content.Context;
-import android.text.method.LinkMovementMethod;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.viewpagerindicator.CirclePageIndicator;
 import com.vk.sdk.api.model.VKApiComment;
 import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiUser;
@@ -38,7 +39,6 @@ public class CommentsListAdapter extends BaseAdapter {
     final ArrayList<VKApiCommunity> groupsList;
 
     private final LayoutInflater layoutInflater;
-    private static final Context appContext = TIFApp.getAppContext();
 
     public ViewHolder viewHolder;
     String first_name = "";
@@ -46,19 +46,16 @@ public class CommentsListAdapter extends BaseAdapter {
     String url = "";
     int position;
 
-    final String postColor;
-
     final static Pattern matPattern = Pattern.compile("\\[(id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]");
 
-    public CommentsListAdapter(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList,ArrayList<VKApiCommunity> groupsList, LayoutInflater inflater, String postColor) {
+    public CommentsListAdapter(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList, ArrayList<VKApiCommunity> groupsList, LayoutInflater inflater) {
         this.commentList = commentList;
         this.profilesList = profilesList;
-        this.groupsList=groupsList;
+        this.groupsList = groupsList;
         layoutInflater = inflater;
-        this.postColor = postColor;
     }
 
-    public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList,ArrayList<VKApiCommunity> groupsList, ListView listView) {
+    public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList, ArrayList<VKApiCommunity> groupsList, ListView listView) {
         this.profilesList.clear();
         this.profilesList.addAll(profilesList);
         this.commentList.clear();
@@ -98,16 +95,11 @@ public class CommentsListAdapter extends BaseAdapter {
             }
 
             if (comment.from_id == profile.id) {
-                        first_name = profile.first_name;
-                        last_name = profile.last_name;
-                        url = profile.photo_100;
-                    }
-                }
-
-
-
-
-
+                first_name = profile.first_name;
+                last_name = profile.last_name;
+                url = profile.photo_100;
+            }
+        }
 
         final int commentListCount = commentList.size();
         VKApiComment vkApiComment;
@@ -129,39 +121,29 @@ public class CommentsListAdapter extends BaseAdapter {
 
                 vkApiComment.text = stringB.toString();
             }
-//            else {
-//                vkApiComment.text = vkApiComment.text;
-//            }
         }
     }
 
     public void changeStateLikeForComment(boolean state, String count) {
-
         viewHolder.likes.setVisibility(View.VISIBLE);
-
         viewHolder.likes.setChecked(state);
-        viewHolder.likes.setText(" "+count);
+        viewHolder.likes.setText(" " + count);
         viewHolder.likes.setEnabled(false);
-        notifyDataSetChanged();
 
+        notifyDataSetChanged();
     }
 
-
     public void holderInitialize(final ViewHolder viewHolder, final VKApiComment comment) {
-
-        ItemDataSetter.commentViewHolder = viewHolder;
-        ItemDataSetter.postColor = postColor;
 
         ImageLoader.getInstance().displayImage(url, viewHolder.user_avatar, TIFApp.additionalOptions);
         if (comment.likes == 0) {
             viewHolder.likes.setVisibility(View.GONE);
         } else {
             viewHolder.likes.setVisibility(View.VISIBLE);
-            viewHolder.likes.setText(" "+String.valueOf(comment.likes));
+            viewHolder.likes.setText(" " + String.valueOf(comment.likes));
             viewHolder.likes.setEnabled(false);
 
-            if (comment.user_likes == false) {
-
+            if (!comment.user_likes) {
                 viewHolder.likes.setChecked(false);
             } else {
                 viewHolder.likes.setChecked(true);
@@ -171,24 +153,38 @@ public class CommentsListAdapter extends BaseAdapter {
         viewHolder.user_name.setText(last_name + " " + first_name);
 
         if (comment.text.length() != 0) {
-            viewHolder.commentTextLayout.setVisibility(View.GONE);
-            viewHolder.userCommentText.setText(ItemDataSetter.getParsedText(comment.text));
-            viewHolder.userCommentText.setMovementMethod(LinkMovementMethod.getInstance());
-            viewHolder.userCommentText.setVisibility(View.VISIBLE);
-            //viewHolder.commentTextLayout.setBackgroundColor(Color.TRANSPARENT);
+            viewHolder.commentTextLayout.setVisibility(View.VISIBLE);
+            ItemDataSetter.setText(ItemDataSetter.getParsedText(comment.text), viewHolder.commentTxtPost, viewHolder.commentCbPostAllText);
         } else {
             viewHolder.commentTextLayout.setVisibility(View.GONE);
         }
 
         String s = String.valueOf(ItemDataSetter.getFormattedDate(comment.date));
-      if (s.contains("2014,")){
-          viewHolder.date_of_user_comment.setText(String.valueOf(s.replace(" 2014,","")));
-      }else{
+        if (s.contains("2014,")) {
+            viewHolder.date_of_user_comment.setText(String.valueOf(s.replace(" 2014,", "")));
+        } else {
 
-        viewHolder.date_of_user_comment.setText(String.valueOf(ItemDataSetter.getFormattedDate(comment.date)));}
+            viewHolder.date_of_user_comment.setText(String.valueOf(ItemDataSetter.getFormattedDate(comment.date)));
+        }
 
         if (comment.attachments != null && comment.attachments.size() != 0) {
-            ItemDataSetter.setAttachemnts(comment.attachments, viewHolder.commentAttachmentsLayout, 2);
+            viewHolder.commentAttachmentsLayout.setVisibility(View.VISIBLE);
+            ItemDataSetter.setAttachemnts(
+                    comment.attachments,
+                    viewHolder.commentMediaLayout,
+                    viewHolder.commentMediaPager,
+                    viewHolder.commentMediaPagerIndicator,
+                    viewHolder.commentAudioLayout,
+                    viewHolder.commentAudioListView,
+                    viewHolder.commentDocumentLayout,
+                    viewHolder.commentAlbumLayout,
+                    viewHolder.commentWikiPageLayout,
+                    viewHolder.commentLinkLayout,
+                    viewHolder.commentTxtLinkSrc,
+                    viewHolder.commentTxtLinkTitle,
+                    viewHolder.commentPollLayout,
+                    viewHolder.commentTxtPollTitle
+            );
         } else {
             viewHolder.commentAttachmentsLayout.setVisibility(View.GONE);
         }
@@ -235,10 +231,8 @@ public class CommentsListAdapter extends BaseAdapter {
         public final TextView user_name;
         public final TextView date_of_user_comment;
         public final CheckBox likes;
-
         public final RelativeLayout commentMediaLayout;
         private final RelativeLayout commentTextLayout;
-        private final TextView userCommentText;
         public final LinearLayout commentAudioLayout;
         private final LinearLayout commentAttachmentsLayout;
         public final LinearLayout commentDocumentLayout;
@@ -248,14 +242,24 @@ public class CommentsListAdapter extends BaseAdapter {
         public final RelativeLayout commentPollLayout;
         public final RelativeLayout commentParentLayout;
         public final RelativeLayout commentDataLayout;
+        public final TextView commentTxtPost;
+        public final CheckBox commentCbPostAllText;
+        public final ImageView commentImgWikiPage;
+        public final TextView commentTxtWikiPage;
+        public final ImageView commentImgLink;
+        public final TextView commentTxtLinkTitle;
+        public final TextView commentTxtLinkSrc;
+        public final ImageView commentImgPoll;
+        public final TextView commentTxtPollTitle;
+        public final ViewPager commentMediaPager;
+        public final CirclePageIndicator commentMediaPagerIndicator;
+        public final ListView commentAudioListView;
 
         public ViewHolder(View convertView) {
             this.user_avatar = (RoundedImageView) convertView.findViewById(R.id.img_user_avatar);
-
             this.user_name = (TextView) convertView.findViewById(R.id.user_name_textView);
             this.date_of_user_comment = (TextView) convertView.findViewById(R.id.text_date_of_comment);
             this.likes = (CheckBox) convertView.findViewById(R.id.post_comment_like_checkbox);
-
             this.commentAttachmentsLayout = (LinearLayout) convertView.findViewById(R.id.commentAttachmentsLayout);
             this.commentMediaLayout = (RelativeLayout) convertView.findViewById(R.id.commentMediaLayout);
             this.commentAudioLayout = (LinearLayout) convertView.findViewById(R.id.commentAudioLayout);
@@ -267,9 +271,18 @@ public class CommentsListAdapter extends BaseAdapter {
             this.commentPollLayout = (RelativeLayout) convertView.findViewById(R.id.commentPollLayout);
             this.commentParentLayout = (RelativeLayout) convertView.findViewById(R.id.commentParentLayout);
             this.commentDataLayout = (RelativeLayout) convertView.findViewById(R.id.commentDataLayout);
-            this.userCommentText=(TextView)convertView.findViewById(R.id.user_comment_text);
+            this.commentTxtPost = (TextView) convertView.findViewById(R.id.txt_post);
+            this.commentCbPostAllText = (CheckBox) convertView.findViewById(R.id.cb_show_all_text);
+            this.commentImgWikiPage = (ImageView) convertView.findViewById(R.id.img_wiki_page);
+            this.commentTxtWikiPage = (TextView) convertView.findViewById(R.id.txt_wiki_page);
+            this.commentImgLink = (ImageView) convertView.findViewById(R.id.img_link);
+            this.commentTxtLinkTitle = (TextView) convertView.findViewById(R.id.txt_link_title);
+            this.commentTxtLinkSrc = (TextView) convertView.findViewById(R.id.txt_link_src);
+            this.commentImgPoll = (ImageView) convertView.findViewById(R.id.img_poll_post);
+            this.commentTxtPollTitle = (TextView) convertView.findViewById(R.id.txt_poll_title);
+            this.commentMediaPager = (ViewPager) convertView.findViewById(R.id.media_pager);
+            this.commentMediaPagerIndicator = (CirclePageIndicator) convertView.findViewById(R.id.media_circle_indicator);
+            this.commentAudioListView = (ListView) convertView.findViewById(R.id.lv_simple);
         }
     }
-
-
 }

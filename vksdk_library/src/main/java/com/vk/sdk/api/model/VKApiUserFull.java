@@ -437,6 +437,7 @@ public class VKApiUserFull extends VKApiUser implements android.os.Parcelable {
 	{
 		parse(from);
 	}
+
     public VKApiUserFull parse(JSONObject user) {
         super.parse(user);
 

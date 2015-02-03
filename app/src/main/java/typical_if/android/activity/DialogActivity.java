@@ -21,8 +21,7 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPost;
-
-import org.json.JSONObject;
+import com.vk.sdk.api.model.VKApiVideo;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -39,6 +38,7 @@ import typical_if.android.event.EventShowSuggestPostDialog;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentUploadAlbumList;
+import typical_if.android.fragment.FragmentVideoView;
 
 /**
  * Created by admin on 10.09.2014.
@@ -60,13 +60,15 @@ public class DialogActivity extends ActionBarActivity {
     public void replaceFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
     }
-int index;
+
+    int index;
+
     public void addFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack("").commit();
-        index=getSupportFragmentManager().getBackStackEntryCount();
+        index = getSupportFragmentManager().getBackStackEntryCount();
     }
 
-    public void changeLanguage(){
+    public void changeLanguage() {
         final AlertDialog.Builder builderIn = new AlertDialog.Builder(Constants.mainActivity);
         builderIn.setTitle(R.string.change_lan);
 
@@ -78,13 +80,15 @@ int index;
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        if(lang!="ua"){
-                        restartAfterChanges(0,"ua");}
+                        if (lang != "ua") {
+                            restartAfterChanges(0, "ua");
+                        }
                         ++Constants.refresherDrawerCounter;
-                         break;
+                        break;
                     case 1:
-                        if(lang!="ru"){
-                        restartAfterChanges(0,"ru");}
+                        if (lang != "ru") {
+                            restartAfterChanges(0, "ru");
+                        }
                         ++Constants.refresherDrawerCounter;
 
                         break;
@@ -97,25 +101,25 @@ int index;
     }
 
 
-    public void restartAfterChanges(final int key ,final String lan){
+    public void restartAfterChanges(final int key, final String lan) {
         final AlertDialog.Builder dialog = new AlertDialog.Builder(Constants.mainActivity);
-         dialog.setTitle(Constants.mainActivity.getApplicationContext().getString(R.string.restart_app_dialog));
+        dialog.setTitle(Constants.mainActivity.getApplicationContext().getString(R.string.restart_app_dialog));
 
         dialog.setPositiveButton(Constants.mainActivity.getApplicationContext().getString(R.string.okay),
-            new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ItemDataSetter.saveUserLanguage(key,lan);
-                Intent mStartActivity = new Intent(Constants.mainActivity.getApplicationContext(), SplashActivity.class);
-                int mPendingIntentId = 123456;
-                PendingIntent mPendingIntent = PendingIntent.getActivity(Constants.mainActivity.getApplicationContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                AlarmManager mgr = (AlarmManager)Constants.mainActivity.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-                mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-                System.exit(0);
-            }
-        });
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ItemDataSetter.saveUserLanguage(key, lan);
+                        Intent mStartActivity = new Intent(Constants.mainActivity.getApplicationContext(), SplashActivity.class);
+                        int mPendingIntentId = 123456;
+                        PendingIntent mPendingIntent = PendingIntent.getActivity(Constants.mainActivity.getApplicationContext(), mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                        AlarmManager mgr = (AlarmManager) Constants.mainActivity.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                        mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
+                        System.exit(0);
+                    }
+                });
         dialog.setNegativeButton(Constants.mainActivity.getApplicationContext().getString(R.string.cancel)
-                ,new DialogInterface.OnClickListener() {
+                , new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 dialog.setCancelable(true);
@@ -123,8 +127,6 @@ int index;
         });
         dialog.create().show();
     }
-
-
 
 
     public void reportListDialog(final long gid, final long id) {
@@ -228,6 +230,7 @@ int index;
                                 getSupportFragmentManager().popBackStack();
                                 Toast.makeText(getApplicationContext(), resources.getString(R.string.post_deleted), Toast.LENGTH_SHORT).show();
                             }
+
                             @Override
                             public void onError(final VKError error) {
                                 super.onError(error);
@@ -265,50 +268,163 @@ int index;
         builder.show();
     }
 
-
-    public void videoResolutionDialog(JSONObject jsonObject) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
-        final Resources resources = getResources();
-
+    public static String isShowDialogNedeed(VKApiVideo video) {
         ArrayList<String> items = new ArrayList<String>();
-        final ArrayList<String> links = new ArrayList<String>();
+        ArrayList<String> links = new ArrayList<String>();
 
-        if (jsonObject.has("mp_240")) {
+      //  JSONObject files = jsonObject.optJSONObject("files");
+
+
+        if (video.player.contains("youtube")) {
+            link = video.player;
+            return link;
+        } else if (isOneLink(video, links, items)) {
+            link = links.get(0);
+            ;
+            return link;
+        } else {
+            new DialogActivity(video, links, items);
+            return link;
+        }
+
+
+    }
+
+    public DialogActivity(VKApiVideo video, ArrayList<String> links, ArrayList<String> items) {
+        videoResolutionDialog(video, items, links);
+    }
+
+    public DialogActivity() {
+    }
+
+
+    public static boolean isOneLink(VKApiVideo video, ArrayList<String> links, ArrayList<String> items) {
+
+        if (video.mp4_240!=null){
             items.add("240");
-            links.add(jsonObject.optString("mp_240"));
+            links.add(video.mp4_240);
         }
-        if (jsonObject.has("mp_360")) {
+        if (video.mp4_360!=null){
             items.add("360");
-            links.add(jsonObject.optString("mp_360"));
+            links.add(video.mp4_360);
         }
-        if (jsonObject.has("mp_480")) {
+        if (video.mp4_480!=null){
             items.add("480");
-            links.add(jsonObject.optString("mp_480"));
+            links.add(video.mp4_480);
         }
-        if (jsonObject.has("mp_720")) {
+        if (video.mp4_720!=null){
             items.add("720");
-            links.add(jsonObject.optString("mp_720"));
+            links.add(video.mp4_720);
         }
+
+
+        if (links.size() != 1 || items.size() != 1) {
+            return false;
+        } else {
+            return
+                    true;
+        }
+    }
+
+
+    static String link = null;
+
+    public  void videoResolutionDialog(final VKApiVideo video, final ArrayList<String> items, final ArrayList<String> links) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
+        final int count = links.size();
 
         builder.setTitle("Choose resolution");
-        builder.setItems((String[])items.toArray(), new DialogInterface.OnClickListener() {
+
+
+        String[] dialogItems = items.toArray(new String[items.size()]);
+        for (int i = 0; i < items.size(); i++) {
+            dialogItems[i] = items.get(i);
+        }
+
+        builder.setItems(dialogItems, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                    case 1:
-                    case 2:
-                    case 3:
-                        Toast.makeText(getApplicationContext(), links.get(which), Toast.LENGTH_SHORT).show();
+                FragmentVideoView fragment;
+                if (count == 4) {
+                    switch (which) {
+                        case 0:
+                            link = links.get(0);
+                          //  fragment = new FragmentVideoView(link);
+                         //   new ItemDataSetter(fragment, link);
+                            break;
+                        case 1:
+                            link = links.get(1);
+                          //  fragment = new FragmentVideoView(link);
+                          //  new ItemDataSetter(fragment, link);
+                            break;
+                        case 2:
+                            link = links.get(2);
+                           // fragment = new FragmentVideoView(link);
+                          //  new ItemDataSetter(fragment, link);
+                            break;
+                        case 3:
+                            link = links.get(3);
+                           // fragment = new FragmentVideoView(link);
+                           // new ItemDataSetter(fragment, link);
+                            break;
+                        default:
+
+                    }
                 }
+
+                if (count == 3) {
+
+                    switch (which) {
+                        case 0:
+                            link = links.get(0);
+
+                            break;
+                        case 1:
+                            link = links.get(1);
+
+                            break;
+                        case 2:
+                            link = links.get(2);
+
+                            break;
+                        default:
+
+                    }
+
+
+                }
+
+                if (count == 2) {
+
+                    switch (which) {
+                        case 0:
+                            link = links.get(0);
+
+                            break;
+                        case 1:
+                            link = links.get(1);
+
+
+                            break;
+                        default:
+
+                    }
+
+
+                }
+                ((MainActivity)Constants.mainActivity).addFragment(FragmentVideoView.newInstance(link,video));
+
+
             }
+
+
         });
 
         builder.show();
     }
 
     public Dialog addPhotoFrom() {
-        final String[] items =  Constants.mainActivity.getResources().getStringArray(R.array.add_photo_from);
+        final String[] items = Constants.mainActivity.getResources().getStringArray(R.array.add_photo_from);
         AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
         builder.setTitle(Constants.mainActivity.getResources().getString(R.string.add_photo_from_title));
         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -349,14 +465,14 @@ int index;
     //-----------------------------------EVENTS---------------------------------------
 
     public void onEventMainThread(EventShowPhotoAttachDialog event) {
-        photoAttachDialog(event.gid,event.which);
+        photoAttachDialog(event.gid, event.which);
     }
 
     public void onEventMainThread(EventShowReportDialog event) {
-        reportDialog(event.gid,event.which);
+        reportDialog(event.gid, event.which);
     }
 
     public void onEventMainThread(EventShowSuggestPostDialog event) {
-        suggestPostDialog(event.gid,event.post);
+        suggestPostDialog(event.gid, event.post);
     }
 }

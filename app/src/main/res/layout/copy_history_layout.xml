@@ -1,172 +1,192 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/element_selector"
     android:divider="@drawable/post_divider"
-    android:background="@drawable/element_selector">
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/linearLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        android:id="@+id/linearLayout"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <RelativeLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/element_selector"
-            android:visibility="visible"
             android:paddingTop="5dp"
-            android:layout_marginBottom="5dp">
+            android:visibility="visible"
+            android:id="@+id/copyHistoryHeader">
 
             <ImageView
+                android:id="@+id/img_copy_history_logo"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:id="@+id/img_copy_history_logo"
-                android:visibility="visible"
-                android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_marginTop="5dp"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="5dp"
                 android:layout_marginLeft="7dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginTop="5dp"
+                android:visibility="visible" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:id="@+id/txt_copy_history_title"
-                android:singleLine="true"
-                android:textColor="#aaffffff"
-                android:textSize="15dp"
-                android:layout_alignTop="@+id/img_copy_history_logo"
-                android:layout_toRightOf="@+id/imageView96"
-                android:layout_toEndOf="@+id/imageView96"
-                android:layout_marginLeft="4dp"
-                android:text="jhv,jhvmxf" />
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_alignTop="@+id/img_copy_history_logo"
+                android:layout_marginLeft="4dp"
+                android:layout_toEndOf="@+id/imageView96"
+                android:layout_toRightOf="@+id/imageView96"
+                android:singleLine="true"
+                android:text="jhv,jhvmxf"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#aaffffff"
+                android:textSize="15dp" />
+
+            <TextView
                 android:id="@+id/txt_copy_history_date"
-                android:textColor="#8cffffff"
-                android:layout_below="@+id/txt_copy_history_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/txt_copy_history_title"
                 android:layout_alignStart="@+id/txt_copy_history_title"
+                android:layout_below="@+id/txt_copy_history_title"
                 android:layout_marginTop="3dp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#8cffffff"
                 android:textSize="13dp" />
 
             <ImageView
+                android:id="@+id/imageView96"
                 android:layout_width="15dp"
                 android:layout_height="15dp"
-                android:id="@+id/imageView96"
-                android:src="@drawable/ic_retweet"
                 android:layout_above="@+id/txt_copy_history_date"
-                android:layout_toRightOf="@+id/img_copy_history_logo"
-                android:layout_toEndOf="@+id/img_copy_history_logo"
+                android:layout_marginBottom="3dp"
                 android:layout_marginLeft="7dp"
-                android:layout_marginBottom="3dp" />
+                android:layout_toEndOf="@+id/img_copy_history_logo"
+                android:layout_toRightOf="@+id/img_copy_history_logo"
+                android:src="@drawable/ic_retweet" />
 
         </RelativeLayout>
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:id="@+id/copyHistorySignedLayout"
-            android:background="@drawable/element_selector"
-            android:layout_marginRight="5dp"></RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/copyHistoryTextLayout"
-            android:visibility="gone"
-            android:background="@color/transparent" />
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:visibility="gone">
+
+            <include layout="@layout/post_text_layout" />
+
+        </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/copyHistoryAttachmentsLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/copyHistoryAttachmentsLayout"
-            android:orientation="vertical"
-            android:visibility="visible"
+            android:background="@drawable/element_selector"
             android:baselineAligned="false"
-            android:background="@drawable/element_selector">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:id="@+id/copyHistoryMediaLayout"
-                android:background="@drawable/element_selector"
-                android:paddingTop="5dp" />
-
-            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:background="@color/transparent"
+                android:visibility="gone" >
+
+                <include layout="@layout/media_pager_container" />
+
+            </RelativeLayout>
+
+            <LinearLayout
                 android:id="@+id/copyHistoryAudioLayout"
-                android:orientation="vertical"
-                android:background="@color/transparent" />
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:background="@color/transparent"
+                android:visibility="gone" >
+
+                <include layout="@layout/simple_listview_layout"/>
+
+            </LinearLayout>
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:id="@+id/copyHistoryDocumentLayout"
-                android:orientation="vertical"
-                android:background="@drawable/element_selector" />
-
-            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:id="@+id/copyHistoryAlbumLayout"
+                android:background="@drawable/element_selector"
                 android:orientation="vertical"
-                android:showDividers="middle"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:id="@+id/copyHistoryAlbumLayout"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
                 android:divider="@drawable/copy_history_divider"
                 android:dividerPadding="5dp"
-                android:background="@color/transparent"
+                android:orientation="vertical"
                 android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 android:paddingTop="5dp"
-                android:paddingRight="5dp" />
+                android:showDividers="middle"
+                android:visibility="gone" />
 
             <RelativeLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
                 android:id="@+id/copyHistoryWikiPageLayout"
-                android:visibility="gone"
-                android:background="@drawable/element_selector"></RelativeLayout>
-
-            <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/element_selector"
+                android:visibility="gone">
+
+                <include layout="@layout/wiki_page_container" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/copyHistoryLinkLayout"
-                android:visibility="gone"
-                android:background="@drawable/element_selector" />
-
-            <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:background="@drawable/element_selector"
+                android:visibility="gone">
+
+                <include layout="@layout/link_container" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/copyHistoryPollLayout"
-                android:background="@drawable/element_selector" />
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/element_selector"
+                android:visibility="gone">
+
+                <include layout="@layout/poll_container" />
+
+            </RelativeLayout>
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/copyHistoryGeoLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:layout_marginRight="5dp"
             android:background="@drawable/element_selector"
-            android:visibility="gone"
-            android:id="@+id/copyHistoryGeoLayout"
-            android:layout_marginRight="5dp"/>
+            android:padding="5dp"
+            android:visibility="gone" >
+
+            <include layout="@layout/post_text_layout" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 

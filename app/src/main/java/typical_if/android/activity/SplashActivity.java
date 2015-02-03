@@ -1,4 +1,4 @@
-package typical_if.android.activity;
+ package typical_if.android.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -38,7 +38,7 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 
-public class SplashActivity extends Activity implements Animation.AnimationListener{
+public class SplashActivity extends Activity implements Animation.AnimationListener {
 
     Animation animMoveDown;
     Animation animFadeIn;
@@ -67,7 +67,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
 
-
         textView = (TextView) findViewById(R.id.splash_title);
         imageView = (ImageView) findViewById(R.id.splash_logo);
 
@@ -77,21 +76,21 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
 
-    config = new Configuration();
-       if( ItemDataSetter.getUserLan()!=""){
-config.locale = ItemDataSetter.loadUserLanguage();
-    getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
+        config = new Configuration();
+        if (ItemDataSetter.getUserLan() != "") {
+            config.locale = ItemDataSetter.loadUserLanguage();
+            getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
 
-}else {
-     locale = new Locale("ua");
-    Locale.setDefault(locale);
+        } else {
+            locale = new Locale("ua");
+            Locale.setDefault(locale);
 
-    config = new Configuration();
-    config.locale = locale;
-    getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
+            config = new Configuration();
+            config.locale = locale;
+            getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
 
-}
-        Toast.makeText(getApplicationContext(),getString(R.string.main_creed), Toast.LENGTH_SHORT).show();
+        }
+        Toast.makeText(getApplicationContext(), getString(R.string.main_creed), Toast.LENGTH_SHORT).show();
         ItemDataSetter.loadUserId();
         ItemDataSetter.loadUserLanguage();
 
@@ -101,10 +100,10 @@ config.locale = ItemDataSetter.loadUserLanguage();
 
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig){
+    public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        Locale myLocale =ItemDataSetter.loadUserLanguage();
-        if (myLocale != null){
+        Locale myLocale = ItemDataSetter.loadUserLanguage();
+        if (myLocale != null) {
             newConfig.locale = myLocale;
             Locale.setDefault(myLocale);
             getApplicationContext().getResources().updateConfiguration(newConfig, getApplicationContext().getResources().getDisplayMetrics());
@@ -118,11 +117,11 @@ config.locale = ItemDataSetter.loadUserLanguage();
         builder.setTitle(R.string.app_name)
                 .setCancelable(false)
                 .setMessage(getString(R.string.no_internet_chooser))
-                .setPositiveButton(getString(R.string.retry) + " ("+counter+")", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getString(R.string.retry) + " (" + counter + ")", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        if (counter <2) {
+                        if (counter < 2) {
                             startActivity(new Intent(Settings.ACTION_SETTINGS));
-                            counter=5;
+                            counter = 5;
                         }
                         checkIfOnlineAndProceed();
                         builder.setCancelable(true);
@@ -178,10 +177,11 @@ config.locale = ItemDataSetter.loadUserLanguage();
 
     AtomicInteger threadsCounter;
     private Boolean isRequestErrorToastShown;
+
     private void makeRequests() {
         threadsCounter = new AtomicInteger(4);
         isRequestErrorToastShown = false;
-        final AtomicInteger requestSessionThreadsCounter = threadsCounter; 
+        final AtomicInteger requestSessionThreadsCounter = threadsCounter;
         //   --------------------START------------- all Request from internet before start APP----------------------
         VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.TF_ID, new VKRequest.VKRequestListener() {
             @Override
@@ -200,7 +200,7 @@ config.locale = ItemDataSetter.loadUserLanguage();
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
-                handleRequestComplete(response.json, Constants.TZ_ID,requestSessionThreadsCounter);
+                handleRequestComplete(response.json, Constants.TZ_ID, requestSessionThreadsCounter);
             }
 
             @Override
@@ -213,7 +213,7 @@ config.locale = ItemDataSetter.loadUserLanguage();
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
-                handleRequestComplete(response.json, Constants.FB_ID,requestSessionThreadsCounter);
+                handleRequestComplete(response.json, Constants.FB_ID, requestSessionThreadsCounter);
             }
 
             @Override
@@ -226,7 +226,7 @@ config.locale = ItemDataSetter.loadUserLanguage();
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
-                handleRequestComplete(response.json, Constants.FN_ID,requestSessionThreadsCounter);
+                handleRequestComplete(response.json, Constants.FN_ID, requestSessionThreadsCounter);
             }
 
             @Override
@@ -239,7 +239,7 @@ config.locale = ItemDataSetter.loadUserLanguage();
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
-                handleRequestComplete(response.json, Constants.ZF_ID,requestSessionThreadsCounter);
+                handleRequestComplete(response.json, Constants.ZF_ID, requestSessionThreadsCounter);
             }
 
             @Override
@@ -255,7 +255,7 @@ config.locale = ItemDataSetter.loadUserLanguage();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (threadsCounter!=requestSessionThreadsCounter)
+                if (threadsCounter != requestSessionThreadsCounter)
                     return;
                 OfflineMode.saveJSON(json, id);
                 decrementThreadsCounter(requestSessionThreadsCounter);
@@ -264,7 +264,7 @@ config.locale = ItemDataSetter.loadUserLanguage();
     }
 
     void handleRequestError(final AtomicInteger requestSessionThreadsCounter) {
-        if (threadsCounter!=requestSessionThreadsCounter)
+        if (threadsCounter != requestSessionThreadsCounter)
             return;
         decrementThreadsCounter(requestSessionThreadsCounter);
         synchronized (isRequestErrorToastShown) {
@@ -276,7 +276,7 @@ config.locale = ItemDataSetter.loadUserLanguage();
     }
 
     void decrementThreadsCounter(final AtomicInteger requestSessionThreadsCounter) {
-        if (threadsCounter!=requestSessionThreadsCounter)
+        if (threadsCounter != requestSessionThreadsCounter)
             return;
         if (requestSessionThreadsCounter.decrementAndGet() == 0 && !isFinishing())
             startNextActivity();

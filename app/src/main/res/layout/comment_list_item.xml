@@ -1,222 +1,229 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
-    android:orientation="horizontal"
+    android:id="@+id/commentParentLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="1"
-    android:padding="5dp"
-    android:id="@+id/commentParentLayout"
+    android:background="@color/app_bg"
     android:clickable="false"
     android:descendantFocusability="blocksDescendants"
     android:focusable="false"
     android:focusableInTouchMode="false"
-    android:background="@color/app_bg">
-
-
-
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:weightSum="1">
 
     <RelativeLayout
+        android:id="@+id/commentTextLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/img_user_avatar"
-        android:id="@+id/commentTextLayout"
+        android:layout_margin="5dp"
+        android:background="@drawable/sample_background"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:visibility="gone"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_margin="5dp"
-        android:background="@drawable/sample_background" >
+        android:visibility="gone">
 
+        <include
+            layout="@layout/post_text_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/commentAttachmentsLayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/commentAttachmentsLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toEndOf="@+id/img_user_avatar"
+        android:background="@drawable/sample_background"
+        android:baselineAligned="false"
+
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:orientation="vertical"
         android:visibility="gone"
-        android:background="@drawable/sample_background"
-
-        android:baselineAligned="false"
-        android:layout_below="@+id/user_comment_text"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp">
+        android:layout_below="@+id/commentTextLayout">
 
         <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
             android:id="@+id/commentMediaLayout"
-            android:background="@drawable/sample_background"/>
-
-        <LinearLayout
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:id="@+id/commentAudioLayout"
-            android:orientation="vertical"
-            android:background="@drawable/sample_background" />
-
-        <LinearLayout
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:id="@+id/commentAlbumLayout"
-            android:orientation="vertical"
             android:background="@drawable/sample_background"
-            android:dividerPadding="5dp"
-            android:divider="@drawable/copy_history_divider"
-            android:showDividers="middle"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp" />
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:visibility="gone">
+
+            <include
+                layout="@layout/media_pager_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
 
         <LinearLayout
+            android:id="@+id/commentAudioLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sample_background"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:id="@+id/commentDocumentLayout"
             android:orientation="vertical"
-            android:background="@drawable/sample_background" />
+            android:visibility="gone">
 
-        <RelativeLayout
+            <include
+                layout="@layout/simple_listview_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/commentAlbumLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sample_background"
+            android:clickable="false"
+            android:divider="@drawable/copy_history_divider"
+            android:dividerPadding="5dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:orientation="vertical"
+            android:padding="5dp"
+            android:showDividers="middle"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/commentDocumentLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sample_background"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone" />
+
+        <RelativeLayout
             android:id="@+id/commentWikiPageLayout"
-            android:visibility="gone"
-            android:background="@drawable/sample_background" />
-
-        <RelativeLayout
-            android:clickable="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:id="@+id/commentLinkLayout"
-            android:background="@drawable/sample_background" />
-
-        <RelativeLayout
+            android:background="@drawable/sample_background"
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
+            android:visibility="gone">
+
+            <include
+                layout="@layout/wiki_page_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/commentLinkLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/sample_background"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:visibility="gone">
+
+            <include
+                layout="@layout/link_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/commentPollLayout"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:visibility="gone"
-            android:id="@+id/commentPollLayout"
-            android:background="@drawable/sample_background" />
+            android:background="@drawable/sample_background"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:visibility="gone">
+
+            <include
+                layout="@layout/poll_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/user_name_textView"
-        android:layout_weight="0.08"
-        android:text="Michael G."
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:textColor="#ffffffff"
-        android:textSize="15dp"
-
-        android:textStyle="bold"
-        android:layout_alignTop="@+id/commentTextLayout"
-        android:layout_toRightOf="@+id/img_user_avatar"
-        android:layout_toEndOf="@+id/img_user_avatar"
-        android:layout_marginLeft="5dp" />
-
-    <com.makeramen.RoundedImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        app:riv_corner_radius="30dip"
-
-       android:layout_height="25dp"
-        android:id="@+id/img_user_avatar"
-        android:cropToPadding="false"
-        android:scaleType="fitStart"
-        android:layout_weight="0.34"
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:src="@drawable/abc_ab_solid_dark_holo"
-        android:layout_width="25dp"
-        android:layout_alignTop="@+id/post_comment_like_checkbox"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/text_date_of_comment"
-        android:textColor="#8cffffff"
-        android:text="Сьогодні о 16:15"
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:textSize="9dp"
-        android:visibility="visible"
-        android:layout_below="@+id/user_name_textView"
-        android:layout_alignLeft="@+id/user_name_textView"
-        android:layout_alignStart="@+id/user_name_textView" />
-
     <CheckBox
+        android:id="@+id/post_comment_like_checkbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="9"
-        android:id="@+id/post_comment_like_checkbox"
         android:button="@drawable/like_or_not_liked_selector"
         android:clickable="false"
         android:enabled="false"
-        android:visibility="visible"
-        android:textColor="#fff0f4ff"
         android:shadowColor="#ff222222"
+        android:text="9"
+        android:textColor="#fff0f4ff"
         android:textSize="10dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="5dp" />
+        android:visibility="visible"
+        android:layout_alignParentTop="false"
+        android:layout_alignTop="@+id/img_user_avatar"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true" />
 
     <TextView
+        android:id="@+id/user_name_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/img_user_avatar"
+        android:layout_toEndOf="@+id/img_user_avatar"
+        android:layout_toRightOf="@+id/img_user_avatar"
+        android:layout_weight="0.08"
+        android:clickable="false"
+        android:focusable="false"
+
+        android:focusableInTouchMode="false"
+        android:text="Michael G."
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:id="@+id/user_comment_text"
-        android:textColor="#d2ffffff"
+        android:textColor="#ffffffff"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/img_user_avatar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_weight="0.34"
+        android:clickable="false"
+        android:cropToPadding="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:scaleType="fitStart"
+        android:src="@drawable/abc_ab_solid_dark_holo"
+        app:riv_corner_radius="30dip"
+        android:layout_margin="5dp" />
+
+    <TextView
+        android:id="@+id/text_date_of_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/user_name_textView"
+        android:layout_alignStart="@+id/user_name_textView"
+        android:layout_below="@+id/user_name_textView"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:textSize="15dp"
-        android:visibility="visible"
-        android:text="Who is there ?"
-        android:layout_below="@+id/text_date_of_comment"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp" />
-
+        android:text="Сьогодні о 16:15"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#8cffffff"
+        android:textSize="9dp"
+        android:visibility="visible" />
 
 </RelativeLayout>

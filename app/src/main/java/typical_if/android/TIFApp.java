@@ -9,7 +9,6 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 
 /**
@@ -51,7 +50,7 @@ public class TIFApp extends Application {
             .showImageOnLoading(R.drawable.event_stub) // TODO resource or drawable
 //                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
 //                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
-            .resetViewBeforeLoading(true)
+            .resetViewBeforeLoading(false)
             .bitmapConfig(Bitmap.Config.RGB_565)
             .imageScaleType(ImageScaleType.EXACTLY)
             .displayer(new FadeInBitmapDisplayer(1600)).build();
@@ -67,20 +66,20 @@ public class TIFApp extends Application {
         displayWidth = displayMetrics.widthPixels;
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-                .cacheOnDisc(true)
-                .cacheInMemory(true)
+//                .cacheOnDisc(true)
+//                .cacheInMemory(true)
                 .showImageOnLoading(R.drawable.pre_load_image_background) // TODO resource or drawable
 //                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
-//                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
-                .resetViewBeforeLoading(true)
+//                .showImageOnFail(R.drawable.pre_load_image_background) // TODO resource or drawable
+                .resetViewBeforeLoading(false)
                 .bitmapConfig(Bitmap.Config.RGB_565)
                 .imageScaleType(ImageScaleType.EXACTLY)
                 .displayer(new FadeInBitmapDisplayer(1600)).build();
 
         // Create global configuration and initialize ImageLoader with this configuration
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(getApplicationContext())
-                .memoryCacheExtraOptions(480, 800) // default = device screen dimensions
-                .diskCacheExtraOptions(480, 800, null)
+                .memoryCacheExtraOptions(480, 320) // default = device screen dimensions
+                .diskCacheExtraOptions(480, 320, null)
                         //.taskExecutorForCachedImages(...)
                         //.tasksProcessingOrder(QueueProcessingType.FIFO) // default
                         //.discCache(new FileCountLimitedDiscCache(cacheDir, new Md5FileNameGenerator(), 1000))
@@ -91,7 +90,7 @@ public class TIFApp extends Application {
                         //;;;
                 .denyCacheImageMultipleSizesInMemory()
                 .defaultDisplayImageOptions(defaultOptions)
-                .tasksProcessingOrder(QueueProcessingType.FIFO)
+//                .tasksProcessingOrder(QueueProcessingType.FIFO)
 //                .memoryCache(new WeakMemoryCache())
                         // .discCacheSize(100 * 1024 * 1024)
 

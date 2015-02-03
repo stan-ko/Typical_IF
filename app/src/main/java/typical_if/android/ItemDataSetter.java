@@ -11,6 +11,8 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -19,6 +21,8 @@ import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,9 +33,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +43,7 @@ import com.koushikdutta.ion.Ion;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.viewpagerindicator.CirclePageIndicator;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -62,11 +67,12 @@ import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import typical_if.android.adapter.CommentsListAdapter;
+import typical_if.android.adapter.AudioAdapter;
+import typical_if.android.adapter.MediaPagerAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoList;
-import typical_if.android.model.Wall.Wall;
+import typical_if.android.fragment.FragmentVideoView;
 
 import static java.lang.String.format;
 import static java.lang.String.valueOf;
@@ -80,6 +86,8 @@ public class ItemDataSetter {
 
     public static Context context = TIFApp.getAppContext();
     public static LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+    public static final DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
 
     public final static Animation animationFadeIn = AnimationUtils.loadAnimation(context, R.anim.fade_in);
     public final static ImageLoadingListener animationLoader = new ImageLoadingListener() {
@@ -114,13 +122,7 @@ public class ItemDataSetter {
         return viewGroup;
     }
 
-    public static Wall wall;
-    public static String postColor;
-    public static WallAdapter.ViewHolder wallViewHolder;
-    public static CommentsListAdapter.ViewHolder commentViewHolder;
-
-    public static int position;
-    public static android.support.v4.app.FragmentManager fragmentManager;
+    public static FragmentManager fragmentManager;
 
 
     public static void setSuggestAttachments(VKAttachments attachments) {
@@ -140,7 +142,22 @@ public class ItemDataSetter {
         Constants.tempPostAttachCounter = counter;
     }
 
-    public static void setAttachemnts(VKAttachments attachments, LinearLayout parentLayout, int type) {
+    public static void setAttachemnts(VKAttachments attachments,
+                                      RelativeLayout mediaLayout,
+                                      ViewPager mediaPager,
+                                      CirclePageIndicator mediaPagerIndicator,
+                                      LinearLayout audioLayout,
+                                      ListView audioListView,
+                                      LinearLayout documentLayout,
+                                      LinearLayout albumLayout,
+                                      RelativeLayout wikiPageLayout,
+                                      RelativeLayout linkLayout,
+                                      TextView linkSrc,
+                                      TextView linkTitle,
+                                      RelativeLayout pollLayout,
+                                      TextView pollTitle
+    ) {
+
         final ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
         final ArrayList<VKApiVideo> videos = new ArrayList<VKApiVideo>();
         final ArrayList<VKApiAudio> audios = new ArrayList<VKApiAudio>();
@@ -149,8 +166,6 @@ public class ItemDataSetter {
         VKApiWikiPage wikiPage = null;
         VKApiLink link = null;
         VKApiPoll poll = null;
-
-        parentLayout.setVisibility(View.VISIBLE);
 
         for (VKAttachments.VKApiAttachment attachment : attachments) {
             if (attachment.getType().equals(VKAttachments.TYPE_PHOTO)) {
@@ -172,63 +187,25 @@ public class ItemDataSetter {
             }
         }
 
-
-        RelativeLayout mediaLayout = null;
-        LinearLayout audioLayout = null;
-        LinearLayout documentLayout = null;
-        LinearLayout albumLayout = null;
-        RelativeLayout wikiPageLayout = null;
-        RelativeLayout linkLayout = null;
-        RelativeLayout pollLayout = null;
-
-        switch (type) {
-            case 0:
-                mediaLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryMediaLayout);
-                audioLayout = (LinearLayout) parentLayout.findViewById(R.id.copyHistoryAudioLayout);
-                documentLayout = (LinearLayout) parentLayout.findViewById(R.id.copyHistoryDocumentLayout);
-                albumLayout = (LinearLayout) parentLayout.findViewById(R.id.copyHistoryAlbumLayout);
-                wikiPageLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryWikiPageLayout);
-                linkLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryLinkLayout);
-                pollLayout = (RelativeLayout) parentLayout.findViewById(R.id.copyHistoryPollLayout);
-                break;
-            case 1:
-                mediaLayout = wallViewHolder.postMediaLayout;
-                audioLayout = wallViewHolder.postAudioLayout;
-                documentLayout = wallViewHolder.postDocumentLayout;
-                albumLayout = wallViewHolder.postAlbumLayout;
-                wikiPageLayout = wallViewHolder.postWikiPageLayout;
-                linkLayout = wallViewHolder.postLinkLayout;
-                pollLayout = wallViewHolder.postPollLayout;
-                break;
-            case 2:
-                mediaLayout = commentViewHolder.commentMediaLayout;
-                audioLayout = commentViewHolder.commentAudioLayout;
-                documentLayout = commentViewHolder.commentDocumentLayout;
-                albumLayout = commentViewHolder.commentAlbumLayout;
-                wikiPageLayout = commentViewHolder.commentWikiPageLayout;
-                linkLayout = commentViewHolder.commentLinkLayout;
-                pollLayout = commentViewHolder.commentPollLayout;
-                break;
-        }
-        if (photos != null && photos.size() != 0 || videos != null && videos.size() != 0) {
-            setMedia(mediaLayout, photos, videos);
+        if (photos.size() != 0 || videos.size() != 0) {
+            setMediaPager(mediaPager, mediaPagerIndicator, mediaLayout, photos, videos);
         } else {
             mediaLayout.setVisibility(View.GONE);
         }
 
-        if (audios != null && audios.size() != 0) {
-            setAudios(audioLayout, audios);
+        if (audios.size() != 0) {
+            setAudios(audioLayout, audioListView, audios);
         } else {
             audioLayout.setVisibility(View.GONE);
         }
 
-        if (docs != null && docs.size() != 0) {
+        if (docs.size() != 0) {
             setDocs(documentLayout, docs);
         } else {
             documentLayout.setVisibility(View.GONE);
         }
 
-        if (albums != null && albums.size() != 0) {
+        if (albums.size() != 0) {
             setAlbums(albumLayout, albums);
         } else {
             albumLayout.setVisibility(View.GONE);
@@ -241,57 +218,32 @@ public class ItemDataSetter {
         }
 
         if (link != null) {
-            setLink(linkLayout, link);
+            setLink(linkLayout, linkSrc, linkTitle, link);
         } else {
             linkLayout.setVisibility(View.GONE);
         }
 
         if (poll != null) {
-            setPoll(pollLayout, poll);
+            setPoll(pollLayout, pollTitle, poll);
         } else {
             pollLayout.setVisibility(View.GONE);
         }
-//        final RelativeLayout mediaLayout1= mediaLayout;
-//
-//        for(i=0 ; i<photos.size(); i++){
-//            VKHelper.getPhotoByID(photos.get(i).owner_id+"_"+photos.get(i).id,new VKRequest.VKRequestListener() {
-//                @Override
-//                public void onComplete(final VKResponse response) {
-//                    super.onComplete(response);
-//                    try {
-//                        photos2.add(VKHelper.getPhotoFromJSONArray(response.json));
-//
-//                        setMedia(mediaLayout1, photos2, videos);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            });
-//        }
-
     }
 
-    public static void setPoll(RelativeLayout parent, VKApiPoll poll) {
-        ViewGroup pollContainer = getPreparedView(parent, R.layout.poll_container);
+    public static void setPoll(RelativeLayout parent, TextView title, VKApiPoll poll) {
+        parent.setVisibility(View.VISIBLE);
 
-        ((TextView) pollContainer.getChildAt(0)).setText(poll.question);
+        title.setText(poll.question);
 
-        if (poll.anonymous == 0) {
-            ((TextView) pollContainer.getChildAt(1)).setText(Constants.POLL_NOT_ANONYMOUS + " " + poll.votes);
-        } else {
-            ((TextView) pollContainer.getChildAt(1)).setText(Constants.POLL_ANONYMOUS + " " + poll.votes);
+        parent.setOnClickListener(inProgressToastListener);
+    }
+
+    public static final View.OnClickListener inProgressToastListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Constants.toastInProgress.show();
         }
-
-
-        pollContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Constants.toastInProgress.show();
-            }
-        });
-
-        parent.addView(pollContainer);
-    }
+    };
 
     static int startTag = 0;
     static int endTag = 0;
@@ -312,10 +264,7 @@ public class ItemDataSetter {
         while (matTags.find()) {
             startTag = stringB.indexOf(matTags.group());
             endTag = startTag + matTags.group().length();
-        String fullTag =text.substring(startTag,endTag);
 
-
-           // spannable.setSpan(new BackgroundColorSpan(Color.BLUE),startTag, endTag, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new ForegroundColorSpan(Color.BLUE), startTag, endTag, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), startTag, endTag, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
@@ -363,23 +312,13 @@ public class ItemDataSetter {
                         .append("|w[fs]")
                         .append("|y[etu]")
                         .append("|z[amw]))[^\\s]+))").toString()
-//                        .append("|(?:(?:25[0-5]|2[0-4]") // or ip address
-//                        .append("[0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\\.(?:25[0-5]|2[0-4][0-9]")
-//                        .append("|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(?:25[0-5]|2[0-4][0-9]|[0-1]")
-//                        .append("[0-9]{2}|[1-9][0-9]|[1-9]|0)\\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}")
-//                        .append("|[1-9][0-9]|[0-9])))")
-//                        .append("(?:\\:\\d{1,5})?)") // plus option port number
-//                        .append("(\\/(?:(?:a-zA-Z0-9\\;\\/\\?\\:\\@\\&\\=\\#\\~")  // plus option query params
-//                        .append("\\-\\.\\+\\!\\*\\'\\(\\)\\,\\_])|(?:\\%[a-fA-F0-9]{2}))*)?")
-//                        .append("(?:\\b|$)").toString()
         ).matcher(text);
 
         while (matLinks.find()) {
             startLink = stringB.indexOf(matLinks.group());
             endLink = startLink + matLinks.group().length();
 
-            //spannable.setSpan(new BackgroundColorSpan(Color.parseColor(postColor)), startLink, endLink,0);
-            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startLink, endLink,Spannable.SPAN_EXCLUSIVE_EXCLUSIVE );
+            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), startLink, endLink, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), startLink, endLink, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             TextPaint t = new TextPaint();
@@ -398,7 +337,7 @@ public class ItemDataSetter {
         }
 
         final Matcher matSite = Pattern.compile("@club26363301 \\(fromMobileIF\\)").matcher(text);
-        while (matSite.find()) {///////////////////////////////
+        while (matSite.find()) {
             startSite = stringB.indexOf(matSite.group());
             endSite = startSite + matSite.group().length();
 
@@ -408,7 +347,7 @@ public class ItemDataSetter {
 
             endSite = startSite + replier.length();
             spannable.setSpan(null, startSite, endSite, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startSite, endSite, 0);
+            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), startSite, endSite, 0);
             spannable.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), startSite, endSite, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new NonUnderlinedClickableSpan() {
                 @Override
@@ -430,8 +369,9 @@ public class ItemDataSetter {
 
             endReply = startReply + replier[1].length();
             spannable.setSpan(null, startReply, endReply, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new ForegroundColorSpan(Color.BLACK), startReply, endReply, 0);
+            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), startReply, endReply, 0);
             spannable.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), startReply, endReply, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
             spannable.setSpan(new NonUnderlinedClickableSpan() {
                 @Override
                 public void onClick(View textView) {
@@ -443,246 +383,175 @@ public class ItemDataSetter {
         return spannable;
     }
 
+    public static void setText(SpannableStringBuilder parsedText, TextView text, CheckBox showAll) {
 
-    public static void setText(String text, RelativeLayout parent) {
-        ViewGroup textContainer = getPreparedView(parent, R.layout.post_text_layout);
+        text.setText(parsedText, TextView.BufferType.SPANNABLE);
+        text.setMovementMethod(LinkMovementMethod.getInstance());
 
-        final TextView mainText = ((TextView) textContainer.getChildAt(0));
-        final CheckBox showAll = ((CheckBox) textContainer.getChildAt(1));
-
-        final SpannableStringBuilder spannable = getParsedText(text);
-        mainText.setText(spannable, TextView.BufferType.SPANNABLE);
-
-        mainText.setMovementMethod(LinkMovementMethod.getInstance());
-
-        if (spannable.length() > 300) {
+        if (parsedText.length() > 300) {
             showAll.setVisibility(View.VISIBLE);
-           // showAll.setBackgroundColor(Color.parseColor(postColor));
-            final SpannableStringBuilder originalSpannable = spannable;
+            showAll.setText(Constants.SHOW_ALL_TEXT);
+
             final SpannableStringBuilder tempSpannable = new SpannableStringBuilder();
-            tempSpannable.append(spannable);
+            tempSpannable.append(parsedText);
             final SpannableStringBuilder tempModifySpannable = tempSpannable.insert(297, "...").delete(300, tempSpannable.length());
-            mainText.setText(tempModifySpannable);
+            text.setText(tempModifySpannable);
 
+            TextParamsHolder textParamsHolder = new TextParamsHolder(parsedText, tempModifySpannable);
+            text.setTag(textParamsHolder);
 
-
-            showAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-
-                    if (isChecked) {
-                        if (mainText.onPreDraw()) {
-                            mainText.setText(originalSpannable);
-                        }
-//                        expand(mainText, originalSpannable);
-                        showAll.setText(Constants.SHOW_MIN_TEXT);
-                    } else {
-                        mainText.setText(tempModifySpannable);
-                        showAll.setText(Constants.SHOW_ALL_TEXT);
-//                        collapse(mainText, tempModifySpannable);
-                    }
-                }
-            });
+            showAll.setTag(text);
+            showAll.setOnCheckedChangeListener(cbShowAllTextListener);
         } else {
             showAll.setVisibility(View.GONE);
         }
-
-        parent.addView(textContainer);
     }
 
-    public static String setNameOfPostAuthor(int id) {
-       VKApiUser profile;
-       String name = null;
-        for (int i = 0; i < wall.profiles.size(); i++) {
-            profile = wall.profiles.get(i);
+    private static class TextParamsHolder {
+        public final SpannableStringBuilder original;
+        public final SpannableStringBuilder temp;
+
+        private TextParamsHolder(SpannableStringBuilder original, SpannableStringBuilder temp) {
+            this.original = original;
+            this.temp = temp;
+        }
+    }
+
+    public static final CompoundButton.OnCheckedChangeListener cbShowAllTextListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            TextView text = (TextView) buttonView.getTag();
+            TextParamsHolder textParamsHolder = (TextParamsHolder) text.getTag();
+
+            SpannableStringBuilder original = textParamsHolder.original;
+            SpannableStringBuilder temp = textParamsHolder.temp;
+
+            if (isChecked) {
+                if (text.onPreDraw()) {
+                    text.setText(original);
+                }
+                buttonView.setText(Constants.SHOW_MIN_TEXT);
+            } else {
+                text.setText(temp);
+                buttonView.setText(Constants.SHOW_ALL_TEXT);
+            }
+        }
+    };
+
+
+    public static void setNameOfPostAuthor(ArrayList<VKApiUser> profiles, String groupName, TextView textView, int id) {
+        VKApiUser profile;
+        String name = null;
+        for (int i = 0; i < profiles.size(); i++) {
+            profile = profiles.get(i);
 
             if (id == profile.id) {
                 name = profile.last_name + " " + profile.first_name;
             }
         }
         if (id == 0) {
-            name = wall.group.name;
-        }
-        return name;
-    }
-
-    public static void setSigned(final int id, RelativeLayout parent) {
-        VKApiUser profile;
-        String name = null;
-        String image = null;
-
-        for (int i = 0; i < wall.profiles.size(); i++) {
-            profile = wall.profiles.get(i);
-            if (id == profile.id) {
-                name = profile.last_name + " " + profile.first_name;
-                image = profile.photo_50;
-            }
+            name = groupName;
         }
 
-        ViewGroup signedContainer = getPreparedView(parent, R.layout.signed_post_container);
-        ImageLoader.getInstance().displayImage(image, (ImageView) signedContainer.getChildAt(0), TIFApp.additionalOptions);
-
-
-        TextView txt_name = ((TextView) signedContainer.getChildAt(1));
-
-
-        txt_name.setText(name);
-
-        signedContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri uri = Uri.parse("http://vk.com/id" + valueOf(id));
-                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            }
-        });
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // parent.addView(signedContainer);
-
-
+        textView.setText(name);
+        textView.setTag("http://vk.com/id" + valueOf(id));
+        textView.setOnClickListener(openActionViewChooserListener);
     }
 
-    public static void setLink(RelativeLayout parent, final VKApiLink link) {
-        ViewGroup linkContainer = getPreparedView(parent, R.layout.link_container);
+    public static void setLink(RelativeLayout parent, TextView src, TextView title, final VKApiLink link) {
+        parent.setVisibility(View.VISIBLE);
 
-    //    ImageLoader.getInstance().displayImage(link.image_src, (ImageView) linkContainer.getChildAt(0));
-        ((TextView) linkContainer.getChildAt(1)).setText(link.title);
-        ((TextView) linkContainer.getChildAt(2)).setText(link.url);
+        title.setText(link.title);
+        src.setText(link.url);
 
-        TextView description = (TextView) linkContainer.getChildAt(3);
-        if (link.description.equals("")) {
-            description.setVisibility(View.GONE);
-        } else {
-            description.setText(link.description);
-        }
-
-
-        linkContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri uri = Uri.parse(link.url);
-                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            }
-        });
-
-        parent.addView(linkContainer);
+        parent.setTag(link.url);
+        parent.setOnClickListener(openActionViewChooserListener);
     }
 
-    public static void setGeo(VKApiPlace geo, RelativeLayout parent) {
-        ViewGroup geoContainer = getPreparedView(parent, R.layout.geo_container);
+    public static void setGeo(VKApiPlace geo, ImageView imgGeo, TextView txtGeo, RelativeLayout geoLayout) {
 
-        ImageView image = (ImageView) geoContainer.findViewById(R.id.img_geo);
         final String[] coordinates = geo.coordinates.split(" ");
         String url = "http://maps.google.com/maps/api/staticmap?center=" + coordinates[0] + "," + coordinates[1] + "&zoom=15&size=600x400&sensor=false";
-        ImageLoader.getInstance().displayImage(url, image);
+        ImageLoader.getInstance().displayImage(url, imgGeo);
 
-        TextView txt = (TextView) geoContainer.findViewById(R.id.txt_geo);
-        txt.setText(geo.title);
+        txtGeo.setText(geo.title);
 
-        geoContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String uri = "geo:" + coordinates[0] + "," + coordinates[1];
-                context.startActivity(new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri)).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            }
-        });
-
-        parent.addView(geoContainer);
+        geoLayout.setTag("geo:" + coordinates[0] + "," + coordinates[1]);
+        geoLayout.setOnClickListener(openActionViewChooserListener);
     }
+
+    public static final View.OnClickListener openActionViewChooserListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Uri uri = Uri.parse((String) v.getTag());
+            context.startActivity(new Intent(android.content.Intent.ACTION_VIEW, uri).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        }
+    };
 
     public static void setWikiPage(RelativeLayout parent, final VKApiWikiPage wikiPage) {
         ViewGroup wikiPageContainer = getPreparedView(parent, R.layout.wiki_page_container);
+        RelativeLayout childLayout = (RelativeLayout) wikiPageContainer.getChildAt(1);
 
-   //     wikiPageContainer.getChildAt(0).setBackgroundColor(Color.parseColor(postColor));
-        ((TextView) wikiPageContainer.getChildAt(1)).setText(wikiPage.title);
+        ((TextView) childLayout.getChildAt(0)).setText(wikiPage.title);
 
-        wikiPageContainer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Uri uri = Uri.parse(wikiPage.source);
-                context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.VIEWER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            }
-        });
+        wikiPageContainer.setTag(wikiPage.source);
+        wikiPageContainer.setOnClickListener(openActionViewChooserListener);
 
         parent.addView(wikiPageContainer);
     }
 
     public static void setAlbums(LinearLayout parent, final ArrayList<VKApiPhotoAlbum> albums) {
-
         ViewGroup tempAlbumContainer;
         parent.removeAllViews();
         parent.setVisibility(View.VISIBLE);
+
         for (final VKApiPhotoAlbum album : albums) {
             tempAlbumContainer = (ViewGroup) inflater.inflate(R.layout.album_container, parent, false);
             tempAlbumContainer.setVisibility(View.VISIBLE);
+
+            int newWidth = TIFApp.getDisplayWidth();
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
+            tempAlbumContainer.setLayoutParams(params);
 
             ImageView image = (ImageView) tempAlbumContainer.findViewById(R.id.img_album_thumb);
             ImageLoader.getInstance().displayImage(album.photo_604, image);
             ((TextView) tempAlbumContainer.getChildAt(1)).setText(valueOf(album.size));
             ((TextView) tempAlbumContainer.getChildAt(2)).setText(album.title);
 
-            tempAlbumContainer.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Constants.ALBUM_ID = album.id;
-                    Constants.TEMP_OWNER_ID = album.owner_id;
-                    fragmentManager.beginTransaction().add(R.id.container, FragmentPhotoList.newInstance(1, album.size)).addToBackStack(null).commit();
-                }
-            });
+            tempAlbumContainer.setTag(album);
+            tempAlbumContainer.setOnClickListener(openAlbumClickListener);
 
             parent.addView(tempAlbumContainer);
         }
     }
 
-    public static void setAudios(LinearLayout parent, final ArrayList<VKApiAudio> audios) {
-        ViewGroup tempAudioContainer;
-        parent.removeAllViews();
-        parent.setVisibility(View.VISIBLE);
-        for (final VKApiAudio audio : audios) {
-            tempAudioContainer = (ViewGroup) inflater.inflate(R.layout.audio_container, parent, false);
-            tempAudioContainer.setVisibility(View.VISIBLE);
-            //tempAudioContainer.getChildAt(0).setBackgroundColor(Color.parseColor(postColor));
-            CheckBox play_pause_music = (CheckBox) tempAudioContainer.getChildAt(0);
-            SeekBar progressBar = (SeekBar) tempAudioContainer.getChildAt(1);
+    private static final View.OnClickListener openAlbumClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            VKApiPhotoAlbum album = (VKApiPhotoAlbum) v.getTag();
 
-            if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPlayed == true) {
-                play_pause_music.setChecked(true);
-                try {
-                    Constants.tempThread.interrupt();
-                } catch (NullPointerException e) {
-
-                }
-                AudioPlayer.progressBar(progressBar).start();
-                Constants.tempThread = AudioPlayer.progressBar(progressBar);
-                Constants.previousCheckBoxState = play_pause_music;
-                Constants.previousSeekBarState = progressBar;
-                progressBar.setVisibility(View.VISIBLE);
-            }
-            if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPaused == true) {
-
-                AudioPlayer.progressBar(progressBar).start();
-                try {
-                    Constants.tempThread.interrupt();
-                } catch (NullPointerException e) {
-                }
-                progressBar.setVisibility(View.VISIBLE);
-                Constants.tempThread = AudioPlayer.progressBar(progressBar);
-            }
-
-
-            ((TextView) tempAudioContainer.getChildAt(2)).setText(getMediaTime(audio.duration));
-            ((TextView) tempAudioContainer.getChildAt(3)).setText(audio.artist);
-            ((TextView) tempAudioContainer.getChildAt(4)).setText(audio.title);
-
-            AudioPlayer.getOwnMediaPlayer(audio.url, play_pause_music, progressBar, audio.title, audio.artist);
-            parent.addView(tempAudioContainer);
+            Constants.ALBUM_ID = album.id;
+            Constants.TEMP_OWNER_ID = album.owner_id;
+            fragmentManager.beginTransaction().add(R.id.container, FragmentPhotoList.newInstance(1, album.size)).addToBackStack(null).commit();
         }
+    };
+
+    public static void setAudios(LinearLayout parent, ListView audioListView, final ArrayList<VKApiAudio> audios) {
+        parent.setVisibility(View.VISIBLE);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) (audios.size() * TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60, displayMetrics)));
+        audioListView.setLayoutParams(params);
+
+        AudioAdapter audioAdapter = new AudioAdapter(audios, context);
+        audioListView.setAdapter(audioAdapter);
     }
 
     public static void setDocs(LinearLayout parent, final ArrayList<VKApiDocument> docs) {
         ViewGroup tempDocumentContainer;
         parent.removeAllViews();
         parent.setVisibility(View.VISIBLE);
+
         for (final VKApiDocument doc : docs) {
             tempDocumentContainer = (ViewGroup) inflater.inflate(R.layout.document_container, parent, false);
             tempDocumentContainer.setVisibility(View.VISIBLE);
@@ -698,13 +567,8 @@ public class ItemDataSetter {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
                 size.setText(Constants.DOC_TYPE_IMAGE + " " + readableFileSize(doc.size));
-                tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Uri uri = Uri.parse(doc.url);
-                        context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.DOWNLOADER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    }
-                });
+                tempDocumentContainer.setTag(doc.url);
+                tempDocumentContainer.setOnClickListener(openActionViewChooserListener);
             } else if (doc.isGif()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
@@ -740,250 +604,344 @@ public class ItemDataSetter {
                 });
             } else {
                 image.setImageDrawable(Constants.RESOURCES.getDrawable(R.drawable.ic_attach_document));
-               // image.setBackgroundColor(Color.parseColor(postColor));
                 image.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-
-                //RelativeLayout.LayoutParams paramsForTitle = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-              //  paramsForTitle.setMargins(setInDp(5), 0, 0, 0);
-              //  title.setLayoutParams(paramsForTitle);
-
-                //RelativeLayout.LayoutParams paramsForSize = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-               // paramsForSize.setMargins(setInDp(5), setInDp(20), 0, 0);
-               // size.setLayoutParams(paramsForSize);
                 size.setText(Constants.DOC_TYPE_DOCUMENT + " " + readableFileSize(doc.size));
-                tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Uri uri = Uri.parse(doc.url);
-                        context.startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.DOWNLOADER_CHOOSER).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-                    }
-                });
+                tempDocumentContainer.setTag(doc.url);
+                tempDocumentContainer.setOnClickListener(openActionViewChooserListener);
             }
 
             parent.addView(tempDocumentContainer);
         }
     }
 
-    public static void setMedia(RelativeLayout parent, final ArrayList<VKApiPhoto> photos, final ArrayList<VKApiVideo> videos) {
-        ImageView img;
-        RelativeLayout relativeLayout;
-        ViewGroup mediaContainer = null;
+    public static void setMediaPager(ViewPager mediaPager, CirclePageIndicator mediaPagerIndicator, RelativeLayout mediaLayout, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
+        int newWidth = TIFApp.getDisplayWidth();
+        int count = photos.size() + videos.size();
 
-        final int count = (photos != null ? photos.size() : 0) + (videos != null ? videos.size() : 0);
-        switch (count) {
-            case 1:
-                mediaContainer = getPreparedView(parent, R.layout.media_container);
-                break;
-            case 2:
-                mediaContainer = getPreparedView(parent, R.layout.media_container2);
-                break;
-            case 3:
-                mediaContainer = getPreparedView(parent, R.layout.media_container3);
-                break;
-            case 4:
-                mediaContainer = getPreparedView(parent, R.layout.media_container4);
-                break;
-            case 5:
-                mediaContainer = getPreparedView(parent, R.layout.media_container5);
-                break;
-            case 6:
-                mediaContainer = getPreparedView(parent, R.layout.media_container6);
-                break;
-            case 7:
-                mediaContainer = getPreparedView(parent, R.layout.media_container7);
-                break;
-            case 8:
-                mediaContainer = getPreparedView(parent, R.layout.media_container8);
-                break;
-            case 9:
-                mediaContainer = getPreparedView(parent, R.layout.media_container9);
-                break;
-            case 10:
-                mediaContainer = getPreparedView(parent, R.layout.media_container10);
-                break;
-        }
+        mediaLayout.setVisibility(View.VISIBLE);
 
-        mediaContainer.setVisibility(View.VISIBLE);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
+        mediaPager.setLayoutParams(params);
 
-        int lastPositionJ = 0;
-        int lastPositionK = 0;
-        int lastPositionL = 0;
+        MediaPagerAdapter mediaPagerAdapter = new MediaPagerAdapter(context, photos, videos);
+        mediaPager.setOffscreenPageLimit(count);
+        mediaPager.setAdapter(mediaPagerAdapter);
+//        mediaPager.setPageTransformer(true, new AccordionTransformer());
 
-        if (photos != null) {
-            final int photosCount = photos.size();
+        final float density = context.getResources().getDisplayMetrics().density;
 
-            for (int i = 0; i < photosCount; i++) {
-                final ViewGroup layout_i = (ViewGroup) mediaContainer.getChildAt(i);
+        mediaPagerIndicator.setViewPager(mediaPager);
+        mediaPagerIndicator.setCentered(true);
+        mediaPagerIndicator.setRadius(5 * density);
+        mediaPagerIndicator.setGapWidth(6 * density);
+        mediaPagerIndicator.setFillColor(context.getResources().getColor(R.color.music_progress));
+        mediaPagerIndicator.setStrokeColor(context.getResources().getColor(R.color.music_progress_alt));
+        mediaPagerIndicator.setStrokeWidth(density);
 
-                if (!(layout_i instanceof LinearLayout)) {
-                    continue;
-                } else {
-                    if (photosCount > 1) {
-                        int newWidth = TIFApp.getDisplayWidth();
-
-                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
-                        layout_i.setLayoutParams(params);
-                    }
-                }
-                layout_i.setVisibility(View.VISIBLE);
-
-                linearBreak:
-                for (int j = 0, photoPointer = 0; j < photos.size(); j++) {
-                    final ViewGroup layout_i_j = (ViewGroup) layout_i.getChildAt(j);
-                    if (!(layout_i_j instanceof RelativeLayout)) {
-                        continue;
-                    }
-                    final int kMax = layout_i_j.getChildCount();
-                    for (int k = 0; k < kMax; k++) {
-                        final View view_i_j_k = layout_i_j.getChildAt(k);
-                        if (view_i_j_k instanceof ImageView) {
-                            img = (ImageView) view_i_j_k;
-                            final int finalJ = photoPointer++;
-                            if (photosCount == 1 && videos.size() == 0) {
-                                int newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
-
-                                float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width);
-                                int newHeight = (int) (photos.get(finalJ).height * scaleFactor);
-                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
-                                img.setLayoutParams(params);
-                                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            }
-
-                            ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img);
-
-
-                            img.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    VKHelper.countOfPhotos = photosCount;
-                                    makeSaveTransaction(photos, finalJ);
-                                }
-                            });
-                            if (photoPointer == photos.size()) {
-                                lastPositionJ = j + 1;
-                                lastPositionK = k;
-                                break;
-                            }
-                        } else if (view_i_j_k instanceof LinearLayout) {
-                            final ViewGroup layout_i_j_k = (LinearLayout) view_i_j_k;
-                            final int lMax = layout_i_j_k.getChildCount();
-                            for (int l = 0; l < lMax; l++) {
-                                final ViewGroup layout_i_j_k_l = (ViewGroup) layout_i_j_k.getChildAt(l);
-                                if (photoPointer == photos.size()) {
-                                    lastPositionJ = j;
-                                    lastPositionL = l;
-                                    lastPositionK = k;
-                                    break linearBreak;
-                                }
-
-                                img = (ImageView) layout_i_j_k_l.getChildAt(0);
-                                final int finalL = photoPointer++;
-
-                                ImageLoader.getInstance().displayImage(photos.get(finalL).photo_604, img);
-
-                                img.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        VKHelper.countOfPhotos = photosCount;
-                                        makeSaveTransaction(photos, finalL);
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (videos != null) {
-            final int videosCount = videos.size();
-            for (int i = 0; i < videosCount; i++) {
-                final ViewGroup layout_i = (ViewGroup) mediaContainer.getChildAt(i);
-                if (!(layout_i instanceof LinearLayout)) {
-                    continue;
-                } else {
-                    if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
-                        int newWidth = TIFApp.getDisplayWidth();
-
-                        float scaleFactor = (float) newWidth / 320;
-                        int newHeight = (int) (240 * scaleFactor);
-                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
-                        layout_i.setLayoutParams(params);
-                    } else if (photos.size() == 0 && videos.size() > 1) {
-                        int newWidth = TIFApp.getDisplayWidth();
-
-                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
-                        layout_i.setLayoutParams(params);
-                    }
-                }
-                layout_i.setVisibility(View.VISIBLE);
-                final int jMax = layout_i.getChildCount();
-                for (int j = lastPositionJ, videoPointer = 0; j < jMax; j++) {
-                    final ViewGroup layout_i_j = (ViewGroup) layout_i.getChildAt(j);
-                    if (!(layout_i_j instanceof RelativeLayout)) {
-                        continue;
-                    }
-                    final int kMax = layout_i_j.getChildCount();
-                    for (int k = lastPositionK; k < kMax; k++) {
-                        final View view_i_j_k = layout_i_j.getChildAt(k);
-                        if (view_i_j_k instanceof ImageView) {
-                            if (videoPointer == videosCount) {
-                                break;
-                            }
-                            img = (ImageView) view_i_j_k;
-
-                            final int finalJ = videoPointer++;
-
-                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                            img.setLayoutParams(params);
-                            img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img);
-
-                            relativeLayout = (RelativeLayout) layout_i_j.getChildAt(k + 1);
-                            relativeLayout.setVisibility(View.VISIBLE);
-                            relativeLayout.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Constants.toastInProgress.show();
-                                }
-                            });
-                            ((TextView) relativeLayout.getChildAt(1)).setText(getMediaTime(videos.get(finalJ).duration));
-                            ((TextView) relativeLayout.getChildAt(2)).setText(videos.get(finalJ).title);
-                        } else if (view_i_j_k instanceof LinearLayout) {
-                            final ViewGroup layout_i_j_k = (LinearLayout) view_i_j_k;
-                            final int lMax = layout_i_j_k.getChildCount();
-                            for (int l = lastPositionL; l < lMax; l++) {
-                                final ViewGroup layout_i_j_k_l = (ViewGroup) layout_i_j_k.getChildAt(l);
-                                lastPositionL = 0;
-                                if (layout_i_j_k_l instanceof RelativeLayout) {
-                                    if (videoPointer == videosCount) {
-                                        break;
-                                    }
-                                    final int finalJ = videoPointer++;
-                                    img = (ImageView) layout_i_j_k_l.getChildAt(0);
-                                    ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_130, img);
-
-                                    relativeLayout = (RelativeLayout) layout_i_j_k_l.getChildAt(1);
-                                    relativeLayout.setVisibility(View.VISIBLE);
-                                    relativeLayout.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            Constants.toastInProgress.show();
-                                        }
-                                    });
-
-                                    ((TextView) relativeLayout.getChildAt(1)).setText(getMediaTime(videos.get(finalJ).duration));
-                                    ((TextView) relativeLayout.getChildAt(2)).setText(videos.get(finalJ).title);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        parent.addView(mediaContainer);
+        ((RelativeLayout) mediaPagerIndicator.getParent()).setVisibility(count == 1 ? View.GONE : View.VISIBLE);
     }
 
+
+    public ItemDataSetter(FragmentVideoView fragment,String link){
+        fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+    }
+
+
+
+
+//    if (!(layout_i instanceof LinearLayout)) {
+//        continue;
+//    } else {
+//        if (photosCount > 1) {
+//            int newWidth = TIFApp.getDisplayWidth();
+//
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
+//            layout_i.setLayoutParams(params);
+//        }
+//    }
+//    layout_i.setVisibility(View.VISIBLE);
+//
+//    linearBreak:
+//            for (int j = 0, photoPointer = 0; j < photos.size(); j++) {
+//        final ViewGroup layout_i_j = (ViewGroup) layout_i.getChildAt(j);
+//        if (!(layout_i_j instanceof RelativeLayout)) {
+//            continue;
+//        }
+//        final int kMax = layout_i_j.getChildCount();
+//        for (int k = 0; k < kMax; k++) {
+//            final View view_i_j_k = layout_i_j.getChildAt(k);
+//            if (view_i_j_k instanceof ImageView) {
+//                img = (ImageView) view_i_j_k;
+//                final int finalJ = photoPointer++;
+//                if (photosCount == 1 && videos.size() == 0) {
+//                    int newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
+//
+//                    float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width);
+//                    int newHeight = (int) (photos.get(finalJ).height * scaleFactor);
+//                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
+//                    img.setLayoutParams(params);
+//                    img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                }
+//
+//                ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img);
+//
+//
+//                img.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        VKHelper.countOfPhotos = photosCount;
+//                        makeSaveTransaction(photos, finalJ);
+//                    }
+//                });
+//                if (photoPointer == photos.size()) {
+//                    lastPositionJ = j + 1;
+//                    lastPositionK = k;
+//                    break;
+//                }
+//            } else if (view_i_j_k instanceof LinearLayout) {
+//                final ViewGroup layout_i_j_k = (LinearLayout) view_i_j_k;
+//                final int lMax = layout_i_j_k.getChildCount();
+//                for (int l = 0; l < lMax; l++) {
+//                    final ViewGroup layout_i_j_k_l = (ViewGroup) layout_i_j_k.getChildAt(l);
+//                    if (photoPointer == photos.size()) {
+//                        lastPositionJ = j;
+//                        lastPositionL = l;
+//                        lastPositionK = k;
+//                        break linearBreak;
+//                    }
+//
+//                    img = (ImageView) layout_i_j_k_l.getChildAt(0);
+//                    final int finalL = photoPointer++;
+//
+//                    ImageLoader.getInstance().displayImage(photos.get(finalL).photo_604, img);
+//
+//                    img.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            VKHelper.countOfPhotos = photosCount;
+//                            makeSaveTransaction(photos, finalL);
+//                        }
+//                    });
+//                }
+//            }
+//        }
+//    }
+//}
+//}
+//
+//        if (videos != null) {
+//final int videosCount = videos.size();
+//        for (int i = 0; i < videosCount; i++) {
+//final ViewGroup layout_i = (ViewGroup) mediaContainer.getChildAt(i);
+//        if (!(layout_i instanceof LinearLayout)) {
+//        continue;
+//        } else {
+//        if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
+//        int newWidth = TIFApp.getDisplayWidth();
+//
+//        float scaleFactor = (float) newWidth / 320;
+//        int newHeight = (int) (240 * scaleFactor);
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
+//        layout_i.setLayoutParams(params);
+//        } else if (photos.size() == 0 && videos.size() > 1) {
+//        int newWidth = TIFApp.getDisplayWidth();
+//
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
+//        layout_i.setLayoutParams(params);
+//        }
+//        }
+//        layout_i.setVisibility(View.VISIBLE);
+//final int jMax = layout_i.getChildCount();
+//        for (int j = lastPositionJ, videoPointer = 0; j < jMax; j++) {
+//final ViewGroup layout_i_j = (ViewGroup) layout_i.getChildAt(j);
+//        if (!(layout_i_j instanceof RelativeLayout)) {
+//        continue;
+//        }
+//final int kMax = layout_i_j.getChildCount();
+//        for (int k = lastPositionK; k < kMax; k++) {
+//final View view_i_j_k = layout_i_j.getChildAt(k);
+//        if (view_i_j_k instanceof ImageView) {
+//        if (videoPointer == videosCount) {
+//        break;
+//        }
+//        img = (ImageView) view_i_j_k;
+//
+//final int finalJ = videoPointer++;
+//
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//        img.setLayoutParams(params);
+//        img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//        ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img);
+//
+//        relativeLayout = (RelativeLayout) layout_i_j.getChildAt(k + 1);
+//        relativeLayout.setVisibility(View.VISIBLE);
+//
+//        try {
+//        Constants.files = new JSONObject("{\n" +
+//        "\n" +
+//        "   \"response\": {\n" +
+//        "\n" +
+//        "      \"count\": 1,\n" +
+//        "\n" +
+//        "      \"items\": [\n" +
+//        "\n" +
+//        "         {\n" +
+//        "\n" +
+//        "            \"id\": 170595910,\n" +
+//        "\n" +
+//        "            \"owner_id\": 106880118,\n" +
+//        "\n" +
+//        "            \"title\": \"Hans Zimmer - Interstellar Main Theme Piano Cover\",\n" +
+//        "\n" +
+//        "            \"duration\": 281,\n" +
+//        "\n" +
+//        "            \"description\": \"\",\n" +
+//        "\n" +
+//        "            \"date\": 1416238922,\n" +
+//        "\n" +
+//        "            \"views\": 2185,\n" +
+//        "\n" +
+//        "            \"comments\": 12,\n" +
+//        "\n" +
+//        "            \"photo_130\": \"https://pp.vk.me/c634005/u106880118/video/s_47bc0893.jpg\",\n" +
+//        "\n" +
+//        "            \"photo_320\": \"https://pp.vk.me/c634005/u106880118/video/l_53618910.jpg\",\n" +
+//        "\n" +
+//        "            \"files\": {\n" +
+//        "\n" +
+//        "               \"mp4_240\": \"http://cs634005v4.vk.me/u106880118/videos/b892209e1d.240.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZw4zXWh910VoAjRwlna7MigJcXLmF3VREPx6u2UF2UQ\",\n" +
+//        "\n" +
+//        "               \"mp4_360\":\"http://cs634005v4.vk.me/u106880118/videos/b892209e1d.360.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZw4zXWh910VoAjRwlna7MigJcXLmF3VREPx6u2UF2UQ\",\n" +
+//        "\n" +
+//        "               \"mp4_480\": \"http://cs634005v4.vk.me/u106880118/videos/b892209e1d.480.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZw4zXWh910VoAjRwlna7MigJcXLmF3VREPx6u2UF2UQ\",\n" +
+//        "\n" +
+//        "               \"mp4_720\": \"http://cs634005v4.vk.me/u106880118/videos/b892209e1d.720.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZw4zXWh910VoAjRwlna7MigJcXLmF3VREPx6u2UF2UQ\"\n" +
+//        "\n" +
+//        "            },\n" +
+//        "\n" +
+//        "            \"player\": \"http://vk.com/video_ext.php?oid=106880118&id=170595910&hash=4cce98c2eea10294&api_hash=1422805710101e694253c964274f\",\n" +
+//        "\n" +
+//        "            \"can_comment\": 1,\n" +
+//        "\n" +
+//        "            \"can_repost\": 1,\n" +
+//        "\n" +
+//        "            \"likes\": {\n" +
+//        "\n" +
+//        "               \"user_likes\": 0,\n" +
+//        "\n" +
+//        "               \"count\": 298\n" +
+//        "\n" +
+//        "            },\n" +
+//        "\n" +
+//        "            \"repeat\": 0\n" +
+//        "\n" +
+//        "         }\n" +
+//        "\n" +
+//        "      ],\n" +
+//        "\n" +
+//        "      \"profiles\": [\n" +
+//        "\n" +
+//        "         {\n" +
+//        "\n" +
+//        "            \"id\": 106880118,\n" +
+//        "\n" +
+//        "            \"first_name\": \"Халим\",\n" +
+//        "\n" +
+//        "            \"last_name\": \"Атамурадов\"\n" +
+//        "\n" +
+//        "         }\n" +
+//        "\n" +
+//        "      ],\n" +
+//        "\n" +
+//        "      \"groups\": []\n" +
+//        "\n" +
+//        "   }\n" +
+//        "\n" +
+//        "}");
+//        } catch (JSONException e) {
+//        e.printStackTrace();
+//        }
+//
+//        relativeLayout.setOnClickListener(new View.OnClickListener() {
+//@Override
+//public void onClick(View v) {
+//        String key = (videos.get(finalJ).owner_id+"_"+videos.get(finalJ).id+"");
+//
+//        VKHelper.getVideoPlay(key, new VKRequest.VKRequestListener() {
+//@Override
+//public void onComplete(VKResponse response) {
+//        super.onComplete(response);
+//        // Constants.toastInProgress.show();
+//        Log.d(response.json.toString(),"VIDEO_FILE");
+//        try {
+//        VKHelper.getVideoSourceFromJson(Constants.files);
+//        //Fragment fragment = new FragmentWebView(url);
+//
+//        } catch (JSONException e) {
+//        e.printStackTrace();
+//        }
+//        }
+//        });
+//        }
+//        });
+//        ((TextView) relativeLayout.getChildAt(1)).setText(getMediaTime(videos.get(finalJ).duration));
+//        ((TextView) relativeLayout.getChildAt(2)).setText(videos.get(finalJ).title);
+//        } else if (view_i_j_k instanceof LinearLayout) {
+//final ViewGroup layout_i_j_k = (LinearLayout) view_i_j_k;
+//final int lMax = layout_i_j_k.getChildCount();
+//        for (int l = lastPositionL; l < lMax; l++) {
+//final ViewGroup layout_i_j_k_l = (ViewGroup) layout_i_j_k.getChildAt(l);
+//        lastPositionL = 0;
+//        if (layout_i_j_k_l instanceof RelativeLayout) {
+//        if (videoPointer == videosCount) {
+//        break;
+//        }
+//final int finalJ = videoPointer++;
+//        img = (ImageView) layout_i_j_k_l.getChildAt(0);
+//        ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_130, img);
+//
+//        relativeLayout = (RelativeLayout) layout_i_j_k_l.getChildAt(1);
+//        relativeLayout.setVisibility(View.VISIBLE);
+//
+//        relativeLayout.setOnClickListener(new View.OnClickListener() {
+//@Override
+//public void onClick(View v) {
+//        String key = (videos.get(finalJ).owner_id+"_"+videos.get(finalJ).id+"");
+//
+//
+//
+//        VKHelper.getVideoPlay(key, new VKRequest.VKRequestListener() {
+//@Override
+//public void onComplete(VKResponse response) {
+//        super.onComplete(response);
+//        try {
+//        VKHelper.getVideoSourceFromJson(Constants.files);
+//
+//        } catch (JSONException e) {
+//        e.printStackTrace();
+//        }
+//
+//
+//
+//
+//        }
+//        });
+//        }
+//        });
+//        ((TextView) relativeLayout.getChildAt(1)).setText(getMediaTime(videos.get(finalJ).duration));
+//        ((TextView) relativeLayout.getChildAt(2)).setText(videos.get(finalJ).title);
+//        }
+//        }
+//        }
+//        }
+//        }
+//        }
+//        }
+//        parent.addView(mediaContainer);
+//    
+    
+    
+    
 
     static int g;
     static ArrayList<VKApiPhoto> finalPhotos;
@@ -1078,6 +1036,7 @@ public class ItemDataSetter {
         } else
             return DateFormat.format(Constants.OTHER_FORMAT_STRING, smsTime).toString();
     }
+
     public static boolean checkNewPostResult(long smsTimeInMilis) {
         Calendar smsTime = Calendar.getInstance();
         smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
@@ -1090,6 +1049,7 @@ public class ItemDataSetter {
             return true;
         } else return false;
     }
+
     public static int setInDp(int dps) {
         final float scale = Constants.RESOURCES.getDisplayMetrics().density;
         return (int) (dps * scale + 0.5f);
@@ -1108,20 +1068,6 @@ public class ItemDataSetter {
             }
         }
         return orientation;
-    }
-
-    public static String getPostColor(long groupIndex) {
-        if (groupIndex == Constants.TF_ID) {
-            return "#3DA2A9";
-        } else if (groupIndex == Constants.TZ_ID) {
-            return "#D5902FA7";
-        } else if (groupIndex == Constants.FB_ID) {
-            return "#1799CD";
-        } else if (groupIndex == Constants.FN_ID) {
-            return "#DE9C0E";
-        } else {
-            return "#84134800";
-        }
     }
 
     public static int getPlayingLogo(long groupIndex) {
@@ -1202,79 +1148,4 @@ public class ItemDataSetter {
         public void onClick(View widget) {
         }
     }
-
-//    private static int textOriginalHeight;
-//
-//    public static void expand(final View v, final SpannableStringBuilder text) {
-//        int ANIMATION_DURATION = 500;//in milisecond
-//        v.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        final int targtetHeight = v.getMeasuredHeight();
-//        textOriginalHeight = v.getHeight();
-//
-//        v.getLayoutParams().height = textOriginalHeight;
-//        v.setVisibility(View.VISIBLE);
-//        Animation a = new Animation() {
-//            @Override
-//            protected void applyTransformation(float interpolatedTime, Transformation t) {
-//                v.getLayoutParams().height = interpolatedTime == 1
-//                        ? ViewGroup.LayoutParams.WRAP_CONTENT
-//                        : textOriginalHeight + (int) (targtetHeight * interpolatedTime);
-//                v.requestLayout();
-//            }
-//
-//            @Override
-//            public boolean willChangeBounds() {
-//                return true;
-//            }
-//        };
-//
-//        // 1dp/ms
-//        a.setDuration(ANIMATION_DURATION);
-//        a.setAnimationListener(new Animation.AnimationListener() {
-//            @Override
-//            public void onAnimationStart(Animation animation) {
-//                ((TextView) v).setText(text);
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animation animation) {
-//
-//            }
-//        });
-//
-//        v.startAnimation(a);
-//    }
-//
-//    public static void collapse(final View v, final SpannableStringBuilder text) {
-//        final int initialHeight = v.getMeasuredHeight();
-//        int ANIMATION_DURATION = 500;
-//
-//        final Animation a = new Animation() {
-//            @Override
-//            protected void applyTransformation(float interpolatedTime, Transformation t) {
-//                v.getLayoutParams().height = interpolatedTime == 1 || initialHeight * (1 - interpolatedTime) <= textOriginalHeight
-//                        ? ViewGroup.LayoutParams.WRAP_CONTENT
-//                        : initialHeight - (int) (initialHeight * interpolatedTime);
-//                if (initialHeight * (1 - interpolatedTime) <= textOriginalHeight) {
-//                    ((TextView) v).setText(text);
-//                }
-//
-//                v.requestLayout();
-//            }
-//
-//            @Override
-//            public boolean willChangeBounds() {
-//                return true;
-//            }
-//        };
-//
-//        // 1dp/ms
-//        a.setDuration(ANIMATION_DURATION);
-//        v.startAnimation(a);
-//    }
 }

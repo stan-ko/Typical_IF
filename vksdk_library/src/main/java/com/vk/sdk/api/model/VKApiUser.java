@@ -120,7 +120,9 @@ public class VKApiUser extends VKApiOwner implements android.os.Parcelable {
     /**
      * Fills an user object from server response.
      */
-    public VKApiUser parse(JSONObject from) {
+
+    public VKApiUser parse( JSONObject from) {
+        if (from!=null){
         super.parse(from);
         first_name = from.optString("first_name", first_name);
         last_name = from.optString("last_name", last_name);
@@ -139,7 +141,7 @@ public class VKApiUser extends VKApiOwner implements android.os.Parcelable {
         if(!TextUtils.isEmpty(photo_200)) {
             photo.add(VKApiPhotoSize.create(photo_200, 200));
         }
-        photo.sort();
+        photo.sort();}
         return this;
     }
 

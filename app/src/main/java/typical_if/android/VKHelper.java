@@ -1,9 +1,5 @@
 package typical_if.android;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.text.Editable;
 import android.util.Log;
 
@@ -16,6 +12,7 @@ import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPhotoAlbum;
 import com.vk.sdk.api.model.VKApiUser;
+import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKAttachments;
 import com.vk.sdk.api.model.VKPostArray;
 
@@ -25,7 +22,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import typical_if.android.activity.SplashActivity;
+import typical_if.android.activity.DialogActivity;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 
@@ -37,6 +34,7 @@ public class VKHelper {
 
 
     public static int offsetCounter;
+
     public static void getAlbumList(long groupID, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("owner_id", groupID);
@@ -46,42 +44,40 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void getPhotoList(long owner_id, long album_id,int rev, int count, VKRequest.VKRequestListener listener) {
-         VKParameters params = new VKParameters();
+    public static void getPhotoList(long owner_id, long album_id, int rev, int count, VKRequest.VKRequestListener listener) {
+        VKParameters params = new VKParameters();
 
 
-        if (offsetCounter==0){
+        if (offsetCounter == 0) {
 
-            if(count==0){
+            if (count == 0) {
 
                 params.put("owner_id", owner_id);
                 params.put("album_id", album_id);
-                params.put("rev",rev);
+                params.put("rev", rev);
                 params.put("extended", 1);
-                params.put("offset",0);
+                params.put("offset", 0);
 
-            }else {
+            } else {
                 params.put("owner_id", owner_id);
                 params.put("album_id", album_id);
-                params.put("rev",rev);
+                params.put("rev", rev);
                 params.put("extended", 1);
-                params.put("offset",0);
-                params.put("count",count);
+                params.put("offset", 0);
+                params.put("count", count);
 
             }
-        }
-
-        else {
+        } else {
 
 
-            int offset =offsetCounter*50 ;
+            int offset = offsetCounter * 50;
 
             params.put("owner_id", owner_id);
             params.put("album_id", album_id);
-            params.put("rev",rev);
+            params.put("rev", rev);
             params.put("extended", 1);
-            params.put("offset",String.valueOf(offset));
-            params.put("count",100);
+            params.put("offset", String.valueOf(offset));
+            params.put("count", 100);
 
         }
 
@@ -155,7 +151,6 @@ public class VKHelper {
         final VKRequest request = new VKRequest("likes.delete", params);
         request.executeWithListener(listener);
     }
-
 
 
     public static void isLiked(String type, long owner_id, long item_id, VKRequest.VKRequestListener listener) {
@@ -275,8 +270,6 @@ public class VKHelper {
     }
 
 
-
-
     public static void getMyselfInfo(VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
         final VKRequest request = new VKRequest("users.get", params);
@@ -285,14 +278,15 @@ public class VKHelper {
 
     public static void getWhoIsPosted(long user_id, String fields, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
-        params.put("user_ids",user_id);
-        params.put("fields",fields);
+        params.put("user_ids", user_id);
+        params.put("fields", fields);
         final VKRequest request = new VKRequest("users.get", params);
         request.executeWithListener(listener);
     }
+
     public static void doWallPost(long owner_id, Editable message, String attachments, VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
-        params.put("owner_id",owner_id);
+        params.put("owner_id", owner_id);
         params.put("message", message);
         params.put("attachments", attachments);
 
@@ -301,7 +295,7 @@ public class VKHelper {
     }
 
 
-    public static void doPlayerRequest(String videos, VKRequest.VKRequestListener vkRequestListener) {
+    public static void getVideoPlay(String videos, VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put("videos", videos);
         params.put("extended", 1);
@@ -311,19 +305,19 @@ public class VKHelper {
     }
 
 
-    public static void getPhotoByID(String photos,VKRequest.VKRequestListener listener){
+    public static void getPhotoByID(String photos, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
-        params.put("photos",photos);
+        params.put("photos", photos);
         params.put("extended", 1);
         final VKRequest request = new VKRequest("photos.getById", params);
         request.executeWithListener(listener);
     }
 
-    public static  ArrayList<VKApiPhotoAlbum> getAlbumFromJSONArray(JSONObject jsonArray) {
+    public static ArrayList<VKApiPhotoAlbum> getAlbumFromJSONArray(JSONObject jsonArray) {
         JSONObject object = jsonArray.optJSONObject("response");
         JSONArray array = object.optJSONArray("items");
         final ArrayList<VKApiPhotoAlbum> albums = new ArrayList<VKApiPhotoAlbum>();
-        for (int i=0; i<array.length(); i++){
+        for (int i = 0; i < array.length(); i++) {
             final VKApiPhotoAlbum album = new VKApiPhotoAlbum().parse(array.optJSONObject(i));
             albums.add(album);
         }
@@ -332,7 +326,7 @@ public class VKHelper {
 
     public static ArrayList<VKApiUser> getProfilesFromJSONArray(JSONArray array) {
         final ArrayList<VKApiUser> profiles = new ArrayList<VKApiUser>();
-        for (int i=0; i<array.length(); i++) {
+        for (int i = 0; i < array.length(); i++) {
             final VKApiUser profile = new VKApiUser().parse(array.optJSONObject(i));
             profiles.add(profile);
         }
@@ -341,7 +335,7 @@ public class VKHelper {
 
     public static ArrayList<VKApiCommunity> getGroupsFromJSONArray(JSONArray array) {
         final ArrayList<VKApiCommunity> groups = new ArrayList<VKApiCommunity>();
-        for (int i=0; i<array.length(); i++) {
+        for (int i = 0; i < array.length(); i++) {
             final VKApiCommunity community = new VKApiCommunity().parse(array.optJSONObject(i));
             groups.add(community);
         }
@@ -350,25 +344,39 @@ public class VKHelper {
 
     public static VKApiPhoto getPhotoFromJSONArray(JSONObject jsonObject) throws JSONException {
         JSONArray array = jsonObject.optJSONArray("response");
-        JSONObject o = (JSONObject)array.get(0);
+        JSONObject o = (JSONObject) array.get(0);
         VKApiPhoto photo = new VKApiPhoto().parse(o);
         return photo;
+    }
+
+    public static String getVideoSourceFromJson(JSONObject object) throws JSONException {
+
+       JSONObject response = object.optJSONObject("response");
+        JSONArray items = response.optJSONArray("items");
+        JSONObject video_object =  items.getJSONObject(0);
+        VKApiVideo video = new VKApiVideo().parse(video_object);
+        String link = DialogActivity.isShowDialogNedeed(video);
+
+
+        return link;
     }
 
     public static ArrayList<VKApiPhoto> getPhotosFromJSONArray(JSONObject jsonArray) {
         JSONObject object = jsonArray.optJSONObject("response");
         try {
             countOfPhotos = object.getInt("count");
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
         JSONArray array = object.optJSONArray("items");
 
         final ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
-        for (int i=0; i<array.length(); i++){
+        for (int i = 0; i < array.length(); i++) {
             final VKApiPhoto photo = new VKApiPhoto().parse(array.optJSONObject(i));
             photos.add(photo);
         }
         return photos;
     }
+
     public static int countOfPhotos;
 
     public static ArrayList<VKApiPhoto> getPhotosByIdFromJSON(JSONObject json) {
@@ -379,7 +387,7 @@ public class VKHelper {
             e.printStackTrace();
         }
         final ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
-        for (int i=0; i<array.length(); i++){
+        for (int i = 0; i < array.length(); i++) {
             final VKApiPhoto photo = new VKApiPhoto().parse(array.optJSONObject(i));
             photos.add(photo);
         }
@@ -393,7 +401,8 @@ public class VKHelper {
         final VKRequest request = new VKRequest("groups.isMember", params);
         request.executeWithListener(vkRequestListener);
     }
-    public static void exec (VKRequest.VKRequestListener vkRequestListener) {
+
+    public static void exec(VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
 
 
@@ -430,58 +439,49 @@ public class VKHelper {
         final VKRequest request = VKApi.wall().get(params);
         request.executeWithListener(vkRequestListener);
     }
+
     public static Wall getGroupWallFromJSON(final JSONObject jsonObject) {
         final Wall wall = new Wall();
-  try {
-      final JSONObject object = jsonObject.optJSONObject(Wall.JSON_KEY_RESPONSE);
+ 
+        final JSONObject object = jsonObject.optJSONObject(Wall.JSON_KEY_RESPONSE);
 
-      wall.count = object.optInt(Wall.JSON_KEY_COUNT);
+        wall.count = object.optInt(Wall.JSON_KEY_COUNT);
 
-        Log.d(wall.TAG, String.valueOf(wall.count));
-        // items
-        final VKPostArray posts = new VKPostArray();
-        try {
-            posts.parse(jsonObject);
-        } catch (JSONException e) {
-        }
+            // groups
+            final JSONArray groups = object.optJSONArray(Wall.JSON_KEY_GROUPS);
+            VKApiCommunity group;
+            VKApi.users().get();
 
-        ArrayList<VKWallPostWrapper> wallPosts = new ArrayList<VKWallPostWrapper>();
-        for (int i = 0; i < posts.size(); i++) {
-            wallPosts.add(new VKWallPostWrapper(posts.get(i)));
-        }
+            for (int i = 0; i < groups.length(); i++) {
+                group = new VKApiCommunity().parse(groups.optJSONObject(i));
+                wall.groups.add(group);
+            }
+            wall.group = new VKApiCommunity().parse(groups.optJSONObject(0));
 
-        wall.posts = wallPosts;
+            // profiles
+            wall.profiles = getProfilesFromJSONArray(object.optJSONArray(Wall.JSON_KEY_PROFILES));
 
-        // groups
-        final JSONArray groups = object.optJSONArray(Wall.JSON_KEY_GROUPS);
-        //Log.d(wall.TAG, "Wall groups: " + groups.toString());
+            // items
+            final VKPostArray posts = new VKPostArray();
+            try {
+                posts.parse(jsonObject);
+            } catch (JSONException e) {}
 
-        VKApiCommunity group;
-        VKApi.users().get();
-        for (int i = 0; i < groups.length(); i++) {
-            group = new VKApiCommunity().parse(groups.optJSONObject(i));
-            wall.groups.add(group);
-        }
-        wall.group = new VKApiCommunity().parse(groups.optJSONObject(0));
-        // profiles
-        wall.profiles=getProfilesFromJSONArray(object.optJSONArray(Wall.JSON_KEY_PROFILES));
-  } catch(Exception npe){
+            ArrayList<VKWallPostWrapper> wallPosts = new ArrayList<VKWallPostWrapper>();
+            for (int i = 0; i < posts.size(); i++) {
+                wallPosts.add(new VKWallPostWrapper(posts.get(i), wall));
+            }
 
-      Intent mStartActivity = new Intent(Constants.mainActivity.getApplicationContext(), SplashActivity.class);
-      int mPendingIntentId = 123456;
-      PendingIntent mPendingIntent = PendingIntent.getActivity(Constants.mainActivity.getApplicationContext(), mPendingIntentId,    mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-      AlarmManager mgr = (AlarmManager)Constants.mainActivity.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-      mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
-      System.exit(0);
-  }
+            wall.posts = wallPosts;
+
         return wall;
-
-  }
+    }
 
     public static String TIF_VK_API_KEY_RESPONSE = "response";
-    public static long getUserIdFromResponse(final VKResponse response){
+
+    public static long getUserIdFromResponse(final VKResponse response) {
         final JSONArray arr = response.json.optJSONArray(TIF_VK_API_KEY_RESPONSE);
-        final JSONObject jsonObject = arr==null ? null : arr.optJSONObject(0);
-        return jsonObject!=null ? jsonObject.optLong("id") : 0;
+        final JSONObject jsonObject = arr == null ? null : arr.optJSONObject(0);
+        return jsonObject != null ? jsonObject.optLong("id") : 0;
     }
 }

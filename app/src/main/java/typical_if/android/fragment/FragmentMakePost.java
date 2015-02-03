@@ -1,7 +1,6 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -422,7 +421,6 @@ public class FragmentMakePost extends Fragment {
                 size.setText(Constants.DOC_TYPE_ANIMATION + " " + ItemDataSetter.readableFileSize(doc.size));
             } else {
                 image.setImageDrawable(Constants.RESOURCES.getDrawable(android.R.drawable.ic_menu_save));
-                image.setBackgroundColor(Color.parseColor(ItemDataSetter.postColor));
                 image.setLayoutParams(new RelativeLayout.LayoutParams(ItemDataSetter.setInDp(50), ItemDataSetter.setInDp(50)));
 
                 RelativeLayout.LayoutParams paramsForTitle = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);

@@ -2,33 +2,43 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="@drawable/element_selector"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp">
-
+    android:background="@drawable/element_selector">
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:id="@+id/img_wiki_page"
         android:src="@drawable/ic_left_link"
-        android:layout_marginRight="5dp" />
+        android:layout_margin="5dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/txt_wiki_page"
-        android:textStyle="bold"
-        android:singleLine="true"
-        android:paddingRight="5dp"
-        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_toRightOf="@+id/img_wiki_page"
-        android:layout_toEndOf="@+id/img_wiki_page" />
+        android:layout_toEndOf="@+id/img_wiki_page">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:layout_below="@+id/txt_wiki_page"
-        android:layout_toRightOf="@+id/img_wiki_page"
-        android:text="@string/wiki_page" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_wiki_page"
+            android:singleLine="true"
+            android:paddingRight="5dp"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/img_wiki_page"
+            android:text="sadasd asdasd asd"
+            android:textColor="@color/vk_smoke_white" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@string/wiki_page"
+            android:visibility="visible"
+            android:textColor="#8cffffff"
+            android:layout_below="@+id/txt_wiki_page"
+            android:layout_toRightOf="@+id/img_wiki_page"
+            android:layout_toEndOf="@+id/img_wiki_page" />
+    </RelativeLayout>
 </RelativeLayout>

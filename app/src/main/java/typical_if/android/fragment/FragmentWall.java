@@ -74,7 +74,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
     final int offsetO = 0;
     final int countPostDefaultForOffset = 100;
     public static int playableLogoRes;
-    String postColor;
     JSONObject jsonObjectOld;
 
     int Offset = Constants.TIF_VK_PRELOAD_POSTS_COUNT;//SplashActivity.getCountOfPosts();
@@ -116,7 +115,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
 
                 final int currentFirstVisibleItem = wallListView.getFirstVisiblePosition();
                 if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-                actionBar.hide();
+                    actionBar.hide();
                 } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
                     actionBar.show();
                 }
@@ -128,10 +127,11 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                     Offset = Offset + 100;
-                     endlessGet(Offset);}
-                  }).start();
-                     temp2 = false;
+                        Offset = Offset + 100;
+                        endlessGet(Offset);
+                    }
+                }).start();
+                temp2 = false;
             }
 
             if (lastItem == totalItemCount & temp) {
@@ -140,7 +140,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
                 temp2 = true;
             }
 
-            if (absListView != null && absListView.getChildCount() > 0) {
+            if (absListView.getChildCount() > 0) {
                 boolean firstItemVisible = absListView.getFirstVisiblePosition() == 0;
                 boolean topOfFirstItemVisible = absListView.getChildAt(0).getTop() == 0;
                 enable = firstItemVisible && topOfFirstItemVisible;
@@ -182,8 +182,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         arguments = getArguments();
         actionBar = ((MainActivity) getActivity()).getSupportActionBar();
 
-
-        postColor = ItemDataSetter.getPostColor(Constants.GROUP_ID);
         playableLogoRes = ItemDataSetter.getPlayingLogo(Constants.GROUP_ID);
         pauseOnScrollListener = new PauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerObject);
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
@@ -201,7 +199,12 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             initGroupWall(jsonObjectOld, inflater);
 
             swipeView.setOnRefreshListener(this);
-            swipeView.setColorScheme(R.color.ab_text_color, android.R.color.holo_green_light, android.R.color.holo_orange_dark, R.color.music_progress);
+            swipeView.setColorScheme(
+                    R.color.ab_text_color,
+                    android.R.color.holo_green_light,
+                    android.R.color.holo_orange_dark,
+                    R.color.music_progress
+            );
 
         } else {
             setDisabledMenu();
@@ -228,6 +231,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         return rootView;
     }
 
+
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater) {
         Wall wall = VKHelper.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
@@ -235,7 +239,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         if (wall.posts.size() == 0) {
             try {
                 fragmentManager.popBackStack();
-            }catch (NullPointerException npe){
+            } catch (NullPointerException npe) {
                 Toast.makeText(getApplicationContext(), getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
             }
             Toast.makeText(getApplicationContext(), getString(R.string.no_suggested_posts), Toast.LENGTH_SHORT).show();
@@ -253,7 +257,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         } else {
             if (adapter == null) {
-                adapter = new WallAdapter(wall, inflater, fragmentManager, postColor, isSuggested);
+                adapter = new WallAdapter(wall, inflater, fragmentManager, isSuggested);
 
                 wallListView.setAdapter(adapter);
                 wallListView.setOnScrollListener(pauseOnScrollListener);
@@ -378,10 +382,10 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         setRetainInstance(true);
         setHasOptionsMenu(true);
 // ((MainActivity) getActivity()).getSupportActionBar().show();
-  super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
     }
 
-    ActionBarArrayAdapter list ;
+    ActionBarArrayAdapter list;
     ActionBar.OnNavigationListener navListener = new ActionBar.OnNavigationListener() {
         @Override
         public boolean onNavigationItemSelected(int i, long l) {

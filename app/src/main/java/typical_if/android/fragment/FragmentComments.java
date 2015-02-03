@@ -11,9 +11,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -26,7 +24,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -107,7 +104,6 @@ public class FragmentComments extends Fragment {
     static long from_user;
 
 
-
     public static FragmentComments newInstanceForPhoto(VKApiPhoto photo, long vk_user_id) {
         loadFromWall = false;
         FragmentComments fragment = new FragmentComments();
@@ -127,7 +123,6 @@ public class FragmentComments extends Fragment {
         Constants.PARAM_NAME2 = "photo_id";
 
 
-
         item_id = photo.id;
         group_id = photo.owner_id;
         if (photo.user_id == 0) {
@@ -138,13 +133,11 @@ public class FragmentComments extends Fragment {
         return fragment;
     }
 
-    public static FragmentComments newInstanceForWall(String postColor, int position, Wall wall, VKWallPostWrapper post) {
+    public static FragmentComments newInstanceForWall(int position, Wall wall, VKWallPostWrapper post) {
         loadFromWall = true;
 
         FragmentComments fragment = new FragmentComments();
-        //Bundle args = new Bundle();
 
-        fragment.postColor = postColor;
         fragment.wall = wall;
         fragment.position = position;
         FragmentComments.post = post;
@@ -178,7 +171,6 @@ public class FragmentComments extends Fragment {
         EventBus.getDefault().register(this);
 
     }
-
 
 
     private void loadPhotoPosts() {
@@ -306,80 +298,64 @@ public class FragmentComments extends Fragment {
     private void loadWallPosts() {
         final View wallItem = inflater.inflate(R.layout.wall_lv_item, null);
 
-
-        RelativeLayout panelWithSigner= ((RelativeLayout) wallItem.getRootView().findViewById(R.id.signer_panel));
-        panelWithSigner.setPadding(5, 0, 5, 5);
-
-        CardView cardView = (CardView) wallItem.getRootView().findViewById(R.id.card_view_wall_lv_Item);
-        cardView.setCardElevation(0);
-        cardView.setShadowPadding(0,0,0,0);
-
         viewHolder = new WallAdapter.ViewHolder(wallItem);
-        WallAdapter.initViewHolder(viewHolder, postColor, wall, position, getFragmentManager(), post, getActivity().getBaseContext(),inflater);
 
-        viewHolder.cb_post_comment.setVisibility(View.GONE);
-        viewHolder.button_comment.setVisibility(View.GONE);
-      //  viewHolder.img_post_other.setVisibility(View.GONE);
-       // viewHolder.extendedMenuItems.setVisibility(View.GONE);
+        WallAdapter.initViewHolder(viewHolder, wall, position, getFragmentManager(), post);
+
+        viewHolder.postRootLayout.setCardElevation(0);
+        viewHolder.postRootLayout.setShadowPadding(0,0,0,0);
+
+        viewHolder.postAuthorPanel.setVisibility(View.GONE);
         viewHolder.postFeatureLayout.setVisibility(View.GONE);
-        //viewHolder.postExpandButtonLayout.setVisibility(View.GONE);
 
-        final VKWallPostWrapper post = this.post;
+        final VKWallPostWrapper post = FragmentComments.post;
 
         if (post.post.text.length() != 0) {
-            RelativeLayout textLayout = (RelativeLayout) viewHolder.postTextLayout.getChildAt(0);
-            CheckBox checkBox = (CheckBox) textLayout.getChildAt(1);
+            CheckBox checkBox = viewHolder.cbPostAllText;
             checkBox.setChecked(true);
             checkBox.setVisibility(View.GONE);
         }
 
         if (post.post.copy_history != null && post.post.copy_history.size() != 0) {
             if (post.post.copy_history.get(0).text.length() != 0) {
-                LinearLayout copyHistoryContainer = (LinearLayout) ((RelativeLayout) viewHolder.copyHistoryLayout.getChildAt(0)).getChildAt(0);
-                RelativeLayout parentCopyHistoryTextContainer = (RelativeLayout) copyHistoryContainer.findViewById(R.id.copyHistoryTextLayout);
-                RelativeLayout textLayout = (RelativeLayout) parentCopyHistoryTextContainer.getChildAt(0);
-                CheckBox checkBox = (CheckBox) textLayout.getChildAt(1);
+
+                CheckBox checkBox = viewHolder.copyHistoryCbPostAllText;
                 checkBox.setChecked(true);
                 checkBox.setVisibility(View.GONE);
             }
         }
+
         listOfComments.addHeaderView(wallItem);
-
         updateCommentList(group_id, post.post.id, listOfComments, inflater);
-
-     //   listOfComments.setOnScrollListener(onScrollListenerObject);
-
-
-
     }
 
     RelativeLayout root;
-
     RelativeLayout coverGlobal;
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //EventBus.getDefault().register(this);
 
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        ((MainActivity) getActivity()).getSupportActionBar().hide();
         FragmentWall.setDisabledMenu();
 
         this.inflater = inflater;
         rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
-       RelativeLayout rootLayoutShowHide = (RelativeLayout)rootView.findViewById(R.id.comment_bar_layout);
-        root=rootLayoutShowHide;
-        coverGlobal = (RelativeLayout)rootView.findViewById(R.id.while_loading_view_layout);
+        RelativeLayout rootLayoutShowHide = (RelativeLayout) rootView.findViewById(R.id.comment_bar_layout);
+        root = rootLayoutShowHide;
+        coverGlobal = (RelativeLayout) rootView.findViewById(R.id.while_loading_view_layout);
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
-        RelativeLayout wrapper = (RelativeLayout)rootView.findViewById(R.id.list_of_comments_wrapper_layout);
+        RelativeLayout wrapper = (RelativeLayout) rootView.findViewById(R.id.list_of_comments_wrapper_layout);
 
-if (VKSdk.isLoggedIn()){
-            if(OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())){
+        if (VKSdk.isLoggedIn()) {
+            if (OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())) {
 
-            rootLayoutShowHide.setVisibility(View.VISIBLE);}}
-       else if (!VKSdk.isLoggedIn()){
+                rootLayoutShowHide.setVisibility(View.VISIBLE);
+            }
+        } else if (!VKSdk.isLoggedIn()) {
             rootLayoutShowHide.setVisibility(View.GONE);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            lp.addRule(RelativeLayout.ALIGN_BOTTOM,R.id.binding_iv);
+            lp.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.binding_iv);
             wrapper.setLayoutParams(lp);
         }
         sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
@@ -393,18 +369,54 @@ if (VKSdk.isLoggedIn()){
         sendComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            if (!commentMessage.getText().toString().isEmpty()){
-                message = commentMessage.getText().toString();
-                if (!edit_status) {
-                    if (reply_to_comment == 0) {
+                if (!commentMessage.getText().toString().isEmpty()) {
+                    message = commentMessage.getText().toString();
+                    if (!edit_status) {
+                        if (reply_to_comment == 0) {
 
-                        VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", 0, new VKRequest.VKRequestListener() {
+                            VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", 0, new VKRequest.VKRequestListener() {
 
+                                @Override
+                                public void onComplete(final VKResponse response) {
+                                    super.onComplete(response);
+                                    commentMessage.setText("");
+                                    updateCommentList(group_id, item_id, listOfComments, inflater);
+                                }
+
+                                @Override
+                                public void onError(final VKError error) {
+                                    super.onError(error);
+                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                }
+
+                            });
+
+                        } else {
+                            VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", reply_to_comment, new VKRequest.VKRequestListener() {
+
+                                @Override
+                                public void onComplete(final VKResponse response) {
+                                    super.onComplete(response);
+                                    commentMessage.setText("");
+                                    updateCommentList(group_id, item_id, listOfComments, inflater);
+                                }
+
+                                @Override
+                                public void onError(final VKError error) {
+                                    super.onError(error);
+                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                }
+                            });
+
+                        }
+                    } else
+                        VKHelper.editComment(group_id, comments.get(positionOfComment).id, message, null, new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
-                                commentMessage.setText("");
                                 updateCommentList(group_id, item_id, listOfComments, inflater);
+                                commentMessage.setText("");
+                                edit_status = false;
                             }
 
                             @Override
@@ -412,47 +424,12 @@ if (VKSdk.isLoggedIn()){
                                 super.onError(error);
                                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }
-
                         });
 
-                    } else {
-                        VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", reply_to_comment, new VKRequest.VKRequestListener() {
-
-                            @Override
-                            public void onComplete(final VKResponse response) {
-                                super.onComplete(response);
-                                commentMessage.setText("");
-                                updateCommentList(group_id, item_id, listOfComments, inflater);
-                            }
-
-                            @Override
-                            public void onError(final VKError error) {
-                                super.onError(error);
-                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                            }
-                        });
-
-                    }
-                } else
-                    VKHelper.editComment(group_id, comments.get(positionOfComment).id, message, null, new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(final VKResponse response) {
-                            super.onComplete(response);
-                            updateCommentList(group_id, item_id, listOfComments, inflater);
-                            commentMessage.setText("");
-                            edit_status = false;
-                        }
-
-                        @Override
-                        public void onError(final VKError error) {
-                            super.onError(error);
-                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                        }
-                    });
-
-                edit_status = false;
+                    edit_status = false;
+                }
             }
-        }});
+        });
         setRetainInstance(true);
         return rootView;
     }
@@ -503,12 +480,12 @@ if (VKSdk.isLoggedIn()){
         );
 
     }
-public static boolean isViewLoaded;
+//public static boolean isViewLoaded;
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
 
         super.onViewCreated(view, savedInstanceState);
-        isViewLoaded=true;
+       // isViewLoaded=true;
        // coverGlobal.setVisibility(View.GONE);
 
 
@@ -526,68 +503,68 @@ public static boolean isViewLoaded;
         if (name == "" || name == null) {
             name = "Адресат";
         }
-        CharSequence[] items=null;
+        CharSequence[] items = null;
 
-          if(VKSdk.isLoggedIn()){
-        if (comment.from_id == Constants.USER_ID) {
-            myComment = true;
+        if (VKSdk.isLoggedIn()) {
+            if (comment.from_id == Constants.USER_ID) {
+                myComment = true;
 
-            if (comment.reply_to_comment != 0) {
-                if (!comment.user_likes)
-                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit), name};
-                else
-                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit), name};
-            } else if (!comment.user_likes) {
-                items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit)};
+                if (comment.reply_to_comment != 0) {
+                    if (!comment.user_likes)
+                        items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit), name};
+                    else
+                        items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit), name};
+                } else if (!comment.user_likes) {
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit)};
+                } else {
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit)};
+                }
             } else {
-                items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report), getResources().getString(R.string.comment_delete), getResources().getString(R.string.comment_edit)};
+                myComment = false;
+                if (comment.reply_to_comment != 0) {
+                    if (!comment.user_likes)
+                        items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report), name};
+                    else
+                        items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report, name)};
+                } else if (!comment.user_likes) {
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report)};
+                } else {
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report)};
+                }
+
             }
-        } else {
-            myComment = false;
-            if (comment.reply_to_comment != 0) {
-                if (!comment.user_likes)
-                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report), name};
-                else
-                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report, name)};
-            } else if (!comment.user_likes) {
-                items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_like), getResources().getString(R.string.comment_report)};
+
+        } else if (!VKSdk.isLoggedIn()) {
+            if (comment.from_id == Constants.USER_ID) {
+                myComment = true;
+
+                if (comment.reply_to_comment != 0) {
+                    if (!comment.user_likes)
+                        items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.copy_text), name};
+                    else
+                        items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.copy_text), name};
+                } else if (!comment.user_likes) {
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.copy_text)};
+                } else {
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.copy_text)};
+                }
             } else {
-                items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.reply), getResources().getString(R.string.copy_text), getResources().getString(R.string.comment_unlike), getResources().getString(R.string.comment_report)};
+                myComment = false;
+                if (comment.reply_to_comment != 0) {
+                    if (!comment.user_likes)
+                        items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.copy_text), name};
+                    else
+                        items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.copy_text)};
+                } else if (!comment.user_likes) {
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.copy_text)};
+                } else {
+                    items = new CharSequence[]{getResources().getString(R.string.profile), getResources().getString(R.string.copy_text),};
+                }
+
             }
+
 
         }
-
-           } else if (!VKSdk.isLoggedIn()) {
-               if (comment.from_id == Constants.USER_ID) {
-                   myComment = true;
-
-                   if (comment.reply_to_comment != 0) {
-                       if (!comment.user_likes)
-                           items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text), name};
-                       else
-                           items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text), name};
-                   } else if (!comment.user_likes) {
-                       items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text)};
-                   } else {
-                       items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text)};
-                   }
-               } else {
-                   myComment = false;
-                   if (comment.reply_to_comment != 0) {
-                       if (!comment.user_likes)
-                           items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text),name};
-                       else
-                           items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text)};
-                   } else if (!comment.user_likes) {
-                       items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text)};
-                   } else {
-                       items = new CharSequence[]{getResources().getString(R.string.profile),getResources().getString(R.string.copy_text),};
-                   }
-
-               }
-
-
-           }
 
         onInitContextMenu(items, position);
 
@@ -603,33 +580,31 @@ public static boolean isViewLoaded;
         profiles = VKHelper.getProfilesFromJSONArray(arrayOfComments[1]);
         groups = VKHelper.getGroupsFromJSONArray(arrayOfComments[2]);
 
-try {
-    getActivity().runOnUiThread(new Runnable() {
-        @Override
-        public void run() {
-            if (adapter == null) {
-                String postColor = ItemDataSetter.getPostColor(Constants.GROUP_ID);
-                adapter = new CommentsListAdapter(comments, profiles, groups, inflater, postColor);
-                listOfComments.setAdapter(adapter);
-            } else {
-                adapter.UpdateCommentList(comments, profiles, groups, listOfComments);
+        try {
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (adapter == null) {
+                        adapter = new CommentsListAdapter(comments, profiles, groups, inflater);
+                        listOfComments.setAdapter(adapter);
+                    } else {
+                        adapter.UpdateCommentList(comments, profiles, groups, listOfComments);
 
 
-            }
+                    }
+                }
+            });
+
+        } catch (NullPointerException npe) {
+
         }
-    });
-
-            }
-catch (NullPointerException npe){
-
-}
     }
 
     public void onInitContextMenu(final CharSequence[] items, final int position) {
 
         final LayoutInflater inflater = getActivity().getLayoutInflater();
-         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-       if (VKSdk.isLoggedIn()){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        if (VKSdk.isLoggedIn()) {
             builder.setItems(items, new DialogInterface.OnClickListener() {
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
                 public void onClick(DialogInterface dialog, int item) {
@@ -655,7 +630,7 @@ catch (NullPointerException npe){
                         case 2: {
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                             clipboard.setText(comments.get(position).text);
-                            Toast.makeText(getActivity().getApplicationContext(),getString(R.string.text_has_been_copied_to_the_buffer),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_has_been_copied_to_the_buffer), Toast.LENGTH_SHORT).show();
                         }
                         break;
                         case 3: {
@@ -748,7 +723,7 @@ catch (NullPointerException npe){
 
                 }
             });
-    }else if (!VKSdk.isLoggedIn()){
+        } else if (!VKSdk.isLoggedIn()) {
             builder.setItems(items, new DialogInterface.OnClickListener() {
                 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
                 public void onClick(DialogInterface dialog, int item) {
@@ -775,13 +750,14 @@ catch (NullPointerException npe){
                     }
 
 
+                }
 
-                };
+                ;
             });
         }
 
         builder.show();
-}
+    }
 
     public String Identify(ArrayList<VKApiComment> commentsList, ArrayList<VKApiUser> profilesList, ArrayList<VKApiCommunity> groupsList, int position) {
         String name = "";
@@ -793,10 +769,9 @@ catch (NullPointerException npe){
             if (commentsList.get(i).id == reply_to_comment) {
                 for (int j = 0; j < profilesList.size(); j++) {
                     if (commentsList.get(i).from_id == profilesList.get(j).id) {
-                        if (groupsList.size()==0){
+                        if (groupsList.size() == 0) {
                             name = profilesList.get(j).first_name;
-                        }
-                        else {
+                        } else {
                             for (int k = 0; k < groupsList.size(); k++) {
 
                                 if (commentsList.get(i).from_id == groupsList.get(k).id) {
@@ -863,7 +838,7 @@ catch (NullPointerException npe){
 
 
     public void onEventMainThread(EventSpinnerLayout event) {
-             coverGlobal.startAnimation(animationFadeOut);
+        coverGlobal.startAnimation(animationFadeOut);
     }
 
 }
