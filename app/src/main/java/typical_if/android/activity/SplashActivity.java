@@ -94,6 +94,8 @@ config.locale = ItemDataSetter.loadUserLanguage();
         Toast.makeText(getApplicationContext(),getString(R.string.main_creed), Toast.LENGTH_SHORT).show();
         ItemDataSetter.loadUserId();
         ItemDataSetter.loadUserLanguage();
+
+
     }
 
 
@@ -152,11 +154,25 @@ config.locale = ItemDataSetter.loadUserLanguage();
         return temp;
     }
     void checkIfOnlineAndProceed() {
-        if (OfflineMode.isOnline(getApplicationContext())) {
-            makeRequests();
-        } else {
-            showAlertNoInternet();
-        }
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean isICA = com.stanko.tools.InternetConnectionHelper.checkHostByConnection("vk.com");
+                        if (!isICA) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showAlertNoInternet();
+                                }
+                            });
+
+                        }else {
+                            makeRequests();
+                        }
+                    }
+                }
+        ).start();
     }
 
 
@@ -270,9 +286,12 @@ config.locale = ItemDataSetter.loadUserLanguage();
         final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
 
-//        if (OfflineMode.isFirstRun("SplashFirstRun")==true){
-           startService(new Intent(this, NotificationService.class));
-       // }
+        if (OfflineMode.isFirstRun("SplashFirstRun")){
+            startService(new Intent(this, NotificationService.class).setAction(Constants.ACTION_FIRST_RUN));
+        } else{
+           // startService(new Intent(this, NotificationService.class).setAction(Constants.ACTION_START_FROM_SPLASH_ACTIVITY));
+        }
+
 
         finish();
     }

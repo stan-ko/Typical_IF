@@ -16,7 +16,7 @@ public class BootCompletedEventRecevier extends BroadcastReceiver {
         // TODO: This method is called when the BroadcastReceiver is receiving
 
         Log.d(LOG_TAG, "onReceive " + intent.getAction());
-        context.startService(new Intent(context, NotificationService.class));
+        context.startService(new Intent(context, NotificationService.class).setAction(Constants.ACTION_BOOT_COMPLETED));
         // an Intent broadcast.
 //        throw new UnsupportedOperationException("Not yet implemented");
     }
