@@ -124,7 +124,7 @@ public class NotificationService extends Service {
             sendNotif();
             intentForSchedule = createIntent(Constants.SCHEDULE_FOR_EIGHT_HOUR);
             pendingIntent = PendingIntent.getBroadcast(TIFApp.getAppContext(), 0, intentForSchedule, 0);
-            alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 4000, pendingIntent);
+            alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + mInterval, pendingIntent);
             Log.d("intervalForNextServiceStart ", " to 8 hours " + mInterval);
             stopSelf();
 
