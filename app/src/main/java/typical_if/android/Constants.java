@@ -66,6 +66,13 @@ public class Constants {
 
    public static int isMember;
 
+    public static final String ACTION_BOOT_COMPLETED="1";
+    public static final String ACTION_START_FROM_SPLASH_ACTIVITY="2";
+    public static final String ACTION_FIRST_RUN = "3";
+
+    public static final String SCHEDULE_FOR_EIGHT_HOUR = "eightHour";
+    public static final String SCHEDULE_FOR_ONE_HOUR = "OneHour";
+    public static final String REPEAT_ACTION = "repeat";
 
     public static long USER_ID;
     public static String USER_LANGUAGE;
