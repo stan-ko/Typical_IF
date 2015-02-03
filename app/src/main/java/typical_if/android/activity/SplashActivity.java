@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,6 +46,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
     TextView textView;
     ImageView imageView;
+    ProgressBar spinner;
 
     Locale locale;
     int counter = 5;
@@ -64,6 +66,8 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
+//        spinner = (ProgressBar) findViewById(R.id.progressBar);
+//        spinner.setScrollBarStyle(PRO);
 
         firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
 
@@ -93,8 +97,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         Toast.makeText(getApplicationContext(), getString(R.string.main_creed), Toast.LENGTH_SHORT).show();
         ItemDataSetter.loadUserId();
         ItemDataSetter.loadUserLanguage();
-
-
     }
 
 
