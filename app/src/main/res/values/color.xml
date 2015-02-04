@@ -26,4 +26,8 @@
     <color name="music_progress_alt">#D0C65F00</color>
     <color name="app_bg">#303030</color>
 
+    <color name="tFIndigo">#3F51B5</color>
+    <color name="tZDeepPurple">#673AB7</color>
+    <color name="fbBlue">#2196F3</color>
+
 </resources>

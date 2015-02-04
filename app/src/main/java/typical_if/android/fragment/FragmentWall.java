@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -43,7 +44,6 @@ import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
-import typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.ActionBarArrayAdapter;
@@ -58,7 +58,8 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
  */
 
 
-public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FragmentWall extends Fragment {
+//    implements SwipeRefreshLayout.OnRefreshListener {
 
     private static final int INITIAL_DELAY_MILLIS = 300;
 
@@ -185,7 +186,38 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         playableLogoRes = ItemDataSetter.getPlayingLogo(Constants.GROUP_ID);
         pauseOnScrollListener = new PauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerObject);
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
+        swipeView.setColorSchemeResources(R.color.tFIndigo, R.color.tZDeepPurple, R.color.fbBlue);
+        swipeView.setProgressViewOffset(true, 0, 100);
+        swipeView. setSize(SwipeRefreshLayout.LARGE);
+        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!OfflineMode.isOnline(getApplicationContext())) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_internet_message_toast_en), Toast.LENGTH_SHORT).show();
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        VKHelper.doGroupWallRequest(offsetO, Offset, Constants.GROUP_ID, new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(final VKResponse response) {
+                                super.onComplete(response);
+                                OfflineMode.saveJSON(response.json, Constants.GROUP_ID);
+                                initGroupWall(OfflineMode.loadJSON(Constants.GROUP_ID), inflaterGlobal);
+                            }
 
+                            @Override
+                            public void onError(final VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                            }
+                        });
+
+                        swipeView.setRefreshing(false);
+                    }
+                }, 3000);
+            }
+        });
         wallListView = (ListView) rootView.findViewById(R.id.listViewWall);
 
         TextView padding = new TextView(getApplicationContext());
@@ -198,13 +230,7 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
             jsonObjectOld = OfflineMode.loadJSON(Constants.GROUP_ID);
             initGroupWall(jsonObjectOld, inflater);
 
-            swipeView.setOnRefreshListener(this);
-            swipeView.setColorScheme(
-                    R.color.ab_text_color,
-                    android.R.color.holo_green_light,
-                    android.R.color.holo_orange_dark,
-                    R.color.music_progress
-            );
+//
 
         } else {
             setDisabledMenu();
@@ -528,38 +554,6 @@ public class FragmentWall extends Fragment implements SwipeRefreshLayout.OnRefre
         outState.putInt("curChoice", wallListView.getScrollY());
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onRefresh() {
-        if (!OfflineMode.isOnline(getApplicationContext())) {
-            Toast.makeText(getApplicationContext(), getString(R.string.no_internet_message_toast_en), Toast.LENGTH_SHORT).show();
-        }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                VKHelper.doGroupWallRequest(offsetO, Offset, Constants.GROUP_ID, new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
-                        OfflineMode.saveJSON(response.json, Constants.GROUP_ID);
-                        initGroupWall(OfflineMode.loadJSON(Constants.GROUP_ID), inflaterGlobal);
-                    }
-
-                    @Override
-                    public void onError(final VKError error) {
-                        super.onError(error);
-                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                    }
-                });
-
-                swipeView.setRefreshing(false);
-            }
-        }, 1000);
-    }
 
     private void endlessAdd(final int lastItem) {
         jsonObjectOld = OfflineMode.loadJSON(Constants.GROUP_ID);

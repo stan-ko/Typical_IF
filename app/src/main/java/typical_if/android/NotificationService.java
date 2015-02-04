@@ -62,6 +62,7 @@ public class NotificationService extends Service {
         Log.d("onStartCommand", "----------------------");
         try {
             if (intent.getAction() == Constants.ACTION_BOOT_COMPLETED) {
+                makeRequests();
                 //TODO make action 1 (start from BOOT_COMPLETED)
                 Log.d("ACTION_BOOT_COMPLETED", "-----------");
             }
@@ -124,7 +125,7 @@ public class NotificationService extends Service {
             sendNotif();
             intentForSchedule = createIntent(Constants.SCHEDULE_FOR_EIGHT_HOUR);
             pendingIntent = PendingIntent.getBroadcast(TIFApp.getAppContext(), 0, intentForSchedule, 0);
-            alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + mInterval, pendingIntent);
+            alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 1000*60*30, pendingIntent);
             Log.d("intervalForNextServiceStart ", " to 8 hours " + mInterval);
             stopSelf();
 
