@@ -188,7 +188,8 @@ public class FragmentWall extends Fragment {
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         swipeView.setColorSchemeResources(R.color.tFIndigo, R.color.tZDeepPurple, R.color.fbBlue);
         swipeView.setProgressViewOffset(true, 0, 100);
-        swipeView. setSize(SwipeRefreshLayout.LARGE);
+
+        swipeView. setSize(SwipeRefreshLayout.DEFAULT);
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

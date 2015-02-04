@@ -109,6 +109,7 @@ public class NotificationService extends Service {
         posts = wall.posts;
         VKWallPostWrapper postW = posts.get(0);
         VKApiPost post = postW.post;
+
         if (ItemDataSetter.checkNewPostResult(post.date)) {
             setAlarm(true);
         } else {
@@ -125,7 +126,7 @@ public class NotificationService extends Service {
             sendNotif();
             intentForSchedule = createIntent(Constants.SCHEDULE_FOR_EIGHT_HOUR);
             pendingIntent = PendingIntent.getBroadcast(TIFApp.getAppContext(), 0, intentForSchedule, 0);
-            alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + 1000*60*30, pendingIntent);
+            alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + mInterval, pendingIntent);
             Log.d("intervalForNextServiceStart ", " to 8 hours " + mInterval);
             stopSelf();
 
