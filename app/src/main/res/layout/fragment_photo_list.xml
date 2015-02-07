@@ -1,11 +1,10 @@
-
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.FragmentPhotoList"
-    android:background="#ff000000">
-
+    android:background="@color/app_bg">
 
     <GridView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -13,68 +12,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:verticalSpacing="2dp"
-
         android:horizontalSpacing="2dp"
         android:columnWidth="180dp"
-
-
-
         android:paddingLeft="5dp"
         android:paddingTop="5dp"
         android:paddingRight="5dp"
-        android:paddingBottom="5dp"
-        android:background="@drawable/blur1"
+        android:paddingBottom="5dp"/>
 
-
-        />
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:visibility="gone"
-        android:background="@drawable/error_album_background"
-        android:baselineAligned="false"
-        android:id="@+id/LinerLayout_Error_Photo">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:id="@+id/textView2"
-                android:layout_marginTop="260dp"
-                android:text="No internet, and you photos aren't saved."
-                android:textStyle="italic"
-                android:textSize="30dp"
-                android:textColor="#ffffffff"
-                android:gravity="center" />
-
-            <Button
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="Retry 5"
-                android:id="@+id/ButtonFromOfflinePhoto"
-                android:visibility="visible"
-
-                android:layout_gravity="center"
-                android:background="@drawable/retry_state_selector"
-                android:layout_toEndOf="@+id/textView2"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp" />
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <com.shamanland.fab.FloatingActionButton
         android:id="@+id/add_photo_from"
-        android:layout_gravity="right|bottom"
-        android:src="@drawable/custom_add_photo_from_icon_small"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="16dp" />
-</FrameLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:src="@drawable/ic_add_white_24dp"
+        app:floatingActionButtonColor="@color/music_progress"
+        app:floatingActionButtonSize="normal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginRight="25dp" />
+
+</RelativeLayout>

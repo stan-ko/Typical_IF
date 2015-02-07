@@ -31,6 +31,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -48,6 +49,7 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
+import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiDocument;
 import com.vk.sdk.api.model.VKApiLink;
 import com.vk.sdk.api.model.VKApiPhoto;
@@ -145,6 +147,7 @@ public class ItemDataSetter {
                                       RelativeLayout mediaLayout,
                                       ViewPager mediaPager,
                                       CirclePageIndicator mediaPagerIndicator,
+                                      ImageButton mediaPagerVideoButton,
                                       LinearLayout audioLayout,
                                       ListView audioListView,
                                       LinearLayout documentLayout,
@@ -187,7 +190,7 @@ public class ItemDataSetter {
         }
 
         if (photos.size() != 0 || videos.size() != 0) {
-            setMediaPager(mediaPager, mediaPagerIndicator, mediaLayout, photos, videos);
+            setMediaPager(mediaPager, mediaPagerIndicator, mediaPagerVideoButton, mediaLayout, photos, videos);
         } else {
             mediaLayout.setVisibility(View.GONE);
         }
@@ -438,7 +441,7 @@ public class ItemDataSetter {
     };
 
 
-    public static void setNameOfPostAuthor(ArrayList<VKApiUser> profiles, String groupName, TextView textView, int id) {
+    public static void setNameOfPostAuthor(ArrayList<VKApiUser> profiles, VKApiCommunity group, TextView textView, int id) {
         VKApiUser profile;
         String name = null;
         for (int i = 0; i < profiles.size(); i++) {
@@ -446,14 +449,15 @@ public class ItemDataSetter {
 
             if (id == profile.id) {
                 name = profile.last_name + " " + profile.first_name;
+                textView.setTag("http://vk.com/id" + String.valueOf(id));
             }
         }
         if (id == 0) {
-            name = groupName;
+            name = group.name;
+            textView.setTag("http://vk.com/" + group.screen_name);
         }
 
         textView.setText(name);
-        textView.setTag("http://vk.com/id" + valueOf(id));
         textView.setOnClickListener(openActionViewChooserListener);
     }
 
@@ -613,7 +617,7 @@ public class ItemDataSetter {
         }
     }
 
-    public static void setMediaPager(final ViewPager mediaPager, CirclePageIndicator mediaPagerIndicator, RelativeLayout mediaLayout, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
+    public static void setMediaPager(final ViewPager mediaPager, CirclePageIndicator mediaPagerIndicator, ImageButton mediaPagerVideoButton, RelativeLayout mediaLayout, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
         int newWidth = TIFApp.getDisplayWidth();
         final int count = photos.size() + videos.size();
 
@@ -627,6 +631,16 @@ public class ItemDataSetter {
         mediaPager.setOffscreenPageLimit(count);
         mediaPager.setAdapter(mediaPagerAdapter);
 
+        if (videos.size() != 0) {
+            mediaPagerVideoButton.setColorFilter(context.getResources().getColor(R.color.music_progress));
+            mediaPagerVideoButton.setVisibility(View.VISIBLE);
+            mediaPager.setTag(photos.size());
+            mediaPagerVideoButton.setTag(mediaPager);
+            mediaPagerVideoButton.setOnClickListener(ibOnCliclListener);
+        } else {
+            mediaPagerVideoButton.setVisibility(View.GONE);
+        }
+
         final float density = context.getResources().getDisplayMetrics().density;
 
         mediaPagerIndicator.setViewPager(mediaPager);
@@ -639,6 +653,14 @@ public class ItemDataSetter {
 
         ((RelativeLayout) mediaPagerIndicator.getParent()).setVisibility(count == 1 ? View.GONE : View.VISIBLE);
     }
+
+    public static final ImageButton.OnClickListener ibOnCliclListener = new ImageButton.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ViewPager viewPager = (ViewPager) v.getTag();
+            viewPager.setCurrentItem((Integer) viewPager.getTag(), true);
+        }
+    };
 
 //    if (!(layout_i instanceof LinearLayout)) {
 //        continue;

@@ -144,8 +144,11 @@ public class MainActivity extends DialogActivity implements
             case 3:
                 return Constants.FN_ID;
             case 4:
-            default:
+                return Constants.ST_ID;
+            case 5:
                 return Constants.ZF_ID;
+            default:
+                return Constants.TF_ID;
         }
 
     }
@@ -174,6 +177,11 @@ public class MainActivity extends DialogActivity implements
                 Constants.Mtitle = mTitle.toString();
                 break;
             case 4:
+                mTitle = getString(R.string.menu_group_title_stantsiya);
+                mIcon = getResources().getDrawable(R.drawable.stantsiya_logo);
+                Constants.Mtitle = mTitle.toString();
+                break;
+            case 5:
                 mTitle = getString(R.string.menu_group_title_events);
                 mIcon = getResources().getDrawable(R.drawable.ic_zf);
                 Constants.Mtitle = mTitle.toString();
@@ -312,25 +320,20 @@ public class MainActivity extends DialogActivity implements
             case 2:
             case 3:
             case 4:
-                vkGroupId = setGroupId(groupPosition);///////////////////////////////////////////////////////////////////////////////////////////////////
+            case 5:
+                vkGroupId = setGroupId(groupPosition);
                 Constants.GROUP_ID = vkGroupId;
-
 
                 onSectionAttached(groupPosition);
 
                 if (childPosition == 0) {
-
                     fragment = FragmentWall.newInstance(false);
-
-
                 } else if (childPosition == 1) {
-
-                    fragment = FragmentAlbumsList.newInstance(1);////////////////////////
-
+                    fragment = FragmentAlbumsList.newInstance(1);
                 }
 
                 break;
-            case 5:
+            case 6:
                 if (VKSdk.isLoggedIn()) {
                     VKSdk.logout();
                     mNavigationDrawerFragment.refreshNavigationDrawer();
@@ -338,15 +341,15 @@ public class MainActivity extends DialogActivity implements
                     VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
                 }
                 break;
-            case 6:
+            case 7:
                 changeLanguage();
                 break;
-            case 7:
+            case 8:
                 finish();
                 break;
         }
 
-        if (groupPosition != 6 && groupPosition != 5) {
+        if (groupPosition != 6 && groupPosition != 7) {
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                 fragmentManager.popBackStack();
             }

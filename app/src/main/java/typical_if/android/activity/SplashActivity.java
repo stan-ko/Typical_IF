@@ -1,6 +1,6 @@
  package typical_if.android.activity;
 
-import android.app.Activity;
+ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -159,18 +159,18 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                 new Runnable() {
                     @Override
                     public void run() {
-                        boolean isICA = com.stanko.tools.InternetConnectionHelper.checkHostByConnection("vk.com");
-                        if (!isICA) {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    showAlertNoInternet();
-                                }
-                            });
-
-                        }else {
+//                        boolean isICA = com.stanko.tools.InternetConnectionHelper.checkHostByConnection("vk.com");
+//                        if (!isICA) {
+//                            runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    showAlertNoInternet();
+//                                }
+//                            });
+//
+//                        }else {
                             makeRequests();
-                        }
+//                        }
                     }
                 }
         ).start();
@@ -242,6 +242,20 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
                 handleRequestComplete(response.json, Constants.ZF_ID, requestSessionThreadsCounter);
+            }
+
+            @Override
+            public void onError(final VKError error) {
+                super.onError(error);
+                handleRequestError(requestSessionThreadsCounter);
+            }
+        });
+
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.ST_ID, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(final VKResponse response) {
+                super.onComplete(response);
+                handleRequestComplete(response.json, Constants.ST_ID, requestSessionThreadsCounter);
             }
 
             @Override

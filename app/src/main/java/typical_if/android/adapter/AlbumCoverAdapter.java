@@ -1,30 +1,39 @@
 package typical_if.android.adapter;
 
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import typical_if.android.TIFApp;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.model.Album;
 
 public class AlbumCoverAdapter extends BaseAdapter {
     private List<Album> albumList;
     LayoutInflater layoutInflater;
-    final int imageHeight;
-   public static int _albumSize;
+    public static int _albumSize;
+
+    int newWidth = TIFApp.getDisplayWidth();
+
+    public ArrayList<View> views = new ArrayList<View>();
 
     public AlbumCoverAdapter(List<Album> list, LayoutInflater inflater) {
         albumList = list;
         layoutInflater = inflater;
-        imageHeight = TIFApp.getDisplayHeight() / 3;
+
+        for (Album album : albumList) {
+            views.add(null);
+        }
     }
 
 
@@ -46,15 +55,16 @@ public class AlbumCoverAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Album album = albumList.get(position);
-        _albumSize= album.size;
+        _albumSize = album.size;
 
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.fragment_albums_list_item, null);
             viewHolder = new ViewHolder(convertView);
-            ViewGroup.LayoutParams lp = viewHolder.album_cover.getLayoutParams();
-            lp.height = imageHeight;
-            viewHolder.album_cover.setLayoutParams(lp);
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, (int) (newWidth / 1.5));
+            viewHolder.album_cover.setLayoutParams(params);
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -65,9 +75,16 @@ public class AlbumCoverAdapter extends BaseAdapter {
         viewHolder.photos_count.setText(album.size + "");
 
         String url = album.sizes.optJSONObject(2).optString("src");
-        ImageLoader.getInstance().displayImage(url, viewHolder.album_cover,TIFApp.additionalOptions);
+        ImageLoader.getInstance().displayImage(url, viewHolder.album_cover, TIFApp.additionalOptions);
+
+        views.set(position, convertView);
 
         return convertView;
+    }
+
+    public Drawable getImageBitmap(int position) {
+         ViewHolder viewHolder = (ViewHolder) views.get(position).getTag();
+        return viewHolder.album_cover.getDrawable();
     }
 
     public static class ViewHolder {

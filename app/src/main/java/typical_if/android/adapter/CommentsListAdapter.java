@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -174,6 +175,7 @@ public class CommentsListAdapter extends BaseAdapter {
                     viewHolder.commentMediaLayout,
                     viewHolder.commentMediaPager,
                     viewHolder.commentMediaPagerIndicator,
+                    viewHolder.commentMediaPagerVideoButton,
                     viewHolder.commentAudioLayout,
                     viewHolder.commentAudioListView,
                     viewHolder.commentDocumentLayout,
@@ -254,6 +256,7 @@ public class CommentsListAdapter extends BaseAdapter {
         public final ViewPager commentMediaPager;
         public final CirclePageIndicator commentMediaPagerIndicator;
         public final ListView commentAudioListView;
+        public final ImageButton commentMediaPagerVideoButton;
 
         public ViewHolder(View convertView) {
             this.user_avatar = (RoundedImageView) convertView.findViewById(R.id.img_user_avatar);
@@ -283,6 +286,7 @@ public class CommentsListAdapter extends BaseAdapter {
             this.commentMediaPager = (ViewPager) convertView.findViewById(R.id.media_pager);
             this.commentMediaPagerIndicator = (CirclePageIndicator) convertView.findViewById(R.id.media_circle_indicator);
             this.commentAudioListView = (ListView) convertView.findViewById(R.id.lv_simple);
+            this.commentMediaPagerVideoButton = (ImageButton) convertView.findViewById(R.id.ib_goto_video_page);
         }
     }
 }

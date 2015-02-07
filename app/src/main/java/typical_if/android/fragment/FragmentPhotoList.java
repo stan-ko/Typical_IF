@@ -2,13 +2,11 @@ package typical_if.android.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,12 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
-import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
+import com.shamanland.fab.FloatingActionButton;
+import com.shamanland.fab.ShowHideOnScroll;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -47,7 +43,6 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     private int counter = 5;
 
     private boolean isRequestNull;
-    ImageView addPhoto;
     //private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private static final int PICK_FROM_CAMERA = 1;
     int type;
@@ -55,7 +50,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
     private static Uri mImageCaptureUri;
     public int sizeOfAlbum;
 
-    public static FragmentPhotoList newInstance(int type,int albumOriginalSize) {
+    public static FragmentPhotoList newInstance(int type, int albumOriginalSize) {
         FragmentPhotoList fragment = new FragmentPhotoList(albumOriginalSize);
         Bundle args = new Bundle();
         fragment.type = type;
@@ -63,9 +58,11 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         return fragment;
     }
 
-    public FragmentPhotoList(){}
+    public FragmentPhotoList() {
+    }
+
     public FragmentPhotoList(int albumOriginalSize) {
-        this.sizeOfAlbum=albumOriginalSize;
+        this.sizeOfAlbum = albumOriginalSize;
     }
 
 
@@ -78,21 +75,21 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         final View rootView = inflater.inflate(R.layout.fragment_photo_list, container, false);
         setRetainInstance(true);
 
-
-        addPhoto = (ImageView) rootView.findViewById(R.id.add_photo_from);
-        addPhoto.setOnClickListener(new View.OnClickListener() {
+        floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.add_photo_from);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Dialog dialog=((MainActivity)getActivity()).addPhotoFrom();
-                if (dialog==null){
+                Dialog dialog = ((MainActivity) getActivity()).addPhotoFrom();
+                if (dialog == null) {
                     return;
-                }else {
+                } else {
                     dialog.show();
                 }
             }
         });
-        if (!VKSdk.isLoggedIn()){
-            addPhoto.setVisibility(View.GONE);}
+        if (!VKSdk.isLoggedIn()) {
+            floatingActionButton.setVisibility(View.GONE);
+        }
 
         doRequest(rootView);
         return rootView;
@@ -226,36 +223,15 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         } else {
             if (temp) {
                 isRequestNull = false;
-                showAlertNoInternet(view);
+                OfflineMode.onErrorToast(getActivity());
             }
         }
         return isRequestNull;
     }
 
-    void showAlertNoInternet(final View view) {
-
-        final LinearLayout lv = (LinearLayout) view.findViewById(R.id.LinerLayout_Error_Photo);
-        final Button btn = (Button) view.findViewById(R.id.ButtonFromOfflinePhoto);
-        lv.setVisibility(View.VISIBLE);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View clickView) {
-                counter--;
-                if (doRequest(view) == true) {
-                    lv.setVisibility(View.GONE);
-                }
-            }
-        });
-        if (counter < 1) {
-            startActivity(new Intent(Settings.ACTION_SETTINGS));
-            counter = 5;
-        }
-        btn.setText("Retry " + counter);
-
-    }
-
     public static int albumSize;
     GridView gridOfPhotos;
+    FloatingActionButton floatingActionButton;
     PhotoListAdapter photoListAdapter;
     private static final int INITIAL_DELAY_MILLIS = 10;
 
@@ -267,17 +243,19 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         for (int i = 0; i < photos.size(); i++) {
             photos2.add(photos.get(i));
         }
+        
         gridOfPhotos = (GridView) view.findViewById(R.id.gridOfPhotos);
+        gridOfPhotos.setOnTouchListener(new ShowHideOnScroll(floatingActionButton));;
 
         gridOfPhotos.setNumColumns(columns);
-        if(photoListAdapter ==null){
-        photoListAdapter= new PhotoListAdapter(photos2, getActivity().getLayoutInflater());}
-        else { photoListAdapter.notifyDataSetChanged();}
-//        SwingBottomInAnimationAdapter swingBottomInAnimationAdapter = new SwingBottomInAnimationAdapter(photoListAdapter);
-//        swingBottomInAnimationAdapter.setAbsListView(gridOfPhotos);
-//        assert swingBottomInAnimationAdapter.getViewAnimator() != null;
-//        swingBottomInAnimationAdapter.getViewAnimator().setInitialDelayMillis(INITIAL_DELAY_MILLIS);
-//        gridOfPhotos.setAdapter(swingBottomInAnimationAdapter);
+
+        if (photoListAdapter == null) {
+            photoListAdapter = new PhotoListAdapter(photos2, getActivity().getLayoutInflater());
+        } else {
+            photoListAdapter.notifyDataSetChanged();
+        }
+
+
         gridOfPhotos.setAdapter(photoListAdapter);
         updated = false;
         gridOfPhotos.setOnScrollListener(this);
@@ -294,21 +272,23 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                 }
             });
 
-            addPhoto.setVisibility(View.GONE);
+            floatingActionButton.setVisibility(View.GONE);
         } else {
             gridOfPhotos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                   // Fragment fragment = FragmentFullScreenViewer.newInstance(photos2, position);
-                    Fragment fragment = new FragmentFullScreenViewer(photos2, position,sizeOfAlbum);
-                    android.support.v4.app.FragmentManager fragmentManager = getFragmentManager();
+                    // Fragment fragment = FragmentFullScreenViewer.newInstance(photos2, position);
+                    Fragment fragment = new FragmentFullScreenViewer(photos2, position, sizeOfAlbum);
+                    FragmentManager fragmentManager = getFragmentManager();
                     final FragmentTransaction transaction = fragmentManager.beginTransaction();
 
                     transaction.setCustomAnimations(R.anim.enter, R.anim.exit);
                     transaction.add(R.id.container, fragment).addToBackStack("String").commit();
                 }
             });
-            if (VKSdk.isLoggedIn()){   addPhoto.setVisibility(View.VISIBLE);}
+            if (VKSdk.isLoggedIn()) {
+                floatingActionButton.setVisibility(View.VISIBLE);
+            }
 
 
         }

@@ -58,6 +58,7 @@ public class Constants {
     public static final long TZ_ID = -26363301;
     public static final long FB_ID = -39253850;
     public static final long FN_ID = -38380107;
+    public static final long ST_ID = -73502996;
 
     public static Activity mainActivity;
     public static final String APP_ID = "4456259";

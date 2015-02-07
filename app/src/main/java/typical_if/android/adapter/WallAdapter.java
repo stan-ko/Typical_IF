@@ -19,6 +19,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -513,7 +514,7 @@ public class WallAdapter extends BaseAdapter {
             viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
         }
 
-        ItemDataSetter.setNameOfPostAuthor(wall.profiles, wall.group.name, viewHolder.author_of_post, post.signer_id);
+        ItemDataSetter.setNameOfPostAuthor(wall.profiles, wall.group, viewHolder.author_of_post, post.signer_id);
 
         if (post.user_likes) {
             viewHolder.cb_post_like.setChecked(true);
@@ -546,7 +547,7 @@ public class WallAdapter extends BaseAdapter {
         if (postWrapper.copyHistoryChecker) {
             VKApiPost copyHistory = post.copy_history.get(0);
 
-            viewHolder.copyHistoryHeader.setTag(postWrapper.copyHistoryUri);
+            viewHolder.copyHistoryHeader.setTag(postWrapper.copyHistoryUrl);
             viewHolder.copyHistoryHeader.setOnClickListener(ItemDataSetter.openActionViewChooserListener);
             viewHolder.txtCopyHistoryTitle.setText(postWrapper.copyHistoryTitle);
             viewHolder.txtCopyHistoryDate.setText(ItemDataSetter.getFormattedDate(copyHistory.date));
@@ -564,6 +565,7 @@ public class WallAdapter extends BaseAdapter {
                         viewHolder.copyHistoryMediaLayout,
                         viewHolder.copyHistoryMediaPager,
                         viewHolder.copyHistoryMediaPagerIndicator,
+                        viewHolder.copyHistoryMediaPagerVideoButton,
                         viewHolder.copyHistoryAudioLayout,
                         viewHolder.copyHistoryAudioListView,
                         viewHolder.copyHistoryDocumentLayout,
@@ -591,6 +593,7 @@ public class WallAdapter extends BaseAdapter {
                     viewHolder.postMediaLayout,
                     viewHolder.postMediaPager,
                     viewHolder.postMediaPagerIndicator,
+                    viewHolder.postMediaPagerVideoButton,
                     viewHolder.postAudioLayout,
                     viewHolder.postAudioListView,
                     viewHolder.postDocumentLayout,
@@ -716,6 +719,7 @@ public class WallAdapter extends BaseAdapter {
         public final ViewPager postMediaPager;
         public final CirclePageIndicator postMediaPagerIndicator;
         public final ListView postAudioListView;
+        public final ImageButton postMediaPagerVideoButton;
 
         public final ImageView imgCopyHistoryLogo;
         public final TextView txtCopyHistoryDate;
@@ -745,6 +749,7 @@ public class WallAdapter extends BaseAdapter {
         public final ViewPager copyHistoryMediaPager;
         public final CirclePageIndicator copyHistoryMediaPagerIndicator;
         public final ListView copyHistoryAudioListView;
+        public final ImageButton copyHistoryMediaPagerVideoButton;
 
         public ViewHolder(View convertView) {
             this.postRootLayout = (CardView) convertView.findViewById(R.id.card_view_wall_lv_item);
@@ -786,6 +791,7 @@ public class WallAdapter extends BaseAdapter {
             this.postMediaPager = (ViewPager) convertView.findViewById(R.id.media_pager);
             this.postMediaPagerIndicator = (CirclePageIndicator) convertView.findViewById(R.id.media_circle_indicator);
             this.postAudioListView = (ListView) convertView.findViewById(R.id.lv_simple);
+            this.postMediaPagerVideoButton = (ImageButton) convertView.findViewById(R.id.ib_goto_video_page);
 
             View copyHistoryView = convertView.findViewById(R.id.incl_copy_history_layout);
             this.imgCopyHistoryLogo = (ImageView) copyHistoryView.findViewById(R.id.img_copy_history_logo);
@@ -816,6 +822,7 @@ public class WallAdapter extends BaseAdapter {
             this.copyHistoryMediaPager = (ViewPager) copyHistoryView.findViewById(R.id.media_pager);
             this.copyHistoryMediaPagerIndicator = (CirclePageIndicator) copyHistoryView.findViewById(R.id.media_circle_indicator);
             this.copyHistoryAudioListView = (ListView) copyHistoryView.findViewById(R.id.lv_simple);
+            this.copyHistoryMediaPagerVideoButton = (ImageButton) copyHistoryView.findViewById(R.id.ib_goto_video_page);
         }
     }
 }
