@@ -26,6 +26,7 @@ import com.vk.sdk.api.model.VKApiPost;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import typical_if.android.activity.MainActivity;
 import typical_if.android.model.Wall.VKWallPostWrapper;
@@ -63,11 +64,10 @@ public class NotificationService extends Service {
         try {
             if (intent.getAction() == Constants.ACTION_BOOT_COMPLETED) {
                 makeRequests();
-                //TODO make action 1 (start from BOOT_COMPLETED)
                 Log.d("ACTION_BOOT_COMPLETED", "-----------");
             }
             if (intent.getAction() == Constants.ACTION_START_FROM_SPLASH_ACTIVITY) {
-                //TODO make action 2 (start from splashActivity)
+                makeRequests();
                 Log.d("ACTION_START_FROM_SPLASH_ACTIVITY", "-----------");
             }
             if (intent.getAction() == Constants.ACTION_FIRST_RUN) {
@@ -120,24 +120,26 @@ public class NotificationService extends Service {
     PendingIntent pendingIntent;
     private void setAlarm(boolean isNewPost) {
         if (isNewPost == true) {
+            OfflineMode.saveInt(Calendar.getInstance().get(Calendar.DATE), Constants.DATE_OF_NOTIF_SEND);
+            //OfflineMode.saveBool(true, Constants.IS_NOTIF_SEND);
             final long currentTime = System.currentTimeMillis();
             final long tomorrowTime = currentTime - (currentTime % ONE_DAY_MILLISECONDS) + ONE_DAY_MILLISECONDS + ONE_HOUR_MILLISECONDS * 8;
             mInterval = tomorrowTime - currentTime;
             sendNotif();
+
             intentForSchedule = createIntent(Constants.SCHEDULE_FOR_EIGHT_HOUR);
             pendingIntent = PendingIntent.getBroadcast(TIFApp.getAppContext(), 0, intentForSchedule, 0);
             alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + mInterval, pendingIntent);
             Log.d("intervalForNextServiceStart ", " to 8 hours " + mInterval);
             stopSelf();
-
         } else {
+            //OfflineMode.saveBool(false, Constants.IS_NOTIF_SEND);
             mInterval = 60 * 60 * 1000;
             intentForSchedule = createIntent(Constants.SCHEDULE_FOR_ONE_HOUR);
             pendingIntent = PendingIntent.getBroadcast(TIFApp.getAppContext(), 0, intentForSchedule, 0);
             alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + mInterval, pendingIntent);
             Log.d("intervalForNextServiceStart ", " for 1 hour " + mInterval);
             stopSelf();
-
         }
     }
 

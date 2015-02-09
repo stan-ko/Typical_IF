@@ -73,6 +73,9 @@ public class Constants {
     public static final String SCHEDULE_FOR_EIGHT_HOUR = "eightHour";
     public static final String SCHEDULE_FOR_ONE_HOUR = "OneHour";
     public static final String REPEAT_ACTION = "repeat";
+    public static final String IS_NOTIF_SEND = "isNotifSend";
+    public static final String DATE_OF_NOTIF_SEND = "dateOfNotifSend";
+
 
     public static long USER_ID;
     public static String USER_LANGUAGE;
