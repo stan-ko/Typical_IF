@@ -27,7 +27,8 @@
     <string name="you_have_no_suggested_posts">У вас немає запропонованих новин</string>
 
     <string name="something_went_wrong">Щось пішло не так</string>
-
+    <string name="error_playing_video">Помилка відтворення відеозапису</string>
+    <string name="error_playing_video_auth">Ця дія вимагає авторизації</string>
     <string name="title_login">Увійти в профіль</string>
     <string name="title_logout">Вийти з профілю</string>
     <string name="look_wall">Стіна</string>
@@ -93,6 +94,10 @@
     <string name="comment_background">Ваш коментар</string>
     <string name="text_has_been_copied_to_the_buffer">Текст був скопійований у буфер</string>
     <string name="restart_app_dialog">Перезапустити?</string>
+
+    <string name="anonymous_poll">Анонімне опитування, голосів:</string>
+    <string name="public_poll">Публічне опитування, голосів: </string>
+    
 
 
     <string name="ab_title_make_post">Запропонувати новину</string>

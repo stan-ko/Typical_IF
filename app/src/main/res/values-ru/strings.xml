@@ -21,6 +21,9 @@
         
     <string name="menu_group_exit">Выйти из программы</string>
 
+    <string name="error_playing_video">Ошибка воспроизведения видеозаписи</string>
+    <string name="error_playing_video_auth">Это действие требует авторизации</string>
+
         
     <string name="profile">Профиль</string>
         
@@ -100,6 +103,8 @@
     <string name="poll_anonymous">Анонимный голосования, голосов:</string>
         
     <string name="poll_not_anonymous">Публичное голосование, голосов:</string>
+
+
 
         
     <string name="txt_dialog_comment">Ваш комментарий ...</string>
@@ -272,6 +277,8 @@
         <item>Запропоновані новини</item>
         <item>Вступити до спільноти</item>
     </string-array>
+    <string name="anonymous_poll">Анонимный опрос</string>
+    <string name="public_poll">Публичный опрос</string>
 
 
 </resources>

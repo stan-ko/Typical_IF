@@ -1,6 +1,6 @@
  package typical_if.android.activity;
 
- import android.app.Activity;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,26 +18,26 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKCaptchaDialog;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.VKSdkListener;
-import com.vk.sdk.VKUIHelper;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
+ import com.vk.sdk.VKAccessToken;
+ import com.vk.sdk.VKCaptchaDialog;
+ import com.vk.sdk.VKSdk;
+ import com.vk.sdk.VKSdkListener;
+ import com.vk.sdk.VKUIHelper;
+ import com.vk.sdk.api.VKError;
+ import com.vk.sdk.api.VKRequest;
+ import com.vk.sdk.api.VKResponse;
 
-import org.json.JSONObject;
+ import org.json.JSONObject;
 
-import java.util.Locale;
-import java.util.concurrent.atomic.AtomicInteger;
+ import java.util.Locale;
+ import java.util.concurrent.atomic.AtomicInteger;
 
-import typical_if.android.Constants;
-import typical_if.android.ItemDataSetter;
-import typical_if.android.NotificationService;
-import typical_if.android.OfflineMode;
-import typical_if.android.R;
-import typical_if.android.VKHelper;
+ import typical_if.android.Constants;
+ import typical_if.android.ItemDataSetter;
+ import typical_if.android.NotificationService;
+ import typical_if.android.OfflineMode;
+ import typical_if.android.R;
+ import typical_if.android.VKHelper;
 
 public class SplashActivity extends Activity implements Animation.AnimationListener {
 

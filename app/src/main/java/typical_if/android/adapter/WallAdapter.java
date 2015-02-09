@@ -160,12 +160,16 @@ public class WallAdapter extends BaseAdapter {
 //                setGradientColors((Color.parseColor("#FF7C7A7E")), postWrapper);
                 viewHolder = new EventViewHolder(convertView);
                 convertView.setTag(viewHolder);
+
+
             } else {
                 viewHolder = (EventViewHolder) convertView.getTag();
             }
 
             initEventViewHolder(viewHolder, (EventObject) getItem(position));
         } else {
+
+
             final VKWallPostWrapper post = posts.get(position);
          final ViewHolder viewHolder ;
 
@@ -623,7 +627,11 @@ public class WallAdapter extends BaseAdapter {
     public static final View.OnClickListener openCommentsFragmentListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+
             ParamsHolder paramsHolder = (ParamsHolder) v.getTag();
+
+
             FragmentComments fragment = FragmentComments.newInstanceForWall(paramsHolder.position, paramsHolder.wall, paramsHolder.post);
 
             fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();

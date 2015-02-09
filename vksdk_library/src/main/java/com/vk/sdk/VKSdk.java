@@ -394,6 +394,11 @@ public class VKSdk {
         return false;
     }
 
+
+
+
+
+
     public static void logout() {
         CookieSyncManager.createInstance(VKUIHelper.getApplicationContext());
         CookieManager cookieManager = CookieManager.getInstance();

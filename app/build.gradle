@@ -4,6 +4,7 @@ android {
     compileSdkVersion 19
     buildToolsVersion "21.0.1"
 
+
     defaultConfig {
         applicationId "typical_if.android"
         minSdkVersion 14
@@ -21,7 +22,16 @@ android {
 }
 
 repositories {
+
     mavenCentral()
+}
+
+apply plugin: 'maven'
+
+configurations {
+    archives {
+        extendsFrom configurations.default
+    }
 }
 
 

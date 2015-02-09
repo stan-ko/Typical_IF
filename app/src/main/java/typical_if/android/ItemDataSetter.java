@@ -71,9 +71,11 @@ import java.util.regex.Pattern;
 
 import typical_if.android.adapter.AudioAdapter;
 import typical_if.android.adapter.MediaPagerAdapter;
+import typical_if.android.adapter.VoteItemAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoList;
+import typical_if.android.util.VKPoll;
 
 import static java.lang.String.format;
 import static java.lang.String.valueOf;
@@ -226,26 +228,70 @@ public class ItemDataSetter {
         }
 
         if (poll != null) {
+
+            /////////////////////////////////////////////////////////////////////////////
             setPoll(pollLayout, pollTitle, poll);
         } else {
             pollLayout.setVisibility(View.GONE);
         }
     }
 
-    public static void setPoll(RelativeLayout parent, TextView title, VKApiPoll poll) {
+    public static void setPoll(final RelativeLayout parent, final TextView title, final VKApiPoll poll) {
+
+        final TextView answers_anonymous_text = ((TextView) parent.findViewById(R.id.answers_anonymous_text));
+
+        VKHelper.getPollById(poll.owner_id, 0, poll.id, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                boolean answered ;
+                super.onComplete(response);
+                VKPoll pol = new VKPoll().parse(OfflineMode.loadJSON(poll.owner_id + poll.id));
+                if (pol.answer_id==0){
+                    answered=false;
+                    fullPollLayout (poll, response,answered);
+                 }else {
+                    answered=true;
+                    fullPollLayout (poll, response,answered);
+
+                }
+
+
+
+             }
+
+            private void fullPollLayout(VKApiPoll poll, VKResponse response, boolean user_answered) {
+
+                String isAnonymous;
+                OfflineMode.saveJSON(response.json, poll.owner_id + poll.id);
+                VKPoll pol = new VKPoll().parse(OfflineMode.loadJSON(poll.owner_id + poll.id));
+                title.setText(pol.question);
+                if (pol.anonymous == 1) {
+                    isAnonymous = Constants.mainActivity.getResources().getString(R.string.anonymous_poll);
+                } else
+                    isAnonymous = Constants.mainActivity.getResources().getString(R.string.public_poll);
+                answers_anonymous_text.setText(isAnonymous + " " + pol.votes);
+
+                View v = inflater.inflate(R.layout.vote_item_layout, parent);
+                RelativeLayout voteItemLayoutSize = ((RelativeLayout) v.findViewById(R.id.NotVotedLayout));
+                ListView pollList = (ListView) parent.findViewById(R.id.listOfVotes);
+                // ViewGroup.LayoutParams params = pollList.getLayoutParams();
+                //  params.height = voteItemLayoutSize.getHeight()*pol.answers.size();
+                //  pollList.setLayoutParams(params);
+                //  pollList.requestLayout();
+                //  pollList.setLayoutParams(new RelativeLayout.LayoutParams(Li, 115));
+                    VoteItemAdapter adapter = new VoteItemAdapter(pollList, pol,pol.answers, context, user_answered);
+                    pollList.setAdapter(adapter);
+
+
+
+            }
+        });
         parent.setVisibility(View.VISIBLE);
+        RelativeLayout votesParentLayout = ((RelativeLayout) parent.findViewById(R.id.votesParentLayout));
+        votesParentLayout.setVisibility(View.VISIBLE);
+ }
 
-        title.setText(poll.question);
 
-        parent.setOnClickListener(inProgressToastListener);
-    }
-
-    public static final View.OnClickListener inProgressToastListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Constants.toastInProgress.show();
-        }
-    };
 
     static int startTag = 0;
     static int endTag = 0;
@@ -461,7 +507,8 @@ public class ItemDataSetter {
         textView.setOnClickListener(openActionViewChooserListener);
     }
 
-    public static void setLink(RelativeLayout parent, TextView src, TextView title, final VKApiLink link) {
+    public static void
+    setLink(RelativeLayout parent, TextView src, TextView title, final VKApiLink link) {
         parent.setVisibility(View.VISIBLE);
 
         title.setText(link.title);
@@ -952,9 +999,7 @@ public class ItemDataSetter {
 //        }
 //        parent.addView(mediaContainer);
 //    
-    
-    
-    
+
 
     static int g;
     static ArrayList<VKApiPhoto> finalPhotos;

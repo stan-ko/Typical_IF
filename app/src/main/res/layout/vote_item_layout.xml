@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/app_bg">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_bg"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/NotVotedLayout"
+
+        android:visibility="gone">
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="20dp"
+            android:id="@+id/vote_progress"
+            android:background="@drawable/progress_bar_yellow_background"
+            android:layout_below="@+id/vote_text"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+             />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/vote_text"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:textColor="#ffffffff"
+            android:visibility="visible" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignTop="@+id/vote_progress"
+            android:layout_alignRight="@+id/vote_progress"
+            android:layout_alignEnd="@+id/vote_progress"
+            android:layout_alignBottom="@+id/vote_progress"
+            android:layout_toEndOf="@+id/vote_text"
+            android:layout_alignLeft="@+id/vote_progress"
+            android:layout_alignStart="@+id/vote_progress"
+            android:id="@+id/relativeLayout3">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:id="@+id/rate_in_answers"
+                android:textSize="13dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_toRightOf="@+id/relativeLayout3"
+            android:layout_toEndOf="@+id/relativeLayout3"
+            android:layout_alignTop="@+id/vote_progress"
+            android:layout_alignBottom="@+id/vote_progress">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:id="@+id/rate_percents"
+                android:textSize="13dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:textColor="#8cffffff" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="10dp"
+        android:visibility="gone"
+        android:id="@+id/AddVoteLayout">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="VOTE"
+            android:id="@+id/add_vote_button"
+            android:background="@drawable/vote_button_backround_shape"
+            android:textColor="#d2ffffff"
+            android:padding="10dp"
+            android:layout_below="@+id/vote_text2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="5dp"
+            android:textSize="13dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/vote_text2"
+            android:layout_alignParentTop="true"
+            android:layout_alignLeft="@+id/add_vote_button"
+            android:layout_alignStart="@+id/add_vote_button"
+            android:textColor="#ffffffff"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:textSize="13dp" />
+    </RelativeLayout>
+</RelativeLayout>

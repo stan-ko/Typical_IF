@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -64,6 +65,7 @@ public class MainActivity extends DialogActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 //        EventBus.getDefault().register();
+
         super.onCreate(savedInstanceState);
 
 
@@ -102,6 +104,8 @@ public class MainActivity extends DialogActivity implements
 
 
         VKUIHelper.onCreate(this);
+
+
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
         VKSdk.wakeUpSession(this);
 
@@ -199,6 +203,16 @@ public class MainActivity extends DialogActivity implements
         list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         actionBar.setListNavigationCallbacks(list, this);
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
