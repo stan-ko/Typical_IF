@@ -1,29 +1,38 @@
 package typical_if.android.adapter;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vk.sdk.api.VKError;
+import com.vk.sdk.api.VKRequest;
+import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiVideo;
 
 import java.util.ArrayList;
 
+import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.fragment.FragmentWebView;
 
 /**
  * Created by gigamole on 31.01.15.
  */
 public class MediaPagerAdapter extends PagerAdapter {
+    private static FragmentManager manager;
 
     public final ArrayList<VKApiPhoto> photos;
     public final ArrayList<VKApiVideo> videos;
@@ -33,6 +42,7 @@ public class MediaPagerAdapter extends PagerAdapter {
 
     public final Context context;
     public final LayoutInflater layoutInflater;
+
 
     private View.OnClickListener openPhotosListener = new View.OnClickListener() {
         @Override
@@ -46,12 +56,37 @@ public class MediaPagerAdapter extends PagerAdapter {
         @Override
         public void onClick(View v) {
             VKApiVideo video = (VKApiVideo) v.getTag();
+            String key = (video.owner_id + "_" + video.id + "_" + video.access_key );
+            Log.d("VIDEO_KEY", key);
+            VKHelper.getVideoPlay(key, new VKRequest.VKRequestListener() {
+                @Override
+                public void onComplete(VKResponse response) {
+                    super.onComplete(response);
+                    VKApiVideo video = VKHelper.getVideoSourceFromJson(response.json);
+
+                    if (video != null) {
+                        Fragment fragment = new FragmentWebView(video);
+                        ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                    } else
+                        Toast.makeText(Constants.mainActivity.getApplicationContext(), R.string.error_playing_video, Toast.LENGTH_SHORT).show();
+
+                }
+
+                        @Override
+                        public void onError(VKError error) {
+                            super.onError(error);
+                            Toast.makeText(Constants.mainActivity.getApplicationContext(), R.string.error_playing_video_auth, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+            );
+
         }
     };
 
     public enum RowType {
         PHOTO_ITEM, VIDEO_ITEM
     }
+
 
     public MediaPagerAdapter(Context context, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
         this.photos = photos;
@@ -118,13 +153,13 @@ public class MediaPagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
         View convertView = getItem(position).getView(layoutInflater, getItemView(position));
-        ((ViewPager) container).addView(convertView);
+        (container).addView(convertView);
         return convertView;
     }
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        ((ViewPager) container).removeView((View) object);
+        (container).removeView((View) object);
     }
 
     public interface Item {

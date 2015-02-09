@@ -1,9 +1,7 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -11,9 +9,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.nhaarman.listviewanimations.appearance.AnimationAdapter;
@@ -41,7 +36,6 @@ public class FragmentAlbumsList extends Fragment {
 
     AlbumCoverAdapter albumCoverAdapter;
     ListView listOfAlbums;
-    //private int mCurrentTransitionEffect = JazzyHelper.TILT;
     private int type;
     private int counter = 5;
     private boolean temp = true;
@@ -62,8 +56,6 @@ public class FragmentAlbumsList extends Fragment {
 
     public FragmentAlbumsList() {
     }
-
-
 
     private AnimationAdapter mAnimAdapter;
 
@@ -145,7 +137,7 @@ public class FragmentAlbumsList extends Fragment {
             isRequestNul = true;
         } else {
             if (temp) {
-                showAlertNoInternet(view);
+                OfflineMode.onErrorToast(getActivity());
                 isRequestNul = false;
             }
         }
@@ -153,32 +145,10 @@ public class FragmentAlbumsList extends Fragment {
         return isRequestNul;
     }
 
-    void showAlertNoInternet(final View view) {
-
-        final LinearLayout lv = (LinearLayout) view.findViewById(R.id.LinerLayyout_Error);
-        final Button btn = (Button) view.findViewById(R.id.ButtonFromOfflineAlbums);
-        lv.setVisibility(View.VISIBLE);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View clickView) {
-                counter--;
-                if (doRequest(view) == true) {
-                    lv.setVisibility(View.GONE);
-                }
-            }
-        });
-        if (counter < 1) {
-            startActivity(new Intent(Settings.ACTION_SETTINGS));
-            counter = 5;
-        }
-        btn.setText(getActivity().getString(R.string.retry) + " (" + counter + ")");
-
-    }
-
     protected void handleResponse(JSONObject jsonObject, View view) {
         final ArrayList<Album> albums = Album.getAlbumFromJSONArray(jsonObject);
         try {
-            listOfAlbums = (ListView) view.findViewById(R.id.listOfAlbums);
+            listOfAlbums = (ListView) view.findViewById(R.id.album_list);
             albumCoverAdapter = new AlbumCoverAdapter(albums, getActivity().getLayoutInflater());
         } catch (NullPointerException e) {
         }

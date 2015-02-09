@@ -2,7 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '21.1.2'
+    buildToolsVersion "21.0.1"
+
 
     defaultConfig {
         applicationId "typical_if.android"
@@ -21,7 +22,16 @@ android {
 }
 
 repositories {
+
     mavenCentral()
+}
+
+apply plugin: 'maven'
+
+configurations {
+    archives {
+        extendsFrom configurations.default
+    }
 }
 
 
@@ -49,5 +59,6 @@ dependencies {
     compile 'com.github.johnkil.android-robototextview:robototextview:2.2.0'
     compile 'com.makeramen:roundedimageview:1.5.0'
     compile 'com.android.support:support-v4:21+'
+    compile 'com.shamanland:fab:0.0.7'
 }
 

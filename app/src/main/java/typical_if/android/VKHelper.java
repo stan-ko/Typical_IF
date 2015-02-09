@@ -1,7 +1,6 @@
 package typical_if.android;
 
 import android.text.Editable;
-import android.util.Log;
 
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKParameters;
@@ -11,6 +10,7 @@ import com.vk.sdk.api.model.VKApiComment;
 import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPhotoAlbum;
+import com.vk.sdk.api.model.VKApiPoll;
 import com.vk.sdk.api.model.VKApiUser;
 import com.vk.sdk.api.model.VKApiVideo;
 import com.vk.sdk.api.model.VKAttachments;
@@ -22,7 +22,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import typical_if.android.activity.DialogActivity;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 
@@ -129,8 +128,7 @@ public class VKHelper {
         params.put("count", countPosts);
         params.put("filter", "all");
         params.put("extended", 1);
-
-        final VKRequest request = VKApi.wall().get(params);
+  final VKRequest request = VKApi.wall().get(params);
         request.executeWithListener(vkRequestListener);
     }
 
@@ -163,6 +161,34 @@ public class VKHelper {
         request.executeWithListener(listener);
 
     }
+
+    public static void getPollById (long owner_id, int is_board, long poll_id, VKRequest.VKRequestListener listener ){
+        VKParameters params = new VKParameters();
+        params.put("owner_id",owner_id);
+        params.put("is_board",is_board);
+        params.put("poll_id",poll_id);
+        final VKRequest request = new VKRequest("polls.getById", params);
+        request.executeWithListener(listener);
+      }
+
+    public static VKApiPoll getVKApiPollFromJSON (JSONObject response)throws NullPointerException {
+//       if (response!=null){
+        VKApiPoll poll = new VKApiPoll().parse(response);
+           return poll;
+//       }
+//       else return null;
+    }
+
+    public static void addVote(long owner_id, long poll_id, long answer_id, int is_board,  VKRequest.VKRequestListener listener ){
+        VKParameters params = new VKParameters();
+        params.put("owner_id",owner_id);
+        params.put("poll_id",poll_id);
+        params.put("answer_id",answer_id);
+        params.put("is_board",is_board);
+        final VKRequest request = new VKRequest("polls.addVote", params);
+        request.executeWithListener(listener);
+    }
+
 
     public static void getUserAudios(VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
@@ -349,17 +375,27 @@ public class VKHelper {
         return photo;
     }
 
-    public static String getVideoSourceFromJson(JSONObject object) throws JSONException {
+    public static VKApiVideo getVideoSourceFromJson(JSONObject object)  {
 
        JSONObject response = object.optJSONObject("response");
         JSONArray items = response.optJSONArray("items");
-        JSONObject video_object =  items.getJSONObject(0);
-        VKApiVideo video = new VKApiVideo().parse(video_object);
-        String link = DialogActivity.isShowDialogNedeed(video);
+        JSONObject video_object = null;
+        try {
+            video_object = items.getJSONObject(0);
+        } catch (JSONException e) {
 
+        }
+       if (video_object!=null ){
 
-        return link;
+            VKApiVideo video = new VKApiVideo().parse(video_object);
+
+       return video;
+       }
+       else
+        return null;
     }
+
+
 
     public static ArrayList<VKApiPhoto> getPhotosFromJSONArray(JSONObject jsonArray) {
         JSONObject object = jsonArray.optJSONObject("response");

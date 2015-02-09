@@ -186,7 +186,8 @@ public class FragmentWall extends Fragment {
         playableLogoRes = ItemDataSetter.getPlayingLogo(Constants.GROUP_ID);
         pauseOnScrollListener = new PauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerObject);
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
-        swipeView.setColorSchemeResources(R.color.tFIndigo, R.color.tZDeepPurple, R.color.fbBlue);
+        swipeView.setColorSchemeResources(android.R.color.white, android.R.color.white, android.R.color.white);
+        swipeView.setProgressBackgroundColor(R.color.music_progress);
         swipeView.setProgressViewOffset(true, 0, 100);
 
         swipeView. setSize(SwipeRefreshLayout.DEFAULT);

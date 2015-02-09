@@ -31,6 +31,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -48,6 +49,7 @@ import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
+import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiDocument;
 import com.vk.sdk.api.model.VKApiLink;
 import com.vk.sdk.api.model.VKApiPhoto;
@@ -69,9 +71,11 @@ import java.util.regex.Pattern;
 
 import typical_if.android.adapter.AudioAdapter;
 import typical_if.android.adapter.MediaPagerAdapter;
+import typical_if.android.adapter.VoteItemAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoList;
+import typical_if.android.util.VKPoll;
 
 import static java.lang.String.format;
 import static java.lang.String.valueOf;
@@ -145,6 +149,7 @@ public class ItemDataSetter {
                                       RelativeLayout mediaLayout,
                                       ViewPager mediaPager,
                                       CirclePageIndicator mediaPagerIndicator,
+                                      ImageButton mediaPagerVideoButton,
                                       LinearLayout audioLayout,
                                       ListView audioListView,
                                       LinearLayout documentLayout,
@@ -187,7 +192,7 @@ public class ItemDataSetter {
         }
 
         if (photos.size() != 0 || videos.size() != 0) {
-            setMediaPager(mediaPager, mediaPagerIndicator, mediaLayout, photos, videos);
+            setMediaPager(mediaPager, mediaPagerIndicator, mediaPagerVideoButton, mediaLayout, photos, videos);
         } else {
             mediaLayout.setVisibility(View.GONE);
         }
@@ -223,26 +228,70 @@ public class ItemDataSetter {
         }
 
         if (poll != null) {
+
+            /////////////////////////////////////////////////////////////////////////////
             setPoll(pollLayout, pollTitle, poll);
         } else {
             pollLayout.setVisibility(View.GONE);
         }
     }
 
-    public static void setPoll(RelativeLayout parent, TextView title, VKApiPoll poll) {
+    public static void setPoll(final RelativeLayout parent, final TextView title, final VKApiPoll poll) {
+
+        final TextView answers_anonymous_text = ((TextView) parent.findViewById(R.id.answers_anonymous_text));
+
+        VKHelper.getPollById(poll.owner_id, 0, poll.id, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(VKResponse response) {
+                boolean answered ;
+                super.onComplete(response);
+                VKPoll pol = new VKPoll().parse(OfflineMode.loadJSON(poll.owner_id + poll.id));
+                if (pol.answer_id==0){
+                    answered=false;
+                    fullPollLayout (poll, response,answered);
+                 }else {
+                    answered=true;
+                    fullPollLayout (poll, response,answered);
+
+                }
+
+
+
+             }
+
+            private void fullPollLayout(VKApiPoll poll, VKResponse response, boolean user_answered) {
+
+                String isAnonymous;
+                OfflineMode.saveJSON(response.json, poll.owner_id + poll.id);
+                VKPoll pol = new VKPoll().parse(OfflineMode.loadJSON(poll.owner_id + poll.id));
+                title.setText(pol.question);
+                if (pol.anonymous == 1) {
+                    isAnonymous = Constants.mainActivity.getResources().getString(R.string.anonymous_poll);
+                } else
+                    isAnonymous = Constants.mainActivity.getResources().getString(R.string.public_poll);
+                answers_anonymous_text.setText(isAnonymous + " " + pol.votes);
+
+                View v = inflater.inflate(R.layout.vote_item_layout, parent);
+                RelativeLayout voteItemLayoutSize = ((RelativeLayout) v.findViewById(R.id.NotVotedLayout));
+                ListView pollList = (ListView) parent.findViewById(R.id.listOfVotes);
+                // ViewGroup.LayoutParams params = pollList.getLayoutParams();
+                //  params.height = voteItemLayoutSize.getHeight()*pol.answers.size();
+                //  pollList.setLayoutParams(params);
+                //  pollList.requestLayout();
+                //  pollList.setLayoutParams(new RelativeLayout.LayoutParams(Li, 115));
+                    VoteItemAdapter adapter = new VoteItemAdapter(pollList, pol,pol.answers, context, user_answered);
+                    pollList.setAdapter(adapter);
+
+
+
+            }
+        });
         parent.setVisibility(View.VISIBLE);
+        RelativeLayout votesParentLayout = ((RelativeLayout) parent.findViewById(R.id.votesParentLayout));
+        votesParentLayout.setVisibility(View.VISIBLE);
+ }
 
-        title.setText(poll.question);
 
-        parent.setOnClickListener(inProgressToastListener);
-    }
-
-    public static final View.OnClickListener inProgressToastListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Constants.toastInProgress.show();
-        }
-    };
 
     static int startTag = 0;
     static int endTag = 0;
@@ -438,7 +487,7 @@ public class ItemDataSetter {
     };
 
 
-    public static void setNameOfPostAuthor(ArrayList<VKApiUser> profiles, String groupName, TextView textView, int id) {
+    public static void setNameOfPostAuthor(ArrayList<VKApiUser> profiles, VKApiCommunity group, TextView textView, int id) {
         VKApiUser profile;
         String name = null;
         for (int i = 0; i < profiles.size(); i++) {
@@ -446,18 +495,20 @@ public class ItemDataSetter {
 
             if (id == profile.id) {
                 name = profile.last_name + " " + profile.first_name;
+                textView.setTag("http://vk.com/id" + String.valueOf(id));
             }
         }
         if (id == 0) {
-            name = groupName;
+            name = group.name;
+            textView.setTag("http://vk.com/" + group.screen_name);
         }
 
         textView.setText(name);
-        textView.setTag("http://vk.com/id" + valueOf(id));
         textView.setOnClickListener(openActionViewChooserListener);
     }
 
-    public static void setLink(RelativeLayout parent, TextView src, TextView title, final VKApiLink link) {
+    public static void
+    setLink(RelativeLayout parent, TextView src, TextView title, final VKApiLink link) {
         parent.setVisibility(View.VISIBLE);
 
         title.setText(link.title);
@@ -613,7 +664,7 @@ public class ItemDataSetter {
         }
     }
 
-    public static void setMediaPager(final ViewPager mediaPager, CirclePageIndicator mediaPagerIndicator, RelativeLayout mediaLayout, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
+    public static void setMediaPager(final ViewPager mediaPager, CirclePageIndicator mediaPagerIndicator, ImageButton mediaPagerVideoButton, RelativeLayout mediaLayout, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
         int newWidth = TIFApp.getDisplayWidth();
         final int count = photos.size() + videos.size();
 
@@ -627,6 +678,16 @@ public class ItemDataSetter {
         mediaPager.setOffscreenPageLimit(count);
         mediaPager.setAdapter(mediaPagerAdapter);
 
+        if (videos.size() != 0) {
+            mediaPagerVideoButton.setColorFilter(context.getResources().getColor(R.color.music_progress));
+            mediaPagerVideoButton.setVisibility(View.VISIBLE);
+            mediaPager.setTag(photos.size());
+            mediaPagerVideoButton.setTag(mediaPager);
+            mediaPagerVideoButton.setOnClickListener(ibOnCliclListener);
+        } else {
+            mediaPagerVideoButton.setVisibility(View.GONE);
+        }
+
         final float density = context.getResources().getDisplayMetrics().density;
 
         mediaPagerIndicator.setViewPager(mediaPager);
@@ -639,6 +700,14 @@ public class ItemDataSetter {
 
         ((RelativeLayout) mediaPagerIndicator.getParent()).setVisibility(count == 1 ? View.GONE : View.VISIBLE);
     }
+
+    public static final ImageButton.OnClickListener ibOnCliclListener = new ImageButton.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            ViewPager viewPager = (ViewPager) v.getTag();
+            viewPager.setCurrentItem((Integer) viewPager.getTag(), true);
+        }
+    };
 
 //    if (!(layout_i instanceof LinearLayout)) {
 //        continue;
@@ -930,9 +999,7 @@ public class ItemDataSetter {
 //        }
 //        parent.addView(mediaContainer);
 //    
-    
-    
-    
+
 
     static int g;
     static ArrayList<VKApiPhoto> finalPhotos;

@@ -1,6 +1,5 @@
 package typical_if.android.fragment;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -9,10 +8,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.FrameLayout;
+
+import com.vk.sdk.api.model.VKApiVideo;
 
 import typical_if.android.Constants;
 import typical_if.android.R;
@@ -31,59 +34,53 @@ public class FragmentWebView extends Fragment  {
     private View mCustomView;
     private myWebChromeClient mWebChromeClient;
     private myWebViewClient mWebViewClient;
+    private VKApiVideo video;
 
     String videoURL = "https://www.youtube.com/embed/NeXMxuNNlE8";
 
-    public FragmentWebView newInstance() {
+    public FragmentWebView newInstance(VKApiVideo video) {
 
-        FragmentWebView fragment = new FragmentWebView();
+        FragmentWebView fragment = new FragmentWebView(video);
         return fragment;
     }
 
-    public FragmentWebView(String url){
-        this.videoURL=url;
+//    public FragmentWebView(String url){
+//        this.videoURL=url;
+//    }
+    public FragmentWebView(){
+        
     }
-    public FragmentWebView(){}
-    ActionBar ab;
+   
 
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_web_view, container, false);
         setRetainInstance(true);
-        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-         ab = getActivity().getActionBar();
-           playVideo(videoURL, rootView);
+       // getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        playVideo(video.player, rootView);
         return rootView;
     }
 
+
+    public FragmentWebView(VKApiVideo video){
+        this.video=video;
+    }
 
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-       ab.hide();
-       activity.onBackPressed();
-        activity.getFragmentManager().addOnBackStackChangedListener(new android.app.FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-
-            }
-        });
-
-
     }
+       
+
+
+
 
     @Override
     public void onDetach() {
         super.onDetach();
-        ab.show();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ab.show();
+ 
     }
 
     public void playVideo(String url, View view){
@@ -99,10 +96,14 @@ public class FragmentWebView extends Fragment  {
         webView.getSettings().setAppCacheEnabled(true);
         webView.getSettings().setBuiltInZoomControls(true);
         webView.getSettings().setSaveFormData(true);
-        webView.getSettings().setEnableSmoothTransition(true);
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.clearCache(true);
+        CookieSyncManager.createInstance(getActivity());
+        final CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeAllCookie();
 
-        webView.loadUrl(videoURL);
-}
+        webView.loadUrl(url);
+    }
 
     public boolean inCustomView() {
         return (mCustomView != null);
@@ -211,7 +212,7 @@ public class FragmentWebView extends Fragment  {
         }
     }
 
-    }
+}
 
 
 

@@ -10,6 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="165dp"
         android:id="@+id/aboutUsLayout"
+        android:visibility="gone"
         android:background="@color/ab_background">
 
         <ImageView
@@ -41,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Про нас"
+            android:layout_marginTop="25dp"
             android:id="@+id/textView"
             android:textColor="@color/ab_text_color"
             android:layout_marginRight="77dp"
@@ -58,7 +60,8 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp" />
+            android:layout_marginTop="15dp"
+            android:visibility="gone"/>
     </RelativeLayout>
 
     <typical_if.android.view.AnimatedExpandableListView

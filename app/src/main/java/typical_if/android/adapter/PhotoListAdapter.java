@@ -6,32 +6,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.WrapperListAdapter;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageScaleType;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.util.List;
 
 import typical_if.android.R;
-import typical_if.android.TIFApp;
 import typical_if.android.util.PhotoUrlHelper;
 
 /**
  * Created by LJ on 16.07.2014.
  */
-public class PhotoListAdapter extends BaseAdapter {
+public class PhotoListAdapter extends BaseAdapter implements WrapperListAdapter {
     List<VKApiPhoto> photoList;
     LayoutInflater layoutInflater;
 
     public PhotoListAdapter(List<VKApiPhoto> list, LayoutInflater inflater) {
         this.photoList = list;
         this.layoutInflater = inflater;
-
     }
 
 
@@ -65,7 +62,7 @@ public class PhotoListAdapter extends BaseAdapter {
        // final ProgressBar pbPreviewImageIsLoading = viewHolder.pbPreviewImageIsLoading;
 
 
-        ImageLoader.getInstance().displayImage(PhotoUrlHelper.getPreviewUrl(photo), viewHolder.photo,TIFApp.additionalOptions, new ImageLoadingListener() {
+        ImageLoader.getInstance().displayImage(PhotoUrlHelper.getPreviewUrl(photo), viewHolder.photo, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 //pbPreviewImageIsLoading.setVisibility(View.VISIBLE);
@@ -92,6 +89,11 @@ public class PhotoListAdapter extends BaseAdapter {
         });
 
         return convertView;
+    }
+
+    @Override
+    public ListAdapter getWrappedAdapter() {
+        return null;
     }
 
     private static class ViewHolder {

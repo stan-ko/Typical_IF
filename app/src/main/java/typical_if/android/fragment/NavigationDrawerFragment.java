@@ -206,6 +206,9 @@ public class NavigationDrawerFragment extends Fragment {
 
         List<String> fn = new ArrayList<String>();
         setChildItems(fn, 3);
+
+        List<String> st = new ArrayList<String>();
+        setChildItems(st, 4);
        // int y=0 ;
 
 
@@ -213,10 +216,10 @@ public class NavigationDrawerFragment extends Fragment {
         listDataHeader.add(getString(R.string.menu_group_title_tz));
         listDataHeader.add(getString(R.string.menu_group_title_fb));
         listDataHeader.add(getString(R.string.menu_group_title_fn));
+        listDataHeader.add(getString(R.string.menu_group_title_stantsiya));
         listDataHeader.add(getString(R.string.menu_group_title_events));
         listDataHeader.add("");
         listDataHeader.add(getString(R.string.settings));
-        listDataHeader.add(getString(R.string.menu_group_about_us));
         listDataHeader.add(getString(R.string.menu_group_exit));
         if (Constants.refresherDrawerCounter>0){
             refreshDrawer();
@@ -231,10 +234,10 @@ public class NavigationDrawerFragment extends Fragment {
         listDataHeader.add(getString(R.string.menu_group_title_tz));
         listDataHeader.add(getString(R.string.menu_group_title_fb));
         listDataHeader.add(getString(R.string.menu_group_title_fn));
+        listDataHeader.add(getString(R.string.menu_group_title_stantsiya));
         listDataHeader.add(getString(R.string.menu_group_title_events));
         listDataHeader.add("");
         listDataHeader.add(getString(R.string.settings));
-        listDataHeader.add(getString(R.string.menu_group_about_us));
         listDataHeader.add(getString(R.string.menu_group_exit));
     }
 
@@ -416,7 +419,7 @@ public class NavigationDrawerFragment extends Fragment {
         getActionBar().setHomeButtonEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(R.string.menu_group_title_tf);
-        actionBar.setIcon(R.drawable.tf_logo);
+        actionBar.setIcon(R.drawable.mobile_tf_logo);
     }
 
     private ActionBar getActionBar() {

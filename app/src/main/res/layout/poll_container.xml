@@ -2,8 +2,9 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="@color/transparent"
+    android:background="@color/app_bg"
     android:paddingBottom="5dp">
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,32 +13,60 @@
         android:id="@+id/txt_poll_title"
         android:textColor="#ffffffff"
         android:singleLine="true"
-        android:text="Jgbnedfyyz"
         android:textSize="15dp"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/img_poll_post"
         android:layout_toEndOf="@+id/img_poll_post"
-        android:layout_marginLeft="15dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/txt_poll_votes"
-        android:text="dfghsdfghsfgs"
-        android:textColor="#ffffffff"
-        android:visibility="gone"
-        android:layout_toRightOf="@+id/img_poll_post"
-        android:layout_toEndOf="@+id/img_poll_post"
-        android:layout_below="@+id/txt_poll_title" />
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp" />
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/img_poll_post"
         android:src="@drawable/survey_image"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_margin="5dp" />
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/votesParentLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_below="@+id/answers_anonymous_text"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:id="@+id/listOfVotes"
+            android:background="@color/app_bg"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:visibility="visible" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/answers_anonymous_text"
+        android:textColor="#8cffffff"
+        android:visibility="visible"
+        android:layout_below="@+id/txt_poll_title"
+        android:layout_alignLeft="@+id/txt_poll_title"
+        android:layout_alignStart="@+id/txt_poll_title"
+        android:layout_marginTop="5dp" />
+
 </RelativeLayout>

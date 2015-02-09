@@ -80,24 +80,42 @@ public class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedEx
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        GroupViewHolder groupViewHolder;
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.navigation_drawer_group_item, null);
+            groupViewHolder = new GroupViewHolder(convertView);
+            convertView.setTag(groupViewHolder);
+        } else {
+           groupViewHolder = (GroupViewHolder) convertView.getTag();
         }
-        TextView lblListHeader = (TextView) convertView.findViewById(R.id.groupItem);
 
-        if (groupPosition == 5) {
+        if (groupPosition == 4) {
+            convertView.setBackgroundColor(convertView.getResources().getColor(R.color.stantsiya_bg));
+        } else {
+            convertView.setBackgroundColor(convertView.getResources().getColor(R.color.transparent));
+        }
+
+
+        if (groupPosition == 6) {
             if (VKSdk.isLoggedIn()) {
-                lblListHeader.setText(R.string.title_logout);
+                groupViewHolder.groupTitle.setText(R.string.title_logout);
             } else {
-                lblListHeader.setText(R.string.title_login);
+                groupViewHolder.groupTitle.setText(R.string.title_login);
             }
         } else {
-            lblListHeader.setText(headerTitle);
+            groupViewHolder.groupTitle.setText(headerTitle);
         }
 
-
         return convertView;
+    }
+
+    private static class GroupViewHolder {
+        public final TextView groupTitle;
+
+        GroupViewHolder(View view) {
+            this.groupTitle = (TextView) view.findViewById(R.id.groupItem);
+        }
     }
 
     @Override

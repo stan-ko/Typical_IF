@@ -1,6 +1,5 @@
 package typical_if.android.model.Wall;
 
-import android.net.Uri;
 import android.text.SpannableStringBuilder;
 import android.view.View;
 
@@ -47,7 +46,7 @@ public class VKWallPostWrapper extends VKApiPost {
     public String copyHistoryTitle = "";
     public String copyHistoryLogo = "";
     public String copyHistoryName = "";
-    public Uri copyHistoryUri;
+    public String copyHistoryUrl;
     public SpannableStringBuilder parsedCopyHistoryText;
     public String copyHistoryGeoUrl;
 
@@ -102,7 +101,7 @@ public class VKWallPostWrapper extends VKApiPost {
                 }
             }
 
-            copyHistoryUri = Uri.parse("http://vk.com/" + copyHistoryName);
+            copyHistoryUrl = "http://vk.com/" + copyHistoryName;
 
             if (copyHistory.text.length() != 0) {
                 this.copyHistoryTextContainerVisibility = View.VISIBLE;

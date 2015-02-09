@@ -184,6 +184,7 @@ public class VKApiPoll extends VKAttachments.VKApiAttachment implements android.
             this.votes = in.readInt();
             this.rate = in.readDouble();
         }
+        public Answer(){}
 
         public static Creator<Answer> CREATOR = new Creator<Answer>() {
             public Answer createFromParcel(Parcel source) {

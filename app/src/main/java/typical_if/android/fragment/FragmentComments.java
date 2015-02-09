@@ -300,6 +300,7 @@ public class FragmentComments extends Fragment {
 
         viewHolder = new WallAdapter.ViewHolder(wallItem);
 
+
         WallAdapter.initViewHolder(viewHolder, wall, position, getFragmentManager(), post);
 
         viewHolder.postRootLayout.setCardElevation(0);
