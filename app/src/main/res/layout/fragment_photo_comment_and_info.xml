@@ -16,6 +16,14 @@
         card_view:cardElevation="5dp"
         android:id="@+id/card_wall_lv_Item">
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/refreshComments"
+        android:background="#ff272727"
+        android:focusableInTouchMode="false">
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -26,6 +34,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:id="@+id/useless">
+
 
 
             <ListView
@@ -142,6 +151,8 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    </android.support.v4.widget.SwipeRefreshLayout>
     </android.support.v7.widget.CardView>
 
 </RelativeLayout><!--</typical_if.android.SwipeRefreshLayout.SwipeRefreshLayout>-->

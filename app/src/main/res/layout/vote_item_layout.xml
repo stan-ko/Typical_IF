@@ -19,7 +19,6 @@
             android:layout_width="fill_parent"
             android:layout_height="20dp"
             android:id="@+id/vote_progress"
-            android:background="@drawable/progress_bar_yellow_background"
             android:layout_below="@+id/vote_text"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"

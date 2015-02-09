@@ -10,8 +10,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -19,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -62,6 +66,7 @@ import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 import typical_if.android.util.PhotoUrlHelper;
 
+import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 
 public class FragmentComments extends Fragment {
@@ -229,7 +234,9 @@ public class FragmentComments extends Fragment {
         });
 
         updateCommentList(group_id, photo.id, listOfComments, inflater);
-//        listOfComments.setOnScrollListener(onScrollListenerObject);
+
+
+
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
 
 
@@ -333,6 +340,7 @@ public class FragmentComments extends Fragment {
     RelativeLayout root;
     RelativeLayout coverGlobal;
 
+    SwipeRefreshLayout swipeView;
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -345,7 +353,56 @@ public class FragmentComments extends Fragment {
         root = rootLayoutShowHide;
         coverGlobal = (RelativeLayout) rootView.findViewById(R.id.while_loading_view_layout);
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
+//        RelativeLayout useless = ((RelativeLayout) rootView.findViewById(R.id.useless));
+
         RelativeLayout wrapper = (RelativeLayout) rootView.findViewById(R.id.list_of_comments_wrapper_layout);
+
+
+
+        swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refreshComments);
+        swipeView.setColorSchemeResources(android.R.color.white, android.R.color.white, android.R.color.white);
+        swipeView.setProgressBackgroundColor(R.color.music_progress);
+        //swipeView.setProgressViewOffset(true, 0, 100);
+
+        swipeView. setSize(SwipeRefreshLayout.DEFAULT);
+        swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (!OfflineMode.isOnline(getApplicationContext())) {
+                    Toast.makeText(getApplicationContext(), getString(R.string.no_internet_message_toast_en), Toast.LENGTH_SHORT).show();
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                    //TODO fuck
+                        Log.d("-----------------------------","-------------------------/////////////////////////////////////");
+
+                        swipeView.setRefreshing(false);
+                    }
+                }, 3000);
+            }
+        });
+
+        listOfComments.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                boolean enable= false;
+                if (listOfComments.getChildCount() > 0) {
+                    boolean firstItemVisible = listOfComments.getFirstVisiblePosition() == 0;
+                    boolean topOfFirstItemVisible = listOfComments.getChildAt(0).getTop() == 0;
+                    enable = firstItemVisible && topOfFirstItemVisible;
+                }
+                swipeView.setEnabled(enable);
+            }
+        });
+
+
+
 
         if (VKSdk.isLoggedIn()) {
             if (OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())) {

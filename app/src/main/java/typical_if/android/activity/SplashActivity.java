@@ -1,4 +1,4 @@
- package typical_if.android.activity;
+package typical_if.android.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,6 +29,7 @@ import com.vk.sdk.api.VKResponse;
 
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -100,7 +101,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     }
 
 
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -154,6 +154,7 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         }
         return temp;
     }
+
     void checkIfOnlineAndProceed() {
         new Thread(
                 new Runnable() {
@@ -288,13 +289,19 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         final Intent intent = new Intent(SplashActivity.this, MainActivity.class);
         startActivity(intent);
 
-        if (OfflineMode.isFirstRun("SplashFirstRun")){
-            startService(new Intent(this, NotificationService.class).setAction(Constants.ACTION_FIRST_RUN));
-        } else{
-           // startService(new Intent(this, NotificationService.class).setAction(Constants.ACTION_START_FROM_SPLASH_ACTIVITY));
+        try {
+            if (OfflineMode.isFirstRun("SplashFirstRun")) {
+                startService(new Intent(this, NotificationService.class).setAction(Constants.ACTION_FIRST_RUN));
+            } else if (OfflineMode.loadInt(Constants.DATE_OF_NOTIF_SEND) != Calendar.getInstance().get(Calendar.DATE)) {
+                startService(new Intent(this, NotificationService.class).setAction(Constants.ACTION_START_FROM_SPLASH_ACTIVITY));
+            }
         }
-
-
+        catch (NumberFormatException nfe) {
+            startService(new Intent(this, NotificationService.class).setAction(Constants.ACTION_FIRST_RUN));
+        }
+        catch (NullPointerException npe){
+            startService(new Intent(this, NotificationService.class).setAction(Constants.ACTION_FIRST_RUN));
+        }
         finish();
     }
 
