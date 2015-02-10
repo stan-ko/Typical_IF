@@ -42,7 +42,9 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
 import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiPhoto;
+import com.vk.sdk.api.model.VKApiPoll;
 import com.vk.sdk.api.model.VKApiUser;
+import com.vk.sdk.api.model.VKAttachments;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -115,6 +117,7 @@ public class FragmentComments extends Fragment {
         Bundle args = new Bundle();
 
 
+
         args.putLong(ARG_VK_USER_ID, vk_user_id);
         fragment.setArguments(args);
         FragmentComments.photo = photo;
@@ -134,6 +137,7 @@ public class FragmentComments extends Fragment {
             photo.user_id = photo.owner_id;
         }
         from_user = photo.user_id;
+
 
         return fragment;
     }
@@ -158,6 +162,7 @@ public class FragmentComments extends Fragment {
         item_id = post.post.id;
         group_id = post.post.from_id;
         from_user = post.post.from_id;
+
         return fragment;
     }
 
@@ -307,8 +312,7 @@ public class FragmentComments extends Fragment {
 
         viewHolder = new WallAdapter.ViewHolder(wallItem);
 
-
-        WallAdapter.initViewHolder(viewHolder, wall, position, getFragmentManager(), post);
+        WallAdapter.initViewHolder(viewHolder, wall, position, getFragmentManager(), post, true);
 
         viewHolder.postRootLayout.setCardElevation(0);
         viewHolder.postRootLayout.setShadowPadding(0,0,0,0);
@@ -334,6 +338,16 @@ public class FragmentComments extends Fragment {
         }
 
         listOfComments.addHeaderView(wallItem);
+
+
+
+        for (VKAttachments.VKApiAttachment attachment: post.post.attachments) {
+            if (attachment.getType().equals(VKAttachments.TYPE_POLL)) {
+                final VKApiPoll poll = ((VKApiPoll) attachment);
+                ItemDataSetter.fillPollLayout(poll, viewHolder.postPollLayout);
+            }
+        }
+
         updateCommentList(group_id, post.post.id, listOfComments, inflater);
     }
 
@@ -489,6 +503,8 @@ public class FragmentComments extends Fragment {
             }
         });
         setRetainInstance(true);
+
+
         return rootView;
     }
 
@@ -548,6 +564,13 @@ public class FragmentComments extends Fragment {
 
 
     }
+
+    public  boolean isRunning;
+
+
+
+
+
 
     public boolean myComment = false;
 
