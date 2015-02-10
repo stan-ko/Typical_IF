@@ -18,6 +18,7 @@ import com.vk.sdk.api.model.VKApiPoll;
 
 import java.util.ArrayList;
 
+import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.util.VKPoll;
@@ -35,14 +36,16 @@ public class VoteItemAdapter extends BaseAdapter {
     public static int pos;
     boolean user_answered;
     public final VKPoll poll;
+    public View listOfVotesParent;
 
-    public VoteItemAdapter(ListView listOfVotes,VKPoll poll,ArrayList<VKApiPoll.Answer> answers, Context context, boolean user_answered) {
+    public VoteItemAdapter(ListView listOfVotes,VKPoll poll,ArrayList<VKApiPoll.Answer> answers, Context context, boolean user_answered, View parent) {
         this.answers= answers;
         this.context = context;
         this.layoutInflater = LayoutInflater.from(context);
         this.votesList=listOfVotes;
         this.user_answered=user_answered;
         this.poll=poll;
+        this.listOfVotesParent=parent;
     }
 
     @Override
@@ -61,7 +64,7 @@ public class VoteItemAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, final ViewGroup parent) {
        pos=position;
         final VKApiPoll.Answer answer = (VKApiPoll.Answer) getItem(position);
 
@@ -80,6 +83,8 @@ public class VoteItemAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+
+
         if(!user_answered) {
 
             RelativeLayout l = ((RelativeLayout) convertView.findViewById(R.id.NotVotedLayout));
@@ -94,7 +99,11 @@ public class VoteItemAdapter extends BaseAdapter {
                         @Override
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
-                            Log.d(response.json.toString(),"VOTE_ADDED");
+                            Log.d("VOTE_ADDED", response.json.toString());
+                         // RelativeLayout spinner=((RelativeLayout) listOfVotesParent.findViewById(R.id.changeVotesSpinnerLayout));
+                       //   spinner.setVisibility(View.VISIBLE);
+                            ItemDataSetter.refreshList(parent,votesList);
+
 
                         }
                     });
@@ -127,6 +136,8 @@ public class VoteItemAdapter extends BaseAdapter {
 
   return convertView;
     }
+
+
 
 
 

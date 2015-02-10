@@ -42,19 +42,41 @@
         android:layout_marginRight="5dp"
         android:layout_below="@+id/answers_anonymous_text"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp">
+        android:layout_marginBottom="5dp"
+        android:visibility="visible">
 
 
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="wrap_content"
             android:id="@+id/listOfVotes"
             android:background="@color/app_bg"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:divider="@drawable/list_divider"
+            android:dividerHeight="1px" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@color/app_bg"
+            android:id="@+id/changeVotesSpinnerLayout"
+            android:visibility="gone">
+
+            <ProgressBar
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBar2"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <TextView

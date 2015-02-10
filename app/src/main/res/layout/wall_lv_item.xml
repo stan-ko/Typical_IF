@@ -296,7 +296,7 @@
                         android:paddingRight="5dp"
                         android:singleLine="true"
                         android:text="Сьогодні о 16:18"
-                        android:textColor="#ffffffff"
+                        android:textColor="#b4ffffff"
                         android:textIsSelectable="true"
                         android:textSize="13dp"
                         android:visibility="visible"
