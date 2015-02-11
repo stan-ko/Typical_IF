@@ -14,10 +14,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.LinearLayout;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCaptchaDialog;
@@ -60,14 +63,11 @@ public class MainActivity extends DialogActivity implements
     ActionBarArrayAdapter list;
 
 
-
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 //        EventBus.getDefault().register();
 
         super.onCreate(savedInstanceState);
-
 
         try {
             if (OfflineMode.loadInt("surprise") < 15) {
@@ -78,6 +78,17 @@ public class MainActivity extends DialogActivity implements
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(R.layout.activity_main);
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        DrawerLayout drawer = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
+        ViewGroup decor = (ViewGroup) getWindow().getDecorView();
+        View child = decor.getChildAt(0);
+        decor.removeView(child);
+        LinearLayout container = (LinearLayout) drawer.findViewById(R.id.drawer_content); // This is the container we defined just now.
+        container.addView(child, 0);
+        drawer.findViewById(R.id.navigation_drawer).setPadding(0, getStatusBarHeight(), 0, 0);
+        decor.addView(drawer);
+
         ActionBar actionBar = getSupportActionBar();
 
         Constants.mainActivity = this;
@@ -89,18 +100,18 @@ public class MainActivity extends DialogActivity implements
         mTitle = getTitle();
 
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
+
         if (mNavigationDrawerFragment.isDrawerOpen()) {
             actionBar.setDisplayShowTitleEnabled(true);
         } else {
             actionBar.setDisplayShowTitleEnabled(false);
         }
         try {
-            if (getIntent().getExtras()!=null) {
+            if (getIntent().getExtras() != null) {
                 notifClick(mNavigationDrawerFragment, getIntent());
             }
-            //processIntent(getIntent());
-        } catch (NullPointerException npe){}
-
+        } catch (NullPointerException npe) {
+        }
 
 
         VKUIHelper.onCreate(this);
@@ -124,15 +135,26 @@ public class MainActivity extends DialogActivity implements
                 }
             }
         });
+
+        mNavigationDrawerFragment.refreshNavigationHeader(VKHelper.UserObject.getUserFromShared());
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
-        notifClick(mNavigationDrawerFragment,intent);
+        notifClick(mNavigationDrawerFragment, intent);
     }
 
-    private void notifClick (NavigationDrawerFragment mNavigationDrawerFragment, Intent notifIntent){
-        if (notifIntent.getExtras().getBoolean("isClickable")){
+    private void notifClick(NavigationDrawerFragment mNavigationDrawerFragment, Intent notifIntent) {
+        if (notifIntent.getExtras().getBoolean("isClickable")) {
             mNavigationDrawerFragment.closeDrawer();
         }
     }
@@ -207,11 +229,10 @@ public class MainActivity extends DialogActivity implements
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
-
 
 
     @Override
@@ -271,20 +292,21 @@ public class MainActivity extends DialogActivity implements
 
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
-            mNavigationDrawerFragment.refreshNavigationDrawer();
             VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(final VKResponse response) {
                     super.onComplete(response);
-                    long userId = VKHelper.getUserIdFromResponse(response);
-                    if (userId == 0) {
+                    VKHelper.UserObject user = VKHelper.getUserFromResponse(response);
+                    if (user.id == 0) {
                         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
-                        userId = sPref.getLong("uid", 0); //TODO че делать если нулл?
-                        Constants.USER_ID = userId;
+                        user.id = sPref.getLong("uid", 0); //TODO че делать если нулл?
+                        Constants.USER_ID = user.id;
                         return;
                     }
-                    Constants.USER_ID = userId;
+                    Constants.USER_ID = user.id;
                     ItemDataSetter.saveUserId(Constants.USER_ID);
+
+                    mNavigationDrawerFragment.refreshNavigationHeader(user);
                 }
 
                 @Override
@@ -297,20 +319,21 @@ public class MainActivity extends DialogActivity implements
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
-            mNavigationDrawerFragment.refreshNavigationDrawer();
             VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(final VKResponse response) {
                     super.onComplete(response);
-                    long userId = VKHelper.getUserIdFromResponse(response);
-                    if (userId == 0) {
+                    VKHelper.UserObject user = VKHelper.getUserFromResponse(response);
+                    if (user.id == 0) {
                         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
-                        userId = sPref.getLong("uid", 0); //TODO че делать если нулл?
-                        Constants.USER_ID = userId;
+                        user.id = sPref.getLong("uid", 0); //TODO че делать если нулл?
+                        Constants.USER_ID = user.id;
                         return;
                     }
-                    Constants.USER_ID = userId;
+                    Constants.USER_ID = user.id;
                     ItemDataSetter.saveUserId(Constants.USER_ID);
+
+                    mNavigationDrawerFragment.refreshNavigationHeader(user);
                 }
 
                 @Override
@@ -348,17 +371,6 @@ public class MainActivity extends DialogActivity implements
 
                 break;
             case 6:
-                if (VKSdk.isLoggedIn()) {
-                    VKSdk.logout();
-                    mNavigationDrawerFragment.refreshNavigationDrawer();
-                } else {
-                    VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
-                }
-                break;
-            case 7:
-                changeLanguage();
-                break;
-            case 8:
                 finish();
                 break;
         }
@@ -371,8 +383,6 @@ public class MainActivity extends DialogActivity implements
         }
         restoreActionBar();
     }
-
-
 
 
     @Override

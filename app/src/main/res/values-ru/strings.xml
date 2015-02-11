@@ -19,7 +19,7 @@
     <string name="menu_group_title_events">Афиша Франковская</string>
     <string name="menu_group_about_us">О приложении</string>
         
-    <string name="menu_group_exit">Выйти из программы</string>
+    <string name="menu_group_exit">Выйти</string>
 
     <string name="error_playing_video">Ошибка воспроизведения видеозаписи</string>
     <string name="error_playing_video_auth">Это действие требует авторизации</string>
@@ -279,6 +279,7 @@
     </string-array>
     <string name="anonymous_poll">Анонимный опрос</string>
     <string name="public_poll">Публичный опрос</string>
+    <string name="tif_title_header">Типичный Мобильный Франковск</string>
 
 
 </resources>

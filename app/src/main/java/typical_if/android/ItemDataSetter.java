@@ -228,8 +228,6 @@ public class ItemDataSetter {
         }
 
         if (poll != null) {
-
-            /////////////////////////////////////////////////////////////////////////////
             setPoll(pollLayout, pollTitle, poll);
         } else {
             pollLayout.setVisibility(View.GONE);
@@ -260,7 +258,6 @@ public class ItemDataSetter {
              }
 
             private void fullPollLayout(VKApiPoll poll, VKResponse response, boolean user_answered) {
-
                 String isAnonymous;
                 OfflineMode.saveJSON(response.json, poll.owner_id + poll.id);
                 VKPoll pol = new VKPoll().parse(OfflineMode.loadJSON(poll.owner_id + poll.id));

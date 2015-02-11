@@ -1,5 +1,7 @@
 package typical_if.android;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 
 import com.vk.sdk.api.VKApi;
@@ -128,7 +130,7 @@ public class VKHelper {
         params.put("count", countPosts);
         params.put("filter", "all");
         params.put("extended", 1);
-  final VKRequest request = VKApi.wall().get(params);
+        final VKRequest request = VKApi.wall().get(params);
         request.executeWithListener(vkRequestListener);
     }
 
@@ -162,29 +164,29 @@ public class VKHelper {
 
     }
 
-    public static void getPollById (long owner_id, int is_board, long poll_id, VKRequest.VKRequestListener listener ){
+    public static void getPollById(long owner_id, int is_board, long poll_id, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
-        params.put("owner_id",owner_id);
-        params.put("is_board",is_board);
-        params.put("poll_id",poll_id);
+        params.put("owner_id", owner_id);
+        params.put("is_board", is_board);
+        params.put("poll_id", poll_id);
         final VKRequest request = new VKRequest("polls.getById", params);
         request.executeWithListener(listener);
-      }
+    }
 
-    public static VKApiPoll getVKApiPollFromJSON (JSONObject response)throws NullPointerException {
+    public static VKApiPoll getVKApiPollFromJSON(JSONObject response) throws NullPointerException {
 //       if (response!=null){
         VKApiPoll poll = new VKApiPoll().parse(response);
-           return poll;
+        return poll;
 //       }
 //       else return null;
     }
 
-    public static void addVote(long owner_id, long poll_id, long answer_id, int is_board,  VKRequest.VKRequestListener listener ){
+    public static void addVote(long owner_id, long poll_id, long answer_id, int is_board, VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
-        params.put("owner_id",owner_id);
-        params.put("poll_id",poll_id);
-        params.put("answer_id",answer_id);
-        params.put("is_board",is_board);
+        params.put("owner_id", owner_id);
+        params.put("poll_id", poll_id);
+        params.put("answer_id", answer_id);
+        params.put("is_board", is_board);
         final VKRequest request = new VKRequest("polls.addVote", params);
         request.executeWithListener(listener);
     }
@@ -298,6 +300,7 @@ public class VKHelper {
 
     public static void getMyselfInfo(VKRequest.VKRequestListener listener) {
         VKParameters params = new VKParameters();
+        params.put("fields", "photo_100");
         final VKRequest request = new VKRequest("users.get", params);
         request.executeWithListener(listener);
     }
@@ -375,9 +378,9 @@ public class VKHelper {
         return photo;
     }
 
-    public static VKApiVideo getVideoSourceFromJson(JSONObject object)  {
+    public static VKApiVideo getVideoSourceFromJson(JSONObject object) {
 
-       JSONObject response = object.optJSONObject("response");
+        JSONObject response = object.optJSONObject("response");
         JSONArray items = response.optJSONArray("items");
         JSONObject video_object = null;
         try {
@@ -385,16 +388,14 @@ public class VKHelper {
         } catch (JSONException e) {
 
         }
-       if (video_object!=null ){
+        if (video_object != null) {
 
             VKApiVideo video = new VKApiVideo().parse(video_object);
 
-       return video;
-       }
-       else
-        return null;
+            return video;
+        } else
+            return null;
     }
-
 
 
     public static ArrayList<VKApiPhoto> getPhotosFromJSONArray(JSONObject jsonArray) {
@@ -478,46 +479,90 @@ public class VKHelper {
 
     public static Wall getGroupWallFromJSON(final JSONObject jsonObject) {
         final Wall wall = new Wall();
- 
+
         final JSONObject object = jsonObject.optJSONObject(Wall.JSON_KEY_RESPONSE);
 
         wall.count = object.optInt(Wall.JSON_KEY_COUNT);
 
-            // groups
-            final JSONArray groups = object.optJSONArray(Wall.JSON_KEY_GROUPS);
-            VKApiCommunity group;
-            VKApi.users().get();
+        // groups
+        final JSONArray groups = object.optJSONArray(Wall.JSON_KEY_GROUPS);
+        VKApiCommunity group;
+        VKApi.users().get();
 
-            for (int i = 0; i < groups.length(); i++) {
-                group = new VKApiCommunity().parse(groups.optJSONObject(i));
-                wall.groups.add(group);
-            }
-            wall.group = new VKApiCommunity().parse(groups.optJSONObject(0));
+        for (int i = 0; i < groups.length(); i++) {
+            group = new VKApiCommunity().parse(groups.optJSONObject(i));
+            wall.groups.add(group);
+        }
+        wall.group = new VKApiCommunity().parse(groups.optJSONObject(0));
 
-            // profiles
-            wall.profiles = getProfilesFromJSONArray(object.optJSONArray(Wall.JSON_KEY_PROFILES));
+        // profiles
+        wall.profiles = getProfilesFromJSONArray(object.optJSONArray(Wall.JSON_KEY_PROFILES));
 
-            // items
-            final VKPostArray posts = new VKPostArray();
-            try {
-                posts.parse(jsonObject);
-            } catch (JSONException e) {}
+        // items
+        final VKPostArray posts = new VKPostArray();
+        try {
+            posts.parse(jsonObject);
+        } catch (JSONException e) {
+        }
 
-            ArrayList<VKWallPostWrapper> wallPosts = new ArrayList<VKWallPostWrapper>();
-            for (int i = 0; i < posts.size(); i++) {
-                wallPosts.add(new VKWallPostWrapper(posts.get(i), wall));
-            }
+        ArrayList<VKWallPostWrapper> wallPosts = new ArrayList<VKWallPostWrapper>();
+        for (int i = 0; i < posts.size(); i++) {
+            wallPosts.add(new VKWallPostWrapper(posts.get(i), wall));
+        }
 
-            wall.posts = wallPosts;
+        wall.posts = wallPosts;
 
         return wall;
     }
 
     public static String TIF_VK_API_KEY_RESPONSE = "response";
 
-    public static long getUserIdFromResponse(final VKResponse response) {
+    public static class UserObject {
+        public long id;
+        public String photo;
+        public String fullName;
+
+        public UserObject(long id, String photo, String fullName) {
+            this.id = id;
+            this.photo = photo;
+            this.fullName = fullName;
+
+            setUserToShared(this);
+        }
+
+        static SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(TIFApp.getAppContext());
+
+        public static final String USER_OBJECT = "USER_OBJECT";
+
+        public static UserObject getUserFromShared() {
+            String userString = sharedPreferences.getString(USER_OBJECT, "0** **" + TIFApp.getAppContext().getString(R.string.tif_title_header));
+            String[] userStrings = userString.split("\\*\\*");
+
+            return new UserObject(Long.valueOf(userStrings[0]), userStrings[1], userStrings[2]);
+        }
+
+        public static void setUserToShared(UserObject user) {
+            String userString = String.format("%d**%s**%s", user.id, user.photo, user.fullName);
+            sharedPreferences.edit().putString(USER_OBJECT, userString).commit();
+        }
+    }
+
+    public static UserObject getUserFromResponse(final VKResponse response) {
         final JSONArray arr = response.json.optJSONArray(TIF_VK_API_KEY_RESPONSE);
         final JSONObject jsonObject = arr == null ? null : arr.optJSONObject(0);
-        return jsonObject != null ? jsonObject.optLong("id") : 0;
+
+        UserObject user;
+
+        if (jsonObject != null) {
+            long id = jsonObject.optLong("id");
+            String photo = jsonObject.optString("photo_100");
+            String fullName = String.format("%s %s", jsonObject.optString("first_name"), jsonObject.optString("last_name"));
+
+            user = new UserObject(id, photo, fullName);
+        } else {
+            user = new UserObject(0, "", "");
+        }
+
+        return user;
     }
 }
