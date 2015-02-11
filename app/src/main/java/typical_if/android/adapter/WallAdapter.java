@@ -183,7 +183,7 @@ public class WallAdapter extends BaseAdapter {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
-            initViewHolder(viewHolder, wall, position, fragmentManager, post);
+            initViewHolder(viewHolder, wall, position, fragmentManager, post,false);
         }
 
         return convertView;
@@ -499,9 +499,10 @@ public class WallAdapter extends BaseAdapter {
                                       final Wall wall,
                                       final int position,
                                       final FragmentManager fragmentManager,
-                                      final VKWallPostWrapper postWrapper) {
+                                      final VKWallPostWrapper postWrapper, boolean comments_visibility) {
 
         ItemDataSetter.fragmentManager = fragmentManager;
+        ItemDataSetter.comments_visibility=comments_visibility;
 
         final VKApiPost post = postWrapper.post;
 

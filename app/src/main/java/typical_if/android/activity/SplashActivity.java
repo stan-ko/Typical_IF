@@ -251,6 +251,19 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
                 handleRequestError(requestSessionThreadsCounter);
             }
         });
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.ST_ID, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(final VKResponse response) {
+                super.onComplete(response);
+                handleRequestComplete(response.json, Constants.ST_ID, requestSessionThreadsCounter);
+            }
+
+            @Override
+            public void onError(final VKError error) {
+                super.onError(error);
+                handleRequestError(requestSessionThreadsCounter);
+            }
+        });
         //-------------------------END-------- all Request from internet before start APP----------------------
     }
 

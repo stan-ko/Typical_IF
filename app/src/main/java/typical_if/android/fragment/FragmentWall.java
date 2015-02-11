@@ -167,6 +167,7 @@ public class FragmentWall extends Fragment {
         super.onDetach();
     }
 
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
@@ -271,8 +272,8 @@ public class FragmentWall extends Fragment {
             if (adapter == null) {
                 ArrayList<WallAdapter.EventObject> events = getEvents(wall);
                 adapter = new WallAdapter(events, wall, inflater, fragmentManager);
-
-                wallListView.setAdapter(adapter);
+                setBottomAdapter(wallListView,adapter);
+                //wallListView.setAdapter(adapter);
                 wallListView.setOnScrollListener(pauseOnScrollListener);
             } else {
                 adapter.setEvent(getEvents(wall));
@@ -280,8 +281,8 @@ public class FragmentWall extends Fragment {
         } else {
             if (adapter == null) {
                 adapter = new WallAdapter(wall, inflater, fragmentManager, isSuggested);
-
-                wallListView.setAdapter(adapter);
+                setBottomAdapter(wallListView,adapter);
+                //wallListView.setAdapter(adapter);
                 wallListView.setOnScrollListener(pauseOnScrollListener);
             } else {
                 adapter.setWall(wall);

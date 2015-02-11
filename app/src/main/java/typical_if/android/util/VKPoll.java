@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by Yurij on 05.02.2015.
  */
-public class VKPoll {
+public class VKPoll extends VKApiPoll {
     /**
      * Poll ID to get information about it using polls.getById method;
      */
