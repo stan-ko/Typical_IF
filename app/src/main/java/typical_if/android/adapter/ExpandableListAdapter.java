@@ -5,13 +5,13 @@ package typical_if.android.adapter;
  */
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.vk.sdk.VKSdk;
 
 import java.util.List;
 
@@ -20,12 +20,12 @@ import typical_if.android.view.AnimatedExpandableListView;
 
 public class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
 
-    private final List<String> _listDataHeader;
+    private final List<GroupObject> _listDataHeader;
     private final SparseArray<List<String>> _listDataChild;
     private final LayoutInflater inflater;
 
 
-    public ExpandableListAdapter(Context context, List<String> listDataHeader, SparseArray<List<String>> listChildData) {
+    public ExpandableListAdapter(Context context, List<GroupObject> listDataHeader, SparseArray<List<String>> listChildData) {
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -81,7 +81,7 @@ public class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedEx
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         GroupViewHolder groupViewHolder;
-        String headerTitle = (String) getGroup(groupPosition);
+        GroupObject header = (GroupObject) getGroup(groupPosition);
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.navigation_drawer_group_item, null);
             groupViewHolder = new GroupViewHolder(convertView);
@@ -91,29 +91,33 @@ public class ExpandableListAdapter extends AnimatedExpandableListView.AnimatedEx
         }
 
         if (groupPosition == 4) {
-            convertView.setBackgroundColor(convertView.getResources().getColor(R.color.stantsiya_bg));
+            groupViewHolder.groupTitle.setTextColor(convertView.getResources().getColor(R.color.stantsiya_bg));
         } else {
-            convertView.setBackgroundColor(convertView.getResources().getColor(R.color.transparent));
+            groupViewHolder.groupTitle.setTextColor(Color.WHITE);
         }
 
-
-        if (groupPosition == 6) {
-            if (VKSdk.isLoggedIn()) {
-                groupViewHolder.groupTitle.setText(R.string.title_logout);
-            } else {
-                groupViewHolder.groupTitle.setText(R.string.title_login);
-            }
-        } else {
-            groupViewHolder.groupTitle.setText(headerTitle);
-        }
+        groupViewHolder.groupTitle.setText(header.title);
+        groupViewHolder.imgGroupItem.setImageResource(header.imgId);
 
         return convertView;
     }
 
+    public static class GroupObject {
+        public final String title;
+        public final int imgId;
+
+        public GroupObject(String title, int imgId) {
+            this.title = title;
+            this.imgId = imgId;
+        }
+    }
+
     private static class GroupViewHolder {
+        public final ImageView imgGroupItem;
         public final TextView groupTitle;
 
         GroupViewHolder(View view) {
+            this.imgGroupItem = (ImageView) view.findViewById(R.id.imgGroupItem);
             this.groupTitle = (TextView) view.findViewById(R.id.groupItem);
         }
     }

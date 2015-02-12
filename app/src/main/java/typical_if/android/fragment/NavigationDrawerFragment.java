@@ -3,7 +3,6 @@ package typical_if.android.fragment;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -20,14 +19,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.ImageButton;
+
+import com.devspark.robototextview.widget.RobotoTextView;
+import com.makeramen.RoundedImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.vk.sdk.VKSdk;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import typical_if.android.Constants;
+import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
+import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.ExpandableListAdapter;
 import typical_if.android.view.AnimatedExpandableListView;
@@ -68,14 +74,12 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
 
     View v;
-    TextView navDrawTitle;
-    List<String> listDataHeader;
+    HeaderViewHolder headerViewHolder;
+    List<ExpandableListAdapter.GroupObject> listDataHeader;
     SparseArray<List<String>> listDataChild;
 
-    RelativeLayout aboutUs;
+    private MainActivity activity;
 
-    public NavigationDrawerFragment() {
-    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +89,7 @@ public class NavigationDrawerFragment extends Fragment {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
 
+        activity = ((MainActivity) getActivity());
 
         if (savedInstanceState != null) {
             mFromSavedInstanceState = true;
@@ -96,40 +101,99 @@ public class NavigationDrawerFragment extends Fragment {
         }else selectItem(0, 0);
     }
 
-    public void refreshNavigationDrawer() {
+    public void refreshNavigationHeader(VKHelper.UserObject user) {
+        if (VKSdk.isLoggedIn()) {
+            headerViewHolder.btLogin.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_lock_open_white_24dp));
+
+            ImageLoader.getInstance().displayImage(user.photo, headerViewHolder.imgAvatar, TIFApp.additionalOptions);
+            headerViewHolder.txtTitle.setText(user.fullName);
+            headerViewHolder.imgAvatar.setTag("http://vk.com/id" + String.valueOf(user.id));
+            headerViewHolder.imgAvatar.setOnClickListener(ItemDataSetter.openActionViewChooserListener);
+        } else {
+            headerViewHolder.btLogin.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_lock_white_24dp));
+
+            headerViewHolder.txtTitle.setText(getString(R.string.tif_title_header));
+            headerViewHolder.imgAvatar.setImageResource(R.drawable.mobile_tf_logo);
+            headerViewHolder.imgAvatar.setTag("");
+            headerViewHolder.imgAvatar.setOnClickListener(null);
+        }
+
         mExpandapleListAdapter.notifyDataSetChanged();
+    }
+
+    public static class HeaderViewHolder {
+        public final RoundedImageView imgAvatar;
+        public final RobotoTextView txtTitle;
+        public final ImageButton btExit;
+        public final ImageButton btAbout;
+        public final ImageButton btSwitch;
+        public final ImageButton btLogin;
+
+        HeaderViewHolder(View view) {
+            this.imgAvatar = (RoundedImageView) view.findViewById(R.id.img_nav_draw);
+            this.txtTitle = (RobotoTextView) view.findViewById(R.id.txt_title_nav_draw);
+            this.btExit = (ImageButton) view.findViewById(R.id.ibt_exit_nav_draw);
+            this.btAbout = (ImageButton) view.findViewById(R.id.ibt_about_us_nav_draw);
+            this.btSwitch = (ImageButton) view.findViewById(R.id.ibt_change_language_nav_draw);
+            this.btLogin = (ImageButton) view.findViewById(R.id.ibt_login_nav_draw);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         setRetainInstance(true);
+
         mDrawerListView = (AnimatedExpandableListView) v.findViewById(R.id.navigation_drawer_exp_list);
+        mDrawerListView.setLayoutParams(
+                new ViewGroup.LayoutParams(
+                        (int) (TIFApp.getDisplayWidth() - getResources().getDimension(R.dimen.navigation_drawer_width_negative)),
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                )
+        );
+
         mDrawerListView.setGroupIndicator(null);
 
-        navDrawTitle = (TextView) v.findViewById(R.id.navigation_drawer_title);
-        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/segoescb.ttf");
-        navDrawTitle.setTypeface(font);
+        View header = inflater.inflate(R.layout.navigation_drawer_header, null);
+        headerViewHolder = new HeaderViewHolder(header);
 
-        prepareListData();
-
-        aboutUs = (RelativeLayout) v.findViewById(R.id.aboutUsLayout);
-        aboutUs.setOnClickListener(new View.OnClickListener() {
+        headerViewHolder.btAbout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity mainActivity = ((MainActivity) getActivity());
-                mainActivity.addFragment(FragmentAboutUs.newInstance());
+                activity.addFragment(FragmentAboutUs.newInstance());
                 closeDrawer();
             }
         });
 
-//        ImageView imageView = (ImageView) v.findViewById(R.id.photo1);
-//        imageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                ((MainActivity)getActivity()).addFragment(FragmentAboutUs.newInstance());
-//            }
-//        });
+        headerViewHolder.btExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.finish();
+            }
+        });
+
+        headerViewHolder.btLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (VKSdk.isLoggedIn()) {
+                    VKSdk.logout();
+                    refreshNavigationHeader(null);
+                } else {
+                    VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
+                }
+            }
+        });
+
+        headerViewHolder.btSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                activity.changeLanguage();
+            }
+        });
+
+        mDrawerListView.addHeaderView(header);
+
+        prepareListData();
 
         mExpandapleListAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
         mDrawerListView.setAdapter(mExpandapleListAdapter);
@@ -191,7 +255,7 @@ public class NavigationDrawerFragment extends Fragment {
      * Preparing the list data
      */
     private void prepareListData() {
-        listDataHeader = new ArrayList<String>();
+        listDataHeader = new ArrayList<ExpandableListAdapter.GroupObject>();
         listDataChild = new SparseArray<List<String>>();
 
         // Adding child data
@@ -209,37 +273,33 @@ public class NavigationDrawerFragment extends Fragment {
 
         List<String> st = new ArrayList<String>();
         setChildItems(st, 4);
-       // int y=0 ;
 
 
-        listDataHeader.add(getString(R.string.menu_group_title_tf));
-        listDataHeader.add(getString(R.string.menu_group_title_tz));
-        listDataHeader.add(getString(R.string.menu_group_title_fb));
-        listDataHeader.add(getString(R.string.menu_group_title_fn));
-        listDataHeader.add(getString(R.string.menu_group_title_stantsiya));
-        listDataHeader.add(getString(R.string.menu_group_title_events));
-        listDataHeader.add("");
-        listDataHeader.add(getString(R.string.settings));
-        listDataHeader.add(getString(R.string.menu_group_exit));
-        if (Constants.refresherDrawerCounter>0){
-            refreshDrawer();
-            Constants.refresherDrawerCounter=0;
-        }
+        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_title_tf), R.drawable.ic_tf));
+        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_title_tz), R.drawable.ic_tz));
+        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_title_fb), R.drawable.ic_fb));
+        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_title_fn), R.drawable.ic_fn));
+        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_title_stantsiya), R.drawable.ic_st));
+        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_title_events), R.drawable.ic_a));
+        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_exit), R.drawable.ic_exit_to_app_white_24dp));
+
+//        if (Constants.refresherDrawerCounter>0){
+//            refreshDrawer();
+//            Constants.refresherDrawerCounter=0;
+//        }
 
  }
 
-    public void refreshDrawer (){
-        listDataHeader.clear();
-        listDataHeader.add(getString(R.string.menu_group_title_tf));
-        listDataHeader.add(getString(R.string.menu_group_title_tz));
-        listDataHeader.add(getString(R.string.menu_group_title_fb));
-        listDataHeader.add(getString(R.string.menu_group_title_fn));
-        listDataHeader.add(getString(R.string.menu_group_title_stantsiya));
-        listDataHeader.add(getString(R.string.menu_group_title_events));
-        listDataHeader.add("");
-        listDataHeader.add(getString(R.string.settings));
-        listDataHeader.add(getString(R.string.menu_group_exit));
-    }
+//    public void refreshDrawer (){
+//        listDataHeader.clear();
+//        listDataHeader.add(getString(R.string.menu_group_title_tf));
+//        listDataHeader.add(getString(R.string.menu_group_title_tz));
+//        listDataHeader.add(getString(R.string.menu_group_title_fb));
+//        listDataHeader.add(getString(R.string.menu_group_title_fn));
+//        listDataHeader.add(getString(R.string.menu_group_title_stantsiya));
+//        listDataHeader.add(getString(R.string.menu_group_title_events));
+//        listDataHeader.add(getString(R.string.menu_group_exit));
+//    }
 
 
 
@@ -253,6 +313,8 @@ public class NavigationDrawerFragment extends Fragment {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
     }
 
+    boolean isDrawerOpen = false;
+
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
      *
@@ -261,6 +323,7 @@ public class NavigationDrawerFragment extends Fragment {
      */
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
+
         mDrawerLayout = drawerLayout;
 
         // set a custom shadow that overlays the main content when the drawer opens
@@ -281,6 +344,17 @@ public class NavigationDrawerFragment extends Fragment {
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ) {
             @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                if(slideOffset > .55 && !isDrawerOpen){
+                    onDrawerOpened(drawerView);
+                    isDrawerOpen = true;
+                } else if(slideOffset < .45 && isDrawerOpen) {
+                    onDrawerClosed(drawerView);
+                    isDrawerOpen = false;
+                }
+            }
+
+            @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
                 if (!isAdded()) {
@@ -297,8 +371,8 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 } else {
-                    showGlobalContextActionBar();
-                    ((MainActivity) getActivity()).getSupportActionBar().show();
+//                    showGlobalContextActionBar();
+//                    ((MainActivity) getActivity()).getSupportActionBar().show();
                     FragmentWall.setDisabledMenu();
                 }
 
@@ -378,12 +452,12 @@ public class NavigationDrawerFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // If the drawer is open, show the global app actions in the action bar. See also
         // showGlobalContextActionBar, which controls the top-left area of the action bar.
-        if (mDrawerLayout != null && isDrawerOpen()) {
-            inflater.inflate(R.menu.main, menu);
-            showGlobalContextActionBar();
-        } else {
-
-        }
+//        if (mDrawerLayout != null && isDrawerOpen()) {
+//            inflater.inflate(R.menu.main, menu);
+//            showGlobalContextActionBar();
+//        } else {
+//
+//        }
 
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -402,25 +476,25 @@ public class NavigationDrawerFragment extends Fragment {
     public void onPrepareOptionsMenu(Menu menu) {
         FragmentWall.setDisabledMenu();
         super.onPrepareOptionsMenu(menu);
-        if (mDrawerLayout != null && isDrawerOpen()) {
-            showGlobalContextActionBar();
-        } else {
-
-        }
+//        if (mDrawerLayout != null && isDrawerOpen()) {
+//            showGlobalContextActionBar();
+//        } else {
+//
+//        }
     }
 
     /**
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
      * 'context', rather than just what's in the current screen.
      */
-    private void showGlobalContextActionBar() {
-        ActionBar actionBar = getActionBar();
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(R.string.menu_group_title_tf);
-        actionBar.setIcon(R.drawable.mobile_tf_logo);
-    }
+//    private void showGlobalContextActionBar() {
+//        ActionBar actionBar = getActionBar();
+//        getActionBar().setDisplayHomeAsUpEnabled(true);
+//        getActionBar().setHomeButtonEnabled(true);
+//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+//        actionBar.setTitle(R.string.menu_group_title_tf);
+//        actionBar.setIcon(R.drawable.mobile_tf_logo);
+//    }
 
     private ActionBar getActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();

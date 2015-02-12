@@ -245,7 +245,13 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         }
         
         gridOfPhotos = (GridView) view.findViewById(R.id.gridOfPhotos);
-        gridOfPhotos.setOnTouchListener(new ShowHideOnScroll(floatingActionButton));;
+
+        if (VKSdk.isLoggedIn()) {
+            gridOfPhotos.setOnTouchListener(new ShowHideOnScroll(floatingActionButton));
+        } else {
+            gridOfPhotos.setOnTouchListener(null);
+        }
+
 
         gridOfPhotos.setNumColumns(columns);
 

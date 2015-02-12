@@ -1,15 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:padding="16dp">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/transparent">
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:id="@+id/imgGroupItem"
+        android:layout_marginRight="36dp" />
 
-    <TextView
+    <com.devspark.robototextview.widget.RobotoTextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/groupItem"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:padding="10dp"
-        android:textColor="#ffffff" />
+        android:layout_height="24dp"
+        android:background="@color/transparent"
+        android:textColor="#ffffff"
+        android:textSize="14sp"
+        android:alpha="0.87"
+        app:fontFamily="roboto"
+        app:textWeight="medium"
+        android:layout_toRightOf="@+id/imgGroupItem"
+        android:layout_toEndOf="@+id/imgGroupItem"
+        android:singleLine="true"
+        android:layout_alignTop="@+id/imgGroupItem"
+        android:layout_alignBottom="@+id/imgGroupItem"
+        android:gravity="center_vertical" />
 
-</LinearLayout>
+</RelativeLayout>

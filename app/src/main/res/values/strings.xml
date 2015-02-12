@@ -12,7 +12,7 @@
     <string name="menu_group_title_events">Афіша Франківська</string>
     <string name="menu_group_title_stantsiya">STANTSIYA</string>
     <string name="menu_group_about_us">Про додаток</string>
-    <string name="menu_group_exit">Покинути програму</string>
+    <string name="menu_group_exit">Вийти</string>
 
     <string name="profile">Профіль</string>
     <string name="reply">Відповісти</string>
@@ -131,6 +131,7 @@
     <string name="period_events">Тривалі події</string>
 
     <string name="null_events">Немає</string>
+    <string name="tif_title_header">Типовий Мобільний Франківськ</string>
 
     <array name="post_report_types">
         <item>Спам</item>
@@ -164,7 +165,7 @@
 
         <item>Запропонувати новину</item>
         <item>Запропоновані новини</item>
-        <item>Вступити до спільноти</item>
+        <item>Покинути спільноту</item>
     </string-array>
 
     <string-array name="menu_join_group">

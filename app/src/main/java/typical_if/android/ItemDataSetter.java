@@ -258,7 +258,6 @@ public class ItemDataSetter {
 
 
 
-
 //
 //            VKHelper.getPollById(poll.owner_id, 0, poll.id, new VKRequest.VKRequestListener() {
 //                @Override
@@ -310,24 +309,20 @@ public class ItemDataSetter {
 
     static VKPoll detailPoll;
     static boolean user_answered;
-
     public static void fillPollLayout(final VKApiPoll poll,final View parent) {
-        final View listFooterView = inflater.inflate( R.layout.list_of_votes_footer_view, null);
         final ListView pollList = (ListView)  parent.findViewById(R.id.listOfVotes);
         pollList.setVisibility(View.VISIBLE);
-
         final RelativeLayout spinner=((RelativeLayout) parent.findViewById(R.id.changeVotesSpinnerLayout));
 
 
         RelativeLayout votesParentLayout = ((RelativeLayout) parent.findViewById(R.id.votesParentLayout));
         votesParentLayout.setVisibility(View.VISIBLE);
-
         VKHelper.getPollById(poll.owner_id, 0, poll.id, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-               // OfflineMode.saveJSON(response.json, poll.owner_id + poll.id);
-                detailPoll = new VKPoll().parse(response.json);
+                OfflineMode.saveJSON(response.json, poll.owner_id + poll.id);
+                detailPoll = new VKPoll().parse(OfflineMode.loadJSON(poll.owner_id + poll.id));
                 boolean user_answered;
                 if (poll.answer_id==0){
                     user_answered=false;
@@ -336,35 +331,12 @@ public class ItemDataSetter {
                 }
                 ItemDataSetter.user_answered=user_answered;
 
-
-                final VoteItemAdapter adapter = new VoteItemAdapter(pollList, detailPoll ,detailPoll.answers, context, user_answered, parent);
+                VoteItemAdapter adapter = new VoteItemAdapter(pollList, detailPoll,detailPoll.answers, context, user_answered, parent);
                 pollList.setAdapter(adapter);
-                setListViewHeightBasedOnChildren(pollList, adapter);
+                setListViewHeightBasedOnChildren(pollList);
                 pollList.invalidateViews();
                 adapter.notifyDataSetChanged();
                 pollList.invalidateViews();
-
-
-
-                TextView changeDecision = ((TextView) listFooterView.findViewById(R.id.change_my_decision_tw));
-                changeDecision.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        VKHelper.deleteVote(poll.owner_id, poll.id, poll.answer_id, 0, new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(VKResponse response) {
-                                super.onComplete(response);
-                                Log.d("VOTE_DELETED", response.json.toString());
-                                 poll.answer_id=0;
-                                for (int i =0 ; i<pollList.getAdapter().getCount(); i++){
-                                    adapter.showProgress(poll.answers.get(i));
-                                }
-
-                                 adapter.notifyDataSetChanged();
-                             }
-                        });
-                    }
-                });
 
 
               if (VoteItemAdapter.pos==pollList.getAdapter().getCount()){
@@ -376,6 +348,11 @@ public class ItemDataSetter {
 
 
         });
+
+
+
+
+
  }
 
     public static void refreshList (View parent, ListView pollList){
@@ -389,9 +366,9 @@ public class ItemDataSetter {
     }
 
 
-    public static void setListViewHeightBasedOnChildren(ListView listView,   VoteItemAdapter mAdapter) {
+    public static void setListViewHeightBasedOnChildren(ListView listView) {
 
-        //VoteItemAdapter mAdapter = ((VoteItemAdapter)(HeaderViewListAdapter)listView.getAdapter();
+        VoteItemAdapter mAdapter = (VoteItemAdapter)listView.getAdapter();
 
         int totalHeight = 0;
 
@@ -399,12 +376,12 @@ public class ItemDataSetter {
         for (int i = 0; i < mAdapter.getCount(); i++) {
             View mView = mAdapter.getView(i,null, listView);
 
-//            mView.measure(
-//                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-//
-//                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-//
-//            totalHeight += mView.getMeasuredHeight();
+            mView.measure(
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+
+                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+            totalHeight += mView.getMeasuredHeight();
             Log.w("HEIGHT" + i, String.valueOf(totalHeight));
 
         }

@@ -83,18 +83,9 @@ public class FragmentWall extends Fragment {
     boolean temp = true;
     boolean temp2 = true;
     boolean enable = false;
+
     Bundle arguments;
     SwipeRefreshLayout swipeView;
-
-
-//    final Thread t = new Thread(new Runnable() {
-//        @Override
-//        public void run() {
-//            while(threadIsStarted){
-//            Offset = Offset + 100;
-//            endlessGet(Offset);}
-//        }
-//    });
 
     AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
 
@@ -109,17 +100,18 @@ public class FragmentWall extends Fragment {
         public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount,
                              int totalItemCount) {
 
-
             final int lastItem = firstVisibleItem + visibleItemCount;
 
             if (absListView.getId() == wallListView.getId()) {
 
                 final int currentFirstVisibleItem = wallListView.getFirstVisiblePosition();
+
                 if (currentFirstVisibleItem > mLastFirstVisibleItem) {
                     actionBar.hide();
                 } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
                     actionBar.show();
                 }
+
 
                 mLastFirstVisibleItem = currentFirstVisibleItem;
             }
@@ -152,8 +144,8 @@ public class FragmentWall extends Fragment {
 
     };
 
-
     public static FragmentWall newInstance(boolean isSuggestedParam) {
+
         FragmentWall fragment = new FragmentWall();
         Bundle args = new Bundle();
         isSuggested = isSuggestedParam;
@@ -179,16 +171,19 @@ public class FragmentWall extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
+
         spinnerLayout = (RelativeLayout) rootView.findViewById(R.id.spinner_layout);
         inflaterGlobal = inflater;
         arguments = getArguments();
         actionBar = ((MainActivity) getActivity()).getSupportActionBar();
 
+        actionBar.show();
+
         playableLogoRes = ItemDataSetter.getPlayingLogo(Constants.GROUP_ID);
         pauseOnScrollListener = new PauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerObject);
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         swipeView.setColorSchemeResources(android.R.color.white, android.R.color.white, android.R.color.white);
-       swipeView.setProgressBackgroundColor(R.color.music_progress);
+        swipeView.setProgressBackgroundColor(R.color.music_progress);
         swipeView.setProgressViewOffset(true, 0, 100);
 
         swipeView. setSize(SwipeRefreshLayout.DEFAULT);
@@ -259,7 +254,6 @@ public class FragmentWall extends Fragment {
 
         return rootView;
     }
-
 
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater) {
         Wall wall = VKHelper.getGroupWallFromJSON(jsonObject);
@@ -445,6 +439,7 @@ public class FragmentWall extends Fragment {
                             menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_join));
 
 
+
                         } catch (Exception e) {
 
                         }
@@ -486,6 +481,7 @@ public class FragmentWall extends Fragment {
             Constants.makePostMenu.getItem(0).setVisible(false);
             Constants.makePostMenu.getItem(1).setVisible(false);
             Constants.makePostMenu.getItem(2).setVisible(false);
+            Constants.makePostMenu.clear();
         }
         Constants.makePostMenu.close();
     }
@@ -555,6 +551,8 @@ public class FragmentWall extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("curChoice", wallListView.getScrollY());
+
+
     }
 
 
