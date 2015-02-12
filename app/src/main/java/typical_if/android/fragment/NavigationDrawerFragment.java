@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -98,6 +99,22 @@ public class NavigationDrawerFragment extends Fragment {
         } else {
             selectItem(0);
         }
+    }
+
+    private void startLoadingWall(int groupPosition) {
+        final int groupPositionH = groupPosition;
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCallbacks.onNavigationDrawerItemSelected(groupPositionH);
+                    }
+                });
+            }
+        }, 360);
     }
 
     public void refreshNavigationHeader(VKHelper.UserObject user) {
@@ -226,14 +243,14 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setAdapter(drawerListViewAdapter);
 
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-               @Override
-               public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                   if (mDrawerLayout != null) {
-                       mCallbacks.onNavigationDrawerItemSelected(--position);
-                       mDrawerLayout.closeDrawer(mFragmentContainerView);
-                   }
-               }
-           }
+                                                   @Override
+                                                   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                       if (mDrawerLayout != null) {
+                                                           closeDrawer();
+                                                           startLoadingWall(--position);
+                                                       }
+                                                   }
+                                               }
         );
 
         return v;
@@ -353,10 +370,10 @@ public class NavigationDrawerFragment extends Fragment {
 
     private void selectItem(int groupPosition) {
         if (mDrawerLayout != null) {
-            mDrawerLayout.closeDrawer(mFragmentContainerView);
+            closeDrawer();
         }
         if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(groupPosition);
+            startLoadingWall(groupPosition);
         }
     }
 
