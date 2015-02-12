@@ -551,9 +551,7 @@ public class FragmentWall extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("curChoice", wallListView.getScrollY());
-
-
-    }
+  }
 
 
     private void endlessAdd(final int lastItem) {
