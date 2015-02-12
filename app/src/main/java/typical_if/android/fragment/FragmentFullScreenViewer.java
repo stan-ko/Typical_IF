@@ -23,8 +23,8 @@ import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
+import org.json.JSONObject;
 import java.util.ArrayList;
 
 import de.greenrobot.event.EventBus;

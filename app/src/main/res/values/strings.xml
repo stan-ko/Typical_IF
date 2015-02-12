@@ -97,8 +97,8 @@
 
     <string name="anonymous_poll">Анонімне опитування, голосів:</string>
     <string name="public_poll">Публічне опитування, голосів: </string>
-    
 
+    <string name="change_my_decision">Змінити вибір</string>
 
     <string name="ab_title_make_post">Запропонувати новину</string>
     <string name="ab_title_suggested_posts">Запропоновані новини</string>
