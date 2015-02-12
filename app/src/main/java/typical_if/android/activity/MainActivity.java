@@ -58,13 +58,11 @@ public class MainActivity extends DialogActivity implements
     private static final int PICK_FROM_CAMERA = 1;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     public NavigationDrawerFragment mNavigationDrawerFragment;
-    // String[] data = new String[] { "one", "two", "three" };
     ActionBarArrayAdapter list;
 
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-//        EventBus.getDefault().register();
 
         super.onCreate(savedInstanceState);
 
@@ -306,6 +304,7 @@ public class MainActivity extends DialogActivity implements
                     ItemDataSetter.saveUserId(Constants.USER_ID);
 
                     mNavigationDrawerFragment.refreshNavigationHeader(user);
+                    ((FragmentWall) getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
                 }
 
                 @Override
@@ -333,6 +332,8 @@ public class MainActivity extends DialogActivity implements
                     ItemDataSetter.saveUserId(Constants.USER_ID);
 
                     mNavigationDrawerFragment.refreshNavigationHeader(user);
+
+                    ((FragmentWall) getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
                 }
 
                 @Override

@@ -85,7 +85,7 @@ public class VoteItemAdapter extends BaseAdapter {
 
 
 
-        if(!user_answered) {
+        if (!user_answered) {
 
             RelativeLayout l = ((RelativeLayout) convertView.findViewById(R.id.NotVotedLayout));
             l.setVisibility(View.GONE);
@@ -100,17 +100,12 @@ public class VoteItemAdapter extends BaseAdapter {
                         public void onComplete(VKResponse response) {
                             super.onComplete(response);
                             Log.d("VOTE_ADDED", response.json.toString());
-                         // RelativeLayout spinner=((RelativeLayout) listOfVotesParent.findViewById(R.id.changeVotesSpinnerLayout));
-                       //   spinner.setVisibility(View.VISIBLE);
                             ItemDataSetter.refreshList(parent,votesList);
-
-
                         }
                     });
                 }
             });
-
-        }else {
+        } else {
             RelativeLayout l = ((RelativeLayout) convertView.findViewById(R.id.NotVotedLayout));
             l.setVisibility(View.VISIBLE);
             RelativeLayout l1 = ((RelativeLayout) convertView.findViewById(R.id.AddVoteLayout));
@@ -124,24 +119,12 @@ public class VoteItemAdapter extends BaseAdapter {
 
         }
 
-
-
-        if (pos==answers.size()){
+        if (pos==answers.size()) {
             votesList.setLayoutParams(new ListView.LayoutParams(ListView.LayoutParams.WRAP_CONTENT, ListView.LayoutParams.WRAP_CONTENT));
         }
 
-
-
-
-
-  return convertView;
+        return convertView;
     }
-
-
-
-
-
-
 
     public static class ViewHolder {
         public final ProgressBar bar;

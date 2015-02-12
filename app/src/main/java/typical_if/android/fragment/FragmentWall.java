@@ -172,6 +172,21 @@ public class FragmentWall extends Fragment {
     FloatingActionButton fabPhoto;
     FloatingActionButton fabSuggest;
 
+    public void checkFabSuggest() {
+        if (VKSdk.isLoggedIn()) {
+            fabSuggest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
+                }
+            });
+            fabSuggest.setVisibility(View.VISIBLE);
+        } else {
+            fabSuggest.setOnClickListener(null);
+            fabSuggest.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
@@ -197,18 +212,7 @@ public class FragmentWall extends Fragment {
             }
         });
 
-        if (VKSdk.isLoggedIn()) {
-            fabSuggest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
-                }
-            });
-            fabSuggest.setVisibility(View.VISIBLE);
-        } else {
-            fabSuggest.setOnClickListener(null);
-            fabSuggest.setVisibility(View.GONE);
-        }
+        checkFabSuggest();
 
         actionBar = ((MainActivity) getActivity()).getSupportActionBar();
         actionBar.show();
