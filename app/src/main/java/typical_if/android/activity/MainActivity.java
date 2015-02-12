@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCaptchaDialog;
@@ -42,6 +44,7 @@ import typical_if.android.VKHelper;
 import typical_if.android.adapter.ActionBarArrayAdapter;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentFullScreenViewer;
+import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
 import typical_if.android.fragment.FragmentWall;
 import typical_if.android.fragment.NavigationDrawerFragment;
@@ -50,7 +53,7 @@ import typical_if.android.fragment.NavigationDrawerFragment;
 public class MainActivity extends DialogActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         FragmentFullScreenViewer.OnFragmentInteractionListener,
-        FragmentComments.OnFragmentInteractionListener, ActionBar.OnNavigationListener {
+        FragmentComments.OnFragmentInteractionListener {
 
 
     private Drawable mIcon;
@@ -212,16 +215,160 @@ public class MainActivity extends DialogActivity implements
         }
     }
 
+    String[] items;
+
+    ActionBar.OnNavigationListener callback = new ActionBar.OnNavigationListener() {
+
+        //  String[] items = getResources().getStringArray(R.array.actions); // List items from res
+
+        @Override
+        public boolean onNavigationItemSelected(int position, long id) {
+
+            // Do stuff when navigation item is selected
+
+            Log.d("NavigationItemSelected", items[position]); // Debug
+
+            switch (position) {
+                case 0: {
+                    addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
+                }
+                break;
+                case 1: {
+                    addFragment(FragmentWall.newInstance(true));
+                }
+                break;
+
+                case 2: {
+                    if (Constants.isMember == 0) {
+                        VKHelper.groupJoin(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(final VKResponse response) {
+                                super.onComplete(response);
+                                Toast.makeText(getApplicationContext(), getString(R.string.group_joined), Toast.LENGTH_SHORT).show();
+                                replaceFragment(FragmentWall.newInstance(false));
+                            }
+
+                            @Override
+                            public void onError(final VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                            }
+                        });
+                    } else {
+                        VKHelper.groupLeave(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(final VKResponse response) {
+                                super.onComplete(response);
+                                Toast.makeText(getApplicationContext(), getString(R.string.group_leaved), Toast.LENGTH_SHORT).show();
+                                replaceFragment(FragmentWall.newInstance(false));
+                            }
+
+                            @Override
+                            public void onError(final VKError error) {
+                                super.onError(error);
+                                OfflineMode.onErrorToast(getApplicationContext());
+                            }
+                        });
+                    }
+                }
+                break;
+
+            }
+            Toast.makeText(getApplicationContext(), "SelectedItem is: " + getSupportActionBar().getSelectedNavigationIndex(), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        ;
+
+
+    };
+
     public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-        //actionBar.setDisplayShowTitleEnabled(true);
-        //actionBar.setTitle(mTitle);
+        final ActionBar actionBar = getSupportActionBar();
+
         actionBar.setIcon(mIcon);
-        list = new ActionBarArrayAdapter(getApplicationContext(), getResources().getStringArray(R.array.menu_join_group), mTitle);
-        list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        actionBar.setListNavigationCallbacks(list, this);
+
+        if (Constants.isMember == 0) {
+            items = getResources().getStringArray(R.array.menu_join_group);
+
+        } else {
+            items = getResources().getStringArray(R.array.menu_leave_group);
+        }
+        if (VKSdk.isLoggedIn()) {
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setTitle(mTitle);
+            list = new ActionBarArrayAdapter(getApplicationContext(), items, mTitle);
+            list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+
+
+
+
+            actionBar.setListNavigationCallbacks(list, callback);
+
+        }
+
+//            actionBar.setListNavigationCallbacks(list, new ActionBar.OnNavigationListener() {
+//                @Override
+//                public boolean onNavigationItemSelected(int position, long id) {
+//                    getSupportActionBar().setSelectedNavigationItem(position);
+
+//                    switch (getSupportActionBar().getSelectedNavigationIndex()) {
+//                        case 0:
+//                            addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
+//                            break;
+//                        case 1:
+//                            addFragment(FragmentWall.newInstance(true));
+//                            break;
+//
+//                        case 2:
+//                            if (Constants.isMember==0){
+//                            VKHelper.groupJoin(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
+//                                @Override
+//                                public void onComplete(final VKResponse response) {
+//                                    super.onComplete(response);
+//                                    Toast.makeText(getApplicationContext(), getString(R.string.group_joined), Toast.LENGTH_SHORT).show();
+//                                     replaceFragment(FragmentWall.newInstance(false));
+//                                }
+//
+//                                @Override
+//                                public void onError(final VKError error) {
+//                                    super.onError(error);
+//                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+//                                }
+//                            });
+//                    } else {
+//                        VKHelper.groupLeave(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
+//                            @Override
+//                            public void onComplete(final VKResponse response) {
+//                                super.onComplete(response);
+//                                Toast.makeText(getApplicationContext(), getString(R.string.group_leaved), Toast.LENGTH_SHORT).show();
+//                                  replaceFragment(FragmentWall.newInstance(false));
+//                            }
+//
+//                            @Override
+//                            public void onError(final VKError error) {
+//                                super.onError(error);
+//                                OfflineMode.onErrorToast(getApplicationContext());
+//                            }
+//                        });
+//                    }
+//
+//                            break;
+//
+//                    }
+
+        //   Toast.makeText(getApplicationContext(), "SelectedItem is: " + getSupportActionBar().getSelectedNavigationIndex(), Toast.LENGTH_SHORT).show();
+        //  return true;
+        // }
+        //   });
+        else {
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+            actionBar.setDisplayShowTitleEnabled(true);
+        }
     }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -230,7 +377,6 @@ public class MainActivity extends DialogActivity implements
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -416,9 +562,6 @@ public class MainActivity extends DialogActivity implements
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-        return true;
-    }
+
 }
 

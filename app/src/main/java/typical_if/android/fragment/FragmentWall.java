@@ -444,6 +444,7 @@ public class FragmentWall extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         setRetainInstance(true);
         setHasOptionsMenu(true);
+// ((MainActivity) getActivity()).getSupportActionBar().show();
         super.onCreate(savedInstanceState);
     }
 
@@ -467,12 +468,16 @@ public class FragmentWall extends Fragment {
                 if (VKSdk.isLoggedIn()) {
                     if (Constants.isMember == 0) {
                         try {
+
                             menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_join));
+
                         } catch (Exception e) {
                         }
                     } else {
                         try {
+
                             menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_leave));
+
                         } catch (Exception e) {
                         }
                     }
@@ -490,6 +495,7 @@ public class FragmentWall extends Fragment {
     }
 
     public static void setEnabledMenu() {
+//        Constants.makePostMenu.
         if (Constants.makePostMenu.size() == 3) {
             Constants.makePostMenu.getItem(0).setVisible(true);
             Constants.makePostMenu.getItem(1).setVisible(true);
@@ -498,6 +504,8 @@ public class FragmentWall extends Fragment {
     }
 
     public static void setDisabledMenu() {
+
+
         if (Constants.makePostMenu.size() == 3) {
             Constants.makePostMenu.getItem(0).setVisible(false);
             Constants.makePostMenu.getItem(1).setVisible(false);
@@ -571,7 +579,7 @@ public class FragmentWall extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("curChoice", wallListView.getScrollY());
-    }
+  }
 
 
     private void endlessAdd(final int lastItem) {

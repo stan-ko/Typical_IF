@@ -58,7 +58,8 @@
             android:layout_alignParentTop="true"
             android:visibility="visible"
             android:divider="@drawable/list_divider"
-            android:dividerHeight="1px" />
+            android:dividerHeight="1px"
+            android:footerDividersEnabled="true" />
 
         <RelativeLayout
             android:layout_width="fill_parent"

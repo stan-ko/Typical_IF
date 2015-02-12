@@ -566,12 +566,6 @@ public class FragmentComments extends Fragment {
     }
 
     public  boolean isRunning;
-
-
-
-
-
-
     public boolean myComment = false;
 
     public void showContextMenu(int position) {
