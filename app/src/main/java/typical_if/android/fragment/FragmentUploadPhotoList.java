@@ -12,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.shamanland.fab.FloatingActionButton;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
@@ -99,6 +99,10 @@ public class FragmentUploadPhotoList extends Fragment {
         super.onDetach();
     }
 
+    public void setFabVisibility(int VISIBILITY) {
+        uploadPhotoFromSd.setVisibility(VISIBILITY);
+    }
+
     public static void refreshCheckBoxes() {
         CheckBox checkBox = null;
 
@@ -130,9 +134,12 @@ public class FragmentUploadPhotoList extends Fragment {
         getActivity().stopService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
     }
 
+    public FloatingActionButton uploadPhotoFromSd;
+
     protected void handleResponse(View rootView, LayoutInflater inflater, final ArrayList<UploadPhotos> photolist, int columns) {
 
-        final ImageView uploadPhotoFromSd = (ImageView) rootView.findViewById(R.id.upload_photo_from_sd);
+        uploadPhotoFromSd = (FloatingActionButton) rootView.findViewById(R.id.upload_photo_from_sd);
+        uploadPhotoFromSd.initBackground();
 
         if (which == 0) {
             uploadPhotoFromSd.setOnClickListener(new View.OnClickListener() {
@@ -180,6 +187,11 @@ public class FragmentUploadPhotoList extends Fragment {
                                     OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                                 }
                             });
+
+                            getActivity().getSupportFragmentManager().popBackStack();
+                            getActivity().getSupportFragmentManager().popBackStack();
+                            getActivity().getSupportFragmentManager().popBackStack();
+
                         }
                     }
                 }
@@ -187,7 +199,7 @@ public class FragmentUploadPhotoList extends Fragment {
         }
 
         photos = (GridView) rootView.findViewById(R.id.adding_photo_upload);
-        PhotoUploadAdapter photoUploadAdapter = new PhotoUploadAdapter(category, inflater, photolist, getActivity().getSupportFragmentManager(), which);
+        PhotoUploadAdapter photoUploadAdapter = new PhotoUploadAdapter(this, category, inflater, photolist, getActivity().getSupportFragmentManager(), which);
         photos.setAdapter(photoUploadAdapter);
         photos.setNumColumns(columns);
     }

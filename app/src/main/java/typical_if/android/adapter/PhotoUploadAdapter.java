@@ -28,13 +28,15 @@ import typical_if.android.model.UploadPhotos;
  */
 public class PhotoUploadAdapter extends BaseAdapter {
 
+    FragmentUploadPhotoList fragmentUploadPhotoList;
     String titlename;
     LayoutInflater layoutInflater;
     ArrayList<UploadPhotos> uploadphotolist;
     android.support.v4.app.FragmentManager manager;
     int which;
 
-    public PhotoUploadAdapter(String titlename, LayoutInflater inflater, ArrayList<UploadPhotos> uploadphotolist, FragmentManager fragmentManager, int which) {
+    public PhotoUploadAdapter(FragmentUploadPhotoList fragmentUploadPhotoList, String titlename, LayoutInflater inflater, ArrayList<UploadPhotos> uploadphotolist, FragmentManager fragmentManager, int which) {
+        this.fragmentUploadPhotoList = fragmentUploadPhotoList;
         this.titlename = titlename;
         this.layoutInflater = inflater;
         this.uploadphotolist = uploadphotolist;
@@ -82,11 +84,11 @@ public class PhotoUploadAdapter extends BaseAdapter {
                 if (which == 1) {
                     if (isChecked) {
                         viewHolder.background.setVisibility(View.VISIBLE);
+                        viewHolder.checkbox.setChecked(true);
                     } else {
                         viewHolder.background.setVisibility(View.INVISIBLE);
+                        viewHolder.checkbox.setChecked(false);
                     }
-
-                    viewHolder.checkbox.setChecked(isChecked);
                 } else {
                     if (isChecked) {
                         viewHolder.background.setVisibility(View.VISIBLE);
@@ -99,6 +101,15 @@ public class PhotoUploadAdapter extends BaseAdapter {
                     viewHolder.checkbox.setChecked(isChecked);
 
                     FragmentUploadPhotoList.refreshCheckBoxes();
+                }
+
+                for (int i = 0; i < getCount(); i++) {
+                    if(((UploadPhotos) getItem(i)).isChecked) {
+                        fragmentUploadPhotoList.setFabVisibility(View.VISIBLE);
+                        break;
+                    } else {
+                        fragmentUploadPhotoList.setFabVisibility(View.INVISIBLE);
+                    }
                 }
             }
         });

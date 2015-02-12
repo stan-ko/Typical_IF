@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/blur1">
+    android:background="@color/app_bg">
 
     <GridView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/adding_photo_upload" />
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <com.shamanland.fab.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/upload_photo_from_sd"
-        android:layout_gravity="right|bottom"
-        android:src="@drawable/custom_upload_icon"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="16dp" />
+        android:layout_gravity="bottom|right"
+        android:src="@drawable/ic_upload_white_24dp"
+        app:floatingActionButtonColor="@color/music_progress"
+        app:floatingActionButtonSize="normal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        android:layout_marginBottom="24dp"
+        android:layout_marginRight="16dp"/>
 
 </FrameLayout>

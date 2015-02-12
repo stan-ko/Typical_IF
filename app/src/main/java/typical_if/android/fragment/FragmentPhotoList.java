@@ -95,7 +95,6 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         return rootView;
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -114,7 +113,6 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
     boolean temp = false;
     boolean updated = false;
-    int yPos;
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {

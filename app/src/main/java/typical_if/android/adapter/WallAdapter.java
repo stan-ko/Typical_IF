@@ -156,8 +156,6 @@ public class WallAdapter extends BaseAdapter {
 
             if (convertView == null) {
                 convertView = layoutInflater.inflate(R.layout.event_item_layout, null, false);
-//                LinearLayout postWrapper = (LinearLayout) convertView.findViewById(R.id.postParentLayout);
-//                setGradientColors((Color.parseColor("#FF7C7A7E")), postWrapper);
                 viewHolder = new EventViewHolder(convertView);
                 convertView.setTag(viewHolder);
 
@@ -306,6 +304,12 @@ public class WallAdapter extends BaseAdapter {
 
                 SwipeLayout eventSwipeLayout = (SwipeLayout) eventView.findViewById(R.id.event_swipe_layout);
 
+                if (i == 1) {
+                    eventSwipeLayout.getBottomView().setBackgroundColor(context.getResources().getColor(R.color.stantsiya_bg));
+                } else {
+                    eventSwipeLayout.getBottomView().setBackgroundColor(context.getResources().getColor(R.color.music_progress));
+                }
+
                 if (ItemDataSetter.isToday(item.date)) {
                     if (item.array.get(i).get(j).equals(context.getString(R.string.null_events))) {
                         unsetSwipeLayout(eventSwipeLayout);
@@ -361,6 +365,7 @@ public class WallAdapter extends BaseAdapter {
     public void setSwipeLayout(SwipeLayout eventSwipeLayout, CalendarData calendarData) {
         eventSwipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         eventSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
+        eventSwipeLayout.setSwipeEnabled(true);
         eventSwipeLayout.getSurfaceView().setTag(eventSwipeLayout);
         eventSwipeLayout.getSurfaceView().setOnClickListener(slClickListener);
 

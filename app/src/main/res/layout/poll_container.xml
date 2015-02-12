@@ -19,7 +19,8 @@
         android:layout_toEndOf="@+id/img_poll_post"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+        android:text="sdaf asd fasdf" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -29,8 +30,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="5dp" />
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -90,6 +91,7 @@
         android:layout_below="@+id/txt_poll_title"
         android:layout_alignLeft="@+id/txt_poll_title"
         android:layout_alignStart="@+id/txt_poll_title"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="5dp"
+        android:text="asd asd asd" />
 
 </RelativeLayout>
