@@ -69,7 +69,7 @@
             android:padding="5dp"
             android:singleLine="true"
             android:text="@string/station_events"
-            android:textColor="@color/ab_background"
+            android:textColor="@color/stantsiya_bg"
             android:textSize="18dp"
             app:typeface="roboto_regular" />
 

@@ -1,52 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#ff272727"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#ff272727">
 
-    <android.support.v4.widget.SwipeRefreshLayout
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/refresh"
         android:background="#ff272727"
         android:focusableInTouchMode="true">
-   <ListView
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listViewWall"
-        android:layout_centerHorizontal="true"
-        android:background="#ff272727"
-        android:divider="@null"
-        android:smoothScrollbar="true"
-        android:scrollingCache="false"
-        android:animationCache="false"
-        android:scrollbarStyle="outsideOverlay"
-        tools:ignore="overdraw"
-        android:footerDividersEnabled="false"/>
+
+        <ListView xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/listViewWall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:animationCache="false"
+            android:background="#ff272727"
+            android:divider="@null"
+            android:footerDividersEnabled="false"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollingCache="false"
+            android:smoothScrollbar="true"
+            tools:ignore="overdraw" />
+
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <typical_if.android.view.ToggleFloatingActionsMenu
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/fab_wall"
+        fab:fab_addButtonSize="normal"
+        fab:fab_expandDirection="up"
+        fab:fab_addButtonColorNormal="@color/music_progress"
+        fab:fab_addButtonColorPressed="@color/music_progress_pressed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="24dp"
+        android:layout_marginRight="16dp">
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fab_wall_photo"
+            fab:fab_icon="@drawable/ic_image_album_white_24dp"
+            fab:fab_size="mini"
+            fab:fab_colorNormal="@color/music_progress"
+            fab:fab_colorPressed="@color/music_progress_pressed"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/fab_wall_suggest"
+            fab:fab_size="mini"
+            fab:fab_icon="@drawable/ic_library_plus_white_24dp"
+            fab:fab_colorNormal="@color/music_progress"
+            fab:fab_colorPressed="@color/music_progress_pressed"/>
+
+    </typical_if.android.view.ToggleFloatingActionsMenu>
+
     <RelativeLayout
+        android:id="@+id/spinner_layout"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/spinner_layout"
-        android:background="#ff272727"
-        android:visibility="visible"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentRight="true"
+        android:layout_alignParentStart="true"
+        android:background="#ff272727"
+        android:visibility="gone">
 
         <ProgressBar
+            android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
     </RelativeLayout>
 
 </RelativeLayout>

@@ -1,8 +1,10 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -11,15 +13,16 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ExpandableListView;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ListView;
 
 import com.devspark.robototextview.widget.RobotoTextView;
 import com.makeramen.RoundedImageView;
@@ -30,13 +33,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import typical_if.android.Constants;
-import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
-import typical_if.android.adapter.ExpandableListAdapter;
-import typical_if.android.view.AnimatedExpandableListView;
+import typical_if.android.adapter.DrawerListViewAdapter;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -64,10 +65,10 @@ public class NavigationDrawerFragment extends Fragment {
      * Helper component that ties the action bar to the navigation drawer.
      */
     private ActionBarDrawerToggle mDrawerToggle;
-    private ExpandableListAdapter mExpandapleListAdapter;
+    private DrawerListViewAdapter drawerListViewAdapter;
 
     public static DrawerLayout mDrawerLayout;
-    public static AnimatedExpandableListView mDrawerListView;
+    public static ListView mDrawerListView;
     public static View mFragmentContainerView;
 
     private boolean mFromSavedInstanceState;
@@ -75,8 +76,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     View v;
     HeaderViewHolder headerViewHolder;
-    List<ExpandableListAdapter.GroupObject> listDataHeader;
-    SparseArray<List<String>> listDataChild;
+    List<DrawerListViewAdapter.GroupObject> listDataHeader;
 
     private MainActivity activity;
 
@@ -96,9 +96,11 @@ public class NavigationDrawerFragment extends Fragment {
         }
         // Select either the default item (0) or the last selected item.
 
-        if (getActivity().getIntent().getExtras()!= null && getActivity().getIntent().getExtras().getBoolean("isClickable")){
-            selectItem(4, 0);
-        }else selectItem(0, 0);
+        if (getActivity().getIntent().getExtras() != null && getActivity().getIntent().getExtras().getBoolean("isClickable")) {
+            selectItem(4);
+        } else {
+            selectItem(0);
+        }
     }
 
     public void refreshNavigationHeader(VKHelper.UserObject user) {
@@ -107,18 +109,19 @@ public class NavigationDrawerFragment extends Fragment {
 
             ImageLoader.getInstance().displayImage(user.photo, headerViewHolder.imgAvatar, TIFApp.additionalOptions);
             headerViewHolder.txtTitle.setText(user.fullName);
+
             headerViewHolder.imgAvatar.setTag("http://vk.com/id" + String.valueOf(user.id));
-            headerViewHolder.imgAvatar.setOnClickListener(ItemDataSetter.openActionViewChooserListener);
+            headerViewHolder.imgAvatar.setOnTouchListener(touchListener);
         } else {
             headerViewHolder.btLogin.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_lock_white_24dp));
 
             headerViewHolder.txtTitle.setText(getString(R.string.tif_title_header));
             headerViewHolder.imgAvatar.setImageResource(R.drawable.mobile_tf_logo);
             headerViewHolder.imgAvatar.setTag("");
-            headerViewHolder.imgAvatar.setOnClickListener(null);
+            headerViewHolder.imgAvatar.setOnTouchListener(null);
         }
 
-        mExpandapleListAdapter.notifyDataSetChanged();
+        drawerListViewAdapter.notifyDataSetChanged();
     }
 
     public static class HeaderViewHolder {
@@ -139,20 +142,47 @@ public class NavigationDrawerFragment extends Fragment {
         }
     }
 
+    public final View.OnTouchListener touchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            RoundedImageView img = (RoundedImageView) v;
+            img.setBorderColor(getResources().getColor(R.color.music_progress));
+
+            Uri uri = Uri.parse((String) v.getTag());
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    img.setBorderWidth(4f);
+                    img.invalidate();
+                    break;
+                }
+                case MotionEvent.ACTION_UP:
+                    img.getContext().startActivity(new Intent(android.content.Intent.ACTION_VIEW, uri).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
+
+                case MotionEvent.ACTION_CANCEL: {
+                    img.setBorderWidth(0f);
+                    img.invalidate();
+                    break;
+                }
+            }
+
+            return true;
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_navigation_drawer, container, false);
         setRetainInstance(true);
 
-        mDrawerListView = (AnimatedExpandableListView) v.findViewById(R.id.navigation_drawer_exp_list);
+        mDrawerListView = (ListView) v.findViewById(R.id.navigation_drawer_exp_list);
         mDrawerListView.setLayoutParams(
                 new ViewGroup.LayoutParams(
                         (int) (TIFApp.getDisplayWidth() - getResources().getDimension(R.dimen.navigation_drawer_width_negative)),
                         ViewGroup.LayoutParams.MATCH_PARENT
                 )
         );
-
-        mDrawerListView.setGroupIndicator(null);
 
         View header = inflater.inflate(R.layout.navigation_drawer_header, null);
         headerViewHolder = new HeaderViewHolder(header);
@@ -195,58 +225,19 @@ public class NavigationDrawerFragment extends Fragment {
 
         prepareListData();
 
-        mExpandapleListAdapter = new ExpandableListAdapter(getActivity(), listDataHeader, listDataChild);
-        mDrawerListView.setAdapter(mExpandapleListAdapter);
-        mDrawerListView.setOnGroupClickListener(new AnimatedExpandableListView.OnGroupClickListener() {
-            @Override
-            public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                if (listDataChild.get(groupPosition) == null) {
-                    if (mDrawerLayout != null) {
-                        mCallbacks.onNavigationDrawerItemSelected(groupPosition, 0);
-                        mDrawerLayout.closeDrawer(mFragmentContainerView);
-                    }
-                } else {
-                    if (mDrawerListView.isGroupExpanded(groupPosition)) {
-                        mDrawerListView.collapseGroupWithAnimation(groupPosition);
-                    } else {
-                        mDrawerListView.expandGroupWithAnimation(groupPosition);
-                    }
-                }
+        drawerListViewAdapter = new DrawerListViewAdapter(getActivity(), listDataHeader);
+        mDrawerListView.setAdapter(drawerListViewAdapter);
 
-                return true;
-            }
-
-        });
-
-        mDrawerListView.setOnGroupExpandListener(new AnimatedExpandableListView.OnGroupExpandListener() {
-            int previousGroup = -1;
-
-            @Override
-            public void onGroupExpand(int groupPosition) {
-                if (groupPosition != previousGroup) {
-                    mDrawerListView.collapseGroupWithAnimation(previousGroup);
-                }
-                previousGroup = groupPosition;
-            }
-        });
-
-        mDrawerListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-            @Override
-            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                List<String> list = listDataChild.get(groupPosition);
-                if (mDrawerLayout != null) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mDrawerLayout.closeDrawer(mFragmentContainerView);
-                        }
-                    });
-
-                    mCallbacks.onNavigationDrawerItemSelected(groupPosition, childPosition);
-                }
-                return false;
-            }
-        });
+        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+               @Override
+               public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                   if (mDrawerLayout != null) {
+                       mCallbacks.onNavigationDrawerItemSelected(--position);
+                       mDrawerLayout.closeDrawer(mFragmentContainerView);
+                   }
+               }
+           }
+        );
 
         return v;
     }
@@ -255,58 +246,16 @@ public class NavigationDrawerFragment extends Fragment {
      * Preparing the list data
      */
     private void prepareListData() {
-        listDataHeader = new ArrayList<ExpandableListAdapter.GroupObject>();
-        listDataChild = new SparseArray<List<String>>();
+        listDataHeader = new ArrayList<DrawerListViewAdapter.GroupObject>();
 
-        // Adding child data
-        List<String> tf = new ArrayList<String>();
-        setChildItems(tf, 0);
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_tf), R.drawable.ic_tf));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_tz), R.drawable.ic_tz));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_fb), R.drawable.ic_fb));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_fn), R.drawable.ic_fn));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_stantsiya), R.drawable.ic_st));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_events), R.drawable.ic_a));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_exit), R.drawable.ic_exit_to_app_white_24dp));
 
-        List<String> tz = new ArrayList<String>();
-        setChildItems(tz, 1);
-
-        List<String> fb = new ArrayList<String>();
-        setChildItems(fb, 2);
-
-        List<String> fn = new ArrayList<String>();
-        setChildItems(fn, 3);
-
-        List<String> st = new ArrayList<String>();
-        setChildItems(st, 4);
-
-
-        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_title_tf), R.drawable.ic_tf));
-        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_title_tz), R.drawable.ic_tz));
-        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_title_fb), R.drawable.ic_fb));
-        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_title_fn), R.drawable.ic_fn));
-        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_title_stantsiya), R.drawable.ic_st));
-        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_title_events), R.drawable.ic_a));
-        listDataHeader.add(new ExpandableListAdapter.GroupObject(getString(R.string.menu_group_exit), R.drawable.ic_exit_to_app_white_24dp));
-
-//        if (Constants.refresherDrawerCounter>0){
-//            refreshDrawer();
-//            Constants.refresherDrawerCounter=0;
-//        }
-
- }
-
-//    public void refreshDrawer (){
-//        listDataHeader.clear();
-//        listDataHeader.add(getString(R.string.menu_group_title_tf));
-//        listDataHeader.add(getString(R.string.menu_group_title_tz));
-//        listDataHeader.add(getString(R.string.menu_group_title_fb));
-//        listDataHeader.add(getString(R.string.menu_group_title_fn));
-//        listDataHeader.add(getString(R.string.menu_group_title_stantsiya));
-//        listDataHeader.add(getString(R.string.menu_group_title_events));
-//        listDataHeader.add(getString(R.string.menu_group_exit));
-//    }
-
-
-
-    public void setChildItems(List<String> list, Integer groupIndex) {
-        list.add(getString(R.string.look_wall));
-        list.add(getString(R.string.look_albums));
-        listDataChild.put(groupIndex, list);
     }
 
     public boolean isDrawerOpen() {
@@ -345,10 +294,10 @@ public class NavigationDrawerFragment extends Fragment {
         ) {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                if(slideOffset > .55 && !isDrawerOpen){
+                if (slideOffset > .55 && !isDrawerOpen) {
                     onDrawerOpened(drawerView);
                     isDrawerOpen = true;
-                } else if(slideOffset < .45 && isDrawerOpen) {
+                } else if (slideOffset < .45 && isDrawerOpen) {
                     onDrawerClosed(drawerView);
                     isDrawerOpen = false;
                 }
@@ -405,16 +354,12 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void selectItem(int groupPosition, int childPosition) {
-
-        if (mDrawerListView != null) {
-            //mDrawerListView.setSelectedChild(groupPosition, childPosition, true);
-        }
+    private void selectItem(int groupPosition) {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(groupPosition, childPosition);
+            mCallbacks.onNavigationDrawerItemSelected(groupPosition);
         }
     }
 
@@ -495,7 +440,6 @@ public class NavigationDrawerFragment extends Fragment {
 //        actionBar.setTitle(R.string.menu_group_title_tf);
 //        actionBar.setIcon(R.drawable.mobile_tf_logo);
 //    }
-
     private ActionBar getActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
     }
@@ -507,8 +451,6 @@ public class NavigationDrawerFragment extends Fragment {
             openDrawer();
         }
     }
-
-
 
 
     public void openDrawer() {
@@ -526,8 +468,7 @@ public class NavigationDrawerFragment extends Fragment {
         /**
          * Called when an item in the navigation drawer is selected.
          */
-        void onNavigationDrawerItemSelected(int groupPosition, int childPosition);
+        void onNavigationDrawerItemSelected(int groupPosition);
 
-        ;
     }
 }

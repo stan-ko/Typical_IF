@@ -16,49 +16,47 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:padding="16dp">
+        android:paddingRight="16dp"
+        android:paddingBottom="16dp">
 
         <RelativeLayout
             android:layout_width="85dp"
             android:layout_height="85dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true">
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="16dp">
 
-            <ImageButton
+            <typical_if.android.view.TouchImageButton
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/ibt_exit_nav_draw"
-                android:background="@drawable/gray_oval_shape"
                 android:src="@drawable/ic_exit_to_app_white_24dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
-            <ImageButton
+            <typical_if.android.view.TouchImageButton
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/ibt_change_language_nav_draw"
-                android:background="@drawable/gray_oval_shape"
                 android:src="@drawable/ic_translate_white_24dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
 
-            <ImageButton
+            <typical_if.android.view.TouchImageButton
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/ibt_about_us_nav_draw"
-                android:background="@drawable/gray_oval_shape"
                 android:src="@drawable/ic_settings_white_24dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
 
-            <ImageButton
+            <typical_if.android.view.TouchImageButton
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/ibt_login_nav_draw"
-                android:background="@drawable/gray_oval_shape"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />
@@ -66,15 +64,16 @@
         </RelativeLayout>
 
         <com.makeramen.RoundedImageView
-            android:layout_width="88dp"
-            android:layout_height="88dp"
-            android:background="@drawable/mobile_tf_logo"
+            android:layout_width="93dp"
+            android:layout_height="93dp"
             android:id="@+id/img_nav_draw"
             android:scaleType="centerCrop"
             app:riv_corner_radius="90dp"
-            android:layout_marginRight="16dp"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true" />
+            android:layout_alignParentLeft="true"
+            android:padding="5dp"
+            android:layout_marginLeft="11dp"
+            android:layout_marginTop="11dp" />
 
         <com.devspark.robototextview.widget.RobotoTextView
             android:layout_width="wrap_content"
@@ -87,7 +86,8 @@
             android:text="@string/tif_title_header"
             android:id="@+id/txt_title_nav_draw"
             android:textColor="@android:color/white"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:layout_marginLeft="16dp" />
 
     </RelativeLayout>
 

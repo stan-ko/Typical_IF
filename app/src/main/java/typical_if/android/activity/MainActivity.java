@@ -40,7 +40,6 @@ import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.ActionBarArrayAdapter;
-import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
@@ -347,7 +346,7 @@ public class MainActivity extends DialogActivity implements
     Fragment fragment = null;
 
     @Override
-    public void onNavigationDrawerItemSelected(int groupPosition, int childPosition) {
+    public void onNavigationDrawerItemSelected(int groupPosition) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         long vkGroupId;
@@ -362,12 +361,7 @@ public class MainActivity extends DialogActivity implements
                 Constants.GROUP_ID = vkGroupId;
 
                 onSectionAttached(groupPosition);
-
-                if (childPosition == 0) {
-                    fragment = FragmentWall.newInstance(false);
-                } else if (childPosition == 1) {
-                    fragment = FragmentAlbumsList.newInstance(1);
-                }
+                fragment = FragmentWall.newInstance(false);
 
                 break;
             case 6:
@@ -375,7 +369,7 @@ public class MainActivity extends DialogActivity implements
                 break;
         }
 
-        if (groupPosition != 6 && groupPosition != 7) {
+        if (groupPosition != 6) {
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                 fragmentManager.popBackStack();
             }

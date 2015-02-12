@@ -32,4 +32,14 @@
         android:textSize="20dp"
         android:layout_centerHorizontal="true" />
 
+    <LinearLayout
+        android:id="@+id/card_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/app_bg"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp" />
+
 </RelativeLayout>

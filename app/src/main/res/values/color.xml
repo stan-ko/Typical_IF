@@ -22,10 +22,11 @@
     <color name="ab_text_color">#0E745C</color>
     <color name="list_child_text_color">#B8B8B8</color>
     <color name="menu_popup">#575757</color>
+    <color name="music_progress_pressed">#ffff883e</color>
     <color name="music_progress">#FF6600</color>
     <color name="music_progress_alt">#D0C65F00</color>
     <color name="app_bg">#303030</color>
-    <color name="stantsiya_bg">#b71c1c</color>
+    <color name="stantsiya_bg">#f44336</color>
     <color name="tFIndigo">#3F51B5</color>
     <color name="tZDeepPurple">#673AB7</color>
     <color name="fbBlue">#2196F3</color>

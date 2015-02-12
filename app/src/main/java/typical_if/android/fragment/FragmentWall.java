@@ -15,13 +15,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.nhaarman.listviewanimations.appearance.AnimationAdapter;
 import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -47,9 +47,9 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
-import typical_if.android.adapter.ActionBarArrayAdapter;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.model.Wall.Wall;
+import typical_if.android.view.ToggleFloatingActionsMenu;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
@@ -60,10 +60,6 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 
 public class FragmentWall extends Fragment {
-//    implements SwipeRefreshLayout.OnRefreshListener {
-
-    private static final int INITIAL_DELAY_MILLIS = 300;
-
 
     static ListView wallListView;
     WallAdapter adapter;
@@ -78,7 +74,7 @@ public class FragmentWall extends Fragment {
     public static int playableLogoRes;
     JSONObject jsonObjectOld;
 
-    int Offset = Constants.TIF_VK_PRELOAD_POSTS_COUNT;//SplashActivity.getCountOfPosts();
+    int Offset = Constants.TIF_VK_PRELOAD_POSTS_COUNT;
     static boolean isSuggested;
 
     boolean temp = true;
@@ -87,6 +83,7 @@ public class FragmentWall extends Fragment {
 
     Bundle arguments;
     SwipeRefreshLayout swipeView;
+    ToggleFloatingActionsMenu toggleFloatingActionsMenu;
 
     AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
 
@@ -109,8 +106,10 @@ public class FragmentWall extends Fragment {
 
                 if (currentFirstVisibleItem > mLastFirstVisibleItem) {
                     actionBar.hide();
+                    toggleFloatingActionsMenu.hide(true);
                 } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
                     actionBar.show();
+                    toggleFloatingActionsMenu.show(true);
                 }
 
 
@@ -167,6 +166,11 @@ public class FragmentWall extends Fragment {
         super.onDetach();
     }
 
+    FragmentManager fragmentManager;
+    long tempGroupId;
+
+    FloatingActionButton fabPhoto;
+    FloatingActionButton fabSuggest;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -175,8 +179,32 @@ public class FragmentWall extends Fragment {
         spinnerLayout = (RelativeLayout) rootView.findViewById(R.id.spinner_layout);
         inflaterGlobal = inflater;
         arguments = getArguments();
-        actionBar = ((MainActivity) getActivity()).getSupportActionBar();
 
+        fragmentManager = getActivity().getSupportFragmentManager();
+        tempGroupId = Constants.GROUP_ID;
+
+        toggleFloatingActionsMenu = (ToggleFloatingActionsMenu) rootView.findViewById(R.id.fab_wall);
+        fabPhoto = (FloatingActionButton) rootView.findViewById(R.id.fab_wall_photo);
+        fabSuggest = (FloatingActionButton) rootView.findViewById(R.id.fab_wall_suggest);
+
+        fabPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Constants.GROUP_ID = tempGroupId;
+                FragmentAlbumsList fragment = FragmentAlbumsList.newInstance(1);
+                ((MainActivity) getActivity()).addFragment(fragment);
+                ((MainActivity) getActivity()).restoreActionBar();
+            }
+        });
+
+        fabSuggest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
+            }
+        });
+
+        actionBar = ((MainActivity) getActivity()).getSupportActionBar();
         actionBar.show();
 
         playableLogoRes = ItemDataSetter.getPlayingLogo(Constants.GROUP_ID);
@@ -269,6 +297,8 @@ public class FragmentWall extends Fragment {
         }
 
         if (Constants.GROUP_ID == Constants.ZF_ID) {
+            fabPhoto.setVisibility(View.GONE);
+
             if (adapter == null) {
                 ArrayList<WallAdapter.EventObject> events = getEvents(wall);
                 adapter = new WallAdapter(events, wall, inflater, fragmentManager);
@@ -279,6 +309,8 @@ public class FragmentWall extends Fragment {
                 adapter.setEvent(getEvents(wall));
             }
         } else {
+            fabPhoto.setVisibility(View.VISIBLE);
+
             if (adapter == null) {
                 adapter = new WallAdapter(wall, inflater, fragmentManager, isSuggested);
                 setBottomAdapter(wallListView,adapter);
@@ -404,17 +436,8 @@ public class FragmentWall extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         setRetainInstance(true);
         setHasOptionsMenu(true);
-// ((MainActivity) getActivity()).getSupportActionBar().show();
         super.onCreate(savedInstanceState);
     }
-
-    ActionBarArrayAdapter list;
-    ActionBar.OnNavigationListener navListener = new ActionBar.OnNavigationListener() {
-        @Override
-        public boolean onNavigationItemSelected(int i, long l) {
-            return true;
-        }
-    };
 
     @Override
     public void onPrepareOptionsMenu(final Menu menu) {
@@ -437,23 +460,15 @@ public class FragmentWall extends Fragment {
                     if (Constants.isMember == 0) {
                         try {
                             menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_join));
-
-
-                        } catch (Exception e) {
-
-                        }
+                        } catch (Exception e) {}
                     } else {
                         try {
                             menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_leave));
-
-                        } catch (Exception e) {
-
-                        }
+                        } catch (Exception e) {}
                     }
                 } else {
                     menu.findItem(R.id.join_leave_group).setVisible(false);
                 }
-
             }
 
             @Override
@@ -465,7 +480,6 @@ public class FragmentWall extends Fragment {
     }
 
     public static void setEnabledMenu() {
-//        Constants.makePostMenu.
         if (Constants.makePostMenu.size() == 3) {
             Constants.makePostMenu.getItem(0).setVisible(true);
             Constants.makePostMenu.getItem(1).setVisible(true);
@@ -474,8 +488,6 @@ public class FragmentWall extends Fragment {
     }
 
     public static void setDisabledMenu() {
-
-
         if (Constants.makePostMenu.size() == 3) {
             Constants.makePostMenu.getItem(0).setVisible(false);
             Constants.makePostMenu.getItem(1).setVisible(false);

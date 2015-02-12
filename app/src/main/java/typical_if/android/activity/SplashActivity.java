@@ -11,13 +11,15 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.github.johnpersano.supertoasts.SuperCardToast;
+import com.github.johnpersano.supertoasts.SuperToast;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCaptchaDialog;
 import com.vk.sdk.VKSdk;
@@ -29,6 +31,7 @@ import com.vk.sdk.api.VKResponse;
 
 import org.json.JSONObject;
 
+import java.net.InetAddress;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -54,10 +57,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
     static public Configuration config;
     SharedPreferences firstOpenPref = null;
 
-//    public static int getCountOfPosts() {
-//        return countOfPosts;
-//    }
-
     final int offsetDefault = 0;
 
     @Override
@@ -67,8 +66,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
-//        spinner = (ProgressBar) findViewById(R.id.progressBar);
-//        spinner.setScrollBarStyle(PRO);
 
         firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
 
@@ -95,7 +92,31 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
             getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
 
         }
-        Toast.makeText(getApplicationContext(), getString(R.string.main_creed), Toast.LENGTH_SHORT).show();
+
+//        Toast.makeText(getApplicationContext(), getString(R.string.main_creed), Toast.LENGTH_SHORT).show();
+
+        final SuperCardToast superCardToast = new SuperCardToast(SplashActivity.this);
+        superCardToast.setText(getString(R.string.main_creed_1));
+        superCardToast.setDuration(SuperToast.Duration.EXTRA_LONG);
+        superCardToast.setAnimations(SuperToast.Animations.FADE);
+        superCardToast.show();
+
+        findViewById(R.id.card_container).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                superCardToast.dismiss();
+
+                SuperCardToast.create(
+                        SplashActivity.this,
+                        getString(R.string.main_creed_2),
+                        SuperToast.Duration.EXTRA_LONG,
+                        SuperToast.Animations.FADE
+                    ).show();
+
+                v.setEnabled(false);
+            }
+        });
+
         ItemDataSetter.loadUserId();
         ItemDataSetter.loadUserLanguage();
     }
@@ -155,23 +176,39 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         return temp;
     }
 
+    public boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("vk.com");
+
+            if (ipAddr.equals("")) {
+                return false;
+            } else {
+                return true;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
+
     void checkIfOnlineAndProceed() {
         new Thread(
                 new Runnable() {
                     @Override
                     public void run() {
 //                        boolean isICA = com.stanko.tools.InternetConnectionHelper.checkHostByConnection("vk.com");
-//                        if (!isICA) {
-//                            runOnUiThread(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    showAlertNoInternet();
-//                                }
-//                            });
-//
-//                        }else {
-                        makeRequests();
-//                        }
+                        if (!isInternetAvailable()) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showAlertNoInternet();
+                                }
+                            });
+
+                        }else {
+                            makeRequests();
+                        }
                     }
                 }
         ).start();
