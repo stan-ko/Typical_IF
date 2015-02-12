@@ -97,7 +97,7 @@ public class NavigationDrawerFragment extends Fragment {
         // Select either the default item (0) or the last selected item.
 
         if (getActivity().getIntent().getExtras() != null && getActivity().getIntent().getExtras().getBoolean("isClickable")) {
-            selectItem(4);
+            selectItem(5);
         } else {
             selectItem(0);
         }

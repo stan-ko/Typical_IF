@@ -337,7 +337,7 @@ public class FragmentWall extends Fragment {
         String[] tempArray;
 
         for (int i = 0; i < wall.posts.size(); i++) {
-            tempPost = wall.posts.get(i).post;
+            tempPost = wall.posts.get(i).post.copy_history.get(0);
 
             ArrayList<VKApiPhoto> photo = new ArrayList<VKApiPhoto>();
 
