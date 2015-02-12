@@ -197,12 +197,18 @@ public class FragmentWall extends Fragment {
             }
         });
 
-        fabSuggest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
-            }
-        });
+        if (VKSdk.isLoggedIn()) {
+            fabSuggest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
+                }
+            });
+            fabSuggest.setVisibility(View.VISIBLE);
+        } else {
+            fabSuggest.setOnClickListener(null);
+            fabSuggest.setVisibility(View.GONE);
+        }
 
         actionBar = ((MainActivity) getActivity()).getSupportActionBar();
         actionBar.show();
@@ -214,7 +220,7 @@ public class FragmentWall extends Fragment {
         swipeView.setProgressBackgroundColor(R.color.music_progress);
         swipeView.setProgressViewOffset(true, 0, 100);
 
-        swipeView. setSize(SwipeRefreshLayout.DEFAULT);
+        swipeView.setSize(SwipeRefreshLayout.DEFAULT);
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -302,8 +308,7 @@ public class FragmentWall extends Fragment {
             if (adapter == null) {
                 ArrayList<WallAdapter.EventObject> events = getEvents(wall);
                 adapter = new WallAdapter(events, wall, inflater, fragmentManager);
-                setBottomAdapter(wallListView,adapter);
-                //wallListView.setAdapter(adapter);
+                setBottomAdapter(wallListView, adapter);
                 wallListView.setOnScrollListener(pauseOnScrollListener);
             } else {
                 adapter.setEvent(getEvents(wall));
@@ -313,8 +318,7 @@ public class FragmentWall extends Fragment {
 
             if (adapter == null) {
                 adapter = new WallAdapter(wall, inflater, fragmentManager, isSuggested);
-                setBottomAdapter(wallListView,adapter);
-                //wallListView.setAdapter(adapter);
+                setBottomAdapter(wallListView, adapter);
                 wallListView.setOnScrollListener(pauseOnScrollListener);
             } else {
                 adapter.setWall(wall);
@@ -460,11 +464,13 @@ public class FragmentWall extends Fragment {
                     if (Constants.isMember == 0) {
                         try {
                             menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_join));
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                        }
                     } else {
                         try {
                             menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_leave));
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                        }
                     }
                 } else {
                     menu.findItem(R.id.join_leave_group).setVisible(false);
