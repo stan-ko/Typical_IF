@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="0dp"
         card_view:cardElevation="8dp"
-        card_view:contentPadding="0dp">
+        card_view:cardBackgroundColor="@color/app_bg">
 
         <RelativeLayout
             android:id="@+id/child_of_comment_list"
