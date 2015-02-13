@@ -194,6 +194,7 @@ public class ItemDataSetter {
         }
 
         if (photos.size() != 0 || videos.size() != 0) {
+            mediaLayout.setTag(true);
             setMediaPager(mediaPager, mediaPagerIndicator, mediaPagerVideoButton, mediaLayout, photos, videos);
         } else {
             mediaLayout.setVisibility(View.GONE);
@@ -778,7 +779,7 @@ public class ItemDataSetter {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
         mediaPager.setLayoutParams(params);
 
-        MediaPagerAdapter mediaPagerAdapter = new MediaPagerAdapter(context, photos, videos);
+        MediaPagerAdapter mediaPagerAdapter = new MediaPagerAdapter(context, (Boolean) mediaLayout.getTag(), photos, videos);
 
         mediaPager.setOffscreenPageLimit(count);
         mediaPager.setAdapter(mediaPagerAdapter);

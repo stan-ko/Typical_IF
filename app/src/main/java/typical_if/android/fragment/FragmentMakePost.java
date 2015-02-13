@@ -3,21 +3,25 @@ package typical_if.android.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.devspark.robototextview.widget.RobotoTextView;
+import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.viewpagerindicator.CirclePageIndicator;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
@@ -39,6 +43,7 @@ import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.WallAdapter;
 import typical_if.android.event.EventShowPhotoAttachDialog;
+import typical_if.android.view.TouchMakePostImageButton;
 
 /**
  * Created by admin on 18.08.2014.
@@ -48,7 +53,6 @@ public class FragmentMakePost extends Fragment {
     private static long gid;
     private long pid;
     private int type;
-    //private Activity activity;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -67,23 +71,25 @@ public class FragmentMakePost extends Fragment {
     }
 
 
-
-
     public FragmentMakePost() {}
 
     static EditText textField;
-    static TextView txtPostAttachCounter;
+    static RobotoTextView txtPostAttachCounter;
 
-    static Button btSendPost;
+    static AddFloatingActionButton btSendPost;
     static LinearLayout makePostAttachmentsContainer;
     static LinearLayout makePostAudioContainer;
     static LinearLayout makePostDocContainer;
     static RelativeLayout makePostMediaContainer;
 
-    static ImageView imgPostAttachPhoto;
-    static ImageView imgPostAttachVideo;
-    static ImageView imgPostAttachAudio;
-    static ImageView imgPostAttachDoc;
+    static ViewPager makePostMediaPager;
+    static ImageButton makePostMediaPagerVideoButton;
+    static CirclePageIndicator makePostMediaPagerIndicator;
+
+    static TouchMakePostImageButton imgPostAttachPhoto;
+    static TouchMakePostImageButton imgPostAttachVideo;
+    static TouchMakePostImageButton imgPostAttachAudio;
+    static TouchMakePostImageButton imgPostAttachDoc;
 
     private static final View.OnClickListener tooManyAttachments = new View.OnClickListener() {
         @Override
@@ -135,13 +141,13 @@ public class FragmentMakePost extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_make_post, container, false);
         setRetainInstance(true);
 
-        //activity = getActivity();
         photoAttachClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 EventBus.getDefault().post(new EventShowPhotoAttachDialog(gid * (-1), 0));
             }
         };
+
         textField = (EditText) rootView.findViewById(R.id.etxt_make_post_field);
         if (WallAdapter.surpriseCounter!=0 && WallAdapter.surpriseCounter==15 && VKSdk.isLoggedIn()){
             OfflineMode.saveInt(15, "surprise");
@@ -150,26 +156,29 @@ public class FragmentMakePost extends Fragment {
                     "натисніть кнопку 'Відправити' " );
         }
 
+        txtPostAttachCounter = (RobotoTextView) rootView.findViewById(R.id.txt_post_attach_counter);
 
-        txtPostAttachCounter = (TextView) rootView.findViewById(R.id.txt_post_attach_counter);
-
-        imgPostAttachPhoto = (ImageView) rootView.findViewById(R.id.img_post_attach_photo);
+        imgPostAttachPhoto = (TouchMakePostImageButton) rootView.findViewById(R.id.img_post_attach_photo);
         imgPostAttachPhoto.setOnClickListener(photoAttachClick);
 
-        imgPostAttachVideo = (ImageView) rootView.findViewById(R.id.img_post_attach_video);
+        imgPostAttachVideo = (TouchMakePostImageButton) rootView.findViewById(R.id.img_post_attach_video);
         imgPostAttachVideo.setOnClickListener(videoAttachClick);
 
-        imgPostAttachAudio = (ImageView) rootView.findViewById(R.id.img_post_attach_audio);
+        imgPostAttachAudio = (TouchMakePostImageButton) rootView.findViewById(R.id.img_post_attach_audio);
         imgPostAttachAudio.setOnClickListener(audioAttachClick);
 
-        imgPostAttachDoc = (ImageView) rootView.findViewById(R.id.img_post_attach_doc);
+        imgPostAttachDoc = (TouchMakePostImageButton) rootView.findViewById(R.id.img_post_attach_doc);
         imgPostAttachDoc.setOnClickListener(docAttachClick);
 
         makePostAttachmentsContainer = (LinearLayout) rootView.findViewById(R.id.make_post_attachments_container_new);
         makePostAudioContainer = (LinearLayout) rootView.findViewById(R.id.make_post_audio_container);
         makePostDocContainer = (LinearLayout) rootView.findViewById(R.id.make_post_doc_container);
         makePostMediaContainer = (RelativeLayout) rootView.findViewById(R.id.make_post_media_container);
-        btSendPost = (Button) rootView.findViewById(R.id.bt_post_send);
+        btSendPost = (AddFloatingActionButton) rootView.findViewById(R.id.bt_post_send);
+
+        makePostMediaPager = (ViewPager) rootView.findViewById(R.id.media_pager);
+        makePostMediaPagerIndicator = (CirclePageIndicator) rootView.findViewById(R.id.media_circle_indicator);
+        makePostMediaPagerVideoButton = (ImageButton) rootView.findViewById(R.id.ib_goto_video_page);
 
         switch (type) {
             case 0:
@@ -218,7 +227,7 @@ public class FragmentMakePost extends Fragment {
                 });
         }
 
-        txtPostAttachCounter.setText(": " + Constants.tempPostAttachCounter + "/" + + Constants.tempMaxPostAttachCounter);
+        txtPostAttachCounter.setText(Constants.tempPostAttachCounter + " / " + + Constants.tempMaxPostAttachCounter);
 
         btSendPost.setVisibility(View.INVISIBLE);
 
@@ -297,7 +306,7 @@ public class FragmentMakePost extends Fragment {
             refreshMakePostFragment(3);
         }
 
-        txtPostAttachCounter.setText(": " + Constants.tempPostAttachCounter + "/" + Constants.tempMaxPostAttachCounter);
+        txtPostAttachCounter.setText(Constants.tempPostAttachCounter + " / " + Constants.tempMaxPostAttachCounter);
         textField.setText(Constants.tempTextSuggestPost);
     }
 
@@ -308,13 +317,7 @@ public class FragmentMakePost extends Fragment {
             btSendPost.setVisibility(View.INVISIBLE);
         }
 
-        txtPostAttachCounter.setText(": " + Constants.tempPostAttachCounter + "/" + Constants.tempMaxPostAttachCounter);
-
-        if (Constants.tempPostAttachCounter == 0) {
-            makePostAttachmentsContainer.setVisibility(View.GONE);
-        } else {
-            makePostAttachmentsContainer.setVisibility(View.VISIBLE);
-        }
+        txtPostAttachCounter.setText(Constants.tempPostAttachCounter + " / " + Constants.tempMaxPostAttachCounter);
 
         if (Constants.tempPostAttachCounter != 10) {
             imgPostAttachPhoto.setOnClickListener(photoAttachClick);
@@ -330,12 +333,22 @@ public class FragmentMakePost extends Fragment {
 
         switch (which) {
             case 0:
-                makePostMediaContainer.setVisibility(View.VISIBLE);
-                setMedia(makePostMediaContainer, Constants.tempPhotoPostAttach, Constants.tempVideoPostAttach);
-                break;
             case 1:
-                makePostMediaContainer.setVisibility(View.VISIBLE);
-                setMedia(makePostMediaContainer, Constants.tempPhotoPostAttach, Constants.tempVideoPostAttach);
+                if (Constants.tempPhotoPostAttach.size() == 0 && Constants.tempVideoPostAttach.size() == 0) {
+                    makePostMediaContainer.setVisibility(View.GONE);
+                } else {
+                    makePostMediaContainer.setVisibility(View.VISIBLE);
+                    setMedia(
+                            makePostMediaPager,
+                            makePostMediaPagerIndicator,
+                            makePostMediaPagerVideoButton,
+                            makePostMediaContainer,
+                            Constants.tempPhotoPostAttach,
+                            Constants.tempVideoPostAttach
+                    );
+                }
+
+                break;
             case 2:
                 makePostAudioContainer.setVisibility(View.VISIBLE);
                 setAudios(makePostAudioContainer, Constants.tempAudioPostAttach);
@@ -439,240 +452,26 @@ public class FragmentMakePost extends Fragment {
         }
     }
 
-    public static void setMedia(RelativeLayout parent, final ArrayList<VKApiPhoto> photos, final ArrayList<VKApiVideo> videos) {
-        ImageView img;
-        RelativeLayout relativeLayout;
-        ViewGroup mediaContainer = null;
+    public static void setMedia(
+            final ViewPager mediaPager,
+            CirclePageIndicator mediaPagerIndicator,
+            ImageButton mediaPagerVideoButton,
+            RelativeLayout mediaLayout,
+            final ArrayList<VKApiPhoto> photos,
+            final ArrayList<VKApiVideo> videos) {
 
-        final int count = (photos != null ? photos.size() : 0) + (videos != null ? videos.size() : 0);
-        switch (count) {
-            case 1:
-                mediaContainer = ItemDataSetter.getPreparedView(parent, R.layout.media_container);
-                break;
-            case 2:
-                mediaContainer = ItemDataSetter.getPreparedView(parent, R.layout.media_container2);
-                break;
-            case 3:
-                mediaContainer = ItemDataSetter.getPreparedView(parent, R.layout.media_container3);
-                break;
-            case 4:
-                mediaContainer = ItemDataSetter.getPreparedView(parent, R.layout.media_container4);
-                break;
-            case 5:
-                mediaContainer = ItemDataSetter.getPreparedView(parent, R.layout.media_container5);
-                break;
-            case 6:
-                mediaContainer = ItemDataSetter.getPreparedView(parent, R.layout.media_container6);
-                break;
-            case 7:
-                mediaContainer = ItemDataSetter.getPreparedView(parent, R.layout.media_container7);
-                break;
-            case 8:
-                mediaContainer = ItemDataSetter.getPreparedView(parent, R.layout.media_container8);
-                break;
-            case 9:
-                mediaContainer = ItemDataSetter.getPreparedView(parent, R.layout.media_container9);
-                break;
-            case 10:
-                mediaContainer = ItemDataSetter.getPreparedView(parent, R.layout.media_container10);
-                break;
-            default:
-                parent.setVisibility(View.GONE);
-                return;
-        }
+        mediaLayout.setTag(false);
 
-        mediaContainer.setVisibility(View.VISIBLE);
-
-        int lastPositionJ = 0;
-        int lastPositionK = 0;
-        int lastPositionL = 0;
-
-        if (photos != null) {
-            final int photosCount = photos.size();
-
-            for (int i = 0; i < photosCount; i++) {
-                final ViewGroup layout_i = (ViewGroup) mediaContainer.getChildAt(i);
-
-                if (!(layout_i instanceof LinearLayout)) {
-                    continue;
-                } else {
-                    if (photosCount > 1) {
-                        int newWidth;
-                        if (ItemDataSetter.getScreenOrientation() == 1) {
-                            newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
-                        } else {
-                            newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
-                        }
-                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
-                        layout_i.setLayoutParams(params);
-                    }
-                }
-                layout_i.setVisibility(View.VISIBLE);
-
-                linearBreak:
-                for (int j = 0, photoPointer = 0; j < photos.size(); j++) {
-                    final ViewGroup layout_i_j = (ViewGroup) layout_i.getChildAt(j);
-                    if (!(layout_i_j instanceof RelativeLayout)) {
-                        continue;
-                    }
-                    final int kMax = layout_i_j.getChildCount();
-                    for (int k = 0; k < kMax; k++) {
-                        final View view_i_j_k = layout_i_j.getChildAt(k);
-                        if (view_i_j_k instanceof ImageView) {
-                            img = (ImageView) view_i_j_k;
-                            final int finalJ = photoPointer++;
-                            if (photosCount == 1 && videos.size() == 0) {
-                                int newWidth;
-                                if (ItemDataSetter.getScreenOrientation() == 1) {
-                                    newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
-                                } else {
-                                    newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
-                                }
-                                float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width);
-                                int newHeight = (int) (photos.get(finalJ).height * scaleFactor);
-                                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
-                                img.setLayoutParams(params);
-                                img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                            }
-
-                            ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img);
-                            img.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    deleteAttaches(0, photos.get(finalJ));
-                                }
-                            });
-                            if (photoPointer == photos.size()) {
-                                lastPositionJ = j + 1;
-                                lastPositionK = k;
-                                break;
-                            }
-                        } else if (view_i_j_k instanceof LinearLayout) {
-                            final ViewGroup layout_i_j_k = (LinearLayout) view_i_j_k;
-                            final int lMax = layout_i_j_k.getChildCount();
-                            for (int l = 0; l < lMax; l++) {
-                                final ViewGroup layout_i_j_k_l = (ViewGroup) layout_i_j_k.getChildAt(l);
-                                if (photoPointer == photos.size()) {
-                                    lastPositionJ = j;
-                                    lastPositionL = l;
-                                    lastPositionK = k;
-                                    break linearBreak;
-                                }
-                                img = (ImageView) layout_i_j_k_l.getChildAt(0);
-                                final int finalL = photoPointer++;
-
-                                ImageLoader.getInstance().displayImage(photos.get(finalL).photo_130, img);
-                                img.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        deleteAttaches(0, photos.get(finalL));
-                                    }
-                                });
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if (videos != null) {
-            final int videosCount = videos.size();
-            for (int i = 0; i < videosCount; i++) {
-                final ViewGroup layout_i = (ViewGroup) mediaContainer.getChildAt(i);
-                if (!(layout_i instanceof LinearLayout)) {
-                    continue;
-                } else {
-                    if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
-                        if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
-                            int newWidth;
-                            if (ItemDataSetter.getScreenOrientation() == 1) {
-                                newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
-                            } else {
-                                newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
-                            }
-                            float scaleFactor = (float) newWidth / 320;
-                            int newHeight = (int) (240 * scaleFactor);
-                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
-                            layout_i.setLayoutParams(params);
-                        }
-                    } else if (photos.size() == 0 && videos.size() > 1) {
-                        int newWidth;
-                        if (ItemDataSetter.getScreenOrientation() == 1) {
-                            newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
-                        } else {
-                            newWidth = TIFApp.getDisplayHeight(); //this method should return the width of device screen.
-                        }
-                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
-                        layout_i.setLayoutParams(params);
-                    }
-                }
-                layout_i.setVisibility(View.VISIBLE);
-                final int jMax = layout_i.getChildCount();
-                for (int j = lastPositionJ, videoPointer = 0; j < jMax; j++) {
-                    final ViewGroup layout_i_j = (ViewGroup) layout_i.getChildAt(j);
-                    if (!(layout_i_j instanceof RelativeLayout)) {
-                        continue;
-                    }
-                    final int kMax = layout_i_j.getChildCount();
-                    for (int k = lastPositionK; k < kMax; k++) {
-                        final View view_i_j_k = layout_i_j.getChildAt(k);
-                        if (view_i_j_k instanceof ImageView) {
-                            if (videoPointer == videosCount) {
-                                break;
-                            }
-                            img = (ImageView) view_i_j_k;
-
-                            final int finalJ = videoPointer++;
-
-                            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                            img.setLayoutParams(params);
-                            ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img);
-
-                            relativeLayout = (RelativeLayout) layout_i_j.getChildAt(k + 1);
-                            relativeLayout.setVisibility(View.VISIBLE);
-                            relativeLayout.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    deleteAttaches(1, videos.get(finalJ));
-                                }
-                            });
-
-                            ((TextView) relativeLayout.getChildAt(1)).setText(ItemDataSetter.getMediaTime(videos.get(finalJ).duration));
-                            ((TextView) relativeLayout.getChildAt(2)).setText(videos.get(finalJ).title);
-                        } else if (view_i_j_k instanceof LinearLayout) {
-                            final ViewGroup layout_i_j_k = (LinearLayout) view_i_j_k;
-                            final int lMax = layout_i_j_k.getChildCount();
-                            for (int l = lastPositionL; l < lMax; l++) {
-                                final ViewGroup layout_i_j_k_l = (ViewGroup) layout_i_j_k.getChildAt(l);
-                                lastPositionL = 0;
-                                if (layout_i_j_k_l instanceof RelativeLayout) {
-                                    if (videoPointer == videosCount) {
-                                        break;
-                                    }
-                                    final int finalJ = videoPointer++;
-                                    img = (ImageView) layout_i_j_k_l.getChildAt(0);
-                                    ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_130, img);
-
-                                    relativeLayout = (RelativeLayout) layout_i_j_k_l.getChildAt(1);
-                                    relativeLayout.setVisibility(View.VISIBLE);
-                                    relativeLayout.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
-                                            deleteAttaches(1, videos.get(finalJ));
-                                        }
-                                    });
-
-                                    ((TextView) relativeLayout.getChildAt(1)).setText(ItemDataSetter.getMediaTime(videos.get(finalJ).duration));
-                                    ((TextView) relativeLayout.getChildAt(2)).setText(videos.get(finalJ).title);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        parent.addView(mediaContainer);
+        ItemDataSetter.setMediaPager(
+                mediaPager,
+                mediaPagerIndicator,
+                mediaPagerVideoButton,
+                mediaLayout,
+                photos,
+                videos
+        );
     }
+
 
     @Override
     public void onAttach(Activity activity) {

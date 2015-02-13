@@ -41,8 +41,6 @@ public class TouchImageButton extends ImageButton {
                 break;
             }
             case MotionEvent.ACTION_UP:
-                // Your action here on button click
-                //performClick();
 
             case MotionEvent.ACTION_CANCEL: {
                 getBackground().clearColorFilter();

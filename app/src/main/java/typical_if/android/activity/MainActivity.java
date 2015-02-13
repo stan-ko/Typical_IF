@@ -372,10 +372,10 @@ public class MainActivity extends DialogActivity implements
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        }
         super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
     }
 
     @Override

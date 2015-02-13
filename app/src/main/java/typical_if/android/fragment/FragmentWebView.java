@@ -25,9 +25,6 @@ import typical_if.android.R;
  */
 public class FragmentWebView extends Fragment  {
 
-//    ProgressDialog pDialog;
-//    WebView videoview;
-
     private WebView webView;
     private FrameLayout customViewContainer;
     private WebChromeClient.CustomViewCallback customViewCallback;
@@ -36,28 +33,27 @@ public class FragmentWebView extends Fragment  {
     private myWebViewClient mWebViewClient;
     private VKApiVideo video;
 
-    String videoURL = "https://www.youtube.com/embed/NeXMxuNNlE8";
-
     public FragmentWebView newInstance(VKApiVideo video) {
 
         FragmentWebView fragment = new FragmentWebView(video);
         return fragment;
     }
 
-//    public FragmentWebView(String url){
-//        this.videoURL=url;
-//    }
     public FragmentWebView(){
         
     }
-   
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_web_view, container, false);
         setRetainInstance(true);
-       // getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         playVideo(video.player, rootView);
         return rootView;
     }

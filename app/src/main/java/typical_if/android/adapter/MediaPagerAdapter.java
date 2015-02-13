@@ -2,9 +2,7 @@ package typical_if.android.adapter;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,13 +24,13 @@ import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentWebView;
 
 /**
  * Created by gigamole on 31.01.15.
  */
 public class MediaPagerAdapter extends PagerAdapter {
-    private static FragmentManager manager;
 
     public final ArrayList<VKApiPhoto> photos;
     public final ArrayList<VKApiVideo> videos;
@@ -40,11 +38,28 @@ public class MediaPagerAdapter extends PagerAdapter {
     public ArrayList<View> views = new ArrayList<View>();
     public ArrayList<Item> medias = new ArrayList<Item>();
 
+    public boolean isPost;
+
     public final Context context;
     public final LayoutInflater layoutInflater;
 
+    public View.OnClickListener deletePhotoAttachListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            VKApiPhoto photo = (VKApiPhoto) v.getTag();
+            FragmentMakePost.deleteAttaches(0, photo);
+        }
+    };
 
-    private View.OnClickListener openPhotosListener = new View.OnClickListener() {
+    public View.OnClickListener deleteVideoAttachListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            VKApiVideo video = (VKApiVideo) v.getTag();
+            FragmentMakePost.deleteAttaches(1, video);
+        }
+    };
+
+    public View.OnClickListener openPhotosListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             VKHelper.countOfPhotos = getPhotosCount();
@@ -52,25 +67,23 @@ public class MediaPagerAdapter extends PagerAdapter {
         }
     };
 
-    private View.OnClickListener openVideosListener = new View.OnClickListener() {
+    public View.OnClickListener openVideosListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             VKApiVideo video = (VKApiVideo) v.getTag();
-            String key = (video.owner_id + "_" + video.id + "_" + video.access_key );
-            Log.d("VIDEO_KEY", key);
+            String key = (video.owner_id + "_" + video.id + "_" + video.access_key);
             VKHelper.getVideoPlay(key, new VKRequest.VKRequestListener() {
-                @Override
-                public void onComplete(VKResponse response) {
-                    super.onComplete(response);
-                    VKApiVideo video = VKHelper.getVideoSourceFromJson(response.json);
+                        @Override
+                        public void onComplete(VKResponse response) {
+                            super.onComplete(response);
+                            VKApiVideo video = VKHelper.getVideoSourceFromJson(response.json);
 
-                    if (video != null) {
-                        Fragment fragment = new FragmentWebView(video);
-                        ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-                    } else
-                        Toast.makeText(Constants.mainActivity.getApplicationContext(), R.string.error_playing_video, Toast.LENGTH_SHORT).show();
-
-                }
+                            if (video != null) {
+                                Fragment fragment = new FragmentWebView(video);
+                                ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                            } else
+                                Toast.makeText(Constants.mainActivity.getApplicationContext(), R.string.error_playing_video, Toast.LENGTH_SHORT).show();
+                        }
 
                         @Override
                         public void onError(VKError error) {
@@ -87,8 +100,9 @@ public class MediaPagerAdapter extends PagerAdapter {
         PHOTO_ITEM, VIDEO_ITEM
     }
 
+    public MediaPagerAdapter(Context context, boolean isPost, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
+        this.isPost = isPost;
 
-    public MediaPagerAdapter(Context context, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
         this.photos = photos;
         this.videos = videos;
 
@@ -199,8 +213,13 @@ public class MediaPagerAdapter extends PagerAdapter {
 
             ImageLoader.getInstance().displayImage(photo.photo_604, viewHolder.photo);
 
-            viewHolder.photo.setTag(position);
-            viewHolder.photo.setOnClickListener(openPhotosListener);
+            if (isPost) {
+                viewHolder.photo.setTag(position);
+                viewHolder.photo.setOnClickListener(openPhotosListener);
+            } else {
+                viewHolder.photo.setTag(photo);
+                viewHolder.photo.setOnClickListener(deletePhotoAttachListener);
+            }
 
             return convertView;
         }
@@ -234,8 +253,13 @@ public class MediaPagerAdapter extends PagerAdapter {
 
             viewHolder.videoContainer.setVisibility(View.VISIBLE);
 
-            viewHolder.videoContainer.setTag(video);
-            viewHolder.videoContainer.setOnClickListener(openVideosListener);
+            if (isPost) {
+                viewHolder.videoContainer.setTag(video);
+                viewHolder.videoContainer.setOnClickListener(openVideosListener);
+            } else {
+                viewHolder.photo.setTag(video);
+                viewHolder.photo.setOnClickListener(deleteVideoAttachListener);
+            }
 
             viewHolder.videoDuration.setText(ItemDataSetter.getMediaTime(video.duration));
             viewHolder.videoTitle.setText(video.title);
