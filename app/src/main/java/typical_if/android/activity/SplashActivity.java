@@ -15,8 +15,6 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.github.johnpersano.supertoasts.SuperCardToast;
 import com.github.johnpersano.supertoasts.SuperToast;
@@ -43,14 +41,9 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 
-public class SplashActivity extends Activity implements Animation.AnimationListener {
+public class SplashActivity extends Activity {
 
-    Animation animMoveDown;
-    Animation animFadeIn;
-
-    TextView textView;
     ImageView imageView;
-    ProgressBar spinner;
 
     Locale locale;
     int counter = 5;
@@ -69,14 +62,13 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
 
-        textView = (TextView) findViewById(R.id.splash_title);
         imageView = (ImageView) findViewById(R.id.splash_logo);
 
-        animMoveDown = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.move_down);
-        animMoveDown.setAnimationListener(this);
-        textView.startAnimation(animMoveDown);
+        Animation rotationOrange = AnimationUtils.loadAnimation(this, R.anim.rotate_splash_spinner_orange);
+        findViewById(R.id.img_splash_spinner_orange).startAnimation(rotationOrange);
 
-        animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fade_in);
+        Animation rotationBlue = AnimationUtils.loadAnimation(this, R.anim.rotate_splash_spinner_blue);
+        findViewById(R.id.img_splash_spinner_blue).startAnimation(rotationBlue);
 
         config = new Configuration();
         if (ItemDataSetter.getUserLan() != "") {
@@ -92,8 +84,6 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
             getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
 
         }
-
-//        Toast.makeText(getApplicationContext(), getString(R.string.main_creed), Toast.LENGTH_SHORT).show();
 
         final SuperCardToast superCardToast = new SuperCardToast(SplashActivity.this);
         superCardToast.setText(getString(R.string.main_creed_1));
@@ -119,6 +109,8 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
 
         ItemDataSetter.loadUserId();
         ItemDataSetter.loadUserLanguage();
+
+        checkIfOnlineAndProceed();
     }
 
 
@@ -397,19 +389,5 @@ public class SplashActivity extends Activity implements Animation.AnimationListe
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return super.onOptionsItemSelected(item);
-    }
-
-    // Animation listener implementation
-    @Override
-    public void onAnimationStart(Animation animation) {
-    }
-
-    @Override
-    public void onAnimationEnd(Animation animation) {
-        checkIfOnlineAndProceed();
-    }
-
-    @Override
-    public void onAnimationRepeat(Animation animation) {
     }
 }
