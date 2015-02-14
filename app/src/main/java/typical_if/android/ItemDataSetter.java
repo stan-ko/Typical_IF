@@ -257,7 +257,7 @@ public class ItemDataSetter {
         parent.setVisibility(View.VISIBLE);
 
      // if (Constants.isFragmentCommentsLoaded & VKSdk.isLoggedIn()){
-          fillPollLayout(poll,parent);
+       //   fillPollLayout(poll,parent);
    //   }
 
 

@@ -2,13 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="#ff000000">
 
     <typical_if.android.ExtendedViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/blur1" />
+        android:background="@color/transparent" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -19,7 +20,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/fullscreen_action_panel"
-        android:background="@drawable/action_panel_gradient_shape">
+        android:background="@color/transparent">
 
         <View android:id="@+id/strut"
             android:layout_width="0dp"
@@ -48,7 +49,8 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:background="#6edefcff" />
+            android:background="#6edefcff"
+            android:visibility="gone" />
 
         <ImageView
             android:layout_width="55dp"
@@ -99,6 +101,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/image_comment"
             android:textColor="#ffffffff"
+            android:paddingLeft="5dp"
 
             android:layout_marginRight="60dp" />
 
@@ -125,7 +128,6 @@
             android:layout_height="wrap_content"
             android:text="171"
             android:id="@+id/cb_photo_comment"
-            android:button="@drawable/ic_photo_comment"
             android:checked="false"
             android:clickable="true"
             android:enabled="true"
@@ -135,7 +137,9 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/strut"
             android:textColor="#ffffffff"
-            android:layout_marginRight="5dip" />
+            android:layout_marginRight="5dip"
+            android:button="@drawable/ic_photo_comment"
+            android:paddingLeft="5dp"/>
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -177,25 +181,25 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_height="20dp"
         android:id="@+id/commentDataLayout"
-        android:background="#00ffffff">
+        android:background="#00ffffff"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp">
 
 
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1"
+            android:layout_height="match_parent"
+            android:text="22"
             android:id="@+id/counterOfPhotos"
             android:textColor="#ffffffff"
-            android:textSize="25dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:textSize="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/slash_between_numbers"
+            android:layout_toStartOf="@+id/slash_between_numbers" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -203,26 +207,31 @@
             android:text="/"
             android:id="@+id/slash_between_numbers"
             android:textColor="#ffffffff"
-            android:textSize="25dp"
-            android:layout_alignTop="@+id/counterOfPhotos"
-            android:layout_toRightOf="@+id/counterOfPhotos" />
+            android:textSize="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/amountOfPhotos"
+            android:layout_toStartOf="@+id/amountOfPhotos"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/amountOfPhotos"
             android:textColor="#ffffffff"
-            android:textSize="25dp"
-            android:layout_alignTop="@+id/slash_between_numbers"
-            android:layout_toRightOf="@+id/slash_between_numbers" />
-    </RelativeLayout>
+            android:textSize="20dp"
+            android:text="45"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/photoHeader"
         android:textColor="#ffeaeaea"
-        android:textSize="20dp"
+        android:textSize="13sp"
         android:text="8 лис 2014 в 22:16"
         android:layout_above="@+id/fullscreen_action_panel"
         android:layout_centerHorizontal="true"

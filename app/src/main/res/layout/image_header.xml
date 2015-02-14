@@ -13,11 +13,17 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:id="@+id/txt_photo_text"
-        android:layout_alignParentTop="false"
+        android:textColor="#b4ffffff"
+        android:visibility="gone"
+        android:textSize="13dp"
         android:layout_below="@+id/list_header_image"
-        android:padding="5dp"
-        android:textColor="#ffffffff"
-        android:visibility="gone" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="5dp"
+        android:text="Something...."
+        android:paddingBottom="5dp" />
 
     <RelativeLayout
         android:orientation="horizontal"
@@ -51,6 +57,7 @@
     </RelativeLayout>
 
     <ImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/list_header_image"
@@ -59,11 +66,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:visibility="visible"
-        android:scaleType="fitCenter" />
+        android:scaleType="center"
+        android:layout_marginBottom="5dp"
+        android:paddingBottom="5dp"
+        android:background="@color/transparent"
+        android:layout_marginTop="5dp" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="80dp"
+        android:layout_height="60dp"
         android:id="@+id/user_photo_sender"
         android:visibility="visible"
         android:focusable="false"
@@ -72,19 +83,31 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@drawable/image_header_state_selector">
+        android:background="@drawable/image_header_state_selector"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="5dp">
 
         <com.makeramen.RoundedImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="50dp"
+
             android:layout_height="50dp"
             android:id="@+id/post_user_avatar"
-            android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true"
+
+
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="15dp"
-            android:visibility="visible"
-            />
+
+            android:clickable="false"
+            android:cropToPadding="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:scaleType="fitStart"
+            android:src="@drawable/abc_ab_solid_dark_holo"
+            app:riv_corner_radius="50dip"
+            android:layout_margin="5dp"  />
 
         <TextView
             android:layout_width="wrap_content"
@@ -92,27 +115,26 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="DELETED DELETED"
             android:id="@+id/post_user_name"
-            android:layout_marginLeft="5dp"
-            android:layout_alignTop="@+id/post_user_avatar"
-            android:layout_toRightOf="@+id/post_user_avatar"
-            android:layout_marginTop="5dp"
             android:textSize="15dp"
             android:textColor="#ffffffff"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:layout_alignTop="@+id/post_user_avatar"
+            android:layout_toRightOf="@+id/post_user_avatar"
+            android:layout_toEndOf="@+id/post_user_avatar"
+            android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
+
             android:id="@+id/post_user_date_of_comment"
-            android:textColor="#ffffffff"
-            android:layout_below="@+id/post_user_name"
-            android:layout_alignLeft="@+id/post_user_name"
-            android:layout_alignStart="@+id/post_user_name"
-            android:layout_marginTop="5dp"
+            android:textColor="#8cffffff"
             android:visibility="visible"
             android:text="23"
-            android:layout_marginLeft="5dp" />
+            android:textSize="9dp"
+            android:layout_below="@+id/post_user_name"
+            android:layout_toRightOf="@+id/post_user_avatar"
+            android:layout_toEndOf="@+id/post_user_avatar" />
 
     </RelativeLayout>
 

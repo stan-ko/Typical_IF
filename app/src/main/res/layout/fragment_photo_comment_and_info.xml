@@ -42,7 +42,7 @@
                     android:layout_height="fill_parent"
                     android:layout_above="@+id/comment_bar_layout"
                     android:layout_alignParentTop="true"
-                    android:background="#ff424242"
+                    android:background="@color/app_bg"
                     android:divider="@drawable/list_divider"
                     android:dividerHeight="1px"
                     android:drawSelectorOnTop="true"
@@ -140,7 +140,7 @@
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/there_are_no_comments_here_tv"
                     android:background="#ff424242"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <ProgressBar
                         android:id="@+id/spinner_progress"

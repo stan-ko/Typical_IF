@@ -243,7 +243,7 @@ public class CommentsListAdapter extends BaseAdapter {
         public final RelativeLayout commentLinkLayout;
         public final RelativeLayout commentPollLayout;
         public final RelativeLayout commentParentLayout;
-        public final RelativeLayout commentDataLayout;
+        public final LinearLayout commentDataLayout;
         public final TextView commentTxtPost;
         public final CheckBox commentCbPostAllText;
         public final ImageView commentImgWikiPage;
@@ -273,7 +273,7 @@ public class CommentsListAdapter extends BaseAdapter {
             this.commentTextLayout = (RelativeLayout) convertView.findViewById(R.id.commentTextLayout);
             this.commentPollLayout = (RelativeLayout) convertView.findViewById(R.id.commentPollLayout);
             this.commentParentLayout = (RelativeLayout) convertView.findViewById(R.id.commentParentLayout);
-            this.commentDataLayout = (RelativeLayout) convertView.findViewById(R.id.commentDataLayout);
+            this.commentDataLayout = (LinearLayout) convertView.findViewById(R.id.commentDataLayout);
             this.commentTxtPost = (TextView) convertView.findViewById(R.id.txt_post);
             this.commentCbPostAllText = (CheckBox) convertView.findViewById(R.id.cb_show_all_text);
             this.commentImgWikiPage = (ImageView) convertView.findViewById(R.id.img_wiki_page);
