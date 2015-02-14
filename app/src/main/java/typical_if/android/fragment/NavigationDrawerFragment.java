@@ -222,7 +222,7 @@ public class NavigationDrawerFragment extends Fragment {
                 if (VKSdk.isLoggedIn()) {
                     VKSdk.logout();
                     refreshNavigationHeader(null);
-                    ((FragmentWall) activity.getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
+                //    ((FragmentWall) activity.getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
                 } else {
                     VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
                 }

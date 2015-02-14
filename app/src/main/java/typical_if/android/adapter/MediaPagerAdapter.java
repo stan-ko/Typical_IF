@@ -1,7 +1,7 @@
 package typical_if.android.adapter;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +24,8 @@ import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.activity.WebViewActivity;
 import typical_if.android.fragment.FragmentMakePost;
-import typical_if.android.fragment.FragmentWebView;
 
 /**
  * Created by gigamole on 31.01.15.
@@ -79,8 +79,13 @@ public class MediaPagerAdapter extends PagerAdapter {
                             VKApiVideo video = VKHelper.getVideoSourceFromJson(response.json);
 
                             if (video != null) {
-                                Fragment fragment = new FragmentWebView(video);
-                                ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                               // new WebViewActivity(video);
+
+                                Intent intent = new Intent( Constants.mainActivity, WebViewActivity.class);
+                                intent.putExtra("VIDEO_OBJECT",video);
+                                Constants.mainActivity.startActivity(intent);
+                              //  Fragment fragment = new FragmentWebView(video);
+                              //  ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                             } else
                                 Toast.makeText(Constants.mainActivity.getApplicationContext(), R.string.error_playing_video, Toast.LENGTH_SHORT).show();
                         }

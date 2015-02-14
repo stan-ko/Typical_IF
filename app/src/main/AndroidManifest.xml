@@ -4,9 +4,7 @@
     package="typical_if.android"
     android:installLocation="preferExternal"
     android:versionCode="2"
-    android:versionName="1.1">
-
-
+    android:versionName="1.1" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -22,6 +20,7 @@
     <activity
         android:name=".MyActivity"
         android:launchMode="singleTop" />
+
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -64,8 +63,6 @@
             android:screenSize="normal" />
     </compatible-screens>
 
-
-
     <application
         android:name=".TIFApp"
         android:allowBackup="true"
@@ -101,6 +98,8 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>
+
+
         <activity android:name="com.vk.sdk.VKOpenAuthActivity" />
 
         <service
@@ -126,6 +125,14 @@
             android:enabled="true"
             android:exported="true" >
         </receiver>
+
+        <activity
+            android:name=".activity.WebViewActivity"
+            android:label="@string/title_activity_web_view"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="landscape">
+
+        </activity>
     </application>
 
 </manifest>

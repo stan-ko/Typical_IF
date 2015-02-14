@@ -80,7 +80,7 @@ public class FragmentWebView extends Fragment  {
     }
 
     public void playVideo(String url, View view){
-        customViewContainer = (FrameLayout) view.findViewById(R.id.customViewContainer);
+
         webView = (WebView) view.findViewById(R.id.webView);
 
         mWebViewClient = new myWebViewClient();

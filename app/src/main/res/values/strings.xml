@@ -6,7 +6,6 @@
     <string name="main_creed_1">Слава Україні!</string>
     <string name="main_creed_2">Героям слава!</string>
     <string name="main_creed">Слава Україні! Героям слава!</string>
-
     <string name="menu_group_title_tf">Типовий Франківськ</string>
     <string name="menu_group_title_tz">Типове Зізнання</string>
     <string name="menu_group_title_fb">Франківська Барахолка</string>
@@ -15,7 +14,6 @@
     <string name="menu_group_title_stantsiya">STANTSIYA</string>
     <string name="menu_group_about_us">Про додаток</string>
     <string name="menu_group_exit">Вийти</string>
-
     <string name="profile">Профіль</string>
     <string name="reply">Відповісти</string>
     <string name="copy_text">Копіювати текст</string>
@@ -27,7 +25,6 @@
     <string name="comment_receiver">Адресат</string>
     <string name="libraries_info">About used libraries</string>
     <string name="you_have_no_suggested_posts">У вас немає запропонованих новин</string>
-
     <string name="something_went_wrong">Щось пішло не так</string>
     <string name="error_playing_video">Помилка відтворення відеозапису</string>
     <string name="error_playing_video_auth">Ця дія вимагає авторизації</string>
@@ -39,40 +36,29 @@
     <string name="navigation_drawer_close">Закрити бокове меню</string>
     <string name="send_comment">Відпр.</string>
     <string name="your_message">Ваше повідомлення...</string>
-
     <string name="date_today">Сьогодні о %s</string>
     <string name="date_yesterday">Вчора о %s</string>
-
     <string name="doc_type_animation">Анімація</string>
     <string name="doc_type_document">Документ</string>
     <string name="doc_type_image">Зображення</string>
-
     <string name="size_in_b">байт</string>
     <string name="size_in_kb">кілобайт</string>
     <string name="size_in_mb">мегабайт</string>
     <string name="size_in_gb">гігабайт</string>
     <string name="size_in_tb">терабайт</string>
-
     <string name="wiki_page">Сторінка</string>
-
     <string name="browser_chooser">Оберіть браузер</string>
     <string name="downloader_chooser">Оберіть завантажувач</string>
     <string name="viewer_chooser">Оберіть переглядач</string>
-
     <string name="show_all_text">Читати далі...</string>
     <string name="show_min_text">Показати скорочено…</string>
     <string name="you_are_not_logged_in">Ви не увійшли в профіль</string>
-
-
     <string name="poll_anonymous">Анонімне голосування, голосів:</string>
     <string name="poll_not_anonymous">Публічне голосування, голосів:</string>
-
     <string name="txt_dialog_comment">Ваш коментар…</string>
-
     <string name="post_report">Поскаржитись</string>
     <string name="post_copy_link">Копіювати посилання</string>
     <string name="change_lan">Змінити мову</string>
-
     <string name="in_progress">В розробці</string>
     <string name="no_suggested_posts">У вас немає запропонованих новин</string>
     <string name="post_deleted">Новина видалена</string>
@@ -80,15 +66,12 @@
     <string name="post_reported">Ви поскаржились на запис</string>
     <string name="post_edit">Редагувати новину</string>
     <string name="post_delete">Видалити новину</string>
-
     <string name="photo_from_own">З альбомів</string>
     <string name="photo_from_sd">З карти пам\'яті</string>
-
     <string name="add_photo_from_title">Завантажити фото </string>
     <string name="no_internet_message_toast_en">Інтернет відсутній. Ви знаходитесь в режимі оффлайн.</string>
     <string name="no_internet_chooser">Інтернет відсутній. Оберіть наступну дію.</string>
     <string name="no_internet_retry">Інтернет відсутній. Спробуйте ще раз.</string>
-
     <string name="retry">Повторити</string>
     <string name="cancel">Скасувати</string>
     <string name="offline">Оффлайн</string>
@@ -96,42 +79,30 @@
     <string name="comment_background">Ваш коментар</string>
     <string name="text_has_been_copied_to_the_buffer">Текст був скопійований у буфер</string>
     <string name="restart_app_dialog">Перезапустити?</string>
-
     <string name="anonymous_poll">Анонімне опитування, голосів:</string>
     <string name="public_poll">Публічне опитування, голосів: </string>
-
     <string name="change_my_decision">Змінити вибір</string>
-
     <string name="ab_title_make_post">Запропонувати новину</string>
     <string name="ab_title_suggested_posts">Запропоновані новини</string>
     <string name="ab_title_group_join">Вступити до спільноти</string>
     <string name="ab_title_group_leave">Покинути спільноту</string>
-
     <string name="group_joined">Ви вступили до спільноти</string>
     <string name="group_leaved">Ви покинули спільноту</string>
     <string name="go_to_start_page">Перейти на стартову сторінку</string>
     <string name="settings">Змінити мову</string>
-
     <string name="error">Помилка</string>
     <string name="max_attaches">Максимальна кількість прикріплень</string>
-
     <string name="upload_progress">Вивантажено</string>
     <string name="upload">Вивантажується...</string>
-
     <string name="albums">Альбоми</string>
-
     <string name="upload_photo_server">Завантаження зображень на сервер</string>
     <string name="upload_photo_progress">Триває завантаження</string>
     <string name="upload_photo_finish">Завантаження завершено</string>
-
     <string name="ab_title_upload_photo">Вивантажити фото</string>
-
     <string name="today_event_description">Ще одна чудова подія прекрасного міста!</string>
-
     <string name="today_events">Події Івано-Франківська</string>
     <string name="station_events">Події антикафе "STANTSIYA"</string>
     <string name="period_events">Тривалі події</string>
-
     <string name="null_events">Немає</string>
     <string name="tif_title_header">Типовий Мобільний Франківськ</string>
 
@@ -143,13 +114,10 @@
         <item>Дитяча порнографія</item>
         <item>Насильство</item>
     </array>
-
     <array name="app_languages">
         <item>Українська</item>
         <item>Російська</item>
-
     </array>
-
     <array name="add_photo_from">
         <item>З карти памяті</item>
         <item>З камери</item>
@@ -162,19 +130,19 @@
         <item>Audio</item>
         <item>Document</item>
     </string-array>
-
     <string-array name="menu_leave_group">
-
         <item>Запропонувати новину</item>
         <item>Запропоновані новини</item>
         <item>Покинути спільноту</item>
     </string-array>
-
     <string-array name="menu_join_group">
         <item>Запропонувати новину</item>
         <item>Запропоновані новини</item>
         <item>Вступити до спільноти</item>
     </string-array>
 
+    <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
