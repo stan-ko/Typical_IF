@@ -21,7 +21,7 @@ public class AudioPlayerService extends Service {
     public static final String playMusic = "com.action.PLAY";
     public static final String pauseMusic = "com.action.PAUSE";
 
-    int icon = android.R.drawable.ic_media_play;
+    int icon = R.drawable.ic_notif_play_small;
     long when = System.currentTimeMillis();
     Notification notification = new Notification(icon, Constants.title, when);
     PendingIntent pendingIntent;
@@ -33,11 +33,11 @@ public class AudioPlayerService extends Service {
 
         contentView = new RemoteViews(getPackageName(), R.layout.custom_notif);
         if (Constants.playedPausedRecord.isPlayed == true && Constants.playedPausedRecord.isPaused == false){
-            contentView.setImageViewResource(R.id.notification_image, android.R.drawable.ic_media_pause);
+            contentView.setImageViewResource(R.id.notification_image, R.drawable.ic_notif_pause);
             pendingIntent = PendingIntent.getService(Constants.mainActivity.getApplicationContext(), 0, new Intent(pauseMusic), PendingIntent.FLAG_UPDATE_CURRENT);
         }
         else if (Constants.playedPausedRecord.isPaused == true && Constants.playedPausedRecord.isPlayed == false){
-            contentView.setImageViewResource(R.id.notification_image, android.R.drawable.ic_media_play);
+            contentView.setImageViewResource(R.id.notification_image, R.drawable.ic_notif_play);
             pendingIntent = PendingIntent.getService(Constants.mainActivity.getApplicationContext(), 0, new Intent(playMusic), PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
@@ -64,7 +64,7 @@ public class AudioPlayerService extends Service {
                     Constants.playedPausedRecord.isPaused = true;
                     //FragmentWall.refresh();
                     Constants.previousCheckBoxState.setChecked(false);
-                    contentView.setImageViewResource(R.id.notification_image, android.R.drawable.ic_media_play);
+                    contentView.setImageViewResource(R.id.notification_image, R.drawable.ic_notif_play);
                     pendingIntent = PendingIntent.getService(Constants.mainActivity.getApplicationContext(), 0, new Intent(playMusic), 0);
                     onCreate();
                     Constants.notificationManager.notify(Constants.notifID, notification);
@@ -75,7 +75,7 @@ public class AudioPlayerService extends Service {
                     Constants.playedPausedRecord.isPaused = false;
                     //FragmentWall.refresh();
                     Constants.previousCheckBoxState.setChecked(true);
-                    contentView.setImageViewResource(R.id.notification_image, android.R.drawable.ic_media_pause);
+                    contentView.setImageViewResource(R.id.notification_image, R.drawable.ic_notif_pause);
                     pendingIntent = PendingIntent.getService(Constants.mainActivity.getApplicationContext(), 0, new Intent(pauseMusic), 0);
                     onCreate();
                     Constants.notificationManager.notify(Constants.notifID, notification);

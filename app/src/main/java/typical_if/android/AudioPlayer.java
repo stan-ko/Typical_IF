@@ -43,6 +43,7 @@ public class AudioPlayer {
                             }
                             Constants.mediaPlayer = new MediaPlayer();
                             Constants.mediaPlayer.setDataSource(stream);
+                            play.setClickable(false);
                             Constants.previousCheckBoxState = play;
                             Constants.previousSeekBarState = progress;
                             Constants.title = songTitle;
@@ -58,6 +59,7 @@ public class AudioPlayer {
                             public void onPrepared(MediaPlayer mp) {
 
                                 Constants.mediaPlayer.start();
+                                play.setClickable(true);
                                 Constants.tempThread = progressBar(progress);
                                 Constants.tempThread.start();
                                 Constants.playedPausedRecord.audioUrl = stream;
