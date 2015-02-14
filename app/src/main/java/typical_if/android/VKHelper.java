@@ -191,6 +191,16 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
+    public static void deleteVote (long owner_id, long poll_id, long answer_id, int is_board,  VKRequest.VKRequestListener listener ) {
+        VKParameters params = new VKParameters();
+        params.put("owner_id",owner_id);
+        params.put("poll_id",poll_id);
+        params.put("answer_id",answer_id);
+        params.put("is_board",is_board);
+        final VKRequest request = new VKRequest("polls.deleteVote", params);
+        request.executeWithListener(listener);
+    }
+
 
     public static void getUserAudios(VKRequest.VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();

@@ -83,6 +83,8 @@ public class OfflineMode {
         ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo nInfo = cm.getActiveNetworkInfo();
         if (nInfo != null && nInfo.isConnected()) {
+
+
             return true;
         }
         else {

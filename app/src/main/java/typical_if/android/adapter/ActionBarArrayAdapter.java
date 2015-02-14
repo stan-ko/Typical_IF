@@ -15,7 +15,12 @@ public class ActionBarArrayAdapter extends ArrayAdapter<String> {
     private CharSequence mTitle;
     public static boolean isJoined;
 
+
+
+
     public ActionBarArrayAdapter(Context context, String[] items,CharSequence mTitle) {
+
+
         super(context, 0, items);
 
 
@@ -23,12 +28,15 @@ public class ActionBarArrayAdapter extends ArrayAdapter<String> {
         this.mTitle=mTitle;
     }
 
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(mContext).inflate(
                     android.R.layout.simple_spinner_item, null);
         }
+
         ((TextView) convertView.findViewById(android.R.id.text1))
                 .setText(mTitle);
         return convertView;

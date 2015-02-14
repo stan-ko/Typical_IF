@@ -194,6 +194,7 @@ public class ItemDataSetter {
         }
 
         if (photos.size() != 0 || videos.size() != 0) {
+            mediaLayout.setTag(true);
             setMediaPager(mediaPager, mediaPagerIndicator, mediaPagerVideoButton, mediaLayout, photos, videos);
         } else {
             mediaLayout.setVisibility(View.GONE);
@@ -229,7 +230,9 @@ public class ItemDataSetter {
             linkLayout.setVisibility(View.GONE);
         }
 
-        if (poll != null) {
+        if (poll != null ) {
+
+            /////////////////////////////////////////////////////////////////////////////
             setPoll(pollLayout, pollTitle, poll);
         } else {
             pollLayout.setVisibility(View.GONE);
@@ -241,6 +244,7 @@ public class ItemDataSetter {
         final TextView answers_anonymous_text = ((TextView) parent.findViewById(R.id.answers_anonymous_text));
         final String isAnonymous;
 
+
         title.setText(poll.question);
 
         if (poll.anonymous == 1) {
@@ -251,15 +255,65 @@ public class ItemDataSetter {
 
         answers_anonymous_text.setText(isAnonymous + " " + poll.votes);
         parent.setVisibility(View.VISIBLE);
-    }
+
+
+
+
+//
+//            VKHelper.getPollById(poll.owner_id, 0, poll.id, new VKRequest.VKRequestListener() {
+//                @Override
+//                public void onComplete(VKResponse response) {
+//                        super.onComplete(response);
+//                     if (poll.answer_id==0){
+//                        fillPollLayout (poll, response,false);
+//                    }else {
+//                        fillPollLayout (poll, response,true);
+//
+//                    }
+//                }
+//
+
+
+
+//                    final String isAnonymous;
+//
+//                    OfflineMode.saveJSON(response.json, poll.owner_id + poll.id);
+//                    VKPoll detailPoll = new VKPoll().parse(OfflineMode.loadJSON(poll.owner_id + poll.id));
+//                    title.setText(detailPoll.question);
+//                    if (detailPoll.anonymous == 1) {
+//                        isAnonymous = Constants.mainActivity.getResources().getString(R.string.anonymous_poll);
+//                    } else
+//                        isAnonymous = Constants.mainActivity.getResources().getString(R.string.public_poll);
+//                    answers_anonymous_text.setText(isAnonymous + " " + detailPoll.votes);
+//
+//                  //  View v = inflater.inflate(R.layout.vote_item_layout, parent);
+//
+//                    ListView pollList = (ListView) parent.findViewById(R.id.listOfVotes);
+//
+//                    VoteItemAdapter adapter = new VoteItemAdapter(pollList, detailPoll,detailPoll.answers, context, user_answered);
+//                    pollList.setAdapter(adapter);
+//                    setListViewHeightBasedOnChildren(pollList);
+//
+//                     pollList.setVisibility(View.VISIBLE);
+
+
+
+            //    }
+        //    });
+
+      //  }
+        //else {
+           // parent.setVisibility(View.GONE);
+       //     ListView pollList = (ListView) parent.findViewById(R.id.listOfVotes);
+       //     pollList.setVisibility(View.GONE);
+}
 
     static VKPoll detailPoll;
     static boolean user_answered;
-
-    public static void fillPollLayout(final VKApiPoll poll, final View parent) {
-        final ListView pollList = (ListView) parent.findViewById(R.id.listOfVotes);
+    public static void fillPollLayout(final VKApiPoll poll,final View parent) {
+        final ListView pollList = (ListView)  parent.findViewById(R.id.listOfVotes);
         pollList.setVisibility(View.VISIBLE);
-        final RelativeLayout spinner = ((RelativeLayout) parent.findViewById(R.id.changeVotesSpinnerLayout));
+        final RelativeLayout spinner=((RelativeLayout) parent.findViewById(R.id.changeVotesSpinnerLayout));
 
 
         RelativeLayout votesParentLayout = ((RelativeLayout) parent.findViewById(R.id.votesParentLayout));
@@ -271,14 +325,14 @@ public class ItemDataSetter {
                 OfflineMode.saveJSON(response.json, poll.owner_id + poll.id);
                 detailPoll = new VKPoll().parse(OfflineMode.loadJSON(poll.owner_id + poll.id));
                 boolean user_answered;
-                if (poll.answer_id == 0) {
-                    user_answered = false;
-                } else {
-                    user_answered = true;
+                if (poll.answer_id==0){
+                    user_answered=false;
+                }else {
+                    user_answered=true;
                 }
-                ItemDataSetter.user_answered = user_answered;
+                ItemDataSetter.user_answered=user_answered;
 
-                VoteItemAdapter adapter = new VoteItemAdapter(pollList, detailPoll, detailPoll.answers, context, user_answered, parent);
+                VoteItemAdapter adapter = new VoteItemAdapter(pollList, detailPoll,detailPoll.answers, context, user_answered, parent);
                 pollList.setAdapter(adapter);
                 setListViewHeightBasedOnChildren(pollList);
                 pollList.invalidateViews();
@@ -286,35 +340,42 @@ public class ItemDataSetter {
                 pollList.invalidateViews();
 
 
-                if (VoteItemAdapter.pos == pollList.getAdapter().getCount()) {
-                    spinner.setLayoutParams(new RelativeLayout.LayoutParams(pollList.getWidth(), pollList.getHeight() * pollList.getAdapter().getCount()));
-                    spinner.setVisibility(View.VISIBLE);
-                }
+              if (VoteItemAdapter.pos==pollList.getAdapter().getCount()){
+                  spinner.setLayoutParams(new RelativeLayout.LayoutParams(pollList.getWidth(),pollList.getHeight()*pollList.getAdapter().getCount()));
+                  spinner.setVisibility(View.VISIBLE);
+              }
+
             }
 
 
         });
-    }
 
-    public static void refreshList(View parent, ListView pollList) {
+
+
+
+
+ }
+
+    public static void refreshList (View parent, ListView pollList){
         pollList.setAdapter(null);
-        VoteItemAdapter adapter = new VoteItemAdapter(pollList, detailPoll, detailPoll.answers, context, user_answered, parent);
+        VoteItemAdapter adapter = new VoteItemAdapter(pollList, detailPoll,detailPoll.answers, context, user_answered, parent);
         pollList.setAdapter(adapter);
         pollList.invalidateViews();
         adapter.notifyDataSetChanged();
         pollList.invalidateViews();
+
     }
 
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
 
-        VoteItemAdapter mAdapter = (VoteItemAdapter) listView.getAdapter();
+        VoteItemAdapter mAdapter = (VoteItemAdapter)listView.getAdapter();
 
         int totalHeight = 0;
 
 
         for (int i = 0; i < mAdapter.getCount(); i++) {
-            View mView = mAdapter.getView(i, null, listView);
+            View mView = mAdapter.getView(i,null, listView);
 
             mView.measure(
                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
@@ -331,7 +392,11 @@ public class ItemDataSetter {
                 + (listView.getDividerHeight() * (mAdapter.getCount() - 1));
         listView.setLayoutParams(params);
         listView.requestLayout();
+
     }
+
+
+
 
 
     static int startTag = 0;
@@ -714,7 +779,7 @@ public class ItemDataSetter {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
         mediaPager.setLayoutParams(params);
 
-        MediaPagerAdapter mediaPagerAdapter = new MediaPagerAdapter(context, photos, videos);
+        MediaPagerAdapter mediaPagerAdapter = new MediaPagerAdapter(context, (Boolean) mediaLayout.getTag(), photos, videos);
 
         mediaPager.setOffscreenPageLimit(count);
         mediaPager.setAdapter(mediaPagerAdapter);

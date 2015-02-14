@@ -1,135 +1,194 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/blur1"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
     android:fillViewport="false">
-    <RelativeLayout android:layout_width="match_parent"
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentTop="true"
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            card_view:cardCornerRadius="0dp"
+            card_view:cardElevation="8dp"
+            card_view:contentPadding="11dp"
+            card_view:cardBackgroundColor="@color/app_bg"
+            android:id="@+id/card_view_make_post_buttons">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:id="@+id/make_post_buttons_container"
+                android:weightSum="4">
+
+                <typical_if.android.view.TouchMakePostImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_post_attach_photo"
+                    android:src="@drawable/ic_file_image_white_24dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:baselineAlignBottom="false"
+                    android:cropToPadding="true"
+                    android:padding="5dp" />
+
+                <typical_if.android.view.TouchMakePostImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_post_attach_video"
+                    android:src="@drawable/ic_file_video_white_24dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="5dp" />
+
+                <typical_if.android.view.TouchMakePostImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_post_attach_audio"
+                    android:src="@drawable/ic_file_music_white_24dp"
+                    android:layout_weight="1"
+                    android:layout_margin="5dp"
+                    android:adjustViewBounds="true"
+                    android:cropToPadding="true"
+                    android:padding="5dp" />
+
+                <typical_if.android.view.TouchMakePostImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/img_post_attach_doc"
+                    android:src="@drawable/ic_file_document_white_24dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:layout_margin="5dp"
+                    android:cropToPadding="true"
+                    android:padding="5dp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <com.devspark.robototextview.widget.RobotoTextView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/txt_post_attach_counter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/wall_background"
+            android:gravity="center"
+            android:padding="5dp"
+            android:singleLine="true"
+            android:textColor="@color/ab_background"
+            android:textSize="18dp"
+            app:typeface="roboto_regular"
+            android:layout_below="@+id/card_view_make_post_buttons"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:id="@+id/make_post_buttons_container"
-            android:weightSum="1">
+            android:layout_alignParentStart="true" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/img_post_attach_photo"
-                android:src="@drawable/ic_msg_attach_photo_up"
-                android:layout_weight="0.12"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="10dp"
-                android:paddingTop="5dp"
-                android:paddingRight="8dp"
-                android:paddingLeft="5dp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rl_make_post"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
+            android:layout_below="@+id/txt_post_attach_counter">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/img_post_attach_video"
-                android:src="@drawable/ic_msg_attach_video_up"
-                android:layout_weight="0.12"
-                android:layout_marginTop="5dp"
-                android:paddingTop="9dp" />
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                card_view:cardCornerRadius="0dp"
+                card_view:cardElevation="8dp"
+                card_view:contentPadding="11dp"
+                card_view:cardBackgroundColor="@color/app_bg"
+                android:id="@+id/card_view_make_post"
+                android:layout_below="@+id/txt_post_attach_counter"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/img_post_attach_audio"
-                android:src="@drawable/ic_msg_attach_audio_up"
-                android:layout_weight="0.12"
-                android:layout_marginTop="7dp"
-                android:paddingTop="7dp"
-                android:paddingRight="15dp"
-                android:paddingLeft="7dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/make_post_attachments_container_new"
+                    android:orientation="vertical"
+                    android:visibility="visible"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/etxt_make_post_field"
+                    android:background="@color/transparent">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/img_post_attach_doc"
-                android:src="@drawable/ic_doc_up"
-                android:layout_weight="0.12"
-                android:layout_marginTop="5dp" />
+                    <EditText
+                        android:textCursorDrawable="@drawable/cursor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/etxt_make_post_field"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:textColor="@android:color/white"
+                        android:hint="@string/your_message"
+                        android:background="@android:color/transparent"
+                        android:padding="0dp"
+                        android:layout_margin="5dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/txt_post_attach_counter"
-                android:gravity="center"
-                android:textStyle="bold"
-                android:textSize="20dp"
-                android:layout_weight="0.20"
-                android:textColor="#ffeeffef"
-                android:layout_marginTop="10dp" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:id="@+id/make_post_media_container"
+                        android:background="@color/transparent"
+                        android:paddingTop="5dp" >
 
-            <Button
+                        <include layout="@layout/media_pager_container"/>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:id="@+id/make_post_audio_container"
+                        android:orientation="vertical"
+                        android:background="@color/transparent"
+                        android:paddingTop="5dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:id="@+id/make_post_doc_container"
+                        android:orientation="vertical"
+                        android:background="@color/transparent"
+                        android:paddingTop="5dp"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <com.getbase.floatingactionbutton.AddFloatingActionButton
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Відпр."
                 android:id="@+id/bt_post_send"
-                android:layout_weight=".30"
-                android:visibility="visible"
-                android:textColor="#ffffffff"
-                android:background="@color/partly_transparent"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginTop="10dp" />
-        </LinearLayout>
+                app:fab_size="normal"
+                app:fab_colorNormal="@color/music_progress"
+                app:fab_colorPressed="@color/music_progress_pressed"
+                android:layout_alignParentRight="false"
+                android:layout_alignParentEnd="false"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/card_view_make_post" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/etxt_make_post_field"
-            android:layout_below="@+id/make_post_buttons_container"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:maxHeight="300dp"
-            android:textColor="#FFEEFFEF" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/make_post_attachments_container_new"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/etxt_make_post_field"
-            android:background="@color/transparent">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:id="@+id/make_post_media_container"
-                android:background="@color/transparent"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:id="@+id/make_post_audio_container"
-                android:orientation="vertical"
-                android:background="@color/transparent" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:id="@+id/make_post_doc_container"
-                android:orientation="vertical"
-                android:background="@color/transparent" />
-
-        </LinearLayout>
-
+        </RelativeLayout>
     </RelativeLayout>
 </ScrollView>

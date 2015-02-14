@@ -1,45 +1,61 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context="typical_if.android.activity.SplashActivity"
-    android:background="@color/app_bg">
+    android:background="@color/app_bg"
+    android:weightSum="3">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/splash_logo"
-        android:src="@drawable/mobile_tf_logo"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:padding="10dp">
 
-    <ProgressBar
-        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:indeterminate="true" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/splash_logo"
+            android:src="@drawable/mobile_tf_logo"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:adjustViewBounds="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/logo_name"
-        android:id="@+id/splash_title"
-        android:gravity="center"
-        android:textColor="#ffffff"
-        android:textSize="20dp"
-        android:layout_centerHorizontal="true" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/img_splash_spinner_orange"
+            android:src="@drawable/splash_spinner_orange"
+            android:padding="19dp"
+            android:layout_alignTop="@+id/splash_logo"
+            android:layout_alignBottom="@+id/splash_logo" />
 
-    <LinearLayout
-        android:id="@+id/card_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/app_bg"
-        android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/img_splash_spinner_blue"
+            android:layout_alignTop="@+id/splash_logo"
+            android:layout_alignBottom="@+id/splash_logo"
+            android:layout_alignLeft="@+id/splash_logo"
+            android:layout_alignRight="@+id/splash_logo"
+            android:src="@drawable/splash_spinner_blue"
+            android:padding="7dp" />
+    </RelativeLayout>
 
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="2">
+
+        <LinearLayout
+            android:id="@+id/card_container"
+            android:layout_width="145dp"
+            android:layout_height="50dp"
+            android:background="@color/app_bg"
+            android:layout_alignParentBottom="false"
+            android:orientation="horizontal"
+            android:layout_centerInParent="true" />
+    </RelativeLayout>
+
+</LinearLayout>
