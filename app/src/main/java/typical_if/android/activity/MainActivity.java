@@ -454,8 +454,7 @@ public class MainActivity extends DialogActivity implements
                     ItemDataSetter.saveUserId(Constants.USER_ID);
 
                     mNavigationDrawerFragment.refreshNavigationHeader(user);
-                   // ((FragmentWall) getSupportFragmentManager().getFragments().get(1));
-                    //.checkFabSuggest();
+                    ((FragmentWall) getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
                 }
 
                 @Override
@@ -484,7 +483,7 @@ public class MainActivity extends DialogActivity implements
 
                     mNavigationDrawerFragment.refreshNavigationHeader(user);
 
-                 //   ((FragmentWall) getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
+                    ((FragmentWall) getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
                 }
 
                 @Override
