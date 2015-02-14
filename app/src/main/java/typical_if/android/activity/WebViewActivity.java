@@ -23,14 +23,14 @@ public class WebViewActivity extends Activity {
     private WebChromeClient mWebChromeClient;
     private myWebViewClient mWebViewClient;
 
-
+    VKApiVideo video;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        VKApiVideo video = (VKApiVideo)getIntent().getExtras().get("VIDEO_OBJECT");
+        video = (VKApiVideo)getIntent().getExtras().get("VIDEO_OBJECT");
         setContentView(R.layout.fragment_web_view);
         playVideo(video.player);
     }
@@ -65,9 +65,9 @@ public class WebViewActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void playVideo(String url){
+    public void playVideo(String url) {
 
-        webView = (WebView)findViewById(R.id.webView);
+        webView = (WebView) findViewById(R.id.webView);
 
         mWebViewClient = new myWebViewClient();
         webView.setWebViewClient(mWebViewClient);
@@ -85,6 +85,15 @@ public class WebViewActivity extends Activity {
         cookieManager.removeAllCookie();
 
         webView.loadUrl(url);
+    //    webView.setBackgroundColor(Color.TRANSPARENT);
+//        webView.setLayerType(WebView.LAYER_TYPE_SOFTWARE, null);
+//        for (int i =0 ; i<video.photo.size();i++ ) {
+//            if (i==video.photo.size()){
+//
+//            }
+//        }
+//        webView.setBackground();
+//    }
     }
 
 

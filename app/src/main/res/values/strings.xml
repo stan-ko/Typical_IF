@@ -105,6 +105,7 @@
     <string name="period_events">Тривалі події</string>
     <string name="null_events">Немає</string>
     <string name="tif_title_header">Типовий Мобільний Франківськ</string>
+    <string name="add_vote">Голосувати</string>
 
     <array name="post_report_types">
         <item>Спам</item>

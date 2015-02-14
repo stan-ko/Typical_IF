@@ -14,13 +14,13 @@
         android:textColor="#ffffffff"
         android:singleLine="true"
         android:textSize="15dp"
-        android:layout_alignParentTop="true"
+        android:layout_marginLeft="5dp"
+        android:text="sdaf asd fasdf"
+        android:layout_alignTop="@+id/img_poll_post"
         android:layout_toRightOf="@+id/img_poll_post"
         android:layout_toEndOf="@+id/img_poll_post"
-        android:layout_marginTop="5dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp"
-        android:text="sdaf asd fasdf" />
+        android:layout_marginStart="11dp"
+        android:paddingRight="10dp" />
 
     <ImageView
         android:layout_width="wrap_content"
@@ -88,10 +88,10 @@
         android:id="@+id/answers_anonymous_text"
         android:textColor="#8cffffff"
         android:visibility="visible"
+        android:text="asd asd asd"
         android:layout_below="@+id/txt_poll_title"
         android:layout_alignLeft="@+id/txt_poll_title"
         android:layout_alignStart="@+id/txt_poll_title"
-        android:layout_marginTop="5dp"
-        android:text="asd asd asd" />
+        android:paddingRight="10dp" />
 
 </RelativeLayout>

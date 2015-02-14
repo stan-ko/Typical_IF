@@ -6,4 +6,4 @@
         android:id="@+id/webView"
         android:layout_gravity="center"
 
-        />
+    android:background="@color/transparent" />

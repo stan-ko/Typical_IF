@@ -91,13 +91,13 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="10dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/AddVoteLayout">
 
         <Button
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="VOTE"
+            android:text="@string/add_vote"
             android:id="@+id/add_vote_button"
             android:background="@drawable/vote_button_backround_shape"
             android:textColor="#8cffffff"

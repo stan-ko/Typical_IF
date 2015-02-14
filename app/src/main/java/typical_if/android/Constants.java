@@ -63,6 +63,7 @@ public class Constants {
     public static Activity mainActivity;
     public static final String APP_ID = "4456259";
     public static Locale LOCALE;
+    public static boolean isFragmentCommentsLoaded;
 
 
    public static int isMember;

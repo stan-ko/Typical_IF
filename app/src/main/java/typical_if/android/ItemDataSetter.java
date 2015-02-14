@@ -256,6 +256,10 @@ public class ItemDataSetter {
         answers_anonymous_text.setText(isAnonymous + " " + poll.votes);
         parent.setVisibility(View.VISIBLE);
 
+     // if (Constants.isFragmentCommentsLoaded & VKSdk.isLoggedIn()){
+          fillPollLayout(poll,parent);
+   //   }
+
 
 
 
@@ -308,9 +312,10 @@ public class ItemDataSetter {
        //     pollList.setVisibility(View.GONE);
 }
 
-    static VKPoll detailPoll;
-    static boolean user_answered;
+   // static VKPoll detailPoll;
+   public  static boolean user_answered;
     public static void fillPollLayout(final VKApiPoll poll,final View parent) {
+
         final ListView pollList = (ListView)  parent.findViewById(R.id.listOfVotes);
         pollList.setVisibility(View.VISIBLE);
         final RelativeLayout spinner=((RelativeLayout) parent.findViewById(R.id.changeVotesSpinnerLayout));
@@ -322,30 +327,25 @@ public class ItemDataSetter {
             @Override
             public void onComplete(VKResponse response) {
                 super.onComplete(response);
-                OfflineMode.saveJSON(response.json, poll.owner_id + poll.id);
-                detailPoll = new VKPoll().parse(OfflineMode.loadJSON(poll.owner_id + poll.id));
-                boolean user_answered;
-                if (poll.answer_id==0){
-                    user_answered=false;
-                }else {
-                    user_answered=true;
-                }
-                ItemDataSetter.user_answered=user_answered;
+          //      OfflineMode.saveJSON(response.json, poll.owner_id + poll.id);
+               // detailPoll = new VKPoll().parse(OfflineMode.loadJSON(poll.owner_id + poll.id));
+                  VKPoll new_poll = new VKPoll().parse(response.json);
+              ItemDataSetter.user_answered = poll.answer_id==0 ? false:true;
 
-                VoteItemAdapter adapter = new VoteItemAdapter(pollList, detailPoll,detailPoll.answers, context, user_answered, parent);
+
+                VoteItemAdapter adapter = new VoteItemAdapter(pollList,poll,new_poll.answers,parent);
                 pollList.setAdapter(adapter);
                 setListViewHeightBasedOnChildren(pollList);
-                pollList.invalidateViews();
-                adapter.notifyDataSetChanged();
-                pollList.invalidateViews();
+               /// pollList.invalidateViews();
+               // adapter.notifyDataSetChanged();
+               // pollList.invalidateViews();
 
+//              if (VoteItemAdapter.pos==pollList.getAdapter().getCount()){
+//                  spinner.setLayoutParams(new RelativeLayout.LayoutParams(pollList.getWidth(),pollList.getHeight()*pollList.getAdapter().getCount()));
+//                  spinner.setVisibility(View.VISIBLE);
+//              }
 
-              if (VoteItemAdapter.pos==pollList.getAdapter().getCount()){
-                  spinner.setLayoutParams(new RelativeLayout.LayoutParams(pollList.getWidth(),pollList.getHeight()*pollList.getAdapter().getCount()));
-                  spinner.setVisibility(View.VISIBLE);
-              }
-
-            }
+           }
 
 
         });
@@ -358,10 +358,10 @@ public class ItemDataSetter {
 
     public static void refreshList (View parent, ListView pollList){
         pollList.setAdapter(null);
-        VoteItemAdapter adapter = new VoteItemAdapter(pollList, detailPoll,detailPoll.answers, context, user_answered, parent);
-        pollList.setAdapter(adapter);
+      //  VoteItemAdapter adapter = new VoteItemAdapter(pollList, detailPoll,detailPoll.answers,  parent);
+     //   pollList.setAdapter(adapter);
         pollList.invalidateViews();
-        adapter.notifyDataSetChanged();
+     //   adapter.notifyDataSetChanged();
         pollList.invalidateViews();
 
     }
@@ -376,13 +376,25 @@ public class ItemDataSetter {
 
         for (int i = 0; i < mAdapter.getCount(); i++) {
             View mView = mAdapter.getView(i,null, listView);
+            mView.setLayoutParams(new ViewGroup.LayoutParams(0,0));
 
-            mView.measure(
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+         try {
+             mView.measure(
+                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
 
-                    View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
 
-            totalHeight += mView.getMeasuredHeight();
+             totalHeight += mView.getMeasuredHeight();
+         } catch (NullPointerException ex) {
+
+             mAdapter.listOfVotesParent.measure(
+                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+
+                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+             totalHeight+=(mAdapter.listOfVotesParent.getMeasuredHeight());
+
+
+         }
             Log.w("HEIGHT" + i, String.valueOf(totalHeight));
 
         }

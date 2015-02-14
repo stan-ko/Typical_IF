@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -144,7 +145,7 @@ public class FragmentComments extends Fragment {
 
     public static FragmentComments newInstanceForWall(int position, Wall wall, VKWallPostWrapper post) {
         loadFromWall = true;
-
+        Constants.isFragmentCommentsLoaded=true;
         FragmentComments fragment = new FragmentComments();
 
         fragment.wall = wall;
@@ -338,8 +339,15 @@ public class FragmentComments extends Fragment {
         }
 
         listOfComments.addHeaderView(wallItem);
+        Constants.isFragmentCommentsLoaded=true;
 
-
+//        getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+//            @Override
+//            public void onBackStackChanged() {
+//              if (getFragmentManager().getBackStackEntryCount()==0){
+//                Constants.isFragmentCommentsLoaded=false;}
+//            }
+//        });
 
         for (VKAttachments.VKApiAttachment attachment: post.post.attachments) {
             if (attachment.getType().equals(VKAttachments.TYPE_POLL)) {
@@ -350,6 +358,14 @@ public class FragmentComments extends Fragment {
 
         updateCommentList(group_id, post.post.id, listOfComments, inflater);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    Constants.isFragmentCommentsLoaded=true;
+    }
+
+
 
     RelativeLayout root;
     RelativeLayout coverGlobal;

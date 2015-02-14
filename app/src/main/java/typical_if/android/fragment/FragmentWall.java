@@ -61,6 +61,12 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 public class FragmentWall extends Fragment {
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    //Constants.isFragmentCommentsLoaded=false;
+    }
+
     static ListView wallListView;
     WallAdapter adapter;
     ActionBar actionBar;

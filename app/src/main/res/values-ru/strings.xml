@@ -280,6 +280,7 @@
     </string-array>
     <string name="anonymous_poll">Анонимный опрос</string>
     <string name="public_poll">Публичный опрос</string>
+    <string name="add_vote">Голосовать</string>
 
 
 </resources>
