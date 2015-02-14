@@ -20,7 +20,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:id="@+id/fullscreen_action_panel"
-        android:background="@color/transparent">
+        android:background="@color/partly_transparent">
 
         <View android:id="@+id/strut"
             android:layout_width="0dp"
@@ -183,11 +183,12 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="25dp"
         android:id="@+id/commentDataLayout"
         android:background="#00ffffff"
         android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp">
+        android:layout_marginLeft="10dp"
+        android:paddingBottom="-10dp">
 
 
         <TextView
