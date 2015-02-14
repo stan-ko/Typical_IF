@@ -282,6 +282,21 @@ public class FragmentWall extends Fragment {
         return rootView;
     }
 
+    public void checkFabSuggest() {
+        if (VKSdk.isLoggedIn()) {
+            fabSuggest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
+                }
+            });
+            fabSuggest.setVisibility(View.VISIBLE);
+        } else {
+            fabSuggest.setOnClickListener(null);
+            fabSuggest.setVisibility(View.GONE);
+        }
+    }
+
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater) {
         Wall wall = VKHelper.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
