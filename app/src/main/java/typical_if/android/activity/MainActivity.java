@@ -180,33 +180,33 @@ public class MainActivity extends DialogActivity implements
         switch ((int) groupIndex) {
             case 0:
                 mTitle = getString(R.string.menu_group_title_tf);
-                mIcon = getResources().getDrawable(R.drawable.tf_logo);
+                mIcon = getResources().getDrawable(R.drawable.ic_ab_tf);
                 Constants.Mtitle = mTitle.toString();
                 break;
             case 1:
                 mTitle = getString(R.string.menu_group_title_tz);
-                mIcon = getResources().getDrawable(R.drawable.tz_logo);
+                mIcon = getResources().getDrawable(R.drawable.ic_ab_tz);
                 Constants.Mtitle = mTitle.toString();
                 break;
             case 2:
                 mTitle = getString(R.string.menu_group_title_fb);
-                mIcon = getResources().getDrawable(R.drawable.fb_logo);
+                mIcon = getResources().getDrawable(R.drawable.ic_ab_fb);
                 Constants.Mtitle = mTitle.toString();
 
                 break;
             case 3:
                 mTitle = getString(R.string.menu_group_title_fn);
-                mIcon = getResources().getDrawable(R.drawable.fn_logo);
+                mIcon = getResources().getDrawable(R.drawable.ic_ab_fn);
                 Constants.Mtitle = mTitle.toString();
                 break;
             case 4:
                 mTitle = getString(R.string.menu_group_title_stantsiya);
-                mIcon = getResources().getDrawable(R.drawable.stantsiya_logo);
+                mIcon = getResources().getDrawable(R.drawable.ic_ab_st);
                 Constants.Mtitle = mTitle.toString();
                 break;
             case 5:
                 mTitle = getString(R.string.menu_group_title_events);
-                mIcon = getResources().getDrawable(R.drawable.ic_zf);
+                mIcon = getResources().getDrawable(R.drawable.ic_ab_a);
                 Constants.Mtitle = mTitle.toString();
                 break;
         }
@@ -306,7 +306,7 @@ public class MainActivity extends DialogActivity implements
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(mTitle);
-        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.action_bar_shape_background));
+//        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.action_bar_shape_background));
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setLogo(mIcon);

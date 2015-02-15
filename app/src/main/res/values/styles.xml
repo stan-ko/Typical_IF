@@ -15,7 +15,7 @@
 
     <style name="MyActionBar"
         parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:background">#575757</item>
+        <item name="android:background">@color/ab_background</item>
         <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
         <item name="titleTextStyle">@style/MyActionBarTitleText</item>
         <item name="android:spinnerDropDownItemStyle">@style/CustomDropDownListView</item>
@@ -28,7 +28,7 @@
     <!-- ActionBar title text -->
     <style name="MyActionBarTitleText"
         parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textColor">#b4ffffff</item>
+        <item name="android:textColor">@color/ab_text_color</item>
         <item name="android:textSize">15sp</item>
 
         <!-- The textColor property is backward compatible with the Support Library -->
