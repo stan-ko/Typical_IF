@@ -30,7 +30,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/ibt_exit_nav_draw"
-                android:src="@drawable/ic_exit_to_app_white_24dp"
+                android:src="@drawable/ic_close_circle_outline_white_24dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true" />
@@ -48,7 +48,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:id="@+id/ibt_about_us_nav_draw"
-                android:src="@drawable/ic_settings_white_24dp"
+                android:src="@drawable/ic_information_outline_white_24dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true" />

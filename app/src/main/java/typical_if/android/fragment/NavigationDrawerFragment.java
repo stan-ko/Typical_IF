@@ -119,7 +119,7 @@ public class NavigationDrawerFragment extends Fragment {
 
     public void refreshNavigationHeader(VKHelper.UserObject user) {
         if (VKSdk.isLoggedIn()) {
-            headerViewHolder.btLogin.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_lock_open_white_24dp));
+            headerViewHolder.btLogin.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_logout_white_24dp));
 
             ImageLoader.getInstance().displayImage(user.photo, headerViewHolder.imgAvatar, TIFApp.additionalOptions);
             headerViewHolder.txtTitle.setText(user.fullName);
@@ -127,7 +127,7 @@ public class NavigationDrawerFragment extends Fragment {
             headerViewHolder.imgAvatar.setTag("http://vk.com/id" + String.valueOf(user.id));
             headerViewHolder.imgAvatar.setOnTouchListener(touchListener);
         } else {
-            headerViewHolder.btLogin.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_lock_white_24dp));
+            headerViewHolder.btLogin.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_login_white_24dp));
 
             headerViewHolder.txtTitle.setText(getString(R.string.tif_title_header));
             headerViewHolder.imgAvatar.setImageResource(R.drawable.mobile_tf_logo);
@@ -269,7 +269,7 @@ public class NavigationDrawerFragment extends Fragment {
         listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_fn), R.drawable.ic_fn));
         listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_stantsiya), R.drawable.ic_st));
         listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_events), R.drawable.ic_a));
-        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_exit), R.drawable.ic_exit_to_app_white_24dp));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_exit), R.drawable.ic_close_circle_outline_white_24dp));
 
     }
 
