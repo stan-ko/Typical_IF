@@ -39,7 +39,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.koushikdutta.ion.Ion;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -73,7 +72,6 @@ import java.util.regex.Pattern;
 import typical_if.android.adapter.AudioAdapter;
 import typical_if.android.adapter.MediaPagerAdapter;
 import typical_if.android.adapter.VoteItemAdapter;
-import typical_if.android.adapter.WallAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoList;
 import typical_if.android.util.VKPoll;
@@ -255,64 +253,8 @@ public class ItemDataSetter {
 
         answers_anonymous_text.setText(isAnonymous + " " + poll.votes);
         parent.setVisibility(View.VISIBLE);
+    }
 
-     // if (Constants.isFragmentCommentsLoaded & VKSdk.isLoggedIn()){
-       //   fillPollLayout(poll,parent);
-   //   }
-
-
-
-
-//
-//            VKHelper.getPollById(poll.owner_id, 0, poll.id, new VKRequest.VKRequestListener() {
-//                @Override
-//                public void onComplete(VKResponse response) {
-//                        super.onComplete(response);
-//                     if (poll.answer_id==0){
-//                        fillPollLayout (poll, response,false);
-//                    }else {
-//                        fillPollLayout (poll, response,true);
-//
-//                    }
-//                }
-//
-
-
-
-//                    final String isAnonymous;
-//
-//                    OfflineMode.saveJSON(response.json, poll.owner_id + poll.id);
-//                    VKPoll detailPoll = new VKPoll().parse(OfflineMode.loadJSON(poll.owner_id + poll.id));
-//                    title.setText(detailPoll.question);
-//                    if (detailPoll.anonymous == 1) {
-//                        isAnonymous = Constants.mainActivity.getResources().getString(R.string.anonymous_poll);
-//                    } else
-//                        isAnonymous = Constants.mainActivity.getResources().getString(R.string.public_poll);
-//                    answers_anonymous_text.setText(isAnonymous + " " + detailPoll.votes);
-//
-//                  //  View v = inflater.inflate(R.layout.vote_item_layout, parent);
-//
-//                    ListView pollList = (ListView) parent.findViewById(R.id.listOfVotes);
-//
-//                    VoteItemAdapter adapter = new VoteItemAdapter(pollList, detailPoll,detailPoll.answers, context, user_answered);
-//                    pollList.setAdapter(adapter);
-//                    setListViewHeightBasedOnChildren(pollList);
-//
-//                     pollList.setVisibility(View.VISIBLE);
-
-
-
-            //    }
-        //    });
-
-      //  }
-        //else {
-           // parent.setVisibility(View.GONE);
-       //     ListView pollList = (ListView) parent.findViewById(R.id.listOfVotes);
-       //     pollList.setVisibility(View.GONE);
-}
-
-   // static VKPoll detailPoll;
    public  static boolean user_answered;
     public static void fillPollLayout(final VKApiPoll poll,final View parent) {
 
@@ -788,7 +730,23 @@ public class ItemDataSetter {
 
         mediaLayout.setVisibility(View.VISIBLE);
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
+        RelativeLayout.LayoutParams params;
+
+        if (count == 1) {
+            int height;
+            int width = TIFApp.getDisplayWidth();
+
+            if (photos.size() == 1) {
+                height = (int) Math.ceil(width * (float) photos.get(0).height / photos.get(0).width);
+            } else {
+                height = (int) Math.ceil(width * (float) 240 / 320);
+            }
+
+            params = new RelativeLayout.LayoutParams(width, height);
+        } else {
+            params = new RelativeLayout.LayoutParams(newWidth, newWidth);
+        }
+
         mediaPager.setLayoutParams(params);
 
         MediaPagerAdapter mediaPagerAdapter = new MediaPagerAdapter(context, (Boolean) mediaLayout.getTag(), photos, videos);
@@ -827,298 +785,6 @@ public class ItemDataSetter {
         }
     };
 
-//    if (!(layout_i instanceof LinearLayout)) {
-//        continue;
-//    } else {
-//        if (photosCount > 1) {
-//            int newWidth = TIFApp.getDisplayWidth();
-//
-//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
-//            layout_i.setLayoutParams(params);
-//        }
-//    }
-//    layout_i.setVisibility(View.VISIBLE);
-//
-//    linearBreak:
-//            for (int j = 0, photoPointer = 0; j < photos.size(); j++) {
-//        final ViewGroup layout_i_j = (ViewGroup) layout_i.getChildAt(j);
-//        if (!(layout_i_j instanceof RelativeLayout)) {
-//            continue;
-//        }
-//        final int kMax = layout_i_j.getChildCount();
-//        for (int k = 0; k < kMax; k++) {
-//            final View view_i_j_k = layout_i_j.getChildAt(k);
-//            if (view_i_j_k instanceof ImageView) {
-//                img = (ImageView) view_i_j_k;
-//                final int finalJ = photoPointer++;
-//                if (photosCount == 1 && videos.size() == 0) {
-//                    int newWidth = TIFApp.getDisplayWidth(); //this method should return the width of device screen.
-//
-//                    float scaleFactor = (float) newWidth / ((float) photos.get(finalJ).width);
-//                    int newHeight = (int) (photos.get(finalJ).height * scaleFactor);
-//                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
-//                    img.setLayoutParams(params);
-//                    img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//                }
-//
-//                ImageLoader.getInstance().displayImage(photos.get(finalJ).photo_604, img);
-//
-//
-//                img.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        VKHelper.countOfPhotos = photosCount;
-//                        makeSaveTransaction(photos, finalJ);
-//                    }
-//                });
-//                if (photoPointer == photos.size()) {
-//                    lastPositionJ = j + 1;
-//                    lastPositionK = k;
-//                    break;
-//                }
-//            } else if (view_i_j_k instanceof LinearLayout) {
-//                final ViewGroup layout_i_j_k = (LinearLayout) view_i_j_k;
-//                final int lMax = layout_i_j_k.getChildCount();
-//                for (int l = 0; l < lMax; l++) {
-//                    final ViewGroup layout_i_j_k_l = (ViewGroup) layout_i_j_k.getChildAt(l);
-//                    if (photoPointer == photos.size()) {
-//                        lastPositionJ = j;
-//                        lastPositionL = l;
-//                        lastPositionK = k;
-//                        break linearBreak;
-//                    }
-//
-//                    img = (ImageView) layout_i_j_k_l.getChildAt(0);
-//                    final int finalL = photoPointer++;
-//
-//                    ImageLoader.getInstance().displayImage(photos.get(finalL).photo_604, img);
-//
-//                    img.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            VKHelper.countOfPhotos = photosCount;
-//                            makeSaveTransaction(photos, finalL);
-//                        }
-//                    });
-//                }
-//            }
-//        }
-//    }
-//}
-//}
-//
-//        if (videos != null) {
-//final int videosCount = videos.size();
-//        for (int i = 0; i < videosCount; i++) {
-//final ViewGroup layout_i = (ViewGroup) mediaContainer.getChildAt(i);
-//        if (!(layout_i instanceof LinearLayout)) {
-//        continue;
-//        } else {
-//        if (videos.size() == 1 || videos.size() == 2 && photos.size() == 0) {
-//        int newWidth = TIFApp.getDisplayWidth();
-//
-//        float scaleFactor = (float) newWidth / 320;
-//        int newHeight = (int) (240 * scaleFactor);
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newHeight);
-//        layout_i.setLayoutParams(params);
-//        } else if (photos.size() == 0 && videos.size() > 1) {
-//        int newWidth = TIFApp.getDisplayWidth();
-//
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(newWidth, newWidth);
-//        layout_i.setLayoutParams(params);
-//        }
-//        }
-//        layout_i.setVisibility(View.VISIBLE);
-//final int jMax = layout_i.getChildCount();
-//        for (int j = lastPositionJ, videoPointer = 0; j < jMax; j++) {
-//final ViewGroup layout_i_j = (ViewGroup) layout_i.getChildAt(j);
-//        if (!(layout_i_j instanceof RelativeLayout)) {
-//        continue;
-//        }
-//final int kMax = layout_i_j.getChildCount();
-//        for (int k = lastPositionK; k < kMax; k++) {
-//final View view_i_j_k = layout_i_j.getChildAt(k);
-//        if (view_i_j_k instanceof ImageView) {
-//        if (videoPointer == videosCount) {
-//        break;
-//        }
-//        img = (ImageView) view_i_j_k;
-//
-//final int finalJ = videoPointer++;
-//
-//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//        img.setLayoutParams(params);
-//        img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//        ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_320, img);
-//
-//        relativeLayout = (RelativeLayout) layout_i_j.getChildAt(k + 1);
-//        relativeLayout.setVisibility(View.VISIBLE);
-//
-//        try {
-//        Constants.files = new JSONObject("{\n" +
-//        "\n" +
-//        "   \"response\": {\n" +
-//        "\n" +
-//        "      \"count\": 1,\n" +
-//        "\n" +
-//        "      \"items\": [\n" +
-//        "\n" +
-//        "         {\n" +
-//        "\n" +
-//        "            \"id\": 170595910,\n" +
-//        "\n" +
-//        "            \"owner_id\": 106880118,\n" +
-//        "\n" +
-//        "            \"title\": \"Hans Zimmer - Interstellar Main Theme Piano Cover\",\n" +
-//        "\n" +
-//        "            \"duration\": 281,\n" +
-//        "\n" +
-//        "            \"description\": \"\",\n" +
-//        "\n" +
-//        "            \"date\": 1416238922,\n" +
-//        "\n" +
-//        "            \"views\": 2185,\n" +
-//        "\n" +
-//        "            \"comments\": 12,\n" +
-//        "\n" +
-//        "            \"photo_130\": \"https://pp.vk.me/c634005/u106880118/video/s_47bc0893.jpg\",\n" +
-//        "\n" +
-//        "            \"photo_320\": \"https://pp.vk.me/c634005/u106880118/video/l_53618910.jpg\",\n" +
-//        "\n" +
-//        "            \"files\": {\n" +
-//        "\n" +
-//        "               \"mp4_240\": \"http://cs634005v4.vk.me/u106880118/videos/b892209e1d.240.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZw4zXWh910VoAjRwlna7MigJcXLmF3VREPx6u2UF2UQ\",\n" +
-//        "\n" +
-//        "               \"mp4_360\":\"http://cs634005v4.vk.me/u106880118/videos/b892209e1d.360.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZw4zXWh910VoAjRwlna7MigJcXLmF3VREPx6u2UF2UQ\",\n" +
-//        "\n" +
-//        "               \"mp4_480\": \"http://cs634005v4.vk.me/u106880118/videos/b892209e1d.480.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZw4zXWh910VoAjRwlna7MigJcXLmF3VREPx6u2UF2UQ\",\n" +
-//        "\n" +
-//        "               \"mp4_720\": \"http://cs634005v4.vk.me/u106880118/videos/b892209e1d.720.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZw4zXWh910VoAjRwlna7MigJcXLmF3VREPx6u2UF2UQ\"\n" +
-//        "\n" +
-//        "            },\n" +
-//        "\n" +
-//        "            \"player\": \"http://vk.com/video_ext.php?oid=106880118&id=170595910&hash=4cce98c2eea10294&api_hash=1422805710101e694253c964274f\",\n" +
-//        "\n" +
-//        "            \"can_comment\": 1,\n" +
-//        "\n" +
-//        "            \"can_repost\": 1,\n" +
-//        "\n" +
-//        "            \"likes\": {\n" +
-//        "\n" +
-//        "               \"user_likes\": 0,\n" +
-//        "\n" +
-//        "               \"count\": 298\n" +
-//        "\n" +
-//        "            },\n" +
-//        "\n" +
-//        "            \"repeat\": 0\n" +
-//        "\n" +
-//        "         }\n" +
-//        "\n" +
-//        "      ],\n" +
-//        "\n" +
-//        "      \"profiles\": [\n" +
-//        "\n" +
-//        "         {\n" +
-//        "\n" +
-//        "            \"id\": 106880118,\n" +
-//        "\n" +
-//        "            \"first_name\": \"Халим\",\n" +
-//        "\n" +
-//        "            \"last_name\": \"Атамурадов\"\n" +
-//        "\n" +
-//        "         }\n" +
-//        "\n" +
-//        "      ],\n" +
-//        "\n" +
-//        "      \"groups\": []\n" +
-//        "\n" +
-//        "   }\n" +
-//        "\n" +
-//        "}");
-//        } catch (JSONException e) {
-//        e.printStackTrace();
-//        }
-//
-//        relativeLayout.setOnClickListener(new View.OnClickListener() {
-//@Override
-//public void onClick(View v) {
-//        String key = (videos.get(finalJ).owner_id+"_"+videos.get(finalJ).id+"");
-//
-//        VKHelper.getVideoPlay(key, new VKRequest.VKRequestListener() {
-//@Override
-//public void onComplete(VKResponse response) {
-//        super.onComplete(response);
-//        // Constants.toastInProgress.show();
-//        Log.d(response.json.toString(),"VIDEO_FILE");
-//        try {
-//        VKHelper.getVideoSourceFromJson(Constants.files);
-//        //Fragment fragment = new FragmentWebView(url);
-//
-//        } catch (JSONException e) {
-//        e.printStackTrace();
-//        }
-//        }
-//        });
-//        }
-//        });
-//        ((TextView) relativeLayout.getChildAt(1)).setText(getMediaTime(videos.get(finalJ).duration));
-//        ((TextView) relativeLayout.getChildAt(2)).setText(videos.get(finalJ).title);
-//        } else if (view_i_j_k instanceof LinearLayout) {
-//final ViewGroup layout_i_j_k = (LinearLayout) view_i_j_k;
-//final int lMax = layout_i_j_k.getChildCount();
-//        for (int l = lastPositionL; l < lMax; l++) {
-//final ViewGroup layout_i_j_k_l = (ViewGroup) layout_i_j_k.getChildAt(l);
-//        lastPositionL = 0;
-//        if (layout_i_j_k_l instanceof RelativeLayout) {
-//        if (videoPointer == videosCount) {
-//        break;
-//        }
-//final int finalJ = videoPointer++;
-//        img = (ImageView) layout_i_j_k_l.getChildAt(0);
-//        ImageLoader.getInstance().displayImage(videos.get(finalJ).photo_130, img);
-//
-//        relativeLayout = (RelativeLayout) layout_i_j_k_l.getChildAt(1);
-//        relativeLayout.setVisibility(View.VISIBLE);
-//
-//        relativeLayout.setOnClickListener(new View.OnClickListener() {
-//@Override
-//public void onClick(View v) {
-//        String key = (videos.get(finalJ).owner_id+"_"+videos.get(finalJ).id+"");
-//
-//
-//
-//        VKHelper.getVideoPlay(key, new VKRequest.VKRequestListener() {
-//@Override
-//public void onComplete(VKResponse response) {
-//        super.onComplete(response);
-//        try {
-//        VKHelper.getVideoSourceFromJson(Constants.files);
-//
-//        } catch (JSONException e) {
-//        e.printStackTrace();
-//        }
-//
-//
-//
-//
-//        }
-//        });
-//        }
-//        });
-//        ((TextView) relativeLayout.getChildAt(1)).setText(getMediaTime(videos.get(finalJ).duration));
-//        ((TextView) relativeLayout.getChildAt(2)).setText(videos.get(finalJ).title);
-//        }
-//        }
-//        }
-//        }
-//        }
-//        }
-//        }
-//        parent.addView(mediaContainer);
-//    
-
-
     static int g;
     static ArrayList<VKApiPhoto> finalPhotos;
 
@@ -1147,8 +813,6 @@ public class ItemDataSetter {
             finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKeyGen(photos)));
             Fragment fragment = new FragmentFullScreenViewer(finalPhotos, position, 0);
             fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-        } else {
-            showAlertNoInternet(WallAdapter.wallAdapterView);
         }
     }
 
@@ -1158,11 +822,6 @@ public class ItemDataSetter {
             photosParam = photosParam.concat(photos.get(g).owner_id + "_" + photos.get(g).id + ",");
         }
         return photosParam;
-    }
-
-
-    static void showAlertNoInternet(final View view) {
-        Toast.makeText(Constants.mainActivity.getApplicationContext(), context.getString(R.string.no_internet_retry), Toast.LENGTH_SHORT).show();
     }
 
 

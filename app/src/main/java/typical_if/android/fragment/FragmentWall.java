@@ -1,13 +1,14 @@
 package typical_if.android.fragment;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,17 +16,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.nhaarman.listviewanimations.appearance.AnimationAdapter;
-import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.PauseOnScrollListener;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
@@ -47,7 +42,8 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
-import typical_if.android.adapter.WallAdapter;
+import typical_if.android.adapter.RecyclerEventAdapter;
+import typical_if.android.adapter.RecyclerWallAdapter;
 import typical_if.android.model.Wall.Wall;
 import typical_if.android.view.ToggleFloatingActionsMenu;
 
@@ -61,19 +57,13 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 public class FragmentWall extends Fragment {
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    //Constants.isFragmentCommentsLoaded=false;
-    }
-
-    static ListView wallListView;
-    WallAdapter adapter;
+    static RecyclerView wallListView;
+    RecyclerView.Adapter adapter;
     ActionBar actionBar;
 
     RelativeLayout spinnerLayout;
     View rootView;
-    PauseOnScrollListener pauseOnScrollListener;
+    NewPauseOnScrollListener pauseOnScrollListener;
     LayoutInflater inflaterGlobal;
     final int offsetO = 0;
     final int countPostDefaultForOffset = 100;
@@ -91,24 +81,27 @@ public class FragmentWall extends Fragment {
     SwipeRefreshLayout swipeView;
     ToggleFloatingActionsMenu toggleFloatingActionsMenu;
 
-    AbsListView.OnScrollListener onScrollListenerObject = new AbsListView.OnScrollListener() {
+    LinearLayoutManager linearLayoutManager;
 
+    RecyclerView.OnScrollListener onScrollListenerRecyclerObject = new RecyclerView.OnScrollListener() {
         int mLastFirstVisibleItem = 0;
 
         @Override
-        public void onScrollStateChanged(AbsListView view, int scrollState) {
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
             temp = true;
         }
 
         @Override
-        public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount,
-                             int totalItemCount) {
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
 
-            final int lastItem = firstVisibleItem + visibleItemCount;
+            final int lastItem = linearLayoutManager.findFirstVisibleItemPosition() + linearLayoutManager.getChildCount();
+            final int totalItemCount = linearLayoutManager.getItemCount();
 
-            if (absListView.getId() == wallListView.getId()) {
+            if (recyclerView.getId() == wallListView.getId()) {
 
-                final int currentFirstVisibleItem = wallListView.getFirstVisiblePosition();
+                final int currentFirstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
 
                 if (currentFirstVisibleItem > mLastFirstVisibleItem) {
                     actionBar.hide();
@@ -117,7 +110,6 @@ public class FragmentWall extends Fragment {
                     actionBar.show();
                     toggleFloatingActionsMenu.show(true);
                 }
-
 
                 mLastFirstVisibleItem = currentFirstVisibleItem;
             }
@@ -139,15 +131,13 @@ public class FragmentWall extends Fragment {
                 temp2 = true;
             }
 
-            if (absListView.getChildCount() > 0) {
-                boolean firstItemVisible = absListView.getFirstVisiblePosition() == 0;
-                boolean topOfFirstItemVisible = absListView.getChildAt(0).getTop() == 0;
+            if (recyclerView.getChildCount() > 0) {
+                boolean firstItemVisible = linearLayoutManager.findFirstVisibleItemPosition() == 0;
+                boolean topOfFirstItemVisible = recyclerView.getChildAt(0).getTop() == 0;
                 enable = firstItemVisible && topOfFirstItemVisible;
             }
             swipeView.setEnabled(enable);
-
         }
-
     };
 
     public static FragmentWall newInstance(boolean isSuggestedParam) {
@@ -214,7 +204,7 @@ public class FragmentWall extends Fragment {
         actionBar.show();
 
         playableLogoRes = ItemDataSetter.getPlayingLogo(Constants.GROUP_ID);
-        pauseOnScrollListener = new PauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerObject);
+        pauseOnScrollListener = new NewPauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerRecyclerObject);
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         swipeView.setColorSchemeResources(android.R.color.white, android.R.color.white, android.R.color.white);
         swipeView.setProgressBackgroundColor(R.color.music_progress);
@@ -249,19 +239,16 @@ public class FragmentWall extends Fragment {
                 }, 3000);
             }
         });
-        wallListView = (ListView) rootView.findViewById(R.id.listViewWall);
+        wallListView = (RecyclerView) rootView.findViewById(R.id.listViewWall);
 
-        TextView padding = new TextView(getApplicationContext());
-        padding.setBackgroundColor(Color.TRANSPARENT);
-        padding.setHeight(ItemDataSetter.setInDp(48));
-        wallListView.addHeaderView(padding);
+        wallListView.setHasFixedSize(true);
+        wallListView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        linearLayoutManager = ((LinearLayoutManager) wallListView.getLayoutManager());
 
         if (!isSuggested) {
 
             jsonObjectOld = OfflineMode.loadJSON(Constants.GROUP_ID);
             initGroupWall(jsonObjectOld, inflater);
-
-//
 
         } else {
             setDisabledMenu();
@@ -303,6 +290,56 @@ public class FragmentWall extends Fragment {
         }
     }
 
+    public class NewPauseOnScrollListener extends RecyclerView.OnScrollListener {
+
+        private ImageLoader imageLoader;
+
+        private final boolean pauseOnScroll;
+        private final boolean pauseOnSettling;
+        private final RecyclerView.OnScrollListener externalListener;
+
+        public NewPauseOnScrollListener(ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnSettling) {
+            this(imageLoader, pauseOnScroll, pauseOnSettling, null);
+        }
+
+        public NewPauseOnScrollListener(ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnSettling,
+                                        RecyclerView.OnScrollListener customListener) {
+            this.imageLoader = imageLoader;
+            this.pauseOnScroll = pauseOnScroll;
+            this.pauseOnSettling = pauseOnSettling;
+            externalListener = customListener;
+        }
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            switch (newState) {
+                case RecyclerView.SCROLL_STATE_IDLE:
+                    imageLoader.resume();
+                    break;
+                case RecyclerView.SCROLL_STATE_DRAGGING:
+                    if (pauseOnScroll) {
+                        imageLoader.pause();
+                    }
+                    break;
+                case RecyclerView.SCROLL_STATE_SETTLING:
+                    if (pauseOnSettling) {
+                        imageLoader.pause();
+                    }
+                    break;
+            }
+            if (externalListener != null) {
+                externalListener.onScrollStateChanged(recyclerView, newState);
+            }
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            if (externalListener != null) {
+                externalListener.onScrolled(recyclerView, dx, dy);
+            }
+        }
+    }
+
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater) {
         Wall wall = VKHelper.getGroupWallFromJSON(jsonObject);
         FragmentManager fragmentManager = getFragmentManager();
@@ -320,24 +357,22 @@ public class FragmentWall extends Fragment {
             fabPhoto.setVisibility(View.GONE);
 
             if (adapter == null) {
-                ArrayList<WallAdapter.EventObject> events = getEvents(wall);
-                adapter = new WallAdapter(events, wall, inflater, fragmentManager);
-                setBottomAdapter(wallListView,adapter);
-                //wallListView.setAdapter(adapter);
+                ArrayList<RecyclerEventAdapter.EventObject> events = getEvents(wall);
+                adapter = new RecyclerEventAdapter(events, inflater, fragmentManager);
+                wallListView.setAdapter(adapter);
                 wallListView.setOnScrollListener(pauseOnScrollListener);
             } else {
-                adapter.setEvent(getEvents(wall));
+                ((RecyclerEventAdapter) adapter).setEvent(getEvents(wall));
             }
         } else {
             fabPhoto.setVisibility(View.VISIBLE);
 
             if (adapter == null) {
-                adapter = new WallAdapter(wall, inflater, fragmentManager, isSuggested);
-                setBottomAdapter(wallListView,adapter);
-                //wallListView.setAdapter(adapter);
+                adapter = new RecyclerWallAdapter(wall, inflater, fragmentManager, isSuggested);
+                wallListView.setAdapter(adapter);
                 wallListView.setOnScrollListener(pauseOnScrollListener);
             } else {
-                adapter.setWall(wall);
+                ((RecyclerWallAdapter) adapter).setWall(wall);
             }
         }
 
@@ -347,8 +382,8 @@ public class FragmentWall extends Fragment {
     Pattern tempPattern;
     Matcher tempMatcher;
 
-    public ArrayList<WallAdapter.EventObject> getEvents(Wall wall) {
-        ArrayList<WallAdapter.EventObject> events = new ArrayList<WallAdapter.EventObject>();
+    public ArrayList<RecyclerEventAdapter.EventObject> getEvents(Wall wall) {
+        ArrayList<RecyclerEventAdapter.EventObject> events = new ArrayList<RecyclerEventAdapter.EventObject>();
 
         VKApiPhoto fakePhoto = new VKApiPhoto();
         fakePhoto.photo_604 = "fake_photo";
@@ -397,7 +432,7 @@ public class FragmentWall extends Fragment {
                 }
             }
 
-            events.add(new WallAdapter.EventObject(
+            events.add(new RecyclerEventAdapter.EventObject(
                             eventData,
                             tempPost.date,
                             photo
@@ -428,15 +463,6 @@ public class FragmentWall extends Fragment {
     }
 
     int mCurCheckPosition = 0;
-    private AnimationAdapter mAnimAdapter;
-
-    private void setBottomAdapter(ListView list, WallAdapter mAdapter) {
-        if (!(mAnimAdapter instanceof SwingBottomInAnimationAdapter)) {
-            mAnimAdapter = new SwingBottomInAnimationAdapter(mAdapter);
-            mAnimAdapter.setAbsListView(list);
-            list.setAdapter(mAnimAdapter);
-        }
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -606,20 +632,13 @@ public class FragmentWall extends Fragment {
         });
     }
 
-    private void scrollCommentsToBottom(final ListView listView, final int lastItem) {
+    private void scrollCommentsToBottom(final RecyclerView listView, final int lastItem) {
         listView.post(new Runnable() {
             @Override
             public void run() {
-                listView.setSelection(lastItem - 2);
+               listView.getLayoutManager().scrollToPosition(lastItem - 2);
             }
         });
 
     }
-
-//    OnDismissCallback onDismissCallback = new OnDismissCallback() {
-//        @Override
-//        public void onDismiss(@NonNull ViewGroup viewGroup, @NonNull int[] ints) {
-//
-//        }
-//    };
 }

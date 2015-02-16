@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -63,7 +62,7 @@ import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.CommentsListAdapter;
-import typical_if.android.adapter.WallAdapter;
+import typical_if.android.adapter.RecyclerWallAdapter;
 import typical_if.android.event.EventSpinnerLayout;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
@@ -102,7 +101,7 @@ public class FragmentComments extends Fragment {
     public int positionOfComment = 0;
     public static int group_id;
 
-    WallAdapter.ViewHolder viewHolder = null;
+    RecyclerWallAdapter.ViewHolder viewHolder = null;
     Button sendComment = null;
     boolean edit_status = false;
     static boolean loadFromWall = false;
@@ -311,9 +310,9 @@ public class FragmentComments extends Fragment {
     private void loadWallPosts() {
         final View wallItem = inflater.inflate(R.layout.wall_lv_item, null);
 
-        viewHolder = new WallAdapter.ViewHolder(wallItem);
+        viewHolder = new RecyclerWallAdapter.ViewHolder(wallItem);
 
-        WallAdapter.initViewHolder(viewHolder, wall, position, getFragmentManager(), post, true);
+        RecyclerWallAdapter.initViewHolder(viewHolder, wall, position, getFragmentManager(), post, true);
 
         viewHolder.postRootLayout.setCardElevation(0);
         viewHolder.postRootLayout.setShadowPadding(0,0,0,0);
@@ -340,14 +339,6 @@ public class FragmentComments extends Fragment {
 
         listOfComments.addHeaderView(wallItem);
         Constants.isFragmentCommentsLoaded=true;
-
-//        getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-//            @Override
-//            public void onBackStackChanged() {
-//              if (getFragmentManager().getBackStackEntryCount()==0){
-//                Constants.isFragmentCommentsLoaded=false;}
-//            }
-//        });
 
         for (VKAttachments.VKApiAttachment attachment: post.post.attachments) {
             if (attachment.getType().equals(VKAttachments.TYPE_POLL)) {
@@ -404,8 +395,8 @@ public class FragmentComments extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                    //TODO fuck
-                        Log.d("-----------------------------","-------------------------/////////////////////////////////////");
+                        //TODO fuck
+                        Log.d("-----------------------------", "-------------------------/////////////////////////////////////");
 
                         swipeView.setRefreshing(false);
                     }

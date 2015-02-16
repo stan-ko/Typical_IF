@@ -41,7 +41,7 @@ import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
-import typical_if.android.adapter.WallAdapter;
+import typical_if.android.adapter.RecyclerWallAdapter;
 import typical_if.android.event.EventShowPhotoAttachDialog;
 import typical_if.android.view.TouchMakePostImageButton;
 
@@ -149,7 +149,7 @@ public class FragmentMakePost extends Fragment {
         };
 
         textField = (EditText) rootView.findViewById(R.id.etxt_make_post_field);
-        if (WallAdapter.surpriseCounter!=0 && WallAdapter.surpriseCounter==15 && VKSdk.isLoggedIn()){
+        if (RecyclerWallAdapter.surpriseCounter!=0 && RecyclerWallAdapter.surpriseCounter==15 && VKSdk.isLoggedIn()){
             OfflineMode.saveInt(15, "surprise");
             textField.setText("Вітаємо ви стали учасником розіграшу 10 годин у антикафе STANTSIYA," +
                     " для того щоб підтвердити вашу участь в розіграші виберіть свою фотографію і " +

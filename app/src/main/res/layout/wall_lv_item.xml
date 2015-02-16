@@ -216,20 +216,58 @@
                 <RelativeLayout
                     android:id="@+id/postFeaturesLayout"
                     android:layout_width="fill_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:background="@color/app_bg"
-                    android:visibility="visible">
+                    android:visibility="visible"
+                    android:paddingBottom="5dp">
 
+
+                    <Button
+                        android:id="@+id/button_repost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/cb_repost"
+                        android:layout_alignEnd="@+id/cb_repost"
+                        android:layout_alignLeft="@+id/cb_repost"
+                        android:layout_alignRight="@+id/cb_repost"
+                        android:layout_alignStart="@+id/cb_repost"
+                        android:layout_alignTop="@+id/cb_repost"
+                        android:layout_weight=".30"
+                        android:background="@drawable/selector_action_post_buttons"
+                        android:visibility="visible" />
+
+                    <Button
+                        android:id="@+id/button_like"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/cb_like"
+                        android:layout_alignEnd="@+id/cb_like"
+                        android:layout_alignRight="@+id/cb_like"
+                        android:layout_alignTop="@+id/cb_comment"
+                        android:layout_toRightOf="@+id/cb_comment"
+                        android:background="@drawable/selector_action_post_buttons"
+                        android:visibility="visible" />
+
+                    <Button
+                        android:id="@+id/button_comment"
+                        android:layout_width="85dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/cb_comment"
+                        android:layout_alignTop="@+id/cb_repost"
+                        android:layout_toEndOf="@+id/cb_repost"
+                        android:layout_toLeftOf="@+id/cb_like"
+                        android:layout_toRightOf="@+id/cb_repost"
+                        android:background="@drawable/selector_action_post_buttons"
+                        android:visibility="visible" />
 
                     <CheckBox
                         android:id="@+id/cb_repost"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="6dp"
                         android:layout_toLeftOf="@+id/cb_comment"
                         android:layout_toStartOf="@+id/cb_comment"
                         android:button="@drawable/repost_or_not_selector"
@@ -245,7 +283,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@+id/cb_repost"
-                        android:layout_marginRight="6dp"
                         android:layout_toLeftOf="@+id/cb_like"
                         android:layout_toStartOf="@+id/cb_like"
                         android:button="@drawable/comment_or_not_comment_selector"
@@ -262,25 +299,13 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_alignTop="@+id/cb_comment"
-                        android:layout_marginRight="12dp"
+                        android:layout_marginRight="6dp"
                         android:button="@drawable/like_or_not_liked_selector"
                         android:checked="false"
                         android:clickable="false"
                         android:enabled="true"
                         android:textColor="#d2ffffff"
                         android:textSize="13dp"
-                        android:visibility="visible" />
-
-                    <Button
-                        android:id="@+id/button_like"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/cb_like"
-                        android:layout_alignEnd="@+id/cb_like"
-                        android:layout_alignRight="@+id/cb_like"
-                        android:layout_alignTop="@+id/cb_comment"
-                        android:layout_toRightOf="@+id/cb_comment"
-                        android:background="#00000000"
                         android:visibility="visible" />
 
                     <com.devspark.robototextview.widget.RobotoTextView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -300,35 +325,12 @@
                         android:textIsSelectable="true"
                         android:textSize="13dp"
                         android:visibility="visible"
-                        app:typeface="roboto_regular" />/>
+                        app:typeface="roboto_regular"
+                        android:layout_toLeftOf="@+id/cb_repost"
+                        android:layout_toStartOf="@+id/cb_repost"
+                        android:ellipsize="end" /><![CDATA[/>
 
-                    <Button
-                        android:id="@+id/button_comment"
-                        android:layout_width="85dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/cb_comment"
-                        android:layout_alignTop="@+id/cb_repost"
-                        android:layout_marginRight="6dp"
-                        android:layout_toEndOf="@+id/cb_repost"
-                        android:layout_toLeftOf="@+id/cb_like"
-                        android:layout_toRightOf="@+id/cb_repost"
-                        android:background="#00000000"
-                        android:visibility="visible" />
-
-                    <Button
-                        android:id="@+id/button_repost"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/cb_repost"
-                        android:layout_alignEnd="@+id/cb_repost"
-                        android:layout_alignLeft="@+id/cb_repost"
-                        android:layout_alignRight="@+id/cb_repost"
-                        android:layout_alignStart="@+id/cb_repost"
-                        android:layout_alignTop="@+id/cb_repost"
-                        android:layout_weight=".30"
-                        android:background="#00000000"
-                        android:visibility="visible" />
-
+                    ]]>
                 </RelativeLayout>
 
 
