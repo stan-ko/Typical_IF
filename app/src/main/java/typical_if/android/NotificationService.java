@@ -36,10 +36,10 @@ public class NotificationService extends Service {
 
     private long mInterval;
     final private Handler mHandler = new Handler();
-    ;
-    private final int offsetDefault = 0;
-    private final int countOfPosts = 1;
-    private final int extended = 1;
+
+    private  int offsetDefault = 0;
+    private  int countOfPosts = 1;
+    private  int extended = 1;
     AlarmManager alarmManager;
     private long timeToNewNotiff;
     private final static int ONE_HOUR_MILLISECONDS = 60 * 60 * 1000;
@@ -60,22 +60,32 @@ public class NotificationService extends Service {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if (OfflineMode.isFirstRun("OnStartCommandFirstRun")){
+            offsetDefault = 0;
+            countOfPosts = 100;
+            extended = 1;
+            makeRequestsForAllPosts(extended, offsetDefault,countOfPosts);
+        }
         Log.d("onStartCommand", "----------------------");
         try {
-            if (intent.getAction() == Constants.ACTION_BOOT_COMPLETED) {
-                makeRequests();
+            if (intent.getAction().equals(Constants.ACTION_BOOT_COMPLETED)) {
+                makeRequests(extended, offsetDefault, countOfPosts);
+
                 Log.d("ACTION_BOOT_COMPLETED", "-----------");
             }
-            if (intent.getAction() == Constants.ACTION_START_FROM_SPLASH_ACTIVITY) {
-                makeRequests();
+            if (intent.getAction().equals(Constants.ACTION_START_FROM_SPLASH_ACTIVITY)) {
+                makeRequests(extended, offsetDefault, countOfPosts);
+
                 Log.d("ACTION_START_FROM_SPLASH_ACTIVITY", "-----------");
             }
-            if (intent.getAction() == Constants.ACTION_FIRST_RUN) {
-                makeRequests();
+            if (intent.getAction().equals(Constants.ACTION_FIRST_RUN)) {
+                makeRequests(extended, offsetDefault, countOfPosts);
+
                 Log.d("ACTION_FIRST_RUN", "-----------");
             }
-            if (intent.getAction() == Constants.REPEAT_ACTION) {
-                makeRequests();
+            if (intent.getAction().equals(Constants.REPEAT_ACTION)) {
+                makeRequests(extended, offsetDefault, countOfPosts);
                 Log.d("REPEAT_ACTION", "-----------");
             }
 
@@ -85,13 +95,28 @@ public class NotificationService extends Service {
         }
         return START_STICKY;
     }
-    private void makeRequests() {
+    private void makeRequests(int extended, int offsetDefault, int countOfPosts) {
         VKHelper.doGroupWallRequest(extended, offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
                 handleRequestComplete(response.json);
                 Log.d("Make", "Request");
+            }
+
+            @Override
+            public void onError(final VKError error) {
+                super.onError(error);
+            }
+        });
+    }
+
+    private void makeRequestsForAllPosts(int extended, int offsetDefault, int countOfPosts) {
+        VKHelper.doGroupWallRequest(extended, offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(final VKResponse response) {
+                super.onComplete(response);
+                OfflineMode.saveJSON(response.json, Constants.ZF_ID);
             }
 
             @Override
@@ -119,7 +144,7 @@ public class NotificationService extends Service {
     Intent intentForSchedule;
     PendingIntent pendingIntent;
     private void setAlarm(boolean isNewPost) {
-        if (isNewPost == true) {
+        if (isNewPost) {
             OfflineMode.saveInt(Calendar.getInstance().get(Calendar.DATE), Constants.DATE_OF_NOTIF_SEND);
             //OfflineMode.saveBool(true, Constants.IS_NOTIF_SEND);
             final long currentTime = System.currentTimeMillis();
