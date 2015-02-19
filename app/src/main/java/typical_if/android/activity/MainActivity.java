@@ -1,8 +1,10 @@
 package typical_if.android.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -60,7 +62,19 @@ public class MainActivity extends DialogActivity implements
     public NavigationDrawerFragment mNavigationDrawerFragment;
     ActionBarArrayAdapter list;
 
+    void showAlertChanges() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.title_of_alert_main))
+                .setCancelable(false)
+                .setMessage(getString(R.string.сhanges_of_new_version))
+                .setPositiveButton(getString(R.string.pisitive_button_alert_of_main), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        builder.setCancelable(true);
+                    }
+                });
 
+        builder.create().show();
+    }
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
@@ -72,6 +86,12 @@ public class MainActivity extends DialogActivity implements
             }
         } catch (Exception e) {
         }
+
+      if (OfflineMode.isFirstRun("mainFirstRun")){
+            showAlertChanges();
+       }
+
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(R.layout.activity_main);
