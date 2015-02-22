@@ -59,6 +59,7 @@ public class NotificationService extends Service {
             countOfPosts = 100;
             extended = 1;
             makeRequestsForAllPosts(extended, offsetDefault,countOfPosts);
+
         }
         Log.d("onStartCommand", "----------------------");
         try {
