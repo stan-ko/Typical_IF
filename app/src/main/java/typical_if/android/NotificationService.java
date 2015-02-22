@@ -8,7 +8,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
-import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -35,20 +34,14 @@ import typical_if.android.model.Wall.Wall;
 public class NotificationService extends Service {
 
     private long mInterval;
-    final private Handler mHandler = new Handler();
-    ;
-    private final int offsetDefault = 0;
-    private final int countOfPosts = 1;
-    private final int extended = 1;
+    private  int offsetDefault = 0;
+    private  int countOfPosts = 1;
+    private  int extended = 1;
     AlarmManager alarmManager;
-    private long timeToNewNotiff;
     private final static int ONE_HOUR_MILLISECONDS = 60 * 60 * 1000;
     private Wall wall;
     private final static int ONE_DAY_MILLISECONDS = 24 * 60 * 60 * 1000;
-    private final long BUFFER = 1000 * 60 * 10;
-//    public static final String ACTION_BOOT_COMPLETED="1";
-//    public static final String ACTION_START_FROM_SPLASH_ACTIVITY="2";
-//    public static final String ACTION_RESTART="3";
+
 
 
     @Override
@@ -60,22 +53,32 @@ public class NotificationService extends Service {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if (OfflineMode.isFirstRun("OnStartCommandFirstRun")){
+            offsetDefault = 0;
+            countOfPosts = 100;
+            extended = 1;
+            makeRequestsForAllPosts(extended, offsetDefault,countOfPosts);
+        }
         Log.d("onStartCommand", "----------------------");
         try {
-            if (intent.getAction() == Constants.ACTION_BOOT_COMPLETED) {
-                makeRequests();
+            if (intent.getAction().equals(Constants.ACTION_BOOT_COMPLETED)) {
+                makeRequests(extended, offsetDefault, countOfPosts);
+
                 Log.d("ACTION_BOOT_COMPLETED", "-----------");
             }
-            if (intent.getAction() == Constants.ACTION_START_FROM_SPLASH_ACTIVITY) {
-                makeRequests();
+            if (intent.getAction().equals(Constants.ACTION_START_FROM_SPLASH_ACTIVITY)) {
+                makeRequests(extended, offsetDefault, countOfPosts);
+
                 Log.d("ACTION_START_FROM_SPLASH_ACTIVITY", "-----------");
             }
-            if (intent.getAction() == Constants.ACTION_FIRST_RUN) {
-                makeRequests();
+            if (intent.getAction().equals(Constants.ACTION_FIRST_RUN)) {
+                makeRequests(extended, offsetDefault, countOfPosts);
+
                 Log.d("ACTION_FIRST_RUN", "-----------");
             }
-            if (intent.getAction() == Constants.REPEAT_ACTION) {
-                makeRequests();
+            if (intent.getAction().equals(Constants.REPEAT_ACTION)) {
+                makeRequests(extended, offsetDefault, countOfPosts);
                 Log.d("REPEAT_ACTION", "-----------");
             }
 
@@ -85,13 +88,28 @@ public class NotificationService extends Service {
         }
         return START_STICKY;
     }
-    private void makeRequests() {
+    private void makeRequests(int extended, int offsetDefault, int countOfPosts) {
         VKHelper.doGroupWallRequest(extended, offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
                 handleRequestComplete(response.json);
                 Log.d("Make", "Request");
+            }
+
+            @Override
+            public void onError(final VKError error) {
+                super.onError(error);
+            }
+        });
+    }
+
+    private void makeRequestsForAllPosts(int extended, int offsetDefault, int countOfPosts) {
+        VKHelper.doGroupWallRequest(extended, offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequest.VKRequestListener() {
+            @Override
+            public void onComplete(final VKResponse response) {
+                super.onComplete(response);
+                OfflineMode.saveJSON(response.json, Constants.ZF_ID);
             }
 
             @Override
@@ -119,21 +137,18 @@ public class NotificationService extends Service {
     Intent intentForSchedule;
     PendingIntent pendingIntent;
     private void setAlarm(boolean isNewPost) {
-        if (isNewPost == true) {
+        if (isNewPost) {
             OfflineMode.saveInt(Calendar.getInstance().get(Calendar.DATE), Constants.DATE_OF_NOTIF_SEND);
-            //OfflineMode.saveBool(true, Constants.IS_NOTIF_SEND);
             final long currentTime = System.currentTimeMillis();
             final long tomorrowTime = currentTime - (currentTime % ONE_DAY_MILLISECONDS) + ONE_DAY_MILLISECONDS + ONE_HOUR_MILLISECONDS * 8;
             mInterval = tomorrowTime - currentTime;
             sendNotif();
-
             intentForSchedule = createIntent(Constants.SCHEDULE_FOR_EIGHT_HOUR);
             pendingIntent = PendingIntent.getBroadcast(TIFApp.getAppContext(), 0, intentForSchedule, 0);
             alarmManager.set(AlarmManager.RTC, System.currentTimeMillis() + mInterval, pendingIntent);
             Log.d("intervalForNextServiceStart ", " to 8 hours " + mInterval);
             stopSelf();
         } else {
-            //OfflineMode.saveBool(false, Constants.IS_NOTIF_SEND);
             mInterval = 60 * 60 * 1000;
             intentForSchedule = createIntent(Constants.SCHEDULE_FOR_ONE_HOUR);
             pendingIntent = PendingIntent.getBroadcast(TIFApp.getAppContext(), 0, intentForSchedule, 0);
@@ -142,13 +157,11 @@ public class NotificationService extends Service {
             stopSelf();
         }
     }
-
     Intent createIntent( String action) {
         Intent intent = new Intent(this, NotificationReceiver.class);
         intent.setAction(action);
         return intent;
     }
-
     private void sendNotif() {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
@@ -168,9 +181,7 @@ public class NotificationService extends Service {
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(1, mBuilder.build());
-
     }
-
     private final VKSdkListener sdkListener = new VKSdkListener() {
         @Override
         public void onCaptchaError(VKError captchaError) {
@@ -188,7 +199,6 @@ public class NotificationService extends Service {
                     .setMessage(authorizationError.toString())
                     .show();
         }
-
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
 
