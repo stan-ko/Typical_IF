@@ -51,6 +51,8 @@
     <string name="downloader_chooser">Оберіть завантажувач</string>
     <string name="viewer_chooser">Оберіть переглядач</string>
     <string name="show_all_text">Читати далі...</string>
+    <string name="error_during_voting">Помилка під час голосування.Спробуйте проголосувати пізніше</string>
+    <string name="poll">Опитування</string>
     <string name="show_min_text">Показати скорочено…</string>
     <string name="you_are_not_logged_in">Ви не увійшли в профіль</string>
     <string name="poll_anonymous">Анонімне голосування, голосів:</string>

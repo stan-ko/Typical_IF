@@ -45,12 +45,13 @@ import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
 import typical_if.android.fragment.FragmentWall;
 import typical_if.android.fragment.NavigationDrawerFragment;
+import typical_if.android.fragment.PollFragment;
 
 
 public class MainActivity extends DialogActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         FragmentFullScreenViewer.OnFragmentInteractionListener,
-        FragmentComments.OnFragmentInteractionListener {
+        FragmentComments.OnFragmentInteractionListener,PollFragment.OnFragmentInteractionListener {
 
 
     private Drawable mIcon;
@@ -536,6 +537,11 @@ public class MainActivity extends DialogActivity implements
     }
 
     @Override
+    public void onFragmentInteraction(String id) {
+
+    }
+
+    @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             getSupportActionBar().show();
@@ -565,6 +571,7 @@ public class MainActivity extends DialogActivity implements
             }
         }
     }
+
 
 
 }

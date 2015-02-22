@@ -29,6 +29,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -238,71 +239,71 @@ public class FragmentComments extends Fragment {
             }
         });
 
-        updateCommentList(group_id, photo.id, listOfComments, inflater);
+        updateCommentList(group_id, photo.id, listOfComments,false);
 
 
 
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
 
 
-        final CheckBox likePostPhoto = ((CheckBox) rootView.findViewById(R.id.like_post_photo_checkbox));
+//        final CheckBox likePostPhoto = ((CheckBox) rootView.findViewById(R.id.like_post_photo_checkbox));
+//
+//        if (photo.user_likes == 0) {
+//
+//            likePostPhoto.setChecked(false);
+//            likePostPhoto.setText(String.valueOf(photo.likes));
+//
+//        } else {
+//
+//            likePostPhoto.setChecked(true);
+//            likePostPhoto.setText(String.valueOf(photo.likes));
+//
+//        }
 
-        if (photo.user_likes == 0) {
-
-            likePostPhoto.setChecked(false);
-            likePostPhoto.setText(String.valueOf(photo.likes));
-
-        } else {
-
-            likePostPhoto.setChecked(true);
-            likePostPhoto.setText(String.valueOf(photo.likes));
-
-        }
-
-        likePostPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (photo.user_likes == 0) {
-                    VKHelper.setLike("photo", group_id, photo.id, new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(final VKResponse response) {
-                            super.onComplete(response);
-                            photo.user_likes = 1;
-                            ++photo.likes;
-                            likePostPhoto.setText(String.valueOf(photo.likes));
-                            likePostPhoto.setChecked(true);
-
-
-                        }
-
-                        @Override
-                        public void onError(final VKError error) {
-                            super.onError(error);
-                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                        }
-                    });
-
-                } else {
-                    VKHelper.deleteLike("photo", group_id, photo.id, new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(final VKResponse response) {
-                            super.onComplete(response);
-                            photo.user_likes = 0;
-                            --photo.likes;
-                            likePostPhoto.setText(String.valueOf(photo.likes));
-                            likePostPhoto.setChecked(false);
-
-                        }
-
-                        @Override
-                        public void onError(final VKError error) {
-                            super.onError(error);
-                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-                        }
-                    });
-                }
-            }
-        });
+//        likePostPhoto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (photo.user_likes == 0) {
+//                    VKHelper.setLike("photo", group_id, photo.id, new VKRequest.VKRequestListener() {
+//                        @Override
+//                        public void onComplete(final VKResponse response) {
+//                            super.onComplete(response);
+//                            photo.user_likes = 1;
+//                            ++photo.likes;
+//                            likePostPhoto.setText(String.valueOf(photo.likes));
+//                            likePostPhoto.setChecked(true);
+//
+//
+//                        }
+//
+//                        @Override
+//                        public void onError(final VKError error) {
+//                            super.onError(error);
+//                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+//                        }
+//                    });
+//
+//                } else {
+//                    VKHelper.deleteLike("photo", group_id, photo.id, new VKRequest.VKRequestListener() {
+//                        @Override
+//                        public void onComplete(final VKResponse response) {
+//                            super.onComplete(response);
+//                            photo.user_likes = 0;
+//                            --photo.likes;
+//                            likePostPhoto.setText(String.valueOf(photo.likes));
+//                            likePostPhoto.setChecked(false);
+//
+//                        }
+//
+//                        @Override
+//                        public void onError(final VKError error) {
+//                            super.onError(error);
+//                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+//                        }
+//                    });
+//                }
+//            }
+//        });
 
 
     }
@@ -313,6 +314,7 @@ public class FragmentComments extends Fragment {
         viewHolder = new RecyclerWallAdapter.ViewHolder(wallItem);
 
         RecyclerWallAdapter.initViewHolder(viewHolder, wall, position, getFragmentManager(), post, true);
+
 
         viewHolder.postRootLayout.setCardElevation(0);
         viewHolder.postRootLayout.setShadowPadding(0,0,0,0);
@@ -337,24 +339,28 @@ public class FragmentComments extends Fragment {
             }
         }
 
-        listOfComments.addHeaderView(wallItem);
         Constants.isFragmentCommentsLoaded=true;
 
-        for (VKAttachments.VKApiAttachment attachment: post.post.attachments) {
-            if (attachment.getType().equals(VKAttachments.TYPE_POLL)) {
-                final VKApiPoll poll = ((VKApiPoll) attachment);
-                ItemDataSetter.fillPollLayout(poll, viewHolder.postPollLayout);
-            }
-        }
 
-        updateCommentList(group_id, post.post.id, listOfComments, inflater);
+        listOfComments.addHeaderView(wallItem);
+
+
+
+
+        updateCommentList(group_id, post.post.id, listOfComments,true);
     }
 
     @Override
     public void onResume() {
         super.onResume();
     Constants.isFragmentCommentsLoaded=true;
+        Log.d("isFragmentCommentsLoaded: "+ Constants.isFragmentCommentsLoaded," was changed in OnResume in FragmentComments");
+
     }
+
+
+
+
 
 
 
@@ -372,7 +378,13 @@ public class FragmentComments extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
         RelativeLayout rootLayoutShowHide = (RelativeLayout) rootView.findViewById(R.id.comment_bar_layout);
         root = rootLayoutShowHide;
+
         coverGlobal = (RelativeLayout) rootView.findViewById(R.id.while_loading_view_layout);
+        if (Constants.isFragmentCommentsLoaded){
+           ProgressBar spinner =  (ProgressBar) rootView.findViewById(R.id.spinner_progress);
+            spinner.setVisibility(View.INVISIBLE);
+         }
+
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
 //        RelativeLayout useless = ((RelativeLayout) rootView.findViewById(R.id.useless));
 
@@ -395,9 +407,7 @@ public class FragmentComments extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //TODO fuck
-                        Log.d("-----------------------------", "-------------------------/////////////////////////////////////");
-
+                        refreshPostData(false);
                         swipeView.setRefreshing(false);
                     }
                 }, 3000);
@@ -459,7 +469,7 @@ public class FragmentComments extends Fragment {
                                 public void onComplete(final VKResponse response) {
                                     super.onComplete(response);
                                     commentMessage.setText("");
-                                    updateCommentList(group_id, item_id, listOfComments, inflater);
+                                    updateCommentList(group_id, item_id, listOfComments,true);
                                 }
 
                                 @Override
@@ -477,7 +487,7 @@ public class FragmentComments extends Fragment {
                                 public void onComplete(final VKResponse response) {
                                     super.onComplete(response);
                                     commentMessage.setText("");
-                                    updateCommentList(group_id, item_id, listOfComments, inflater);
+                                    updateCommentList(group_id, item_id, listOfComments,true);
                                 }
 
                                 @Override
@@ -493,7 +503,7 @@ public class FragmentComments extends Fragment {
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
-                                updateCommentList(group_id, item_id, listOfComments, inflater);
+                                updateCommentList(group_id, item_id, listOfComments,true);
                                 commentMessage.setText("");
                                 edit_status = false;
                             }
@@ -516,7 +526,30 @@ public class FragmentComments extends Fragment {
     }
 
 
-    public void updateCommentList(long owner_id, final long item_id, final ListView listOfComments, final LayoutInflater inflater) {
+    public void refreshPostData (boolean scrollToBottom){
+
+        for (VKAttachments.VKApiAttachment attachment : post.post.attachments){
+            if (attachment.getType().equals(equals(VKAttachments.TYPE_POLL))){
+                VKHelper.getPollById(((VKApiPoll) attachment).owner_id,0, ((VKApiPoll) attachment).id, new VKRequest.VKRequestListener() {
+                    @Override
+                    public void onComplete(VKResponse response) {
+                        super.onComplete(response);
+                        PollFragment.updatedPoll = new VKApiPoll().parse(response.json);
+
+                       }
+
+                    @Override
+                    public void onError(VKError error) {
+                        super.onError(error);
+                    }
+                });
+            }
+          }
+        updateCommentList(group_id, item_id, listOfComments, scrollToBottom);
+
+    }
+
+    public void updateCommentList(long owner_id, final long item_id, final ListView listOfComments, final boolean scrollToBottom) {
 
         VKHelper.getComments(owner_id, item_id, new VKRequest.VKRequestListener() {
 
@@ -529,7 +562,8 @@ public class FragmentComments extends Fragment {
                     @Override
                     public void run() {
                         Looper.prepare();
-                        parseCommentList(OfflineMode.loadJSON(item_id));
+                        parseCommentList(OfflineMode.loadJSON(item_id),scrollToBottom);
+
                         EventBus.getDefault().post(new EventSpinnerLayout());
                     }
                 }).start();
@@ -543,7 +577,7 @@ public class FragmentComments extends Fragment {
 
         });
         if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(item_id)) {
-            parseCommentList(OfflineMode.loadJSON(item_id));
+            parseCommentList(OfflineMode.loadJSON(item_id),scrollToBottom);
             // If IsOnline and response from preferences not null then load JSON from preferences
         }
 
@@ -654,7 +688,7 @@ public class FragmentComments extends Fragment {
     }
 
 
-    public void parseCommentList(final JSONObject response) {
+    public void parseCommentList(final JSONObject response, final boolean scrollToBottom) {
 
         JSONArray[] arrayOfComments = VKHelper.getResponseArrayOfComment(response);
         comments = VKHelper.getCommentsFromJSON(arrayOfComments[0]);
@@ -670,7 +704,7 @@ public class FragmentComments extends Fragment {
                         adapter = new CommentsListAdapter(comments, profiles, groups, inflater);
                         listOfComments.setAdapter(adapter);
                     } else {
-                        adapter.UpdateCommentList(comments, profiles, groups, listOfComments);
+                        adapter.UpdateCommentList(comments, profiles, groups, listOfComments,scrollToBottom);
 
 
                     }
@@ -678,6 +712,7 @@ public class FragmentComments extends Fragment {
             });
 
         } catch (NullPointerException npe) {
+            Toast.makeText(Constants.mainActivity.getApplicationContext(),Constants.mainActivity.getResources().getString(R.string.something_went_wrong),Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -762,7 +797,7 @@ public class FragmentComments extends Fragment {
                                     @Override
                                     public void onComplete(final VKResponse response) {
                                         super.onComplete(response);
-                                        updateCommentList(group_id, item_id, listOfComments, inflater);
+                                        updateCommentList(group_id, item_id, listOfComments, true);
                                     }
 
                                     @Override
@@ -897,7 +932,10 @@ public class FragmentComments extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        EventBus.getDefault().unregister(this);
+      Constants.isFragmentCommentsLoaded=false;
+      Log.d("isFragmentCommentsLoaded: "+ Constants.isFragmentCommentsLoaded," was changed in OnDetach in FragmentComments");
+
+      EventBus.getDefault().unregister(this);
     }
 
 
@@ -914,6 +952,14 @@ public class FragmentComments extends Fragment {
             textView.setVisibility(View.GONE);
         }
         ImageLoader.getInstance().displayImage(PhotoUrlHelper.getFullScreenUrl(photo), imageView);
+        RelativeLayout.LayoutParams params;
+        int height;
+        int width = TIFApp.getDisplayWidth();
+        height = (int) Math.ceil(width * (float) photo.height / photo.width);
+        params = new RelativeLayout.LayoutParams(width, height);
+        imageView.setLayoutParams(params);
+        imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
     }
 
     public final static Animation animationFadeOut = AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.fade_out);

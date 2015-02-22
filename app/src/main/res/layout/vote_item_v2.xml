@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/app_bg">
+
+
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:id="@+id/rate_bar"
+            android:progress="86"
+            android:layout_toLeftOf="@+id/temp2"
+            android:visibility="visible"
+            android:layout_marginBottom="5dp"
+            android:layout_below="@+id/variant_text"
+            android:layout_toEndOf="@+id/variant_text"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NTUSER.DAT{86ae9ce5-ae7e-11e3-80ba-0026b956c968}.TM---------11111111111111111111111111222222222222222222222222"
+            android:id="@+id/variant_text"
+            android:textColor="@color/textFadeOutColor"
+            android:visibility="visible"
+            android:textSize="10dp"
+            android:layout_alignTop="@+id/temp2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="5dp"
+            android:typeface="monospace"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:layout_alignParentRight="false"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="22.6%"
+            android:id="@+id/temp2"
+            android:textColor="#ffffffff"
+            android:visibility="invisible"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp" />
+
+    <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_your_vote_button"
+            android:background="#ff525252"
+            android:layout_alignRight="@+id/rate_bar"
+            android:layout_alignEnd="@+id/rate_bar"
+            android:visibility="visible"
+            android:layout_alignBottom="@+id/rate_bar"
+            android:layout_below="@+id/variant_text"
+            android:layout_toEndOf="@+id/variant_text"
+            android:layout_alignLeft="@+id/rate_bar"
+            android:layout_alignStart="@+id/rate_bar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="324"
+        android:id="@+id/rate_amount_text"
+        android:textColor="@color/textFadeOutColor"
+        android:visibility="visible"
+        android:textSize="12dp"
+        android:layout_alignRight="@+id/rate_bar"
+        android:layout_alignEnd="@+id/rate_bar"
+        android:layout_alignLeft="@+id/rate_bar"
+        android:layout_alignStart="@+id/rate_bar"
+        android:layout_alignTop="@+id/rate_bar"
+        android:layout_alignBottom="@+id/rate_bar"
+        android:gravity="center_vertical|center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/add_vote"
+        android:id="@+id/add_vote_text"
+        android:textColor="@color/textFadeOutColor"
+        android:visibility="visible"
+        android:textSize="12dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_below="@+id/variant_text"
+        android:layout_alignBottom="@+id/rate_bar"
+        android:layout_alignRight="@+id/rate_bar"
+        android:layout_alignEnd="@+id/rate_bar"
+        android:layout_alignLeft="@+id/rate_bar"
+        android:layout_alignStart="@+id/rate_bar" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/variant_text"
+        android:layout_toEndOf="@+id/add_your_vote_button"
+        android:layout_alignBottom="@+id/rate_bar"
+        android:layout_marginRight="5dp"
+        android:gravity="left"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/add_your_vote_button">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="22.6%"
+            android:id="@+id/rate_percents_text"
+            android:textColor="@color/textFadeOutColor"
+            android:visibility="visible"
+            android:textSize="12dp"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:layout_centerVertical="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp" />
+    </RelativeLayout>
+
+</RelativeLayout>

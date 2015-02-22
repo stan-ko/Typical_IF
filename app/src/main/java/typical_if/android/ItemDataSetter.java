@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -71,10 +72,10 @@ import java.util.regex.Pattern;
 
 import typical_if.android.adapter.AudioAdapter;
 import typical_if.android.adapter.MediaPagerAdapter;
-import typical_if.android.adapter.VoteItemAdapter;
+import typical_if.android.adapter.VotesItemAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoList;
-import typical_if.android.util.VKPoll;
+import typical_if.android.fragment.PollFragment;
 
 import static java.lang.String.format;
 import static java.lang.String.valueOf;
@@ -237,10 +238,12 @@ public class ItemDataSetter {
         }
     }
 
+
     public static void setPoll(final RelativeLayout parent, final TextView title, final VKApiPoll poll) {
 
-        final TextView answers_anonymous_text = ((TextView) parent.findViewById(R.id.answers_anonymous_text));
+        final TextView answers_anonymous_text = ((TextView) parent.findViewById(R.id.answers_anonymous_text_preview));
         final String isAnonymous;
+        final RelativeLayout go_to_poll = ((RelativeLayout) parent.findViewById(R.id.go_to_poll_details));
 
 
         title.setText(poll.question);
@@ -253,99 +256,56 @@ public class ItemDataSetter {
 
         answers_anonymous_text.setText(isAnonymous + " " + poll.votes);
         parent.setVisibility(View.VISIBLE);
+        go_to_poll.setVisibility(View.VISIBLE);
+        go_to_poll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new PollFragment(poll);
+                fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+            }
+        });
+       //
+ //  if (Constants.isFragmentCommentsLoaded){
+   //    Log.d("polls_are_loaded","Constants.isFragmentCommentsLoaded= "+Constants.isFragmentCommentsLoaded);
+      //  initVotes (poll,list_of_polls);
+     // }
+
     }
 
-   public  static boolean user_answered;
-    public static void fillPollLayout(final VKApiPoll poll,final View parent) {
-
-        final ListView pollList = (ListView)  parent.findViewById(R.id.listOfVotes);
-        pollList.setVisibility(View.VISIBLE);
-        final RelativeLayout spinner=((RelativeLayout) parent.findViewById(R.id.changeVotesSpinnerLayout));
-
-
-        RelativeLayout votesParentLayout = ((RelativeLayout) parent.findViewById(R.id.votesParentLayout));
-        votesParentLayout.setVisibility(View.VISIBLE);
-        VKHelper.getPollById(poll.owner_id, 0, poll.id, new VKRequest.VKRequestListener() {
-            @Override
-            public void onComplete(VKResponse response) {
-                super.onComplete(response);
-          //      OfflineMode.saveJSON(response.json, poll.owner_id + poll.id);
-               // detailPoll = new VKPoll().parse(OfflineMode.loadJSON(poll.owner_id + poll.id));
-                  VKPoll new_poll = new VKPoll().parse(response.json);
-              ItemDataSetter.user_answered = poll.answer_id==0 ? false:true;
-
-
-                VoteItemAdapter adapter = new VoteItemAdapter(pollList,poll,new_poll.answers,parent);
-                pollList.setAdapter(adapter);
-                setListViewHeightBasedOnChildren(pollList);
-               /// pollList.invalidateViews();
-               // adapter.notifyDataSetChanged();
-               // pollList.invalidateViews();
-
-//              if (VoteItemAdapter.pos==pollList.getAdapter().getCount()){
-//                  spinner.setLayoutParams(new RelativeLayout.LayoutParams(pollList.getWidth(),pollList.getHeight()*pollList.getAdapter().getCount()));
-//                  spinner.setVisibility(View.VISIBLE);
-//              }
-
-           }
-
-
-        });
+     public static void initVotes (final VKApiPoll poll, final  ListView list_of_polls){
+         VotesItemAdapter adapter = new VotesItemAdapter(poll);
+         list_of_polls.setAdapter(adapter);
+         setListViewHeightBasedOnChildren(list_of_polls);
 
 
 
-
-
- }
-
-    public static void refreshList (View parent, ListView pollList){
-        pollList.setAdapter(null);
-      //  VoteItemAdapter adapter = new VoteItemAdapter(pollList, detailPoll,detailPoll.answers,  parent);
-     //   pollList.setAdapter(adapter);
-        pollList.invalidateViews();
-     //   adapter.notifyDataSetChanged();
-        pollList.invalidateViews();
 
     }
 
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
-
-        VoteItemAdapter mAdapter = (VoteItemAdapter)listView.getAdapter();
-
-        int totalHeight = 0;
-
-
-        for (int i = 0; i < mAdapter.getCount(); i++) {
-            View mView = mAdapter.getView(i,null, listView);
-            mView.setLayoutParams(new ViewGroup.LayoutParams(0,0));
-
-         try {
-             mView.measure(
-                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-
-                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-
-             totalHeight += mView.getMeasuredHeight();
-         } catch (NullPointerException ex) {
-
-             mAdapter.listOfVotesParent.measure(
-                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-
-                     View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-             totalHeight+=(mAdapter.listOfVotesParent.getMeasuredHeight());
+        BaseAdapter mAdapter ;
+        if (listView.getAdapter() instanceof VotesItemAdapter) {
+            mAdapter = (VotesItemAdapter) listView.getAdapter();
 
 
-         }
-            Log.w("HEIGHT" + i, String.valueOf(totalHeight));
+            int totalHeight = 0;
+            for (int i = 0; i < mAdapter.getCount(); i++) {
+                View mView = mAdapter.getView(i, null, listView);
+                mView.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+
+                mView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+                totalHeight += mView.getMeasuredHeight();
+                Log.w("HEIGHT" + i, String.valueOf(totalHeight));
+
+            }
+            ViewGroup.LayoutParams params = listView.getLayoutParams();
+            params.height = 50+totalHeight + (listView.getDividerHeight() * (mAdapter.getCount() - 1));
+            listView.setLayoutParams(params);
+            listView.requestLayout();
+
 
         }
-
-        ViewGroup.LayoutParams params = listView.getLayoutParams();
-        params.height = totalHeight
-                + (listView.getDividerHeight() * (mAdapter.getCount() - 1));
-        listView.setLayoutParams(params);
-        listView.requestLayout();
 
     }
 

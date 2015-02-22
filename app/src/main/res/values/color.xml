@@ -30,5 +30,7 @@
     <color name="tFIndigo">#3F51B5</color>
     <color name="tZDeepPurple">#673AB7</color>
     <color name="fbBlue">#2196F3</color>
+    <color name="textFadeOutColor">#beffffff</color>
+    <color name="only_white">#ffffff</color>
 
 </resources>

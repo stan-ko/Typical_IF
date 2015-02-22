@@ -56,7 +56,7 @@ public class CommentsListAdapter extends BaseAdapter {
         layoutInflater = inflater;
     }
 
-    public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList, ArrayList<VKApiCommunity> groupsList, ListView listView) {
+    public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList, ArrayList<VKApiCommunity> groupsList, ListView listView,boolean scrollToBottom) {
         this.profilesList.clear();
         this.profilesList.addAll(profilesList);
         this.commentList.clear();
@@ -64,8 +64,8 @@ public class CommentsListAdapter extends BaseAdapter {
         this.groupsList.clear();
         this.groupsList.addAll(groupsList);
         this.notifyDataSetChanged();
-
-        scrollCommentsToBottom(listView);
+    if (scrollToBottom){
+        scrollCommentsToBottom(listView);}
     }
 
     private void scrollCommentsToBottom(final ListView listView) {
@@ -170,6 +170,7 @@ public class CommentsListAdapter extends BaseAdapter {
 
         if (comment.attachments != null && comment.attachments.size() != 0) {
             viewHolder.commentAttachmentsLayout.setVisibility(View.VISIBLE);
+
             ItemDataSetter.setAttachemnts(
                     comment.attachments,
                     viewHolder.commentMediaLayout,
@@ -186,7 +187,9 @@ public class CommentsListAdapter extends BaseAdapter {
                     viewHolder.commentTxtLinkTitle,
                     viewHolder.commentPollLayout,
                     viewHolder.commentTxtPollTitle
+
             );
+
         } else {
             viewHolder.commentAttachmentsLayout.setVisibility(View.GONE);
         }
@@ -281,8 +284,8 @@ public class CommentsListAdapter extends BaseAdapter {
             this.commentImgLink = (ImageView) convertView.findViewById(R.id.img_link);
             this.commentTxtLinkTitle = (TextView) convertView.findViewById(R.id.txt_link_title);
             this.commentTxtLinkSrc = (TextView) convertView.findViewById(R.id.txt_link_src);
-            this.commentImgPoll = (ImageView) convertView.findViewById(R.id.img_poll_post);
-            this.commentTxtPollTitle = (TextView) convertView.findViewById(R.id.txt_poll_title);
+            this.commentImgPoll = (ImageView) convertView.findViewById(R.id.img_poll_post_preview);
+            this.commentTxtPollTitle = (TextView) convertView.findViewById(R.id.txt_poll_title_preview);
             this.commentMediaPager = (ViewPager) convertView.findViewById(R.id.media_pager);
             this.commentMediaPagerIndicator = (CirclePageIndicator) convertView.findViewById(R.id.media_circle_indicator);
             this.commentAudioListView = (ListView) convertView.findViewById(R.id.lv_simple);

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Stack;
 
 import typical_if.android.adapter.FullScreenImageAdapter;
 
@@ -64,9 +65,10 @@ public class Constants {
     public static final String APP_ID = "4456259";
     public static Locale LOCALE;
     public static boolean isFragmentCommentsLoaded;
-
+    public static final ArrayList<Stack> stacks_array = new ArrayList<Stack>();
 
    public static int isMember;
+
 
     public static final String ACTION_BOOT_COMPLETED="1";
     public static final String ACTION_START_FROM_SPLASH_ACTIVITY="2";

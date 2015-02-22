@@ -139,7 +139,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/there_are_no_comments_here_tv"
-                    android:background="#ff424242"
+                    android:background="@color/app_bg"
                     android:visibility="visible">
 
                     <ProgressBar

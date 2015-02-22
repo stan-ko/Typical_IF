@@ -100,8 +100,10 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
         } else {
             viewHolder.itemView.setPadding(0, 0, 0, 0);
         }
+///////////////////////////////////////////////////////////
+    //   Constants.stacks_array.add();
+        initViewHolder(viewHolder, wall, i, fragmentManager, post, false);
 
-        initViewHolder(viewHolder, wall, i, fragmentManager, post,false);
     }
 
     public static void initViewHolder(final ViewHolder viewHolder,
@@ -500,8 +502,8 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
             this.imgLink = (ImageView) convertView.findViewById(R.id.img_link);
             this.txtLinkTitle = (TextView) convertView.findViewById(R.id.txt_link_title);
             this.txtLinkSrc = (TextView) convertView.findViewById(R.id.txt_link_src);
-            this.imgPoll = (ImageView) convertView.findViewById(R.id.img_poll_post);
-            this.txtPollTitle = (TextView) convertView.findViewById(R.id.txt_poll_title);
+            this.imgPoll = (ImageView) convertView.findViewById(R.id.img_poll_post_preview);
+            this.txtPollTitle = (TextView) convertView.findViewById(R.id.txt_poll_title_preview);
             this.imgGeo = (ImageView) convertView.findViewById(R.id.img_geo);
             this.txtGeo = (TextView) convertView.findViewById(R.id.txt_geo);
             this.postMediaPager = (ViewPager) convertView.findViewById(R.id.media_pager);
@@ -531,8 +533,8 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
             this.copyHistoryImgLink = (ImageView) copyHistoryView.findViewById(R.id.img_link);
             this.copyHistoryTxtLinkTitle = (TextView) copyHistoryView.findViewById(R.id.txt_link_title);
             this.copyHistoryTxtLinkSrc = (TextView) copyHistoryView.findViewById(R.id.txt_link_src);
-            this.copyHistoryImgPoll = (ImageView) copyHistoryView.findViewById(R.id.img_poll_post);
-            this.copyHistoryTxtPollTitle = (TextView) copyHistoryView.findViewById(R.id.txt_poll_title);
+            this.copyHistoryImgPoll = (ImageView) copyHistoryView.findViewById(R.id.img_poll_post_preview);
+            this.copyHistoryTxtPollTitle = (TextView) copyHistoryView.findViewById(R.id.txt_poll_title_preview);
             this.copyHistoryImgGeo = (ImageView) copyHistoryView.findViewById(R.id.img_geo);
             this.copyHistoryTxtGeo = (TextView) copyHistoryView.findViewById(R.id.txt_geo);
             this.copyHistoryMediaPager = (ViewPager) copyHistoryView.findViewById(R.id.media_pager);

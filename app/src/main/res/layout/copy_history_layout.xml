@@ -172,7 +172,7 @@
                 android:background="@drawable/element_selector"
                 android:visibility="gone">
 
-                <include layout="@layout/poll_container" />
+                <include layout="@layout/poll_preview_container" />
 
             </RelativeLayout>
         </LinearLayout>

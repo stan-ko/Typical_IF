@@ -34,6 +34,8 @@
         <!-- The textColor property is backward compatible with the Support Library -->
     </style>
 
+
+
     <!-- ActionBar tabs text -->
     <style name="MyActionBarTabText"
         parent="@style/Widget.AppCompat.ActionBar.TabText">
@@ -62,6 +64,13 @@
         <!--<item name="android:popupBackground">@drawable/menu_dropdown_panel_customtab</item>-->
         <!--<item name="android:background">@drawable/spinner_background_ab_customtab</item>-->
     <!--</style>-->
+
+
+    <style name="CustomProgressBarHorizontal" parent="android:Widget.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/abc_cab_background_bottom_holo_light</item>
+        <item name="android:minHeight">10dip</item>
+        <item name="android:maxHeight">20dip</item>
+    </style>
 
 
 </resources>

@@ -26,7 +26,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/app_bg"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingBottom="10dp">
 
                 <RelativeLayout
                     android:id="@+id/postTextLayout"
@@ -123,7 +124,7 @@
                         android:background="@color/transparent"
                         android:visibility="gone">
 
-                        <include layout="@layout/poll_container" />
+                        <include layout="@layout/poll_preview_container" />
 
                     </RelativeLayout>
 

@@ -6,6 +6,8 @@
     android:versionCode="2"
     android:versionName="1.1" >
 
+
+
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="19" />
@@ -64,6 +66,7 @@
     </compatible-screens>
 
     <application
+        android:largeHeap="true"
         android:name=".TIFApp"
         android:allowBackup="true"
         android:icon="@drawable/image_actionbar_if"

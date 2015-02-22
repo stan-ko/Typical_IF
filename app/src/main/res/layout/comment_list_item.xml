@@ -20,7 +20,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/img_user_avatar"
-        android:layout_margin="5dp"
         android:background="@drawable/sample_background"
         android:clickable="false"
         android:focusable="false"
@@ -47,8 +46,9 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:orientation="vertical"
-        android:visibility="gone"
-        android:layout_below="@+id/commentTextLayout">
+        android:visibility="visible"
+        android:layout_below="@+id/commentTextLayout"
+        android:layout_marginTop="5dp">
 
         <RelativeLayout
             android:id="@+id/commentMediaLayout"
@@ -58,7 +58,7 @@
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <include
                 layout="@layout/media_pager_container"
@@ -152,7 +152,7 @@
             android:visibility="gone">
 
             <include
-                layout="@layout/poll_container"
+                layout="@layout/poll_preview_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </RelativeLayout>
@@ -169,7 +169,7 @@
         android:shadowColor="#ff222222"
         android:text="9"
         android:textColor="#fff0f4ff"
-        android:textSize="10dp"
+        android:textSize="13dp"
         android:visibility="visible"
         android:layout_alignParentTop="false"
         android:layout_alignTop="@+id/img_user_avatar"
@@ -190,9 +190,10 @@
         android:focusableInTouchMode="false"
         android:text="Michael G."
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#ffffffff"
+        android:textColor="#d1ffffff"
         android:textSize="15dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_marginTop="-2dp" />
 
     <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/img_user_avatar"

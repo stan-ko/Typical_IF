@@ -139,7 +139,7 @@
             android:textColor="#ffffffff"
             android:layout_marginRight="5dip"
             android:button="@drawable/ic_photo_comment"
-            android:paddingLeft="5dp"/>
+            android:paddingLeft="5dp" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -157,8 +157,8 @@
             android:layout_alignTop="@+id/cb_photo_comment"
             android:layout_marginLeft="-10dip"
             android:layout_marginRight="-8dp"
-            android:layout_marginBottom="-8dp"
-            android:layout_marginTop="-8dp" />
+            android:layout_marginTop="-8dp"
+            android:layout_marginBottom="-8dp" />
 
         <RelativeLayout
             android:layout_width="fill_parent"

@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -149,6 +150,13 @@ public class FragmentWall extends Fragment {
     }
 
     public FragmentWall() {
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Constants.isFragmentCommentsLoaded=false;
+        Log.d("isFragmentCommentsLoaded: "+ Constants.isFragmentCommentsLoaded," was changed in OnResume in FragmentWall");
     }
 
     @Override
@@ -309,6 +317,7 @@ public class FragmentWall extends Fragment {
             this.pauseOnSettling = pauseOnSettling;
             externalListener = customListener;
         }
+
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -476,6 +485,8 @@ public class FragmentWall extends Fragment {
         if (savedInstanceState != null) {
             mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
             wallListView.scrollTo(0, mCurCheckPosition);
+            Constants.isFragmentCommentsLoaded=false;
+            Log.d("isFragmentCommentsLoaded: " + Constants.isFragmentCommentsLoaded, " was changed in onActivityCreated in FragmentWall");
         }
     }
 
@@ -538,6 +549,7 @@ public class FragmentWall extends Fragment {
             Constants.makePostMenu.getItem(0).setVisible(false);
             Constants.makePostMenu.getItem(1).setVisible(false);
             Constants.makePostMenu.getItem(2).setVisible(false);
+            Constants.makePostMenu.close();
         }
         Constants.makePostMenu.close();
     }
