@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="typical_if.android.fragment.PollFragment"
-    android:paddingTop="?android:attr/actionBarSize">
+    android:paddingTop="?android:attr/actionBarSize"
+    android:background="@color/app_bg">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -32,21 +33,21 @@
             android:layout_marginRight="5dp"
             android:layout_below="@+id/answers_anonymous_text"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:visibility="visible" >
+            android:visibility="visible"
+            android:layout_marginBottom="5dp">
 
             <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/listOfVotes"
                 android:background="@color/app_bg"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
                 android:visibility="visible"
                 android:divider="@null"
                 android:dividerHeight="1px"
-                android:footerDividersEnabled="true" />
+                android:footerDividersEnabled="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
 
         </RelativeLayout>
 
@@ -78,5 +79,6 @@
             android:layout_alignStart="@+id/img_poll_post"
             android:layout_marginTop="5dp"
             android:textSize="12dp" />
+
     </RelativeLayout>
 </RelativeLayout>

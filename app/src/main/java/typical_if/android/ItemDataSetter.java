@@ -260,7 +260,7 @@ public class ItemDataSetter {
         go_to_poll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new PollFragment(poll);
+                Fragment fragment = new PollFragment(poll,answers_anonymous_text,isAnonymous);
                 fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
         });
@@ -273,9 +273,9 @@ public class ItemDataSetter {
     }
 
      public static void initVotes (final VKApiPoll poll, final  ListView list_of_polls){
-         VotesItemAdapter adapter = new VotesItemAdapter(poll);
-         list_of_polls.setAdapter(adapter);
-         setListViewHeightBasedOnChildren(list_of_polls);
+       //  VotesItemAdapter adapter = new VotesItemAdapter(poll);
+      //   list_of_polls.setAdapter(adapter);
+      //   setListViewHeightBasedOnChildren(list_of_polls);
 
 
 

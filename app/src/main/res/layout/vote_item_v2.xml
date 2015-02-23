@@ -2,78 +2,100 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/app_bg">
+    android:background="@color/app_bg"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
 
 
-        <ProgressBar
+
+
+        <com.daimajia.numberprogressbar.NumberProgressBar
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="wrap_content"
-            android:layout_height="25dp"
+            android:layout_height="35dp"
             android:id="@+id/rate_bar"
             android:progress="86"
-            android:layout_toLeftOf="@+id/temp2"
             android:visibility="visible"
             android:layout_marginBottom="5dp"
             android:layout_below="@+id/variant_text"
             android:layout_toEndOf="@+id/variant_text"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="15dp" />
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            custom:progress_unreached_color="#CCCCCC"
+            custom:progress_reached_color="#ff3498db"
+
+            custom:progress_unreached_bar_height="0.75dp"
+            custom:progress_reached_bar_height="1.5dp"
+
+            custom:progress_text_size="12sp"
+            custom:progress_text_color="@color/textFadeOutColor"
+            custom:progress_text_offset="10dp"
+            custom:progress_text_visibility="visible"
+
+
+            custom:max="100"
+            custom:progress="65"
+            android:layout_toLeftOf="@+id/rate_amount_text" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="NTUSER.DAT{86ae9ce5-ae7e-11e3-80ba-0026b956c968}.TM---------11111111111111111111111111222222222222222222222222"
+            android:text="Чи погодились б ви на вічне життя ?"
             android:id="@+id/variant_text"
             android:textColor="@color/textFadeOutColor"
             android:visibility="visible"
-            android:textSize="10dp"
-            android:layout_alignTop="@+id/temp2"
+            android:textSize="13dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginBottom="5dp"
-            android:typeface="monospace"
+            android:typeface="normal"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:layout_alignParentRight="false"
-            android:inputType="text" />
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:inputType="textMultiLine"
+            android:layout_marginTop="5dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="22.6%"
-            android:id="@+id/temp2"
-            android:textColor="#ffffffff"
-            android:visibility="invisible"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp" />
-
-    <ImageButton
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/add_your_vote_button"
-            android:background="#ff525252"
+            android:text="@string/add_vote"
+            android:background="@drawable/vote_button_backround_shape"
+            android:visibility="invisible"
+            android:layout_alignBottom="@+id/rate_bar"
+            android:layout_alignLeft="@+id/rate_bar"
+            android:layout_alignStart="@+id/rate_bar"
+        android:layout_marginLeft="-5dp"
+            android:layout_alignTop="@+id/rate_bar"
+        android:textSize="13dp"
+        android:textColor="#c8ffffff"
             android:layout_alignRight="@+id/rate_bar"
             android:layout_alignEnd="@+id/rate_bar"
-            android:visibility="visible"
-            android:layout_alignBottom="@+id/rate_bar"
-            android:layout_below="@+id/variant_text"
-            android:layout_toEndOf="@+id/variant_text"
-            android:layout_alignLeft="@+id/rate_bar"
-            android:layout_alignStart="@+id/rate_bar" />
+            android:layout_marginRight="-5dp"
+            android:gravity="center"
+            android:minLines="1"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:padding="1dp"
+            android:textAlignment="center" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="324"
-        android:id="@+id/rate_amount_text"
+        android:id="@+id/dv"
         android:textColor="@color/textFadeOutColor"
-        android:visibility="visible"
+        android:visibility="gone"
         android:textSize="12dp"
         android:layout_alignRight="@+id/rate_bar"
         android:layout_alignEnd="@+id/rate_bar"
@@ -86,47 +108,19 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="@string/add_vote"
-        android:id="@+id/add_vote_text"
+        android:text="334"
+        android:id="@+id/rate_amount_text"
         android:textColor="@color/textFadeOutColor"
         android:visibility="visible"
-        android:textSize="12dp"
-        android:gravity="center_vertical|center_horizontal"
-        android:layout_below="@+id/variant_text"
+        android:textSize="13dp"
+        android:gravity="fill_horizontal|center_vertical"
+        android:maxLines="1"
+        android:paddingRight="5dp"
         android:layout_alignBottom="@+id/rate_bar"
-        android:layout_alignRight="@+id/rate_bar"
-        android:layout_alignEnd="@+id/rate_bar"
-        android:layout_alignLeft="@+id/rate_bar"
-        android:layout_alignStart="@+id/rate_bar" />
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/variant_text"
-        android:layout_toEndOf="@+id/add_your_vote_button"
-        android:layout_alignBottom="@+id/rate_bar"
-        android:layout_marginRight="5dp"
-        android:gravity="left"
+        android:layout_alignTop="@+id/rate_bar"
         android:layout_alignParentRight="true"
-        android:layout_toRightOf="@+id/add_your_vote_button">
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="5dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="22.6%"
-            android:id="@+id/rate_percents_text"
-            android:textColor="@color/textFadeOutColor"
-            android:visibility="visible"
-            android:textSize="12dp"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:layout_centerVertical="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp" />
-    </RelativeLayout>
-
+</RelativeLayout>
 </RelativeLayout>
