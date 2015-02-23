@@ -426,19 +426,32 @@ public class FragmentWall extends Fragment {
             tempPost.text = tempPost.text.replaceFirst(":", "");
             tempArray = tempPost.text.split("(.+):\n");
 
-
-            for (int j = 0; j < Constants.EVENT_COUNT; j++) {
-                switch (j) {
-                    case Constants.TODAY_EVENT:
-                        parseEvents(eventData, today, j, "(о ).+\n", tempArray[j]);
-                        break;
-                    case Constants.STATION_EVENT:
-                        parseEvents(eventData, stantsiya, j, "(о ).+\n", tempArray[j]);
-                        break;
-                    case Constants.PERIOD_EVENT:
-                        parseEvents(eventData, period, j, "- .+(\n|$)", tempArray[j]);
-                        break;
+            try {
+                for (int j = 0; j < Constants.EVENT_COUNT; j++) {
+                    switch (j) {
+                        case Constants.TODAY_EVENT:
+                            parseEvents(eventData, today, j, "(о ).+\n", tempArray[j]);
+                            break;
+                        case Constants.STATION_EVENT:
+                            parseEvents(eventData, stantsiya, j, "(о ).+\n", tempArray[j]);
+                            break;
+                        case Constants.PERIOD_EVENT:
+                            parseEvents(eventData, period, j, "- .+(\n|$)", tempArray[j]);
+                            break;
+                    }
                 }
+            } catch (Exception e) {
+                today.clear();
+                stantsiya.clear();
+                period.clear();
+
+                today.add(getString(R.string.null_events));
+                stantsiya.add(getString(R.string.null_events));
+                period.add(getString(R.string.null_events));
+
+                eventData.put(0, today);
+                eventData.put(1, stantsiya);
+                eventData.put(2, period);
             }
 
             events.add(new RecyclerEventAdapter.EventObject(
