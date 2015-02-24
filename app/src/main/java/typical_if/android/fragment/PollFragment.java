@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,6 +39,8 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
     private String mParam1;
     private String mParam2;
     public static VKApiPoll updatedPoll;
+    public TextView answers_anonymous_text_preview;
+    public String isAnonymous_preview;
 
     private OnFragmentInteractionListener mListener;
     private VKApiPoll poll;
@@ -67,7 +70,9 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PollFragment(VKApiPoll poll) {
+    public PollFragment(VKApiPoll poll, TextView answers_anonymous_text, String isAnonymous) {
+        this.answers_anonymous_text_preview=answers_anonymous_text;
+        this.isAnonymous_preview=isAnonymous;
         if (Constants.isFragmentCommentsLoaded&updatedPoll!=null){
             this.poll=updatedPoll;
         }else {
@@ -90,6 +95,8 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
         getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll));
         FragmentWall.setDisabledMenu();
         View view = inflater.inflate(R.layout.poll_view_container_fragment, container, false);
+        View footerView  = view.inflate(getActivity().getApplicationContext(), R.layout.footter_view_button_change_decision, null);
+        final Button change_decision_button = ((Button) footerView.findViewById(R.id.change_vote_decision_button));
         final TextView title = ((TextView) view.findViewById(R.id.txt_poll_title));
         final TextView answers_anonymous_text = ((TextView) view.findViewById(R.id.answers_anonymous_text));
         pollList = (ListView) view.findViewById(R.id.listOfVotes);
@@ -110,8 +117,9 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
 
         // Set the adapter
 
-        VotesItemAdapter adapter = new VotesItemAdapter(poll);
+        VotesItemAdapter adapter = new VotesItemAdapter(poll,answers_anonymous_text,answers_anonymous_text_preview,isAnonymous, isAnonymous_preview, change_decision_button);
         pollList.setAdapter(adapter);
+        pollList.addFooterView(footerView);
         ItemDataSetter.setListViewHeightBasedOnChildren(pollList);
 
 

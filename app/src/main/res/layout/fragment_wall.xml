@@ -4,13 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff272727">
+    android:background="#ff000000">
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ff272727"
+        android:background="#ff000000"
         android:focusableInTouchMode="true">
 
         <android.support.v7.widget.RecyclerView
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:animationCache="false"
-            android:background="#ff272727"
+            android:background="#ff000000"
             android:divider="@null"
             android:footerDividersEnabled="false"
             android:scrollbarStyle="outsideOverlay"

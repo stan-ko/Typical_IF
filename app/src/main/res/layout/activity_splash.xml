@@ -1,39 +1,46 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context="typical_if.android.activity.SplashActivity"
-    android:background="@color/app_bg"
-    android:weightSum="3">
+    android:background="@color/app_bg">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_centerInParent="true"
+        android:id="@+id/splash">
 
         <ImageView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/splash_logo"
             android:src="@drawable/mobile_tf_logo"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true"
-            android:adjustViewBounds="true" />
+            android:adjustViewBounds="true"
+            android:layout_centerInParent="true" />
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/img_splash_spinner_orange"
             android:src="@drawable/splash_spinner_orange"
             android:padding="19dp"
             android:layout_alignTop="@+id/splash_logo"
-            android:layout_alignBottom="@+id/splash_logo" />
+            android:layout_alignBottom="@+id/splash_logo"
+            android:layout_alignLeft="@+id/splash_logo"
+            android:layout_alignStart="@+id/splash_logo"
+            android:layout_alignRight="@+id/splash_logo"
+            android:layout_alignEnd="@+id/splash_logo" />
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/img_splash_spinner_blue"
             android:layout_alignTop="@+id/splash_logo"
             android:layout_alignBottom="@+id/splash_logo"
@@ -46,7 +53,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="2">
+        android:layout_below="@+id/splash">
 
         <LinearLayout
             android:id="@+id/card_container"
@@ -58,4 +65,4 @@
             android:layout_centerInParent="true" />
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>
