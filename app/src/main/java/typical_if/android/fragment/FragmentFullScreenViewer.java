@@ -125,17 +125,17 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         imagepager.setOnPageChangeListener(this);
         onPageSelected(0);
 
-        adapter = new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, Constants.GROUP_ID,
+        adapter = new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,  OfflineMode.loadLong(Constants.VK_GROUP_ID),
                 Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
 
 
 
         //if (adapter==null|imagepager.getAdapter()==null){
-         //   adapter= new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,Constants.GROUP_ID,
+         //   adapter= new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, OfflineMode.loadLong(Constants.VK_GROUP_ID),
               //      Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
 
        // }else {
-          //  adapter = new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, Constants.GROUP_ID,
+          //  adapter = new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,  OfflineMode.loadLong(Constants.VK_GROUP_ID),
             //        Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
       //  }
 
@@ -230,7 +230,7 @@ else
         albumSize.setText(String.valueOf(originalSizeOfAlbum));
 
 
-        VKHelper.isLiked("photo",Constants.GROUP_ID, photos.get(position).id, new VKRequest.VKRequestListener() {
+        VKHelper.isLiked("photo", OfflineMode.loadLong(Constants.VK_GROUP_ID), photos.get(position).id, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);

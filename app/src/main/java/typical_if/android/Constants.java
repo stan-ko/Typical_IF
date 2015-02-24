@@ -8,7 +8,6 @@ import android.media.MediaPlayer;
 import android.view.Menu;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.vk.sdk.VKScope;
 import com.vk.sdk.api.model.VKApiAudio;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Locale;
-import java.util.Stack;
 
 import typical_if.android.adapter.FullScreenImageAdapter;
 
@@ -65,7 +63,6 @@ public class Constants {
     public static final String APP_ID = "4456259";
     public static Locale LOCALE;
     public static boolean isFragmentCommentsLoaded;
-    public static final ArrayList<Stack> stacks_array = new ArrayList<Stack>();
 
    public static int isMember;
 
@@ -77,8 +74,10 @@ public class Constants {
     public static final String SCHEDULE_FOR_EIGHT_HOUR = "eightHour";
     public static final String SCHEDULE_FOR_ONE_HOUR = "OneHour";
     public static final String REPEAT_ACTION = "repeat";
-    public static final String IS_NOTIF_SEND = "isNotifSend";
+
     public static final String DATE_OF_NOTIF_SEND = "dateOfNotifSend";
+    public static final String VK_GROUP_ID = "groupId";
+
 
 
     public static long USER_ID;
@@ -98,8 +97,6 @@ public class Constants {
 
     public static Menu makePostMenu;
 
- public static FullScreenImageAdapter tempAdapter ;
-    //public static HashMap<String,FullScreenImageAdapter> ADAPTERS_ARRAY = new HashMap<String, FullScreenImageAdapter>();
     public static Deque<FullScreenImageAdapter> queueOfAdapters=new LinkedList<FullScreenImageAdapter>();
 
 
@@ -111,7 +108,7 @@ public class Constants {
     public static int tempPostAttachCounter = 0;
     public static int tempMaxPostAttachCounter = 0;
     public static int tempCurrentPhotoAttachCounter = 0;
-    public static int COUNT_OF_PHOTOS=0;
+
 
     public static Intent myIntent;
     public static int refresherDrawerCounter;
@@ -133,7 +130,6 @@ public class Constants {
 
     public static final Resources RESOURCES = TIFApp.getAppContext().getResources();
 
-    public static Toast toastInProgress = Toast.makeText(TIFApp.getAppContext(), RESOURCES.getString(R.string.in_progress), Toast.LENGTH_SHORT);
 
     public static final String TIME_FORMAT_STRING = "kk:mm";
     public static final String DATE_TIME_FORMAT_STRING = "d MMMM о kk:mm";

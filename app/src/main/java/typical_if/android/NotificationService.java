@@ -47,7 +47,7 @@ public class NotificationService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d("onCreateService", "----------------------");
+//        Log.d("onCreateService", "----------------------");
         alarmManager=(AlarmManager)getSystemService(ALARM_SERVICE);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
     }
@@ -61,31 +61,31 @@ public class NotificationService extends Service {
             makeRequestsForAllPosts(extended, offsetDefault,countOfPosts);
 
         }
-        Log.d("onStartCommand", "----------------------");
+//        Log.d("onStartCommand", "----------------------");
         try {
             if (intent.getAction().equals(Constants.ACTION_BOOT_COMPLETED)) {
                 makeRequests(extended, offsetDefault, countOfPosts);
 
-                Log.d("ACTION_BOOT_COMPLETED", "-----------");
+//                Log.d("ACTION_BOOT_COMPLETED", "-----------");
             }
             if (intent.getAction().equals(Constants.ACTION_START_FROM_SPLASH_ACTIVITY)) {
                 makeRequests(extended, offsetDefault, countOfPosts);
 
-                Log.d("ACTION_START_FROM_SPLASH_ACTIVITY", "-----------");
+//                Log.d("ACTION_START_FROM_SPLASH_ACTIVITY", "-----------");
             }
             if (intent.getAction().equals(Constants.ACTION_FIRST_RUN)) {
                 makeRequests(extended, offsetDefault, countOfPosts);
 
-                Log.d("ACTION_FIRST_RUN", "-----------");
+//                Log.d("ACTION_FIRST_RUN", "-----------");
             }
             if (intent.getAction().equals(Constants.REPEAT_ACTION)) {
                 makeRequests(extended, offsetDefault, countOfPosts);
-                Log.d("REPEAT_ACTION", "-----------");
+//                Log.d("REPEAT_ACTION", "-----------");
             }
 
         } catch (NullPointerException NPE) {
             //TODO make action 3 (restart Service)
-            Log.d("restart", "-----------");
+//            Log.d("restart", "-----------");
         }
         return START_STICKY;
     }
@@ -95,7 +95,7 @@ public class NotificationService extends Service {
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
                 handleRequestComplete(response.json);
-                Log.d("Make", "Request");
+//                Log.d("Make", "Request");
             }
 
             @Override

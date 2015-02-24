@@ -41,7 +41,6 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
-import typical_if.android.adapter.ActionBarArrayAdapter;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
@@ -61,7 +60,7 @@ public class MainActivity extends DialogActivity implements
     private static final int PICK_FROM_CAMERA = 1;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     public NavigationDrawerFragment mNavigationDrawerFragment;
-    ActionBarArrayAdapter list;
+
 
     void showAlertChanges() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -108,6 +107,9 @@ public class MainActivity extends DialogActivity implements
         decor.addView(drawer);
 
         ActionBar actionBar = getSupportActionBar();
+        onSectionAttached(OfflineMode.loadLong(Constants.VK_GROUP_ID));
+        restoreActionBar();
+
 
         Constants.mainActivity = this;
         Constants.myIntent = new Intent(this, AudioPlayerService.class);
@@ -177,7 +179,7 @@ public class MainActivity extends DialogActivity implements
         }
     }
 
-    public long setGroupId(final int clickedPosition) {
+    private long setGroupId(final int clickedPosition) {
         switch (clickedPosition) {
             case 0:
                 return Constants.TF_ID;
@@ -233,166 +235,16 @@ public class MainActivity extends DialogActivity implements
         }
     }
 
- //   String[] items;
-
-//    ActionBar.OnNavigationListener callback = new ActionBar.OnNavigationListener() {
-//
-//        //  String[] items = getResources().getStringArray(R.array.actions); // List items from res
-//
-//        @Override
-//        public boolean onNavigationItemSelected(int position, long id) {
-//
-//            // Do stuff when navigation item is selected
-//
-//            Log.d("NavigationItemSelected", items[position]); // Debug
-//
-//            switch (position) {
-//                case 0: {
-//                    addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
-//                }
-//                break;
-//                case 1: {
-//                    addFragment(FragmentWall.newInstance(true));
-//                }
-//                break;
-//
-//                case 2: {
-//                    if (Constants.isMember == 0) {
-//                        VKHelper.groupJoin(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
-//                            @Override
-//                            public void onComplete(final VKResponse response) {
-//                                super.onComplete(response);
-//                                Toast.makeText(getApplicationContext(), getString(R.string.group_joined), Toast.LENGTH_SHORT).show();
-//                                replaceFragment(FragmentWall.newInstance(false));
-//                            }
-//
-//                            @Override
-//                            public void onError(final VKError error) {
-//                                super.onError(error);
-//                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-//                            }
-//                        });
-//                    } else {
-//                        VKHelper.groupLeave(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
-//                            @Override
-//                            public void onComplete(final VKResponse response) {
-//                                super.onComplete(response);
-//                                Toast.makeText(getApplicationContext(), getString(R.string.group_leaved), Toast.LENGTH_SHORT).show();
-//                                replaceFragment(FragmentWall.newInstance(false));
-//                            }
-//
-//                            @Override
-//                            public void onError(final VKError error) {
-//                                super.onError(error);
-//                                OfflineMode.onErrorToast(getApplicationContext());
-//                            }
-//                        });
-//                    }
-//                }
-//                break;
-//
-//            }
-//            Toast.makeText(getApplicationContext(), "SelectedItem is: " + getSupportActionBar().getSelectedNavigationIndex(), Toast.LENGTH_SHORT).show();
-//            return false;
-//        }
-//
-//        ;
-//
-//
-//    };
 
     public void restoreActionBar() {
-//        final ActionBar actionBar = getSupportActionBar();
-//
-//        actionBar.setIcon(mIcon);
-//
-//        if (Constants.isMember == 0) {
-//            items = getResources().getStringArray(R.array.menu_join_group);
-//
-//        } else {
-//            items = getResources().getStringArray(R.array.menu_leave_group);
-//        }
-//        if (VKSdk.isLoggedIn()) {
-//            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-//            actionBar.setDisplayShowTitleEnabled(false);
-//            actionBar.setTitle(mTitle);
-//            list = new ActionBarArrayAdapter(getApplicationContext(), items, mTitle);
-//            list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//
-//
-//
-//
-//            actionBar.setListNavigationCallbacks(list, callback);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(mTitle);
-//        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.action_bar_shape_background));
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setLogo(mIcon);
 
     }
-
-//            actionBar.setListNavigationCallbacks(list, new ActionBar.OnNavigationListener() {
-//                @Override
-//                public boolean onNavigationItemSelected(int position, long id) {
-//                    getSupportActionBar().setSelectedNavigationItem(position);
-
-//                    switch (getSupportActionBar().getSelectedNavigationIndex()) {
-//                        case 0:
-//                            addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
-//                            break;
-//                        case 1:
-//                            addFragment(FragmentWall.newInstance(true));
-//                            break;
-//
-//                        case 2:
-//                            if (Constants.isMember==0){
-//                            VKHelper.groupJoin(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
-//                                @Override
-//                                public void onComplete(final VKResponse response) {
-//                                    super.onComplete(response);
-//                                    Toast.makeText(getApplicationContext(), getString(R.string.group_joined), Toast.LENGTH_SHORT).show();
-//                                     replaceFragment(FragmentWall.newInstance(false));
-//                                }
-//
-//                                @Override
-//                                public void onError(final VKError error) {
-//                                    super.onError(error);
-//                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-//                                }
-//                            });
-//                    } else {
-//                        VKHelper.groupLeave(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
-//                            @Override
-//                            public void onComplete(final VKResponse response) {
-//                                super.onComplete(response);
-//                                Toast.makeText(getApplicationContext(), getString(R.string.group_leaved), Toast.LENGTH_SHORT).show();
-//                                  replaceFragment(FragmentWall.newInstance(false));
-//                            }
-//
-//                            @Override
-//                            public void onError(final VKError error) {
-//                                super.onError(error);
-//                                OfflineMode.onErrorToast(getApplicationContext());
-//                            }
-//                        });
-//                    }
-//
-//                            break;
-//
-//                    }
-
-        //   Toast.makeText(getApplicationContext(), "SelectedItem is: " + getSupportActionBar().getSelectedNavigationIndex(), Toast.LENGTH_SHORT).show();
-        //  return true;
-        // }
-        //   });
-//        else {
-//            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//            actionBar.setDisplayShowTitleEnabled(true);
-//        }
- //   }
 
 
     @Override
@@ -408,15 +260,10 @@ public class MainActivity extends DialogActivity implements
         if (mNavigationDrawerFragment.onOptionsItemSelected(item)) {
             return true;
         }
-//        switch (item.getItemId()) {
-//            case R.id.action_go_home:
-//
-//                return true;
-//
-//            default:
+
         return super.onOptionsItemSelected(item);
 
-        //  }
+
     }
 
     @Override
@@ -518,7 +365,7 @@ public class MainActivity extends DialogActivity implements
     Fragment fragment = null;
 
     @Override
-    public void onNavigationDrawerItemSelected(int groupPosition) {
+    public void onNavigationDrawerItemSelected(int groupPosition, boolean isResumed) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         long vkGroupId;
@@ -530,11 +377,9 @@ public class MainActivity extends DialogActivity implements
             case 4:
             case 5:
                 vkGroupId = setGroupId(groupPosition);
-                Constants.GROUP_ID = vkGroupId;
-
+                OfflineMode.saveLong(vkGroupId, Constants.VK_GROUP_ID);
                 onSectionAttached(groupPosition);
                 fragment = FragmentWall.newInstance(false);
-
                 break;
             case 6:
                 finish();
@@ -549,7 +394,6 @@ public class MainActivity extends DialogActivity implements
         }
         restoreActionBar();
     }
-
 
     @Override
     public void onFragmentInteraction(Uri uri) {

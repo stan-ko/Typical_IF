@@ -155,7 +155,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         if (firstVisibleItem + visibleItemCount >= totalItemCount & !updated) {
 
 
-            VKHelper.getPhotoList(Constants.GROUP_ID, Constants.ALBUM_ID, 1, _count, new VKRequest.VKRequestListener() {
+            VKHelper.getPhotoList( OfflineMode.loadLong(Constants.VK_GROUP_ID), Constants.ALBUM_ID, 1, _count, new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(final VKResponse response) {
 

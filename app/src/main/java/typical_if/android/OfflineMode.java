@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,8 +15,8 @@ import typical_if.android.model.Wall.Wall;
  * Created by pc on 05.08.14.
  */
 public class OfflineMode {
-
-
+    final static SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("key", Activity.MODE_PRIVATE);
+    final static SharedPreferences.Editor ed = sPref.edit();
     public static void saveJSON(JSONObject jsonObject, long gid) {
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(gid),Activity.MODE_PRIVATE);
         final SharedPreferences.Editor ed = sPref.edit();
@@ -43,7 +42,7 @@ public class OfflineMode {
         boolean isFirstRun =true;
         boolean notFirstRun = false;
         Boolean FirstRun = tfFirstRunSPref.getBoolean(key, isFirstRun);
-        Log.d("firsRun----------------------------",""+FirstRun);
+//        Log.d("firsRun----------------------------",""+FirstRun);
         if (FirstRun==isFirstRun){
             editor.clear();
             editor.putBoolean(key, notFirstRun);
@@ -113,22 +112,18 @@ public class OfflineMode {
             return false;
         }
     }
-    public static void saveBool(boolean flag, String id) {
-        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id),Activity.MODE_PRIVATE);
-        final SharedPreferences.Editor ed = sPref.edit();
-        final String BoolString = Boolean.toString(flag);
-        final String BoolKey = id;
+    public static void saveLong(Long id, String key) {
+        final String strId = Long.toString(id);
+//        Log.d("SaveLong","------------------------------ "+id);
         ed.clear();
-        ed.putString(BoolKey, BoolString);
+        ed.putString(key, strId);
         ed.commit();
     }
-    public static boolean loadBool(String id)  {
-        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
-        final String boolKey = String.valueOf(id);
-        final String savedText = sPref.getString(boolKey, "");
-        // e.printStackTrace();
 
-        return Boolean.valueOf(savedText);
+    public static Long loadLong(String key) {
+        final String id = sPref.getString(key, "0");
+//        Log.d("LoadLong", "------------------------------ " + id);
+        return Long.valueOf(id);
     }
 
     public static void saveInt(int surprise, String id) {
