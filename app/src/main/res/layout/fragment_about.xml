@@ -104,9 +104,7 @@
                 android:text="Visit "
                 android:id="@+id/textView10"
                 android:textColor="#ffffffff"
-                android:layout_toEndOf="@+id/tf_site"
                 android:layout_below="@+id/stas"
-                android:layout_toRightOf="@+id/tf_site"
                 android:layout_marginTop="15dp" />
 
         </RelativeLayout>
@@ -162,8 +160,6 @@
             android:textColor="#ff797dff"
             android:layout_toEndOf="@+id/stantsiya"
             android:layout_alignBottom="@+id/stantsiya"
-            android:layout_alignLeft="@+id/devlight_com_ua_ref"
-            android:layout_alignStart="@+id/devlight_com_ua_ref"
             android:layout_marginLeft="71dp" />
 
     </RelativeLayout>

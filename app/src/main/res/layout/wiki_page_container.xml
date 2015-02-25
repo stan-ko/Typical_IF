@@ -26,8 +26,6 @@
             android:singleLine="true"
             android:paddingRight="5dp"
             android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/img_wiki_page"
-            android:text="sadasd asdasd asd"
             android:textColor="@color/vk_smoke_white" />
 
         <TextView
@@ -37,8 +35,7 @@
             android:text="@string/wiki_page"
             android:visibility="visible"
             android:textColor="#8cffffff"
-            android:layout_below="@+id/txt_wiki_page"
-            android:layout_toRightOf="@+id/img_wiki_page"
-            android:layout_toEndOf="@+id/img_wiki_page" />
+            android:layout_below="@+id/txt_wiki_page"/>
+
     </RelativeLayout>
 </RelativeLayout>

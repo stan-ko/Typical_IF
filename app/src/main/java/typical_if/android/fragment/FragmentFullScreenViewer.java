@@ -70,33 +70,29 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     public int originalSizeOfAlbum;
     public static RelativeLayout panel;
 
-//    public static FragmentFullScreenViewer newInstance(ArrayList<VKApiPhoto> photos, int currentposition) {
-//
-//        FragmentFullScreenViewer fragment = new FragmentFullScreenViewer();
-//        args = new Bundle();
-//        fragment.setArguments(args);
-//        FragmentFullScreenViewer.photos = photos;
-//        FragmentFullScreenViewer.currentPosition = currentposition;
-//
-//
-//
-//        return fragment;
+//    public FragmentFullScreenViewer(ArrayList<VKApiPhoto> photos, int currentposition, int sizeOfAlbum) {
+//    this.photos = photos;
+//    this.currentPosition = currentposition;
+//        this.originalSizeOfAlbum = sizeOfAlbum;
+//     setArguments(new Bundle());
 //    }
 
 
 
-    public FragmentFullScreenViewer(ArrayList<VKApiPhoto> photos, int currentposition, int sizeOfAlbum) {
-    this.photos = photos;
-    this.currentPosition = currentposition;
-        this.originalSizeOfAlbum = sizeOfAlbum;
-     setArguments(new Bundle());
-    }
 
+    public FragmentFullScreenViewer(){
+
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
+//        args.putSerializable("finalPhotos", photos);
+//        args.putInt("position", position);
+//        args.putInt("sizeOfAlbum", 0);
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-
+            this.photos = (ArrayList<VKApiPhoto>) getArguments().getSerializable("finalPhotos");
+            this.currentPosition = getArguments().getInt("position");
+            this.originalSizeOfAlbum = getArguments().getInt("sizeOfAlbum");
         }
     }
 
@@ -130,14 +126,6 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
 
 
-        //if (adapter==null|imagepager.getAdapter()==null){
-         //   adapter= new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, OfflineMode.loadLong(Constants.VK_GROUP_ID),
-              //      Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
-
-       // }else {
-          //  adapter = new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,  OfflineMode.loadLong(Constants.VK_GROUP_ID),
-            //        Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
-      //  }
 
             adapter.notifyDataSetChanged();
             imagepager.setAdapter(adapter);

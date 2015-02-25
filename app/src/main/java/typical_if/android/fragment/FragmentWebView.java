@@ -32,10 +32,13 @@ public class FragmentWebView extends Fragment  {
     private myWebChromeClient mWebChromeClient;
     private myWebViewClient mWebViewClient;
     private VKApiVideo video;
-
+    final private static Bundle args = new Bundle();
     public FragmentWebView newInstance(VKApiVideo video) {
 
-        FragmentWebView fragment = new FragmentWebView(video);
+        FragmentWebView fragment = new FragmentWebView();
+        args.clear();
+        args.putParcelable("video", video);
+        fragment.setArguments(args);
         return fragment;
     }
 
@@ -47,6 +50,9 @@ public class FragmentWebView extends Fragment  {
     public void onCreate(Bundle savedInstanceState) {
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.video = (VKApiVideo)getArguments().getParcelable("video");
+        }
     }
 
     @Override
@@ -59,9 +65,9 @@ public class FragmentWebView extends Fragment  {
     }
 
 
-    public FragmentWebView(VKApiVideo video){
-        this.video=video;
-    }
+//    public FragmentWebView(VKApiVideo video){
+//        this.video=video;
+//    }
 
 
     @Override

@@ -114,7 +114,6 @@
                 card_view:contentPadding="11dp"
                 card_view:cardBackgroundColor="@color/app_bg"
                 android:id="@+id/card_view_make_post"
-                android:layout_below="@+id/txt_post_attach_counter"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true">
 

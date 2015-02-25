@@ -30,42 +30,44 @@ import java.util.ArrayList;
 import typical_if.android.Constants;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
-import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.PhotoListAdapter;
 
 public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollListener {
-
     public ArrayList<VKApiPhoto> photos2 = new ArrayList<VKApiPhoto>();
-    int height = TIFApp.getDisplayHeight();
     private OnFragmentInteractionListener mListener;
-    private int counter = 5;
-
     private boolean isRequestNull;
-    //private int mCurrentTransitionEffect = JazzyHelper.TILT;
-    private static final int PICK_FROM_CAMERA = 1;
     int type;
-    final int PIC_CROP = 2;
-    private static Uri mImageCaptureUri;
+    final private static Bundle args = new Bundle();
     public int sizeOfAlbum;
 
     public static FragmentPhotoList newInstance(int type, int albumOriginalSize) {
-        FragmentPhotoList fragment = new FragmentPhotoList(albumOriginalSize);
-        Bundle args = new Bundle();
+        FragmentPhotoList fragment = new FragmentPhotoList();
+        args.clear();
+        args.putInt("albumOriginalSize", albumOriginalSize);
         fragment.type = type;
         fragment.setArguments(args);
         return fragment;
     }
 
+
+
     public FragmentPhotoList() {
     }
 
-    public FragmentPhotoList(int albumOriginalSize) {
-        this.sizeOfAlbum = albumOriginalSize;
+//    public FragmentPhotoList(int albumOriginalSize) {
+//        this.sizeOfAlbum = albumOriginalSize;
+//    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            this.sizeOfAlbum = getArguments().getInt("albumOriginalSize");
+
+        }
     }
-
-
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -282,7 +284,12 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     // Fragment fragment = FragmentFullScreenViewer.newInstance(photos2, position);
-                    Fragment fragment = new FragmentFullScreenViewer(photos2, position, sizeOfAlbum);
+                   final  Fragment fragment = new FragmentFullScreenViewer();
+                    args.clear();
+                    args.putSerializable("finalPhotos", photos2);
+                    args.putInt("position", position);
+                    args.putInt("sizeOfAlbum", sizeOfAlbum);
+                    fragment.setArguments(args);
                     FragmentManager fragmentManager = getFragmentManager();
                     final FragmentTransaction transaction = fragmentManager.beginTransaction();
 

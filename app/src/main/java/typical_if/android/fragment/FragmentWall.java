@@ -68,7 +68,7 @@ public class FragmentWall extends Fragment {
     NewPauseOnScrollListener pauseOnScrollListener;
     LayoutInflater inflaterGlobal;
     final int offsetO = 0;
-    final int countPostDefaultForOffset = 100;
+    final int countPostDefaultForOffset = 50;
     public static int playableLogoRes;
     JSONObject jsonObjectOld;
 
@@ -116,11 +116,11 @@ public class FragmentWall extends Fragment {
                 mLastFirstVisibleItem = currentFirstVisibleItem;
             }
 
-            if (lastItem == totalItemCount - 20 & temp2) {
+            if (lastItem == totalItemCount - 5 & temp2) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Offset = Offset + 100;
+                        Offset = Offset + countPostDefaultForOffset;
                         endlessGet(Offset);
                     }
                 }).start();
@@ -141,10 +141,9 @@ public class FragmentWall extends Fragment {
             swipeView.setEnabled(enable);
         }
     };
-
+   final static private Bundle args = new Bundle();
     public static FragmentWall newInstance(boolean isSuggestedParam) {
         FragmentWall fragment = new FragmentWall();
-        Bundle args = new Bundle();
         isSuggested = isSuggestedParam;
         fragment.setArguments(args);
         return fragment;

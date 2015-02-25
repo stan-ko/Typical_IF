@@ -160,7 +160,7 @@ public class Constants {
     public static final String txt_dialog_comment = RESOURCES.getString(R.string.txt_dialog_comment);
 
     public static final String TIF_VK_API_KEY_TOKEN = "VK_ACCESS_TOKEN";
-    public static final int TIF_VK_PRELOAD_POSTS_COUNT = 100;
+    public static final int TIF_VK_PRELOAD_POSTS_COUNT = 50;
 
     public static final int TODAY_EVENT = 0;
     public static final int STATION_EVENT = 1;
