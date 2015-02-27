@@ -115,24 +115,25 @@ public class FragmentWall extends Fragment {
 
                 mLastFirstVisibleItem = currentFirstVisibleItem;
             }
+            if (OfflineMode.loadLong(Constants.VK_GROUP_ID)!= Constants.ZF_ID) {
 
-            if (lastItem == totalItemCount - 5 & temp2) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Offset = Offset + countPostDefaultForOffset;
-                        endlessGet(Offset);
-                    }
-                }).start();
-                temp2 = false;
+                if (lastItem == totalItemCount - 5 & temp2) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Offset = Offset + countPostDefaultForOffset;
+                            endlessGet(Offset);
+                        }
+                    }).start();
+                    temp2 = false;
+                }
+
+                if (lastItem == totalItemCount & temp) {
+                    endlessAdd(lastItem);
+                    temp = false;
+                    temp2 = true;
+                }
             }
-
-            if (lastItem == totalItemCount & temp) {
-                endlessAdd(lastItem);
-                temp = false;
-                temp2 = true;
-            }
-
             if (recyclerView.getChildCount() > 0) {
                 boolean firstItemVisible = linearLayoutManager.findFirstVisibleItemPosition() == 0;
                 boolean topOfFirstItemVisible = recyclerView.getChildAt(0).getTop() == 0;
@@ -656,11 +657,7 @@ public class FragmentWall extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putInt("curChoice", wallListView.getScrollY());
     }
-//    @Override
-//    public void onPause(){
-//        super.onPause();
-//        OfflineMode.saveLong( OfflineMode.loadLong(Constants.VK_GROUP_ID), Constants.VK_GROUP_ID);
-//    }
+
 
 
     private void endlessAdd(final int lastItem) {
@@ -681,6 +678,7 @@ public class FragmentWall extends Fragment {
             public void onError(final VKError error) {
                 super.onError(error);
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                endlessGet(Offset);
             }
         });
     }

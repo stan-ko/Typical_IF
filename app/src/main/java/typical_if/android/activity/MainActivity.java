@@ -383,6 +383,7 @@ public class MainActivity extends DialogActivity implements
                 break;
             case 6:
                 finish();
+             //   Log.d("finish"," - ---- -- - - -- - --------------------------  -- - " );
                 break;
         }
 
