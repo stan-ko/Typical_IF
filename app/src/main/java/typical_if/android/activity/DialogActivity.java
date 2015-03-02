@@ -437,7 +437,7 @@ try {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        addFragment(FragmentUploadAlbumList.newInstance(Constants.GROUP_ID * (-1), 1));
+                        addFragment(FragmentUploadAlbumList.newInstance( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), 1));
                         dialog.cancel();
                         break;
                     case 1:

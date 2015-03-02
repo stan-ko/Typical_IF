@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.shamanland.fab.ShowHideOnScroll;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
@@ -67,7 +68,7 @@ public class FragmentWall extends Fragment {
     NewPauseOnScrollListener pauseOnScrollListener;
     LayoutInflater inflaterGlobal;
     final int offsetO = 0;
-    final int countPostDefaultForOffset = 100;
+    final int countPostDefaultForOffset = 50;
     public static int playableLogoRes;
     JSONObject jsonObjectOld;
 
@@ -114,24 +115,25 @@ public class FragmentWall extends Fragment {
 
                 mLastFirstVisibleItem = currentFirstVisibleItem;
             }
+            if (OfflineMode.loadLong(Constants.VK_GROUP_ID)!= Constants.ZF_ID) {
 
-            if (lastItem == totalItemCount - 20 & temp2) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Offset = Offset + 100;
-                        endlessGet(Offset);
-                    }
-                }).start();
-                temp2 = false;
+                if (lastItem == totalItemCount - 5 & temp2) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Offset = Offset + countPostDefaultForOffset;
+                            endlessGet(Offset);
+                        }
+                    }).start();
+                    temp2 = false;
+                }
+
+                if (lastItem == totalItemCount & temp) {
+                    endlessAdd(lastItem);
+                    temp = false;
+                    temp2 = true;
+                }
             }
-
-            if (lastItem == totalItemCount & temp) {
-                endlessAdd(lastItem);
-                temp = false;
-                temp2 = true;
-            }
-
             if (recyclerView.getChildCount() > 0) {
                 boolean firstItemVisible = linearLayoutManager.findFirstVisibleItemPosition() == 0;
                 boolean topOfFirstItemVisible = recyclerView.getChildAt(0).getTop() == 0;
@@ -140,10 +142,9 @@ public class FragmentWall extends Fragment {
             swipeView.setEnabled(enable);
         }
     };
-
+   final static private Bundle args = new Bundle();
     public static FragmentWall newInstance(boolean isSuggestedParam) {
         FragmentWall fragment = new FragmentWall();
-        Bundle args = new Bundle();
         isSuggested = isSuggestedParam;
         fragment.setArguments(args);
         return fragment;
@@ -176,7 +177,7 @@ public class FragmentWall extends Fragment {
 
     FloatingActionButton fabPhoto;
     FloatingActionButton fabSuggest;
-
+    com.shamanland.fab.FloatingActionButton floatingActionButtonBackToTop;
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
@@ -186,7 +187,21 @@ public class FragmentWall extends Fragment {
         arguments = getArguments();
 
         fragmentManager = getActivity().getSupportFragmentManager();
-        tempGroupId = Constants.GROUP_ID;
+        tempGroupId =  OfflineMode.loadLong(Constants.VK_GROUP_ID);
+
+
+        floatingActionButtonBackToTop = (com.shamanland.fab.FloatingActionButton) rootView.findViewById(R.id.beckToTop);
+        floatingActionButtonBackToTop.setBackgroundColor(0);
+
+        floatingActionButtonBackToTop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wallListView.scrollToPosition(0);
+                actionBar.show();
+
+            }
+        });
+
 
         toggleFloatingActionsMenu = (ToggleFloatingActionsMenu) rootView.findViewById(R.id.fab_wall);
         fabPhoto = (FloatingActionButton) rootView.findViewById(R.id.fab_wall_photo);
@@ -195,7 +210,7 @@ public class FragmentWall extends Fragment {
         fabPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Constants.GROUP_ID = tempGroupId;
+               //  OfflineMode.loadLong(Constants.VK_GROUP_ID) = tempGroupId;
                 FragmentAlbumsList fragment = FragmentAlbumsList.newInstance(1);
                 ((MainActivity) getActivity()).addFragment(fragment);
                 ((MainActivity) getActivity()).restoreActionBar();
@@ -205,14 +220,14 @@ public class FragmentWall extends Fragment {
         fabSuggest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
+                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance( OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
             }
         });
 
         actionBar = ((MainActivity) getActivity()).getSupportActionBar();
         actionBar.show();
 
-        playableLogoRes = ItemDataSetter.getPlayingLogo(Constants.GROUP_ID);
+        playableLogoRes = ItemDataSetter.getPlayingLogo( OfflineMode.loadLong(Constants.VK_GROUP_ID));
         pauseOnScrollListener = new NewPauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerRecyclerObject);
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         swipeView.setColorSchemeResources(android.R.color.white, android.R.color.white, android.R.color.white);
@@ -228,12 +243,12 @@ public class FragmentWall extends Fragment {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        VKHelper.doGroupWallRequest(offsetO, Offset, Constants.GROUP_ID, new VKRequest.VKRequestListener() {
+                        VKHelper.doGroupWallRequest(offsetO, Offset,  OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
-                                OfflineMode.saveJSON(response.json, Constants.GROUP_ID);
-                                initGroupWall(OfflineMode.loadJSON(Constants.GROUP_ID), inflaterGlobal);
+                                OfflineMode.saveJSON(response.json,  OfflineMode.loadLong(Constants.VK_GROUP_ID));
+                                initGroupWall(OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID)), inflaterGlobal);
                             }
 
                             @Override
@@ -251,17 +266,26 @@ public class FragmentWall extends Fragment {
         wallListView = (RecyclerView) rootView.findViewById(R.id.listViewWall);
 
         wallListView.setHasFixedSize(true);
+        wallListView.setOnTouchListener(new ShowHideOnScroll(floatingActionButtonBackToTop));
+//        wallListView.setOnTouchListener(new ShowHideOnScroll(toggleFloatingActionsMenu));
         wallListView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         linearLayoutManager = ((LinearLayoutManager) wallListView.getLayoutManager());
 
         if (!isSuggested) {
+//if (OfflineMode.loadLong(Constants.VK_GROUP_ID)!=0) {
+//     OfflineMode.loadLong(Constants.VK_GROUP_ID) = OfflineMode.loadLong(Constants.VK_GROUP_ID);
+//} else {
+//     OfflineMode.loadLong(Constants.VK_GROUP_ID) = Constants.TF_ID;
+//}
 
-            jsonObjectOld = OfflineMode.loadJSON(Constants.GROUP_ID);
+
+            Log.d("GROUP_ID", ""+ OfflineMode.loadLong(Constants.VK_GROUP_ID));
+            jsonObjectOld = OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID));
             initGroupWall(jsonObjectOld, inflater);
 
         } else {
             setDisabledMenu();
-            VKHelper.getSuggestedPosts(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
+            VKHelper.getSuggestedPosts( OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(final VKResponse response) {
                     super.onComplete(response);
@@ -289,7 +313,7 @@ public class FragmentWall extends Fragment {
             fabSuggest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
+                    ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance( OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
                 }
             });
             fabSuggest.setVisibility(View.VISIBLE);
@@ -363,7 +387,7 @@ public class FragmentWall extends Fragment {
             Toast.makeText(getApplicationContext(), getString(R.string.no_suggested_posts), Toast.LENGTH_SHORT).show();
         }
 
-        if (Constants.GROUP_ID == Constants.ZF_ID) {
+        if ( OfflineMode.loadLong(Constants.VK_GROUP_ID) == Constants.ZF_ID) {
             fabPhoto.setVisibility(View.GONE);
 
             if (adapter == null) {
@@ -427,19 +451,32 @@ public class FragmentWall extends Fragment {
             tempPost.text = tempPost.text.replaceFirst(":", "");
             tempArray = tempPost.text.split("(.+):\n");
 
-
-            for (int j = 0; j < Constants.EVENT_COUNT; j++) {
-                switch (j) {
-                    case Constants.TODAY_EVENT:
-                        parseEvents(eventData, today, j, "(о ).+\n", tempArray[j]);
-                        break;
-                    case Constants.STATION_EVENT:
-                        parseEvents(eventData, stantsiya, j, "(о ).+\n", tempArray[j]);
-                        break;
-                    case Constants.PERIOD_EVENT:
-                        parseEvents(eventData, period, j, "- .+(\n|$)", tempArray[j]);
-                        break;
+            try {
+                for (int j = 0; j < Constants.EVENT_COUNT; j++) {
+                    switch (j) {
+                        case Constants.TODAY_EVENT:
+                            parseEvents(eventData, today, j, "(о ).+\n", tempArray[j]);
+                            break;
+                        case Constants.STATION_EVENT:
+                            parseEvents(eventData, stantsiya, j, "(о ).+\n", tempArray[j]);
+                            break;
+                        case Constants.PERIOD_EVENT:
+                            parseEvents(eventData, period, j, "- .+(\n|$)", tempArray[j]);
+                            break;
+                    }
                 }
+            } catch (Exception e) {
+                today.clear();
+                stantsiya.clear();
+                period.clear();
+
+                today.add(getString(R.string.null_events));
+                stantsiya.add(getString(R.string.null_events));
+                period.add(getString(R.string.null_events));
+
+                eventData.put(0, today);
+                eventData.put(1, stantsiya);
+                eventData.put(2, period);
             }
 
             events.add(new RecyclerEventAdapter.EventObject(
@@ -485,7 +522,7 @@ public class FragmentWall extends Fragment {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
             mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
-            wallListView.scrollTo(0, mCurCheckPosition);
+            wallListView.scrollToPosition(0);
             Constants.isFragmentCommentsLoaded=false;
             Log.d("isFragmentCommentsLoaded: " + Constants.isFragmentCommentsLoaded, " was changed in onActivityCreated in FragmentWall");
         }
@@ -509,7 +546,7 @@ public class FragmentWall extends Fragment {
         }
 
         super.onPrepareOptionsMenu(menu);
-        VKHelper.isMember(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
+        VKHelper.isMember( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
@@ -573,14 +610,14 @@ public class FragmentWall extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.make_post:
-                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
+                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance( OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
                 break;
             case R.id.suggested_posts:
                 ((MainActivity) getActivity()).addFragment(FragmentWall.newInstance(true));
                 break;
             case R.id.join_leave_group:
                 if (Constants.isMember == 0) {
-                    VKHelper.groupJoin(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
+                    VKHelper.groupJoin( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(final VKResponse response) {
                             super.onComplete(response);
@@ -595,7 +632,7 @@ public class FragmentWall extends Fragment {
                         }
                     });
                 } else {
-                    VKHelper.groupLeave(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
+                    VKHelper.groupLeave( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequest.VKRequestListener() {
                         @Override
                         public void onComplete(final VKResponse response) {
                             super.onComplete(response);
@@ -623,24 +660,26 @@ public class FragmentWall extends Fragment {
     }
 
 
+
     private void endlessAdd(final int lastItem) {
-        jsonObjectOld = OfflineMode.loadJSON(Constants.GROUP_ID);
+        jsonObjectOld = OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID));
         initGroupWall(jsonObjectOld, inflaterGlobal);
         scrollCommentsToBottom(wallListView, lastItem);
     }
 
     private void endlessGet(final int Offset) {
-        VKHelper.doGroupWallRequest(Offset, countPostDefaultForOffset, Constants.GROUP_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(Offset, countPostDefaultForOffset,  OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);
-                OfflineMode.saveJSON(OfflineMode.jsonPlus(jsonObjectOld, response.json), Constants.GROUP_ID);
+                OfflineMode.saveJSON(OfflineMode.jsonPlus(jsonObjectOld, response.json),  OfflineMode.loadLong(Constants.VK_GROUP_ID));
             }
 
             @Override
             public void onError(final VKError error) {
                 super.onError(error);
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                endlessGet(Offset);
             }
         });
     }

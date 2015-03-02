@@ -92,7 +92,7 @@ public class FragmentAlbumsList extends Fragment {
     public void onAttach(Activity activity) {
         FragmentWall.setDisabledMenu();
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached(Constants.GROUP_ID);
+        ((MainActivity) activity).onSectionAttached( OfflineMode.loadLong(Constants.VK_GROUP_ID));
     }
 
     private boolean doRequest(final View view) {
@@ -105,8 +105,8 @@ public class FragmentAlbumsList extends Fragment {
                     @Override
                     public void onComplete(final VKResponse response) {
                         super.onComplete(response);
-                        OfflineMode.saveJSON(response.json, Constants.GROUP_ID + "albums");
-                        handleResponse(OfflineMode.loadJSON(Constants.GROUP_ID + "albums"), view);
+                        OfflineMode.saveJSON(response.json,  OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums");
+                        handleResponse(OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums"), view);
 
                     }
                     @Override
@@ -116,12 +116,12 @@ public class FragmentAlbumsList extends Fragment {
                     }
                 });
             } else {
-                VKHelper.getAlbumList(Constants.GROUP_ID, new VKRequest.VKRequestListener() {
+                VKHelper.getAlbumList( OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(final VKResponse response) {
                         super.onComplete(response);
-                        OfflineMode.saveJSON(response.json, Constants.GROUP_ID + "albums");
-                        handleResponse(OfflineMode.loadJSON(Constants.GROUP_ID + "albums"), view);
+                        OfflineMode.saveJSON(response.json,  OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums");
+                        handleResponse(OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums"), view);
                     }
                     @Override
                     public void onError(final VKError error) {
@@ -132,8 +132,8 @@ public class FragmentAlbumsList extends Fragment {
             }
             isRequestNul=  true;
         }
-        if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(Constants.GROUP_ID + "albums")) {
-            handleResponse(OfflineMode.loadJSON(Constants.GROUP_ID + "albums"), view);
+        if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums")) {
+            handleResponse(OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums"), view);
             isRequestNul = true;
         } else {
             if (temp) {

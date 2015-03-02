@@ -73,22 +73,42 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public PollFragment(VKApiPoll poll, TextView answers_anonymous_text, String isAnonymous) {
-        this.answers_anonymous_text_preview=answers_anonymous_text;
-        this.isAnonymous_preview=isAnonymous;
-        if (Constants.isFragmentCommentsLoaded&updatedPoll!=null){
-            this.poll=updatedPoll;
-        }else {
-            this.poll=poll;
-        }
-    }
+//    public PollFragment(VKApiPoll poll, TextView answers_anonymous_text, String isAnonymous) {
+//
+//        this.answers_anonymous_text_preview=answers_anonymous_text;
+//        this.isAnonymous_preview=isAnonymous;
+//        if (Constants.isFragmentCommentsLoaded&updatedPoll!=null){
+//            this.poll=updatedPoll;
+//        }else {
+//            this.poll=poll;
+//        }
+//    }
+
     public PollFragment(){}
 
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+//        args.clear();
+//        args.putParcelable("poll", poll);
+//        args.putString("isAnonymous", isAnonymous);
+//        args.putSerializable("answers_anonymous_text", (java.io.Serializable) answers_anonymous_text);
+//        fragment.setArguments(args);
  super.onCreate(savedInstanceState);
+        final TextView answers_anonymous_text = ((TextView) getActivity().findViewById(R.id.answers_anonymous_text_preview));
+        if (getArguments() != null) {
+            this.isAnonymous_preview=getArguments().getString("isAnonymous");
+
+            if (Constants.isFragmentCommentsLoaded&updatedPoll!=null){
+            this.poll=updatedPoll;
+        }else {
+            this.poll=(VKApiPoll)getArguments().getParcelable("poll");;
+        }
+            answers_anonymous_text.setText(getArguments().getString("answers_anonymous_text"));
+            this.answers_anonymous_text_preview =answers_anonymous_text ;
+
+        }
   }
 
 

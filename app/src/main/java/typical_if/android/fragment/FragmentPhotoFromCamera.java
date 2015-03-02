@@ -55,7 +55,7 @@ public class FragmentPhotoFromCamera extends Fragment {
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d("My ID", String.valueOf(Constants.GROUP_ID));
+        Log.d("My ID", String.valueOf( OfflineMode.loadLong(Constants.VK_GROUP_ID)));
         View rootView = inflater.inflate(R.layout.fragment_upload_photo_from_camera, container, false);
         setRetainInstance(true);
         File imageFile = new File(path);
@@ -67,7 +67,7 @@ public class FragmentPhotoFromCamera extends Fragment {
             public void onClick(View v) {
                 final File tempFile = new File(path);
                 getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
-                final VKRequest req = VKApi.uploadAlbumPhotoRequest(tempFile, Constants.ALBUM_ID, (int)(Constants.GROUP_ID*(-1)));
+                final VKRequest req = VKApi.uploadAlbumPhotoRequest(tempFile, Constants.ALBUM_ID, (int)( OfflineMode.loadLong(Constants.VK_GROUP_ID)*(-1)));
                 req.executeWithListener(new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(VKResponse response) {

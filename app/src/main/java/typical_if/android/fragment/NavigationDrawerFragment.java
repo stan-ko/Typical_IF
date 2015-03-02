@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import typical_if.android.Constants;
+import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
@@ -95,13 +96,13 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         if (getActivity().getIntent().getExtras() != null && getActivity().getIntent().getExtras().getBoolean("isClickable")) {
-            selectItem(5);
+            selectItem(5, false);
         } else {
-            selectItem(0);
+            selectItem(setClickedPisition(OfflineMode.loadLong(Constants.VK_GROUP_ID)), false);
         }
     }
 
-    private void startLoadingWall(int groupPosition) {
+    private void startLoadingWall(int groupPosition, final boolean isResume) {
         final int groupPositionH = groupPosition;
 
         new Handler().postDelayed(new Runnable() {
@@ -110,13 +111,12 @@ public class NavigationDrawerFragment extends Fragment {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mCallbacks.onNavigationDrawerItemSelected(groupPositionH);
+                        mCallbacks.onNavigationDrawerItemSelected(groupPositionH, isResume);
                     }
                 });
             }
         }, 360);
     }
-
     public void refreshNavigationHeader(VKHelper.UserObject user) {
         if (VKSdk.isLoggedIn()) {
             headerViewHolder.btLogin.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_logout_white_24dp));
@@ -222,7 +222,7 @@ public class NavigationDrawerFragment extends Fragment {
                 if (VKSdk.isLoggedIn()) {
                     VKSdk.logout();
                     refreshNavigationHeader(null);
-                //    ((FragmentWall) activity.getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
+                    //    ((FragmentWall) activity.getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
                 } else {
                     VKSdk.authorize(Constants.S_MY_SCOPE, true, true);
                 }
@@ -243,15 +243,16 @@ public class NavigationDrawerFragment extends Fragment {
         drawerListViewAdapter = new DrawerListViewAdapter(getActivity(), listDataHeader);
         mDrawerListView.setAdapter(drawerListViewAdapter);
 
-        mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                   @Override
-                                                   public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                       if (mDrawerLayout != null) {
-                                                           closeDrawer();
-                                                           startLoadingWall(--position);
-                                                       }
-                                                   }
-                                               }
+        mDrawerListView.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        if (mDrawerLayout != null) {
+                            closeDrawer();
+                            startLoadingWall(--position, false);
+                        }
+                    }
+                }
         );
 
         return v;
@@ -369,12 +370,12 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
-    private void selectItem(int groupPosition) {
+    private void selectItem(int groupPosition, boolean isResume) {
         if (mDrawerLayout != null) {
             closeDrawer();
         }
         if (mCallbacks != null) {
-            startLoadingWall(groupPosition);
+            startLoadingWall(groupPosition, isResume);
         }
     }
 
@@ -466,7 +467,26 @@ public class NavigationDrawerFragment extends Fragment {
             openDrawer();
         }
     }
+    private int setClickedPisition(final long groupId) {
+        final int intGroupId  = (int) groupId;
+        switch (intGroupId) {
+            case (int)Constants.TF_ID:
+                return 0;
+            case (int)Constants.TZ_ID:
+                return 1;
+            case (int)Constants.FB_ID:
+                return 2;
+            case (int)Constants.FN_ID:
+                return 3;
+            case (int)Constants.ST_ID:
+                return 4;
+            case (int)Constants.ZF_ID:
+                return 5;
+            default:
+                return 0;
+        }
 
+    }
 
     public void openDrawer() {
         mDrawerLayout.openDrawer(mFragmentContainerView);
@@ -483,7 +503,7 @@ public class NavigationDrawerFragment extends Fragment {
         /**
          * Called when an item in the navigation drawer is selected.
          */
-        void onNavigationDrawerItemSelected(int groupPosition);
+        void onNavigationDrawerItemSelected(int groupPosition, boolean isResume);
 
     }
 }

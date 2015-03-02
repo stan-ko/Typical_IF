@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 public class NotificationReceiver extends BroadcastReceiver {
     public NotificationReceiver() {
@@ -18,11 +17,11 @@ public class NotificationReceiver extends BroadcastReceiver {
         if (bundle != null) {
             if (intent.getAction() == Constants.SCHEDULE_FOR_EIGHT_HOUR) {
                 context.startService(new Intent(context, NotificationService.class).setAction(Constants.REPEAT_ACTION));
-                Log.d("SCHEDULE_FOR_EIGHT_HOUR", " --------------------------- ");
+//                Log.d("SCHEDULE_FOR_EIGHT_HOUR", " --------------------------- ");
             }
             if (intent.getAction() == Constants.SCHEDULE_FOR_ONE_HOUR) {
                 context.startService(new Intent(context, NotificationService.class).setAction(Constants.REPEAT_ACTION));
-                Log.d("SCHEDULE_FOR_ONE_HOUR", " --------------------------- ");
+//                Log.d("SCHEDULE_FOR_ONE_HOUR", " --------------------------- ");
 
             }
         }

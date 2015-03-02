@@ -343,11 +343,7 @@ public class FragmentComments extends Fragment {
 
         Constants.isFragmentCommentsLoaded=true;
 
-
         listOfComments.addHeaderView(wallItem);
-
-
-
 
         updateCommentList(group_id, post.post.id, listOfComments,true);
     }
@@ -360,12 +356,6 @@ public class FragmentComments extends Fragment {
         Log.d("isFragmentCommentsLoaded: "+ Constants.isFragmentCommentsLoaded," was changed in OnResume in FragmentComments");
 
     }
-
-
-
-
-
-
 
     RelativeLayout root;
     RelativeLayout coverGlobal;

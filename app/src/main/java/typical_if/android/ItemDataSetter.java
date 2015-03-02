@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -253,14 +254,19 @@ public class ItemDataSetter {
         } else
             isAnonymous = Constants.mainActivity.getResources().getString(R.string.public_poll);
 
-
-        answers_anonymous_text.setText(isAnonymous + " " + poll.votes);
+        final String answers_anonymous_textStr = isAnonymous + " " + poll.votes;
+        answers_anonymous_text.setText(answers_anonymous_textStr);
         parent.setVisibility(View.VISIBLE);
         go_to_poll.setVisibility(View.VISIBLE);
         go_to_poll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Fragment fragment = new PollFragment(poll,answers_anonymous_text,isAnonymous);
+                Fragment fragment = new PollFragment();
+                args.clear();
+                args.putParcelable("poll", poll);
+                args.putString("isAnonymous", isAnonymous);
+                args.putString("answers_anonymous_text", answers_anonymous_textStr);
+                fragment.setArguments(args);
                 fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
         });
@@ -747,7 +753,7 @@ public class ItemDataSetter {
 
     static int g;
     static ArrayList<VKApiPhoto> finalPhotos;
-
+    final private static Bundle args = new Bundle();
     public static void makeSaveTransaction(final ArrayList<VKApiPhoto> photos, final int position) {
 
         if (OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())) {
@@ -757,7 +763,13 @@ public class ItemDataSetter {
                     super.onComplete(response);
                     OfflineMode.saveJSON(response.json, photosKeyGen(photos));
                     finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKeyGen(photos)));
-                    Fragment fragment = new FragmentFullScreenViewer(finalPhotos, position, 0);
+//                    Fragment fragment = new FragmentFullScreenViewer(finalPhotos, position, 0);
+                    Fragment fragment = new FragmentFullScreenViewer();
+                    args.clear();
+                    args.putSerializable("finalPhotos", finalPhotos);
+                    args.putInt("position", position);
+                    args.putInt("sizeOfAlbum", 0);
+                    fragment.setArguments(args);
                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                     OfflineMode.saveJSON(response.json, photosKeyGen(photos));
                 }
@@ -765,13 +777,23 @@ public class ItemDataSetter {
                 @Override
                 public void onError(VKError error) {
                     super.onError(error);
-                    Fragment fragment = new FragmentFullScreenViewer(photos, position, 0);
+                    Fragment fragment = new FragmentFullScreenViewer();
+                    args.clear();
+                    args.putSerializable("finalPhotos", photos);
+                    args.putInt("position", position);
+                    args.putInt("sizeOfAlbum", 0);
+                    fragment.setArguments(args);
                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 }
             });
         } else if (OfflineMode.isJsonNull(photosKeyGen(photos))) {
             finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKeyGen(photos)));
-            Fragment fragment = new FragmentFullScreenViewer(finalPhotos, position, 0);
+            Fragment fragment = new FragmentFullScreenViewer();
+            args.clear();
+            args.putSerializable("finalPhotos", photos);
+            args.putInt("position", position);
+            args.putInt("sizeOfAlbum", 0);
+            fragment.setArguments(args);
             fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
         }
     }

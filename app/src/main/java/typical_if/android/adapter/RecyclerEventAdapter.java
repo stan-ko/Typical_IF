@@ -242,7 +242,6 @@ public class RecyclerEventAdapter extends RecyclerView.Adapter<RecyclerEventAdap
                 } else {
                     unsetSwipeLayout(eventSwipeLayout);
                 }
-
                 tempLayout.addView(eventView);
             }
         }

@@ -33,25 +33,26 @@ public class FragmentVideoView extends Fragment {
     ProgressDialog pDialog;
     VideoView videoview;
     VKApiVideo video;
-
+   final static private Bundle args = new Bundle();
    // static String videoURL = "http://cs634005v4.vk.me/u106880118/videos/b892209e1d.240.mp4?extra=cN3FmRT76KMgP631XZmgnsaoYN3BTo2mLVM7-v3J-s5M2V5GxdeKZwg9XWh910VoAjRwlna7MigJcXK1R3dWFfwo7DMHjkY";
 
-    public static FragmentVideoView newInstance(String url, VKApiVideo video) {
-        FragmentVideoView fragment = new FragmentVideoView(video);
-
-        Bundle args = new Bundle();
+    public static final FragmentVideoView newInstance(String url, VKApiVideo video) {
+        FragmentVideoView fragment = new FragmentVideoView();
+        args.clear();
+        args.putParcelable("video", video);
         args.putString("url",url);
-
         fragment.setArguments(args);
-
-
 
         return fragment;
     }
 
-    public FragmentVideoView(VKApiVideo video ){
-        this.video=video;
+@Override
+public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    if (getArguments() != null) {
+        this.video =   getArguments().getParcelable("video");
     }
+}
     public FragmentVideoView(){}
     ActionBar actionBar;
 

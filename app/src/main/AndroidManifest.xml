@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="typical_if.android"
     android:installLocation="preferExternal"
-    android:versionCode="2"
-    android:versionName="1.1" >
+    android:versionCode="5"
+    android:versionName="2.0.1" >
 
 
 
@@ -19,21 +19,21 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <activity
-        android:name=".MyActivity"
-        android:launchMode="singleTop" />
+    <!--<activity-->
+        <!--android:name=".MyActivity"-->
+        <!--android:launchMode="singleTop" />-->
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <supports-screens
-        android:anyDensity="true"
-        android:largeScreens="false"
-        android:normalScreens="true"
-        android:requiresSmallestWidthDp="600"
-        android:smallScreens="true"
-        android:xlargeScreens="false" />
+    <!--<supports-screens-->
+        <!--android:anyDensity="true"-->
+        <!--android:largeScreens="true"-->
+        <!--android:normalScreens="true"-->
+        <!--android:requiresSmallestWidthDp="600"-->
+        <!--android:smallScreens="true"-->
+        <!--android:xlargeScreens="false" />-->
 
     <compatible-screens>
 
@@ -63,13 +63,41 @@
         <screen
             android:screenDensity="xhdpi"
             android:screenSize="normal" />
+        <!-- all large size screens -->
+        <screen
+            android:screenDensity="ldpi"
+            android:screenSize="large" />
+        <screen
+            android:screenDensity="mdpi"
+            android:screenSize="large" />
+        <screen
+            android:screenDensity="hdpi"
+            android:screenSize="large" />
+        <screen
+            android:screenDensity="xhdpi"
+            android:screenSize="large" />
+        <!-- all xlarge size screens -->
+        <screen
+            android:screenDensity="ldpi"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="mdpi"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="hdpi"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="xhdpi"
+            android:screenSize="xlarge" />
+        <screen
+            android:screenDensity="480"
+            android:screenSize="normal" />
     </compatible-screens>
 
     <application
-        android:largeHeap="true"
         android:name=".TIFApp"
         android:allowBackup="true"
-        android:icon="@drawable/image_actionbar_if"
+        android:icon="@drawable/ic_launcher"
         android:theme="@style/AppTheme" >
         <service
             android:name=".UploadPhotoService"

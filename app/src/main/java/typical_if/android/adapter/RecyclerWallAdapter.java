@@ -263,7 +263,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
             final VKApiPost post = (VKApiPost) viewHolder.cb_post_like.getTag();
 
             if (!post.user_likes) {
-                VKHelper.setLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
+                VKHelper.setLike("post",  OfflineMode.loadLong(Constants.VK_GROUP_ID), post.id, new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(final VKResponse response) {
                         super.onComplete(response);
@@ -274,7 +274,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
                 });
             } else {
 
-                VKHelper.deleteLike("post", Constants.GROUP_ID, post.id, new VKRequest.VKRequestListener() {
+                VKHelper.deleteLike("post", OfflineMode.loadLong(Constants.VK_GROUP_ID), post.id, new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(final VKResponse response) {
                         super.onComplete(response);
@@ -309,7 +309,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
                 dialog.setPositiveButton(context.getString(R.string.okay), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        final String pidFull = "wall" + Constants.GROUP_ID + "_" + post.id;
+                        final String pidFull = "wall" +  OfflineMode.loadLong(Constants.VK_GROUP_ID) + "_" + post.id;
                         VKHelper.doRepost(pidFull, text.getText().toString(), new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(final VKResponse response) {
