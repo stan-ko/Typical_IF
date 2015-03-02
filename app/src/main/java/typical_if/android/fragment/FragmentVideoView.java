@@ -122,7 +122,7 @@ public class FragmentVideoView extends Fragment {
         pDialog.setCancelable(false);
         // Show progressbar
         pDialog.show();
-        pDialog.setContentView(R.layout.custom_progress_bar);
+       // pDialog.setContentView(R.layout.custom_progress_bar);
 
         try {
             // Start the MediaController

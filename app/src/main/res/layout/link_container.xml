@@ -2,7 +2,10 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:background="@drawable/element_selector">
+    android:background="@drawable/element_selector"
+    android:paddingBottom="5dp">
+
+
     <ImageView
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -11,7 +14,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:src="@drawable/ic_left_link"
-        android:layout_margin="5dp" />
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -26,13 +32,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/txt_link_title"
-            android:layout_toEndOf="@+id/img_link"
             android:textColor="@color/vk_smoke_white"
             android:maxLines="1"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/txt_link_src"
             android:textStyle="normal"
-            android:text="sd asdasd as d" />
+            android:text="sd asdasd as d"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="3dp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -44,7 +51,8 @@
             android:textStyle="normal"
             android:layout_below="@+id/txt_link_title"
             android:visibility="visible"
-            android:text="asdasd asd " />
+            android:text="asdasd asd "
+            android:layout_marginBottom="5dp" />
 
         </RelativeLayout>
 </RelativeLayout>

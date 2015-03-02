@@ -263,13 +263,13 @@ public class NavigationDrawerFragment extends Fragment {
     private void prepareListData() {
         listDataHeader = new ArrayList<DrawerListViewAdapter.GroupObject>();
 
-        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_tf), R.drawable.ic_tf));
-        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_tz), R.drawable.ic_tz));
-        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_fb), R.drawable.ic_fb));
-        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_fn), R.drawable.ic_fn));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_tf),        R.drawable.ic_tf));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_tz),        R.drawable.ic_tz));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_fb),        R.drawable.ic_fb));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_fn),        R.drawable.ic_fn));
         listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_stantsiya), R.drawable.ic_st));
-        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_events), R.drawable.ic_a));
-        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_exit), R.drawable.ic_close_circle_outline_white_24dp));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_events),    R.drawable.ic_a));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_exit),            R.drawable.ic_close_circle_outline_white_24dp));
 
     }
 

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
@@ -41,6 +42,7 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
     String isAnonymous;
     Button changeDecision;
     int answer_id;
+    int rule = 0 ;
 
 
     public VotesItemAdapter(VKApiPoll poll, TextView answers_anonymous_text, TextView answers_anonymous_text_preview, String isAnonymous, String isAnonymous_preview,
@@ -85,14 +87,21 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
         }
         viewHolder.vote_text.setVisibility(View.VISIBLE);
 
-        checkConditions(viewHolder, answer);
 
 
+     //   viewHolder.amount_of_answers.setText(String.valueOf(answer.votes));
+    //    viewHolder.vote_text.setText(answer.text);
+    //    viewHolder.bar.setMax(100);
 
-        viewHolder.amount_of_answers.setText(String.valueOf(answer.votes));
-        viewHolder.vote_text.setText(answer.text);
-        viewHolder.bar.setMax(100);
-        viewHolder.bar.setProgress((int) answer.rate);
+      ///  if (viewHolder.wasAlreadyCalled){
+      ///     viewHolder.bar.setProgress((int) answer.rate);
+     //  }else {
+            viewHolder.bar.setProgress(0);
+      //  }
+
+
+            checkConditions(viewHolder, answer);
+
 
 
 
@@ -114,6 +123,7 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
                             notifyDataSetChanged();
                             checkConditions(viewHolder,answer);
                             viewHolder.vote_text.setTypeface(null, Typeface.BOLD);
+
 
                         }
                     }
@@ -202,7 +212,8 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
 
    return convertView;
     }
-    public void checkConditions (ViewHolder viewHolder, VKApiPoll.Answer answer){
+  //  Thread t;
+    public void checkConditions (final ViewHolder viewHolder, final VKApiPoll.Answer answer) {
 
 
         answers_anonymous_text_preview.setText(isAnonymous_preview + " " + poll.votes);
@@ -211,54 +222,84 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
         viewHolder.amount_of_answers.setText(String.valueOf(answer.votes));
         viewHolder.vote_text.setText(answer.text);
         viewHolder.bar.setMax(100);
-        viewHolder.bar.setProgress((int) answer.rate);
+        // viewHolder.bar.setProgress((int) answer.rate);
 
-        if (poll.answer_id==0){
+        if (VKSdk.isLoggedIn()) {
+            viewHolder.bar.setProgress((int) answer.rate);
+            if (poll.answer_id == 0) {
+                changeDecision.setVisibility(View.INVISIBLE);
+
+                viewHolder.bar.setVisibility(View.INVISIBLE);
+                viewHolder.amount_of_answers.setVisibility(View.INVISIBLE);
+                viewHolder.addVoteButton.setVisibility(View.VISIBLE);
+
+            }
+            if (poll.answer_id > 0) {
+                changeDecision.setVisibility(View.VISIBLE);
+                viewHolder.addVoteButton.setVisibility(View.GONE);
+                viewHolder.bar.setVisibility(View.VISIBLE);
+
+                viewHolder.amount_of_answers.setVisibility(View.VISIBLE);
+            }
+
+            if (answer.id == poll.answer_id) {
+                viewHolder.vote_text.setTypeface(null, Typeface.BOLD);
+                viewHolder.amount_of_answers.setTypeface(null, Typeface.BOLD);
+
+                viewHolder.vote_text.setTextColor(Color.WHITE);
+                viewHolder.amount_of_answers.setTextColor(Color.WHITE);
+            } else {
+                viewHolder.vote_text.setTypeface(null, Typeface.NORMAL);
+                viewHolder.amount_of_answers.setTypeface(null, Typeface.NORMAL);
+                viewHolder.amount_of_answers.setTextColor(Constants.mainActivity.getResources().getColor(R.color.textFadeOutColor));
+                ;
+                viewHolder.vote_text.setTextColor(Constants.mainActivity.getResources().getColor(R.color.textFadeOutColor));
+            }
+
+
+        } else {
+
             changeDecision.setVisibility(View.INVISIBLE);
-            viewHolder.bar.setVisibility(View.INVISIBLE);
-            viewHolder.amount_of_answers.setVisibility(View.INVISIBLE);
-            viewHolder.addVoteButton.setVisibility(View.VISIBLE);
-
-        }
-        if  (poll.answer_id>0){
-            changeDecision.setVisibility(View.VISIBLE);
             viewHolder.addVoteButton.setVisibility(View.GONE);
             viewHolder.bar.setVisibility(View.VISIBLE);
 
+
+//            if (!viewHolder.wasAlreadyCalled) {
+//                final ObjectAnimator animation = ObjectAnimator.ofInt(viewHolder.bar, "progress", (int) answer.rate);
+//                animation.setDuration(1200); // 0.5 second
+//                animation.setInterpolator(new DecelerateInterpolator());
+
+
+//                try {
+//                    t.join();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+         //   if (viewHolder.wasAlreadyCalled)
+            viewHolder.bar.setProgress((int) answer.rate);
+
+
             viewHolder.amount_of_answers.setVisibility(View.VISIBLE);
+
         }
-
-        if (answer.id==poll.answer_id){
-            viewHolder.vote_text.setTypeface(null, Typeface.BOLD);
-            viewHolder.amount_of_answers.setTypeface(null, Typeface.BOLD);
-
-            viewHolder.vote_text.setTextColor(Color.WHITE);
-            viewHolder.amount_of_answers.setTextColor(Color.WHITE);
-        } else {
-            viewHolder.vote_text.setTypeface(null, Typeface.NORMAL);
-            viewHolder.amount_of_answers.setTypeface(null, Typeface.NORMAL);
-            viewHolder.amount_of_answers.setTextColor(Constants.mainActivity.getResources().getColor(R.color.textFadeOutColor));;
-            viewHolder.vote_text.setTextColor(Constants.mainActivity.getResources().getColor(R.color.textFadeOutColor));
-        }
-
     }
+
+
 
     public static class ViewHolder {
         public final NumberProgressBar bar;
         public final TextView vote_text;
-     //   public final TextView rate_percents;
         public final TextView amount_of_answers;
-
         public final Button addVoteButton;
+        public boolean wasAlreadyCalled;
 
-
-        ViewHolder(View view) {
-
+     ViewHolder(View view) {
+            this.wasAlreadyCalled = false;
             this.bar = (NumberProgressBar) view.findViewById(R.id.rate_bar);
             this.vote_text = (TextView) view.findViewById(R.id.variant_text);
-        //   this.rate_percents = (TextView) view.findViewById(R.id.rate_percents_text);
             this.amount_of_answers = (TextView) view.findViewById(R.id.rate_amount_text);
-
             this.addVoteButton = ((Button) view.findViewById(R.id.add_your_vote_button));
 
 

@@ -2,49 +2,49 @@
 <resources>
     <string name="licenses_text">
         <b>Asynchronous Http Client for Android</b>
-        /nAuthor: James Smith
-        /nGitHUB: <u>https://github.com/loopj/android-async-http</u>
-        /nLicense: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
-        /n
-        /n<b>Google GSON</b>
-        /nCopyright: Google Inc
-        /nGoogle-Code: <u>http://code.google.com/p/google-gson</u>
-        /nLicense: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
-        /n
-        /n<b>SlidingMenu</b>
-        /nAuthor: Jeremy Feinstein
-        /nCopyright 2012-2014 Jeremy Feinstein
-        /nGitHub: <u>https://github.com/jfeinstein10/SlidingMenu</u>
-        /nLicense: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
-        /n
-        /n<b>Universal Image Loader for Android</b>
-        /nAuthor: Sergey Tarasevich
-        /nCopyright 2011-2014 Sergey Tarasevich
-        /nGitHub: <u>https://github.com/nostra13/Android-Universal-Image-Loader</u>
-        /nLicense: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
-        /n
-        /n<b>Iconify Font Awesome for Android</b>
-        /nAuthor: Joan Zapata
-        /nCopyright 2013 Joan Zapata
-        /nGitHub: <u>https://github.com/JoanZapata/android-iconify</u>
-        /nLicense: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
-        /n
-        /n<b>EventBus</b>
-        /nAuthor: Markus Junginger
-        /nCopyright (C) 2012-2014 Markus Junginger, greenrobot (http://greenrobot.de)
-        /nGitHub: <u>https://github.com/greenrobot/EventBus</u>
-        /nLicense: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
-        /n
-        /n<b>android-gif-drawable</b>
-        /nAuthor: Karol Wrótniak
-        /nGitHub: <u>https://github.com/koral--/android-gif-drawable</u>
-        /nLicense: MIT License. Read the full license here: <u>https://github.com/koral--/android-gif-drawable/blob/master/LICENSE</u>
-        /n
-        /n<b>ACRA</b>
-        /nAuthor: Kevin Gaudin <u>https://plus.google.com/+KevinGaudin/posts</u>
-        /nCopyright © 2013 Kevin Gaudin <u>http://acra.ch</u>
-        /nGitHub: <u>https://github.com/ACRA/acra</u>
-        /nLicense: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
-        /n
+        <br /> Author: James Smith
+        <br /> GitHUB: <u>https://github.com/loopj/android-async-http</u>
+        <br /> License: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
+        <br />
+        <br /><b>Google GSON</b>
+        <br />Copyright: Google Inc
+        <br />Google-Code: <u>http://code.google.com/p/google-gson</u>
+        <br />License: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
+        <br />
+        <br /><b>SlidingMenu</b>
+        <br />Author: Jeremy Feinstein
+        <br />Copyright 2012-2014 Jeremy Feinstein
+        <br />GitHub: <u>https://github.com/jfeinstein10/SlidingMenu</u>
+        <br />License: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
+        <br />
+        <br /><b>Universal Image Loader for Android</b>
+        <br />Author: Sergey Tarasevich
+        <br />Copyright 2011-2014 Sergey Tarasevich
+        <br />GitHub: <u>https://github.com<br />ostra13/Android-Universal-Image-Loader</u>
+        <br />License: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
+        <br />
+        <br /><b>Iconify Font Awesome for Android</b>
+        <br />Author: Joan Zapata
+        <br />Copyright 2013 Joan Zapata
+        <br />GitHub: <u>https://github.com/JoanZapata/android-iconify</u>
+        <br />License: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
+        <br />
+        <br /><b>EventBus</b>
+        <br />Author: Markus Junginger
+        <br />Copyright (C) 2012-2014 Markus Junginger, greenrobot (http://greenrobot.de)
+        <br />GitHub: <u>https://github.com/greenrobot/EventBus</u>
+        <br />License: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
+        <br />
+        <br /><b>android-gif-drawable</b>
+        <br />Author: Karol Wrotniak
+        <br />GitHub: <u>https://github.com/koral--/android-gif-drawable</u>
+        <br />License: MIT License. Read the full license here: <u>https://github.com/koral--/android-gif-drawable/blob/master/LICENSE</u>
+        <br />
+        <br /><b>ACRA</b>
+        <br />Author: Kevin Gaudin <u>https://plus.google.com/+KevinGaudin/posts</u>
+        <br />Copyright © 2013 Kevin Gaudin <u>http://acra.ch</u>
+        <br />GitHub: <u>https://github.com/ACRA/acra</u>
+        <br />License: Apache License, Version 2.0. Read the full license here: <u>http://www.apache.org/licenses/LICENSE-2.0</u>
+        <br />
     </string>
-</nesources>
+    </resources>

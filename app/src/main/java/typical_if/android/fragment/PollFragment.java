@@ -12,11 +12,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.model.VKApiPoll;
 
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
+import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.VotesItemAdapter;
 
 /**
@@ -65,6 +67,7 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
         fragment.setArguments(args);
         return fragment;
     }
+    public static boolean isRunning;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -81,6 +84,8 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
     }
     public PollFragment(){}
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
  super.onCreate(savedInstanceState);
@@ -91,11 +96,21 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        getActivity().getActionBar().show();
-        getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll));
+        ((MainActivity) getActivity()).getSupportActionBar().show();
+        isRunning=true;
+
+        if ( VKSdk.isLoggedIn()){
+
+
+            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll));
+            Constants.MtitlePoll= getActivity().getActionBar().getTitle().toString();
+        }else  {
+            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll)+" ("+getActivity().getResources().getString(R.string.login_to_vote)+")");
+            Constants.MtitlePoll= getActivity().getActionBar().getTitle().toString();
+        }
         FragmentWall.setDisabledMenu();
         View view = inflater.inflate(R.layout.poll_view_container_fragment, container, false);
-        View footerView  = view.inflate(getActivity().getApplicationContext(), R.layout.footter_view_button_change_decision, null);
+        View footerView  = View.inflate(getActivity().getApplicationContext(), R.layout.footter_view_button_change_decision, null);
         final Button change_decision_button = ((Button) footerView.findViewById(R.id.change_vote_decision_button));
         final TextView title = ((TextView) view.findViewById(R.id.txt_poll_title));
         final TextView answers_anonymous_text = ((TextView) view.findViewById(R.id.answers_anonymous_text));
@@ -149,6 +164,7 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
     public void onDetach() {
 
        getActivity().getActionBar().setTitle(Constants.Mtitle);
+        isRunning=false;
 
        FragmentWall.setEnabledMenu();
 
@@ -161,6 +177,11 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
         mListener = null;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        isRunning=true;
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

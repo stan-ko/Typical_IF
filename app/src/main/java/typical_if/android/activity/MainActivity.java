@@ -57,7 +57,7 @@ public class MainActivity extends DialogActivity implements
 
 
     private Drawable mIcon;
-    private CharSequence mTitle;
+    public CharSequence mTitle;
     private static final int PICK_FROM_CAMERA = 1;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     public NavigationDrawerFragment mNavigationDrawerFragment;
@@ -302,31 +302,13 @@ public class MainActivity extends DialogActivity implements
 //    };
 
     public void restoreActionBar() {
-//        final ActionBar actionBar = getSupportActionBar();
-//
-//        actionBar.setIcon(mIcon);
-//
-//        if (Constants.isMember == 0) {
-//            items = getResources().getStringArray(R.array.menu_join_group);
-//
-//        } else {
-//            items = getResources().getStringArray(R.array.menu_leave_group);
-//        }
-//        if (VKSdk.isLoggedIn()) {
-//            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-//            actionBar.setDisplayShowTitleEnabled(false);
-//            actionBar.setTitle(mTitle);
-//            list = new ActionBarArrayAdapter(getApplicationContext(), items, mTitle);
-//            list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//
-//
-//
-//
-//            actionBar.setListNavigationCallbacks(list, callback);
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(mTitle);
+       if (PollFragment.isRunning){
+           actionBar.setTitle(Constants.MtitlePoll);
+       }else {
+        actionBar.setTitle(mTitle);}
 //        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.action_bar_shape_background));
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
@@ -547,7 +529,12 @@ public class MainActivity extends DialogActivity implements
             }
             replaceFragment(fragment);
         }
-        restoreActionBar();
+        if  (getSupportActionBar().getTitle().equals(getString(R.string.poll))){
+            Constants.MtitlePoll = getString(R.string.poll);
+        } if ( getSupportActionBar().getTitle().equals(getString(R.string.poll)+" ("+getString(R.string.login_to_vote)+")")){
+            Constants.MtitlePoll = getString(R.string.poll)+" ("+getString(R.string.login_to_vote)+")";
+        }
+   restoreActionBar();
     }
 
 

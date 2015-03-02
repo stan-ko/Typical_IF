@@ -101,7 +101,7 @@
     <string name="you_are_not_logged_in">Ви не вошли в профиль</string>
 
         
-    <string name="poll_anonymous">Анонимный голосования, голосов:</string>
+    <string name="poll_anonymous">Анонимное голосование, голосов:</string>
         
     <string name="poll_not_anonymous">Публичное голосование, голосов:</string>
 
@@ -212,7 +212,7 @@
     <string name="test_validation">Test validation</string>
     <string name="logout">Logout</string>
 
-    <string name = "today_events"> События Ивано-Франковская </string>
+    <string name = "today_events"> События Ивано-Франковска </string>
     <string name = "station_events"> События антикафе "STANTSIYA" </string>
     <string name = "period_events"> Длительные события </string>
     <string name="null_events">Немає</string>
@@ -283,6 +283,15 @@
     <string name="add_vote">Голосовать</string>
     <string name="error_during_voting">Ошибка голосования. Попробуйте позже.</string>
     <string name="poll">Опрос</string>
+    <string name="login_to_vote">Ввойдите в профиль</string>
+    <string name="change_my_decision">Сменить выбор</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="pisitive_button_alert_of_main">ОК, спасибо разработчикам</string>
+    <string name="tif_title_header">Типичный Мобильный Франковськ</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="title_of_alert_main">Изменения внесенные новой версией:</string>
+    <string name="сhanges_of_new_version">- на опитування тепер можна відповідати, а не тільки дивитись;         \n - відтворення відео нарешті працює на повну;         \n - повністю перепрацьований дизайн, який зараз в Material стилі;         \n - зміна навігації, тепер велика кнопуля "+" за якою можна добавити новий пост та відкрити альбоми групи;         \n - афіша франківська, де тепер можете добавити найцікавіші події в календар;         \n - антикафе "Stantsiya" має свій розділ;         \n - нова система попереднього перегляду зображень;         \n - збільшена швидкість завантаження зображень;         \n - збільшена швидкість роботи і прогортування стіни;         \n - підвищена стабільність роботи.</string>
+    <string name="exception_during_run">Ошибка во время запуска</string>
 
 
 </resources>

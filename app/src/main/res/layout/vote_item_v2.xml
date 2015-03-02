@@ -36,7 +36,7 @@
 
             custom:progress_text_size="12sp"
             custom:progress_text_color="@color/textFadeOutColor"
-            custom:progress_text_offset="10dp"
+            custom:progress_text_offset="2dp"
             custom:progress_text_visibility="visible"
 
 
@@ -108,19 +108,20 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="334"
         android:id="@+id/rate_amount_text"
         android:textColor="@color/textFadeOutColor"
         android:visibility="visible"
         android:textSize="13dp"
-        android:gravity="fill_horizontal|center_vertical"
+        android:gravity="left|center_vertical"
         android:maxLines="1"
-        android:paddingRight="5dp"
         android:layout_alignBottom="@+id/rate_bar"
         android:layout_alignTop="@+id/rate_bar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginRight="5dp" />
+        android:layout_marginRight="5dp"
+
+        android:minWidth="30dp"
+        android:text="444" />
 
 </RelativeLayout>
 </RelativeLayout>

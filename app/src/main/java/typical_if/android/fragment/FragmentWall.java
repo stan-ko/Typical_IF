@@ -155,6 +155,7 @@ public class FragmentWall extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Constants.MtitlePoll="";
         Constants.isFragmentCommentsLoaded=false;
         Log.d("isFragmentCommentsLoaded: "+ Constants.isFragmentCommentsLoaded," was changed in OnResume in FragmentWall");
     }
@@ -537,7 +538,7 @@ public class FragmentWall extends Fragment {
     }
 
     public static void setEnabledMenu() {
-        if (Constants.makePostMenu.size() == 3) {
+        if (Constants.makePostMenu!=null&Constants.makePostMenu.size() == 3) {
             Constants.makePostMenu.getItem(0).setVisible(true);
             Constants.makePostMenu.getItem(1).setVisible(true);
             Constants.makePostMenu.getItem(2).setVisible(true);
@@ -545,7 +546,7 @@ public class FragmentWall extends Fragment {
     }
 
     public static void setDisabledMenu() {
-        if (Constants.makePostMenu.size() == 3) {
+        if (Constants.makePostMenu!=null&Constants.makePostMenu.size() == 3) {
             Constants.makePostMenu.getItem(0).setVisible(false);
             Constants.makePostMenu.getItem(1).setVisible(false);
             Constants.makePostMenu.getItem(2).setVisible(false);

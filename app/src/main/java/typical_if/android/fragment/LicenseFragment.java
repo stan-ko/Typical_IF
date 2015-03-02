@@ -33,10 +33,24 @@ public class LicenseFragment extends Fragment{
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+       // getActivity().getActionBar().show();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.license_view_layout, container, false);
+        getActivity().getActionBar().hide();
         TextView license = ((TextView) rootView.findViewById(R.id.license_text));
-        license.setText(Html.fromHtml(getStringFromAssetFile(getActivity())));
+        license.setText(Html.fromHtml(String.format("%.1f", null) + " " + "<br>" +
+                "<small>" + getStringFromAssetFile(getActivity()) + "</small>"));
+
         setRetainInstance(true);
 
 
@@ -47,12 +61,11 @@ public class LicenseFragment extends Fragment{
 
     private String getStringFromAssetFile(Activity activity)
     {
-        String text = "licenses.xml";
-
+        String fileName = "licenses.xml";
         byte[] buffer = null;
         InputStream is;
         try {
-            is = activity.getAssets().open(text);
+            is = activity.getAssets().open(fileName);
             int size = is.available();
             buffer = new byte[size];
             is.read(buffer);
@@ -60,10 +73,7 @@ public class LicenseFragment extends Fragment{
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        String str_data = new String(buffer);
-
-        return Html.fromHtml(str_data).toString();
+        return  new String(buffer);
     }
 
 

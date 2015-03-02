@@ -121,6 +121,7 @@ public class Constants {
     public static NotificationManager notificationManager;
     public static String title = "";
     public static String Mtitle = "";
+    public static String MtitlePoll= "";
     public static String artist = "";
     public static String tempCameraPhotoFile = "";
     public static MediaPlayer mediaPlayer = null;

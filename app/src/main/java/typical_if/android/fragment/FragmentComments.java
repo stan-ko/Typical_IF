@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -23,7 +24,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -64,6 +64,7 @@ import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.RecyclerWallAdapter;
+import typical_if.android.event.EventShowContextMenu;
 import typical_if.android.event.EventSpinnerLayout;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
@@ -85,12 +86,13 @@ public class FragmentComments extends Fragment {
     public static String TYPE;
 
 
-    ListView listOfComments = null;
+    public ListView listOfComments = null;
     ArrayList<VKApiComment> comments = null;
     ArrayList<VKApiUser> profiles = null;
     ArrayList<VKApiCommunity> groups = null;
     CommentsListAdapter adapter = null;
     VKApiUser postSender = null;
+
 
     String message = null;
     EditText commentMessage = null;
@@ -353,6 +355,7 @@ public class FragmentComments extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        ((MainActivity) getActivity()).getSupportActionBar().hide();
     Constants.isFragmentCommentsLoaded=true;
         Log.d("isFragmentCommentsLoaded: "+ Constants.isFragmentCommentsLoaded," was changed in OnResume in FragmentComments");
 
@@ -401,6 +404,7 @@ public class FragmentComments extends Fragment {
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 if (!OfflineMode.isOnline(getApplicationContext())) {
                     Toast.makeText(getApplicationContext(), getString(R.string.no_internet_message_toast_en), Toast.LENGTH_SHORT).show();
                 }
@@ -413,6 +417,7 @@ public class FragmentComments extends Fragment {
                 }, 3000);
             }
         });
+
 
         listOfComments.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
@@ -441,6 +446,7 @@ public class FragmentComments extends Fragment {
                 rootLayoutShowHide.setVisibility(View.VISIBLE);
             }
         } else if (!VKSdk.isLoggedIn()) {
+
             rootLayoutShowHide.setVisibility(View.GONE);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -528,24 +534,24 @@ public class FragmentComments extends Fragment {
 
     public void refreshPostData (boolean scrollToBottom){
 
-        for (VKAttachments.VKApiAttachment attachment : post.post.attachments){
-            if (attachment.getType().equals(equals(VKAttachments.TYPE_POLL))){
-                VKHelper.getPollById(((VKApiPoll) attachment).owner_id,0, ((VKApiPoll) attachment).id, new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
-                        PollFragment.updatedPoll = new VKApiPoll().parse(response.json);
+                for (VKAttachments.VKApiAttachment attachment : post.post.attachments) {
+                    if (attachment.getType().equals(equals(VKAttachments.TYPE_POLL))) {
+                        VKHelper.getPollById(((VKApiPoll) attachment).owner_id, 0, ((VKApiPoll) attachment).id, new VKRequest.VKRequestListener() {
+                            @Override
+                            public void onComplete(VKResponse response) {
+                                super.onComplete(response);
+                                PollFragment.updatedPoll = new VKApiPoll().parse(response.json);
 
-                       }
+                            }
 
-                    @Override
-                    public void onError(VKError error) {
-                        super.onError(error);
+                            @Override
+                            public void onError(VKError error) {
+                                super.onError(error);
+                            }
+                        });
                     }
-                });
-            }
-          }
-        updateCommentList(group_id, item_id, listOfComments, scrollToBottom);
+                }
+                updateCommentList(group_id, item_id, listOfComments, scrollToBottom);
 
     }
 
@@ -576,26 +582,50 @@ public class FragmentComments extends Fragment {
             }
 
         });
-        if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(item_id)) {
-            parseCommentList(OfflineMode.loadJSON(item_id),scrollToBottom);
-            // If IsOnline and response from preferences not null then load JSON from preferences
-        }
+     try {
+         if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(item_id)) {
+
+             parseCommentList(OfflineMode.loadJSON(item_id), scrollToBottom);
 
 
-        listOfComments.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                        if (position > 0) {
-                            showContextMenu(position - 1);
-                        }
+             // If IsOnline and response from preferences not null then load JSON from preferences
+         } else {
 
-                    }
-                }
-        );
+         }
+     }catch (NullPointerException ex) {
+         //TODO nothing need to do
+     }
 
-    }
-//public static boolean isViewLoaded;
+//        listOfComments.setOnItemClickListener(
+//                new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+//
+//                        if (position > 0) {
+//                            showContextMenu(position - 1);
+//
+//                        }
+//
+//                    }
+//                }
+//        );
+
+
+
+      //  adapter.
+
+
+//        for (int i = 0 ; i<listOfComments.getAdapter().getCount();i++ ){
+//     (((View) listOfComments.getAdapter().getItem(i)).findViewById(R.id.txt_post)).setOnClickListener(new View.OnClickListener() {
+//         @Override
+//         public void onClick(View view) {
+//             showContextMenu(position);
+//         }
+//     });
+//
+//        }
+   }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
@@ -603,6 +633,13 @@ public class FragmentComments extends Fragment {
        // isViewLoaded=true;
        // coverGlobal.setVisibility(View.GONE);
 
+
+    }
+
+    public void onEventMainThread (EventShowContextMenu event){
+        if (event.position > 0) {
+          showContextMenu(event.position - 1);
+        }
 
     }
 
@@ -701,10 +738,10 @@ public class FragmentComments extends Fragment {
                 @Override
                 public void run() {
                     if (adapter == null) {
-                        adapter = new CommentsListAdapter(comments, profiles, groups, inflater);
+                        adapter = new CommentsListAdapter(comments, profiles, groups, inflater, listOfComments);
                         listOfComments.setAdapter(adapter);
                     } else {
-                        adapter.UpdateCommentList(comments, profiles, groups, listOfComments,scrollToBottom);
+                        adapter.UpdateCommentList(comments, profiles, groups, listOfComments,scrollToBottom, listOfComments);
 
 
                     }
@@ -934,6 +971,16 @@ public class FragmentComments extends Fragment {
         mListener = null;
       Constants.isFragmentCommentsLoaded=false;
       Log.d("isFragmentCommentsLoaded: "+ Constants.isFragmentCommentsLoaded," was changed in OnDetach in FragmentComments");
+        ((MainActivity) getActivity()).getSupportActionBar().show();
+      getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+          @Override
+          public void onBackStackChanged() {
+              if (swipeView.isRefreshing()){
+                  swipeView.setRefreshing(false);
+              }
+          }
+      });
+
 
       EventBus.getDefault().unregister(this);
     }

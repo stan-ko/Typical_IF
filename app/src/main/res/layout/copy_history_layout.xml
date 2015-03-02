@@ -13,8 +13,6 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:orientation="vertical"
         android:visibility="visible">
 
@@ -23,7 +21,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:background="@drawable/element_selector"
-            android:paddingTop="5dp"
             android:visibility="visible"
             android:id="@+id/copyHistoryHeader">
 
@@ -37,8 +34,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="7dp"
-                android:layout_marginTop="5dp"
-                android:visibility="visible" />
+                android:visibility="visible"
+                android:layout_marginTop="5dp" />
 
             <TextView
                 android:id="@+id/txt_copy_history_title"
@@ -52,7 +49,9 @@
                 android:text="jhv,jhvmxf"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#aaffffff"
-                android:textSize="15dp" />
+                android:textSize="14dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="5dp" />
 
             <TextView
                 android:id="@+id/txt_copy_history_date"
@@ -61,10 +60,10 @@
                 android:layout_alignLeft="@+id/txt_copy_history_title"
                 android:layout_alignStart="@+id/txt_copy_history_title"
                 android:layout_below="@+id/txt_copy_history_title"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="2dp"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="#8cffffff"
-                android:textSize="13dp" />
+                android:textSize="12dp" />
 
             <ImageView
                 android:id="@+id/imageView96"
@@ -84,7 +83,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
 
             <include layout="@layout/post_text_layout" />
 
@@ -104,7 +105,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
-                android:visibility="gone" >
+                android:visibility="gone">
 
                 <include layout="@layout/media_pager_container" />
 
@@ -181,10 +182,9 @@
             android:id="@+id/copyHistoryGeoLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
             android:background="@drawable/element_selector"
             android:padding="5dp"
-            android:visibility="gone" >
+            android:visibility="gone">
 
             <include layout="@layout/post_text_layout" />
 

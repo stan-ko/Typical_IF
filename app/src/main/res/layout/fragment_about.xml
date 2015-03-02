@@ -30,11 +30,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView4"
-                android:textColor="#ffffffff"
+                android:textColor="@color/textFadeOutColor"
                 android:text="Developed by  "
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:layout_alignParentStart="false"
+                android:layout_alignLeft="@+id/textView10"
+                android:layout_marginTop="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -44,7 +46,8 @@
                 android:layout_toEndOf="@+id/textView4"
                 android:layout_alignTop="@+id/textView4"
                 android:layout_toRightOf="@+id/textView4"
-                android:textColor="#ff797dff" />
+                android:textColor="#ff797dff"
+                android:textSize="17dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -54,7 +57,8 @@
                 android:layout_toEndOf="@+id/textView4"
                 android:textColor="#ff797dff"
                 android:layout_below="@+id/vasil_ref"
-                android:layout_toRightOf="@+id/textView4" />
+                android:layout_toRightOf="@+id/textView4"
+                android:textSize="17dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -65,7 +69,8 @@
                 android:textColor="#ff797dff"
                 android:layout_below="@+id/lyubomir_ref"
                 android:layout_alignLeft="@+id/lyubomir_ref"
-                android:layout_alignStart="@+id/lyubomir_ref" />
+                android:layout_alignStart="@+id/lyubomir_ref"
+                android:textSize="17dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -75,7 +80,8 @@
                 android:layout_toEndOf="@+id/textView4"
                 android:textColor="#ff797dff"
                 android:layout_below="@+id/viktor_ref"
-                android:layout_toRightOf="@+id/textView4" />
+                android:layout_toRightOf="@+id/textView4"
+                android:textSize="17dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -86,7 +92,8 @@
                 android:textColor="#ff797dff"
                 android:layout_below="@+id/yurij_ref"
                 android:layout_alignLeft="@+id/yurij_ref"
-                android:layout_alignStart="@+id/yurij_ref" />
+                android:layout_alignStart="@+id/yurij_ref"
+                android:textSize="17dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -96,18 +103,21 @@
                 android:textColor="#ffffffff"
                 android:layout_toEndOf="@+id/textView10"
                 android:layout_alignTop="@+id/textView10"
-                android:layout_toRightOf="@+id/textView10" />
+                android:layout_toRightOf="@+id/textView10"
+                android:layout_marginLeft="5dp"
+                android:textSize="15dp"
+                android:layout_marginBottom="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Visit "
                 android:id="@+id/textView10"
-                android:textColor="#ffffffff"
+                android:textColor="@color/textFadeOutColor"
                 android:layout_toEndOf="@+id/tf_site"
                 android:layout_below="@+id/stas"
-                android:layout_toRightOf="@+id/tf_site"
-                android:layout_marginTop="15dp" />
+                android:layout_marginTop="25dp"
+                android:paddingTop="1dp" />
 
         </RelativeLayout>
 
@@ -118,11 +128,10 @@
             android:adjustViewBounds="true"
             android:src="@drawable/devlightlogo"
             android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="75dp"
-            android:layout_marginRight="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginBottom="10dp" />
 
         <ImageView
@@ -164,7 +173,8 @@
             android:layout_alignBottom="@+id/stantsiya"
             android:layout_alignLeft="@+id/devlight_com_ua_ref"
             android:layout_alignStart="@+id/devlight_com_ua_ref"
-            android:layout_marginLeft="71dp" />
+            android:layout_marginLeft="71dp"
+            android:textSize="15dp" />
 
     </RelativeLayout>
 

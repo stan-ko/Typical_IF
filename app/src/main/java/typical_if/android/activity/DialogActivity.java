@@ -58,7 +58,12 @@ public class DialogActivity extends ActionBarActivity {
     }
 
     public void replaceFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+try {
+    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+}catch (IllegalStateException ise){
+    Toast.makeText(getApplicationContext(),getResources().getString(R.string.exception_during_run),Toast.LENGTH_SHORT).show();
+
+}
     }
 
     int index;

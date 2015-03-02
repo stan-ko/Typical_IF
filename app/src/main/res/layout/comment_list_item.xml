@@ -10,8 +10,11 @@
     android:focusable="false"
     android:focusableInTouchMode="false"
     android:orientation="horizontal"
-    android:padding="5dp"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:paddingLeft="5dp"
+    android:paddingTop="5dp"
+    android:paddingRight="5dp"
+    android:paddingBottom="5dp">
 
     <RelativeLayout
         android:id="@+id/commentTextLayout"
@@ -32,6 +35,86 @@
             android:layout_height="wrap_content" />
     </RelativeLayout>
 
+    <CheckBox
+        android:id="@+id/post_comment_like_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:button="@drawable/like_or_not_liked_selector"
+        android:clickable="false"
+        android:enabled="false"
+        android:shadowColor="#ff222222"
+        android:text="9"
+        android:textColor="#fff0f4ff"
+        android:textSize="13dp"
+        android:visibility="visible"
+        android:layout_alignParentTop="false"
+        android:layout_alignTop="@+id/img_user_avatar"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true" />
+
+    <TextView
+        android:id="@+id/user_name_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/img_user_avatar"
+        android:layout_toEndOf="@+id/img_user_avatar"
+        android:layout_toRightOf="@+id/img_user_avatar"
+        android:layout_weight="0.08"
+        android:clickable="false"
+        android:focusable="false"
+
+        android:focusableInTouchMode="false"
+        android:text="Michael G."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#d1ffffff"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:layout_marginTop="-2dp" />
+
+    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/img_user_avatar"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_weight="0.34"
+        android:clickable="false"
+        android:cropToPadding="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:scaleType="fitStart"
+        android:src="@drawable/abc_ab_solid_dark_holo"
+        app:riv_corner_radius="30dip"
+        android:layout_margin="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp" />
+
+    <TextView
+        android:id="@+id/text_date_of_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/user_name_textView"
+        android:layout_alignStart="@+id/user_name_textView"
+        android:layout_below="@+id/user_name_textView"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="Сьогодні о 16:15"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#8cffffff"
+        android:textSize="9dp"
+        android:visibility="visible" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/comment_list_clickable_canvas"
+        android:background="@drawable/element_selector_v2"
+        android:clickable="true"
+        android:layout_alignBottom="@+id/commentAttachmentsLayout"
+        android:paddingBottom="5dp"
+        android:visibility="visible" />
+
     <LinearLayout
         android:id="@+id/commentAttachmentsLayout"
         android:layout_width="fill_parent"
@@ -48,7 +131,9 @@
         android:orientation="vertical"
         android:visibility="visible"
         android:layout_below="@+id/commentTextLayout"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="3dp"
+        android:layout_marginLeft="3dp">
 
         <RelativeLayout
             android:id="@+id/commentMediaLayout"
@@ -58,7 +143,8 @@
             android:clickable="false"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:visibility="visible">
+            android:visibility="visible"
+            android:layout_marginBottom="5dp">
 
             <include
                 layout="@layout/media_pager_container"
@@ -158,73 +244,5 @@
         </RelativeLayout>
 
     </LinearLayout>
-
-    <CheckBox
-        android:id="@+id/post_comment_like_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:button="@drawable/like_or_not_liked_selector"
-        android:clickable="false"
-        android:enabled="false"
-        android:shadowColor="#ff222222"
-        android:text="9"
-        android:textColor="#fff0f4ff"
-        android:textSize="13dp"
-        android:visibility="visible"
-        android:layout_alignParentTop="false"
-        android:layout_alignTop="@+id/img_user_avatar"
-        android:layout_marginRight="5dp"
-        android:layout_alignParentRight="true" />
-
-    <TextView
-        android:id="@+id/user_name_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/img_user_avatar"
-        android:layout_toEndOf="@+id/img_user_avatar"
-        android:layout_toRightOf="@+id/img_user_avatar"
-        android:layout_weight="0.08"
-        android:clickable="false"
-        android:focusable="false"
-
-        android:focusableInTouchMode="false"
-        android:text="Michael G."
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#d1ffffff"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        android:layout_marginTop="-2dp" />
-
-    <com.makeramen.RoundedImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/img_user_avatar"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_weight="0.34"
-        android:clickable="false"
-        android:cropToPadding="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:scaleType="fitStart"
-        android:src="@drawable/abc_ab_solid_dark_holo"
-        app:riv_corner_radius="30dip"
-        android:layout_margin="5dp" />
-
-    <TextView
-        android:id="@+id/text_date_of_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/user_name_textView"
-        android:layout_alignStart="@+id/user_name_textView"
-        android:layout_below="@+id/user_name_textView"
-        android:clickable="false"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:text="Сьогодні о 16:15"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#8cffffff"
-        android:textSize="9dp"
-        android:visibility="visible" />
 
 </RelativeLayout>

@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import de.greenrobot.event.EventBus;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
+import typical_if.android.event.EventShowContextMenu;
 
 
 /**
@@ -46,23 +48,32 @@ public class CommentsListAdapter extends BaseAdapter {
     String last_name = "";
     String url = "";
     int position;
+    ListView listView ;
+    public RelativeLayout canvas ;
+
 
     final static Pattern matPattern = Pattern.compile("\\[(id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]");
 
-    public CommentsListAdapter(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList, ArrayList<VKApiCommunity> groupsList, LayoutInflater inflater) {
+    public CommentsListAdapter(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList,
+                               ArrayList<VKApiCommunity> groupsList, LayoutInflater inflater,
+                               ListView list) {
         this.commentList = commentList;
         this.profilesList = profilesList;
         this.groupsList = groupsList;
         layoutInflater = inflater;
+        this.listView=list;
     }
 
-    public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList, ArrayList<VKApiCommunity> groupsList, ListView listView,boolean scrollToBottom) {
+    public void UpdateCommentList(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList,
+                                  ArrayList<VKApiCommunity> groupsList, ListView listView,boolean scrollToBottom,
+                                  ListView list) {
         this.profilesList.clear();
         this.profilesList.addAll(profilesList);
         this.commentList.clear();
         this.commentList.addAll(commentList);
         this.groupsList.clear();
         this.groupsList.addAll(groupsList);
+        this.listView=list;
         this.notifyDataSetChanged();
     if (scrollToBottom){
         scrollCommentsToBottom(listView);}
@@ -135,6 +146,7 @@ public class CommentsListAdapter extends BaseAdapter {
     }
 
     public void holderInitialize(final ViewHolder viewHolder, final VKApiComment comment) {
+        RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT);
 
         ImageLoader.getInstance().displayImage(url, viewHolder.user_avatar, TIFApp.additionalOptions);
         if (comment.likes == 0) {
@@ -150,6 +162,15 @@ public class CommentsListAdapter extends BaseAdapter {
                 viewHolder.likes.setChecked(true);
             }
         }
+
+
+        viewHolder.canvas.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+             EventBus.getDefault().post(new EventShowContextMenu(listView.getPositionForView(view)));
+            }
+        });
+
 
         viewHolder.user_name.setText(last_name + " " + first_name);
 
@@ -167,6 +188,8 @@ public class CommentsListAdapter extends BaseAdapter {
 
             viewHolder.date_of_user_comment.setText(String.valueOf(ItemDataSetter.getFormattedDate(comment.date)));
         }
+
+
 
         if (comment.attachments != null && comment.attachments.size() != 0) {
             viewHolder.commentAttachmentsLayout.setVisibility(View.VISIBLE);
@@ -189,10 +212,29 @@ public class CommentsListAdapter extends BaseAdapter {
                     viewHolder.commentTxtPollTitle
 
             );
+            params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.commentAttachmentsLayout);
+            viewHolder.canvas.setLayoutParams(params);
 
         } else {
             viewHolder.commentAttachmentsLayout.setVisibility(View.GONE);
+            params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.commentTextLayout);
+            viewHolder.canvas.setLayoutParams(params);
+
+
+
+
+
+//            if (viewHolder.canvas.isPressed()){
+//
+//            }else {
+//               /// viewHolder.commentAttachmentsLayout.bringToFront();
+//            }
         }
+
+
+
+
+
     }
 
     @Override
@@ -211,7 +253,7 @@ public class CommentsListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         this.position = position;
 
         final VKApiComment comment = commentList.get(position);
@@ -227,11 +269,13 @@ public class CommentsListAdapter extends BaseAdapter {
         userIdentifier(comment);
         holderInitialize(viewHolder, comment);
 
+
         return convertView;
     }
 
 
     public static class ViewHolder {
+        public final RelativeLayout canvas ;
         public final RoundedImageView user_avatar;
         public final TextView user_name;
         public final TextView date_of_user_comment;
@@ -262,6 +306,7 @@ public class CommentsListAdapter extends BaseAdapter {
         public final ImageButton commentMediaPagerVideoButton;
 
         public ViewHolder(View convertView) {
+            this.canvas = ((RelativeLayout) convertView.findViewById(R.id.comment_list_clickable_canvas));
             this.user_avatar = (RoundedImageView) convertView.findViewById(R.id.img_user_avatar);
             this.user_name = (TextView) convertView.findViewById(R.id.user_name_textView);
             this.date_of_user_comment = (TextView) convertView.findViewById(R.id.text_date_of_comment);

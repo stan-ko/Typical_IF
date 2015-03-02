@@ -54,6 +54,8 @@
     <string name="error_during_voting">Помилка під час голосування.Спробуйте проголосувати пізніше</string>
     <string name="poll">Опитування</string>
     <string name="show_min_text">Показати скорочено…</string>
+    <string name="login_to_vote">Увійдіть в профіль</string>
+    <string name="exception_during_run">Помилка при запуску</string>
     <string name="you_are_not_logged_in">Ви не увійшли в профіль</string>
     <string name="poll_anonymous">Анонімне голосування, голосів:</string>
     <string name="poll_not_anonymous">Публічне голосування, голосів:</string>
