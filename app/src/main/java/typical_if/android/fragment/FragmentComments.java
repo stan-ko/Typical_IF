@@ -373,10 +373,10 @@ public class FragmentComments extends Fragment {
         root = rootLayoutShowHide;
 
         coverGlobal = (RelativeLayout) rootView.findViewById(R.id.while_loading_view_layout);
-        if (Constants.isFragmentCommentsLoaded){
-           ProgressBar spinner =  (ProgressBar) rootView.findViewById(R.id.spinner_progress);
-            spinner.setVisibility(View.INVISIBLE);
-         }
+//        if (Constants.isFragmentCommentsLoaded){
+//           ProgressBar spinner =  (ProgressBar) rootView.findViewById(R.id.spinner_progress);
+//            spinner.setVisibility(View.INVISIBLE);
+//         }
 
         listOfComments = ((ListView) rootView.findViewById(R.id.listOfComments));
 //        RelativeLayout useless = ((RelativeLayout) rootView.findViewById(R.id.useless));

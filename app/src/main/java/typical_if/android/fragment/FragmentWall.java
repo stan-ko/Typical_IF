@@ -575,21 +575,30 @@ public class FragmentWall extends Fragment {
     }
 
     public static void setEnabledMenu() {
-        if (Constants.makePostMenu!=null&Constants.makePostMenu.size() == 3) {
-            Constants.makePostMenu.getItem(0).setVisible(true);
-            Constants.makePostMenu.getItem(1).setVisible(true);
-            Constants.makePostMenu.getItem(2).setVisible(true);
-        }
+
+ if (!Constants.isPollFragmentLoaded) {
+
+     if (Constants.makePostMenu.size() == 3) {
+         Constants.makePostMenu.getItem(0).setVisible(true);
+         Constants.makePostMenu.getItem(1).setVisible(true);
+         Constants.makePostMenu.getItem(2).setVisible(true);
+
+
+     }
+     Log.d("EnablingMenu...", "status: " + Constants.makePostMenu.hasVisibleItems());
+ }
     }
 
     public static void setDisabledMenu() {
-        if (Constants.makePostMenu!=null&Constants.makePostMenu.size() == 3) {
+
+        if (Constants.makePostMenu.size() == 3) {
             Constants.makePostMenu.getItem(0).setVisible(false);
             Constants.makePostMenu.getItem(1).setVisible(false);
             Constants.makePostMenu.getItem(2).setVisible(false);
             Constants.makePostMenu.close();
         }
         Constants.makePostMenu.close();
+        Log.d("DisablingMenu..."," status: "+Constants.makePostMenu.hasVisibleItems());
     }
 
     @Override

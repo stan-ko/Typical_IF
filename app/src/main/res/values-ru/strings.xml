@@ -1,8 +1,7 @@
 <?xml version = "1.0" encoding = "utf-8"?>
 
 <resources>
-    <string name="pisitive_button_alert_of_main">OK, Слава Украине </string>
-    <string name="title_of_alert_main">Зміни внесенні новою версією:</string>
+
     <string name="action_settings">Settings</string>
     <string name="app_name">Типичный Франковск</string>
     <string name="logo_name">Типичный\nМобильный\nФранковск</string>
@@ -10,23 +9,23 @@
     <string name="main_creed_2">Героям слава! </string>
     <string name="main_creed">Слава Украине! Героям слава! </string>
     <string name="menu_group_title_stantsiya">STANTSIYA</string>
-        <string name="title_activity_web_view">WebViewActivity</string>
+       
     <string name="menu_group_title_tf">Типичный Франковск</string>
-    <string name="change_my_decision">Змінити вибір</string>
+
         <string name="сhanges_of_new_version">
-        - на опитування тепер можна відповідати, а не тільки дивитись;
-        \n - відтворення відео нарешті працює на повну;
-        \n - повністю перепрацьований дизайн, який зараз в Material стилі;
-        \n - зміна навігації, тепер велика кнопуля "+" за якою можна добавити новий пост та відкрити альбоми групи;
-        \n - афіша франківська, де тепер можете добавити найцікавіші події в календар;
-        \n - антикафе "Stantsiya" має свій розділ;
-        \n - нова система попереднього перегляду зображень;
-        \n - збільшена швидкість завантаження зображень;
-        \n - збільшена швидкість роботи і прогортування стіни;
-        \n - підвищена стабільність роботи.
+           - На опрос теперь можно отвечать, а не только смотреть;
+        \n - воспроизведение видео наконец работает на полную;
+        \n - полностью переработанный дизайн, который сейчас в Material стиле;
+        \n - изменение навигации - теперь большая кнопуля "+" по которой можно добавить новый пост и открыть альбомы группы;
+        \n - афиша Франковская, где теперь можно добавить интересные события в календарь;
+        \n - антикафе "Stantsiya" имеет свой раздел;
+        \n - новая система предварительного просмотра изображений;
+        \n - увеличена скорость загрузки изображений;
+        \n - увеличена скорость работы и прогортування стены;
+        \n - повышена стабильность работы.
     </string>
     <string name="menu_group_title_tz">Типичное Признание</string>
-        <string name="tif_title_header">Типовий Мобільний Франківськ</string>
+     
     <string name="menu_group_title_fb">Франковская Барахолка</string>
         
     <string name="menu_group_title_fn">Франковские Новости</string>
@@ -112,7 +111,7 @@
     <string name="show_all_text">Читать далее...</string>
         
     <string name="show_min_text">Показать сокращенно ...</string>
-    <string name="you_are_not_logged_in">Ви не вошли в профиль</string>
+    <string name="you_are_not_logged_in">Вы не вошли в профиль</string>
 
         
     <string name="poll_anonymous">Анонимное голосование, голосов:</string>
@@ -304,7 +303,6 @@
     <string name="tif_title_header">Типичный Мобильный Франковськ</string>
     <string name="title_activity_web_view">WebViewActivity</string>
     <string name="title_of_alert_main">Изменения внесенные новой версией:</string>
-    <string name="сhanges_of_new_version">- на опитування тепер можна відповідати, а не тільки дивитись;         \n - відтворення відео нарешті працює на повну;         \n - повністю перепрацьований дизайн, який зараз в Material стилі;         \n - зміна навігації, тепер велика кнопуля "+" за якою можна добавити новий пост та відкрити альбоми групи;         \n - афіша франківська, де тепер можете добавити найцікавіші події в календар;         \n - антикафе "Stantsiya" має свій розділ;         \n - нова система попереднього перегляду зображень;         \n - збільшена швидкість завантаження зображень;         \n - збільшена швидкість роботи і прогортування стіни;         \n - підвищена стабільність роботи.</string>
     <string name="exception_during_run">Ошибка во время запуска</string>
 
 

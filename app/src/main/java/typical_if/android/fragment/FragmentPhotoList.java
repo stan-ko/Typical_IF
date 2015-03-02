@@ -121,9 +121,13 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
 
     }
 
+    int _lastInScreen;
+    int _substract;
+    float _ratio;
+    int _count = 100;
+
     @Override
     public void onScroll(final AbsListView view, int firstVisibleItem, final int visibleItemCount, int totalItemCount) {
-
         _lastInScreen = firstVisibleItem + visibleItemCount;
         if (_lastInScreen >= totalItemCount & totalItemCount >= 100 & totalItemCount != VKHelper.countOfPhotos) {
 
@@ -147,10 +151,7 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
         }
     }
 
-    int _lastInScreen;
-    int _substract;
-    float _ratio;
-    int _count = 100;
+
 
     private void getElsePhotos(int firstVisibleItem, final int visibleItemCount, final int totalItemCount, final AbsListView view) {
 

@@ -16,6 +16,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,9 @@ import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
+
+import java.util.Arrays;
+import java.util.LinkedList;
 
 import typical_if.android.AudioPlayer;
 import typical_if.android.AudioPlayerService;
@@ -144,9 +148,11 @@ public class MainActivity extends DialogActivity implements
             public void onBackStackChanged() {
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                     try {
-                        if (Constants.makePostMenu.size() == 3) {
-                            FragmentWall.setEnabledMenu();
-                            getSupportActionBar().show();
+                        if (!Constants.isPollFragmentLoaded) {
+                            if (Constants.makePostMenu.size() == 3) {
+                                FragmentWall.setEnabledMenu();
+                                getSupportActionBar().show();
+                            }
                         }
                     } catch (NullPointerException e) {
                     }
@@ -302,6 +308,10 @@ public class MainActivity extends DialogActivity implements
 //    };
 
     public void restoreActionBar() {
+
+
+   //   Log.d("StackElement = "," "+l.getFirst().toString());
+
 //        final ActionBar actionBar = getSupportActionBar();
 //
 //        actionBar.setIcon(mIcon);
@@ -327,7 +337,7 @@ public class MainActivity extends DialogActivity implements
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(mTitle);
-//        actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.action_bar_shape_background));
+//      actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.action_bar_shape_background));
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setLogo(mIcon);
@@ -395,6 +405,7 @@ public class MainActivity extends DialogActivity implements
  //   }
 
 
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
@@ -421,12 +432,14 @@ public class MainActivity extends DialogActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
+       if (!Constants.isPollFragmentLoaded) {
+           if (!mNavigationDrawerFragment.isDrawerOpen()) {
+               getMenuInflater().inflate(R.menu.main, menu);
+               restoreActionBar();
+               return true;
+           }
+           return super.onCreateOptionsMenu(menu);
+       } else return false;
     }
 
 
@@ -438,7 +451,7 @@ public class MainActivity extends DialogActivity implements
             return;
 
         if (requestCode == PICK_FROM_CAMERA) {
-            FragmentPhotoFromCamera fragmentPhotoFromCamera = new FragmentPhotoFromCamera().newInstance(Constants.tempCameraPhotoFile);
+            FragmentPhotoFromCamera fragmentPhotoFromCamera = FragmentPhotoFromCamera.newInstance(Constants.tempCameraPhotoFile);
             addFragment(fragmentPhotoFromCamera);
         }
     }
@@ -518,11 +531,13 @@ public class MainActivity extends DialogActivity implements
     Fragment fragment = null;
 
     @Override
-    public void onNavigationDrawerItemSelected(int groupPosition) {
+    public void onNavigationDrawerItemSelected(int groupPosition, boolean isResume) {
+
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         long vkGroupId;
         switch (groupPosition) {
+
             case 0:
             case 1:
             case 2:
@@ -541,6 +556,8 @@ public class MainActivity extends DialogActivity implements
                 break;
         }
 
+
+        Log.d("OnNavigationItemSelected"," status: position = "+groupPosition);
         if (groupPosition != 6) {
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                 fragmentManager.popBackStack();
@@ -552,7 +569,7 @@ public class MainActivity extends DialogActivity implements
         } if ( getSupportActionBar().getTitle().equals(getString(R.string.poll)+" ("+getString(R.string.login_to_vote)+")")){
             Constants.MtitlePoll = getString(R.string.poll)+" ("+getString(R.string.login_to_vote)+")";
         }
-   restoreActionBar();
+       restoreActionBar();
     }
 
 

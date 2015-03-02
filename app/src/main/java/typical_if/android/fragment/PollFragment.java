@@ -3,6 +3,7 @@ package typical_if.android.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,23 +57,23 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
      * The Adapter which will be used to populate the ListView/GridView with
      * Views.
      */
-  //  private ListAdapter mAdapter;
+    //  private ListAdapter mAdapter;
 
     // TODO: Rename and change types of parameters
     public static PollFragment newInstance(String param1, String param2) {
+        Constants.isPollFragmentLoaded = true;
+        Log.d("isPollFragmentLoaded: " + Constants.isPollFragmentLoaded, " was changed in newInstance() in PollFragment");
         PollFragment fragment = new PollFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+        FragmentWall.setDisabledMenu();
         return fragment;
     }
+
     public static boolean isRunning;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
 //    public PollFragment(VKApiPoll poll, TextView answers_anonymous_text, String isAnonymous) {
 //
 //        this.answers_anonymous_text_preview=answers_anonymous_text;
@@ -84,8 +85,8 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
 //        }
 //    }
 
-    public PollFragment(){}
-
+    public PollFragment() {
+    }
 
 
     @Override
@@ -95,48 +96,51 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
 //        args.putString("isAnonymous", isAnonymous);
 //        args.putSerializable("answers_anonymous_text", (java.io.Serializable) answers_anonymous_text);
 //        fragment.setArguments(args);
- super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         final TextView answers_anonymous_text = ((TextView) getActivity().findViewById(R.id.answers_anonymous_text_preview));
         if (getArguments() != null) {
-            this.isAnonymous_preview=getArguments().getString("isAnonymous");
+            this.isAnonymous_preview = getArguments().getString("isAnonymous");
 
-            if (Constants.isFragmentCommentsLoaded&updatedPoll!=null){
-            this.poll=updatedPoll;
-        }else {
-            this.poll=(VKApiPoll)getArguments().getParcelable("poll");;
-        }
+            if (Constants.isFragmentCommentsLoaded & updatedPoll != null) {
+                this.poll = updatedPoll;
+            } else {
+                this.poll = getArguments().getParcelable("poll");
+                ;
+            }
             answers_anonymous_text.setText(getArguments().getString("answers_anonymous_text"));
-            this.answers_anonymous_text_preview =answers_anonymous_text ;
+            this.answers_anonymous_text_preview = answers_anonymous_text;
+            FragmentWall.setDisabledMenu();
 
         }
-  }
-
+    }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         ((MainActivity) getActivity()).getSupportActionBar().show();
-        isRunning=true;
+        isRunning = true;
 
-        if ( VKSdk.isLoggedIn()){
+        if (VKSdk.isLoggedIn()) {
 
 
             getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll));
-            Constants.MtitlePoll= getActivity().getActionBar().getTitle().toString();
-        }else  {
-            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll)+" ("+getActivity().getResources().getString(R.string.login_to_vote)+")");
-            Constants.MtitlePoll= getActivity().getActionBar().getTitle().toString();
+            Constants.MtitlePoll = getActivity().getActionBar().getTitle().toString();
+            FragmentWall.setDisabledMenu();
+        } else {
+            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll) + " ("
+                                                    + getActivity().getResources().getString(R.string.login_to_vote) + ")");
+            Constants.MtitlePoll = getActivity().getActionBar().getTitle().toString();
+            FragmentWall.setDisabledMenu();
         }
-        FragmentWall.setDisabledMenu();
+
         View view = inflater.inflate(R.layout.poll_view_container_fragment, container, false);
-        View footerView  = View.inflate(getActivity().getApplicationContext(), R.layout.footter_view_button_change_decision, null);
+        View footerView = View.inflate(getActivity().getApplicationContext(), R.layout.footter_view_button_change_decision, null);
         final Button change_decision_button = ((Button) footerView.findViewById(R.id.change_vote_decision_button));
         final TextView title = ((TextView) view.findViewById(R.id.txt_poll_title));
         final TextView answers_anonymous_text = ((TextView) view.findViewById(R.id.answers_anonymous_text));
         pollList = (ListView) view.findViewById(R.id.listOfVotes);
         final String isAnonymous;
-
 
 
         title.setText(poll.question);
@@ -149,10 +153,8 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
 
         answers_anonymous_text.setText(isAnonymous + " " + poll.votes);
         view.setVisibility(View.VISIBLE);
-
-        // Set the adapter
-
-        VotesItemAdapter adapter = new VotesItemAdapter(poll,answers_anonymous_text,answers_anonymous_text_preview,isAnonymous, isAnonymous_preview, change_decision_button);
+        VotesItemAdapter adapter = new VotesItemAdapter(poll, answers_anonymous_text, answers_anonymous_text_preview,
+                isAnonymous, isAnonymous_preview, change_decision_button);
         pollList.setAdapter(adapter);
         pollList.addFooterView(footerView);
         ItemDataSetter.setListViewHeightBasedOnChildren(pollList);
@@ -166,6 +168,7 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
 //
 //            }
 //        });
+        FragmentWall.setDisabledMenu();
         return view;
     }
 
@@ -178,19 +181,24 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        Constants.isPollFragmentLoaded = true;
+        Log.d("isPollFragmentLoaded: " + Constants.isPollFragmentLoaded, " was changed in OnAttach() in PollFragment");
+        FragmentWall.setDisabledMenu();
+
     }
 
     @Override
     public void onDetach() {
+        Constants.isPollFragmentLoaded = false;
+        Log.d("isPollFragmentLoaded: " + Constants.isPollFragmentLoaded, " was changed in OnDetach() in PollFragment");
+        getActivity().getActionBar().setTitle(Constants.Mtitle);
+        isRunning = false;
 
-       getActivity().getActionBar().setTitle(Constants.Mtitle);
-        isRunning=false;
+        FragmentWall.setEnabledMenu();
 
-       FragmentWall.setEnabledMenu();
-
-       if (Constants.isFragmentCommentsLoaded){
-           getActivity().getActionBar().hide();
-       }
+        if (Constants.isFragmentCommentsLoaded) {
+            getActivity().getActionBar().hide();
+        }
 
         super.onDetach();
 
@@ -200,7 +208,23 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
     @Override
     public void onResume() {
         super.onResume();
-        isRunning=true;
+        isRunning = true;
+        getActivity().getActionBar().show();
+
+        if (VKSdk.isLoggedIn()) {
+            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll));
+            Constants.MtitlePoll = getActivity().getActionBar().getTitle().toString();
+        } else {
+            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll) + " ("
+          + getActivity().getResources().getString(R.string.login_to_vote) + ")");
+            Constants.MtitlePoll = getActivity().getActionBar().getTitle().toString();
+        }
+        FragmentWall.setDisabledMenu();
+
+        Constants.isPollFragmentLoaded = true;
+
+        Log.d("isPollFragmentLoaded: " + Constants.isPollFragmentLoaded, " was changed in OnResume() in PollFragment");
+        FragmentWall.setDisabledMenu();
     }
 
     @Override
@@ -208,33 +232,10 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
         if (null != mListener) {
             // Notify the active callbacks interface (the activity, if the
             // fragment is attached to one) that an item has been selected.
-         //   mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
+            //   mListener.onFragmentInteraction(DummyContent.ITEMS.get(position).id);
         }
     }
 
-    /**
-     * The default content for this Fragment has a TextView that is shown when
-     * the list is empty. If you would like to change the text, call this method
-     * to supply the text it should use.
-     */
-    public void setEmptyText(CharSequence emptyText) {
-        View emptyView = pollList.getEmptyView();
-
-        if (emptyView instanceof TextView) {
-            ((TextView) emptyView).setText(emptyText);
-        }
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         public void onFragmentInteraction(String id);
