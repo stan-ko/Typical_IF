@@ -11,11 +11,12 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:padding="10dp"
-        android:layout_alignParentTop="false"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="false"
         android:layout_alignParentStart="false"
         android:layout_centerInParent="true"
-        android:id="@+id/splash">
+        android:id="@+id/splash"
+        android:layout_marginTop="50dp">
 
         <ImageView
             android:layout_width="wrap_content"

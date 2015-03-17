@@ -166,8 +166,16 @@ public class CommentsListAdapter extends BaseAdapter {
 
         viewHolder.canvas.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-             EventBus.getDefault().post(new EventShowContextMenu(listView.getPositionForView(view)));
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.comment_list_clickable_canvas :
+                        EventBus.getDefault().post(new EventShowContextMenu(listView.getPositionForView(v)));
+                        break;
+
+                    default :
+                        break;
+                }
+
             }
         });
 
@@ -219,11 +227,6 @@ public class CommentsListAdapter extends BaseAdapter {
             viewHolder.commentAttachmentsLayout.setVisibility(View.GONE);
             params.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.commentTextLayout);
             viewHolder.canvas.setLayoutParams(params);
-
-
-
-
-
 //            if (viewHolder.canvas.isPressed()){
 //
 //            }else {

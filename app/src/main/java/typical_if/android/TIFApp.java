@@ -103,5 +103,7 @@ public class TIFApp extends Application {
                 .build();
         ImageLoader.getInstance().init(config);
 
+
+
     }
 }

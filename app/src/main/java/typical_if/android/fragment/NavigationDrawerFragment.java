@@ -14,6 +14,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -91,14 +92,16 @@ public class NavigationDrawerFragment extends Fragment {
 
         activity = ((MainActivity) getActivity());
 
-        if (savedInstanceState != null) {
-            mFromSavedInstanceState = true;
-        }
+
 
         if (getActivity().getIntent().getExtras() != null && getActivity().getIntent().getExtras().getBoolean("isClickable")) {
             selectItem(5, false);
         } else {
             selectItem(setClickedPisition(OfflineMode.loadLong(Constants.VK_GROUP_ID)), false);
+        }
+
+        if (savedInstanceState != null) {
+            mFromSavedInstanceState = true;
         }
     }
 
@@ -108,12 +111,19 @@ public class NavigationDrawerFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mCallbacks.onNavigationDrawerItemSelected(groupPositionH, isResume);
-                    }
-                });
+        try {
+
+
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mCallbacks.onNavigationDrawerItemSelected(groupPositionH, isResume);
+                }
+            });
+        } catch (NullPointerException ex) {
+            Log.d("Navigation has caused NPE ", "activity = "+ getActivity());
+        }
+
             }
         }, 360);
     }
@@ -338,7 +348,8 @@ public class NavigationDrawerFragment extends Fragment {
                 } else {
 //                    showGlobalContextActionBar();
 //                    ((MainActivity) getActivity()).getSupportActionBar().show();
-                    FragmentWall.setDisabledMenu();
+                 if (Constants.makePostMenu!=null){
+                    FragmentWall.setDisabledMenu();}
                 }
 
                 if (!mUserLearnedDrawer) {

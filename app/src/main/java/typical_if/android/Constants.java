@@ -64,6 +64,10 @@ public class Constants {
     public static Locale LOCALE;
     public static boolean isFragmentCommentsLoaded;
     public static boolean isPollFragmentLoaded;
+    public static boolean isPhotoListFragmentLoaded;
+    public static boolean isFragmentMakePostLoaded;
+    public static boolean isFragmentAlbumListLoaded;
+    public static boolean isFragmentFullScreenLoaded;
    public static int isMember;
 
 

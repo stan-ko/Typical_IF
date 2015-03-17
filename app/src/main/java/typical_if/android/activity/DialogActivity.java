@@ -15,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.ClipboardManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.vk.sdk.api.VKError;
@@ -39,6 +40,7 @@ import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentUploadAlbumList;
 import typical_if.android.fragment.FragmentVideoView;
+import typical_if.android.fragment.FragmentWall;
 
 /**
  * Created by admin on 10.09.2014.
@@ -59,10 +61,19 @@ public class DialogActivity extends ActionBarActivity {
 
     public void replaceFragment(Fragment fragment) {
 try {
-    getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+    Log.d("getSupportFragmentManager is :" + getSupportFragmentManager(), "fragment = " + fragment);
+    if (fragment!=null){
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commitAllowingStateLoss();}
+        else {
+        fragment = FragmentWall.newInstance(false);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commitAllowingStateLoss();
+
+    }
 }catch (IllegalStateException ise){
     Toast.makeText(getApplicationContext(),getResources().getString(R.string.exception_during_run),Toast.LENGTH_SHORT).show();
-
+}
+catch (NullPointerException npe){
+    Toast.makeText(getApplicationContext(),getResources().getString(R.string.exception_during_run),Toast.LENGTH_SHORT).show();
 }
     }
 

@@ -23,24 +23,26 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            android:src="@color/only_white" />
 
         <TextView
             android:id="@+id/txt_album_name"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="New Text"
-            android:textColor="#ffffffff"
-            android:textSize="13dp"
-            android:layout_alignBottom="@+id/img_album_cover"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:textSize="17dp"
             android:paddingLeft="5dp"
             android:paddingTop="3dp"
             android:paddingRight="5dp"
             android:paddingBottom="3dp"
             android:singleLine="true"
-            android:background="@android:color/black" />
+            android:layout_above="@+id/txt_photos_count"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/only_white" />
 
         <TextView
             android:id="@+id/txt_photos_count"
@@ -49,16 +51,17 @@
             android:layout_gravity="right"
 
             android:text="New Text"
-            android:textColor="@android:color/white"
-            android:textSize="13dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
+            android:textColor="@color/only_white"
+            android:textSize="12dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingTop="3dp"
             android:paddingBottom="3dp"
-            android:background="@android:color/black" />
+            android:layout_alignBottom="@+id/img_album_cover"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="5dp" />
 
     </RelativeLayout>
 

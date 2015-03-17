@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/header_relative_layout">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/photo_list_header_image"
+            android:focusable="false"
+            android:src="@drawable/blur3"
+            android:scaleType="centerCrop"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Нашы дывчата"
+            android:id="@+id/photo_album_title"
+
+            android:textColor="@color/textFadeOutColor"
+            android:textSize="20dp"
+            android:visibility="visible"
+            android:layout_below="@+id/cover_camera_iw"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:gravity="clip_horizontal|center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:typeface="sans" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="2567 фотографій"
+            android:id="@+id/size_of_album"
+            android:textColor="@color/textFadeOutColor"
+            android:layout_alignBottom="@+id/photos_icon_iw"
+            android:layout_toRightOf="@+id/photos_icon_iw"
+            android:layout_toEndOf="@+id/photos_icon_iw" />
+
+        <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:id="@+id/cover_camera_iw"
+            android:src="@drawable/ic_cover_camera"
+            android:visibility="visible"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/photos_icon_iw"
+            android:src="@drawable/abc_ic_menu_copy_mtrl_am_alpha"
+            android:layout_below="@+id/photo_album_title"
+            android:layout_toLeftOf="@+id/cover_camera_iw"
+            android:layout_toStartOf="@+id/cover_camera_iw"
+            android:layout_marginRight="5dp" />
+    </RelativeLayout>
+</LinearLayout>

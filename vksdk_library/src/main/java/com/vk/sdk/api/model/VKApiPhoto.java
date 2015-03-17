@@ -142,10 +142,10 @@ public class VKApiPhoto extends VKAttachments.VKApiAttachment implements Parcela
      */
     public String access_key;
 
-	public VKApiPhoto(JSONObject from) throws JSONException
-	{
-		parse(from);
-	}
+    public VKApiPhoto(JSONObject from) throws JSONException
+    {
+        parse(from);
+    }
 
 
     /**

@@ -59,6 +59,7 @@ public class FragmentMakePost extends Fragment {
      * number.
      */
     public static FragmentMakePost newInstance(long vkGroupId, long post_id, int typeParam) {
+        Constants.isFragmentMakePostLoaded =true;
         FragmentMakePost fragment = new FragmentMakePost();
         Bundle args = new Bundle();
 
@@ -70,6 +71,11 @@ public class FragmentMakePost extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        Constants.isFragmentMakePostLoaded =true;
+    }
 
     public FragmentMakePost() {}
 
@@ -121,6 +127,12 @@ public class FragmentMakePost extends Fragment {
         }
     };
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Constants.isFragmentMakePostLoaded =false;
+    }
+
 
     @Override
     public void onDestroy() {
@@ -130,10 +142,12 @@ public class FragmentMakePost extends Fragment {
         Constants.tempVideoPostAttach.clear();
         Constants.tempDocPostAttach.clear();
         Constants.tempPostAttachCounter = 0;
+        Constants.isFragmentCommentsLoaded=false;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        Constants.isFragmentMakePostLoaded =true;
         Log.d("Make post","  Fragment");
         ((MainActivity) getActivity()).getSupportActionBar().hide();
         FragmentWall.setDisabledMenu();
@@ -476,5 +490,6 @@ public class FragmentMakePost extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        Constants.isFragmentMakePostLoaded =true;
     }
 }

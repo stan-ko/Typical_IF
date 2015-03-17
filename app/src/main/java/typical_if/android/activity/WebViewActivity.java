@@ -39,6 +39,7 @@ public class WebViewActivity extends Activity {
     public void onBackPressed() {
         super.onBackPressed();
         webView.loadUrl("about:blank");
+        finish();
     }
 
     public WebViewActivity (){}
@@ -105,5 +106,9 @@ public class WebViewActivity extends Activity {
     }
 
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        finish();
+    }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="album_unnamed">Без імені</string>
 
     <string name="app_name">Типовий Франківськ</string>
     <string name="logo_name">Типовий\nМобільний\nФранківськ</string>
@@ -110,6 +111,10 @@
     <string name="null_events">Немає</string>
     <string name="tif_title_header">Типовий Мобільний Франківськ</string>
     <string name="add_vote">Голосувати</string>
+    <string name="photos_less_five">фотографії</string>
+    <string name="photos_more_five">фотографій</string>
+    <string name="photos_equal_one">фотографія</string>
+
 
     <string name="сhanges_of_new_version">
         - на опитування тепер можна відповідати, а не тільки дивитись;

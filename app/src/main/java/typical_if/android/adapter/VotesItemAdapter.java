@@ -34,7 +34,7 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
     public final VKList<VKApiPoll.Answer> answers;
     //  public final LayoutInflater layoutInflater;
 
-    public final VKApiPoll poll;
+    public VKApiPoll poll;
     LayoutInflater layoutInflater;
     TextView answers_anonymous_text;
     TextView answers_anonymous_text_preview;

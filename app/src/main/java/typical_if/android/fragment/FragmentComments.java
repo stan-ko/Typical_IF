@@ -29,7 +29,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -222,6 +221,11 @@ public class FragmentComments extends Fragment {
                 postPhotoUserName.setText(postSender.last_name + " " + postSender.first_name);
                 postPhotoUserDateOfComment.setText(ItemDataSetter.getFormattedDate(photo.date));
 
+//                if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1){
+//
+//                    photoUserSender.callOnClick();
+//                }
+//
             }
 
             @Override
@@ -235,17 +239,17 @@ public class FragmentComments extends Fragment {
         photoUserSender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri uri = Uri.parse("http://vk.com/id" + postSender.id + "");
+                if (postSender!=null){
+                  Uri uri = Uri.parse("http://vk.com/id" + postSender.id + "");
                 getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));}
             }
         });
 
+
         updateCommentList(group_id, photo.id, listOfComments,false);
 
-
-
-        commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
+       commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
 
 
 //        final CheckBox likePostPhoto = ((CheckBox) rootView.findViewById(R.id.like_post_photo_checkbox));
@@ -369,7 +373,7 @@ public class FragmentComments extends Fragment {
 
         this.inflater = inflater;
         rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
-        RelativeLayout rootLayoutShowHide = (RelativeLayout) rootView.findViewById(R.id.comment_bar_layout);
+        final RelativeLayout rootLayoutShowHide = (RelativeLayout) rootView.findViewById(R.id.comment_bar_layout);
         root = rootLayoutShowHide;
 
         coverGlobal = (RelativeLayout) rootView.findViewById(R.id.while_loading_view_layout);
@@ -445,6 +449,13 @@ public class FragmentComments extends Fragment {
         }
         sendComment = (Button) rootView.findViewById(R.id.buttonSendComment);
         commentMessage = (EditText) rootView.findViewById(R.id.field_of_message_for_comment);
+
+
+
+
+
+
+
         if (loadFromWall) {
             loadWallPosts();
         } else {
@@ -523,7 +534,7 @@ public class FragmentComments extends Fragment {
 
 
     public void refreshPostData (boolean scrollToBottom){
-
+               if (loadFromWall){
                 for (VKAttachments.VKApiAttachment attachment : post.post.attachments) {
                     if (attachment.getType().equals(equals(VKAttachments.TYPE_POLL))) {
                         VKHelper.getPollById(((VKApiPoll) attachment).owner_id, 0, ((VKApiPoll) attachment).id, new VKRequest.VKRequestListener() {
@@ -541,7 +552,12 @@ public class FragmentComments extends Fragment {
                         });
                     }
                 }
-                updateCommentList(group_id, item_id, listOfComments, scrollToBottom);
+                   updateCommentList(group_id, item_id, listOfComments, scrollToBottom);
+               } else {
+
+                   updateCommentList(group_id, item_id, listOfComments, scrollToBottom);
+               }
+
 
     }
 
@@ -961,7 +977,9 @@ public class FragmentComments extends Fragment {
         mListener = null;
       Constants.isFragmentCommentsLoaded=false;
       Log.d("isFragmentCommentsLoaded: "+ Constants.isFragmentCommentsLoaded," was changed in OnDetach in FragmentComments");
-        ((MainActivity) getActivity()).getSupportActionBar().show();
+      if (loadFromWall){
+        ((MainActivity) getActivity()).getSupportActionBar().show();}
+
       getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
           @Override
           public void onBackStackChanged() {

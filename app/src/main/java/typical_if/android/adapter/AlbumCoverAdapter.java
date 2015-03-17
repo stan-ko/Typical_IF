@@ -1,5 +1,6 @@
 package typical_if.android.adapter;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,8 +78,13 @@ public class AlbumCoverAdapter extends BaseAdapter {
 
         String url = album.sizes.optJSONObject(2).optString("src");
         ImageLoader.getInstance().displayImage(url, viewHolder.album_cover, TIFApp.additionalOptions);
+        ImageLoader.getInstance().loadImage(url, new SimpleImageLoadingListener()  {
+        @Override
+        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
 
-        views.set(position, convertView);
+        }
+    });
+                views.set(position, convertView);
 
         return convertView;
     }

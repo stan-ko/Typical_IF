@@ -3,6 +3,7 @@ package typical_if.android.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,6 +47,7 @@ public class FragmentAlbumsList extends Fragment {
      * number.
      */
     public static FragmentAlbumsList newInstance(int type) {
+        Constants.isFragmentAlbumListLoaded=true;
         FragmentAlbumsList fragment = new FragmentAlbumsList();
         Bundle args = new Bundle();
         fragment.type = type;
@@ -59,22 +61,29 @@ public class FragmentAlbumsList extends Fragment {
 
     private AnimationAdapter mAnimAdapter;
 
-    private void setBottomAdapter(ListView list, AlbumCoverAdapter mAdapter)
+    private void setBottomAdapter(final ListView list, AlbumCoverAdapter mAdapter)
     {
-        if (!(mAnimAdapter instanceof SwingBottomInAnimationAdapter)) {
-            mAnimAdapter = new SwingBottomInAnimationAdapter(mAdapter);
-            mAnimAdapter.setAbsListView(list);
-            list.setAdapter(mAnimAdapter);
-        }
+       try {
+           if (!(mAnimAdapter instanceof SwingBottomInAnimationAdapter)) {
+               mAnimAdapter = new SwingBottomInAnimationAdapter(mAdapter);
+               mAnimAdapter.setAbsListView(list);
+
+               list.setAdapter(mAnimAdapter);
+           }
+
+       }catch (NullPointerException c ){
+           list.setAdapter(mAdapter);
+       }
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        Constants.isFragmentAlbumListLoaded=true;
         ((MainActivity)getActivity()).getSupportActionBar().hide();
         FragmentWall.setDisabledMenu();
 
         final View rootView = inflater.inflate(R.layout.fragment_albums_list, container, false);
+        listOfAlbums = (ListView) rootView.findViewById(R.id.album_list);
         setRetainInstance(true);
         doRequest(rootView);
 
@@ -84,12 +93,31 @@ public class FragmentAlbumsList extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Constants.makePostMenu = menu;
-        super.onCreateOptionsMenu(menu, inflater);
+        Constants.makePostMenu = null;
+       super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Constants.isFragmentAlbumListLoaded=true;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Constants.isFragmentAlbumListLoaded=false;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Constants.isFragmentAlbumListLoaded=false;
     }
 
     @Override
     public void onAttach(Activity activity) {
+        Constants.isFragmentAlbumListLoaded=true;
         FragmentWall.setDisabledMenu();
         super.onAttach(activity);
         ((MainActivity) activity).onSectionAttached( OfflineMode.loadLong(Constants.VK_GROUP_ID));
@@ -120,8 +148,9 @@ public class FragmentAlbumsList extends Fragment {
                     @Override
                     public void onComplete(final VKResponse response) {
                         super.onComplete(response);
-                        OfflineMode.saveJSON(response.json,  OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums");
-                        handleResponse(OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums"), view);
+                        OfflineMode.saveJSON(response.json, OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums");
+
+                        handleResponse(OfflineMode.loadJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums"), view);
                     }
                     @Override
                     public void onError(final VKError error) {
@@ -148,19 +177,20 @@ public class FragmentAlbumsList extends Fragment {
     protected void handleResponse(JSONObject jsonObject, View view) {
         final ArrayList<Album> albums = Album.getAlbumFromJSONArray(jsonObject);
         try {
-            listOfAlbums = (ListView) view.findViewById(R.id.album_list);
-            albumCoverAdapter = new AlbumCoverAdapter(albums, getActivity().getLayoutInflater());
-        } catch (NullPointerException e) {
-        }
+           albumCoverAdapter = new AlbumCoverAdapter(albums, getActivity().getLayoutInflater());
+        } catch (NullPointerException e) {  }
         //listOfAlbums.setTransitionEffect(mCurrentTransitionEffect);
-        setBottomAdapter(listOfAlbums,albumCoverAdapter);
+        Log.d(listOfAlbums+ "listOfAlbums"+ albumCoverAdapter+"       albumCoverAdapter ","");
+        setBottomAdapter(listOfAlbums, albumCoverAdapter);
        // listOfAlbums.setAdapter(albumCoverAdapter);
+
         listOfAlbums.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Constants.ALBUM_ID = albums.get(position).id;
+                String src =  albums.get(position).sizes.optJSONObject(2).optString("src");
                 Constants.TEMP_OWNER_ID = albums.get(position).owner_id;
-                Fragment fragment = FragmentPhotoList.newInstance(type, albums.get(position).size);
+                Fragment fragment = FragmentPhotoList.newInstance(type, albums.get(position).size, albums.get(position).title, src);
                 ((MainActivity)getActivity()).addFragment(fragment);
             }
         });

@@ -34,6 +34,8 @@ import com.vk.sdk.api.model.VKAttachments;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -576,9 +578,19 @@ public class FragmentWall extends Fragment {
 
     public static void setEnabledMenu() {
 
- if (!Constants.isPollFragmentLoaded) {
+ if ( !Constants.isPollFragmentLoaded
+     &!Constants.isFragmentMakePostLoaded
+     &!Constants.isFragmentAlbumListLoaded
+     &!Constants.isFragmentCommentsLoaded
+     &!Constants.isFragmentFullScreenLoaded) {
 
      if (Constants.makePostMenu.size() == 3) {
+         StackTraceElement [] el = Thread.currentThread().getStackTrace();
+         LinkedList<StackTraceElement> l = new LinkedList<StackTraceElement>(Arrays.asList(el));
+         for (StackTraceElement e:l){
+             Log.d("StackTraceElement is: "," "+e.toString());
+         }
+
          Constants.makePostMenu.getItem(0).setVisible(true);
          Constants.makePostMenu.getItem(1).setVisible(true);
          Constants.makePostMenu.getItem(2).setVisible(true);
@@ -590,15 +602,20 @@ public class FragmentWall extends Fragment {
     }
 
     public static void setDisabledMenu() {
-
-        if (Constants.makePostMenu.size() == 3) {
-            Constants.makePostMenu.getItem(0).setVisible(false);
-            Constants.makePostMenu.getItem(1).setVisible(false);
-            Constants.makePostMenu.getItem(2).setVisible(false);
-            Constants.makePostMenu.close();
-        }
+try {
+    if (Constants.makePostMenu.size() == 3) {
+        Constants.makePostMenu.getItem(0).setVisible(false);
+        Constants.makePostMenu.getItem(1).setVisible(false);
+        Constants.makePostMenu.getItem(2).setVisible(false);
         Constants.makePostMenu.close();
-        Log.d("DisablingMenu..."," status: "+Constants.makePostMenu.hasVisibleItems());
+    }
+    Constants.makePostMenu.close();
+    Log.d("DisablingMenu...", " status: " + Constants.makePostMenu.hasVisibleItems());
+}catch (NullPointerException ex){
+    Log.d ("Options Menu has not already initialized", " and equals: "+Constants.makePostMenu);
+
+
+}
     }
 
     @Override

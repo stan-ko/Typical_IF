@@ -27,7 +27,8 @@ public class Album {
   //  public ArrayList<VKApiPhoto> photos;
 
     public Album(){}
-    public Album(long id, String thumb_id, long owner_id, String title, String description, String created, String updated, int size, int can_upload, String privacy_view, String privacy_comment, String thumb_src, JSONArray sizes) {
+    public Album(long id, String thumb_id, long owner_id, String title, String description, String created, String updated,
+                 int size, int can_upload, String privacy_view, String privacy_comment, String thumb_src, JSONArray sizes) {
 
         this.id = id;
         this.thumb_id = thumb_id;

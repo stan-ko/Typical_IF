@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ public class LicenseFragment extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View rootView = inflater.inflate(R.layout.license_view_layout, container, false);
         getActivity().getActionBar().hide();
         TextView license = ((TextView) rootView.findViewById(R.id.license_text));
@@ -58,6 +60,12 @@ public class LicenseFragment extends Fragment{
         return rootView;
 
     }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+    }
+
 
     private String getStringFromAssetFile(Activity activity)
     {

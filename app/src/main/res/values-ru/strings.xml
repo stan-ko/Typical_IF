@@ -304,6 +304,10 @@
     <string name="title_activity_web_view">WebViewActivity</string>
     <string name="title_of_alert_main">Изменения внесенные новой версией:</string>
     <string name="exception_during_run">Ошибка во время запуска</string>
+    <string name="album_unnamed">Без имени</string>
+    <string name="photos_equal_one">фотография</string>
+    <string name="photos_less_five">фотографии</string>
+    <string name="photos_more_five">фотографий</string>
 
 
 </resources>

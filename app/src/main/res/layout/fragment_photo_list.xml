@@ -4,20 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.FragmentPhotoList"
-    android:background="@color/app_bg">
+    android:background="@color/partly_transparent">
 
-    <GridView
+    <in.srain.cube.views.GridViewWithHeaderAndFooter
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/gridOfPhotos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:verticalSpacing="2dp"
-        android:horizontalSpacing="2dp"
         android:columnWidth="180dp"
-        android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        android:paddingRight="5dp"
-        android:paddingBottom="5dp"/>
+        android:background="@color/photo_item_background_color"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp" />
 
     <com.shamanland.fab.FloatingActionButton
         android:id="@+id/add_photo_from"
@@ -32,5 +29,23 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="24dp"
         android:layout_marginRight="16dp" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/gridOfPhotos"
+        android:id="@+id/while_loading_rel_layout"
+        android:background="@color/app_bg"
+        android:visibility="visible">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar2"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
 </RelativeLayout>

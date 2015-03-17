@@ -85,7 +85,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 //
         final String urlOfPhotoPreview = PhotoUrlHelper.getPreviewUrl(photo);
 
-        final String urlOfFullScreenPhoto = PhotoUrlHelper.getFullScreenUrl(photo);
+        final String urlOfFullScreenPhoto = PhotoUrlHelper.getBestQualityUrl(photo.src);
 
         ImageLoader.getInstance().displayImage(urlOfPhotoPreview, imageView, options, new ImageLoadingListener() {
             @Override

@@ -424,6 +424,8 @@ public class VKHelper {
         return photos;
     }
 
+
+
     public static int countOfPhotos;
 
     public static ArrayList<VKApiPhoto> getPhotosByIdFromJSON(JSONObject json) {

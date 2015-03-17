@@ -39,7 +39,7 @@
                 <ListView
                     android:id="@+id/listOfComments"
                     android:layout_width="wrap_content"
-                    android:layout_height="fill_parent"
+                    android:layout_height="wrap_content"
                     android:layout_above="@+id/comment_bar_layout"
                     android:layout_alignParentTop="true"
                     android:background="@color/app_bg"
@@ -55,11 +55,11 @@
 
                 <RelativeLayout
                     android:id="@+id/comment_bar_layout"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="false"
+                    android:layout_alignParentStart="false"
                     android:background="#ff757575"
                     android:visibility="visible">
 
@@ -70,12 +70,12 @@
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
-                        android:layout_alignParentTop="true"
+                        android:layout_alignParentTop="false"
                         android:autoText="false"
                         android:background="#ff757575"
                         android:hint="@string/your_message"
                         android:maxLines="5"
-                        android:minHeight="40dp"
+                        android:minHeight="45dp"
                         android:paddingLeft="15dp"
                         android:paddingRight="2dp"
                         android:phoneNumber="false"
@@ -90,7 +90,10 @@
                         android:layout_marginRight="10dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="5dp" />
+                        android:layout_marginLeft="5dp"
+                        android:maxHeight="105dp"
+                        android:minLines="1"
+                        android:inputType="textMultiLine" />
 
                     <Button
                         android:id="@+id/buttonSendComment"

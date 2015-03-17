@@ -609,7 +609,7 @@ public class ItemDataSetter {
 
             Constants.ALBUM_ID = album.id;
             Constants.TEMP_OWNER_ID = album.owner_id;
-            fragmentManager.beginTransaction().add(R.id.container, FragmentPhotoList.newInstance(1, album.size)).addToBackStack(null).commit();
+            fragmentManager.beginTransaction().add(R.id.container, FragmentPhotoList.newInstance(1, album.size,album.title,album.photo.get(1).src)).addToBackStack(null).commit();
         }
     };
 

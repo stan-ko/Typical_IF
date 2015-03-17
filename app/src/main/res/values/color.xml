@@ -32,5 +32,6 @@
     <color name="fbBlue">#2196F3</color>
     <color name="textFadeOutColor">#beffffff</color>
     <color name="only_white">#ffffff</color>
+    <color name="photo_item_background_color">#ff343434</color>
 
 </resources>

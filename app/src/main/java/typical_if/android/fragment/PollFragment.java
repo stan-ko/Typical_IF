@@ -47,6 +47,7 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
 
     private OnFragmentInteractionListener mListener;
     private VKApiPoll poll;
+    public VotesItemAdapter adapter;
 
     /**
      * The fragment's ListView/GridView.
@@ -153,9 +154,17 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
 
         answers_anonymous_text.setText(isAnonymous + " " + poll.votes);
         view.setVisibility(View.VISIBLE);
-        VotesItemAdapter adapter = new VotesItemAdapter(poll, answers_anonymous_text, answers_anonymous_text_preview,
-                isAnonymous, isAnonymous_preview, change_decision_button);
-        pollList.setAdapter(adapter);
+        if (adapter!=null){
+            if (adapter.poll!=null){
+                pollList.setAdapter(adapter);
+            }
+        }else {
+            adapter = new VotesItemAdapter(poll, answers_anonymous_text, answers_anonymous_text_preview,
+                    isAnonymous, isAnonymous_preview, change_decision_button);
+            pollList.setAdapter(adapter);
+        }
+
+
         pollList.addFooterView(footerView);
         ItemDataSetter.setListViewHeightBasedOnChildren(pollList);
 

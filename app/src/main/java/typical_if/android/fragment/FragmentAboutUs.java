@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -28,9 +30,10 @@ public class FragmentAboutUs extends Fragment{
      */
 
     public static FragmentAboutUs newInstance() {
+
         FragmentAboutUs fragment = new FragmentAboutUs();
         Bundle args = new Bundle();
-
+FragmentWall.setDisabledMenu();
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,13 +44,33 @@ public class FragmentAboutUs extends Fragment{
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        FragmentWall.setDisabledMenu();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         getActivity().getActionBar().show();
     }
 
+
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(null);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(null, inflater);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FragmentWall.setDisabledMenu();
+        setHasOptionsMenu(false);
         View rootView = inflater.inflate(R.layout.fragment_about, container, false);
         setRetainInstance(true);
         getActivity().getActionBar().hide();

@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -33,9 +34,6 @@ import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.VKResponse;
-
-import java.util.Arrays;
-import java.util.LinkedList;
 
 import typical_if.android.AudioPlayer;
 import typical_if.android.AudioPlayerService;
@@ -97,9 +95,15 @@ public class MainActivity extends DialogActivity implements
        }
 
 
+
+
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(R.layout.activity_main);
+
+
+        // ensure that the view is available if we add the fragment
+
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         DrawerLayout drawer = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
@@ -130,7 +134,7 @@ public class MainActivity extends DialogActivity implements
         }
         try {
             if (getIntent().getExtras() != null) {
-                notifClick(mNavigationDrawerFragment, getIntent());
+                onNotificationClick(mNavigationDrawerFragment, getIntent());
             }
         } catch (NullPointerException npe) {
         }
@@ -173,11 +177,45 @@ public class MainActivity extends DialogActivity implements
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        notifClick(mNavigationDrawerFragment, intent);
+    protected void onPause() {
+        super.onPause();
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        boolean isScreenOn = powerManager.isScreenOn();
+
+        if (!isScreenOn) {
+
+
+            if (getIntent().getExtras() != null &&getIntent().getExtras().getBoolean("isClickable")) {
+                onNavigationDrawerItemSelected(5, false);
+            } else
+                onNavigationDrawerItemSelected((int)(long)OfflineMode.loadLong(Constants.VK_GROUP_ID),false);
+
+            // The screen has been locked
+            // do stuff...
+        }
     }
 
-    private void notifClick(NavigationDrawerFragment mNavigationDrawerFragment, Intent notifIntent) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+
+
+    }
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//     if (keyCode=)
+//        return super.onKeyDown(keyCode, event);
+//    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        onNotificationClick(mNavigationDrawerFragment, intent);
+    }
+
+    private void onNotificationClick(NavigationDrawerFragment mNavigationDrawerFragment, Intent notifIntent) {
         if (notifIntent.getExtras().getBoolean("isClickable")) {
             mNavigationDrawerFragment.closeDrawer();
         }
@@ -239,101 +277,11 @@ public class MainActivity extends DialogActivity implements
         }
     }
 
- //   String[] items;
 
-//    ActionBar.OnNavigationListener callback = new ActionBar.OnNavigationListener() {
-//
-//        //  String[] items = getResources().getStringArray(R.array.actions); // List items from res
-//
-//        @Override
-//        public boolean onNavigationItemSelected(int position, long id) {
-//
-//            // Do stuff when navigation item is selected
-//
-//            Log.d("NavigationItemSelected", items[position]); // Debug
-//
-//            switch (position) {
-//                case 0: {
-//                    addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
-//                }
-//                break;
-//                case 1: {
-//                    addFragment(FragmentWall.newInstance(true));
-//                }
-//                break;
-//
-//                case 2: {
-//                    if (Constants.isMember == 0) {
-//                        VKHelper.groupJoin(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
-//                            @Override
-//                            public void onComplete(final VKResponse response) {
-//                                super.onComplete(response);
-//                                Toast.makeText(getApplicationContext(), getString(R.string.group_joined), Toast.LENGTH_SHORT).show();
-//                                replaceFragment(FragmentWall.newInstance(false));
-//                            }
-//
-//                            @Override
-//                            public void onError(final VKError error) {
-//                                super.onError(error);
-//                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-//                            }
-//                        });
-//                    } else {
-//                        VKHelper.groupLeave(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
-//                            @Override
-//                            public void onComplete(final VKResponse response) {
-//                                super.onComplete(response);
-//                                Toast.makeText(getApplicationContext(), getString(R.string.group_leaved), Toast.LENGTH_SHORT).show();
-//                                replaceFragment(FragmentWall.newInstance(false));
-//                            }
-//
-//                            @Override
-//                            public void onError(final VKError error) {
-//                                super.onError(error);
-//                                OfflineMode.onErrorToast(getApplicationContext());
-//                            }
-//                        });
-//                    }
-//                }
-//                break;
-//
-//            }
-//            Toast.makeText(getApplicationContext(), "SelectedItem is: " + getSupportActionBar().getSelectedNavigationIndex(), Toast.LENGTH_SHORT).show();
-//            return false;
-//        }
-//
-//        ;
-//
-//
-//    };
 
     public void restoreActionBar() {
 
 
-   //   Log.d("StackElement = "," "+l.getFirst().toString());
-
-//        final ActionBar actionBar = getSupportActionBar();
-//
-//        actionBar.setIcon(mIcon);
-//
-//        if (Constants.isMember == 0) {
-//            items = getResources().getStringArray(R.array.menu_join_group);
-//
-//        } else {
-//            items = getResources().getStringArray(R.array.menu_leave_group);
-//        }
-//        if (VKSdk.isLoggedIn()) {
-//            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
-//            actionBar.setDisplayShowTitleEnabled(false);
-//            actionBar.setTitle(mTitle);
-//            list = new ActionBarArrayAdapter(getApplicationContext(), items, mTitle);
-//            list.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//
-//
-//
-//
-//
-//            actionBar.setListNavigationCallbacks(list, callback);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setTitle(mTitle);
@@ -344,72 +292,16 @@ public class MainActivity extends DialogActivity implements
 
     }
 
-//            actionBar.setListNavigationCallbacks(list, new ActionBar.OnNavigationListener() {
-//                @Override
-//                public boolean onNavigationItemSelected(int position, long id) {
-//                    getSupportActionBar().setSelectedNavigationItem(position);
 
-//                    switch (getSupportActionBar().getSelectedNavigationIndex()) {
-//                        case 0:
-//                            addFragment(FragmentMakePost.newInstance(Constants.GROUP_ID, 0, 0));
-//                            break;
-//                        case 1:
-//                            addFragment(FragmentWall.newInstance(true));
-//                            break;
-//
-//                        case 2:
-//                            if (Constants.isMember==0){
-//                            VKHelper.groupJoin(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
-//                                @Override
-//                                public void onComplete(final VKResponse response) {
-//                                    super.onComplete(response);
-//                                    Toast.makeText(getApplicationContext(), getString(R.string.group_joined), Toast.LENGTH_SHORT).show();
-//                                     replaceFragment(FragmentWall.newInstance(false));
-//                                }
-//
-//                                @Override
-//                                public void onError(final VKError error) {
-//                                    super.onError(error);
-//                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
-//                                }
-//                            });
-//                    } else {
-//                        VKHelper.groupLeave(Constants.GROUP_ID * (-1), new VKRequest.VKRequestListener() {
-//                            @Override
-//                            public void onComplete(final VKResponse response) {
-//                                super.onComplete(response);
-//                                Toast.makeText(getApplicationContext(), getString(R.string.group_leaved), Toast.LENGTH_SHORT).show();
-//                                  replaceFragment(FragmentWall.newInstance(false));
-//                            }
-//
-//                            @Override
-//                            public void onError(final VKError error) {
-//                                super.onError(error);
-//                                OfflineMode.onErrorToast(getApplicationContext());
-//                            }
-//                        });
-//                    }
-//
-//                            break;
-//
-//                    }
-
-        //   Toast.makeText(getApplicationContext(), "SelectedItem is: " + getSupportActionBar().getSelectedNavigationIndex(), Toast.LENGTH_SHORT).show();
-        //  return true;
-        // }
-        //   });
-//        else {
-//            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//            actionBar.setDisplayShowTitleEnabled(true);
-//        }
- //   }
 
 
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
+           // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         super.onConfigurationChanged(newConfig);
     }
@@ -548,6 +440,8 @@ public class MainActivity extends DialogActivity implements
                 OfflineMode.saveLong(vkGroupId, Constants.VK_GROUP_ID);
                 onSectionAttached(groupPosition);
                 fragment = FragmentWall.newInstance(false);
+
+
 
                 break;
             case 6:

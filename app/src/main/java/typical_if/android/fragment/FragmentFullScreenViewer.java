@@ -89,6 +89,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 //        args.putInt("position", position);
 //        args.putInt("sizeOfAlbum", 0);
         super.onCreate(savedInstanceState);
+        Constants.isFragmentFullScreenLoaded=true;
         if (getArguments() != null) {
             this.photos = (ArrayList<VKApiPhoto>) getArguments().getSerializable("finalPhotos");
             this.currentPosition = getArguments().getInt("position");
@@ -100,6 +101,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final Bundle arguments = getArguments();
+        Constants.isFragmentFullScreenLoaded=true;
         EventBus.getDefault().register(this);
 
         ((MainActivity)getActivity()).getSupportActionBar().hide();
@@ -163,6 +165,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     public void onResume() {
         super.onResume();
         VKUIHelper.onResume(getActivity());
+        Constants.isFragmentFullScreenLoaded=true;
     }
 
     @Override
@@ -170,12 +173,14 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         super.onDestroy();
         VKUIHelper.onDestroy(getActivity());
         EventBus.getDefault().unregister(this);
+        Constants.isFragmentFullScreenLoaded=false;
     }
 
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        Constants.isFragmentFullScreenLoaded=true;
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
@@ -189,6 +194,8 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        Constants.isFragmentFullScreenLoaded=false;
+
 
     }
 
