@@ -32,6 +32,7 @@ import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.event.EventShowContextMenu;
 import typical_if.android.fragment.FragmentMakePost;
+import typical_if.android.fragment.FragmentWithAttach;
 
 
 /**
@@ -45,7 +46,7 @@ public class CommentsListAdapter extends BaseAdapter {
 
     private final LayoutInflater layoutInflater;
     //private final Activity mContext;
-    private final FragmentMakePost mFragment;
+    private final FragmentWithAttach mFragment;
 
     public ViewHolder viewHolder;
     String first_name = "";
@@ -58,7 +59,7 @@ public class CommentsListAdapter extends BaseAdapter {
 
     final static Pattern matPattern = Pattern.compile("\\[(id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]");
 
-    public CommentsListAdapter(FragmentMakePost fragment,
+    public CommentsListAdapter(FragmentWithAttach fragment,
                                ArrayList<VKApiComment> commentList,
                                ArrayList<VKApiUser> profilesList,
                                ArrayList<VKApiCommunity> groupsList,

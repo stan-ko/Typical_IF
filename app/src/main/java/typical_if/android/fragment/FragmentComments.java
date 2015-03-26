@@ -73,7 +73,7 @@ import typical_if.android.util.PhotoUrlHelper;
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 
-public class FragmentComments extends FragmentMakePost {
+public class FragmentComments extends FragmentWithAttach {
 
     public static final String POSTED = "POSTED";
     final int displayHeight = TIFApp.getDisplayHeight();

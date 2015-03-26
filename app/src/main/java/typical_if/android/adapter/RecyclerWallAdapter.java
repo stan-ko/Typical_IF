@@ -43,6 +43,7 @@ import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentMakePost;
+import typical_if.android.fragment.FragmentWithAttach;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 import typical_if.android.util.BitmapCache;
@@ -57,7 +58,7 @@ import static java.lang.String.valueOf;
 public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapter.ViewHolder> {
 
     private final Activity mContext;
-    private final FragmentMakePost mFragment;
+    private final FragmentWithAttach mFragment;
 //    private final BitmapCache mMemoryCache;
     private Wall wall;
     private final ArrayList<VKWallPostWrapper> posts;
@@ -68,7 +69,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
 //    static boolean flag;
     public static int surpriseCounter = 0;
 
-    public RecyclerWallAdapter(final FragmentMakePost fragment,
+    public RecyclerWallAdapter(final FragmentWithAttach fragment,
                                final Wall wall,
                                final LayoutInflater inflater,
                                final FragmentManager fragmentManager,

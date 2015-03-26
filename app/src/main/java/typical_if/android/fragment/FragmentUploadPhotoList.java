@@ -37,7 +37,7 @@ import typical_if.android.model.UploadPhotos;
 /**
  * Created by LJ on 25.07.2014.
  */
-public class FragmentUploadPhotoList extends FragmentMakePost {
+public class FragmentUploadPhotoList extends FragmentWithAttach {
     static String category;
     static String[] uris;
     ArrayList<UploadPhotos> photolist = null;

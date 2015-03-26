@@ -32,7 +32,7 @@ import typical_if.android.adapter.VideoAttachAdapter;
 /**
  * Created by admin on 19.08.2014.
  */
-public class FragmentAttachPostList extends FragmentMakePost {
+public class FragmentAttachPostList extends FragmentWithAttach {
 
     ListView attachList;
     RelativeLayout spinnerLayout;

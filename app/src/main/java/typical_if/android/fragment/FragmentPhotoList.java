@@ -50,7 +50,7 @@ import typical_if.android.adapter.PhotoListAdapter;
 import typical_if.android.util.PhotoUrlHelper;
 
 
-public class FragmentPhotoList extends FragmentMakePost implements AbsListView.OnScrollListener {
+public class FragmentPhotoList extends FragmentWithAttach implements AbsListView.OnScrollListener {
 
     public ArrayList<VKApiPhoto> finalPhotos = new ArrayList<VKApiPhoto>();
     private OnFragmentInteractionListener mListener;

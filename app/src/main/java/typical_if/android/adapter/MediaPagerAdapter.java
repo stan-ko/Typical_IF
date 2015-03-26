@@ -28,6 +28,7 @@ import typical_if.android.R;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.WebViewActivity;
 import typical_if.android.fragment.FragmentMakePost;
+import typical_if.android.fragment.FragmentWithAttach;
 
 /**
  * Created by gigamole on 31.01.15.
@@ -38,7 +39,7 @@ public class MediaPagerAdapter extends PagerAdapter {
     public final ArrayList<VKApiVideo> videos;
     private final Context mContext;
     public final LayoutInflater mLayoutInflater;
-    private final FragmentMakePost mFragment;
+    private final FragmentWithAttach mFragment;
 
     public ArrayList<View> views = new ArrayList<View>();
     public ArrayList<Item> medias = new ArrayList<Item>();
@@ -108,7 +109,7 @@ public class MediaPagerAdapter extends PagerAdapter {
         PHOTO_ITEM, VIDEO_ITEM
     }
 
-    public MediaPagerAdapter(FragmentMakePost fragment, boolean isPost, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
+    public MediaPagerAdapter(FragmentWithAttach fragment, boolean isPost, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
         this.mContext = fragment.getActivity();
         this.mFragment = fragment;
         this.isPost = isPost;

@@ -60,7 +60,7 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
  */
 
 
-public class FragmentWall extends FragmentMakePost {
+public class FragmentWall extends FragmentWithAttach {
 
     static RecyclerView wallListView;
     RecyclerView.Adapter adapter;

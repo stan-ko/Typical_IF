@@ -12,7 +12,6 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.Spannable;
@@ -75,8 +74,8 @@ import typical_if.android.adapter.AudioAdapter;
 import typical_if.android.adapter.MediaPagerAdapter;
 import typical_if.android.adapter.VotesItemAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
-import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentPhotoList;
+import typical_if.android.fragment.FragmentWithAttach;
 import typical_if.android.fragment.PollFragment;
 
 import static java.lang.String.format;
@@ -148,7 +147,7 @@ public class ItemDataSetter {
         Constants.tempPostAttachCounter = counter;
     }
 
-    public static void setAttachemnts(FragmentMakePost fragment,
+    public static void setAttachemnts(FragmentWithAttach fragment,
                                       VKAttachments attachments,
                                       RelativeLayout mediaLayout,
                                       ViewPager mediaPager,
@@ -232,7 +231,7 @@ public class ItemDataSetter {
             linkLayout.setVisibility(View.GONE);
         }
 
-        if (poll != null ) {
+        if (poll != null) {
 
             /////////////////////////////////////////////////////////////////////////////
             setPoll(pollLayout, pollTitle, poll);
@@ -272,27 +271,25 @@ public class ItemDataSetter {
                 fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
             }
         });
-       //
- //  if (Constants.isFragmentCommentsLoaded){
-   //    Log.d("polls_are_loaded","Constants.isFragmentCommentsLoaded= "+Constants.isFragmentCommentsLoaded);
-      //  initVotes (poll,list_of_polls);
-     // }
+        //
+        //  if (Constants.isFragmentCommentsLoaded){
+        //    Log.d("polls_are_loaded","Constants.isFragmentCommentsLoaded= "+Constants.isFragmentCommentsLoaded);
+        //  initVotes (poll,list_of_polls);
+        // }
 
     }
 
-     public static void initVotes (final VKApiPoll poll, final  ListView list_of_polls){
-       //  VotesItemAdapter adapter = new VotesItemAdapter(poll);
-      //   list_of_polls.setAdapter(adapter);
-      //   setListViewHeightBasedOnChildren(list_of_polls);
-
-
+    public static void initVotes(final VKApiPoll poll, final ListView list_of_polls) {
+        //  VotesItemAdapter adapter = new VotesItemAdapter(poll);
+        //   list_of_polls.setAdapter(adapter);
+        //   setListViewHeightBasedOnChildren(list_of_polls);
 
 
     }
 
 
     public static void setListViewHeightBasedOnChildren(ListView listView) {
-        BaseAdapter mAdapter ;
+        BaseAdapter mAdapter;
         if (listView.getAdapter() instanceof VotesItemAdapter) {
             mAdapter = (VotesItemAdapter) listView.getAdapter();
 
@@ -308,7 +305,7 @@ public class ItemDataSetter {
 
             }
             ViewGroup.LayoutParams params = listView.getLayoutParams();
-            params.height = 50+totalHeight + (listView.getDividerHeight() * (mAdapter.getCount() - 1));
+            params.height = 50 + totalHeight + (listView.getDividerHeight() * (mAdapter.getCount() - 1));
             listView.setLayoutParams(params);
             listView.requestLayout();
 
@@ -316,9 +313,6 @@ public class ItemDataSetter {
         }
 
     }
-
-
-
 
 
     static int startTag = 0;
@@ -329,6 +323,19 @@ public class ItemDataSetter {
     static int endSite = 0;
     static int startReply = 0;
     static int endReply = 0;
+
+    private final static String linksPattern = "((?:(http|https|Http|Https|rtsp|Rtsp):" +
+            "\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)" +
+            "\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_" +
+            "\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?" +
+            "((?:(?:[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}\\.)+" +
+            "(?:" + "(?:aero|arpa|asia|a[cdefgilmnoqrstuwxz])" + "|(?:biz|b[abdefghijmnorstvwyz])" +
+            "|(?:cat|com|coop|c[acdfghiklmnoruvxyz])" + "|d[ejkmoz]" + "|(?:edu|e[cegrstu])" + "|f[ijkmor]" +
+            "|(?:gov|g[abdefghilmnpqrstuwy])" + "|h[kmnrtu]" + "|(?:info|int|i[delmnoqrst])" +
+            "|(?:jobs|j[emop])" + "|k[eghimnrwyz]" + "|l[abcikrstuvy]" + "|(?:mil|mobi|museum|m[acdghklmnopqrstuvwxyz])" +
+            "|(?:name|net|n[acefgilopruz])" + "|(?:org|om)" + "|(?:pro|p[aefghklmnrstwy])" + "|qa" + "|r[eouw]" +
+            "|s[abcdeghijklmnortuvyz]" + "|(?:tel|travel|t[cdfghjklmnoprtvwz])" +
+            "|u[agkmsyz]" + "|v[aceginu]" + "|w[fs]" + "|y[etu]" + "|z[amw]))[^\\s]+))";
 
     public static SpannableStringBuilder getParsedText(String text) {
         final Matcher matTags = Pattern.compile("#\\w+").matcher(text);
@@ -355,12 +362,8 @@ public class ItemDataSetter {
             }, startTag, endTag, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
-        final Matcher matLinks = Pattern.compile(
-                "((?:(http|https|Http|Https|rtsp|Rtsp):" +
-                "\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)" +
-                "\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_" +
-                "\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?" + "((?:(?:[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}\\.)+" + "(?:" + "(?:aero|arpa|asia|a[cdefgilmnoqrstuwxz])" + "|(?:biz|b[abdefghijmnorstvwyz])" + "|(?:cat|com|coop|c[acdfghiklmnoruvxyz])" + "|d[ejkmoz]" + "|(?:edu|e[cegrstu])" + "|f[ijkmor]" + "|(?:gov|g[abdefghilmnpqrstuwy])" + "|h[kmnrtu]" + "|(?:info|int|i[delmnoqrst])" + "|(?:jobs|j[emop])" + "|k[eghimnrwyz]" + "|l[abcikrstuvy]" + "|(?:mil|mobi|museum|m[acdghklmnopqrstuvwxyz])" + "|(?:name|net|n[acefgilopruz])" + "|(?:org|om)" + "|(?:pro|p[aefghklmnrstwy])" + "|qa" + "|r[eouw]" + "|s[abcdeghijklmnortuvyz]" + "|(?:tel|travel|t[cdfghjklmnoprtvwz])" + "|u[agkmsyz]" + "|v[aceginu]" + "|w[fs]" + "|y[etu]" + "|z[amw]))[^\\s]+))"
-        ).matcher(text);
+
+        final Matcher matLinks = Pattern.compile(linksPattern).matcher(text);
 
         while (matLinks.find()) {
             startLink = stringB.indexOf(matLinks.group());
@@ -436,7 +439,7 @@ public class ItemDataSetter {
         text.setText(parsedText, TextView.BufferType.SPANNABLE);
         text.setMovementMethod(LinkMovementMethod.getInstance());
 
-        if (!Constants.isFragmentCommentsLoaded&parsedText.length() > 300) {
+        if (!Constants.isFragmentCommentsLoaded & parsedText.length() > 300) {
             showAll.setVisibility(View.VISIBLE);
             showAll.setText(Constants.SHOW_ALL_TEXT);
 
@@ -583,7 +586,7 @@ public class ItemDataSetter {
 
             Constants.ALBUM_ID = album.id;
             Constants.TEMP_OWNER_ID = album.owner_id;
-            fragmentManager.beginTransaction().add(R.id.container, FragmentPhotoList.newInstance(1, album.size,album.title,album.photo.get(1).src)).addToBackStack(null).commit();
+            fragmentManager.beginTransaction().add(R.id.container, FragmentPhotoList.newInstance(1, album.size, album.title, album.photo.get(1).src)).addToBackStack(null).commit();
         }
     };
 
@@ -664,7 +667,7 @@ public class ItemDataSetter {
         }
     }
 
-    public static void setMediaPager(FragmentMakePost fragment, final ViewPager mediaPager, CirclePageIndicator mediaPagerIndicator, ImageButton mediaPagerVideoButton, RelativeLayout mediaLayout, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
+    public static void setMediaPager(FragmentWithAttach fragment, final ViewPager mediaPager, CirclePageIndicator mediaPagerIndicator, ImageButton mediaPagerVideoButton, RelativeLayout mediaLayout, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
         int newWidth = TIFApp.getDisplayWidth();
         final int count = photos.size() + videos.size();
 
@@ -728,6 +731,7 @@ public class ItemDataSetter {
     static int g;
     static ArrayList<VKApiPhoto> finalPhotos;
     final private static Bundle args = new Bundle();
+
     public static void makeSaveTransaction(final ArrayList<VKApiPhoto> photos, final int position) {
 
         if (OfflineMode.isOnline(TIFApp.getAppContext())) {
