@@ -254,13 +254,9 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                                 super.onComplete(response);
 
                                 btnLike.setSelected(true);
-                                if (TextUtils.isEmpty(btnLike.getText())) {
-                                    btnLike.setText(null);
-                                }
-                                btnLike.setText(String.valueOf(Integer.parseInt(btnLike.getText().toString()) + 1));
-                                ++photos.get(position).likes;
+                                final int likesCount = ++photos.get(position).likes;
+                                btnLike.setText(likesCount==0 ? null : String.valueOf(likesCount));
                                 photos.get(position).user_likes = 1;
-
                             }
 
                             @Override
@@ -269,19 +265,17 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
                             }
                         });
-                    } else {
+                    }
+                    else {
                         VKHelper.deleteLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
-                                btnLike.setSelected(false);
-                                btnLike.setText(String.valueOf(Integer.parseInt(btnLike.getText().toString()) - 1));
-                                if ("0".equals(btnLike.getText())) {
-                                    btnLike.setText(null);
-                                }
-                                --photos.get(position).likes;
-                                photos.get(position).user_likes = 0;
 
+                                btnLike.setSelected(false);
+                                final int likesCount = --photos.get(position).likes;
+                                photos.get(position).user_likes = 0;
+                                btnLike.setText(likesCount==0 ? null : String.valueOf(likesCount));
                             }
 
                             @Override
@@ -293,8 +287,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                     }
                 }
                 else if (!VKSdk.isLoggedIn()) {
-                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.you_are_not_logged_in), Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(getActivity().getApplicationContext(), R.string.you_are_not_logged_in, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -306,7 +299,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                     FragmentComments fragment = FragmentComments.newInstanceForPhoto(photos.get(position), Constants.USER_ID);
                     getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 } else if (!VKSdk.isLoggedIn()) {
-                    Toast.makeText(Constants.mainActivity.getApplicationContext(), getString(R.string.you_are_not_logged_in), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Constants.mainActivity.getApplicationContext(), R.string.you_are_not_logged_in, Toast.LENGTH_SHORT).show();
                 }
             }
         });
