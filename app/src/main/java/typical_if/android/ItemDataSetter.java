@@ -354,38 +354,10 @@ public class ItemDataSetter {
         }
 
         final Matcher matLinks = Pattern.compile(
-                new StringBuilder()
-                        .append("((?:(http|https|Http|Https|rtsp|Rtsp):")
-                        .append("\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)")
-                        .append("\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_")
-                        .append("\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?")
-                        .append("((?:(?:[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}\\.)+")   // named host
-                        .append("(?:")   // plus top level domain
-                        .append("(?:aero|arpa|asia|a[cdefgilmnoqrstuwxz])")
-                        .append("|(?:biz|b[abdefghijmnorstvwyz])")
-                        .append("|(?:cat|com|coop|c[acdfghiklmnoruvxyz])")
-                        .append("|d[ejkmoz]")
-                        .append("|(?:edu|e[cegrstu])")
-                        .append("|f[ijkmor]")
-                        .append("|(?:gov|g[abdefghilmnpqrstuwy])")
-                        .append("|h[kmnrtu]")
-                        .append("|(?:info|int|i[delmnoqrst])")
-                        .append("|(?:jobs|j[emop])")
-                        .append("|k[eghimnrwyz]")
-                        .append("|l[abcikrstuvy]")
-                        .append("|(?:mil|mobi|museum|m[acdghklmnopqrstuvwxyz])")
-                        .append("|(?:name|net|n[acefgilopruz])")
-                        .append("|(?:org|om)")
-                        .append("|(?:pro|p[aefghklmnrstwy])")
-                        .append("|qa")
-                        .append("|r[eouw]")
-                        .append("|s[abcdeghijklmnortuvyz]")
-                        .append("|(?:tel|travel|t[cdfghjklmnoprtvwz])")
-                        .append("|u[agkmsyz]")
-                        .append("|v[aceginu]")
-                        .append("|w[fs]")
-                        .append("|y[etu]")
-                        .append("|z[amw]))[^\\s]+))").toString()
+                "((?:(http|https|Http|Https|rtsp|Rtsp):" +
+                "\\/\\/(?:(?:[a-zA-Z0-9\\$\\-\\_\\.\\+\\!\\*\\'\\(\\)" +
+                "\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,64}(?:\\:(?:[a-zA-Z0-9\\$\\-\\_" +
+                "\\.\\+\\!\\*\\'\\(\\)\\,\\;\\?\\&\\=]|(?:\\%[a-fA-F0-9]{2})){1,25})?\\@)?)?" + "((?:(?:[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}\\.)+" + "(?:" + "(?:aero|arpa|asia|a[cdefgilmnoqrstuwxz])" + "|(?:biz|b[abdefghijmnorstvwyz])" + "|(?:cat|com|coop|c[acdfghiklmnoruvxyz])" + "|d[ejkmoz]" + "|(?:edu|e[cegrstu])" + "|f[ijkmor]" + "|(?:gov|g[abdefghilmnpqrstuwy])" + "|h[kmnrtu]" + "|(?:info|int|i[delmnoqrst])" + "|(?:jobs|j[emop])" + "|k[eghimnrwyz]" + "|l[abcikrstuvy]" + "|(?:mil|mobi|museum|m[acdghklmnopqrstuvwxyz])" + "|(?:name|net|n[acefgilopruz])" + "|(?:org|om)" + "|(?:pro|p[aefghklmnrstwy])" + "|qa" + "|r[eouw]" + "|s[abcdeghijklmnortuvyz]" + "|(?:tel|travel|t[cdfghjklmnoprtvwz])" + "|u[agkmsyz]" + "|v[aceginu]" + "|w[fs]" + "|y[etu]" + "|z[amw]))[^\\s]+))"
         ).matcher(text);
 
         while (matLinks.find()) {

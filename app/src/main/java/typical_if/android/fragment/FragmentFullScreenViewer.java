@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -60,16 +61,16 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
     //  TextView countLikes;
     //  TextView countComments;
-    ImageView addLike;
-    ImageView goToComments;
+    View addLike;
+    View goToComments;
     TextView photoHeader;
     //  CheckBox likedOrNotLikedBox;
     TextView counterOfPhotos;
     TextView albumSize;
-    CheckBox cb_like;
-    CheckBox cb_comment;
+    Button cb_like;
+    Button cb_comment;
     public int originalSizeOfAlbum;
-    public static RelativeLayout panel;
+//    public static View panel;
 
 //    public FragmentFullScreenViewer(ArrayList<VKApiPhoto> photos, int currentposition, int sizeOfAlbum) {
 //    this.photos = photos;
@@ -110,15 +111,18 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
 
         rootView = inflater.inflate(R.layout.fragment_fullscreen_list, container, false);
-        addLike = (ImageView) rootView.findViewById(R.id.add_like);
-        goToComments = (ImageView) rootView.findViewById(R.id.go_to_comments);
+        addLike = rootView.findViewById(R.id.add_like);
+        goToComments = rootView.findViewById(R.id.go_to_comments);
         photoHeader = (TextView) rootView.findViewById(R.id.photoHeader);
         photoHeader.setVisibility(View.GONE);
         counterOfPhotos = (TextView) rootView.findViewById(R.id.counterOfPhotos);
         albumSize = (TextView) rootView.findViewById(R.id.amountOfPhotos);
-        panel = ((RelativeLayout) rootView.findViewById(R.id.fullscreen_action_panel));
-        cb_like = ((CheckBox) rootView.findViewById(R.id.cb_photo_like));
-        cb_comment= ((CheckBox) rootView.findViewById(R.id.cb_photo_comment));
+//        panel = rootView.findViewById(R.id.fullscreen_action_panel);
+        //cb_like = ((CheckBox) rootView.findViewById(R.id.cb_photo_like));
+        //cb_comment= ((CheckBox) rootView.findViewById(R.id.cb_photo_comment));
+
+        cb_like = (Button) rootView.findViewById(R.id.add_like);
+        cb_comment= (Button) rootView.findViewById(R.id.go_to_comments);
 
 
         FragmentManager manager = getFragmentManager();
@@ -198,8 +202,6 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         super.onDetach();
         mListener = null;
         Constants.isFragmentFullScreenLoaded=false;
-
-
     }
 
 
@@ -211,12 +213,11 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     public void onPageSelected(final int position) {
 
        if (photos.get(position).likes==0){
-
-            cb_like.setText("");
+            cb_like.setText(null);
         } else  cb_like.setText(String.valueOf(photos.get(position).likes));
 
         if (photos.get(position).comments==0){
-            cb_comment.setText("");
+            cb_comment.setText(null);
         }else
             cb_comment.setText(String.valueOf(photos.get(position).comments));
 
@@ -249,12 +250,14 @@ else
                 OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
             }
         });
-        if (photos.get(position).user_likes == 0) {
-            cb_like.setChecked(false);
-        }
-        else{
-            cb_like.setChecked(true);
-        }
+
+        cb_like.setSelected(photos.get(position).user_likes != 0);
+//        if (photos.get(position).user_likes == 0) {
+//            cb_like.setChecked(false);
+//        }
+//        else{
+//            cb_like.setChecked(true);
+//        }
 
         addLike.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,13 +265,13 @@ else
 
                 if (VKSdk.isLoggedIn()){
 
-                    if (photos.get(position).user_likes == 0 & !cb_like.isChecked()) {
+                    if (photos.get(position).user_likes == 0 & !cb_like.isSelected()) {
                         VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
 
-                                cb_like.setChecked(true);
+                                cb_like.setSelected(true);
                                 if(cb_like.getText().toString()==""){cb_like.setText("0");}
                                 cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) + 1));
                                 ++photos.get(position).likes;
@@ -287,7 +290,7 @@ else
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
-                                cb_like.setChecked(false);
+                                cb_like.setSelected(false);
                                 cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) - 1));
                                 if (cb_like.getText().toString()=="0"){cb_like.setText("");}
                                 --photos.get(position).likes;

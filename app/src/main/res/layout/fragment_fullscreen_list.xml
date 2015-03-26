@@ -27,65 +27,43 @@
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <CheckBox
-                android:id="@+id/cb_photo_like"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:button="@drawable/like_or_not_liked_selector_vk_style"
-                android:text="1714"
-                android:textColor="#ffffffff" />
-
             <Button
                 android:id="@+id/add_like"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_alignEnd="@+id/cb_photo_like"
-                android:layout_alignLeft="@+id/cb_photo_like"
-                android:layout_alignRight="@+id/cb_photo_like"
-                android:layout_alignStart="@+id/cb_photo_like"
-                android:layout_marginLeft="-15dp"
-                android:layout_marginRight="-20dp"
-                android:background="@drawable/action_with_photo_selector" />
-
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/action_with_photo_selector"
+                android:drawableLeft="@drawable/like_or_not_liked_selector_vk_style_btn"
+                android:drawablePadding="4dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="15dp"
+                android:text="1714"
+                android:textColor="@color/white" />
 
         </RelativeLayout>
-
-        <!--<View-->
-        <!--android:id="@+id/strut"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:layout_centerHorizontal="true" />-->
-
 
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
-            <CheckBox
-                android:id="@+id/cb_photo_comment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:button="@drawable/ic_photo_comment"
-                android:text="171"
-                android:textColor="#ffffffff" />
-
             <Button
                 android:id="@+id/go_to_comments"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_alignEnd="@+id/cb_photo_comment"
-                android:layout_alignLeft="@+id/cb_photo_comment"
-                android:layout_alignRight="@+id/cb_photo_comment"
-                android:layout_alignStart="@+id/cb_photo_comment"
-                android:layout_marginLeft="-15dp"
-                android:layout_marginRight="-20dp"
-                android:background="@drawable/action_with_photo_selector" />
-
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/action_with_photo_selector"
+                android:drawableLeft="@drawable/ic_photo_comment"
+                android:drawablePadding="4dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="15dp"
+                android:text="171"
+                android:textColor="@color/white" />
         </RelativeLayout>
-
 
     </LinearLayout>
 
