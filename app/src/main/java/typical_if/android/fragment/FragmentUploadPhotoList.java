@@ -75,10 +75,10 @@ public class FragmentUploadPhotoList extends Fragment {
         int number = getActivity().getWindowManager().getDefaultDisplay().getWidth();
         final int columns = (int) ((float) number / (float) scalefactor);
         photolist = new ArrayList<UploadPhotos>();
-        for (int i = 0; i < uris.length; i++) {
-            String[] temp = uris[i].split("/");
+        for (String uri : uris) {
+            String[] temp = uri.split("/");
             if (temp[temp.length - 2].contains(category)) {
-                photolist.add(new UploadPhotos(uris[i]));
+                photolist.add(new UploadPhotos(uri));
             }
         }
 

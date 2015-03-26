@@ -67,10 +67,10 @@ public class MainActivity extends DialogActivity implements
 
     void showAlertChanges() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle(getString(R.string.title_of_alert_main))
+        builder.setTitle(R.string.title_of_alert_main)
                 .setCancelable(false)
-                .setMessage(getString(R.string.сhanges_of_new_version))
-                .setPositiveButton(getString(R.string.pisitive_button_alert_of_main), new DialogInterface.OnClickListener() {
+                .setMessage(R.string.сhanges_of_new_version)
+                .setPositiveButton(R.string.pisitive_button_alert_of_main, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         builder.setCancelable(true);
                     }
@@ -494,21 +494,9 @@ public class MainActivity extends DialogActivity implements
         if (this.isFinishing()) {
             stopService(new Intent(this, AudioPlayerService.class));
             AudioPlayerService.cancelNotification(this, Constants.notifID);
-            if (Constants.mediaPlayer != null) {
-                Constants.mediaPlayer.stop();
-                Constants.playedPausedRecord.isPaused = true;
-                Constants.playedPausedRecord.isPlayed = false;
-                Constants.previousSeekBarState.setVisibility(View.INVISIBLE);
-                try {
-                    Constants.tempThread.interrupt();
-                } catch (NullPointerException e) {
-                }
-                AudioPlayer.progressBar(Constants.previousSeekBarState).interrupt();
-            }
+            AudioPlayer.stop();
         }
     }
-
-
 
 }
 

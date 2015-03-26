@@ -68,11 +68,11 @@ public class Constants {
     public static boolean isFragmentMakePostLoaded;
     public static boolean isFragmentAlbumListLoaded;
     public static boolean isFragmentFullScreenLoaded;
-   public static int isMember;
+    public static int isMember;
 
 
-    public static final String ACTION_BOOT_COMPLETED="1";
-    public static final String ACTION_START_FROM_SPLASH_ACTIVITY="2";
+    public static final String ACTION_BOOT_COMPLETED = "1";
+    public static final String ACTION_START_FROM_SPLASH_ACTIVITY = "2";
     public static final String ACTION_FIRST_RUN = "3";
 
     public static final String SCHEDULE_FOR_EIGHT_HOUR = "eightHour";
@@ -81,7 +81,6 @@ public class Constants {
 
     public static final String DATE_OF_NOTIF_SEND = "dateOfNotifSend";
     public static final String VK_GROUP_ID = "groupId";
-
 
 
     public static long USER_ID;
@@ -101,7 +100,7 @@ public class Constants {
 
     public static Menu makePostMenu;
 
-    public static Deque<FullScreenImageAdapter> queueOfAdapters=new LinkedList<FullScreenImageAdapter>();
+    public static Deque<FullScreenImageAdapter> queueOfAdapters = new LinkedList<FullScreenImageAdapter>();
 
 
     public static ArrayList<VKApiPhoto> tempPhotoPostAttach = new ArrayList<VKApiPhoto>();
@@ -122,19 +121,15 @@ public class Constants {
     public static NotificationManager notificationManager;
     public static String title = "";
     public static String Mtitle = "";
-    public static String MtitlePoll= "";
+    public static String MtitlePoll = "";
     public static String artist = "";
     public static String tempCameraPhotoFile = "";
-    public static MediaPlayer mediaPlayer = null;
-    public static Thread tempThread = null;
     public static CheckBox previousCheckBoxState = null;
     public static SeekBar previousSeekBarState = null;
-    public static AudioRecords playedPausedRecord = new AudioRecords(null, false, false, false);
 
     public static String tempTextSuggestPost = "";
 
     public static final Resources RESOURCES = TIFApp.getAppContext().getResources();
-
 
     public static final String TIME_FORMAT_STRING = "kk:mm";
     public static final String DATE_TIME_FORMAT_STRING = "d MMMM о kk:mm";
@@ -173,6 +168,6 @@ public class Constants {
 
     public static final int EVENT_COUNT = 3;
 
-    public static JSONObject files ;
+    public static JSONObject files;
 
 }

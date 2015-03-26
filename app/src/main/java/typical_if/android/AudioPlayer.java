@@ -9,11 +9,33 @@ import android.widget.SeekBar;
 
 import java.io.IOException;
 
+import typical_if.android.util.StoppableThread;
+
 
 /**
  * Created by LJ on 12.08.2014.
  */
 public class AudioPlayer {
+
+    static final long PROGRESS_UPDATE_TIME = 1000;
+    static MediaPlayer mediaPlayer;
+    public static StoppableThread tempThread;
+    public static AudioRecords playedPausedRecord = new AudioRecords(null, false, false, false);
+
+    public static void stop(){
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer = null;
+            playedPausedRecord.isPaused = true;
+            playedPausedRecord.isPlayed = false;
+            Constants.previousSeekBarState.setVisibility(View.INVISIBLE);
+            AudioPlayer.progressBar(Constants.previousSeekBarState).interrupt();
+        }
+        if (tempThread!=null) {
+            tempThread.stopThread();
+            tempThread = null;
+        }
+    }
 
     public static void getOwnMediaPlayer(final String stream, final CheckBox play, final SeekBar progress, final String songTitle, final String singer) {
 
@@ -32,17 +54,17 @@ public class AudioPlayer {
                     if (progress != Constants.previousSeekBarState && Constants.previousSeekBarState != null){
                         Constants.previousSeekBarState.setVisibility(View.INVISIBLE);
                     }
-                    if (Constants.playedPausedRecord.audioUrl == null || Constants.playedPausedRecord.audioUrl != stream) {
+                    if (playedPausedRecord.audioUrl == null || playedPausedRecord.audioUrl != stream) {
                         try {
-                            if (Constants.mediaPlayer != null) {
-                                if (Constants.mediaPlayer.isPlaying()) {
-                                    Constants.mediaPlayer.stop();
+                            if (mediaPlayer != null) {
+                                if (mediaPlayer.isPlaying()) {
+                                    mediaPlayer.stop();
                                     //Log.d("PLAYER IS STOPED", "YES");
-                                    Constants.mediaPlayer.release();
+                                    mediaPlayer.release();
                                 }
                             }
-                            Constants.mediaPlayer = new MediaPlayer();
-                            Constants.mediaPlayer.setDataSource(stream);
+                            mediaPlayer = new MediaPlayer();
+                            mediaPlayer.setDataSource(stream);
                             play.setClickable(false);
                             Constants.previousCheckBoxState = play;
                             Constants.previousSeekBarState = progress;
@@ -53,23 +75,23 @@ public class AudioPlayer {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        Constants.mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                        Constants.mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                             @Override
                             public void onPrepared(MediaPlayer mp) {
 
-                                Constants.mediaPlayer.start();
+                                mediaPlayer.start();
                                 play.setClickable(true);
-                                Constants.tempThread = progressBar(progress);
-                                Constants.tempThread.start();
-                                Constants.playedPausedRecord.audioUrl = stream;
-                                Constants.playedPausedRecord.isPlayed = true;
-                                Constants.playedPausedRecord.isPaused = false;
+                                tempThread = progressBar(progress);
+                                tempThread.start();
+                                playedPausedRecord.audioUrl = stream;
+                                playedPausedRecord.isPlayed = true;
+                                playedPausedRecord.isPaused = false;
                                 Constants.mainActivity.stopService(Constants.myIntent);
                                 Constants.mainActivity.startService(Constants.myIntent);
                             }
                         });
-                        Constants.mediaPlayer.prepareAsync();
+                        mediaPlayer.prepareAsync();
 //                        Constants.mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 //                            @Override
 //                            public void onCompletion(MediaPlayer mp) {
@@ -78,18 +100,18 @@ public class AudioPlayer {
 //                        });
 
                     }
-                    else if (Constants.playedPausedRecord.audioUrl == stream && Constants.playedPausedRecord.isPaused == true){
-                        Constants.mediaPlayer.start();
-                        Constants.playedPausedRecord.audioUrl = stream;
-                        Constants.playedPausedRecord.isPlayed = true;
-                        Constants.playedPausedRecord.isPaused = false;
+                    else if (playedPausedRecord.audioUrl == stream && playedPausedRecord.isPaused == true){
+                        mediaPlayer.start();
+                        playedPausedRecord.audioUrl = stream;
+                        playedPausedRecord.isPlayed = true;
+                        playedPausedRecord.isPaused = false;
                         Constants.mainActivity.stopService(Constants.myIntent);
                         Constants.mainActivity.startService(Constants.myIntent);
                     }
                 }
                 else {
-                    Constants.mediaPlayer.pause();
-                    Constants.playedPausedRecord = new AudioRecords(stream, false, true, false);
+                    mediaPlayer.pause();
+                    playedPausedRecord = new AudioRecords(stream, false, true, false);
                     Constants.mainActivity.stopService(Constants.myIntent);
                     Constants.mainActivity.startService(Constants.myIntent);
                     Constants.timerForNotif = System.currentTimeMillis();
@@ -100,59 +122,57 @@ public class AudioPlayer {
     }
 
 
-    public static Thread progressBar(final SeekBar progress){
-        Thread seekTo = new Thread(new Runnable() {
+    public static StoppableThread progressBar(final SeekBar progress){
+        return new StoppableThread(new Runnable() {
             @Override
             public void run() {
                 int currentPosition = 0;
                 try {
-                    int total = Constants.mediaPlayer.getDuration();
+                    int total = mediaPlayer.getDuration();
                     progress.setMax(total);
-                    Constants.playedPausedRecord.totalDuration = total;
+                    playedPausedRecord.totalDuration = total;
                 }
-                catch (IllegalStateException e){
-
-                }
-                while (Constants.mediaPlayer != null) {
+                catch (IllegalStateException e){}
+                while (mediaPlayer != null) {
+                    if (((StoppableThread)Thread.currentThread()).isStopped)
+                        return;
                     try {
-                        Thread.sleep(1000);
-                        currentPosition = Constants.mediaPlayer.getCurrentPosition();
+                        Thread.sleep(PROGRESS_UPDATE_TIME);
+                        currentPosition = mediaPlayer.getCurrentPosition();
                     } catch (InterruptedException e) {
                         return;
                     } catch (Exception e) {
                         return;
                     }
 
-                    if (System.currentTimeMillis() >= (Constants.timerForNotif + 10000) && Constants.playedPausedRecord.isPaused == true){
+                    if (((StoppableThread)Thread.currentThread()).isStopped)
+                        return;
+
+                    if (System.currentTimeMillis() >= (Constants.timerForNotif + 10000) && playedPausedRecord.isPaused){
                         Constants.mainActivity.stopService(Constants.myIntent);
                         AudioPlayerService.cancelNotification(Constants.mainActivity.getApplicationContext(), Constants.notifID);
                         Constants.timerForNotif = 0;
                     }
 
                     progress.setProgress(currentPosition);
-                    Constants.playedPausedRecord.progresBarposition = currentPosition;
+                    playedPausedRecord.progresBarposition = currentPosition;
                     progress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
                         @Override
                         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                             if (fromUser) {
-                                Constants.mediaPlayer.seekTo(progress);
+                                mediaPlayer.seekTo(progress);
                             }
                         }
 
                         @Override
-                        public void onStartTrackingTouch(SeekBar seekBar) {
-
-                        }
+                        public void onStartTrackingTouch(SeekBar seekBar) {}
 
                         @Override
-                        public void onStopTrackingTouch(SeekBar seekBar) {
-
-                        }
+                        public void onStopTrackingTouch(SeekBar seekBar) {}
                     });
                 }
             }
         });
-        return seekTo;
     }
 }

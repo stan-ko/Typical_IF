@@ -58,11 +58,11 @@ public class AlbumUploadAdapter extends BaseAdapter {
 
         int count = 0;
         final ArrayList covers = new ArrayList();
-        for (int i = 0; i < arrPath.length; i++) {
-            String[] temp = arrPath[i].split("/");
+        for (String anArrPath : arrPath) {
+            String[] temp = anArrPath.split("/");
             if (temp[temp.length - 2].equals(titles.get(position))) {
                 count++;
-                covers.add(arrPath[i]);
+                covers.add(anArrPath);
             }
         }
 

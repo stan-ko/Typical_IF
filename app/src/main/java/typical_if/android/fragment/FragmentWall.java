@@ -1,5 +1,6 @@
 package typical_if.android.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -180,6 +181,8 @@ public class FragmentWall extends Fragment {
     FloatingActionButton fabPhoto;
     FloatingActionButton fabSuggest;
     com.shamanland.fab.FloatingActionButton floatingActionButtonBackToTop;
+
+    @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
@@ -200,7 +203,6 @@ public class FragmentWall extends Fragment {
             public void onClick(View v) {
                 wallListView.scrollToPosition(0);
                 actionBar.show();
-
             }
         });
 
@@ -240,7 +242,7 @@ public class FragmentWall extends Fragment {
             @Override
             public void onRefresh() {
                 if (!OfflineMode.isOnline(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_internet_message_toast_en), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.no_internet_message_toast_en, Toast.LENGTH_SHORT).show();
                 }
                 new Handler().postDelayed(new Runnable() {
                     @Override

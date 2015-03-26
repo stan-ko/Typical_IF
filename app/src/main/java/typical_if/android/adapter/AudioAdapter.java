@@ -65,29 +65,29 @@ public class AudioAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPlayed) {
+        if (AudioPlayer.playedPausedRecord.audioUrl != null && AudioPlayer.playedPausedRecord.audioUrl.equals(audio.url) && AudioPlayer.playedPausedRecord.isPlayed) {
             viewHolder.cbAction.setChecked(true);
 
             try {
-                Constants.tempThread.interrupt();
+                AudioPlayer.tempThread.interrupt();
             } catch (NullPointerException e) {
             }
 
             AudioPlayer.progressBar(viewHolder.progress).start();
-            Constants.tempThread = AudioPlayer.progressBar(viewHolder.progress);
+            AudioPlayer.tempThread = AudioPlayer.progressBar(viewHolder.progress);
             Constants.previousCheckBoxState = viewHolder.cbAction;
             Constants.previousSeekBarState = viewHolder.progress;
             viewHolder.progress.setVisibility(View.VISIBLE);
         }
-        if (Constants.playedPausedRecord.audioUrl != null && Constants.playedPausedRecord.audioUrl.equals(audio.url) && Constants.playedPausedRecord.isPaused) {
+        if (AudioPlayer.playedPausedRecord.audioUrl != null && AudioPlayer.playedPausedRecord.audioUrl.equals(audio.url) && AudioPlayer.playedPausedRecord.isPaused) {
 
             AudioPlayer.progressBar(viewHolder.progress).start();
             try {
-                Constants.tempThread.interrupt();
+                AudioPlayer.tempThread.interrupt();
             } catch (NullPointerException e) {
             }
             viewHolder.progress.setVisibility(View.VISIBLE);
-            Constants.tempThread = AudioPlayer.progressBar(viewHolder.progress);
+            AudioPlayer.tempThread = AudioPlayer.progressBar(viewHolder.progress);
         }
 
 

@@ -32,11 +32,11 @@ public class AudioPlayerService extends Service {
         super.onCreate();
 
         contentView = new RemoteViews(getPackageName(), R.layout.custom_notif);
-        if (Constants.playedPausedRecord.isPlayed == true && Constants.playedPausedRecord.isPaused == false){
+        if (AudioPlayer.playedPausedRecord.isPlayed && !AudioPlayer.playedPausedRecord.isPaused){
             contentView.setImageViewResource(R.id.notification_image, R.drawable.ic_notif_pause);
             pendingIntent = PendingIntent.getService(Constants.mainActivity.getApplicationContext(), 0, new Intent(pauseMusic), PendingIntent.FLAG_UPDATE_CURRENT);
         }
-        else if (Constants.playedPausedRecord.isPaused == true && Constants.playedPausedRecord.isPlayed == false){
+        else if (AudioPlayer.playedPausedRecord.isPaused && !AudioPlayer.playedPausedRecord.isPlayed){
             contentView.setImageViewResource(R.id.notification_image, R.drawable.ic_notif_play);
             pendingIntent = PendingIntent.getService(Constants.mainActivity.getApplicationContext(), 0, new Intent(playMusic), PendingIntent.FLAG_UPDATE_CURRENT);
         }
@@ -50,8 +50,6 @@ public class AudioPlayerService extends Service {
     }
 
 
-
-
     @Override
     public int onStartCommand(final Intent intent, final int flags, final int startId) {
         Constants.notificationManager.notify(Constants.notifID, notification);
@@ -59,9 +57,9 @@ public class AudioPlayerService extends Service {
             String action = intent.getAction();
             if (!TextUtils.isEmpty(action)) {
                 if (action.equals("com.action.PAUSE")) {
-                    Constants.mediaPlayer.pause();
-                    Constants.playedPausedRecord.isPlayed = false;
-                    Constants.playedPausedRecord.isPaused = true;
+                    AudioPlayer.mediaPlayer.pause();
+                    AudioPlayer.playedPausedRecord.isPlayed = false;
+                    AudioPlayer.playedPausedRecord.isPaused = true;
                     //FragmentWall.refresh();
                     Constants.previousCheckBoxState.setChecked(false);
                     contentView.setImageViewResource(R.id.notification_image, R.drawable.ic_notif_play);
@@ -70,9 +68,9 @@ public class AudioPlayerService extends Service {
                     Constants.notificationManager.notify(Constants.notifID, notification);
                 }
                 else if (action.equals("com.action.PLAY")) {
-                    Constants.mediaPlayer.start();
-                    Constants.playedPausedRecord.isPlayed = true;
-                    Constants.playedPausedRecord.isPaused = false;
+                    AudioPlayer.mediaPlayer.start();
+                    AudioPlayer.playedPausedRecord.isPlayed = true;
+                    AudioPlayer.playedPausedRecord.isPaused = false;
                     //FragmentWall.refresh();
                     Constants.previousCheckBoxState.setChecked(true);
                     contentView.setImageViewResource(R.id.notification_image, R.drawable.ic_notif_pause);
@@ -80,8 +78,6 @@ public class AudioPlayerService extends Service {
                     onCreate();
                     Constants.notificationManager.notify(Constants.notifID, notification);
                 }
-
-
             }
         }
         return super.onStartCommand(intent, flags, startId);
