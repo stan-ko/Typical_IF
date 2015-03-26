@@ -1,21 +1,19 @@
 package typical_if.android.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nirhart.parallaxscroll.views.ParallaxListView;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
@@ -40,35 +38,34 @@ import typical_if.android.event.EventReturnNeedAdapter;
 
 public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPager.OnPageChangeListener {
 
-
-    public static final String LIKED = "LIKED: ";
-    public static final String LIKE_DELETED = "LIKE DELETED";
+    //    public static final String LIKED = "LIKED: ";
+//    public static final String LIKE_DELETED = "LIKE DELETED";
     private FragmentFullScreenViewer.OnFragmentInteractionListener mListener;
-    public  ArrayList<VKApiPhoto> photos;
-    private ExtendedViewPager imagepager;
+    public ArrayList<VKApiPhoto> photos;
+    private ExtendedViewPager imagePager;
     public int currentPosition;
     public FullScreenImageAdapter adapter;
 
-    public static final String ARG_VK_GROUP_ID = "vk_group_id";
-    public static final String ARG_VK_ALBUM_ID = "vk_album_id";
+//    public static final String ARG_VK_GROUP_ID = "vk_group_id";
+//    public static final String ARG_VK_ALBUM_ID = "vk_album_id";
 
     public static final String ARG_VK_USER_ID = "user_id";
     public static final String TYPE = "photo";
     public static Bundle args;
-    public View rootView;
+    //public View rootView;
 
     long user_id;
 
     //  TextView countLikes;
     //  TextView countComments;
-    View addLike;
-    View goToComments;
+//    View addLike;
+//    View goToComments;
     TextView photoHeader;
     //  CheckBox likedOrNotLikedBox;
     TextView counterOfPhotos;
     TextView albumSize;
-    Button cb_like;
-    Button cb_comment;
+    Button btnLike;
+    Button btnComment;
     public int originalSizeOfAlbum;
 //    public static View panel;
 
@@ -79,19 +76,16 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 //     setArguments(new Bundle());
 //    }
 
-
-
-
-    public FragmentFullScreenViewer(){
-
+    public FragmentFullScreenViewer() {
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 //        args.putSerializable("finalPhotos", photos);
 //        args.putInt("position", position);
 //        args.putInt("sizeOfAlbum", 0);
         super.onCreate(savedInstanceState);
-        Constants.isFragmentFullScreenLoaded=true;
+        Constants.isFragmentFullScreenLoaded = true;
         if (getArguments() != null) {
             this.photos = (ArrayList<VKApiPhoto>) getArguments().getSerializable("finalPhotos");
             this.currentPosition = getArguments().getInt("position");
@@ -103,43 +97,39 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final Bundle arguments = getArguments();
-        Constants.isFragmentFullScreenLoaded=true;
+        Constants.isFragmentFullScreenLoaded = true;
         EventBus.getDefault().register(this);
 
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        ((MainActivity) getActivity()).getSupportActionBar().hide();
         FragmentWall.setDisabledMenu();
 
-
-        rootView = inflater.inflate(R.layout.fragment_fullscreen_list, container, false);
-        addLike = rootView.findViewById(R.id.add_like);
-        goToComments = rootView.findViewById(R.id.go_to_comments);
+        final View rootView = inflater.inflate(R.layout.fragment_fullscreen_list, container, false);
+//        addLike = rootView.findViewById(R.id.add_like);
+//        goToComments = rootView.findViewById(R.id.go_to_comments);
         photoHeader = (TextView) rootView.findViewById(R.id.photoHeader);
         photoHeader.setVisibility(View.GONE);
         counterOfPhotos = (TextView) rootView.findViewById(R.id.counterOfPhotos);
         albumSize = (TextView) rootView.findViewById(R.id.amountOfPhotos);
 //        panel = rootView.findViewById(R.id.fullscreen_action_panel);
-        //cb_like = ((CheckBox) rootView.findViewById(R.id.cb_photo_like));
-        //cb_comment= ((CheckBox) rootView.findViewById(R.id.cb_photo_comment));
+        //btnLike = ((CheckBox) rootView.findViewById(R.id.cb_photo_like));
+        //btnComment= ((CheckBox) rootView.findViewById(R.id.cb_photo_comment));
 
-        cb_like = (Button) rootView.findViewById(R.id.add_like);
-        cb_comment= (Button) rootView.findViewById(R.id.go_to_comments);
+        btnLike = (Button) rootView.findViewById(R.id.add_like);
+        btnComment = (Button) rootView.findViewById(R.id.go_to_comments);
 
 
         FragmentManager manager = getFragmentManager();
-        imagepager = (ExtendedViewPager) rootView.findViewById(R.id.pager);
-        imagepager.setOnPageChangeListener(this);
+        imagePager = (ExtendedViewPager) rootView.findViewById(R.id.pager);
+        imagePager.setOnPageChangeListener(this);
         onPageSelected(0);
 
-        adapter = new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments,  OfflineMode.loadLong(Constants.VK_GROUP_ID),
+        adapter = new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, OfflineMode.loadLong(Constants.VK_GROUP_ID),
                 Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
 
-
-
-
-            adapter.notifyDataSetChanged();
-            imagepager.setAdapter(adapter);
-            imagepager.setCurrentItem(currentPosition);
-            adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
+        imagePager.setAdapter(adapter);
+        imagePager.setCurrentItem(currentPosition);
+        adapter.notifyDataSetChanged();
 
         VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
             @Override
@@ -152,6 +142,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                 arguments.putLong(ARG_VK_USER_ID, user_id);
 
             }
+
             @Override
             public void onError(final VKError error) {
                 super.onError(error);
@@ -159,20 +150,16 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             }
         });
 
-
-
         setRetainInstance(true);
         Constants.queueOfAdapters.add(adapter);
         return rootView;
-
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
         VKUIHelper.onResume(getActivity());
-        Constants.isFragmentFullScreenLoaded=true;
+        Constants.isFragmentFullScreenLoaded = true;
     }
 
     @Override
@@ -180,55 +167,52 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         super.onDestroy();
         VKUIHelper.onDestroy(getActivity());
         EventBus.getDefault().unregister(this);
-        Constants.isFragmentFullScreenLoaded=false;
+        Constants.isFragmentFullScreenLoaded = false;
     }
 
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Constants.isFragmentFullScreenLoaded=true;
+        Constants.isFragmentFullScreenLoaded = true;
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException(activity.toString() + " must implement OnFragmentInteractionListener");
         }
-
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-        Constants.isFragmentFullScreenLoaded=false;
+        Constants.isFragmentFullScreenLoaded = false;
     }
 
 
-
-
     @Override
-    public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) { }
+    public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) {
+    }
+
     @Override
     public void onPageSelected(final int position) {
 
-       if (photos.get(position).likes==0){
-            cb_like.setText(null);
-        } else  cb_like.setText(String.valueOf(photos.get(position).likes));
+        if (photos.get(position).likes == 0) {
+            btnLike.setText(null);
+        } else btnLike.setText(String.valueOf(photos.get(position).likes));
 
-        if (photos.get(position).comments==0){
-            cb_comment.setText(null);
-        }else
-            cb_comment.setText(String.valueOf(photos.get(position).comments));
+        if (photos.get(position).comments == 0) {
+            btnComment.setText(null);
+        } else
+            btnComment.setText(String.valueOf(photos.get(position).comments));
 
-      counterOfPhotos.setText(String.valueOf(position + 1));
+        counterOfPhotos.setText(String.valueOf(position + 1));
 
-           // albumSize.setText(String.valueOf(Constants.COUNT_OF_PHOTOS));
-        if (originalSizeOfAlbum==0){
+        // albumSize.setText(String.valueOf(Constants.COUNT_OF_PHOTOS));
+        if (originalSizeOfAlbum == 0) {
             albumSize.setText(String.valueOf(photos.size()));
-        }
-else
-        albumSize.setText(String.valueOf(originalSizeOfAlbum));
+        } else
+            albumSize.setText(String.valueOf(originalSizeOfAlbum));
 
 
         VKHelper.isLiked("photo", OfflineMode.loadLong(Constants.VK_GROUP_ID), photos.get(position).id, new VKRequest.VKRequestListener() {
@@ -237,13 +221,11 @@ else
                 super.onComplete(response);
                 try {
                     JSONObject j = response.json.optJSONObject("response");
-                    photos.get(position).user_likes = j.optInt("liked");;
-                }catch (NullPointerException ex){
-
-
-                }
+                    photos.get(position).user_likes = j.optInt("liked");
+                } catch (NullPointerException e) {}
 
             }
+
             @Override
             public void onError(final VKError error) {
                 super.onError(error);
@@ -251,29 +233,31 @@ else
             }
         });
 
-        cb_like.setSelected(photos.get(position).user_likes != 0);
+        btnLike.setSelected(photos.get(position).user_likes > 0);
 //        if (photos.get(position).user_likes == 0) {
-//            cb_like.setChecked(false);
+//            btnLike.setChecked(false);
 //        }
 //        else{
-//            cb_like.setChecked(true);
+//            btnLike.setChecked(true);
 //        }
 
-        addLike.setOnClickListener(new View.OnClickListener() {
+        btnLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (VKSdk.isLoggedIn()){
+                if (VKSdk.isLoggedIn()) {
 
-                    if (photos.get(position).user_likes == 0 & !cb_like.isSelected()) {
+                    if (photos.get(position).user_likes == 0 & !btnLike.isSelected()) {
                         VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
 
-                                cb_like.setSelected(true);
-                                if(cb_like.getText().toString()==""){cb_like.setText("0");}
-                                cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) + 1));
+                                btnLike.setSelected(true);
+                                if (TextUtils.isEmpty(btnLike.getText())) {
+                                    btnLike.setText(null);
+                                }
+                                btnLike.setText(String.valueOf(Integer.parseInt(btnLike.getText().toString()) + 1));
                                 ++photos.get(position).likes;
                                 photos.get(position).user_likes = 1;
 
@@ -290,9 +274,11 @@ else
                             @Override
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
-                                cb_like.setSelected(false);
-                                cb_like.setText(String.valueOf(Integer.parseInt(cb_like.getText().toString()) - 1));
-                                if (cb_like.getText().toString()=="0"){cb_like.setText("");}
+                                btnLike.setSelected(false);
+                                btnLike.setText(String.valueOf(Integer.parseInt(btnLike.getText().toString()) - 1));
+                                if ("0".equals(btnLike.getText())) {
+                                    btnLike.setText(null);
+                                }
                                 --photos.get(position).likes;
                                 photos.get(position).user_likes = 0;
 
@@ -305,41 +291,31 @@ else
                             }
                         });
                     }
-
-                }else if (!VKSdk.isLoggedIn()){
-                 Toast.makeText(getActivity().getApplicationContext(),getString(R.string.you_are_not_logged_in),Toast.LENGTH_SHORT).show();
+                }
+                else if (!VKSdk.isLoggedIn()) {
+                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.you_are_not_logged_in), Toast.LENGTH_SHORT).show();
 
                 }
-
             }
         });
 
-        goToComments.setOnClickListener(new View.OnClickListener() {
+        btnComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (VKSdk.isLoggedIn()){
-                    FragmentComments fragment = FragmentComments.newInstanceForPhoto(
-
-                            photos.get(position), Constants.USER_ID);
+                if (VKSdk.isLoggedIn()) {
+                    FragmentComments fragment = FragmentComments.newInstanceForPhoto(photos.get(position), Constants.USER_ID);
                     getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-
-                }else if (!VKSdk.isLoggedIn()){
-                    Toast.makeText(Constants.mainActivity.getApplicationContext(),getString(R.string.you_are_not_logged_in), Toast.LENGTH_SHORT).show();
+                } else if (!VKSdk.isLoggedIn()) {
+                    Toast.makeText(Constants.mainActivity.getApplicationContext(), getString(R.string.you_are_not_logged_in), Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
-
-
     }
 
 
     @Override
-    public void onPageScrollStateChanged(int state ) {
-
+    public void onPageScrollStateChanged(int state) {
         //Log.d("stateOnPageScrollStateChanged^---------------------------------------------------------------->" + "   ", state + "");
-
     }
 
     public interface OnFragmentInteractionListener {
@@ -347,13 +323,13 @@ else
         public void onFragmentInteraction(Uri uri);
     }
 
+    @SuppressWarnings("unused") // used via EventBus but is Lint undetectable
     public void onEventMainThread(EventReturnNeedAdapter event) {
         adapter = event.adapter;
         adapter.notifyDataSetChanged();
-        imagepager.setAdapter(adapter);
-        imagepager.setCurrentItem(currentPosition);
+        imagePager.setAdapter(adapter);
+        imagePager.setCurrentItem(currentPosition);
         adapter.notifyDataSetChanged();
-
     }
 
 }
