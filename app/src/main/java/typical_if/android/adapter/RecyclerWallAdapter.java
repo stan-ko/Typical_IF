@@ -56,7 +56,8 @@ import static java.lang.String.valueOf;
  */
 public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapter.ViewHolder> {
 
-    private final Context mContext;
+    private final Activity mContext;
+    private final FragmentMakePost mFragment;
 //    private final BitmapCache mMemoryCache;
     private Wall wall;
     private final ArrayList<VKWallPostWrapper> posts;
@@ -67,14 +68,15 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
 //    static boolean flag;
     public static int surpriseCounter = 0;
 
-    public RecyclerWallAdapter(final Activity activity,
+    public RecyclerWallAdapter(final FragmentMakePost fragment,
                                final Wall wall,
                                final LayoutInflater inflater,
                                final FragmentManager fragmentManager,
                                final boolean isSuggested) {
         this.wall = wall;
         this.layoutInflater = inflater;
-        this.mContext = activity;
+        this.mFragment = fragment;
+        this.mContext = fragment.getActivity();
         this.fragmentManager = fragmentManager;
         this.posts = wall.posts;
 //        RecyclerWallAdapter.isSuggested = isSuggested;
@@ -180,6 +182,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
             viewHolder.copyHistoryAttachmentsLayout.setVisibility(postWrapper.copyHistoryAttachmentsContainerVisibility);
             if (postWrapper.copyHistoryAttachmentsChecker) {
                 ItemDataSetter.setAttachemnts(
+                        mFragment,
                         copyHistory.attachments,
                         viewHolder.copyHistoryMediaLayout,
                         viewHolder.copyHistoryMediaPager,
@@ -208,6 +211,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
         viewHolder.postMediaLayout.setVisibility(View.VISIBLE);
         if (postWrapper.postAttachmentsChecker) {
             ItemDataSetter.setAttachemnts(
+                    mFragment,
                     post.attachments,
                     viewHolder.postMediaLayout,
                     viewHolder.postMediaPager,

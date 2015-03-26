@@ -12,6 +12,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.Spannable;
@@ -25,7 +26,6 @@ import android.text.style.ForegroundColorSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +75,7 @@ import typical_if.android.adapter.AudioAdapter;
 import typical_if.android.adapter.MediaPagerAdapter;
 import typical_if.android.adapter.VotesItemAdapter;
 import typical_if.android.fragment.FragmentFullScreenViewer;
+import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentPhotoList;
 import typical_if.android.fragment.PollFragment;
 
@@ -147,7 +148,8 @@ public class ItemDataSetter {
         Constants.tempPostAttachCounter = counter;
     }
 
-    public static void setAttachemnts(VKAttachments attachments,
+    public static void setAttachemnts(FragmentMakePost fragment,
+                                      VKAttachments attachments,
                                       RelativeLayout mediaLayout,
                                       ViewPager mediaPager,
                                       CirclePageIndicator mediaPagerIndicator,
@@ -195,7 +197,7 @@ public class ItemDataSetter {
 
         if (photos.size() != 0 || videos.size() != 0) {
             mediaLayout.setTag(true);
-            setMediaPager(mediaPager, mediaPagerIndicator, mediaPagerVideoButton, mediaLayout, photos, videos);
+            setMediaPager(fragment, mediaPager, mediaPagerIndicator, mediaPagerVideoButton, mediaLayout, photos, videos);
         } else {
             mediaLayout.setVisibility(View.GONE);
         }
@@ -662,7 +664,7 @@ public class ItemDataSetter {
         }
     }
 
-    public static void setMediaPager(final ViewPager mediaPager, CirclePageIndicator mediaPagerIndicator, ImageButton mediaPagerVideoButton, RelativeLayout mediaLayout, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
+    public static void setMediaPager(FragmentMakePost fragment, final ViewPager mediaPager, CirclePageIndicator mediaPagerIndicator, ImageButton mediaPagerVideoButton, RelativeLayout mediaLayout, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
         int newWidth = TIFApp.getDisplayWidth();
         final int count = photos.size() + videos.size();
 
@@ -687,7 +689,7 @@ public class ItemDataSetter {
 
         mediaPager.setLayoutParams(params);
 
-        MediaPagerAdapter mediaPagerAdapter = new MediaPagerAdapter(context, (Boolean) mediaLayout.getTag(), photos, videos);
+        MediaPagerAdapter mediaPagerAdapter = new MediaPagerAdapter(fragment, (Boolean) mediaLayout.getTag(), photos, videos);
 
         mediaPager.setOffscreenPageLimit(count);
         mediaPager.setAdapter(mediaPagerAdapter);

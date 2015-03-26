@@ -277,7 +277,7 @@ public class FragmentMakePost extends Fragment {
         return rootView;
     }
 
-    private static String getAttachesForPost() {
+    private String getAttachesForPost() {
         StringBuilder attachments = new StringBuilder("");
         if (Constants.tempPostAttachCounter != 0) {
             VKApiPhoto photo;
@@ -306,7 +306,7 @@ public class FragmentMakePost extends Fragment {
         return attachments.toString();
     };
 
-    public static void setAttachmentsOnEdit() {
+    public void setAttachmentsOnEdit() {
         if (Constants.tempPhotoPostAttach.size() != 0) {
             refreshMakePostFragment(0);
         }
@@ -324,7 +324,7 @@ public class FragmentMakePost extends Fragment {
         textField.setText(Constants.tempTextSuggestPost);
     }
 
-    public static void refreshMakePostFragment(int which) {
+    public void refreshMakePostFragment(int which) {
         if (Constants.tempPostAttachCounter >= 1 || textField.getText().length() != 0) {
             btSendPost.setVisibility(View.VISIBLE);
         } else {
@@ -374,7 +374,7 @@ public class FragmentMakePost extends Fragment {
         }
     }
 
-    public static void deleteAttaches(int which, Object object) {
+    public void deleteAttaches(int which, Object object) {
         switch (which) {
             case 0:
                 Constants.tempPhotoPostAttach.remove(object);
@@ -395,7 +395,7 @@ public class FragmentMakePost extends Fragment {
         refreshMakePostFragment(which);
     }
 
-    public static void setAudios(LinearLayout parent, final ArrayList<VKApiAudio> audios) {
+    public void setAudios(LinearLayout parent, final ArrayList<VKApiAudio> audios) {
         ViewGroup tempAudioContainer;
         parent.removeAllViews();
         parent.setVisibility(View.VISIBLE);
@@ -419,7 +419,7 @@ public class FragmentMakePost extends Fragment {
         }
     }
 
-    public static void setDocs(LinearLayout parent, final ArrayList<VKApiDocument> docs) {
+    public void setDocs(LinearLayout parent, final ArrayList<VKApiDocument> docs) {
         ViewGroup tempDocumentContainer;
         parent.removeAllViews();
         parent.setVisibility(View.VISIBLE);
@@ -466,7 +466,7 @@ public class FragmentMakePost extends Fragment {
         }
     }
 
-    public static void setMedia(
+    public void setMedia(
             final ViewPager mediaPager,
             CirclePageIndicator mediaPagerIndicator,
             ImageButton mediaPagerVideoButton,
@@ -477,6 +477,7 @@ public class FragmentMakePost extends Fragment {
         mediaLayout.setTag(false);
 
         ItemDataSetter.setMediaPager(
+                this,
                 mediaPager,
                 mediaPagerIndicator,
                 mediaPagerVideoButton,

@@ -37,7 +37,7 @@ import typical_if.android.model.UploadPhotos;
 /**
  * Created by LJ on 25.07.2014.
  */
-public class FragmentUploadPhotoList extends Fragment {
+public class FragmentUploadPhotoList extends FragmentMakePost {
     static String category;
     static String[] uris;
     ArrayList<UploadPhotos> photolist = null;
@@ -213,7 +213,7 @@ public class FragmentUploadPhotoList extends Fragment {
             getActivity().getSupportFragmentManager().popBackStack();
             getActivity().getSupportFragmentManager().popBackStack();
             Constants.tempPostAttachCounter += Constants.tempCurrentPhotoAttachCounter;
-            FragmentMakePost.refreshMakePostFragment(0);
+            refreshMakePostFragment(0);
         }
     }
 

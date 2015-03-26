@@ -73,7 +73,7 @@ import typical_if.android.util.PhotoUrlHelper;
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 
-public class FragmentComments extends Fragment {
+public class FragmentComments extends FragmentMakePost {
 
     public static final String POSTED = "POSTED";
     final int displayHeight = TIFApp.getDisplayHeight();
@@ -320,7 +320,7 @@ public class FragmentComments extends Fragment {
 
         viewHolder = new RecyclerWallAdapter.ViewHolder(wallItem);
 
-        final RecyclerWallAdapter adapter = new RecyclerWallAdapter(getActivity(), wall, inflater, getFragmentManager(), true);
+        final RecyclerWallAdapter adapter = new RecyclerWallAdapter(this, wall, inflater, getFragmentManager(), true);
         adapter.initViewHolder(viewHolder, position, post, true);
 
         viewHolder.postRootLayout.setCardElevation(0);
@@ -737,7 +737,7 @@ public class FragmentComments extends Fragment {
                 @Override
                 public void run() {
                     if (adapter == null) {
-                        adapter = new CommentsListAdapter(comments, profiles, groups, inflater, listOfComments);
+                        adapter = new CommentsListAdapter(FragmentComments.this, comments, profiles, groups, inflater, listOfComments);
                         listOfComments.setAdapter(adapter);
                     } else {
                         adapter.UpdateCommentList(comments, profiles, groups, listOfComments, scrollToBottom, listOfComments);

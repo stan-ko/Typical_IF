@@ -32,7 +32,7 @@ import typical_if.android.adapter.VideoAttachAdapter;
 /**
  * Created by admin on 19.08.2014.
  */
-public class FragmentAttachPostList extends Fragment {
+public class FragmentAttachPostList extends FragmentMakePost {
 
     ListView attachList;
     RelativeLayout spinnerLayout;
@@ -81,7 +81,7 @@ public class FragmentAttachPostList extends Fragment {
                                 getActivity().getSupportFragmentManager().popBackStack();
                                 Constants.tempPostAttachCounter++;
                                 Constants.tempAudioPostAttach.add(audios.get(position));
-                                FragmentMakePost.refreshMakePostFragment(2);
+                                refreshMakePostFragment(2);
                             }
                         });
 
@@ -111,7 +111,7 @@ public class FragmentAttachPostList extends Fragment {
                                 getActivity().getSupportFragmentManager().popBackStack();
                                 Constants.tempPostAttachCounter++;
                                 Constants.tempVideoPostAttach.add(videos.get(position));
-                                FragmentMakePost.refreshMakePostFragment(1);
+                                refreshMakePostFragment(1);
                             }
                         });
 
@@ -140,7 +140,7 @@ public class FragmentAttachPostList extends Fragment {
                                 getActivity().getSupportFragmentManager().popBackStack();
                                 Constants.tempPostAttachCounter++;
                                 Constants.tempDocPostAttach.add(docs.get(position));
-                                FragmentMakePost.refreshMakePostFragment(3);
+                                refreshMakePostFragment(3);
                             }
                         });
 

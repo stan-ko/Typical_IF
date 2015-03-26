@@ -1,6 +1,7 @@
 package typical_if.android.adapter;
 
 
+import android.app.Activity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,7 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.event.EventShowContextMenu;
+import typical_if.android.fragment.FragmentMakePost;
 
 
 /**
@@ -42,6 +44,8 @@ public class CommentsListAdapter extends BaseAdapter {
     final ArrayList<VKApiCommunity> groupsList;
 
     private final LayoutInflater layoutInflater;
+    //private final Activity mContext;
+    private final FragmentMakePost mFragment;
 
     public ViewHolder viewHolder;
     String first_name = "";
@@ -54,9 +58,14 @@ public class CommentsListAdapter extends BaseAdapter {
 
     final static Pattern matPattern = Pattern.compile("\\[(id)\\d+\\|[a-zA-ZА-Яа-яєЄіІїЇюЮйЙ 0-9(\\W)]+?\\]");
 
-    public CommentsListAdapter(ArrayList<VKApiComment> commentList, ArrayList<VKApiUser> profilesList,
-                               ArrayList<VKApiCommunity> groupsList, LayoutInflater inflater,
+    public CommentsListAdapter(FragmentMakePost fragment,
+                               ArrayList<VKApiComment> commentList,
+                               ArrayList<VKApiUser> profilesList,
+                               ArrayList<VKApiCommunity> groupsList,
+                               LayoutInflater inflater,
                                ListView list) {
+        this.mFragment = fragment;
+//        this.mContext = fragment.getActivity();
         this.commentList = commentList;
         this.profilesList = profilesList;
         this.groupsList = groupsList;
@@ -193,7 +202,6 @@ public class CommentsListAdapter extends BaseAdapter {
         if (s.contains("2014,")) {
             viewHolder.date_of_user_comment.setText(String.valueOf(s.replace(" 2014,", "")));
         } else {
-
             viewHolder.date_of_user_comment.setText(String.valueOf(ItemDataSetter.getFormattedDate(comment.date)));
         }
 
@@ -203,6 +211,7 @@ public class CommentsListAdapter extends BaseAdapter {
             viewHolder.commentAttachmentsLayout.setVisibility(View.VISIBLE);
 
             ItemDataSetter.setAttachemnts(
+                    mFragment,
                     comment.attachments,
                     viewHolder.commentMediaLayout,
                     viewHolder.commentMediaPager,

@@ -3,6 +3,7 @@ package typical_if.android.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,6 +38,7 @@ public class MediaPagerAdapter extends PagerAdapter {
     public final ArrayList<VKApiVideo> videos;
     private final Context mContext;
     public final LayoutInflater mLayoutInflater;
+    private final FragmentMakePost mFragment;
 
     public ArrayList<View> views = new ArrayList<View>();
     public ArrayList<Item> medias = new ArrayList<Item>();
@@ -48,7 +50,7 @@ public class MediaPagerAdapter extends PagerAdapter {
         @Override
         public void onClick(View v) {
             VKApiPhoto photo = (VKApiPhoto) v.getTag();
-            FragmentMakePost.deleteAttaches(0, photo);
+            mFragment.deleteAttaches(0, photo);
         }
     };
 
@@ -56,7 +58,7 @@ public class MediaPagerAdapter extends PagerAdapter {
         @Override
         public void onClick(View v) {
             VKApiVideo video = (VKApiVideo) v.getTag();
-            FragmentMakePost.deleteAttaches(1, video);
+            mFragment.deleteAttaches(1, video);
         }
     };
 
@@ -106,9 +108,9 @@ public class MediaPagerAdapter extends PagerAdapter {
         PHOTO_ITEM, VIDEO_ITEM
     }
 
-    public MediaPagerAdapter(Context context, boolean isPost, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
-        this.mContext = context;
-
+    public MediaPagerAdapter(FragmentMakePost fragment, boolean isPost, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
+        this.mContext = fragment.getActivity();
+        this.mFragment = fragment;
         this.isPost = isPost;
 
         this.photos = photos;
@@ -127,7 +129,7 @@ public class MediaPagerAdapter extends PagerAdapter {
             views.add(null);
         }
 
-        this.mLayoutInflater = LayoutInflater.from(context);
+        this.mLayoutInflater = LayoutInflater.from(mContext);
     }
 
     public View getItemView(int position) {
@@ -288,4 +290,5 @@ public class MediaPagerAdapter extends PagerAdapter {
             this.videoTitle = (TextView) convertView.findViewById(R.id.txt_video_title_media_container);
         }
     }
+
 }

@@ -60,7 +60,7 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
  */
 
 
-public class FragmentWall extends Fragment {
+public class FragmentWall extends FragmentMakePost {
 
     static RecyclerView wallListView;
     RecyclerView.Adapter adapter;
@@ -406,7 +406,7 @@ public class FragmentWall extends Fragment {
             fabPhoto.setVisibility(View.VISIBLE);
 
             if (adapter == null) {
-                adapter = new RecyclerWallAdapter(getActivity(), wall, inflater, fragmentManager, isSuggested);
+                adapter = new RecyclerWallAdapter(this, wall, inflater, fragmentManager, isSuggested);
                 wallListView.setAdapter(adapter);
                 wallListView.setOnScrollListener(pauseOnScrollListener);
             } else {

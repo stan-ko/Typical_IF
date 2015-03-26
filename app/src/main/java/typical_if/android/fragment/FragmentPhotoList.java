@@ -50,7 +50,8 @@ import typical_if.android.adapter.PhotoListAdapter;
 import typical_if.android.util.PhotoUrlHelper;
 
 
-public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollListener {
+public class FragmentPhotoList extends FragmentMakePost implements AbsListView.OnScrollListener {
+
     public ArrayList<VKApiPhoto> finalPhotos = new ArrayList<VKApiPhoto>();
     private OnFragmentInteractionListener mListener;
     private boolean isRequestNull;
@@ -376,7 +377,7 @@ try {
                         position = position - 10;
                     }
                     Constants.tempPhotoPostAttach.add(finalPhotos.get(position));
-                    FragmentMakePost.refreshMakePostFragment(0);
+                    refreshMakePostFragment(0);
                 }
             });
 
