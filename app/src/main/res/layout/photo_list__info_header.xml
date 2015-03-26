@@ -21,25 +21,25 @@
             android:layout_alignParentStart="true" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Нашы дывчата"
+            android:text="Text text text text text text"
             android:id="@+id/photo_album_title"
 
             android:textColor="@color/textFadeOutColor"
             android:textSize="20dp"
             android:visibility="visible"
             android:layout_below="@+id/cover_camera_iw"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="false"
             android:layout_marginBottom="10dp"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:gravity="clip_horizontal|center_horizontal"
+            android:layout_alignParentEnd="false"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:typeface="sans" />
+            android:typeface="sans"
+            android:gravity="center" />
 
         <TextView
             android:layout_width="wrap_content"

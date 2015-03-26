@@ -28,66 +28,6 @@
             android:layout_centerHorizontal="true"/>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:id="@+id/count_of_comments"
-            android:textColor="#ffffffff"
-            android:textSize="35dp"
-            android:text="45"
-            android:layout_toEndOf="@+id/strut"
-            android:layout_alignBaseline="@+id/count_of_likes"
-            android:layout_alignBottom="@+id/count_of_likes"
-            android:layout_toRightOf="@+id/strut"
-            android:visibility="gone" />
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="1px"
-            android:id="@+id/thin_line"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="#6edefcff"
-            android:visibility="gone" />
-
-        <ImageView
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:id="@+id/image_not_liked"
-            android:layout_gravity="left|bottom"
-
-            android:visibility="visible"
-            android:layout_toStartOf="@+id/strut"
-            android:layout_alignTop="@+id/count_of_comments"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
-
-        <ImageView
-            android:layout_width="55dp"
-            android:layout_height="55dp"
-            android:id="@+id/image_comment"
-            android:layout_gravity="left|bottom"
-            android:layout_alignRight="@+id/strut"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignLeft="@+id/strut" />
-
-        <TextView
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-
-            android:id="@+id/count_of_likes"
-            android:textColor="#ffffffff"
-            android:textSize="20dp"
-            android:text="23"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="55dp"
-            android:layout_marginBottom="15dp"
-            android:visibility="gone" />
-
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -97,13 +37,30 @@
             android:checked="false"
             android:clickable="true"
             android:enabled="true"
-            android:layout_toStartOf="@+id/image_comment"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/image_comment"
             android:textColor="#ffffffff"
-            android:paddingLeft="5dp"
 
-            android:layout_marginRight="60dp" />
+
+            android:layout_marginRight="60dp"
+            android:layout_alignRight="@+id/strut" />
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="171"
+            android:id="@+id/cb_photo_comment"
+            android:checked="false"
+            android:clickable="true"
+            android:enabled="true"
+            android:layout_toEndOf="@+id/strut"
+            android:layout_marginLeft="65dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/strut"
+            android:textColor="#ffffffff"
+            android:layout_marginRight="-5dip"
+            android:button="@drawable/ic_photo_comment"
+
+            />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -115,31 +72,12 @@
             android:layout_alignStart="@+id/cb_photo_like"
             android:layout_alignRight="@+id/cb_photo_like"
             android:layout_alignEnd="@+id/cb_photo_like"
-            android:layout_toRightOf="@+id/image_not_liked"
             android:clickable="true"
             android:layout_alignBottom="@+id/go_to_comments"
             android:layout_alignTop="@+id/go_to_comments"
             android:layout_marginLeft="-10dip"
             android:layout_marginRight="-8dp"
             android:visibility="visible" />
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="171"
-            android:id="@+id/cb_photo_comment"
-            android:checked="false"
-            android:clickable="true"
-            android:enabled="true"
-            android:layout_toStartOf="@+id/count_of_comments"
-            android:layout_toEndOf="@+id/strut"
-            android:layout_marginLeft="65dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/strut"
-            android:textColor="#ffffffff"
-            android:layout_marginRight="5dip"
-            android:button="@drawable/ic_photo_comment"
-            android:paddingLeft="5dp" />
 
         <ImageButton
             android:layout_width="wrap_content"
@@ -159,24 +97,6 @@
             android:layout_marginRight="-8dp"
             android:layout_marginTop="-8dp"
             android:layout_marginBottom="-8dp" />
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_toLeftOf="@+id/cb_photo_like"
-            android:layout_toStartOf="@+id/cb_photo_like"
-            android:layout_alignParentBottom="true"></RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_toStartOf="@+id/cb_photo_like"
-            android:id="@+id/relativeLayout"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/go_to_comments"
-            android:layout_toEndOf="@+id/go_to_comments"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
 
 
     </RelativeLayout>

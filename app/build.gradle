@@ -63,5 +63,6 @@ dependencies {
     compile 'com.daimajia.numberprogressbar:library:1.2@aar'
     compile 'in.srain.cube:grid-view-with-header-footer:1.0.9'
     compile 'com.github.manuelpeinado.fadingactionbar:fadingactionbar:3.1.2'
+    compile 'com.github.nirhart:parallaxscroll:1.0'
 }
 

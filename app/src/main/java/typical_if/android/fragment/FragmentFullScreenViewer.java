@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nirhart.parallaxscroll.views.ParallaxListView;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
@@ -107,6 +108,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         ((MainActivity)getActivity()).getSupportActionBar().hide();
         FragmentWall.setDisabledMenu();
 
+
         rootView = inflater.inflate(R.layout.fragment_fullscreen_list, container, false);
         addLike = (ImageView) rootView.findViewById(R.id.add_like);
         goToComments = (ImageView) rootView.findViewById(R.id.go_to_comments);
@@ -117,6 +119,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         panel = ((RelativeLayout) rootView.findViewById(R.id.fullscreen_action_panel));
         cb_like = ((CheckBox) rootView.findViewById(R.id.cb_photo_like));
         cb_comment= ((CheckBox) rootView.findViewById(R.id.cb_photo_comment));
+
 
         FragmentManager manager = getFragmentManager();
         imagepager = (ExtendedViewPager) rootView.findViewById(R.id.pager);
@@ -206,7 +209,9 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     public void onPageScrolled(final int position, float positionOffset, int positionOffsetPixels) { }
     @Override
     public void onPageSelected(final int position) {
-        if (photos.get(position).likes==0){
+
+       if (photos.get(position).likes==0){
+
             cb_like.setText("");
         } else  cb_like.setText(String.valueOf(photos.get(position).likes));
 
