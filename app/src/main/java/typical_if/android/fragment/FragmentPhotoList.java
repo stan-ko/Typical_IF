@@ -86,13 +86,13 @@ public class FragmentPhotoList extends Fragment implements AbsListView.OnScrollL
             this.sizeOfAlbum = getArguments().getInt("albumOriginalSize");
             this.albumTitle = getArguments().getString("title");
             if (this.sizeOfAlbum==1){
-                this.albumSizeWithNoun=sizeOfAlbum+" "+Constants.mainActivity.getResources().getString(R.string.photos_equal_one);
+                this.albumSizeWithNoun=sizeOfAlbum+" "+getString(R.string.photos_equal_one);
             }
             if (this.sizeOfAlbum<5){
-                this.albumSizeWithNoun=sizeOfAlbum+" "+Constants.mainActivity.getResources().getString(R.string.photos_less_five);
+                this.albumSizeWithNoun=sizeOfAlbum+" "+getString(R.string.photos_less_five);
 
             }else {
-                this.albumSizeWithNoun=sizeOfAlbum+" "+Constants.mainActivity.getResources().getString(R.string.photos_more_five);
+                this.albumSizeWithNoun=sizeOfAlbum+" "+getString(R.string.photos_more_five);
             }
 
         }
@@ -143,8 +143,8 @@ try {
 }catch (InflateException x ){
       headerView  = ItemDataSetter.inflater.inflate(R.layout.photo_list__info_header, null);
 }
-        Typeface titleTypeface = Typeface.createFromAsset(Constants.mainActivity.getAssets(), "fonts/Roboto-Light.ttf");
-        Typeface sizeTypeface = Typeface.createFromAsset(Constants.mainActivity.getAssets(), "fonts/Roboto-Thin.ttf");
+        Typeface titleTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
+        Typeface sizeTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
 
         final ImageView cover_im = (ImageView) headerView.findViewById(R.id.photo_list_header_image);
         final RelativeLayout shell = ((RelativeLayout) headerView.findViewById(R.id.header_relative_layout));
@@ -164,7 +164,7 @@ try {
                     cover_im.setImageBitmap(PhotoUrlHelper.fastBlur(loadedImage, 10));
                     cover_im.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     RelativeLayout l = ((RelativeLayout) root.findViewById(R.id.while_loading_rel_layout));
-                    l.startAnimation(AnimationUtils.loadAnimation(Constants.mainActivity.getApplicationContext(), R.anim.fade_out));
+                    l.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out));
                 }
             });
 
@@ -227,7 +227,7 @@ try {
                 } else {
                     _count = (int) (_ratio * 100);
                 }
-                if (OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())) {
+                if (OfflineMode.isOnline(getActivity())) {
                     getElsePhotos(firstVisibleItem, visibleItemCount, totalItemCount, view);
                     scrollPhotoListToBottom(gridOfPhotos, _lastInScreen);
                 }
@@ -313,7 +313,7 @@ try {
         } else {
             if (temp) {
                 isRequestNull = false;
-                OfflineMode.onErrorToast(getActivity());
+                OfflineMode.onErrorToast();
             }
         }
         return isRequestNull;
@@ -345,17 +345,17 @@ try {
 
     private void initPhotoList(){
         if (photoListAdapter == null) {
-            Log.d("finalPhotos.size= " + finalPhotos.size(), "getActivity = " + Constants.mainActivity.getLayoutInflater());
-            photoListAdapter = new PhotoListAdapter(finalPhotos, Constants.mainActivity.getLayoutInflater());
+            Log.d("finalPhotos.size= " + finalPhotos.size(), "getActivity = " + getActivity());
+            photoListAdapter = new PhotoListAdapter(finalPhotos, getActivity().getLayoutInflater());
         } else {
             photoListAdapter.notifyDataSetChanged();
         }
         gridOfPhotos.setAdapter(photoListAdapter);
 
         if (photoListAdapter == null) {
-            Log.d("finalPhotos.size= " + finalPhotos.size(), "getActivity = " + Constants.mainActivity.getLayoutInflater());
+            Log.d("finalPhotos.size= " + finalPhotos.size(), "getActivity = " + getActivity().getLayoutInflater());
 
-            photoListAdapter = new PhotoListAdapter(finalPhotos, Constants.mainActivity.getLayoutInflater());
+            photoListAdapter = new PhotoListAdapter(finalPhotos, getActivity().getLayoutInflater());
         } else {
             photoListAdapter.notifyDataSetChanged();
         }

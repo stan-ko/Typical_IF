@@ -310,7 +310,7 @@ public class SplashActivity extends Activity {
         synchronized (isRequestErrorToastShown) {
             if (!isRequestErrorToastShown.value) {
                 isRequestErrorToastShown.value = true;
-                OfflineMode.onErrorToast(getApplicationContext());
+                OfflineMode.onErrorToast();
             }
         }
     }
@@ -356,7 +356,7 @@ public class SplashActivity extends Activity {
 
         @Override
         public void onAccessDenied(final VKError authorizationError) {
-            new AlertDialog.Builder(Constants.mainActivity)
+            new AlertDialog.Builder(SplashActivity.this)
                     .setMessage(authorizationError.toString())
                     .show();
         }

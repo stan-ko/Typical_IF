@@ -1,12 +1,10 @@
 package typical_if.android.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -147,7 +145,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             @Override
             public void onError(final VKError error) {
                 super.onError(error);
-                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                OfflineMode.onErrorToast();
             }
         });
 
@@ -230,7 +228,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             @Override
             public void onError(final VKError error) {
                 super.onError(error);
-                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                OfflineMode.onErrorToast();
             }
         });
 
@@ -263,7 +261,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                             @Override
                             public void onError(final VKError error) {
                                 super.onError(error);
-                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                OfflineMode.onErrorToast();
                             }
                         });
                     }
@@ -282,7 +280,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                             @Override
                             public void onError(final VKError error) {
                                 super.onError(error);
-                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                OfflineMode.onErrorToast();
                             }
                         });
                     }

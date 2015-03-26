@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.LinearLayout;
 
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCaptchaDialog;
@@ -44,6 +43,8 @@ import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.adapter.ActionBarArrayAdapter;
+import typical_if.android.event.EventShowPhotoAttachDialog;
+import typical_if.android.event.MainActivityAddFragmentEvent;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentFullScreenViewer;
 import typical_if.android.fragment.FragmentPhotoFromCamera;
@@ -55,7 +56,7 @@ import typical_if.android.fragment.PollFragment;
 public class MainActivity extends DialogActivity implements
         NavigationDrawerFragment.NavigationDrawerCallbacks,
         FragmentFullScreenViewer.OnFragmentInteractionListener,
-        FragmentComments.OnFragmentInteractionListener,PollFragment.OnFragmentInteractionListener {
+        FragmentComments.OnFragmentInteractionListener, PollFragment.OnFragmentInteractionListener {
 
 
     private Drawable mIcon;
@@ -78,6 +79,7 @@ public class MainActivity extends DialogActivity implements
 
         builder.create().show();
     }
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
@@ -90,12 +92,9 @@ public class MainActivity extends DialogActivity implements
         } catch (Exception e) {
         }
 
-      if (OfflineMode.isFirstRun("mainFirstRun")){
+        if (OfflineMode.isFirstRun("mainFirstRun")) {
             showAlertChanges();
-       }
-
-
-
+        }
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
@@ -103,21 +102,19 @@ public class MainActivity extends DialogActivity implements
 
 
         // ensure that the view is available if we add the fragment
-
-
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        DrawerLayout drawer = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
-        ViewGroup decor = (ViewGroup) getWindow().getDecorView();
-        View child = decor.getChildAt(0);
+        final LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final DrawerLayout drawer = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
+        final ViewGroup decor = (ViewGroup) getWindow().getDecorView();
+        final View child = decor.getChildAt(0);
         decor.removeView(child);
-        LinearLayout container = (LinearLayout) drawer.findViewById(R.id.drawer_content); // This is the container we defined just now.
+        final ViewGroup container = (ViewGroup) drawer.findViewById(R.id.drawer_content); // This is the container we defined just now.
         container.addView(child, 0);
         drawer.findViewById(R.id.navigation_drawer).setPadding(0, getStatusBarHeight(), 0, 0);
         decor.addView(drawer);
 
-        ActionBar actionBar = getSupportActionBar();
+        final ActionBar actionBar = getSupportActionBar();
 
-        Constants.mainActivity = this;
+//        Constants.mainActivity = this;
         Constants.myIntent = new Intent(this, AudioPlayerService.class);
         Constants.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -185,10 +182,10 @@ public class MainActivity extends DialogActivity implements
         if (!isScreenOn) {
 
 
-            if (getIntent().getExtras() != null &&getIntent().getExtras().getBoolean("isClickable")) {
+            if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean("isClickable")) {
                 onNavigationDrawerItemSelected(5, false);
             } else
-                onNavigationDrawerItemSelected((int)(long)OfflineMode.loadLong(Constants.VK_GROUP_ID),false);
+                onNavigationDrawerItemSelected((int) (long) OfflineMode.loadLong(Constants.VK_GROUP_ID), false);
 
             // The screen has been locked
             // do stuff...
@@ -198,8 +195,6 @@ public class MainActivity extends DialogActivity implements
     @Override
     protected void onResume() {
         super.onResume();
-
-
 
 
     }
@@ -278,7 +273,6 @@ public class MainActivity extends DialogActivity implements
     }
 
 
-
     public void restoreActionBar() {
 
 
@@ -293,15 +287,12 @@ public class MainActivity extends DialogActivity implements
     }
 
 
-
-
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
 
-           // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            // setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
         super.onConfigurationChanged(newConfig);
     }
@@ -324,14 +315,14 @@ public class MainActivity extends DialogActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       if (!Constants.isPollFragmentLoaded) {
-           if (!mNavigationDrawerFragment.isDrawerOpen()) {
-               getMenuInflater().inflate(R.menu.main, menu);
-               restoreActionBar();
-               return true;
-           }
-           return super.onCreateOptionsMenu(menu);
-       } else return false;
+        if (!Constants.isPollFragmentLoaded) {
+            if (!mNavigationDrawerFragment.isDrawerOpen()) {
+                getMenuInflater().inflate(R.menu.main, menu);
+                restoreActionBar();
+                return true;
+            }
+            return super.onCreateOptionsMenu(menu);
+        } else return false;
     }
 
 
@@ -386,7 +377,7 @@ public class MainActivity extends DialogActivity implements
                 @Override
                 public void onError(final VKError error) {
                     super.onError(error);
-                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                    OfflineMode.onErrorToast();
                 }
             });
         }
@@ -415,7 +406,7 @@ public class MainActivity extends DialogActivity implements
                 @Override
                 public void onError(final VKError error) {
                     super.onError(error);
-                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                    OfflineMode.onErrorToast();
                 }
             });
         }
@@ -442,28 +433,28 @@ public class MainActivity extends DialogActivity implements
                 fragment = FragmentWall.newInstance(false);
 
 
-
                 break;
             case 6:
                 finish();
-             //   Log.d("finish"," - ---- -- - - -- - --------------------------  -- - " );
+                //   Log.d("finish"," - ---- -- - - -- - --------------------------  -- - " );
                 break;
         }
 
 
-        Log.d("OnNavigationItemSelected"," status: position = "+groupPosition);
+        Log.d("OnNavigationItemSelected", " status: position = " + groupPosition);
         if (groupPosition != 6) {
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                 fragmentManager.popBackStack();
             }
             replaceFragment(fragment);
         }
-        if  (getSupportActionBar().getTitle().equals(getString(R.string.poll))){
+        if (getSupportActionBar().getTitle().equals(getString(R.string.poll))) {
             Constants.MtitlePoll = getString(R.string.poll);
-        } if ( getSupportActionBar().getTitle().equals(getString(R.string.poll)+" ("+getString(R.string.login_to_vote)+")")){
-            Constants.MtitlePoll = getString(R.string.poll)+" ("+getString(R.string.login_to_vote)+")";
         }
-       restoreActionBar();
+        if (getSupportActionBar().getTitle().equals(getString(R.string.poll) + " (" + getString(R.string.login_to_vote) + ")")) {
+            Constants.MtitlePoll = getString(R.string.poll) + " (" + getString(R.string.login_to_vote) + ")";
+        }
+        restoreActionBar();
     }
 
 
@@ -496,6 +487,11 @@ public class MainActivity extends DialogActivity implements
             AudioPlayerService.cancelNotification(this, Constants.notifID);
             AudioPlayer.stop();
         }
+    }
+
+
+    public void onEventMainThread(MainActivityAddFragmentEvent event) {
+        addFragment(event.fragmentVideoView);
     }
 
 }

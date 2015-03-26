@@ -1,8 +1,10 @@
 package typical_if.android.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,9 +35,11 @@ import typical_if.android.VKHelper;
 public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
 
     public final VKList<VKApiPoll.Answer> answers;
-    //  public final LayoutInflater layoutInflater;
+    //  public final LayoutInflater mLayoutInflater;
 
     public VKApiPoll poll;
+    final Context appContext;
+    final int textFadeOutColor;
     LayoutInflater layoutInflater;
     TextView answers_anonymous_text;
     TextView answers_anonymous_text_preview;
@@ -46,10 +50,12 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
     int rule = 0 ;
 
 
-    public VotesItemAdapter(VKApiPoll poll, TextView answers_anonymous_text, TextView answers_anonymous_text_preview, String isAnonymous, String isAnonymous_preview,
+    public VotesItemAdapter(final Context activity, VKApiPoll poll, TextView answers_anonymous_text, TextView answers_anonymous_text_preview, String isAnonymous, String isAnonymous_preview,
                             Button changeDecision) {
         this.answers = poll.answers;
-        this.layoutInflater = (LayoutInflater) ItemDataSetter.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        this.appContext = activity.getApplicationContext();
+        this.textFadeOutColor = appContext.getResources().getColor(R.color.textFadeOutColor);
+        this.layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.answers_anonymous_text=answers_anonymous_text;
         this.answers_anonymous_text_preview=answers_anonymous_text_preview;
         this.isAnonymous=isAnonymous;
@@ -252,9 +258,8 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
             } else {
                 viewHolder.vote_text.setTypeface(null, Typeface.NORMAL);
                 viewHolder.amount_of_answers.setTypeface(null, Typeface.NORMAL);
-                viewHolder.amount_of_answers.setTextColor(Constants.mainActivity.getResources().getColor(R.color.textFadeOutColor));
-                ;
-                viewHolder.vote_text.setTextColor(Constants.mainActivity.getResources().getColor(R.color.textFadeOutColor));
+                viewHolder.amount_of_answers.setTextColor(textFadeOutColor);
+                viewHolder.vote_text.setTextColor(textFadeOutColor);
             }
 
 

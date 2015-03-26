@@ -454,8 +454,7 @@ public class VKRequest extends VKObject {
 				    }
 			    }
 
-			    if (requestListener != null)
-			    {
+			    if (requestListener != null){
                       requestListener.onComplete(response);
 			    }
 		    }

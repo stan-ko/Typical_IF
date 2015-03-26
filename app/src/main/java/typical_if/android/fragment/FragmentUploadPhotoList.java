@@ -26,7 +26,6 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import typical_if.android.Constants;
-import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
@@ -162,7 +161,7 @@ public class FragmentUploadPhotoList extends Fragment {
                                 @Override
                                 public void onError(final VKError error) {
                                     super.onError(error);
-                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                    OfflineMode.onErrorToast();
                                 }
                             });
                         }
@@ -185,7 +184,7 @@ public class FragmentUploadPhotoList extends Fragment {
                                 @Override
                                 public void onError(final VKError error) {
                                     super.onError(error);
-                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                    OfflineMode.onErrorToast();
                                 }
                             });
 
@@ -243,7 +242,7 @@ public class FragmentUploadPhotoList extends Fragment {
                                 @Override
                                 public void onError(final VKError error) {
                                     super.onError(error);
-                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                    OfflineMode.onErrorToast();
                                 }
                             });
                         }
@@ -270,7 +269,7 @@ public class FragmentUploadPhotoList extends Fragment {
                                 @Override
                                 public void onError(final VKError error) {
                                     super.onError(error);
-                                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                    OfflineMode.onErrorToast();
                                 }
                             });
                         }

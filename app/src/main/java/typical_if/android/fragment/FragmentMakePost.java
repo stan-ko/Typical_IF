@@ -211,7 +211,7 @@ public class FragmentMakePost extends Fragment {
                             @Override
                             public void onError(final VKError error) {
                                 super.onError(error);
-                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                OfflineMode.onErrorToast();
                             }
                         });
                     }
@@ -234,7 +234,7 @@ public class FragmentMakePost extends Fragment {
                             @Override
                             public void onError(final VKError error) {
                                 super.onError(error);
-                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                OfflineMode.onErrorToast();
                             }
                         });
                     }

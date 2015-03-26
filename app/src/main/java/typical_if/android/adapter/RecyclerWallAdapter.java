@@ -1,5 +1,6 @@
 package typical_if.android.adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -56,26 +57,28 @@ import static java.lang.String.valueOf;
 public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapter.ViewHolder> {
 
     private final Context mContext;
-    private final BitmapCache mMemoryCache;
+//    private final BitmapCache mMemoryCache;
     private Wall wall;
     private final ArrayList<VKWallPostWrapper> posts;
     private final LayoutInflater layoutInflater;
-    private final Context context;
 
     public static FragmentManager fragmentManager;
-    private static boolean isSuggested;
-    static boolean flag;
+//    private static boolean isSuggested;
+//    static boolean flag;
     public static int surpriseCounter = 0;
 
-    public RecyclerWallAdapter(Wall wall, LayoutInflater inflater, FragmentManager fragmentManager, boolean isSuggested) {
+    public RecyclerWallAdapter(final Activity activity,
+                               final Wall wall,
+                               final LayoutInflater inflater,
+                               final FragmentManager fragmentManager,
+                               final boolean isSuggested) {
         this.wall = wall;
         this.layoutInflater = inflater;
-        this.context = TIFApp.getAppContext();
+        this.mContext = activity;
         this.fragmentManager = fragmentManager;
         this.posts = wall.posts;
-        RecyclerWallAdapter.isSuggested = isSuggested;
-        mContext = Constants.mainActivity.getApplicationContext();
-        mMemoryCache = new BitmapCache();
+//        RecyclerWallAdapter.isSuggested = isSuggested;
+//        mMemoryCache = new BitmapCache();
     }
 
     public void setWall(Wall wall) {
@@ -87,7 +90,8 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.wall_lv_item, viewGroup, false);
+        //View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.wall_lv_item, viewGroup, false);
+        View v = layoutInflater.inflate(R.layout.wall_lv_item, viewGroup, false);
         return new ViewHolder(v);
     }
 
@@ -102,15 +106,14 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
         }
 ///////////////////////////////////////////////////////////
     //   Constants.stacks_array.add();
-        initViewHolder(viewHolder, wall, i, fragmentManager, post, false);
+        initViewHolder(viewHolder, i, post, false);
 
     }
 
-    public static void initViewHolder(final ViewHolder viewHolder,
-                                      final Wall wall,
-                                      final int position,
-                                      final FragmentManager fragmentManager,
-                                      final VKWallPostWrapper postWrapper, boolean comments_visibility) {
+    public void initViewHolder(final ViewHolder viewHolder,
+                               final int position,
+                               final VKWallPostWrapper postWrapper,
+                               boolean comments_visibility) {
 
         ItemDataSetter.fragmentManager = fragmentManager;
         ItemDataSetter.comments_visibility = comments_visibility;
@@ -236,7 +239,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
         }
     }
 
-    public static final View.OnClickListener btLikeOnClickListener = new View.OnClickListener() {
+    public final View.OnClickListener btLikeOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             try {
@@ -287,26 +290,26 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
         }
     };
 
-    public static final View.OnClickListener btRepostOnClickListener = new View.OnClickListener() {
+    public final View.OnClickListener btRepostOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Context context = TIFApp.getAppContext();
-            LayoutInflater layoutInflater = LayoutInflater.from(context);
+            //Context context = TIFApp.getAppContext();
+            //LayoutInflater layoutInflater = LayoutInflater.from(context);
 
             final ViewHolder viewHolder = (ViewHolder) v.getTag();
             final VKWallPostWrapper postWrapper = (VKWallPostWrapper) viewHolder.cb_post_repost.getTag();
             final VKApiPost post = postWrapper.post;
 
             try {
-                final AlertDialog.Builder dialog = new AlertDialog.Builder(Constants.mainActivity);
+                final AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 
                 View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
                 dialog.setView(view);
-                dialog.setTitle(context.getString(R.string.comment_background));
+                dialog.setTitle(R.string.comment_background);
 
                 final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
 
-                dialog.setPositiveButton(context.getString(R.string.okay), new DialogInterface.OnClickListener() {
+                dialog.setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         final String pidFull = "wall" +  OfflineMode.loadLong(Constants.VK_GROUP_ID) + "_" + post.id;
@@ -346,7 +349,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
                     }
                 });
 
-                dialog.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialog.setCancelable(true);
@@ -360,7 +363,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
         }
     };
 
-    public static final View.OnClickListener openCommentsFragmentListener = new View.OnClickListener() {
+    public final View.OnClickListener openCommentsFragmentListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             ParamsHolder paramsHolder = (ParamsHolder) v.getTag();
@@ -370,7 +373,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
         }
     };
 
-    public static final View.OnClickListener errorToastListener = new View.OnClickListener() {
+    public final View.OnClickListener errorToastListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
@@ -542,5 +545,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
             this.copyHistoryAudioListView = (ListView) copyHistoryView.findViewById(R.id.lv_simple);
             this.copyHistoryMediaPagerVideoButton = (ImageButton) copyHistoryView.findViewById(R.id.ib_goto_video_page);
         }
+
+
     }
 }

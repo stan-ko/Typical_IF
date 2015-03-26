@@ -258,7 +258,7 @@ public class FragmentWall extends Fragment {
                             @Override
                             public void onError(final VKError error) {
                                 super.onError(error);
-                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                OfflineMode.onErrorToast();
                             }
                         });
 
@@ -304,7 +304,7 @@ public class FragmentWall extends Fragment {
                 @Override
                 public void onError(final VKError error) {
                     super.onError(error);
-                    OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                    OfflineMode.onErrorToast();
                 }
             });
         }
@@ -406,7 +406,7 @@ public class FragmentWall extends Fragment {
             fabPhoto.setVisibility(View.VISIBLE);
 
             if (adapter == null) {
-                adapter = new RecyclerWallAdapter(wall, inflater, fragmentManager, isSuggested);
+                adapter = new RecyclerWallAdapter(getActivity(), wall, inflater, fragmentManager, isSuggested);
                 wallListView.setAdapter(adapter);
                 wallListView.setOnScrollListener(pauseOnScrollListener);
             } else {
@@ -573,7 +573,7 @@ public class FragmentWall extends Fragment {
             @Override
             public void onError(final VKError error) {
                 super.onError(error);
-                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                OfflineMode.onErrorToast();
             }
         });
     }
@@ -656,7 +656,7 @@ try {
                         @Override
                         public void onError(final VKError error) {
                             super.onError(error);
-                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                            OfflineMode.onErrorToast();
                         }
                     });
                 } else {
@@ -671,7 +671,7 @@ try {
                         @Override
                         public void onError(final VKError error) {
                             super.onError(error);
-                            OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                            OfflineMode.onErrorToast();
                         }
                     });
                 }
@@ -706,7 +706,7 @@ try {
             @Override
             public void onError(final VKError error) {
                 super.onError(error);
-                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                OfflineMode.onErrorToast();
                 endlessGet(Offset);
             }
         });

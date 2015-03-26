@@ -91,7 +91,7 @@ public class FragmentAttachPostList extends Fragment {
                     @Override
                     public void onError(final VKError error) {
                         super.onError(error);
-                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                        OfflineMode.onErrorToast();
                     }
                 });
                 break;
@@ -120,7 +120,7 @@ public class FragmentAttachPostList extends Fragment {
                     @Override
                     public void onError(final VKError error) {
                         super.onError(error);
-                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                        OfflineMode.onErrorToast();
                     }
                 });
                 break;
@@ -149,7 +149,7 @@ public class FragmentAttachPostList extends Fragment {
                     @Override
                     public void onError(final VKError error) {
                         super.onError(error);
-                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                        OfflineMode.onErrorToast();
                     }
                 });
         }

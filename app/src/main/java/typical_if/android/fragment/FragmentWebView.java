@@ -181,7 +181,7 @@ public class FragmentWebView extends Fragment  {
         public View getVideoLoadingProgressView() {
 
             if (mVideoProgressView == null) {
-                LayoutInflater inflater = LayoutInflater.from(Constants.mainActivity);
+                LayoutInflater inflater = LayoutInflater.from(getActivity());
                 mVideoProgressView = inflater.inflate(R.layout.video_progress, null);
             }
             return mVideoProgressView;

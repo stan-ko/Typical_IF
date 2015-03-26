@@ -196,7 +196,7 @@ public class NotificationService extends Service {
 
         @Override
         public void onAccessDenied(final VKError authorizationError) {
-            new AlertDialog.Builder(Constants.mainActivity)
+            new AlertDialog.Builder(NotificationService.this)
                     .setMessage(authorizationError.toString())
                     .show();
         }

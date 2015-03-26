@@ -106,7 +106,6 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
                 this.poll = updatedPoll;
             } else {
                 this.poll = getArguments().getParcelable("poll");
-                ;
             }
             answers_anonymous_text.setText(getArguments().getString("answers_anonymous_text"));
             this.answers_anonymous_text_preview = answers_anonymous_text;
@@ -117,8 +116,7 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ((MainActivity) getActivity()).getSupportActionBar().show();
         isRunning = true;
 
@@ -146,11 +144,7 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
 
         title.setText(poll.question);
 
-        if (poll.anonymous == 1) {
-            isAnonymous = Constants.mainActivity.getResources().getString(R.string.anonymous_poll);
-        } else
-            isAnonymous = Constants.mainActivity.getResources().getString(R.string.public_poll);
-
+        isAnonymous = poll.anonymous == 1 ? getString(R.string.anonymous_poll) : getString(R.string.public_poll);
 
         answers_anonymous_text.setText(isAnonymous + " " + poll.votes);
         view.setVisibility(View.VISIBLE);
@@ -159,7 +153,7 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
                 pollList.setAdapter(adapter);
             }
         }else {
-            adapter = new VotesItemAdapter(poll, answers_anonymous_text, answers_anonymous_text_preview,
+            adapter = new VotesItemAdapter(getActivity(), poll, answers_anonymous_text, answers_anonymous_text_preview,
                     isAnonymous, isAnonymous_preview, change_decision_button);
             pollList.setAdapter(adapter);
         }

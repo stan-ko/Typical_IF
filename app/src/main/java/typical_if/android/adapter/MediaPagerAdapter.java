@@ -1,5 +1,6 @@
 package typical_if.android.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
@@ -34,14 +35,14 @@ public class MediaPagerAdapter extends PagerAdapter {
 
     public final ArrayList<VKApiPhoto> photos;
     public final ArrayList<VKApiVideo> videos;
+    private final Context mContext;
+    public final LayoutInflater mLayoutInflater;
 
     public ArrayList<View> views = new ArrayList<View>();
     public ArrayList<Item> medias = new ArrayList<Item>();
 
     public boolean isPost;
 
-    public final Context context;
-    public final LayoutInflater layoutInflater;
 
     public View.OnClickListener deletePhotoAttachListener = new View.OnClickListener() {
         @Override
@@ -81,19 +82,19 @@ public class MediaPagerAdapter extends PagerAdapter {
                             if (video != null) {
                                // new WebViewActivity(video);
 
-                                Intent intent = new Intent( Constants.mainActivity, WebViewActivity.class);
+                                Intent intent = new Intent(mContext, WebViewActivity.class);
                                 intent.putExtra("VIDEO_OBJECT",video);
-                                Constants.mainActivity.startActivity(intent);
+                                mContext.startActivity(intent);
                               //  Fragment fragment = new FragmentWebView(video);
                               //  ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                             } else
-                                Toast.makeText(Constants.mainActivity.getApplicationContext(), R.string.error_playing_video, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, R.string.error_playing_video, Toast.LENGTH_SHORT).show();
                         }
 
                         @Override
                         public void onError(VKError error) {
                             super.onError(error);
-                            Toast.makeText(Constants.mainActivity.getApplicationContext(), R.string.error_playing_video_auth, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(mContext, R.string.error_playing_video_auth, Toast.LENGTH_SHORT).show();
                         }
                     }
             );
@@ -106,6 +107,8 @@ public class MediaPagerAdapter extends PagerAdapter {
     }
 
     public MediaPagerAdapter(Context context, boolean isPost, ArrayList<VKApiPhoto> photos, ArrayList<VKApiVideo> videos) {
+        this.mContext = context;
+
         this.isPost = isPost;
 
         this.photos = photos;
@@ -124,8 +127,7 @@ public class MediaPagerAdapter extends PagerAdapter {
             views.add(null);
         }
 
-        this.context = context;
-        this.layoutInflater = LayoutInflater.from(context);
+        this.mLayoutInflater = LayoutInflater.from(context);
     }
 
     public View getItemView(int position) {
@@ -171,7 +173,7 @@ public class MediaPagerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        View convertView = getItem(position).getView(layoutInflater, getItemView(position));
+        View convertView = getItem(position).getView(mLayoutInflater, getItemView(position));
         (container).addView(convertView);
         return convertView;
     }

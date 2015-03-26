@@ -36,6 +36,7 @@ import typical_if.android.VKHelper;
 import typical_if.android.event.EventShowPhotoAttachDialog;
 import typical_if.android.event.EventShowReportDialog;
 import typical_if.android.event.EventShowSuggestPostDialog;
+import typical_if.android.event.MainActivityAddFragmentEvent;
 import typical_if.android.fragment.FragmentAlbumsList;
 import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentUploadAlbumList;
@@ -60,21 +61,20 @@ public class DialogActivity extends ActionBarActivity {
     }
 
     public void replaceFragment(Fragment fragment) {
-try {
-    Log.d("getSupportFragmentManager is :" + getSupportFragmentManager(), "fragment = " + fragment);
-    if (fragment!=null){
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commitAllowingStateLoss();}
-        else {
-        fragment = FragmentWall.newInstance(false);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commitAllowingStateLoss();
+        try {
+            Log.d("getSupportFragmentManager is :" + getSupportFragmentManager(), "fragment = " + fragment);
+            if (fragment != null) {
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commitAllowingStateLoss();
+            } else {
+                fragment = FragmentWall.newInstance(false);
+                getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commitAllowingStateLoss();
 
-    }
-}catch (IllegalStateException ise){
-    Toast.makeText(getApplicationContext(),R.string.exception_during_run,Toast.LENGTH_SHORT).show();
-}
-catch (NullPointerException npe){
-    Toast.makeText(getApplicationContext(),R.string.exception_during_run,Toast.LENGTH_SHORT).show();
-}
+            }
+        } catch (IllegalStateException ise) {
+            Toast.makeText(getApplicationContext(), R.string.exception_during_run, Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException npe) {
+            Toast.makeText(getApplicationContext(), R.string.exception_during_run, Toast.LENGTH_SHORT).show();
+        }
     }
 
     int index;
@@ -85,7 +85,7 @@ catch (NullPointerException npe){
     }
 
     public void changeLanguage() {
-        final AlertDialog.Builder builderIn = new AlertDialog.Builder(Constants.mainActivity);
+        final AlertDialog.Builder builderIn = new AlertDialog.Builder(this);
         builderIn.setTitle(R.string.change_lan);
 
         final Resources resources = getResources();
@@ -118,23 +118,23 @@ catch (NullPointerException npe){
 
 
     public void restartAfterChanges(final int key, final String lan) {
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(Constants.mainActivity);
-        dialog.setTitle(Constants.mainActivity.getApplicationContext().getString(R.string.restart_app_dialog));
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setTitle(R.string.restart_app_dialog);
 
-        dialog.setPositiveButton(Constants.mainActivity.getApplicationContext().getString(R.string.okay),
+        dialog.setPositiveButton(R.string.okay,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         ItemDataSetter.saveUserLanguage(key, lan);
-                        Intent mStartActivity = new Intent(Constants.mainActivity.getApplicationContext(), SplashActivity.class);
+                        Intent mStartActivity = new Intent(DialogActivity.this, SplashActivity.class);
                         int mPendingIntentId = 123456;
-                        PendingIntent mPendingIntent = PendingIntent.getActivity(Constants.mainActivity.getApplicationContext(), mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
-                        AlarmManager mgr = (AlarmManager) Constants.mainActivity.getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+                        PendingIntent mPendingIntent = PendingIntent.getActivity(DialogActivity.this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);
+                        AlarmManager mgr = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
                         mgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, mPendingIntent);
                         System.exit(0);
                     }
                 });
-        dialog.setNegativeButton(Constants.mainActivity.getApplicationContext().getString(R.string.cancel)
+        dialog.setNegativeButton(R.string.cancel
                 , new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -146,7 +146,7 @@ catch (NullPointerException npe){
 
 
     public void reportListDialog(final long gid, final long id) {
-        final AlertDialog.Builder builderIn = new AlertDialog.Builder(Constants.mainActivity);
+        final AlertDialog.Builder builderIn = new AlertDialog.Builder(this);
         builderIn.setTitle(R.string.post_report);
         final Resources resources = getResources();
 
@@ -191,7 +191,7 @@ catch (NullPointerException npe){
                     @Override
                     public void onError(final VKError error) {
                         super.onError(error);
-                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                        OfflineMode.onErrorToast();
                     }
                 });
             }
@@ -200,7 +200,7 @@ catch (NullPointerException npe){
     }
 
     public void reportDialog(final long gid, final long id) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final Resources resources = getResources();
 
         final String[] items = {resources.getString(R.string.post_report), resources.getString(R.string.post_copy_link)};
@@ -224,10 +224,9 @@ catch (NullPointerException npe){
     }
 
     public void suggestPostDialog(final long gid, final VKApiPost post) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
-        final Resources resources = getResources();
-
-        final String[] items = {resources.getString(R.string.post_edit), resources.getString(R.string.post_delete)};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        final Resources resources = getResources();
+        final String[] items = {getString(R.string.post_edit), getString(R.string.post_delete)};
 
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -250,7 +249,7 @@ catch (NullPointerException npe){
                             @Override
                             public void onError(final VKError error) {
                                 super.onError(error);
-                                OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                                OfflineMode.onErrorToast();
                             }
                         });
                         break;
@@ -262,7 +261,7 @@ catch (NullPointerException npe){
     }
 
     public void photoAttachDialog(final long gid, final int type) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final Resources resources = getResources();
 
         final String[] items = {resources.getString(R.string.photo_from_own), resources.getString(R.string.photo_from_sd)};
@@ -288,7 +287,7 @@ catch (NullPointerException npe){
         ArrayList<String> items = new ArrayList<String>();
         ArrayList<String> links = new ArrayList<String>();
 
-      //  JSONObject files = jsonObject.optJSONObject("files");
+        //  JSONObject files = jsonObject.optJSONObject("files");
 
 
         if (video.player.contains("youtube")) {
@@ -316,19 +315,19 @@ catch (NullPointerException npe){
 
     public static boolean isOneLink(VKApiVideo video, ArrayList<String> links, ArrayList<String> items) {
 
-        if (video.mp4_240!=null){
+        if (video.mp4_240 != null) {
             items.add("240");
             links.add(video.mp4_240);
         }
-        if (video.mp4_360!=null){
+        if (video.mp4_360 != null) {
             items.add("360");
             links.add(video.mp4_360);
         }
-        if (video.mp4_480!=null){
+        if (video.mp4_480 != null) {
             items.add("480");
             links.add(video.mp4_480);
         }
-        if (video.mp4_720!=null){
+        if (video.mp4_720 != null) {
             items.add("720");
             links.add(video.mp4_720);
         }
@@ -345,8 +344,8 @@ catch (NullPointerException npe){
 
     static String link = null;
 
-    public  void videoResolutionDialog(final VKApiVideo video, final ArrayList<String> items, final ArrayList<String> links) {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
+    public void videoResolutionDialog(final VKApiVideo video, final ArrayList<String> items, final ArrayList<String> links) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         final int count = links.size();
 
         builder.setTitle("Choose resolution");
@@ -365,23 +364,23 @@ catch (NullPointerException npe){
                     switch (which) {
                         case 0:
                             link = links.get(0);
-                          //  fragment = new FragmentVideoView(link);
-                         //   new ItemDataSetter(fragment, link);
+                            //  fragment = new FragmentVideoView(link);
+                            //   new ItemDataSetter(fragment, link);
                             break;
                         case 1:
                             link = links.get(1);
-                          //  fragment = new FragmentVideoView(link);
-                          //  new ItemDataSetter(fragment, link);
+                            //  fragment = new FragmentVideoView(link);
+                            //  new ItemDataSetter(fragment, link);
                             break;
                         case 2:
                             link = links.get(2);
-                           // fragment = new FragmentVideoView(link);
-                          //  new ItemDataSetter(fragment, link);
+                            // fragment = new FragmentVideoView(link);
+                            //  new ItemDataSetter(fragment, link);
                             break;
                         case 3:
                             link = links.get(3);
-                           // fragment = new FragmentVideoView(link);
-                           // new ItemDataSetter(fragment, link);
+                            // fragment = new FragmentVideoView(link);
+                            // new ItemDataSetter(fragment, link);
                             break;
                         default:
 
@@ -425,11 +424,9 @@ catch (NullPointerException npe){
                         default:
 
                     }
-
-
                 }
-                ((MainActivity)Constants.mainActivity).addFragment(FragmentVideoView.newInstance(link,video));
-
+                EventBus.getDefault().post(new MainActivityAddFragmentEvent(FragmentVideoView.newInstance(link, video)));
+                //((MainActivity) Constants.mainActivity).addFragment(FragmentVideoView.newInstance(link, video));
 
             }
 
@@ -440,15 +437,15 @@ catch (NullPointerException npe){
     }
 
     public Dialog addPhotoFrom() {
-        final String[] items = Constants.mainActivity.getResources().getStringArray(R.array.add_photo_from);
-        AlertDialog.Builder builder = new AlertDialog.Builder(Constants.mainActivity);
-        builder.setTitle(Constants.mainActivity.getResources().getString(R.string.add_photo_from_title));
+        final String[] items = getResources().getStringArray(R.array.add_photo_from);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.add_photo_from_title);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        addFragment(FragmentUploadAlbumList.newInstance( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), 1));
+                        addFragment(FragmentUploadAlbumList.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), 1));
                         dialog.cancel();
                         break;
                     case 1:
@@ -475,7 +472,7 @@ catch (NullPointerException npe){
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         Uri outputFileUri = Uri.fromFile(file);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        Constants.mainActivity.startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
+        startActivityForResult(cameraIntent, PICK_FROM_CAMERA);
     }
 
     //-----------------------------------EVENTS---------------------------------------

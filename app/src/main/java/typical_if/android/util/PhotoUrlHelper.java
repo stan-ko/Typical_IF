@@ -79,21 +79,18 @@ public class PhotoUrlHelper {
 
         float radius = 20;
 
-        Bitmap overlay = Bitmap.createBitmap((int) (view.getMeasuredWidth()),
-                (int) (view.getMeasuredHeight()), Bitmap.Config.ARGB_8888);
+        Bitmap overlay = Bitmap.createBitmap((view.getMeasuredWidth()), (view.getMeasuredHeight()), Bitmap.Config.ARGB_8888);
 
         Canvas canvas = new Canvas(overlay);
 
         canvas.translate(-view.getLeft(), -view.getTop());
         canvas.drawBitmap(bkg, 0, 0, null);
 
-        RenderScript rs = RenderScript.create(Constants.mainActivity);
+        RenderScript rs = RenderScript.create(view.getContext());
 
-        Allocation overlayAlloc = Allocation.createFromBitmap(
-                rs, overlay);
+        Allocation overlayAlloc = Allocation.createFromBitmap(rs, overlay);
 
-        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(
-                rs, overlayAlloc.getElement());
+        ScriptIntrinsicBlur blur = ScriptIntrinsicBlur.create(rs, overlayAlloc.getElement());
 
         blur.setInput(overlayAlloc);
 
@@ -103,11 +100,9 @@ public class PhotoUrlHelper {
 
         overlayAlloc.copyTo(overlay);
 
-        view.setBackground(new BitmapDrawable(
-                Constants.mainActivity.getResources(), overlay));
+        view.setBackground(new BitmapDrawable(view.getResources(), overlay));
 
         rs.destroy();
-
     }
 
 

@@ -17,8 +17,9 @@ import typical_if.android.model.Wall.Wall;
 public class OfflineMode {
     final static SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("key", Activity.MODE_PRIVATE);
     final static SharedPreferences.Editor ed = sPref.edit();
+
     public static void saveJSON(JSONObject jsonObject, long gid) {
-        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(gid),Activity.MODE_PRIVATE);
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(gid), Activity.MODE_PRIVATE);
         final SharedPreferences.Editor ed = sPref.edit();
         final String JsonString = jsonObject.toString();
         final String JsonKey = String.valueOf(gid);
@@ -26,8 +27,9 @@ public class OfflineMode {
         ed.putString(JsonKey, JsonString);
         ed.commit();
     }
+
     public static void saveJSON(JSONObject jsonObject, String id) {
-        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id),Activity.MODE_PRIVATE);
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
         final SharedPreferences.Editor ed = sPref.edit();
         final String JsonString = jsonObject.toString();
         final String JsonKey = id;
@@ -35,15 +37,16 @@ public class OfflineMode {
         ed.putString(JsonKey, JsonString);
         ed.commit();
     }
+
     public static boolean isFirstRun(String prefName) {
-        final SharedPreferences tfFirstRunSPref = TIFApp.getAppContext().getSharedPreferences(prefName,Activity.MODE_PRIVATE);
+        final SharedPreferences tfFirstRunSPref = TIFApp.getAppContext().getSharedPreferences(prefName, Activity.MODE_PRIVATE);
         final SharedPreferences.Editor editor = tfFirstRunSPref.edit();
         String key = "isFirstRun";
-        boolean isFirstRun =true;
+        boolean isFirstRun = true;
         boolean notFirstRun = false;
         Boolean FirstRun = tfFirstRunSPref.getBoolean(key, isFirstRun);
 //        Log.d("firsRun----------------------------",""+FirstRun);
-        if (FirstRun==isFirstRun){
+        if (FirstRun == isFirstRun) {
             editor.clear();
             editor.putBoolean(key, notFirstRun);
             editor.commit();
@@ -52,7 +55,7 @@ public class OfflineMode {
 
     }
 
-    public static JSONObject loadJSON(long gid)  {
+    public static JSONObject loadJSON(long gid) {
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(gid), Activity.MODE_PRIVATE);
         final String JsonKey = String.valueOf(gid);
         final String savedText = sPref.getString(JsonKey, "");
@@ -61,11 +64,12 @@ public class OfflineMode {
         try {
             jsonObj = new JSONObject(savedText);
         } catch (JSONException e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
         }
         return jsonObj;
     }
-    public static JSONObject loadJSON(String id)  {
+
+    public static JSONObject loadJSON(String id) {
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
         final String JsonKey = String.valueOf(id);
         final String savedText = sPref.getString(JsonKey, "");
@@ -74,22 +78,23 @@ public class OfflineMode {
         try {
             jsonObj = new JSONObject(savedText);
         } catch (JSONException e) {
-          //  e.printStackTrace();
+            //  e.printStackTrace();
         }
         return jsonObj;
     }
+
     public static boolean isOnline(final Context context) {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo nInfo = cm.getActiveNetworkInfo();
         if (nInfo != null && nInfo.isConnected()) {
 
 
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
+
     public static boolean isJsonNull(long id) {
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
         final String JsonKey = String.valueOf(id);
@@ -101,6 +106,7 @@ public class OfflineMode {
             return false;
         }
     }
+
     public static boolean isJsonNull(String id) {
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
         final String JsonKey = id;
@@ -112,6 +118,7 @@ public class OfflineMode {
             return false;
         }
     }
+
     public static void saveLong(Long id, String key) {
         final String strId = Long.toString(id);
 //        Log.d("SaveLong","------------------------------ "+id);
@@ -127,7 +134,7 @@ public class OfflineMode {
     }
 
     public static void saveInt(int surprise, String id) {
-        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id),Activity.MODE_PRIVATE);
+        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
         final SharedPreferences.Editor ed = sPref.edit();
         final String JsonString = Integer.toString(surprise);
         final String JsonKey = id;
@@ -136,11 +143,11 @@ public class OfflineMode {
         ed.commit();
     }
 
-    public static int loadInt(String id)  {
+    public static int loadInt(String id) {
         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
         final String JsonKey = String.valueOf(id);
         final String savedText = sPref.getString(JsonKey, "");
-            // e.printStackTrace();
+        // e.printStackTrace();
 
         return Integer.parseInt(savedText);
     }
@@ -156,7 +163,8 @@ public class OfflineMode {
             return false;
         }
     }
-    public static synchronized JSONObject jsonPlus (final JSONObject jsonObject, final JSONObject jsonObjectOffset) {
+
+    public static synchronized JSONObject jsonPlus(final JSONObject jsonObject, final JSONObject jsonObjectOffset) {
 
         //---------------1-----------------------------
         final JSONObject object = jsonObject.optJSONObject(Wall.JSON_KEY_RESPONSE);
@@ -164,14 +172,14 @@ public class OfflineMode {
         String items = object.optString(Wall.JSON_KEY_ITEMS);
         StringBuilder itemsSB = new StringBuilder(items.subSequence(0, items.length()));
         itemsSB.delete(0, 1);
-        itemsSB.delete(itemsSB.length()-1, itemsSB.length());
-        items= itemsSB.toString();
+        itemsSB.delete(itemsSB.length() - 1, itemsSB.length());
+        items = itemsSB.toString();
         // profiles
         String profiles = object.optString(Wall.JSON_KEY_PROFILES);
         StringBuilder profilesSB = new StringBuilder(profiles.subSequence(0, profiles.length()));
         profilesSB.delete(0, 1);
-        profilesSB.delete(profilesSB.length()-1, profilesSB.length());
-        profiles= profilesSB.toString();
+        profilesSB.delete(profilesSB.length() - 1, profilesSB.length());
+        profiles = profilesSB.toString();
         //---------------end 1-----------------------------
 
         //---------------2-----------------------------
@@ -181,36 +189,37 @@ public class OfflineMode {
         String itemsOffset = objectOffset.optString(Wall.JSON_KEY_ITEMS);
         StringBuilder itemsSBOffset = new StringBuilder(itemsOffset.subSequence(0, itemsOffset.length()));
         itemsSBOffset.delete(0, 1);
-        itemsSBOffset.delete(itemsSBOffset.length()-1, itemsSBOffset.length());
-        itemsOffset= itemsSBOffset.toString();
+        itemsSBOffset.delete(itemsSBOffset.length() - 1, itemsSBOffset.length());
+        itemsOffset = itemsSBOffset.toString();
         // groups
         final String groupsOffset = objectOffset.optString(Wall.JSON_KEY_GROUPS);
         // profiles
         String profilesOffset = objectOffset.optString(Wall.JSON_KEY_PROFILES);
         StringBuilder profilesOffsetSB = new StringBuilder(profilesOffset.subSequence(0, profilesOffset.length()));
         profilesOffsetSB.delete(0, 1);
-        profilesOffsetSB.delete(profilesOffsetSB.length()-1, profilesOffsetSB.length());
-        profilesOffset= profilesOffsetSB.toString();
+        profilesOffsetSB.delete(profilesOffsetSB.length() - 1, profilesOffsetSB.length());
+        profilesOffset = profilesOffsetSB.toString();
         //---------------end 2-----------------------------
         final String response = "{\"response\":{" +
-                "\"count\":"+countOffset+"," +
-                "\"items\":["+items+","+itemsOffset+"]," +
-                "\"groups\":"+groupsOffset+"," +
-                " \"profiles\":["+profiles+","+profilesOffset+"]}}" ;
+                "\"count\":" + countOffset + "," +
+                "\"items\":[" + items + "," + itemsOffset + "]," +
+                "\"groups\":" + groupsOffset + "," +
+                " \"profiles\":[" + profiles + "," + profilesOffset + "]}}";
         JSONObject wall;
         try {
             wall = new JSONObject(response);
         } catch (JSONException e) {
-            wall= null;
+            wall = null;
             e.printStackTrace();
         }
         return wall;
     }
-    public  static void onErrorToast(Context ApplicationContext){
-    //    Toast.makeText(ApplicationContext, R.string.error, Toast.LENGTH_SHORT).show();
 
+
+    public static void onErrorToast() {
+        //    Toast.makeText(TIFApp.getAppContext(), R.string.error, Toast.LENGTH_SHORT).show();
     }
 
 
-    }
+}
 

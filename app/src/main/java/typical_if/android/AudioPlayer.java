@@ -87,8 +87,8 @@ public class AudioPlayer {
                                 playedPausedRecord.audioUrl = stream;
                                 playedPausedRecord.isPlayed = true;
                                 playedPausedRecord.isPaused = false;
-                                Constants.mainActivity.stopService(Constants.myIntent);
-                                Constants.mainActivity.startService(Constants.myIntent);
+                                TIFApp.getAppContext().stopService(Constants.myIntent);
+                                TIFApp.getAppContext().startService(Constants.myIntent);
                             }
                         });
                         mediaPlayer.prepareAsync();
@@ -105,15 +105,15 @@ public class AudioPlayer {
                         playedPausedRecord.audioUrl = stream;
                         playedPausedRecord.isPlayed = true;
                         playedPausedRecord.isPaused = false;
-                        Constants.mainActivity.stopService(Constants.myIntent);
-                        Constants.mainActivity.startService(Constants.myIntent);
+                        TIFApp.getAppContext().stopService(Constants.myIntent);
+                        TIFApp.getAppContext().startService(Constants.myIntent);
                     }
                 }
                 else {
                     mediaPlayer.pause();
                     playedPausedRecord = new AudioRecords(stream, false, true, false);
-                    Constants.mainActivity.stopService(Constants.myIntent);
-                    Constants.mainActivity.startService(Constants.myIntent);
+                    TIFApp.getAppContext().stopService(Constants.myIntent);
+                    TIFApp.getAppContext().startService(Constants.myIntent);
                     Constants.timerForNotif = System.currentTimeMillis();
                     //AudioPlayerService.cancelNotification(Constants.mainActivity.getApplicationContext() , Constants.notifID);
                 }
@@ -149,8 +149,8 @@ public class AudioPlayer {
                         return;
 
                     if (System.currentTimeMillis() >= (Constants.timerForNotif + 10000) && playedPausedRecord.isPaused){
-                        Constants.mainActivity.stopService(Constants.myIntent);
-                        AudioPlayerService.cancelNotification(Constants.mainActivity.getApplicationContext(), Constants.notifID);
+                        TIFApp.getAppContext().stopService(Constants.myIntent);
+                        AudioPlayerService.cancelNotification(TIFApp.getAppContext(), Constants.notifID);
                         Constants.timerForNotif = 0;
                     }
 

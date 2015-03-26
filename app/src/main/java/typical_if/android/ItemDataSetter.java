@@ -249,10 +249,10 @@ public class ItemDataSetter {
 
         title.setText(poll.question);
 
-        if (poll.anonymous == 1) {
-            isAnonymous = Constants.mainActivity.getResources().getString(R.string.anonymous_poll);
-        } else
-            isAnonymous = Constants.mainActivity.getResources().getString(R.string.public_poll);
+        if (poll.anonymous == 1)
+            isAnonymous = TIFApp.getAppContext().getString(R.string.anonymous_poll);
+        else
+            isAnonymous = TIFApp.getAppContext().getString(R.string.public_poll);
 
         final String answers_anonymous_textStr = isAnonymous + " " + poll.votes;
         answers_anonymous_text.setText(answers_anonymous_textStr);
@@ -728,7 +728,7 @@ public class ItemDataSetter {
     final private static Bundle args = new Bundle();
     public static void makeSaveTransaction(final ArrayList<VKApiPhoto> photos, final int position) {
 
-        if (OfflineMode.isOnline(Constants.mainActivity.getApplicationContext())) {
+        if (OfflineMode.isOnline(TIFApp.getAppContext())) {
             VKHelper.getPhotoByID(photosKeyGen(photos), new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {
@@ -844,20 +844,20 @@ public class ItemDataSetter {
         return (int) (dps * scale + 0.5f);
     }
 
-    public static int getScreenOrientation() {
-        Display getOrient = Constants.mainActivity.getWindowManager().getDefaultDisplay();
-        int orientation = Configuration.ORIENTATION_UNDEFINED;
-        if (getOrient.getWidth() == getOrient.getHeight()) {
-            orientation = Configuration.ORIENTATION_SQUARE;
-        } else {
-            if (getOrient.getWidth() < getOrient.getHeight()) {
-                orientation = Configuration.ORIENTATION_PORTRAIT;
-            } else {
-                orientation = Configuration.ORIENTATION_LANDSCAPE;
-            }
-        }
-        return orientation;
-    }
+//    public static int getScreenOrientation() {
+//        Display getOrient = Constants.mainActivity.getWindowManager().getDefaultDisplay();
+//        int orientation = Configuration.ORIENTATION_UNDEFINED;
+//        if (getOrient.getWidth() == getOrient.getHeight()) {
+//            orientation = Configuration.ORIENTATION_SQUARE;
+//        } else {
+//            if (getOrient.getWidth() < getOrient.getHeight()) {
+//                orientation = Configuration.ORIENTATION_PORTRAIT;
+//            } else {
+//                orientation = Configuration.ORIENTATION_LANDSCAPE;
+//            }
+//        }
+//        return orientation;
+//    }
 
     public static int getPlayingLogo(long groupIndex) {
         if (groupIndex == Constants.TF_ID) {
@@ -892,7 +892,7 @@ public class ItemDataSetter {
         ed.commit();
         Locale locale = new Locale(value);
         Locale.setDefault(locale);
-        final Resources res = Constants.mainActivity.getResources();
+        final Resources res = TIFApp.getAppContext().getResources();
         final Configuration conf = res.getConfiguration();
         conf.locale = locale;
         res.updateConfiguration(conf, null);

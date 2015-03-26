@@ -34,11 +34,11 @@ public class AudioPlayerService extends Service {
         contentView = new RemoteViews(getPackageName(), R.layout.custom_notif);
         if (AudioPlayer.playedPausedRecord.isPlayed && !AudioPlayer.playedPausedRecord.isPaused){
             contentView.setImageViewResource(R.id.notification_image, R.drawable.ic_notif_pause);
-            pendingIntent = PendingIntent.getService(Constants.mainActivity.getApplicationContext(), 0, new Intent(pauseMusic), PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingIntent = PendingIntent.getService(this, 0, new Intent(pauseMusic), PendingIntent.FLAG_UPDATE_CURRENT);
         }
         else if (AudioPlayer.playedPausedRecord.isPaused && !AudioPlayer.playedPausedRecord.isPlayed){
             contentView.setImageViewResource(R.id.notification_image, R.drawable.ic_notif_play);
-            pendingIntent = PendingIntent.getService(Constants.mainActivity.getApplicationContext(), 0, new Intent(playMusic), PendingIntent.FLAG_UPDATE_CURRENT);
+            pendingIntent = PendingIntent.getService(this, 0, new Intent(playMusic), PendingIntent.FLAG_UPDATE_CURRENT);
         }
 
         contentView.setImageViewResource(R.id.logo_image_while_playing, FragmentWall.playableLogoRes);
@@ -63,7 +63,7 @@ public class AudioPlayerService extends Service {
                     //FragmentWall.refresh();
                     Constants.previousCheckBoxState.setChecked(false);
                     contentView.setImageViewResource(R.id.notification_image, R.drawable.ic_notif_play);
-                    pendingIntent = PendingIntent.getService(Constants.mainActivity.getApplicationContext(), 0, new Intent(playMusic), 0);
+                    pendingIntent = PendingIntent.getService(this, 0, new Intent(playMusic), 0);
                     onCreate();
                     Constants.notificationManager.notify(Constants.notifID, notification);
                 }
@@ -74,7 +74,7 @@ public class AudioPlayerService extends Service {
                     //FragmentWall.refresh();
                     Constants.previousCheckBoxState.setChecked(true);
                     contentView.setImageViewResource(R.id.notification_image, R.drawable.ic_notif_pause);
-                    pendingIntent = PendingIntent.getService(Constants.mainActivity.getApplicationContext(), 0, new Intent(pauseMusic), 0);
+                    pendingIntent = PendingIntent.getService(this, 0, new Intent(pauseMusic), 0);
                     onCreate();
                     Constants.notificationManager.notify(Constants.notifID, notification);
                 }

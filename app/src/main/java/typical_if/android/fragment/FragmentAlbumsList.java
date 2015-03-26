@@ -140,7 +140,7 @@ public class FragmentAlbumsList extends Fragment {
                     @Override
                     public void onError(final VKError error) {
                         super.onError(error);
-                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                        OfflineMode.onErrorToast();
                     }
                 });
             } else {
@@ -155,7 +155,7 @@ public class FragmentAlbumsList extends Fragment {
                     @Override
                     public void onError(final VKError error) {
                         super.onError(error);
-                        OfflineMode.onErrorToast(Constants.mainActivity.getApplicationContext());
+                        OfflineMode.onErrorToast();
                     }
                 });
             }
@@ -166,7 +166,7 @@ public class FragmentAlbumsList extends Fragment {
             isRequestNul = true;
         } else {
             if (temp) {
-                OfflineMode.onErrorToast(getActivity());
+                OfflineMode.onErrorToast();
                 isRequestNul = false;
             }
         }
