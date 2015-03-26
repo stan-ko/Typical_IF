@@ -31,6 +31,7 @@ import typical_if.android.Constants;
 import typical_if.android.ExtendedViewPager;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.FullScreenImageAdapter;
@@ -287,7 +288,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                     }
                 }
                 else if (!VKSdk.isLoggedIn()) {
-                    Toast.makeText(getActivity().getApplicationContext(), R.string.you_are_not_logged_in, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TIFApp.getAppContext(), R.string.you_are_not_logged_in, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -299,7 +300,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                     FragmentComments fragment = FragmentComments.newInstanceForPhoto(photos.get(position), Constants.USER_ID);
                     getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 } else if (!VKSdk.isLoggedIn()) {
-                    Toast.makeText(Constants.mainActivity.getApplicationContext(), R.string.you_are_not_logged_in, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TIFApp.getAppContext(), R.string.you_are_not_logged_in, Toast.LENGTH_SHORT).show();
                 }
             }
         });

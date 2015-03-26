@@ -97,7 +97,7 @@
     <string name="settings">Змінити мову</string>
     <string name="error">Помилка</string>
     <string name="max_attaches">Максимальна кількість прикріплень</string>
-    <string name="upload_progress">Вивантажено</string>
+    <string name="upload_progress">Вивантажено %1$d/%2$d</string>
     <string name="upload">Вивантажується...</string>
     <string name="albums">Альбоми</string>
     <string name="upload_photo_server">Завантаження зображень на сервер</string>

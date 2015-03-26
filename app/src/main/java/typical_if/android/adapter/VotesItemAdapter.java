@@ -24,6 +24,7 @@ import com.vk.sdk.api.model.VKList;
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 
 /**
@@ -131,7 +132,7 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
                     @Override
                     public void onError(VKError error) {
                         super.onError(error);
-                        Toast.makeText(Constants.mainActivity.getApplicationContext(),Constants.mainActivity.getResources().getString(R.string.error_during_voting),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TIFApp.getAppContext(),R.string.error_during_voting,Toast.LENGTH_SHORT).show();
 
                     }
                 });
@@ -169,7 +170,7 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
                     @Override
                     public void onError(VKError error) {
                         super.onError(error);
-                        Toast.makeText(Constants.mainActivity.getApplicationContext(),Constants.mainActivity.getResources().getString(R.string.error_during_voting),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TIFApp.getAppContext(),R.string.error_during_voting,Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -201,7 +202,7 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
                     @Override
                     public void onError(VKError error) {
                         super.onError(error);
-                        Toast.makeText(Constants.mainActivity.getApplicationContext(),Constants.mainActivity.getResources().getString(R.string.error_during_voting),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(TIFApp.getAppContext(),R.string.error_during_voting,Toast.LENGTH_SHORT).show();
                     }
                 });
 

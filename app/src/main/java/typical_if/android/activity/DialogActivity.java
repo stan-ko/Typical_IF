@@ -70,10 +70,10 @@ try {
 
     }
 }catch (IllegalStateException ise){
-    Toast.makeText(getApplicationContext(),getResources().getString(R.string.exception_during_run),Toast.LENGTH_SHORT).show();
+    Toast.makeText(getApplicationContext(),R.string.exception_during_run,Toast.LENGTH_SHORT).show();
 }
 catch (NullPointerException npe){
-    Toast.makeText(getApplicationContext(),getResources().getString(R.string.exception_during_run),Toast.LENGTH_SHORT).show();
+    Toast.makeText(getApplicationContext(),R.string.exception_during_run,Toast.LENGTH_SHORT).show();
 }
     }
 
@@ -184,7 +184,7 @@ catch (NullPointerException npe){
                         final int isSucceed = response.json.optInt("response");
 
                         if (isSucceed == 1) {
-                            Toast.makeText(getApplicationContext(), resources.getString(R.string.post_reported), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), R.string.post_reported, Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -244,7 +244,7 @@ catch (NullPointerException npe){
                             public void onComplete(final VKResponse response) {
                                 super.onComplete(response);
                                 getSupportFragmentManager().popBackStack();
-                                Toast.makeText(getApplicationContext(), resources.getString(R.string.post_deleted), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), R.string.post_deleted, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override

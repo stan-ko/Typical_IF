@@ -100,7 +100,7 @@ public class FragmentMakePost extends Fragment {
     private static final View.OnClickListener tooManyAttachments = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Toast.makeText(TIFApp.getAppContext(), ItemDataSetter.context.getString(R.string.max_attaches), Toast.LENGTH_SHORT).show();
+            Toast.makeText(TIFApp.getAppContext(), R.string.max_attaches, Toast.LENGTH_SHORT).show();
         }
     };
 

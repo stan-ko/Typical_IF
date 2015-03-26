@@ -29,6 +29,7 @@ import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.UploadPhotoService;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.PhotoUploadAdapter;
@@ -208,7 +209,7 @@ public class FragmentUploadPhotoList extends Fragment {
     private int counter = 1;
 
     public void decrementThreadsCounter() {
-        Toast.makeText(ItemDataSetter.context, ItemDataSetter.context.getString(R.string.upload_progress) + " " + counter++ + "/" + Constants.tempCurrentPhotoAttachCounter, Toast.LENGTH_SHORT).show();
+        Toast.makeText(TIFApp.getAppContext(), TIFApp.getAppContext().getString(R.string.upload_progress,counter,Constants.tempCurrentPhotoAttachCounter), Toast.LENGTH_SHORT).show();
         if (decrementer.decrementAndGet() == 0) {
             getActivity().getSupportFragmentManager().popBackStack();
             getActivity().getSupportFragmentManager().popBackStack();

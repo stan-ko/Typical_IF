@@ -386,9 +386,9 @@ public class FragmentWall extends Fragment {
             try {
                 fragmentManager.popBackStack();
             } catch (NullPointerException npe) {
-                Toast.makeText(getApplicationContext(), getString(R.string.something_went_wrong), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.something_went_wrong, Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(getApplicationContext(), getString(R.string.no_suggested_posts), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.no_suggested_posts, Toast.LENGTH_SHORT).show();
         }
 
         if ( OfflineMode.loadLong(Constants.VK_GROUP_ID) == Constants.ZF_ID) {
@@ -649,7 +649,7 @@ try {
                         @Override
                         public void onComplete(final VKResponse response) {
                             super.onComplete(response);
-                            Toast.makeText(getActivity(), getString(R.string.group_joined), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.group_joined, Toast.LENGTH_SHORT).show();
                             ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
                         }
 
@@ -664,7 +664,7 @@ try {
                         @Override
                         public void onComplete(final VKResponse response) {
                             super.onComplete(response);
-                            Toast.makeText(getActivity(), getString(R.string.group_leaved), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), R.string.group_leaved, Toast.LENGTH_SHORT).show();
                             ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
                         }
 

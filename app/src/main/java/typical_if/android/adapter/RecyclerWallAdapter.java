@@ -355,7 +355,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
                 dialog.create().show();
 
             } catch (NullPointerException npe) {
-                Toast.makeText(getApplicationContext(), context.getString(R.string.error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -373,7 +373,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
     public static final View.OnClickListener errorToastListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Toast.makeText(getApplicationContext(), TIFApp.getAppContext().getString(R.string.error), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
         }
     };
 

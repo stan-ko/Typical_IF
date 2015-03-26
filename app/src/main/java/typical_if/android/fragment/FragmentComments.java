@@ -1,5 +1,6 @@
 package typical_if.android.fragment;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -365,6 +366,7 @@ public class FragmentComments extends Fragment {
     RelativeLayout coverGlobal;
 
     SwipeRefreshLayout swipeView;
+    @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -400,7 +402,7 @@ public class FragmentComments extends Fragment {
             public void onRefresh() {
 
                 if (!OfflineMode.isOnline(getApplicationContext())) {
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_internet_message_toast_en), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.no_internet_message_toast_en, Toast.LENGTH_SHORT).show();
                 }
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -755,7 +757,7 @@ public class FragmentComments extends Fragment {
             });
 
         } catch (NullPointerException npe) {
-            Toast.makeText(Constants.mainActivity.getApplicationContext(),Constants.mainActivity.getResources().getString(R.string.something_went_wrong),Toast.LENGTH_SHORT).show();
+            Toast.makeText(TIFApp.getAppContext(),R.string.something_went_wrong,Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -790,7 +792,7 @@ public class FragmentComments extends Fragment {
                         case 2: {
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                             clipboard.setText(comments.get(position).text);
-                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.text_has_been_copied_to_the_buffer), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TIFApp.getAppContext(), R.string.text_has_been_copied_to_the_buffer, Toast.LENGTH_SHORT).show();
                         }
                         break;
                         case 3: {
@@ -874,11 +876,11 @@ public class FragmentComments extends Fragment {
                             getActivity().getApplicationContext().startActivity(Intent.createChooser(new Intent(Intent.ACTION_VIEW, uri), Constants.BROWSER_CHOOSER)
                                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 
-                            Toast.makeText(getActivity().getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TIFApp.getAppContext(), items[item], Toast.LENGTH_SHORT).show();
                         }
 
                         default:
-                            Toast.makeText(getActivity().getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TIFApp.getAppContext(), items[item], Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -897,7 +899,7 @@ public class FragmentComments extends Fragment {
                         case 1: {
                             ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
                             clipboard.setText(comments.get(position).text);
-                            Toast.makeText(getActivity().getApplicationContext(),getString(R.string.text_has_been_copied_to_the_buffer),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(TIFApp.getAppContext(),R.string.text_has_been_copied_to_the_buffer,Toast.LENGTH_SHORT).show();
                         }
                         break;
                         case 2: {
