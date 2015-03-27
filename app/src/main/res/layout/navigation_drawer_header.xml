@@ -11,7 +11,8 @@
         android:id="@+id/img_nav_draw_bg"
         android:src="@drawable/img_nav_draw_header"
         android:alpha="0.6"
-        android:scaleType="matrix" />
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop" />
 
     <RelativeLayout
         android:layout_width="match_parent"

@@ -4,10 +4,6 @@
       <root url="jar://$PROJECT_DIR$/app/libs/stankoutils.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="file://$PROJECT_DIR$/../StanKoUtils/app/src/main/java" />
-      <root url="file://$PROJECT_DIR$/../StanKoUtils/app/build/generated/source/r/debug" />
-      <root url="file://$PROJECT_DIR$/../StanKoUtils/app/build/generated/source/buildConfig/debug" />
-    </SOURCES>
+    <SOURCES />
   </library>
 </component>
