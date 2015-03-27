@@ -39,15 +39,12 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
-import typical_if.android.activity.MainActivity;
 import typical_if.android.fragment.FragmentComments;
-import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentWithAttach;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
-import static com.vk.sdk.VKUIHelper.getTopActivity;
 import static java.lang.String.valueOf;
 
 /**
@@ -253,17 +250,17 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
 //                }
 //            } catch (Exception e) {
 //            }
-            if (VKSdk.isLoggedIn()) {
-                surpriseCounter++;
-                OfflineMode.saveInt(surpriseCounter, "surprise");
-            }
-            try {
-                if (OfflineMode.loadInt("surprise") == 15 && VKSdk.isLoggedIn()) {
-                    ((MainActivity) getTopActivity()).addFragment(FragmentMakePost.newInstance(-77149556, 0, 0));
-                }
-            } catch (Exception e) {
-                surpriseCounter = 0;
-            }
+//            if (VKSdk.isLoggedIn()) {
+//                surpriseCounter++;
+//                OfflineMode.saveInt(surpriseCounter, "surprise");
+//            }
+//            try {
+//                if (OfflineMode.loadInt("surprise") == 15 && VKSdk.isLoggedIn()) {
+//                    ((MainActivity) getTopActivity()).addFragment(FragmentMakePost.newInstance(-77149556, 0, 0));
+//                }
+//            } catch (Exception e) {
+//                surpriseCounter = 0;
+//            }
 
             final ViewHolder viewHolder = (ViewHolder) v.getTag();
             final VKApiPost post = (VKApiPost) viewHolder.cb_post_like.getTag();
