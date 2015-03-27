@@ -5,6 +5,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import typical_if.android.VKHelper;
+
 /**
  * Created by LJ on 14.07.2014.
  */
@@ -79,8 +81,8 @@ public class Album {
 
 
     public static  ArrayList<Album> getAlbumFromJSONArray(JSONObject jsonArray) {
-        JSONObject object = jsonArray.optJSONObject("response");
-        JSONArray array = object.optJSONArray("items");
+        JSONObject object = jsonArray.optJSONObject(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
+        JSONArray array = object.optJSONArray(VKHelper.TIF_VK_SDK_KEY_ITEMS);
         final ArrayList<Album> albums = new ArrayList<Album>();
         for (int i=0; i<array.length(); i++){
             final Album album = getAlbumFromJSON(array.optJSONObject(i));

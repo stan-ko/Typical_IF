@@ -110,7 +110,7 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
                     @Override
                     public void onSuccess() {
                         if (hasJson) {
-                            int result = vkJson.optInt("response");
+                            int result = vkJson.optInt(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
                             if (result != 0) {
                                 Log.d("YOU'RE_VOTE_ADDED", vkJson.toString());
                                 poll.answer_id = answer.id;

@@ -540,7 +540,7 @@ public class FragmentWall extends FragmentWithAttach {
             @Override
             public void onSuccess() {
                 if(hasJson) {
-                    Constants.isMember = vkJson.optInt("response");
+                    Constants.isMember = vkJson.optInt(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
                     if (VKSdk.isLoggedIn()) {
                         if (Constants.isMember == 0) {
                             try {

@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import typical_if.android.VKHelper;
+
 /**
  * Created by Yurij on 05.02.2015.
  */
@@ -53,7 +55,7 @@ public class VKPoll extends VKApiPoll {
 
     public VKPoll parse (JSONObject source1) {
 
-        JSONObject source = source1.optJSONObject("response");
+        JSONObject source = source1.optJSONObject(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
         id = source.optInt("id");
         owner_id = source.optInt("owner_id");
         created = source.optLong("created");

@@ -5,6 +5,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import typical_if.android.VKHelper;
+
 /**
  * Created by admin on 24.07.2014.
  */
@@ -66,7 +68,7 @@ public class Profile {
     }
 
    public static Profile parseUserInfoFromJSON (JSONObject o){
-       JSONArray a = o.optJSONArray("response");
+       JSONArray a = o.optJSONArray(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
        JSONObject o1 = a.optJSONObject(0);
 
      return new Profile(o1.optLong("id"),o1.optString("first_name"),

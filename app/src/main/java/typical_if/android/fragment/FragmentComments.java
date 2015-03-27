@@ -204,7 +204,7 @@ public class FragmentComments extends FragmentWithAttach {
             @Override
             public void onSuccess() {
                 try {
-                    JSONArray array = vkJson.optJSONArray("response");
+                    JSONArray array = vkJson.optJSONArray(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
                     JSONObject object = array.optJSONObject(0);
                     postSender = new VKApiUser(object);
                 } catch (JSONException e) {
