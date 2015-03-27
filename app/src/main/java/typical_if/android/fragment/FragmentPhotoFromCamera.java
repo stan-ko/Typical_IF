@@ -76,7 +76,7 @@ public class FragmentPhotoFromCamera extends Fragment {
 //                    @Override
 //                    public void onError(VKError error) {
 //                        super.onError(error);
-//                        OfflineMode.onErrorToast();
+//                        TIFApp.showCommonErrorToast();
 //                    }
                 });
             }

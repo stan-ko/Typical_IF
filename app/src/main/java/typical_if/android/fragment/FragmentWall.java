@@ -641,7 +641,7 @@ try {
                         }
 //                        @Override
 //                        public void onError() {
-//                            OfflineMode.onErrorToast();
+//                            TIFApp.showCommonErrorToast();
 //                        }
                     });
                 } else {

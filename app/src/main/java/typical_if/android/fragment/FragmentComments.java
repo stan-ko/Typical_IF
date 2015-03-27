@@ -217,7 +217,7 @@ public class FragmentComments extends FragmentWithAttach {
 
 //            @Override
 //            public void onError() {
-//                OfflineMode.onErrorToast();
+//                TIFApp.showCommonErrorToast();
 //            }
         });
 
@@ -455,7 +455,7 @@ public class FragmentComments extends FragmentWithAttach {
                                 }
 //                                @Override
 //                                public void onError() {
-//                                    OfflineMode.onErrorToast();
+//                                    TIFApp.showCommonErrorToast();
 //                                }
                             });
 
@@ -468,7 +468,7 @@ public class FragmentComments extends FragmentWithAttach {
                                 }
 //                                @Override
 //                                public void onError() {
-//                                    OfflineMode.onErrorToast();
+//                                    TIFApp.showCommonErrorToast();
 //                                }
                             });
 
@@ -483,7 +483,7 @@ public class FragmentComments extends FragmentWithAttach {
                             }
 //                            @Override
 //                            public void onError() {
-//                                OfflineMode.onErrorToast();
+//                                TIFApp.showCommonErrorToast();
 //                            }
                         });
 
@@ -543,7 +543,7 @@ public class FragmentComments extends FragmentWithAttach {
             }
 //            @Override
 //            public void onError() {
-//                OfflineMode.onErrorToast();
+//                TIFApp.showCommonErrorToast();
 //            }
         });
         try {
@@ -760,7 +760,7 @@ public class FragmentComments extends FragmentWithAttach {
 
 //                                    @Override
 //                                    public void onError() {
-//                                        OfflineMode.onErrorToast();
+//                                        TIFApp.showCommonErrorToast();
 //                                    }
                                 });
 
@@ -775,7 +775,7 @@ public class FragmentComments extends FragmentWithAttach {
 
 //                                    @Override
 //                                    public void onError() {
-//                                        OfflineMode.onErrorToast();
+//                                        TIFApp.showCommonErrorToast();
 //                                    }
                                 });
                             }
@@ -794,7 +794,7 @@ public class FragmentComments extends FragmentWithAttach {
 //                                    @Override
 //                                    public void onError(final VKError error) {
 //                                        super.onError(error);
-//                                        OfflineMode.onErrorToast();
+//                                        TIFApp.showCommonErrorToast();
 //                                    }
                                 });
                             } else {

@@ -136,7 +136,7 @@ public class FragmentAlbumsList extends Fragment {
 //                    @Override
 //                    public void onError(final VKError error) {
 //                        super.onError(error);
-//                        OfflineMode.onErrorToast();
+//                        TIFApp.showCommonErrorToast();
 //                    }
                 });
             } else {
@@ -148,7 +148,7 @@ public class FragmentAlbumsList extends Fragment {
                     }
 //                    @Override
 //                    public void onError() {
-//                        OfflineMode.onErrorToast();
+//                        TIFApp.showCommonErrorToast();
 //                    }
                 });
             }
@@ -159,7 +159,7 @@ public class FragmentAlbumsList extends Fragment {
             isRequestNul = true;
         } else {
             if (temp) {
-                OfflineMode.onErrorToast();
+                TIFApp.showCommonErrorToast();
                 isRequestNul = false;
             }
         }

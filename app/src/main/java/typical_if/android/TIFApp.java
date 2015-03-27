@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.DisplayMetrics;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -106,4 +107,17 @@ public class TIFApp extends Application {
         OfflineMode.init(this);
 
     }
+
+    public static void showToast(final String msgToShow) {
+        Toast.makeText(getAppContext(), msgToShow, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showToast(final int stringResId) {
+        Toast.makeText(getAppContext(), stringResId, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showCommonErrorToast() {
+        //    Toast.makeText(TIFApp.getAppContext(), R.string.error, Toast.LENGTH_SHORT).show();
+    }
+
 }

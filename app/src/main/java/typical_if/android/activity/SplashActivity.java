@@ -37,6 +37,7 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.NotificationService;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.VKRequestListener;
 import typical_if.android.util.BooleanLock;
@@ -148,7 +149,7 @@ public class SplashActivity extends Activity {
                         builder.setCancelable(true);
                     }
                 });
-        if (!isFirstOpen() && OfflineMode.loadJSON(Constants.TF_ID) != null) {
+        if (!isFirstOpen() & OfflineMode.loadJSON(Constants.TF_ID) != null) {
             builder.setNeutralButton(getString(R.string.offline), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     builder.setCancelable(true);
@@ -297,7 +298,7 @@ public class SplashActivity extends Activity {
         synchronized (isRequestErrorToastShown) {
             if (!isRequestErrorToastShown.value) {
                 isRequestErrorToastShown.value = true;
-                OfflineMode.onErrorToast();
+                TIFApp.showCommonErrorToast();
             }
         }
     }

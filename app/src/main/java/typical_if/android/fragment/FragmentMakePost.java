@@ -172,7 +172,7 @@ public class FragmentMakePost extends FragmentWithAttach {
                             }
 //                            @Override
 //                            public void onError() {
-//                                OfflineMode.onErrorToast();
+//                                TIFApp.showCommonErrorToast();
 //                            }
                         });
                     }
@@ -193,7 +193,7 @@ public class FragmentMakePost extends FragmentWithAttach {
                             }
 //                            @Override
 //                            public void onError() {
-//                                OfflineMode.onErrorToast();
+//                                TIFApp.showCommonErrorToast();
 //                            }
                         });
                     }

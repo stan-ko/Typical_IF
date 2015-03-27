@@ -155,7 +155,7 @@ public class FragmentUploadPhotoList extends FragmentWithAttach {
                                 }
 //                                @Override
 //                                public void onError() {
-//                                    OfflineMode.onErrorToast();
+//                                    TIFApp.showCommonErrorToast();
 //                                }
                             });
                         }

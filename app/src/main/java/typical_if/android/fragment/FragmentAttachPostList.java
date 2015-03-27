@@ -85,7 +85,7 @@ public class FragmentAttachPostList extends FragmentWithAttach {
 
 //                    @Override
 //                    public void onError() {
-//                        OfflineMode.onErrorToast();
+//                        TIFApp.showCommonErrorToast();
 //                    }
                 });
                 break;
@@ -112,7 +112,7 @@ public class FragmentAttachPostList extends FragmentWithAttach {
                     }
 //                    @Override
 //                    public void onError() {
-//                        OfflineMode.onErrorToast();
+//                        TIFApp.showCommonErrorToast();
 //                    }
                 });
                 break;
@@ -139,7 +139,7 @@ public class FragmentAttachPostList extends FragmentWithAttach {
                     }
 //                    @Override
 //                    public void onError() {
-//                        OfflineMode.onErrorToast();
+//                        TIFApp.showCommonErrorToast();
 //                    }
                 });
         }

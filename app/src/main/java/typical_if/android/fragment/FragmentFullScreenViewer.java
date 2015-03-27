@@ -140,7 +140,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             }
 //            @Override
 //            public void onError() {
-//                OfflineMode.onErrorToast();
+//                TIFApp.showCommonErrorToast();
 //            }
         });
 
@@ -250,7 +250,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                             }
 //                            @Override
 //                            public void onError() {
-//                                OfflineMode.onErrorToast();
+//                                TIFApp.showCommonErrorToast();
 //                            }
                         });
                     } else {
@@ -264,7 +264,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                             }
 //                            @Override
 //                            public void onError() {
-//                                OfflineMode.onErrorToast();
+//                                TIFApp.showCommonErrorToast();
 //                            }
                         });
                     }

@@ -224,11 +224,5 @@ public class OfflineMode extends SharedPrefsHelper {
         return wall;
     }
 
-
-    public static void onErrorToast() {
-        //    Toast.makeText(TIFApp.getAppContext(), R.string.error, Toast.LENGTH_SHORT).show();
-    }
-
-
 }
 

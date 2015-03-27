@@ -318,7 +318,7 @@ try {
         } else {
             if (temp) {
                 isRequestNull = false;
-                OfflineMode.onErrorToast();
+                TIFApp.showCommonErrorToast();
             }
         }
         return isRequestNull;
