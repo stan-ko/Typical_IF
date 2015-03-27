@@ -239,7 +239,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
                 if (VKSdk.isLoggedIn()) {
 
-                    if (photos.get(position).user_likes == 0 & !btnLike.isSelected()) {
+                    if (photos.get(position).user_likes == 0 && !btnLike.isSelected()) {
                         VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequestListener() {
                             @Override
                             public void onSuccess() {

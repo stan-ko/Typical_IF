@@ -154,7 +154,7 @@ public class FragmentAlbumsList extends Fragment {
             }
             isRequestNul=  true;
         }
-        if (!OfflineMode.isOnline() & OfflineMode.isJsonNull( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums")) {
+        if (!OfflineMode.isOnline() && OfflineMode.isJsonNull( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums")) {
             handleResponse(OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums"), view);
             isRequestNul = true;
         } else {

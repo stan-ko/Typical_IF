@@ -117,7 +117,7 @@ public class FragmentWall extends FragmentWithAttach {
             }
             if (OfflineMode.loadLong(Constants.VK_GROUP_ID)!= Constants.ZF_ID) {
 
-                if (lastItem == totalItemCount - 5 & temp2) {
+                if (lastItem == totalItemCount - 5 && temp2) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -128,7 +128,7 @@ public class FragmentWall extends FragmentWithAttach {
                     temp2 = false;
                 }
 
-                if (lastItem == totalItemCount & temp) {
+                if (lastItem == totalItemCount && temp) {
                     endlessAdd(lastItem);
                     temp = false;
                     temp2 = true;

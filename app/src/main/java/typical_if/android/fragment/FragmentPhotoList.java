@@ -213,7 +213,7 @@ try {
     @Override
     public void onScroll(final AbsListView view, int firstVisibleItem, final int visibleItemCount, int totalItemCount) {
         _lastInScreen = firstVisibleItem + visibleItemCount;
-        if (_lastInScreen >= totalItemCount & totalItemCount >= 100 & totalItemCount != VKHelper.countOfPhotos) {
+        if (_lastInScreen >= totalItemCount && totalItemCount >= 100 && totalItemCount != VKHelper.countOfPhotos) {
 
             if (_lastInScreen < VKHelper.countOfPhotos) {
                 _subtract = VKHelper.countOfPhotos - _lastInScreen;
@@ -238,7 +238,7 @@ try {
 
     private void getElsePhotos(int firstVisibleItem, final int visibleItemCount, final int totalItemCount, final AbsListView view) {
 
-        if (firstVisibleItem + visibleItemCount >= totalItemCount & !updated) {
+        if (firstVisibleItem + visibleItemCount >= totalItemCount && !updated) {
 
 
             VKHelper.getPhotoList(OfflineMode.loadLong(Constants.VK_GROUP_ID), Constants.ALBUM_ID, 1, _count, new VKRequestListener() {

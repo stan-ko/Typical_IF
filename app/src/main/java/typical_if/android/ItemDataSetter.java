@@ -436,7 +436,7 @@ public class ItemDataSetter {
         text.setText(parsedText, TextView.BufferType.SPANNABLE);
         text.setMovementMethod(LinkMovementMethod.getInstance());
 
-        if (!Constants.isFragmentCommentsLoaded & parsedText.length() > 300) {
+        if (!Constants.isFragmentCommentsLoaded && parsedText.length() > 300) {
             showAll.setVisibility(View.VISIBLE);
             showAll.setText(Constants.SHOW_ALL_TEXT);
 

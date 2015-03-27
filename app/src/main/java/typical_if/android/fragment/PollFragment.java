@@ -102,7 +102,7 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
         if (getArguments() != null) {
             this.isAnonymous_preview = getArguments().getString("isAnonymous");
 
-            if (Constants.isFragmentCommentsLoaded & updatedPoll != null) {
+            if (Constants.isFragmentCommentsLoaded && updatedPoll != null) {
                 this.poll = updatedPoll;
             } else {
                 this.poll = getArguments().getParcelable("poll");

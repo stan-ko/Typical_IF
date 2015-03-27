@@ -148,7 +148,7 @@ public class SplashActivity extends Activity {
                         builder.setCancelable(true);
                     }
                 });
-        if (!isFirstOpen() & OfflineMode.loadJSON(Constants.TF_ID) != null) {
+        if (!isFirstOpen() && OfflineMode.loadJSON(Constants.TF_ID) != null) {
             builder.setNeutralButton(getString(R.string.offline), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     builder.setCancelable(true);
