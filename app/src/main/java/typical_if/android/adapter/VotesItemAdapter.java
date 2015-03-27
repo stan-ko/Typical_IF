@@ -1,10 +1,8 @@
 package typical_if.android.adapter;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,17 +15,13 @@ import android.widget.Toast;
 
 import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPoll;
 import com.vk.sdk.api.model.VKList;
 
-import typical_if.android.Constants;
-import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 
 /**
  * Created by Yurij on 05.02.2015.
@@ -47,7 +41,7 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
     String isAnonymous;
     Button changeDecision;
     int answer_id;
-    int rule = 0 ;
+    int rule = 0;
 
 
     public VotesItemAdapter(final Context activity, VKApiPoll poll, TextView answers_anonymous_text, TextView answers_anonymous_text_preview, String isAnonymous, String isAnonymous_preview,
@@ -56,12 +50,12 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
         this.appContext = activity.getApplicationContext();
         this.textFadeOutColor = appContext.getResources().getColor(R.color.textFadeOutColor);
         this.layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.answers_anonymous_text=answers_anonymous_text;
-        this.answers_anonymous_text_preview=answers_anonymous_text_preview;
-        this.isAnonymous=isAnonymous;
-        this.isAnonymous_preview=isAnonymous_preview;
+        this.answers_anonymous_text = answers_anonymous_text;
+        this.answers_anonymous_text_preview = answers_anonymous_text_preview;
+        this.isAnonymous = isAnonymous;
+        this.isAnonymous_preview = isAnonymous_preview;
         this.poll = poll;
-        this.changeDecision=changeDecision;
+        this.changeDecision = changeDecision;
     }
 
 
@@ -95,51 +89,43 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
         viewHolder.vote_text.setVisibility(View.VISIBLE);
 
 
+        //   viewHolder.amount_of_answers.setText(String.valueOf(answer.votes));
+        //    viewHolder.vote_text.setText(answer.text);
+        //    viewHolder.bar.setMax(100);
 
-     //   viewHolder.amount_of_answers.setText(String.valueOf(answer.votes));
-    //    viewHolder.vote_text.setText(answer.text);
-    //    viewHolder.bar.setMax(100);
-
-      ///  if (viewHolder.wasAlreadyCalled){
-      ///     viewHolder.bar.setProgress((int) answer.rate);
-     //  }else {
-            viewHolder.bar.setProgress(0);
-      //  }
-
-
-            checkConditions(viewHolder, answer);
+        ///  if (viewHolder.wasAlreadyCalled){
+        ///     viewHolder.bar.setProgress((int) answer.rate);
+        //  }else {
+        viewHolder.bar.setProgress(0);
+        //  }
 
 
-
+        checkConditions(viewHolder, answer);
 
 
         viewHolder.addVoteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                VKHelper.addVote(poll.owner_id, poll.id, answer.id, 0, new VKRequest.VKRequestListener() {
+                VKHelper.addVote(poll.owner_id, poll.id, answer.id, 0, new VKRequestListener() {
                     @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
-
-                        int result = response.json.optInt("response");
-                        if (result!=0) {
-                            Log.d("YOU'RE_VOTE_ADDED",response.json.toString());
-                            poll.answer_id=answer.id;
-                            ++poll.votes;
-                            ++answer.votes;
-                            notifyDataSetChanged();
-                            checkConditions(viewHolder,answer);
-                            viewHolder.vote_text.setTypeface(null, Typeface.BOLD);
-
-
+                    public void onSuccess() {
+                        if (hasJson) {
+                            int result = vkJson.optInt("response");
+                            if (result != 0) {
+                                Log.d("YOU'RE_VOTE_ADDED", vkJson.toString());
+                                poll.answer_id = answer.id;
+                                ++poll.votes;
+                                ++answer.votes;
+                                notifyDataSetChanged();
+                                checkConditions(viewHolder, answer);
+                                viewHolder.vote_text.setTypeface(null, Typeface.BOLD);
+                            }
                         }
                     }
 
                     @Override
-                    public void onError(VKError error) {
-                        super.onError(error);
-                        Toast.makeText(TIFApp.getAppContext(),R.string.error_during_voting,Toast.LENGTH_SHORT).show();
-
+                    public void onError() {
+                        Toast.makeText(TIFApp.getAppContext(), R.string.error_during_voting, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -147,40 +133,37 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
         });
 
 
-       changeDecision.setOnClickListener(new View.OnClickListener() {
+        changeDecision.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               if (poll.answer_id!=0){
-                for (int i =0 ; i <poll.answers.size(); i++){
-                    if (poll.answer_id==answers.get(i).id){
-                        answer_id=answers.get(i).id;
-                    }
-                }
-                VKHelper.deleteVote(poll.owner_id, poll.id, answer_id, 0, new VKRequest.VKRequestListener() {
-                    @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
-
-                        int result = response.json.optInt("response");
-                        if (result!=0) {
-                            Log.d("YOU'RE_VOTE_DELETED",response.json.toString());
-                            poll.answer_id=0;
-                            --poll.votes;
-                            --answer.votes;
-                            notifyDataSetChanged();
-                            checkConditions (viewHolder,answer);
-                            viewHolder.vote_text.setTypeface(null, Typeface.NORMAL);
+                if (poll.answer_id != 0) {
+                    for (int i = 0; i < poll.answers.size(); i++) {
+                        if (poll.answer_id == answers.get(i).id) {
+                            answer_id = answers.get(i).id;
                         }
                     }
+                    VKHelper.deleteVote(poll.owner_id, poll.id, answer_id, 0, new VKRequestListener() {
+                        @Override
+                        public void onSuccess() {
+                            int result = vkJson.optInt(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
+                            if (result != 0) {
+                                Log.d("YOU'RE_VOTE_DELETED", vkJson.toString());
+                                poll.answer_id = 0;
+                                --poll.votes;
+                                --answer.votes;
+                                notifyDataSetChanged();
+                                checkConditions(viewHolder, answer);
+                                viewHolder.vote_text.setTypeface(null, Typeface.NORMAL);
+                            }
+                        }
 
-                    @Override
-                    public void onError(VKError error) {
-                        super.onError(error);
-                        Toast.makeText(TIFApp.getAppContext(),R.string.error_during_voting,Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onError() {
+                            Toast.makeText(TIFApp.getAppContext(), R.string.error_during_voting, Toast.LENGTH_SHORT).show();
+                        }
+                    });
 
-               }
+                }
 
             }
         });
@@ -188,39 +171,37 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
         viewHolder.bar.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                VKHelper.deleteVote(poll.owner_id, poll.id, answer.id, 0, new VKRequest.VKRequestListener() {
+                VKHelper.deleteVote(poll.owner_id, poll.id, answer.id, 0, new VKRequestListener() {
                     @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
-
-                        int result = response.json.optInt("response");
-                        if (result!=0) {
-                            Log.d("YOU'RE_VOTE_DELETED",response.json.toString());
-                            poll.answer_id=0;
+                    public void onSuccess() {
+                        int result = vkJson.optInt(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
+                        if (result != 0) {
+                            Log.d("YOU'RE_VOTE_DELETED", vkJson.toString());
+                            poll.answer_id = 0;
                             --poll.votes;
                             --answer.votes;
                             notifyDataSetChanged();
-                            checkConditions (viewHolder,answer);
+                            checkConditions(viewHolder, answer);
                             viewHolder.vote_text.setTypeface(null, Typeface.NORMAL);
                         }
                     }
 
                     @Override
-                    public void onError(VKError error) {
-                        super.onError(error);
-                        Toast.makeText(TIFApp.getAppContext(),R.string.error_during_voting,Toast.LENGTH_SHORT).show();
+                    public void onError() {
+                        Toast.makeText(TIFApp.getAppContext(), R.string.error_during_voting, Toast.LENGTH_SHORT).show();
                     }
                 });
 
-            return true;
+                return true;
             }
         });
 
 
-   return convertView;
+        return convertView;
     }
-  //  Thread t;
-    public void checkConditions (final ViewHolder viewHolder, final VKApiPoll.Answer answer) {
+
+    //  Thread t;
+    public void checkConditions(final ViewHolder viewHolder, final VKApiPoll.Answer answer) {
 
 
         answers_anonymous_text_preview.setText(isAnonymous_preview + " " + poll.votes);
@@ -283,7 +264,7 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
 //                }
 //
 //            }
-         //   if (viewHolder.wasAlreadyCalled)
+            //   if (viewHolder.wasAlreadyCalled)
             viewHolder.bar.setProgress((int) answer.rate);
 
 
@@ -293,7 +274,6 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
     }
 
 
-
     public static class ViewHolder {
         public final NumberProgressBar bar;
         public final TextView vote_text;
@@ -301,7 +281,7 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
         public final Button addVoteButton;
         public boolean wasAlreadyCalled;
 
-     ViewHolder(View view) {
+        ViewHolder(View view) {
             this.wasAlreadyCalled = false;
             this.bar = (NumberProgressBar) view.findViewById(R.id.rate_bar);
             this.vote_text = (TextView) view.findViewById(R.id.variant_text);

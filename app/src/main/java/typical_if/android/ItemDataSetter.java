@@ -46,9 +46,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.viewpagerindicator.CirclePageIndicator;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiDocument;
@@ -735,11 +732,10 @@ public class ItemDataSetter {
     public static void makeSaveTransaction(final ArrayList<VKApiPhoto> photos, final int position) {
 
         if (OfflineMode.isOnline()) {
-            VKHelper.getPhotoByID(photosKeyGen(photos), new VKRequest.VKRequestListener() {
+            VKHelper.getPhotoByID(photosKeyGen(photos), new VKRequestListener() {
                 @Override
-                public void onComplete(VKResponse response) {
-                    super.onComplete(response);
-                    OfflineMode.saveJSON(response.json, photosKeyGen(photos));
+                public void onSuccess() {
+                    OfflineMode.saveJSON(vkJson, photosKeyGen(photos));
                     finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKeyGen(photos)));
 //                    Fragment fragment = new FragmentFullScreenViewer(finalPhotos, position, 0);
                     Fragment fragment = new FragmentFullScreenViewer();
@@ -749,12 +745,11 @@ public class ItemDataSetter {
                     args.putInt("sizeOfAlbum", 0);
                     fragment.setArguments(args);
                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-                    OfflineMode.saveJSON(response.json, photosKeyGen(photos));
+                    OfflineMode.saveJSON(vkJson, photosKeyGen(photos));
                 }
 
                 @Override
-                public void onError(VKError error) {
-                    super.onError(error);
+                public void onError() {
                     Fragment fragment = new FragmentFullScreenViewer();
                     args.clear();
                     args.putSerializable("finalPhotos", photos);

@@ -14,9 +14,6 @@ import android.widget.ListView;
 
 import com.nhaarman.listviewanimations.appearance.AnimationAdapter;
 import com.nhaarman.listviewanimations.appearance.simple.SwingBottomInAnimationAdapter;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 
 import org.json.JSONObject;
 
@@ -26,6 +23,7 @@ import typical_if.android.Constants;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.AlbumCoverAdapter;
 import typical_if.android.model.Album;
@@ -129,34 +127,29 @@ public class FragmentAlbumsList extends Fragment {
             temp = false;
             if (type == 0) {
 
-                VKHelper.getAlbumList(Constants.USER_ID, new VKRequest.VKRequestListener() {
+                VKHelper.getAlbumList(Constants.USER_ID, new VKRequestListener() {
                     @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
-                        OfflineMode.saveJSON(response.json,  OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums");
+                    public void onSuccess() {
+                        OfflineMode.saveJSON(vkJson,  OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums");
                         handleResponse(OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums"), view);
-
                     }
-                    @Override
-                    public void onError(final VKError error) {
-                        super.onError(error);
-                        OfflineMode.onErrorToast();
-                    }
+//                    @Override
+//                    public void onError(final VKError error) {
+//                        super.onError(error);
+//                        OfflineMode.onErrorToast();
+//                    }
                 });
             } else {
-                VKHelper.getAlbumList( OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequest.VKRequestListener() {
+                VKHelper.getAlbumList( OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
                     @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
-                        OfflineMode.saveJSON(response.json, OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums");
-
+                    public void onSuccess() {
+                        OfflineMode.saveJSON(vkJson, OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums");
                         handleResponse(OfflineMode.loadJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums"), view);
                     }
-                    @Override
-                    public void onError(final VKError error) {
-                        super.onError(error);
-                        OfflineMode.onErrorToast();
-                    }
+//                    @Override
+//                    public void onError() {
+//                        OfflineMode.onErrorToast();
+//                    }
                 });
             }
             isRequestNul=  true;

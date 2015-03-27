@@ -18,9 +18,6 @@ import android.text.ClipboardManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKApiVideo;
 
@@ -33,6 +30,7 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 import typical_if.android.event.EventShowPhotoAttachDialog;
 import typical_if.android.event.EventShowReportDialog;
 import typical_if.android.event.EventShowSuggestPostDialog;
@@ -177,22 +175,22 @@ public class DialogActivity extends ActionBarActivity {
                         reason = 3;
                         break;
                 }
-                VKHelper.doReportPost(gid, id, reason, new VKRequest.VKRequestListener() {
+                VKHelper.doReportPost(gid, id, reason, new VKRequestListener() {
                     @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
-                        final int isSucceed = response.json.optInt("response");
+                    public void onSuccess() {
+                        if (hasJson) {
+                            final int isSucceed = vkJson.optInt(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
 
-                        if (isSucceed == 1) {
-                            Toast.makeText(getApplicationContext(), R.string.post_reported, Toast.LENGTH_SHORT).show();
+                            if (isSucceed == 1) {
+                                Toast.makeText(getApplicationContext(), R.string.post_reported, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
 
-                    @Override
-                    public void onError(final VKError error) {
-                        super.onError(error);
-                        OfflineMode.onErrorToast();
-                    }
+//                    @Override
+//                    public void onError() {
+//                        showErrorToast();
+//                    }
                 });
             }
         });
@@ -238,19 +236,17 @@ public class DialogActivity extends ActionBarActivity {
                         addFragment(FragmentMakePost.newInstance(gid, post.id, 1));
                         break;
                     case 1:
-                        VKHelper.deleteSuggestedPost(gid, post.id, new VKRequest.VKRequestListener() {
+                        VKHelper.deleteSuggestedPost(gid, post.id, new VKRequestListener() {
                             @Override
-                            public void onComplete(final VKResponse response) {
-                                super.onComplete(response);
+                            public void onSuccess() {
                                 getSupportFragmentManager().popBackStack();
                                 Toast.makeText(getApplicationContext(), R.string.post_deleted, Toast.LENGTH_SHORT).show();
                             }
 
-                            @Override
-                            public void onError(final VKError error) {
-                                super.onError(error);
-                                OfflineMode.onErrorToast();
-                            }
+//                            @Override
+//                            public void onError() {
+//                                showErrorToast();
+//                            }
                         });
                         break;
                 }

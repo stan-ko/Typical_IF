@@ -24,9 +24,6 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.shamanland.fab.ShowHideOnScroll;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKAttachments;
@@ -45,6 +42,7 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.RecyclerEventAdapter;
 import typical_if.android.adapter.RecyclerWallAdapter;
@@ -246,18 +244,11 @@ public class FragmentWall extends FragmentWithAttach {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        VKHelper.doGroupWallRequest(offsetO, Offset,  OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequest.VKRequestListener() {
+                        VKHelper.doGroupWallRequest(offsetO, Offset,  OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
                             @Override
-                            public void onComplete(final VKResponse response) {
-                                super.onComplete(response);
-                                OfflineMode.saveJSON(response.json,  OfflineMode.loadLong(Constants.VK_GROUP_ID));
+                            public void onSuccess() {
+                                OfflineMode.saveJSON(vkJson,  OfflineMode.loadLong(Constants.VK_GROUP_ID));
                                 initGroupWall(OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID)), inflaterGlobal);
-                            }
-
-                            @Override
-                            public void onError(final VKError error) {
-                                super.onError(error);
-                                OfflineMode.onErrorToast();
                             }
                         });
 
@@ -288,23 +279,19 @@ public class FragmentWall extends FragmentWithAttach {
 
         } else {
             setDisabledMenu();
-            VKHelper.getSuggestedPosts( OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequest.VKRequestListener() {
+            VKHelper.getSuggestedPosts( OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
                 @Override
-                public void onComplete(final VKResponse response) {
-                    super.onComplete(response);
-                    initGroupWall(response.json, inflater);
+                public void onSuccess() {
+                    initGroupWall(vkJson, inflater);
                     wallListView.setOnScrollListener(null);
-
                     swipeView.setOnRefreshListener(null);
                     swipeView.setEnabled(false);
                     swipeView.setRefreshing(false);
                 }
-
-                @Override
-                public void onError(final VKError error) {
-                    super.onError(error);
-                    OfflineMode.onErrorToast();
-                }
+//                @Override
+//                public void onError() {
+//                    showErrorToast();
+//                }
             });
         }
 
@@ -549,31 +536,33 @@ public class FragmentWall extends FragmentWithAttach {
         }
 
         super.onPrepareOptionsMenu(menu);
-        VKHelper.isMember( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequest.VKRequestListener() {
+        VKHelper.isMember( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-                Constants.isMember = response.json.optInt("response");
-                if (VKSdk.isLoggedIn()) {
-                    if (Constants.isMember == 0) {
-                        try {
-                            menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_join));
-                        } catch (Exception e) {}
+            public void onSuccess() {
+                if(hasJson) {
+                    Constants.isMember = vkJson.optInt("response");
+                    if (VKSdk.isLoggedIn()) {
+                        if (Constants.isMember == 0) {
+                            try {
+                                menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_join));
+                            } catch (Exception e) {
+                            }
+                        } else {
+                            try {
+                                menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_leave));
+                            } catch (Exception e) {
+                            }
+                        }
                     } else {
-                        try {
-                            menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_leave));
-                        } catch (Exception e) {}
+                        menu.findItem(R.id.join_leave_group).setVisible(false);
                     }
-                } else {
-                    menu.findItem(R.id.join_leave_group).setVisible(false);
                 }
             }
 
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-                OfflineMode.onErrorToast();
-            }
+//            @Override
+//            public void onError() {
+//                showErrorToast();
+//            }
         });
     }
 
@@ -644,34 +633,29 @@ try {
                 break;
             case R.id.join_leave_group:
                 if (Constants.isMember == 0) {
-                    VKHelper.groupJoin( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequest.VKRequestListener() {
+                    VKHelper.groupJoin( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
                         @Override
-                        public void onComplete(final VKResponse response) {
-                            super.onComplete(response);
+                        public void onSuccess() {
                             Toast.makeText(getActivity(), R.string.group_joined, Toast.LENGTH_SHORT).show();
                             ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
                         }
-
-                        @Override
-                        public void onError(final VKError error) {
-                            super.onError(error);
-                            OfflineMode.onErrorToast();
-                        }
+//                        @Override
+//                        public void onError() {
+//                            OfflineMode.onErrorToast();
+//                        }
                     });
                 } else {
-                    VKHelper.groupLeave( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequest.VKRequestListener() {
+                    VKHelper.groupLeave( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
                         @Override
-                        public void onComplete(final VKResponse response) {
-                            super.onComplete(response);
+                        public void onSuccess() {
                             Toast.makeText(getActivity(), R.string.group_leaved, Toast.LENGTH_SHORT).show();
                             ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
                         }
 
-                        @Override
-                        public void onError(final VKError error) {
-                            super.onError(error);
-                            OfflineMode.onErrorToast();
-                        }
+//                        @Override
+//                        public void onError() {
+//                            showErrorToast();
+//                        }
                     });
                 }
                 break;
@@ -695,17 +679,15 @@ try {
     }
 
     private void endlessGet(final int Offset) {
-        VKHelper.doGroupWallRequest(Offset, countPostDefaultForOffset,  OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(Offset, countPostDefaultForOffset,  OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-                OfflineMode.saveJSON(OfflineMode.jsonPlus(jsonObjectOld, response.json),  OfflineMode.loadLong(Constants.VK_GROUP_ID));
+            public void onSuccess() {
+                OfflineMode.saveJSON(OfflineMode.jsonPlus(jsonObjectOld, vkJson),  OfflineMode.loadLong(Constants.VK_GROUP_ID));
             }
 
             @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-                OfflineMode.onErrorToast();
+            public void onError() {
+                super.onError();
                 endlessGet(Offset);
             }
         });

@@ -24,8 +24,6 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 
 import org.json.JSONObject;
 
@@ -40,6 +38,7 @@ import typical_if.android.NotificationService;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 import typical_if.android.util.BooleanLock;
 
 public class SplashActivity extends Activity {
@@ -214,83 +213,71 @@ public class SplashActivity extends Activity {
     private void makeRequests() {
         //final AtomicInteger requestSessionThreadsCounter = threadsCounter;
         //   --------------------START------------- all Request from internet before start APP----------------------
-        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.TF_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.TF_ID, new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-                handleRequestComplete(response.json, Constants.TF_ID);
+            public void onSuccess() {
+                handleRequestComplete(vkJson, Constants.TF_ID);
             }
 
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-                handleRequestError();
-            }
+//            @Override
+//            public void onError() {
+//                showErrorToast();
+//            }
         });
-        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.TZ_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.TZ_ID, new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-                handleRequestComplete(response.json, Constants.TZ_ID);
+            public void onSuccess() {
+                handleRequestComplete(vkJson, Constants.TZ_ID);
             }
 
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-                handleRequestError();
-            }
+//            @Override
+//            public void onError() {
+//                showErrorToast();
+//            }
         });
-        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.FB_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.FB_ID, new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-                handleRequestComplete(response.json, Constants.FB_ID);
+            public void onSuccess() {
+                handleRequestComplete(vkJson, Constants.FB_ID);
             }
 
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-                handleRequestError();
-            }
+//            @Override
+//            public void onError() {
+//                showErrorToast();
+//            }
         });
-        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.FN_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.FN_ID, new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-                handleRequestComplete(response.json, Constants.FN_ID);
+            public void onSuccess() {
+                handleRequestComplete(vkJson, Constants.FN_ID);
             }
 
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-                handleRequestError();
-            }
+//            @Override
+//            public void onError() {
+//                showErrorToast();
+//            }
         });
-        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.ZF_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.ZF_ID, new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-                handleRequestComplete(response.json, Constants.ZF_ID);
+            public void onSuccess() {
+                handleRequestComplete(vkJson, Constants.ZF_ID);
             }
 
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-                handleRequestError();
-            }
+//            @Override
+//            public void onError() {
+//                showErrorToast();
+//            }
         });
-        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.ST_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(offsetDefault, Constants.TIF_VK_PRELOAD_POSTS_COUNT, Constants.ST_ID, new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-                handleRequestComplete(response.json, Constants.ST_ID);
+            public void onSuccess() {
+                handleRequestComplete(vkJson, Constants.ST_ID);
             }
 
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-                handleRequestError();
-            }
+//            @Override
+//            public void onError() {
+//                showErrorToast();
+//            }
         });
         //-------------------------END-------- all Request from internet before start APP----------------------
     }

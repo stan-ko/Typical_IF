@@ -14,9 +14,6 @@ import android.widget.Toast;
 
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKUIHelper;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONArray;
@@ -31,6 +28,7 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.FullScreenImageAdapter;
 import typical_if.android.event.EventReturnNeedAdapter;
@@ -130,23 +128,20 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         imagePager.setCurrentItem(currentPosition);
         adapter.notifyDataSetChanged();
 
-        VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
+        VKHelper.getMyselfInfo(new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-
-                JSONArray arr = response.json.optJSONArray("response");
-                JSONObject jsonObject = arr.optJSONObject(0);
-                Constants.USER_ID = jsonObject.optLong("id");
-                arguments.putLong(ARG_VK_USER_ID, user_id);
-
+            public void onSuccess() {
+                if (hasJson) {
+                    JSONArray arr = vkJson.optJSONArray(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
+                    JSONObject jsonObject = arr.optJSONObject(0);
+                    Constants.USER_ID = jsonObject.optLong("id");
+                    arguments.putLong(ARG_VK_USER_ID, user_id);
+                }
             }
-
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-                OfflineMode.onErrorToast();
-            }
+//            @Override
+//            public void onError() {
+//                OfflineMode.onErrorToast();
+//            }
         });
 
         setRetainInstance(true);
@@ -214,22 +209,20 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             albumSize.setText(String.valueOf(originalSizeOfAlbum));
 
 
-        VKHelper.isLikedPhoto(photos.get(position).id, new VKRequest.VKRequestListener() {
+        VKHelper.isLikedPhoto(photos.get(position).id, new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-                try {
-                    JSONObject j = response.json.optJSONObject("response");
-                    photos.get(position).user_likes = j.optInt("liked");
-                } catch (NullPointerException e) {}
-
+            public void onSuccess() {
+                if (hasJson) {
+                    JSONObject j = vkJson.optJSONObject(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
+                    if (j != null)
+                        photos.get(position).user_likes = j.optInt("liked");
+                }
             }
 
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-                OfflineMode.onErrorToast();
-            }
+//            @Override
+//            public void onError() {
+//                showErrorToast();
+//            }
         });
 
         btnLike.setSelected(photos.get(position).user_likes > 0);
@@ -247,45 +240,35 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                 if (VKSdk.isLoggedIn()) {
 
                     if (photos.get(position).user_likes == 0 & !btnLike.isSelected()) {
-                        VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
+                        VKHelper.setLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequestListener() {
                             @Override
-                            public void onComplete(final VKResponse response) {
-                                super.onComplete(response);
-
+                            public void onSuccess() {
                                 btnLike.setSelected(true);
                                 final int likesCount = ++photos.get(position).likes;
-                                btnLike.setText(likesCount==0 ? null : String.valueOf(likesCount));
+                                btnLike.setText(likesCount == 0 ? null : String.valueOf(likesCount));
                                 photos.get(position).user_likes = 1;
                             }
-
-                            @Override
-                            public void onError(final VKError error) {
-                                super.onError(error);
-                                OfflineMode.onErrorToast();
-                            }
+//                            @Override
+//                            public void onError() {
+//                                OfflineMode.onErrorToast();
+//                            }
                         });
-                    }
-                    else {
-                        VKHelper.deleteLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequest.VKRequestListener() {
+                    } else {
+                        VKHelper.deleteLike(TYPE, photos.get(position).owner_id, photos.get(position).id, new VKRequestListener() {
                             @Override
-                            public void onComplete(final VKResponse response) {
-                                super.onComplete(response);
-
+                            public void onSuccess() {
                                 btnLike.setSelected(false);
                                 final int likesCount = --photos.get(position).likes;
                                 photos.get(position).user_likes = 0;
-                                btnLike.setText(likesCount==0 ? null : String.valueOf(likesCount));
+                                btnLike.setText(likesCount == 0 ? null : String.valueOf(likesCount));
                             }
-
-                            @Override
-                            public void onError(final VKError error) {
-                                super.onError(error);
-                                OfflineMode.onErrorToast();
-                            }
+//                            @Override
+//                            public void onError() {
+//                                OfflineMode.onErrorToast();
+//                            }
                         });
                     }
-                }
-                else if (!VKSdk.isLoggedIn()) {
+                } else if (!VKSdk.isLoggedIn()) {
                     Toast.makeText(TIFApp.getAppContext(), R.string.you_are_not_logged_in, Toast.LENGTH_SHORT).show();
                 }
             }

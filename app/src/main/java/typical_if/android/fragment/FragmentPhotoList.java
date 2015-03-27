@@ -30,8 +30,6 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.shamanland.fab.FloatingActionButton;
 import com.shamanland.fab.ShowHideOnScroll;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
 
 import org.json.JSONObject;
@@ -45,6 +43,7 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.PhotoListAdapter;
 import typical_if.android.util.PhotoUrlHelper;
@@ -242,16 +241,18 @@ try {
         if (firstVisibleItem + visibleItemCount >= totalItemCount & !updated) {
 
 
-            VKHelper.getPhotoList(OfflineMode.loadLong(Constants.VK_GROUP_ID), Constants.ALBUM_ID, 1, _count, new VKRequest.VKRequestListener() {
+            VKHelper.getPhotoList(OfflineMode.loadLong(Constants.VK_GROUP_ID), Constants.ALBUM_ID, 1, _count, new VKRequestListener() {
                 @Override
-                public void onComplete(final VKResponse response) {
-
-                    super.onComplete(response);
-                    OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
+                public void onSuccess() {
+                    OfflineMode.saveJSON(vkJson, Constants.ALBUM_ID);
                     handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
                     initPhotoList();
                 }
 
+                @Override
+                public void onError() {
+                    //show no toast
+                }
             });
             updated = true;
         }
@@ -280,28 +281,31 @@ try {
         if (OfflineMode.isOnline()) {
             temp = false;
             if (type == 0) {
-                VKHelper.getPhotoList(Constants.USER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
-
+                VKHelper.getPhotoList(Constants.USER_ID, Constants.ALBUM_ID, 1, 100, new VKRequestListener() {
                     @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
-                        OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
+                    public void onSuccess() {
+                        OfflineMode.saveJSON(vkJson, Constants.ALBUM_ID);
                         handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
                         attachHeaderView(view);
                         initPhotoList();
                     }
+                    @Override
+                    public void onError() {
+                        // show NO default toast?
+                    }
                 });
             } else {
-                VKHelper.getPhotoList(Constants.TEMP_OWNER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
-
+                VKHelper.getPhotoList(Constants.TEMP_OWNER_ID, Constants.ALBUM_ID, 1, 100, new VKRequestListener() {
                     @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
-                        OfflineMode.saveJSON(response.json, Constants.ALBUM_ID);
+                    public void onSuccess() {
+                        OfflineMode.saveJSON(vkJson, Constants.ALBUM_ID);
                         handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
                         attachHeaderView(view);
                         initPhotoList();
-
+                    }
+                    @Override
+                    public void onError() {
+                        // show NO default toast?
                     }
                 });
 

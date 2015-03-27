@@ -3,7 +3,6 @@ package typical_if.android.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,9 +15,7 @@ import android.widget.Toast;
 
 import com.shamanland.fab.FloatingActionButton;
 import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKPhotoArray;
 
 import java.io.File;
@@ -26,10 +23,10 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import typical_if.android.Constants;
-import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.UploadPhotoService;
+import typical_if.android.VKRequestListener;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.PhotoUploadAdapter;
 import typical_if.android.model.UploadPhotos;
@@ -150,19 +147,16 @@ public class FragmentUploadPhotoList extends FragmentWithAttach {
                     for (int j = 0; j < photolist.size(); j++) {
                         getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
                         if (photolist.get(j).isChecked) {
-                            VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photoSrc), Constants.USER_ID, (int) gid).executeWithListener(new VKRequest.VKRequestListener() {
+                            VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photoSrc), Constants.USER_ID, (int) gid).executeWithListener(new VKRequestListener() {
                                 @Override
-                                public void onComplete(final VKResponse response) {
-                                    super.onComplete(response);
-                                    Constants.tempPhotoPostAttach.add(((VKPhotoArray) response.parsedModel).get(0));
+                                public void onSuccess() {
+                                    Constants.tempPhotoPostAttach.add(((VKPhotoArray) vkResponse.parsedModel).get(0));
                                     decrementThreadsCounter();
                                 }
-
-                                @Override
-                                public void onError(final VKError error) {
-                                    super.onError(error);
-                                    OfflineMode.onErrorToast();
-                                }
+//                                @Override
+//                                public void onError() {
+//                                    OfflineMode.onErrorToast();
+//                                }
                             });
                         }
                     }
@@ -175,17 +169,11 @@ public class FragmentUploadPhotoList extends FragmentWithAttach {
                     for (int j = 0; j < photolist.size(); j++) {
                         getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
                         if (photolist.get(j).isChecked) {
-                            VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photoSrc), Constants.ALBUM_ID, (int) gid).executeWithListener(new VKRequest.VKRequestListener() {
-                                @Override
-                                public void onComplete(final VKResponse response) {
-                                    super.onComplete(response);
-                                }
-
-                                @Override
-                                public void onError(final VKError error) {
-                                    super.onError(error);
-                                    OfflineMode.onErrorToast();
-                                }
+                            VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photoSrc), Constants.ALBUM_ID, (int) gid).executeWithListener(new VKRequestListener() {
+//                                @Override
+//                                public void onError() {
+//                                    showErrorToast();
+//                                }
                             });
 
                             getActivity().getSupportFragmentManager().popBackStack();
@@ -231,18 +219,11 @@ public class FragmentUploadPhotoList extends FragmentWithAttach {
                     for (int j = 0; j < photolist.size(); j++) {
                         getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
                         if (photolist.get(j).isChecked) {
-                            VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photoSrc), Constants.USER_ID, (int) gid).executeWithListener(new VKRequest.VKRequestListener() {
+                            VKApi.uploadWallPhotoRequest(new File(photolist.get(j).photoSrc), Constants.USER_ID, (int) gid).executeWithListener(new VKRequestListener() {
                                 @Override
-                                public void onComplete(final VKResponse response) {
-                                    super.onComplete(response);
-                                    Constants.tempPhotoPostAttach.add(((VKPhotoArray) response.parsedModel).get(0));
+                                public void onSuccess() {
+                                    Constants.tempPhotoPostAttach.add(((VKPhotoArray) vkResponse.parsedModel).get(0));
                                     decrementThreadsCounter();
-                                }
-
-                                @Override
-                                public void onError(final VKError error) {
-                                    super.onError(error);
-                                    OfflineMode.onErrorToast();
                                 }
                             });
                         }
@@ -260,17 +241,11 @@ public class FragmentUploadPhotoList extends FragmentWithAttach {
                         getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
                         if (photolist.get(j).isChecked) {
                             req = VKApi.uploadAlbumPhotoRequest(new File(photolist.get(j).photoSrc), Constants.ALBUM_ID, (int) gid);
-                            req.executeWithListener(new VKRequest.VKRequestListener() {
-                                @Override
-                                public void onComplete(final VKResponse response) {
-                                    super.onComplete(response);
-                                }
-
-                                @Override
-                                public void onError(final VKError error) {
-                                    super.onError(error);
-                                    OfflineMode.onErrorToast();
-                                }
+                            req.executeWithListener(new VKRequestListener() {
+//                                @Override
+//                                public void onError() {
+//                                    showErrorToast();
+//                                }
                             });
                         }
                     }

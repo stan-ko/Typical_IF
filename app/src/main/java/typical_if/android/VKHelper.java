@@ -65,7 +65,7 @@ public class VKHelper {
 
     public static int offsetCounter;
 
-    public static void getAlbumList(long groupID, VKRequest.VKRequestListener listener) {
+    public static void getAlbumList(long groupID, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, groupID);
         params.put(TIF_VK_SDK_KEY_NEED_COVERS, 1);
@@ -74,7 +74,7 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void getPhotoList(long owner_id, long album_id, int rev, int count, VKRequest.VKRequestListener listener) {
+    public static void getPhotoList(long owner_id, long album_id, int rev, int count, VKRequestListener listener) {
         VKParameters params = new VKParameters();
 
         if (offsetCounter == 0) {
@@ -112,7 +112,7 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void editSuggestedPost(long gid, long pid, Editable message, String attachments, VKRequest.VKRequestListener vkRequestListener) {
+    public static void editSuggestedPost(long gid, long pid, Editable message, String attachments, VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_POST_ID, pid);
         params.put(TIF_VK_SDK_KEY_OWNER_ID, gid);
@@ -123,7 +123,7 @@ public class VKHelper {
         request.executeWithListener(vkRequestListener);
     }
 
-    public static void deleteSuggestedPost(long gid, long pid, VKRequest.VKRequestListener vkRequestListener) {
+    public static void deleteSuggestedPost(long gid, long pid, VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_POST_ID, pid);
         params.put(TIF_VK_SDK_KEY_OWNER_ID, gid);
@@ -132,7 +132,7 @@ public class VKHelper {
         request.executeWithListener(vkRequestListener);
     }
 
-    public static void getSuggestedPosts(long gid, VKRequest.VKRequestListener vkRequestListener) {
+    public static void getSuggestedPosts(long gid, VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, gid);
         params.put(TIF_VK_SDK_KEY_DOMAIN, gid);
@@ -145,7 +145,7 @@ public class VKHelper {
         request.executeWithListener(vkRequestListener);
     }
 
-    public static void doGroupWallRequest(int offset, int countPosts, long gid, VKRequest.VKRequestListener vkRequestListener) {
+    public static void doGroupWallRequest(int offset, int countPosts, long gid, VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, gid);
         params.put(TIF_VK_SDK_KEY_DOMAIN, gid);
@@ -157,13 +157,13 @@ public class VKHelper {
         request.executeWithListener(vkRequestListener);
     }
 
-    public static void setLikePost(long item_id, VKRequest.VKRequestListener listener) {
+    public static void setLikePost(long item_id, VKRequestListener listener) {
         setLike(TIF_VK_SDK_KEY_POST, OfflineMode.loadLong(Constants.VK_GROUP_ID), item_id, listener);
     }
-    public static void setLikePost(long owner_id, long item_id, VKRequest.VKRequestListener listener) {
+    public static void setLikePost(long owner_id, long item_id, VKRequestListener listener) {
         setLike(TIF_VK_SDK_KEY_POST, owner_id, item_id, listener);
     }
-    public static void setLike(String type, long owner_id, long item_id, VKRequest.VKRequestListener listener) {
+    public static void setLike(String type, long owner_id, long item_id, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_TYPE, type);
         params.put(TIF_VK_SDK_KEY_OWNER_ID, owner_id);
@@ -172,10 +172,10 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void deleteLikePost(long item_id, VKRequest.VKRequestListener listener) {
+    public static void deleteLikePost(long item_id, VKRequestListener listener) {
         deleteLike(TIF_VK_SDK_KEY_POST, OfflineMode.loadLong(Constants.VK_GROUP_ID), item_id, listener);
     }
-    public static void deleteLike(String type, long owner_id, long item_id, VKRequest.VKRequestListener listener) {
+    public static void deleteLike(String type, long owner_id, long item_id, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_TYPE, type);
         params.put(TIF_VK_SDK_KEY_OWNER_ID, owner_id);
@@ -184,10 +184,10 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void isLikedPhoto(long item_id, VKRequest.VKRequestListener listener) {
+    public static void isLikedPhoto(long item_id, VKRequestListener listener) {
         isLiked(TIF_VK_SDK_KEY_PHOTO, OfflineMode.loadLong(Constants.VK_GROUP_ID), item_id, listener);
     }
-    public static void isLiked(String type, long owner_id, long item_id, VKRequest.VKRequestListener listener) {
+    public static void isLiked(String type, long owner_id, long item_id, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         //params.put("user_id",user_id );
         params.put(TIF_VK_SDK_KEY_TYPE, type);
@@ -198,7 +198,7 @@ public class VKHelper {
 
     }
 
-    public static void getPollById(long owner_id, int is_board, long poll_id, VKRequest.VKRequestListener listener) {
+    public static void getPollById(long owner_id, int is_board, long poll_id, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, owner_id);
         params.put(TIF_VK_SDK_KEY_IS_BOARD, is_board);
@@ -215,7 +215,7 @@ public class VKHelper {
 //       else return null;
     }
 
-    public static void addVote(long owner_id, long poll_id, long answer_id, int is_board, VKRequest.VKRequestListener listener) {
+    public static void addVote(long owner_id, long poll_id, long answer_id, int is_board, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, owner_id);
         params.put(TIF_VK_SDK_KEY_POLL_ID, poll_id);
@@ -225,7 +225,7 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void deleteVote(long owner_id, long poll_id, long answer_id, int is_board,  VKRequest.VKRequestListener listener ) {
+    public static void deleteVote(long owner_id, long poll_id, long answer_id, int is_board,  VKRequestListener listener ) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID,owner_id);
         params.put(TIF_VK_SDK_KEY_POLL_ID,poll_id);
@@ -236,7 +236,7 @@ public class VKHelper {
     }
 
 
-    public static void getUserAudios(VKRequest.VKRequestListener vkRequestListener) {
+    public static void getUserAudios(VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, Constants.USER_ID);
 
@@ -244,7 +244,7 @@ public class VKHelper {
         request.executeWithListener(vkRequestListener);
     }
 
-    public static void getUserVideos(VKRequest.VKRequestListener vkRequestListener) {
+    public static void getUserVideos(VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, Constants.USER_ID);
 
@@ -252,7 +252,7 @@ public class VKHelper {
         request.executeWithListener(vkRequestListener);
     }
 
-    public static void getUserDocs(VKRequest.VKRequestListener vkRequestListener) {
+    public static void getUserDocs(VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, Constants.USER_ID);
 
@@ -260,7 +260,7 @@ public class VKHelper {
         request.executeWithListener(vkRequestListener);
     }
 
-    public static void doRepost(String pid, String message, VKRequest.VKRequestListener listener) {
+    public static void doRepost(String pid, String message, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("object", pid);
         params.put(TIF_VK_SDK_KEY_MESSAGE, message);
@@ -268,7 +268,7 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void doReportPost(long oid, long pid, int reason, VKRequest.VKRequestListener listener) {
+    public static void doReportPost(long oid, long pid, int reason, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, oid);
         params.put(TIF_VK_SDK_KEY_POST_ID, pid);
@@ -277,7 +277,7 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void getComments(long owner_id, long item_id, VKRequest.VKRequestListener listener) {
+    public static void getComments(long owner_id, long item_id, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, owner_id);
         params.put(Constants.PARAM_NAME2, item_id);
@@ -303,7 +303,7 @@ public class VKHelper {
         return array;
     }
 
-    public static void deleteComment(long owner_id, long item_id, VKRequest.VKRequestListener listener) {
+    public static void deleteComment(long owner_id, long item_id, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, owner_id);
         params.put(TIF_VK_SDK_KEY_COMMENT_ID, item_id);
@@ -311,7 +311,7 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void createComment(long owner_id, long item_id, String message, int reply_to_comment, VKRequest.VKRequestListener listener) {
+    public static void createComment(long owner_id, long item_id, String message, int reply_to_comment, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, owner_id);
         params.put(Constants.PARAM_NAME2, item_id);
@@ -321,7 +321,7 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void editComment(long owner_id, long comment_id, String message, VKAttachments.VKApiAttachment attachments, VKRequest.VKRequestListener listener) {
+    public static void editComment(long owner_id, long comment_id, String message, VKAttachments.VKApiAttachment attachments, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, owner_id);
         params.put(TIF_VK_SDK_KEY_COMMENT_ID, comment_id);
@@ -342,14 +342,14 @@ public class VKHelper {
     }
 
 
-    public static void getMyselfInfo(VKRequest.VKRequestListener listener) {
+    public static void getMyselfInfo(VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("fields", "photo_100");
         final VKRequest request = new VKRequest("users.get", params);
         request.executeWithListener(listener);
     }
 
-    public static void getWhoIsPosted(long user_id, String fields, VKRequest.VKRequestListener listener) {
+    public static void getWhoIsPosted(long user_id, String fields, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("user_ids", user_id);
         params.put("fields", fields);
@@ -357,7 +357,7 @@ public class VKHelper {
         request.executeWithListener(listener);
     }
 
-    public static void doWallPost(long owner_id, Editable message, String attachments, VKRequest.VKRequestListener vkRequestListener) {
+    public static void doWallPost(long owner_id, Editable message, String attachments, VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, owner_id);
         params.put(TIF_VK_SDK_KEY_MESSAGE, message);
@@ -368,7 +368,7 @@ public class VKHelper {
     }
 
 
-    public static void getVideoPlay(String videos, VKRequest.VKRequestListener vkRequestListener) {
+    public static void getVideoPlay(String videos, VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put("videos", videos);
         params.put(TIF_VK_SDK_KEY_EXTENDED, 1);
@@ -378,7 +378,7 @@ public class VKHelper {
     }
 
 
-    public static void getPhotoByID(String photos, VKRequest.VKRequestListener listener) {
+    public static void getPhotoByID(String photos, VKRequestListener listener) {
         VKParameters params = new VKParameters();
         params.put("photos", photos);
         params.put(TIF_VK_SDK_KEY_EXTENDED, 1);
@@ -477,7 +477,7 @@ public class VKHelper {
         return photos;
     }
 
-    public static void isMember(long gid, VKRequest.VKRequestListener vkRequestListener) {
+    public static void isMember(long gid, VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_GROUP_ID, gid);
 
@@ -485,7 +485,7 @@ public class VKHelper {
         request.executeWithListener(vkRequestListener);
     }
 
-    public static void exec(VKRequest.VKRequestListener vkRequestListener) {
+    public static void exec(VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
 
 
@@ -494,7 +494,7 @@ public class VKHelper {
     }
 
 
-    public static void groupJoin(long gid, VKRequest.VKRequestListener vkRequestListener) {
+    public static void groupJoin(long gid, VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_GROUP_ID, gid);
 
@@ -502,7 +502,7 @@ public class VKHelper {
         request.executeWithListener(vkRequestListener);
     }
 
-    public static void groupLeave(long gid, VKRequest.VKRequestListener vkRequestListener) {
+    public static void groupLeave(long gid, VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_GROUP_ID, gid);
 
@@ -510,7 +510,7 @@ public class VKHelper {
         request.executeWithListener(vkRequestListener);
     }
 
-    public static void doGroupWallRequest(int extended, int offset, int countPosts, long gid, VKRequest.VKRequestListener vkRequestListener) {
+    public static void doGroupWallRequest(int extended, int offset, int countPosts, long gid, VKRequestListener vkRequestListener) {
         VKParameters params = new VKParameters();
         params.put(TIF_VK_SDK_KEY_OWNER_ID, gid);
         params.put(TIF_VK_SDK_KEY_DOMAIN, gid);

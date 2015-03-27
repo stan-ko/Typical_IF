@@ -31,8 +31,6 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 
 import typical_if.android.AudioPlayer;
 import typical_if.android.AudioPlayerService;
@@ -42,8 +40,8 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 import typical_if.android.adapter.ActionBarArrayAdapter;
-import typical_if.android.event.EventShowPhotoAttachDialog;
 import typical_if.android.event.MainActivityAddFragmentEvent;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentFullScreenViewer;
@@ -356,11 +354,10 @@ public class MainActivity extends DialogActivity implements
 
         @Override
         public void onReceiveNewToken(VKAccessToken newToken) {
-            VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
+            VKHelper.getMyselfInfo(new VKRequestListener() {
                 @Override
-                public void onComplete(final VKResponse response) {
-                    super.onComplete(response);
-                    VKHelper.UserObject user = VKHelper.getUserFromResponse(response);
+                public void onSuccess() {
+                    VKHelper.UserObject user = VKHelper.getUserFromResponse(vkResponse);
                     if (user.id == 0) {
                         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
                         user.id = sPref.getLong("uid", 0); //TODO че делать если нулл?
@@ -374,21 +371,19 @@ public class MainActivity extends DialogActivity implements
                     ((FragmentWall) getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
                 }
 
-                @Override
-                public void onError(final VKError error) {
-                    super.onError(error);
-                    OfflineMode.onErrorToast();
-                }
+//                @Override
+//                public void onError() {
+//                    showErrorToast();
+//                }
             });
         }
 
         @Override
         public void onAcceptUserToken(VKAccessToken token) {
-            VKHelper.getMyselfInfo(new VKRequest.VKRequestListener() {
+            VKHelper.getMyselfInfo(new VKRequestListener() {
                 @Override
-                public void onComplete(final VKResponse response) {
-                    super.onComplete(response);
-                    VKHelper.UserObject user = VKHelper.getUserFromResponse(response);
+                public void onComplete() {
+                    VKHelper.UserObject user = VKHelper.getUserFromResponse(vkResponse);
                     if (user.id == 0) {
                         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
                         user.id = sPref.getLong("uid", 0); //TODO че делать если нулл?
@@ -403,11 +398,10 @@ public class MainActivity extends DialogActivity implements
                     ((FragmentWall) getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
                 }
 
-                @Override
-                public void onError(final VKError error) {
-                    super.onError(error);
-                    OfflineMode.onErrorToast();
-                }
+//                @Override
+//                public void onError() {
+//                    showErrorToast();
+//                }
             });
         }
     };

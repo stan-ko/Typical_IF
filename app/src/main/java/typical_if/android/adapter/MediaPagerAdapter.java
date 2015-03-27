@@ -1,9 +1,7 @@
 package typical_if.android.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,20 +12,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiVideo;
 
 import java.util.ArrayList;
 
-import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 import typical_if.android.activity.WebViewActivity;
-import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentWithAttach;
 
 /**
@@ -74,32 +68,28 @@ public class MediaPagerAdapter extends PagerAdapter {
     public View.OnClickListener openVideosListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            VKApiVideo video = (VKApiVideo) v.getTag();
-            String key = (video.owner_id + "_" + video.id + "_" + video.access_key);
-            VKHelper.getVideoPlay(key, new VKRequest.VKRequestListener() {
-                        @Override
-                        public void onComplete(VKResponse response) {
-                            super.onComplete(response);
-                            VKApiVideo video = VKHelper.getVideoSourceFromJson(response.json);
-
-                            if (video != null) {
-                               // new WebViewActivity(video);
-
-                                Intent intent = new Intent(mContext, WebViewActivity.class);
-                                intent.putExtra("VIDEO_OBJECT",video);
-                                mContext.startActivity(intent);
-                              //  Fragment fragment = new FragmentWebView(video);
-                              //  ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-                            } else
-                                Toast.makeText(mContext, R.string.error_playing_video, Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onError(VKError error) {
-                            super.onError(error);
-                            Toast.makeText(mContext, R.string.error_playing_video_auth, Toast.LENGTH_SHORT).show();
-                        }
+            final VKApiVideo video = (VKApiVideo) v.getTag();
+            final String key = (video.owner_id + "_" + video.id + "_" + video.access_key);
+            VKHelper.getVideoPlay(key, new VKRequestListener() {
+                    @Override
+                    public void onSuccess() {
+                        final VKApiVideo video = VKHelper.getVideoSourceFromJson(vkJson);
+                        if (video != null) {
+                            // new WebViewActivity(video);
+                            final Intent intent = new Intent(mContext, WebViewActivity.class);
+                            intent.putExtra("VIDEO_OBJECT", video);
+                            mContext.startActivity(intent);
+                            //  Fragment fragment = new FragmentWebView(video);
+                            //  ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+                        } else
+                            Toast.makeText(mContext, R.string.error_playing_video, Toast.LENGTH_SHORT).show();
                     }
+
+                    @Override
+                    public void onError() {
+                        Toast.makeText(mContext, R.string.error_playing_video_auth, Toast.LENGTH_SHORT).show();
+                    }
+                }
             );
 
         }

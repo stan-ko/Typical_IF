@@ -1,8 +1,6 @@
 package typical_if.android.fragment;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,26 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devspark.robototextview.widget.RobotoTextView;
 import com.getbase.floatingactionbutton.AddFloatingActionButton;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
-import com.vk.sdk.api.model.VKApiAudio;
-import com.vk.sdk.api.model.VKApiDocument;
-import com.vk.sdk.api.model.VKApiPhoto;
-import com.vk.sdk.api.model.VKApiVideo;
-
-import java.util.ArrayList;
 
 import de.greenrobot.event.EventBus;
 import typical_if.android.Constants;
@@ -40,6 +26,7 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.RecyclerWallAdapter;
 import typical_if.android.event.EventShowPhotoAttachDialog;
@@ -176,19 +163,17 @@ public class FragmentMakePost extends FragmentWithAttach {
                 btSendPost.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        VKHelper.doWallPost(gid, textField.getText(), getAttachesForPost(), new VKRequest.VKRequestListener() {
+                        VKHelper.doWallPost(gid, textField.getText(), getAttachesForPost(), new VKRequestListener() {
                             @Override
-                            public void onComplete(final VKResponse response) {
-                                super.onComplete(response);
+                            public void onSuccess() {
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 Toast.makeText(TIFApp.getAppContext(), ItemDataSetter.context.getString(R.string.post_added), Toast.LENGTH_SHORT).show();
                             }
-                            @Override
-                            public void onError(final VKError error) {
-                                super.onError(error);
-                                OfflineMode.onErrorToast();
-                            }
+//                            @Override
+//                            public void onError() {
+//                                OfflineMode.onErrorToast();
+//                            }
                         });
                     }
                 });
@@ -199,19 +184,17 @@ public class FragmentMakePost extends FragmentWithAttach {
                 btSendPost.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        VKHelper.editSuggestedPost(gid, pid, textField.getText(), getAttachesForPost(), new VKRequest.VKRequestListener() {
+                        VKHelper.editSuggestedPost(gid, pid, textField.getText(), getAttachesForPost(), new VKRequestListener() {
                             @Override
-                            public void onComplete(final VKResponse response) {
-                                super.onComplete(response);
+                            public void onSuccess() {
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 ItemDataSetter.fragmentManager.popBackStack();
                                 ItemDataSetter.fragmentManager.beginTransaction().add(R.id.container, FragmentWall.newInstance(true)).addToBackStack(null).commit();
                             }
-                            @Override
-                            public void onError(final VKError error) {
-                                super.onError(error);
-                                OfflineMode.onErrorToast();
-                            }
+//                            @Override
+//                            public void onError() {
+//                                OfflineMode.onErrorToast();
+//                            }
                         });
                     }
                 });

@@ -36,9 +36,6 @@ import android.widget.Toast;
 import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiComment;
 import com.vk.sdk.api.model.VKApiCommunity;
 import com.vk.sdk.api.model.VKApiPhoto;
@@ -60,6 +57,7 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.CommentsListAdapter;
 import typical_if.android.adapter.RecyclerWallAdapter;
@@ -202,37 +200,25 @@ public class FragmentComments extends FragmentWithAttach {
         final TextView postPhotoUserName = ((TextView) rootView.findViewById(R.id.post_user_name));
         final TextView postPhotoUserDateOfComment = ((TextView) rootView.findViewById(R.id.post_user_date_of_comment));
 
-        VKHelper.getWhoIsPosted(from_user, "photo_50", new VKRequest.VKRequestListener() {
+        VKHelper.getWhoIsPosted(from_user, "photo_50", new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-
+            public void onSuccess() {
                 try {
-                    JSONArray array = response.json.optJSONArray("response");
+                    JSONArray array = vkJson.optJSONArray("response");
                     JSONObject object = array.optJSONObject(0);
                     postSender = new VKApiUser(object);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
                 ImageLoader.getInstance().displayImage(postSender.photo_50, postPhotoUserAvatar);
                 postPhotoUserName.setText(postSender.last_name + " " + postSender.first_name);
                 postPhotoUserDateOfComment.setText(ItemDataSetter.getFormattedDate(photo.date));
-
-//                if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1){
-//
-//                    photoUserSender.callOnClick();
-//                }
-//
             }
 
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-                OfflineMode.onErrorToast();
-
-            }
+//            @Override
+//            public void onError() {
+//                OfflineMode.onErrorToast();
+//            }
         });
 
         photoUserSender.setOnClickListener(new View.OnClickListener() {
@@ -270,10 +256,9 @@ public class FragmentComments extends FragmentWithAttach {
 //            @Override
 //            public void onClick(View v) {
 //                if (photo.user_likes == 0) {
-//                    VKHelper.setLike("photo", group_id, photo.id, new VKRequest.VKRequestListener() {
+//                    VKHelper.setLike("photo", group_id, photo.id, new VKRequestListener() {
 //                        @Override
-//                        public void onComplete(final VKResponse response) {
-//                            super.onComplete(response);
+//                        public void onSuccess() {
 //                            photo.user_likes = 1;
 //                            ++photo.likes;
 //                            likePostPhoto.setText(String.valueOf(photo.likes));
@@ -290,10 +275,9 @@ public class FragmentComments extends FragmentWithAttach {
 //                    });
 //
 //                } else {
-//                    VKHelper.deleteLike("photo", group_id, photo.id, new VKRequest.VKRequestListener() {
+//                    VKHelper.deleteLike("photo", group_id, photo.id, new VKRequestListener() {
 //                        @Override
-//                        public void onComplete(final VKResponse response) {
-//                            super.onComplete(response);
+//                        public void onSuccess() {
 //                            photo.user_likes = 0;
 //                            --photo.likes;
 //                            likePostPhoto.setText(String.valueOf(photo.likes));
@@ -463,56 +447,44 @@ public class FragmentComments extends FragmentWithAttach {
                     if (!edit_status) {
                         if (reply_to_comment == 0) {
 
-                            VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", 0, new VKRequest.VKRequestListener() {
-
+                            VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", 0, new VKRequestListener() {
                                 @Override
-                                public void onComplete(final VKResponse response) {
-                                    super.onComplete(response);
+                                public void onSuccess() {
                                     commentMessage.setText("");
                                     updateCommentList(group_id, item_id, listOfComments, true);
                                 }
-
-                                @Override
-                                public void onError(final VKError error) {
-                                    super.onError(error);
-                                    OfflineMode.onErrorToast();
-                                }
-
+//                                @Override
+//                                public void onError() {
+//                                    OfflineMode.onErrorToast();
+//                                }
                             });
 
                         } else {
-                            VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", reply_to_comment, new VKRequest.VKRequestListener() {
-
+                            VKHelper.createComment(group_id, item_id, message + "\n@club77149556 (Мобільний ТФ)", reply_to_comment, new VKRequestListener() {
                                 @Override
-                                public void onComplete(final VKResponse response) {
-                                    super.onComplete(response);
+                                public void onSuccess() {
                                     commentMessage.setText("");
                                     updateCommentList(group_id, item_id, listOfComments, true);
                                 }
-
-                                @Override
-                                public void onError(final VKError error) {
-                                    super.onError(error);
-                                    OfflineMode.onErrorToast();
-                                }
+//                                @Override
+//                                public void onError() {
+//                                    OfflineMode.onErrorToast();
+//                                }
                             });
 
                         }
                     } else
-                        VKHelper.editComment(group_id, comments.get(positionOfComment).id, message, null, new VKRequest.VKRequestListener() {
+                        VKHelper.editComment(group_id, comments.get(positionOfComment).id, message, null, new VKRequestListener() {
                             @Override
-                            public void onComplete(final VKResponse response) {
-                                super.onComplete(response);
+                            public void onSuccess() {
                                 updateCommentList(group_id, item_id, listOfComments, true);
                                 commentMessage.setText("");
                                 edit_status = false;
                             }
-
-                            @Override
-                            public void onError(final VKError error) {
-                                super.onError(error);
-                                OfflineMode.onErrorToast();
-                            }
+//                            @Override
+//                            public void onError() {
+//                                OfflineMode.onErrorToast();
+//                            }
                         });
 
                     edit_status = false;
@@ -530,17 +502,16 @@ public class FragmentComments extends FragmentWithAttach {
         if (loadFromWall) {
             for (VKAttachments.VKApiAttachment attachment : post.post.attachments) {
                 if (attachment.getType().equals(equals(VKAttachments.TYPE_POLL))) {
-                    VKHelper.getPollById(((VKApiPoll) attachment).owner_id, 0, ((VKApiPoll) attachment).id, new VKRequest.VKRequestListener() {
+                    VKHelper.getPollById(((VKApiPoll) attachment).owner_id, 0, ((VKApiPoll) attachment).id, new VKRequestListener() {
                         @Override
-                        public void onComplete(VKResponse response) {
-                            super.onComplete(response);
-                            PollFragment.updatedPoll = new VKApiPoll().parse(response.json);
-
+                        public void onSuccess() {
+                            if (hasJson)
+                                PollFragment.updatedPoll = new VKApiPoll().parse(vkJson);
                         }
 
                         @Override
-                        public void onError(VKError error) {
-                            super.onError(error);
+                        public void onError() {
+                            // show no default toast
                         }
                     });
                 }
@@ -556,13 +527,10 @@ public class FragmentComments extends FragmentWithAttach {
 
     public void updateCommentList(long owner_id, final long item_id, final ListView listOfComments, final boolean scrollToBottom) {
 
-        VKHelper.getComments(owner_id, item_id, new VKRequest.VKRequestListener() {
-
+        VKHelper.getComments(owner_id, item_id, new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-
-                OfflineMode.saveJSON(response.json, item_id);
+            public void onSuccess() {
+                OfflineMode.saveJSON(vkJson, item_id);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -573,13 +541,10 @@ public class FragmentComments extends FragmentWithAttach {
                     }
                 }).start();
             }
-
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-                OfflineMode.onErrorToast();
-            }
-
+//            @Override
+//            public void onError() {
+//                OfflineMode.onErrorToast();
+//            }
         });
         try {
             if (!OfflineMode.isOnline() && !OfflineMode.isJsonNull(item_id)) {
@@ -785,37 +750,33 @@ public class FragmentComments extends FragmentWithAttach {
                         case 3: {
                             if (!comments.get(position).user_likes) {
 
-                                VKHelper.setLike(TYPE, group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
+                                VKHelper.setLike(TYPE, group_id, comments.get(position).id, new VKRequestListener() {
                                     @Override
-                                    public void onComplete(final VKResponse response) {
-                                        super.onComplete(response);
+                                    public void onSuccess() {
                                         ++comments.get(position).likes;
                                         comments.get(position).user_likes = true;
                                         adapter.changeStateLikeForComment(true, String.valueOf(comments.get(position).likes));
                                     }
 
-                                    @Override
-                                    public void onError(final VKError error) {
-                                        super.onError(error);
-                                        OfflineMode.onErrorToast();
-                                    }
+//                                    @Override
+//                                    public void onError() {
+//                                        OfflineMode.onErrorToast();
+//                                    }
                                 });
 
                             } else {
-                                VKHelper.deleteLike(TYPE, group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
+                                VKHelper.deleteLike(TYPE, group_id, comments.get(position).id, new VKRequestListener() {
                                     @Override
-                                    public void onComplete(final VKResponse response) {
-                                        super.onComplete(response);
+                                    public void onSuccess() {
                                         --comments.get(position).likes;
                                         comments.get(position).user_likes = false;
                                         adapter.changeStateLikeForComment(false, String.valueOf(comments.get(position).likes));
                                     }
 
-                                    @Override
-                                    public void onError(final VKError error) {
-                                        super.onError(error);
-                                        OfflineMode.onErrorToast();
-                                    }
+//                                    @Override
+//                                    public void onError() {
+//                                        OfflineMode.onErrorToast();
+//                                    }
                                 });
                             }
                         }
@@ -825,20 +786,16 @@ public class FragmentComments extends FragmentWithAttach {
                             break;
                         case 5: {
                             if (myComment) {
-                                VKHelper.deleteComment(group_id, comments.get(position).id, new VKRequest.VKRequestListener() {
+                                VKHelper.deleteComment(group_id, comments.get(position).id, new VKRequestListener() {
                                     @Override
-                                    public void onComplete(final VKResponse response) {
-                                        super.onComplete(response);
+                                    public void onSuccess() {
                                         updateCommentList(group_id, item_id, listOfComments, true);
                                     }
-
-                                    @Override
-                                    public void onError(final VKError error) {
-                                        super.onError(error);
-                                        OfflineMode.onErrorToast();
-                                    }
-
-
+//                                    @Override
+//                                    public void onError(final VKError error) {
+//                                        super.onError(error);
+//                                        OfflineMode.onErrorToast();
+//                                    }
                                 });
                             } else {
                                 Uri uri = Uri.parse("http://vk.com/id" + comments.get(position).reply_to_user + "");

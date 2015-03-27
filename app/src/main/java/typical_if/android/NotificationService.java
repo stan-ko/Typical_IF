@@ -18,8 +18,6 @@ import com.vk.sdk.VKCaptchaDialog;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPost;
 
 import org.json.JSONObject;
@@ -90,33 +88,31 @@ public class NotificationService extends Service {
         return START_STICKY;
     }
     private void makeRequests(int extended, int offsetDefault, int countOfPosts) {
-        VKHelper.doGroupWallRequest(extended, offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(extended, offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-                handleRequestComplete(response.json);
+            public void onSuccess() {
+                handleRequestComplete(vkJson);
 //                Log.d("Make", "Request");
             }
 
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-            }
+//            @Override
+//            public void onError(final VKError error) {
+//                super.onError(error);
+//            }
         });
     }
 
     private void makeRequestsForAllPosts(int extended, int offsetDefault, int countOfPosts) {
-        VKHelper.doGroupWallRequest(extended, offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequest.VKRequestListener() {
+        VKHelper.doGroupWallRequest(extended, offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequestListener() {
             @Override
-            public void onComplete(final VKResponse response) {
-                super.onComplete(response);
-                OfflineMode.saveJSON(response.json, Constants.ZF_ID);
+            public void onSuccess() {
+                OfflineMode.saveJSON(vkJson, Constants.ZF_ID);
             }
-
-            @Override
-            public void onError(final VKError error) {
-                super.onError(error);
-            }
+//
+//            @Override
+//            public void onError(final VKError error) {
+//                super.onError(error);
+//            }
         });
     }
     private void handleRequestComplete(final JSONObject json) {

@@ -25,8 +25,6 @@ import com.makeramen.RoundedImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiPost;
 
 import org.json.JSONObject;
@@ -39,6 +37,7 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentWithAttach;
 import typical_if.android.model.Wall.VKWallPostWrapper;
@@ -266,10 +265,9 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
             final VKApiPost post = (VKApiPost) viewHolder.cb_post_like.getTag();
 
             if (!post.user_likes) {
-                VKHelper.setLikePost(post.id, new VKRequest.VKRequestListener() {
+                VKHelper.setLikePost(post.id, new VKRequestListener() {
                     @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
+                    public void onSuccess() {
                         viewHolder.cb_post_like.setText(" " + String.valueOf(++post.likes_count) + " ");
                         viewHolder.cb_post_like.setChecked(true);
                         post.user_likes = true;
@@ -277,10 +275,9 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
                 });
             } else {
 
-                VKHelper.deleteLikePost(post.id, new VKRequest.VKRequestListener() {
+                VKHelper.deleteLikePost(post.id, new VKRequestListener() {
                     @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
+                    public void onSuccess() {
                         viewHolder.cb_post_like.setText(" " + String.valueOf(--post.likes_count) + " ");
                         viewHolder.cb_post_like.setChecked(false);
                         post.user_likes = false;
@@ -312,40 +309,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
                 dialog.setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        final String pidFull = "wall" +  OfflineMode.loadLong(Constants.VK_GROUP_ID) + "_" + post.id;
-                        VKHelper.doRepost(pidFull, text.getText().toString(), new VKRequest.VKRequestListener() {
-                            @Override
-                            public void onComplete(final VKResponse response) {
-                                super.onComplete(response);
-                                JSONObject object = response.json.optJSONObject("response");
-                                int isSuccessed = object.optInt("success");
-
-                                if (isSuccessed == 1) {
-                                    post.user_reposted = true;
-                                    viewHolder.cb_post_repost.setChecked(true);
-                                    viewHolder.cb_post_repost.setText(" " + String.valueOf(++post.reposts_count) + " ");
-
-                                    if (!post.user_likes) {
-
-                                        VKHelper.setLikePost((postWrapper.groupId * (-1)), post.id, new VKRequest.VKRequestListener() {
-                                            @Override
-                                            public void onComplete(final VKResponse response) {
-                                                super.onComplete(response);
-                                                viewHolder.cb_post_like.setText(" " + String.valueOf(++post.likes_count) + " ");
-                                                viewHolder.cb_post_like.setChecked(true);
-                                                post.user_likes = true;
-
-                                            }
-                                        });
-                                    }
-                                    viewHolder.cb_post_repost.setChecked(true);
-                                    viewHolder.cb_post_repost.setEnabled(false);
-                                } else {
-                                    viewHolder.cb_post_repost.setChecked(false);
-                                }
-                            }
-                        });
-
+                        doRepost(viewHolder, postWrapper, post, text);
                     }
                 });
 
@@ -362,6 +326,52 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
             }
         }
     };
+
+    final void doRepost(final ViewHolder viewHolder, final VKWallPostWrapper postWrapper, final VKApiPost post, final EditText text){
+        final String pidFull = "wall" +  OfflineMode.loadLong(Constants.VK_GROUP_ID) + "_" + post.id;
+        VKHelper.doRepost(pidFull, text.getText().toString(), new VKRequestListener() {
+            @Override
+            public void onSuccess() {
+                if (hasJson) {
+                    JSONObject object = vkJson.optJSONObject(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
+                    int isSuccessed = object.optInt("success");
+
+                    if (isSuccessed == 1) {
+                        post.user_reposted = true;
+                        viewHolder.cb_post_repost.setChecked(true);
+                        viewHolder.cb_post_repost.setText(" " + String.valueOf(++post.reposts_count) + " ");
+
+                        if (!post.user_likes) {
+
+                            VKHelper.setLikePost((postWrapper.groupId * (-1)), post.id, new VKRequestListener() {
+                                @Override
+                                public void onSuccess() {
+                                    viewHolder.cb_post_like.setText(" " + String.valueOf(++post.likes_count) + " ");
+                                    viewHolder.cb_post_like.setChecked(true);
+                                    post.user_likes = true;
+
+                                }
+                                @Override
+                                public void onError() {
+                                    //show NO default toast?
+                                }
+                            });
+
+                        }
+                        viewHolder.cb_post_repost.setChecked(true);
+                        viewHolder.cb_post_repost.setEnabled(false);
+                    } else {
+                        viewHolder.cb_post_repost.setChecked(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onError() {
+                //no default toast
+            }
+        });
+    }
 
     public final View.OnClickListener openCommentsFragmentListener = new View.OnClickListener() {
         @Override

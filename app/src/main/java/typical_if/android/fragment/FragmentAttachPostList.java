@@ -1,7 +1,6 @@
 package typical_if.android.fragment;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +8,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-import com.vk.sdk.api.VKError;
-import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 import com.vk.sdk.api.model.VKApiAudio;
 import com.vk.sdk.api.model.VKApiDocument;
 import com.vk.sdk.api.model.VKApiVideo;
@@ -22,9 +18,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import typical_if.android.Constants;
-import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.VKHelper;
+import typical_if.android.VKRequestListener;
 import typical_if.android.adapter.AudioAttachAdapter;
 import typical_if.android.adapter.DocAttachAdapter;
 import typical_if.android.adapter.VideoAttachAdapter;
@@ -67,12 +63,11 @@ public class FragmentAttachPostList extends FragmentWithAttach {
 
         switch (type) {
             case 2:
-                VKHelper.getUserAudios(new VKRequest.VKRequestListener() {
+                VKHelper.getUserAudios(new VKRequestListener() {
                     @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
-                        JSONObject responseObject = response.json.optJSONObject("response");
-                        JSONArray items = responseObject.optJSONArray("items");
+                    public void onSuccess() {
+                        JSONObject responseObject = vkJson.optJSONObject(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
+                        JSONArray items = responseObject.optJSONArray(VKHelper.TIF_VK_SDK_KEY_ITEMS);
                         final ArrayList<VKApiAudio> audios = parseAudioItems(items);
                         attachList.setAdapter(new AudioAttachAdapter(audios, inflater));
                         attachList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -88,20 +83,18 @@ public class FragmentAttachPostList extends FragmentWithAttach {
                         spinnerLayout.setVisibility(View.GONE);
                     }
 
-                    @Override
-                    public void onError(final VKError error) {
-                        super.onError(error);
-                        OfflineMode.onErrorToast();
-                    }
+//                    @Override
+//                    public void onError() {
+//                        OfflineMode.onErrorToast();
+//                    }
                 });
                 break;
             case 1:
-                VKHelper.getUserVideos(new VKRequest.VKRequestListener() {
+                VKHelper.getUserVideos(new VKRequestListener() {
                     @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
-                        JSONObject responseObject = response.json.optJSONObject("response");
-                        JSONArray items = responseObject.optJSONArray("items");
+                    public void onSuccess() {
+                        JSONObject responseObject = vkJson.optJSONObject(VKHelper.TIF_VK_API_KEY_RESPONSE);
+                        JSONArray items = responseObject.optJSONArray(VKHelper.TIF_VK_SDK_KEY_ITEMS);
 
                         final ArrayList<VKApiVideo> videos = parseVideoItems(items);
                         attachList.setAdapter(new VideoAttachAdapter(videos, inflater));
@@ -117,20 +110,18 @@ public class FragmentAttachPostList extends FragmentWithAttach {
 
                         spinnerLayout.setVisibility(View.GONE);
                     }
-                    @Override
-                    public void onError(final VKError error) {
-                        super.onError(error);
-                        OfflineMode.onErrorToast();
-                    }
+//                    @Override
+//                    public void onError() {
+//                        OfflineMode.onErrorToast();
+//                    }
                 });
                 break;
             case 3:
-                VKHelper.getUserDocs(new VKRequest.VKRequestListener() {
+                VKHelper.getUserDocs(new VKRequestListener() {
                     @Override
-                    public void onComplete(final VKResponse response) {
-                        super.onComplete(response);
-                        JSONObject responseObject = response.json.optJSONObject("response");
-                        JSONArray items = responseObject.optJSONArray("items");
+                    public void onSuccess() {
+                        JSONObject responseObject = vkJson.optJSONObject(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
+                        JSONArray items = responseObject.optJSONArray(VKHelper.TIF_VK_SDK_KEY_ITEMS);
 
                         final ArrayList<VKApiDocument> docs = parseDocItems(items);
                         attachList.setAdapter(new DocAttachAdapter(docs, inflater));
@@ -146,11 +137,10 @@ public class FragmentAttachPostList extends FragmentWithAttach {
 
                         spinnerLayout.setVisibility(View.GONE);
                     }
-                    @Override
-                    public void onError(final VKError error) {
-                        super.onError(error);
-                        OfflineMode.onErrorToast();
-                    }
+//                    @Override
+//                    public void onError() {
+//                        OfflineMode.onErrorToast();
+//                    }
                 });
         }
 

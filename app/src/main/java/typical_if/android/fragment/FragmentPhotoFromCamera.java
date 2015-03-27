@@ -17,9 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.vk.sdk.api.VKApi;
-import com.vk.sdk.api.VKError;
 import com.vk.sdk.api.VKRequest;
-import com.vk.sdk.api.VKResponse;
 
 import java.io.File;
 
@@ -28,6 +26,7 @@ import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.UploadPhotoService;
+import typical_if.android.VKRequestListener;
 
 /**
  * Created by LJ on 29.07.2014.
@@ -68,18 +67,17 @@ public class FragmentPhotoFromCamera extends Fragment {
                 final File tempFile = new File(path);
                 getActivity().startService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
                 final VKRequest req = VKApi.uploadAlbumPhotoRequest(tempFile, Constants.ALBUM_ID, (int)( OfflineMode.loadLong(Constants.VK_GROUP_ID)*(-1)));
-                req.executeWithListener(new VKRequest.VKRequestListener() {
+                req.executeWithListener(new VKRequestListener() {
                     @Override
-                    public void onComplete(VKResponse response) {
-                        super.onComplete(response);
-                        Log.d("MY response", response.responseString);
+                    public void onSuccess() {
+                        Log.d("MY response", vkResponse.responseString);
                         //getActivity().stopService(new Intent(getActivity().getApplicationContext(), UploadPhotoService.class));
                     }
-                    @Override
-                    public void onError(VKError error) {
-                        super.onError(error);
-                        OfflineMode.onErrorToast();
-                    }
+//                    @Override
+//                    public void onError(VKError error) {
+//                        super.onError(error);
+//                        OfflineMode.onErrorToast();
+//                    }
                 });
             }
         });
