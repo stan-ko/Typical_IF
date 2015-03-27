@@ -21,8 +21,8 @@ import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.util.ArrayList;
 
-import typical_if.android.TIFApp;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.util.PhotoUrlHelper;
 
 /**

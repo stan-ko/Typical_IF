@@ -1,7 +1,6 @@
 package typical_if.android.adapter;
 
 
-import android.app.Activity;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +30,6 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.event.EventShowContextMenu;
-import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentWithAttach;
 
 

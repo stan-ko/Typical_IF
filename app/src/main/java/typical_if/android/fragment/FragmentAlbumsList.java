@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import typical_if.android.Constants;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.VKRequestListener;
 import typical_if.android.activity.MainActivity;

@@ -16,7 +16,6 @@ import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPhotoSize;
 import com.vk.sdk.api.model.VKPhotoSizes;
 
-import typical_if.android.Constants;
 import typical_if.android.TIFApp;
 
 /**

@@ -1,8 +1,5 @@
 package typical_if.android;
 
-import android.widget.ProgressBar;
-import android.widget.SeekBar;
-
 /**
  * Created by LJ on 18.08.2014.
  */

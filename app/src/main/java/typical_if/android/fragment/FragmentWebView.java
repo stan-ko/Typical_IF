@@ -17,7 +17,6 @@ import android.widget.FrameLayout;
 
 import com.vk.sdk.api.model.VKApiVideo;
 
-import typical_if.android.Constants;
 import typical_if.android.R;
 
 /**
