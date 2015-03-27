@@ -26,11 +26,8 @@ public class VKRequestListener extends VKRequest.VKRequestListener {
             this.vkJson = response.json;
         }
         isSuccessful = true;
-        onComplete();
         onSuccess();
     }
-
-    public void onComplete(){}
 
     public void onSuccess(){}
 
@@ -39,8 +36,6 @@ public class VKRequestListener extends VKRequest.VKRequestListener {
         super.onError(error);
         vkError = error;
         isSuccessful = false;
-//        onError(error.errorMessage);
-        onComplete();
         onError();
     }
 

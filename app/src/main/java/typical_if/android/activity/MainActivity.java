@@ -382,7 +382,7 @@ public class MainActivity extends DialogActivity implements
         public void onAcceptUserToken(VKAccessToken token) {
             VKHelper.getMyselfInfo(new VKRequestListener() {
                 @Override
-                public void onComplete() {
+                public void onSuccess() {
                     VKHelper.UserObject user = VKHelper.getUserFromResponse(vkResponse);
                     if (user.id == 0) {
                         final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
