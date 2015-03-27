@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
@@ -241,7 +240,7 @@ public class FragmentWall extends FragmentWithAttach {
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!OfflineMode.isOnline(getApplicationContext())) {
+                if (!OfflineMode.isOnline()) {
                     Toast.makeText(getApplicationContext(), R.string.no_internet_message_toast_en, Toast.LENGTH_SHORT).show();
                 }
                 new Handler().postDelayed(new Runnable() {
@@ -543,7 +542,7 @@ public class FragmentWall extends FragmentWithAttach {
         Constants.makePostMenu = menu;
 
 
-        if (OfflineMode.isOnline(getApplicationContext())) {
+        if (OfflineMode.isOnline()) {
             setEnabledMenu();
         } else {
             setDisabledMenu();

@@ -125,7 +125,7 @@ public class FragmentAlbumsList extends Fragment {
 
     private boolean doRequest(final View view) {
 
-        if (OfflineMode.isOnline(getActivity().getApplicationContext())) {
+        if (OfflineMode.isOnline()) {
             temp = false;
             if (type == 0) {
 
@@ -161,7 +161,7 @@ public class FragmentAlbumsList extends Fragment {
             }
             isRequestNul=  true;
         }
-        if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums")) {
+        if (!OfflineMode.isOnline() & OfflineMode.isJsonNull( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums")) {
             handleResponse(OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums"), view);
             isRequestNul = true;
         } else {

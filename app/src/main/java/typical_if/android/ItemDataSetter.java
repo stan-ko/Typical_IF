@@ -734,7 +734,7 @@ public class ItemDataSetter {
 
     public static void makeSaveTransaction(final ArrayList<VKApiPhoto> photos, final int position) {
 
-        if (OfflineMode.isOnline(TIFApp.getAppContext())) {
+        if (OfflineMode.isOnline()) {
             VKHelper.getPhotoByID(photosKeyGen(photos), new VKRequest.VKRequestListener() {
                 @Override
                 public void onComplete(VKResponse response) {

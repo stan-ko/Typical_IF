@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
@@ -401,7 +400,7 @@ public class FragmentComments extends FragmentWithAttach {
             @Override
             public void onRefresh() {
 
-                if (!OfflineMode.isOnline(getApplicationContext())) {
+                if (!OfflineMode.isOnline()) {
                     Toast.makeText(getApplicationContext(), R.string.no_internet_message_toast_en, Toast.LENGTH_SHORT).show();
                 }
                 new Handler().postDelayed(new Runnable() {
@@ -435,7 +434,7 @@ public class FragmentComments extends FragmentWithAttach {
 
 
         if (VKSdk.isLoggedIn()) {
-            if (OfflineMode.isOnline(getApplicationContext())) {
+            if (OfflineMode.isOnline()) {
                 rootLayoutShowHide.setVisibility(View.VISIBLE);
             }
         } else if (!VKSdk.isLoggedIn()) {
@@ -583,11 +582,8 @@ public class FragmentComments extends FragmentWithAttach {
 
         });
         try {
-            if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(item_id)) {
-
+            if (!OfflineMode.isOnline() && !OfflineMode.isJsonNull(item_id)) {
                 parseCommentList(OfflineMode.loadJSON(item_id), scrollToBottom);
-
-
                 // If IsOnline and response from preferences not null then load JSON from preferences
             } else {
 

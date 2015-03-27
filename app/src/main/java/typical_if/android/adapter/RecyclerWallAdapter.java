@@ -2,7 +2,6 @@ package typical_if.android.adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -46,7 +45,6 @@ import typical_if.android.fragment.FragmentMakePost;
 import typical_if.android.fragment.FragmentWithAttach;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
-import typical_if.android.util.BitmapCache;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
 import static com.vk.sdk.VKUIHelper.getTopActivity;
@@ -237,24 +235,24 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
         }
 
         viewHolder.button_comment.setTag(new ParamsHolder(position, wall, postWrapper));
-        if (OfflineMode.isOnline(getApplicationContext()) | OfflineMode.isJsonNull(post.id)) {
-            viewHolder.button_comment.setOnClickListener(openCommentsFragmentListener);
-        } else {
+        if (!OfflineMode.isOnline() && !OfflineMode.isJsonNull(post.id)) {
             viewHolder.button_comment.setOnClickListener(errorToastListener);
+        } else {
+            viewHolder.button_comment.setOnClickListener(openCommentsFragmentListener);
         }
     }
 
     public final View.OnClickListener btLikeOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            try {
-                if (!OfflineMode.isIntNul("surprise")) {
-                    surpriseCounter = OfflineMode.loadInt("surprise");
-                } else {
-                    surpriseCounter = 0;
-                }
-            } catch (Exception e) {
-            }
+//            try {
+//                if (!OfflineMode.isIntNul("surprise")) {
+//                    surpriseCounter = OfflineMode.loadInt("surprise");
+//                } else {
+//                    surpriseCounter = 0;
+//                }
+//            } catch (Exception e) {
+//            }
             if (VKSdk.isLoggedIn()) {
                 surpriseCounter++;
                 OfflineMode.saveInt(surpriseCounter, "surprise");

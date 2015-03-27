@@ -228,7 +228,7 @@ try {
                 } else {
                     _count = (int) (_ratio * 100);
                 }
-                if (OfflineMode.isOnline(getActivity())) {
+                if (OfflineMode.isOnline()) {
                     getElsePhotos(firstVisibleItem, visibleItemCount, totalItemCount, view);
                     scrollPhotoListToBottom(gridOfPhotos, _lastInScreen);
                 }
@@ -277,7 +277,7 @@ try {
         this.columns = columns;
         VKHelper.offsetCounter = 0;
 
-        if (OfflineMode.isOnline(getActivity().getApplicationContext())) {
+        if (OfflineMode.isOnline()) {
             temp = false;
             if (type == 0) {
                 VKHelper.getPhotoList(Constants.USER_ID, Constants.ALBUM_ID, 1, 100, new VKRequest.VKRequestListener() {
@@ -308,7 +308,7 @@ try {
             }
             isRequestNull = true;
         }
-        if (!OfflineMode.isOnline(getActivity().getApplicationContext()) & OfflineMode.isJsonNull(Constants.ALBUM_ID)) {
+        if (!OfflineMode.isOnline() && !OfflineMode.isJsonNull(Constants.ALBUM_ID)) {
             handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
             isRequestNull = true;
         } else {
