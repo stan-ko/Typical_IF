@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.media.MediaPlayer;
 import android.view.Menu;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
@@ -28,6 +27,7 @@ import typical_if.android.adapter.FullScreenImageAdapter;
  * Created by Miller on 17.07.2014.
  */
 public class Constants {
+
     public static final String[] S_MY_SCOPE = new String[]{
             VKScope.WALL,
             VKScope.PHOTOS,

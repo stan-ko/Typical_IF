@@ -214,7 +214,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
             albumSize.setText(String.valueOf(originalSizeOfAlbum));
 
 
-        VKHelper.isLiked("photo", OfflineMode.loadLong(Constants.VK_GROUP_ID), photos.get(position).id, new VKRequest.VKRequestListener() {
+        VKHelper.isLikedPhoto(photos.get(position).id, new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(final VKResponse response) {
                 super.onComplete(response);

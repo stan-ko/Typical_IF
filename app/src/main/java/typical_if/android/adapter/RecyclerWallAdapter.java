@@ -266,7 +266,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
             final VKApiPost post = (VKApiPost) viewHolder.cb_post_like.getTag();
 
             if (!post.user_likes) {
-                VKHelper.setLike("post",  OfflineMode.loadLong(Constants.VK_GROUP_ID), post.id, new VKRequest.VKRequestListener() {
+                VKHelper.setLikePost(post.id, new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(final VKResponse response) {
                         super.onComplete(response);
@@ -277,7 +277,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
                 });
             } else {
 
-                VKHelper.deleteLike("post", OfflineMode.loadLong(Constants.VK_GROUP_ID), post.id, new VKRequest.VKRequestListener() {
+                VKHelper.deleteLikePost(post.id, new VKRequest.VKRequestListener() {
                     @Override
                     public void onComplete(final VKResponse response) {
                         super.onComplete(response);
@@ -327,7 +327,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
 
                                     if (!post.user_likes) {
 
-                                        VKHelper.setLike("post", (postWrapper.groupId * (-1)), post.id, new VKRequest.VKRequestListener() {
+                                        VKHelper.setLikePost((postWrapper.groupId * (-1)), post.id, new VKRequest.VKRequestListener() {
                                             @Override
                                             public void onComplete(final VKResponse response) {
                                                 super.onComplete(response);
