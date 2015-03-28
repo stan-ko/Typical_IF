@@ -596,6 +596,7 @@ public class FragmentComments extends FragmentWithAttach {
 
     }
 
+    @SuppressWarnings("unused") // used via EventBus but is Lint undetectable
     public void onEventMainThread(EventShowContextMenu event) {
         if (event.position > 0) {
             showContextMenu(event.position - 1);
@@ -967,6 +968,7 @@ public class FragmentComments extends FragmentWithAttach {
     public final Animation animationFadeOut = AnimationUtils.loadAnimation(TIFApp.getAppContext(), R.anim.fade_out);
 
 
+    @SuppressWarnings("unused") // used via EventBus but is Lint undetectable
     public void onEventMainThread(EventSpinnerLayout event) {
         coverGlobal.startAnimation(animationFadeOut);
     }

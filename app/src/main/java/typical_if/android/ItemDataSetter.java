@@ -119,23 +119,6 @@ public class ItemDataSetter {
     public static FragmentManager fragmentManager;
 
 
-    public static void setSuggestAttachments(VKAttachments attachments) {
-        int counter = 0;
-        for (VKAttachments.VKApiAttachment attachment : attachments) {
-            if (attachment.getType().equals(VKAttachments.TYPE_PHOTO)) {
-                Constants.tempPhotoPostAttach.add((VKApiPhoto) attachment);
-            } else if (attachment.getType().equals(VKAttachments.TYPE_VIDEO)) {
-                Constants.tempVideoPostAttach.add((VKApiVideo) attachment);
-            } else if (attachment.getType().equals(VKAttachments.TYPE_AUDIO)) {
-                Constants.tempAudioPostAttach.add((VKApiAudio) attachment);
-            } else if (attachment.getType().equals(VKAttachments.TYPE_DOC)) {
-                Constants.tempDocPostAttach.add((VKApiDocument) attachment);
-            }
-            counter++;
-        }
-        Constants.tempPostAttachCounter = counter;
-    }
-
     public static void setAttachemnts(FragmentWithAttach fragment,
                                       VKAttachments attachments,
                                       RelativeLayout mediaLayout,

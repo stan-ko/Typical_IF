@@ -99,7 +99,6 @@ public class MainActivity extends DialogActivity implements
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(R.layout.activity_main);
 
-
         // ensure that the view is available if we add the fragment
         final LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final DrawerLayout drawer = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
@@ -136,9 +135,8 @@ public class MainActivity extends DialogActivity implements
         }
 
 
+        // VK init
         VKUIHelper.onCreate(this);
-
-
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, sTokenKey));
         VKSdk.wakeUpSession(this);
 
@@ -485,6 +483,7 @@ public class MainActivity extends DialogActivity implements
     }
 
 
+    @SuppressWarnings("unused") // used via EventBus but is Lint undetectable
     public void onEventMainThread(MainActivityAddFragmentEvent event) {
         addFragment(event.fragmentVideoView);
     }

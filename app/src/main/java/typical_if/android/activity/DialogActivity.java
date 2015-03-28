@@ -18,15 +18,18 @@ import android.text.ClipboardManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.vk.sdk.api.model.VKApiAudio;
+import com.vk.sdk.api.model.VKApiDocument;
+import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKApiVideo;
+import com.vk.sdk.api.model.VKAttachments;
 
 import java.io.File;
 import java.util.ArrayList;
 
 import de.greenrobot.event.EventBus;
 import typical_if.android.Constants;
-import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
@@ -234,7 +237,7 @@ public class DialogActivity extends ActionBarActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        ItemDataSetter.setSuggestAttachments(post.attachments);
+                        setSuggestAttachments(post.attachments);
                         Constants.tempTextSuggestPost = post.text;
                         addFragment(FragmentMakePost.newInstance(gid, post.id, 1));
                         break;
@@ -476,15 +479,38 @@ public class DialogActivity extends ActionBarActivity {
 
     //-----------------------------------EVENTS---------------------------------------
 
+    @SuppressWarnings("unused") // used via EventBus but is Lint undetectable
     public void onEventMainThread(EventShowPhotoAttachDialog event) {
         photoAttachDialog(event.gid, event.which);
     }
 
+    @SuppressWarnings("unused") // used via EventBus but is Lint undetectable
     public void onEventMainThread(EventShowReportDialog event) {
         reportDialog(event.gid, event.which);
     }
 
+    @SuppressWarnings("unused") // used via EventBus but is Lint undetectable
     public void onEventMainThread(EventShowSuggestPostDialog event) {
         suggestPostDialog(event.gid, event.post);
     }
+
+
+    public void setSuggestAttachments(VKAttachments attachments) {
+        int counter = 0;
+        for (VKAttachments.VKApiAttachment attachment : attachments) {
+            if (attachment.getType().equals(VKAttachments.TYPE_PHOTO)) {
+                Constants.tempPhotoPostAttach.add((VKApiPhoto) attachment);
+            } else if (attachment.getType().equals(VKAttachments.TYPE_VIDEO)) {
+                Constants.tempVideoPostAttach.add((VKApiVideo) attachment);
+            } else if (attachment.getType().equals(VKAttachments.TYPE_AUDIO)) {
+                Constants.tempAudioPostAttach.add((VKApiAudio) attachment);
+            } else if (attachment.getType().equals(VKAttachments.TYPE_DOC)) {
+                Constants.tempDocPostAttach.add((VKApiDocument) attachment);
+            }
+            counter++;
+        }
+        Constants.tempPostAttachCounter = counter;
+    }
+
+
 }
