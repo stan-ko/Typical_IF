@@ -61,7 +61,7 @@ public class MediaPagerAdapter extends PagerAdapter {
         @Override
         public void onClick(View v) {
             VKHelper.countOfPhotos = getPhotosCount();
-            ItemDataSetter.makeSaveTransaction(photos, ((Integer) v.getTag()));
+            ItemDataSetter.makeSaveTransaction(mFragment.getFragmentManager(), photos, ((Integer) v.getTag()));
         }
     };
 

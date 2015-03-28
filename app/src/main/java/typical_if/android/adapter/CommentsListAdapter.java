@@ -31,6 +31,7 @@ import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.event.EventShowContextMenu;
 import typical_if.android.fragment.FragmentWithAttach;
+import typical_if.android.util.DateUtils;
 
 
 /**
@@ -197,11 +198,11 @@ public class CommentsListAdapter extends BaseAdapter {
             viewHolder.commentTextLayout.setVisibility(View.GONE);
         }
 
-        String s = String.valueOf(ItemDataSetter.getFormattedDate(comment.date));
+        String s = String.valueOf(DateUtils.getFormattedDate(comment.date));
         if (s.contains("2014,")) {
             viewHolder.date_of_user_comment.setText(String.valueOf(s.replace(" 2014,", "")));
         } else {
-            viewHolder.date_of_user_comment.setText(String.valueOf(ItemDataSetter.getFormattedDate(comment.date)));
+            viewHolder.date_of_user_comment.setText(String.valueOf(DateUtils.getFormattedDate(comment.date)));
         }
 
 
@@ -209,7 +210,7 @@ public class CommentsListAdapter extends BaseAdapter {
         if (comment.attachments != null && comment.attachments.size() != 0) {
             viewHolder.commentAttachmentsLayout.setVisibility(View.VISIBLE);
 
-            ItemDataSetter.setAttachemnts(
+            ItemDataSetter.setAttachments(
                     mFragment,
                     comment.attachments,
                     viewHolder.commentMediaLayout,

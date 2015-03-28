@@ -52,7 +52,6 @@ import java.util.Collections;
 
 import de.greenrobot.event.EventBus;
 import typical_if.android.Constants;
-import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
@@ -65,6 +64,7 @@ import typical_if.android.event.EventShowContextMenu;
 import typical_if.android.event.EventSpinnerLayout;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
+import typical_if.android.util.DateUtils;
 import typical_if.android.util.PhotoUrlHelper;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
@@ -212,7 +212,7 @@ public class FragmentComments extends FragmentWithAttach {
                 }
                 ImageLoader.getInstance().displayImage(postSender.photo_50, postPhotoUserAvatar);
                 postPhotoUserName.setText(postSender.last_name + " " + postSender.first_name);
-                postPhotoUserDateOfComment.setText(ItemDataSetter.getFormattedDate(photo.date));
+                postPhotoUserDateOfComment.setText(DateUtils.getFormattedDate(photo.date));
             }
 
 //            @Override

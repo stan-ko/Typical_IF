@@ -23,6 +23,7 @@ import java.util.Locale;
 public class TIFApp extends Application {
 
     private static Context appContext;
+    public static DisplayMetrics displayMetrics;
 
     public static Context getAppContext() {
         return appContext;
@@ -67,7 +68,7 @@ public class TIFApp extends Application {
 
         appContext = getApplicationContext();
 
-        final DisplayMetrics displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
+        displayMetrics = getApplicationContext().getResources().getDisplayMetrics();
         displayHeight = displayMetrics.heightPixels;
         displayWidth = displayMetrics.widthPixels;
 
@@ -164,5 +165,11 @@ public class TIFApp extends Application {
         //res.updateConfiguration(config, null);
         res.updateConfiguration(config, res.getDisplayMetrics());
     }
+
+    public static int getScaledDp(int dps) {
+        final float scale = displayMetrics.density;
+        return (int) (dps * scale + 0.5f);
+    }
+
 
 }

@@ -14,7 +14,6 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -116,10 +115,7 @@ public class ItemDataSetter {
         return viewGroup;
     }
 
-    public static FragmentManager fragmentManager;
-
-
-    public static void setAttachemnts(FragmentWithAttach fragment,
+    public static void setAttachments(FragmentWithAttach fragment,
                                       VKAttachments attachments,
                                       RelativeLayout mediaLayout,
                                       ViewPager mediaPager,
@@ -206,14 +202,14 @@ public class ItemDataSetter {
         if (poll != null) {
 
             /////////////////////////////////////////////////////////////////////////////
-            setPoll(pollLayout, pollTitle, poll);
+            setPoll(fragment.getFragmentManager(), pollLayout, pollTitle, poll);
         } else {
             pollLayout.setVisibility(View.GONE);
         }
     }
 
 
-    public static void setPoll(final RelativeLayout parent, final TextView title, final VKApiPoll poll) {
+    public static void setPoll(final FragmentManager fragmentManager, final RelativeLayout parent, final TextView title, final VKApiPoll poll) {
 
         final TextView answers_anonymous_text = ((TextView) parent.findViewById(R.id.answers_anonymous_text_preview));
         final String isAnonymous;
@@ -235,7 +231,8 @@ public class ItemDataSetter {
             @Override
             public void onClick(View view) {
                 Fragment fragment = new PollFragment();
-                args.clear();
+                final Bundle args = new Bundle();
+                //args.clear();
                 args.putParcelable("poll", poll);
                 args.putString("isAnonymous", isAnonymous);
                 args.putString("answers_anonymous_text", answers_anonymous_textStr);
@@ -551,11 +548,12 @@ public class ItemDataSetter {
         }
     }
 
+    // TODO: remove static reference to FragmentManager
+    public static FragmentManager fragmentManager;
     private static final View.OnClickListener openAlbumClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             VKApiPhotoAlbum album = (VKApiPhotoAlbum) v.getTag();
-
             Constants.ALBUM_ID = album.id;
             Constants.TEMP_OWNER_ID = album.owner_id;
             fragmentManager.beginTransaction().add(R.id.container, FragmentPhotoList.newInstance(1, album.size, album.title, album.photo.get(1).src)).addToBackStack(null).commit();
@@ -617,7 +615,7 @@ public class ItemDataSetter {
                             public void onClick(View v) {
                                 spinner.setVisibility(View.GONE);
                                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                                image.setLayoutParams(new RelativeLayout.LayoutParams(setInDp(60), setInDp(60)));
+                                image.setLayoutParams(new RelativeLayout.LayoutParams(TIFApp.getScaledDp(60), TIFApp.getScaledDp(60)));
                                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
                                 title.setVisibility(View.VISIBLE);
                                 size.setVisibility(View.VISIBLE);
@@ -700,33 +698,31 @@ public class ItemDataSetter {
         }
     };
 
-    static int g;
-    static ArrayList<VKApiPhoto> finalPhotos;
-    final private static Bundle args = new Bundle();
-
-    public static void makeSaveTransaction(final ArrayList<VKApiPhoto> photos, final int position) {
-
+    public static void makeSaveTransaction(final FragmentManager fragmentManager, final ArrayList<VKApiPhoto> photos, final int position) {
+//        final ArrayList<VKApiPhoto> finalPhotos = new ArrayList<VKApiPhoto>();
         if (OfflineMode.isOnline()) {
-            VKHelper.getPhotoByID(photosKeyGen(photos), new VKRequestListener() {
+            VKHelper.getPhotoByID(getPhotosKey(photos), new VKRequestListener() {
                 @Override
                 public void onSuccess() {
-                    OfflineMode.saveJSON(vkJson, photosKeyGen(photos));
-                    finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKeyGen(photos)));
+                    OfflineMode.saveJSON(vkJson, getPhotosKey(photos));
+//                    finalPhotos.addAll(VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(getPhotosKey(photos))));
 //                    Fragment fragment = new FragmentFullScreenViewer(finalPhotos, position, 0);
                     Fragment fragment = new FragmentFullScreenViewer();
-                    args.clear();
-                    args.putSerializable("finalPhotos", finalPhotos);
+                    final Bundle args = new Bundle();
+//                    args.clear();
+                    args.putSerializable("finalPhotos", VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(getPhotosKey(photos))));
                     args.putInt("position", position);
                     args.putInt("sizeOfAlbum", 0);
                     fragment.setArguments(args);
                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-                    OfflineMode.saveJSON(vkJson, photosKeyGen(photos));
+                    OfflineMode.saveJSON(vkJson, getPhotosKey(photos));
                 }
 
                 @Override
                 public void onError() {
                     Fragment fragment = new FragmentFullScreenViewer();
-                    args.clear();
+                    final Bundle args = new Bundle();
+//                    args.clear();
                     args.putSerializable("finalPhotos", photos);
                     args.putInt("position", position);
                     args.putInt("sizeOfAlbum", 0);
@@ -734,10 +730,12 @@ public class ItemDataSetter {
                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 }
             });
-        } else if (OfflineMode.isJsonNull(photosKeyGen(photos))) {
-            finalPhotos = VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKeyGen(photos)));
+        }
+        else if (!OfflineMode.isJsonNull(getPhotosKey(photos))) {
+//            finalPhotos.addAll(VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(getPhotosKey(photos))));
             Fragment fragment = new FragmentFullScreenViewer();
-            args.clear();
+            final Bundle args = new Bundle();
+//            args.clear();
             args.putSerializable("finalPhotos", photos);
             args.putInt("position", position);
             args.putInt("sizeOfAlbum", 0);
@@ -746,9 +744,10 @@ public class ItemDataSetter {
         }
     }
 
-    private static String photosKeyGen(final ArrayList<VKApiPhoto> photos) {
+    //static int g;
+    private static String getPhotosKey(final ArrayList<VKApiPhoto> photos) {
         String photosParam = "";
-        for (g = 0; g < photos.size(); g++) {
+        for (int g = 0; g < photos.size(); g++) {
             photosParam = photosParam.concat(photos.get(g).owner_id + "_" + photos.get(g).id + ",");
         }
         return photosParam;
@@ -773,7 +772,7 @@ public class ItemDataSetter {
         }
     }
 
-    public static boolean isToday(long smsTimeInMilis) {
+    public static boolean checkNewPostResult(long smsTimeInMilis) {
         Calendar smsTime = Calendar.getInstance();
         smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
         smsTime.setTimeInMillis(smsTimeInMilis * 1000);
@@ -784,43 +783,7 @@ public class ItemDataSetter {
         return now.get(Calendar.DATE) == smsTime.get(Calendar.DATE);
     }
 
-    public static String getFormattedDate(long smsTimeInMilis) {
-        Calendar smsTime = Calendar.getInstance();
-        smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
-        smsTime.setTimeInMillis(smsTimeInMilis * 1000);
-
-        Calendar now = Calendar.getInstance();
-        now.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
-
-        if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
-            return String.format(Constants.TODAY, DateFormat.format(Constants.TIME_FORMAT_STRING, smsTime));
-        } else if (now.get(Calendar.DATE) - smsTime.get(Calendar.DATE) == 1) {
-            return String.format(Constants.YESTERDAY, DateFormat.format(Constants.TIME_FORMAT_STRING, smsTime));
-        } else if (now.get(Calendar.YEAR) == smsTime.get(Calendar.YEAR)) {
-            return DateFormat.format(Constants.DATE_TIME_FORMAT_STRING, smsTime).toString();
-        } else
-            return DateFormat.format(Constants.OTHER_FORMAT_STRING, smsTime).toString();
-    }
-
-    public static boolean checkNewPostResult(long smsTimeInMilis) {
-        Calendar smsTime = Calendar.getInstance();
-        smsTime.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
-        smsTime.setTimeInMillis(smsTimeInMilis * 1000);
-
-        Calendar now = Calendar.getInstance();
-        now.setTimeZone(TimeZone.getTimeZone("Europe/Kiev"));
-
-        if (now.get(Calendar.DATE) == smsTime.get(Calendar.DATE)) {
-            return true;
-        } else return false;
-    }
-
-    public static int setInDp(int dps) {
-        final float scale = Constants.RESOURCES.getDisplayMetrics().density;
-        return (int) (dps * scale + 0.5f);
-    }
-
-//    public static int getScreenOrientation() {
+    //    public static int getScreenOrientation() {
 //        Display getOrient = Constants.mainActivity.getWindowManager().getDefaultDisplay();
 //        int orientation = Configuration.ORIENTATION_UNDEFINED;
 //        if (getOrient.getWidth() == getOrient.getHeight()) {

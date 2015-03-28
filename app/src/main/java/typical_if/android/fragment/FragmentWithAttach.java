@@ -281,14 +281,14 @@ public abstract class FragmentWithAttach extends Fragment {
                 size.setText(Constants.DOC_TYPE_ANIMATION + " " + ItemDataSetter.readableFileSize(doc.size));
             } else {
                 image.setImageDrawable(Constants.RESOURCES.getDrawable(android.R.drawable.ic_menu_save));
-                image.setLayoutParams(new RelativeLayout.LayoutParams(ItemDataSetter.setInDp(50), ItemDataSetter.setInDp(50)));
+                image.setLayoutParams(new RelativeLayout.LayoutParams(TIFApp.getScaledDp(50), TIFApp.getScaledDp(50)));
 
                 RelativeLayout.LayoutParams paramsForTitle = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                paramsForTitle.setMargins(ItemDataSetter.setInDp(55), 0, 0, 0);
+                paramsForTitle.setMargins(TIFApp.getScaledDp(55), 0, 0, 0);
                 title.setLayoutParams(paramsForTitle);
 
                 RelativeLayout.LayoutParams paramsForSize = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                paramsForSize.setMargins(ItemDataSetter.setInDp(55), ItemDataSetter.setInDp(20), 0, 0);
+                paramsForSize.setMargins(TIFApp.getScaledDp(55), TIFApp.getScaledDp(20), 0, 0);
                 size.setLayoutParams(paramsForSize);
                 size.setText(Constants.DOC_TYPE_DOCUMENT + " " + ItemDataSetter.readableFileSize(doc.size));
             }

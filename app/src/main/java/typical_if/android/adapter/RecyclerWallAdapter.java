@@ -42,6 +42,7 @@ import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentWithAttach;
 import typical_if.android.model.Wall.VKWallPostWrapper;
 import typical_if.android.model.Wall.Wall;
+import typical_if.android.util.DateUtils;
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
 import static java.lang.String.valueOf;
@@ -97,7 +98,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
         final VKWallPostWrapper post = posts.get(i);
 
         if (i == 0) {
-            viewHolder.itemView.setPadding(0, ItemDataSetter.setInDp(48), 0, 0);
+            viewHolder.itemView.setPadding(0, TIFApp.getScaledDp(48), 0, 0);
         } else {
             viewHolder.itemView.setPadding(0, 0, 0, 0);
         }
@@ -123,11 +124,11 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
         viewHolder.cb_post_like.setText(" " + valueOf(post.likes_count) + " ");
         viewHolder.cb_post_repost.setText(" " + String.valueOf(post.reposts_count) + " ");
 
-        String s = String.valueOf(ItemDataSetter.getFormattedDate(post.date));
+        String s = String.valueOf(DateUtils.getFormattedDate(post.date));
         if (s.contains("2014,")) {
             viewHolder.txt_post_date.setText(String.valueOf(s.replace(" 2014,", ",")));
         } else {
-            viewHolder.txt_post_date.setText(ItemDataSetter.getFormattedDate(post.date));
+            viewHolder.txt_post_date.setText(DateUtils.getFormattedDate(post.date));
         }
 
         ItemDataSetter.setNameOfPostAuthor(wall.profiles, wall.group, viewHolder.author_of_post, post.signer_id);
@@ -166,7 +167,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
             viewHolder.copyHistoryHeader.setTag(postWrapper.copyHistoryUrl);
             viewHolder.copyHistoryHeader.setOnClickListener(ItemDataSetter.openActionViewChooserListener);
             viewHolder.txtCopyHistoryTitle.setText(postWrapper.copyHistoryTitle);
-            viewHolder.txtCopyHistoryDate.setText(ItemDataSetter.getFormattedDate(copyHistory.date));
+            viewHolder.txtCopyHistoryDate.setText(DateUtils.getFormattedDate(copyHistory.date));
             ImageLoader.getInstance().displayImage(postWrapper.copyHistoryLogo, viewHolder.imgCopyHistoryLogo, TIFApp.additionalOptions);
 
             viewHolder.copyHistoryTextLayout.setVisibility(postWrapper.copyHistoryTextContainerVisibility);
@@ -176,7 +177,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
 
             viewHolder.copyHistoryAttachmentsLayout.setVisibility(postWrapper.copyHistoryAttachmentsContainerVisibility);
             if (postWrapper.copyHistoryAttachmentsChecker) {
-                ItemDataSetter.setAttachemnts(
+                ItemDataSetter.setAttachments(
                         mFragment,
                         copyHistory.attachments,
                         viewHolder.copyHistoryMediaLayout,
@@ -205,7 +206,7 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
         viewHolder.postAttachmentsLayout.setVisibility(postWrapper.postAttachmentsVisibility);
         viewHolder.postMediaLayout.setVisibility(View.VISIBLE);
         if (postWrapper.postAttachmentsChecker) {
-            ItemDataSetter.setAttachemnts(
+            ItemDataSetter.setAttachments(
                     mFragment,
                     post.attachments,
                     viewHolder.postMediaLayout,

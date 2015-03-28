@@ -29,6 +29,7 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
+import typical_if.android.util.DateUtils;
 import typical_if.android.view.ResizableImageView;
 
 /**
@@ -61,7 +62,7 @@ public class RecyclerEventAdapter extends RecyclerView.Adapter<RecyclerEventAdap
         initEventViewHolder(viewHolder, eventObjects.get(i));
 
         if (i == 0) {
-            viewHolder.itemView.setPadding(0, ItemDataSetter.setInDp(48), 0, 0);
+            viewHolder.itemView.setPadding(0, TIFApp.getScaledDp(48), 0, 0);
         } else {
             viewHolder.itemView.setPadding(0, 0, 0, 0);
         }
@@ -83,7 +84,7 @@ public class RecyclerEventAdapter extends RecyclerView.Adapter<RecyclerEventAdap
         public void onClick(View v) {
             ArrayList<VKApiPhoto> photos = (ArrayList<VKApiPhoto>) v.getTag();
             VKHelper.countOfPhotos = photos.size();
-            ItemDataSetter.makeSaveTransaction(photos, 0);
+            ItemDataSetter.makeSaveTransaction(fragmentManager, photos, 0);
         }
     };
 
@@ -202,7 +203,7 @@ public class RecyclerEventAdapter extends RecyclerView.Adapter<RecyclerEventAdap
                     eventSwipeLayout.getBottomView().setBackgroundColor(context.getResources().getColor(R.color.music_progress));
                 }
 
-                if (ItemDataSetter.isToday(item.date)) {
+                if (DateUtils.isToday(item.date)) {
                     if (item.array.get(i).get(j).equals(context.getString(R.string.null_events))) {
                         unsetSwipeLayout(eventSwipeLayout);
                     } else {

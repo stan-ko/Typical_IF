@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 
 /**
  * Created by admin on 19.08.2014.
@@ -68,14 +69,14 @@ public class DocAttachAdapter extends BaseAdapter {
             viewHolder.txt_doc_attach_size.setText(Constants.DOC_TYPE_IMAGE + " " + ItemDataSetter.readableFileSize(doc.size));
         } else {
             viewHolder.img_doc_attach.setImageDrawable(Constants.RESOURCES.getDrawable(android.R.drawable.ic_menu_save));
-            viewHolder.img_doc_attach.setLayoutParams(new RelativeLayout.LayoutParams(ItemDataSetter.setInDp(50), ItemDataSetter.setInDp(50)));
+            viewHolder.img_doc_attach.setLayoutParams(new RelativeLayout.LayoutParams(TIFApp.getScaledDp(50), TIFApp.getScaledDp(50)));
 
             RelativeLayout.LayoutParams paramsForTitle = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            paramsForTitle.setMargins(ItemDataSetter.setInDp(55), 0, 0, 0);
+            paramsForTitle.setMargins(TIFApp.getScaledDp(55), 0, 0, 0);
             viewHolder.txt_doc_attach_title.setLayoutParams(paramsForTitle);
 
             RelativeLayout.LayoutParams paramsForSize = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            paramsForSize.setMargins(ItemDataSetter.setInDp(55), ItemDataSetter.setInDp(20), 0, 0);
+            paramsForSize.setMargins(TIFApp.getScaledDp(55), TIFApp.getScaledDp(20), 0, 0);
             viewHolder.txt_doc_attach_size.setLayoutParams(paramsForSize);
             viewHolder.txt_doc_attach_size.setText(Constants.DOC_TYPE_DOCUMENT + " " + ItemDataSetter.readableFileSize(doc.size));
         }

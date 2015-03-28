@@ -43,14 +43,14 @@
                     android:layout_above="@+id/comment_bar_layout"
                     android:layout_alignParentTop="true"
                     android:background="@color/app_bg"
+                    android:clickable="false"
                     android:divider="@drawable/list_divider"
                     android:dividerHeight="1px"
                     android:drawSelectorOnTop="true"
-                    android:headerDividersEnabled="true"
-                    android:focusableInTouchMode="false"
-                    android:clickable="false"
                     android:focusable="false"
-                    android:footerDividersEnabled="true" />
+                    android:focusableInTouchMode="false"
+                    android:footerDividersEnabled="true"
+                    android:headerDividersEnabled="true" />
 
 
                 <RelativeLayout
@@ -71,29 +71,27 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="false"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toLeftOf="@+id/buttonSendComment"
+                        android:layout_toStartOf="@+id/buttonSendComment"
                         android:autoText="false"
                         android:background="#ff757575"
                         android:hint="@string/your_message"
+                        android:inputType="textMultiLine"
+                        android:maxHeight="105dp"
                         android:maxLines="5"
                         android:minHeight="45dp"
+                        android:minLines="1"
                         android:paddingLeft="15dp"
                         android:paddingRight="2dp"
                         android:phoneNumber="false"
                         android:selectAllOnFocus="false"
                         android:textColor="#ffffffff"
-
                         android:typeface="normal"
-
-                        android:visibility="visible"
-                        android:layout_toLeftOf="@+id/buttonSendComment"
-                        android:layout_toStartOf="@+id/buttonSendComment"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginLeft="5dp"
-                        android:maxHeight="105dp"
-                        android:minLines="1"
-                        android:inputType="textMultiLine" />
+                        android:visibility="visible" />
 
                     <Button
                         android:id="@+id/buttonSendComment"
@@ -105,9 +103,9 @@
                         android:layout_marginEnd="20dp"
                         android:layout_marginRight="5dp"
                         android:layout_weight=".30"
+                        android:background="@drawable/ic_message_box_send"
                         android:textColor="#ffffffff"
-                        android:visibility="visible"
-                        android:background="@drawable/ic_message_box_send" />
+                        android:visibility="visible" />
 
                 </RelativeLayout>
 
