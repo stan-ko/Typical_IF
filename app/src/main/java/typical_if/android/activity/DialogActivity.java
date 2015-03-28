@@ -29,6 +29,7 @@ import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.VKRequestListener;
 import typical_if.android.event.EventShowPhotoAttachDialog;
@@ -88,19 +89,19 @@ public class DialogActivity extends ActionBarActivity {
 
         final Resources resources = getResources();
         final String[] items = resources.getStringArray(R.array.app_languages);
-        final String lang = ItemDataSetter.getUserLan();
+        final String lang = OfflineMode.getUserLan();
         builderIn.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        if (lang != "ua") {
+                        if (lang.equalsIgnoreCase("ua")) {
                             restartAfterChanges(0, "ua");
                         }
                         ++Constants.refresherDrawerCounter;
                         break;
                     case 1:
-                        if (lang != "ru") {
+                        if (lang.equalsIgnoreCase("ru")) {
                             restartAfterChanges(0, "ru");
                         }
                         ++Constants.refresherDrawerCounter;
@@ -123,7 +124,9 @@ public class DialogActivity extends ActionBarActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ItemDataSetter.saveUserLanguage(key, lan);
+                        OfflineMode.saveUserLanguage(key, lan);
+                        OfflineMode.saveDefaultUserLanguage(lan);
+                        TIFApp.setUserLanguage(lan);
                         Intent mStartActivity = new Intent(DialogActivity.this, SplashActivity.class);
                         int mPendingIntentId = 123456;
                         PendingIntent mPendingIntent = PendingIntent.getActivity(DialogActivity.this, mPendingIntentId, mStartActivity, PendingIntent.FLAG_CANCEL_CURRENT);

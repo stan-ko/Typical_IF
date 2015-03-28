@@ -69,7 +69,7 @@ public class MainActivity extends DialogActivity implements
         builder.setTitle(R.string.title_of_alert_main)
                 .setCancelable(false)
                 .setMessage(R.string.сhanges_of_new_version)
-                .setPositiveButton(R.string.pisitive_button_alert_of_main, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.positive_button_alert_of_main, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         builder.setCancelable(true);
                     }
@@ -83,14 +83,15 @@ public class MainActivity extends DialogActivity implements
 
         super.onCreate(savedInstanceState);
 
-        try {
-            if (OfflineMode.loadInt("surprise") < 15) {
-                OfflineMode.saveInt(0, "surprise");
-            }
-        } catch (Exception e) {
-        }
+//        try {
+//            if (OfflineMode.loadInt("surprise") < 15) {
+//                OfflineMode.saveInt(0, "surprise");
+//            }
+//        } catch (Exception e) {
+//        }
 
-        if (OfflineMode.isFirstRun("mainFirstRun")) {
+        if (OfflineMode.getIsFirstRunMainActivity()) {
+            OfflineMode.setNotFirstRunMainActivity();
             showAlertChanges();
         }
 
@@ -365,7 +366,7 @@ public class MainActivity extends DialogActivity implements
                         return;
                     }
                     Constants.USER_ID = user.id;
-                    ItemDataSetter.saveUserId(Constants.USER_ID);
+                    OfflineMode.saveUserId(Constants.USER_ID);
 
                     mNavigationDrawerFragment.refreshNavigationHeader(user);
                     ((FragmentWall) getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
@@ -391,7 +392,7 @@ public class MainActivity extends DialogActivity implements
                         return;
                     }
                     Constants.USER_ID = user.id;
-                    ItemDataSetter.saveUserId(Constants.USER_ID);
+                    OfflineMode.saveUserId(Constants.USER_ID);
 
                     mNavigationDrawerFragment.refreshNavigationHeader(user);
 

@@ -8,6 +8,8 @@ import com.stanko.tools.SharedPrefsHelper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Locale;
+
 import typical_if.android.model.Wall.Wall;
 
 /**
@@ -40,25 +42,68 @@ public class OfflineMode extends SharedPrefsHelper {
 //        ed.commit();
     }
 
-    private final static String TIF_SP_KEY_IS_FIRST_RUN = "isFirstRun";
-    public static boolean isFirstRun(String prefName) {
-        if (!has(TIF_SP_KEY_IS_FIRST_RUN))
-            return true;
-        return getBoolean(TIF_SP_KEY_IS_FIRST_RUN);
+    private static final String TIF_SP_KEY_APP_FIRST_RUN = "isAppFirstRun";
+    public static boolean getIsFirstRunApp() {
+        return getBoolean(TIF_SP_KEY_APP_FIRST_RUN, true);
+    }
+    public static boolean setNotFirstRunApp() {
+        return save(TIF_SP_KEY_APP_FIRST_RUN, false);
+    }
+
+    private static final String TIF_SP_KEY_MAIN_FIRST_RUN = "isMainFirstRun";
+    public static boolean getIsFirstRunMainActivity() {
+        return getBoolean(TIF_SP_KEY_MAIN_FIRST_RUN, true);
+    }
+    public static boolean setNotFirstRunMainActivity() {
+        return save(TIF_SP_KEY_MAIN_FIRST_RUN, false);
+    }
+
+    private static final String TIF_SP_KEY_START_CMD_FIRST_RUN = "isOnStartCommandFirstRun";
+    public static boolean getIsFirstRunStartCommand() {
+        return getBoolean(TIF_SP_KEY_START_CMD_FIRST_RUN, true);
+    }
+    public static boolean setNotFirstRunStartCommand() {
+        return save(TIF_SP_KEY_START_CMD_FIRST_RUN, false);
+    }
+
+    private static final String TIF_SP_KEY_SPLASH_FIRST_RUN = "isSplashFirstRun";
+    public static boolean getIsFirstRunSplashActivity() {
+        return getBoolean(TIF_SP_KEY_SPLASH_FIRST_RUN, true);
+    }
+    public static boolean setNotFirstRunSplashActivity() {
+        return save(TIF_SP_KEY_SPLASH_FIRST_RUN, false);
+    }
+
+
+//    public static boolean getIsFirstRun(String prefName) {
+//        if (!has(prefName))
+//            return true;
+//        return getBoolean(prefName,true);
 //        final SharedPreferences tfFirstRunSPref = TIFApp.getAppContext().getSharedPreferences(prefName, Activity.MODE_PRIVATE);
 //        final SharedPreferences.Editor editor = tfFirstRunSPref.edit();
-//        String key = "isFirstRun";
-//        boolean isFirstRun = true;
+//        String key = "getIsFirstRun";
+//        boolean getIsFirstRun = true;
 //        boolean notFirstRun = false;
-//        Boolean FirstRun = tfFirstRunSPref.getBoolean(key, isFirstRun);
+//        Boolean FirstRun = tfFirstRunSPref.getBoolean(key, getIsFirstRun);
 ////        Log.d("firsRun----------------------------",""+FirstRun);
-//        if (FirstRun == isFirstRun) {
+//        if (FirstRun == getIsFirstRun) {
 //            editor.clear();
 //            editor.putBoolean(key, notFirstRun);
 //            editor.commit();
-//            return isFirstRun;
+//            return getIsFirstRun;
 //        } else return notFirstRun;
-    }
+//    }
+//    public static boolean setNotFirstRun(String prefName) {
+//        return save(prefName, true);
+//    }
+//    private final static String TIF_SP_KEY_IS_FIRST_RUN = "getIsFirstRun";
+//    public static boolean saveIsFirstRun(final boolean value){
+//        return save(TIF_SP_KEY_IS_FIRST_RUN,value);
+//    }
+//    public static boolean getIsFirstRun(){
+//        return getBoolean(TIF_SP_KEY_IS_FIRST_RUN,true);
+//    }
+
 
     public static JSONObject loadJSON(long gid) {
 //        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(gid), Activity.MODE_PRIVATE);
@@ -101,7 +146,9 @@ public class OfflineMode extends SharedPrefsHelper {
             return true;
         boolean isJsonNull = false;
         try {
-            isJsonNull = (new JSONObject(getString(jsonKey)) == null);
+            new JSONObject(getString(jsonKey));
+            // we wong get here if exception occurs
+            isJsonNull = true;
         } catch (JSONException ignored) {}
         return isJsonNull;
     }
@@ -120,7 +167,9 @@ public class OfflineMode extends SharedPrefsHelper {
             return true;
         boolean isJsonNull = false;
         try {
-            isJsonNull = (new JSONObject(getString(id)) == null);
+            new JSONObject(getString(id));
+            // we wong get here if exception occurs
+            isJsonNull = true;
         } catch (JSONException ignored) {}
         return isJsonNull;
     }
@@ -223,6 +272,66 @@ public class OfflineMode extends SharedPrefsHelper {
         }
         return wall;
     }
+
+    public static void saveUserId(long uid) {
+        save("uid",uid);
+//        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+//        final SharedPreferences.Editor ed = sPref.edit();
+//        final long user_id = uid;
+//        final String long_key = "uid";
+//        ed.putLong(long_key, user_id);
+//        ed.commit();
+    }
+
+    public static void loadUserId() {
+//        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+//        final String long_key = "uid";
+        final long user_id = getLong("uid", 0L);
+        Constants.USER_ID = user_id;
+    }
+
+
+    public static void saveUserLanguage(int id, String lng) {
+        save(String.valueOf(id),lng);
+//        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+//        final SharedPreferences.Editor ed = sPref.edit();
+//        final int key = id;
+//        final String value = lan;
+//        ed.putString(String.valueOf(key), value);
+//        ed.commit();
+//        Locale locale = new Locale(lng);
+//        Locale.setDefault(locale);
+//        final Resources res = TIFApp.getAppContext().getResources();
+//        final Configuration conf = res.getConfiguration();
+//        conf.locale = locale;
+//        res.updateConfiguration(conf, null);
+    }
+
+    public static Locale getUserLocale() {
+        return new Locale(getUserLan());
+//        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+//        final String key = "user_lan";
+//        final String app_lan = sPref.getString(String.valueOf(0), "");
+//        return getString("0", "");
+//        Constants.USER_LANGUAGE = app_lan;
+//        Locale.setDefault(locale);
+//        Constants.LOCALE.setDefault(locale);
+//        return locale;
+    }
+
+    public static String getUserLan() {
+//        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
+        return getString(String.valueOf(0), "");
+    }
+
+    private final static String TIF_SP_KEY_DEFAULT_LANGUAGE = "defaultLanguage";
+    public static void saveDefaultUserLanguage(String lng) {
+        save(TIF_SP_KEY_DEFAULT_LANGUAGE, lng);
+    }
+    public static String getDefaultUserLanguage() {
+        return getString(TIF_SP_KEY_DEFAULT_LANGUAGE);
+    }
+
 
 }
 

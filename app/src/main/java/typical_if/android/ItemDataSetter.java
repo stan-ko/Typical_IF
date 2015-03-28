@@ -1,11 +1,7 @@
 package typical_if.android;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -62,7 +58,6 @@ import com.vk.sdk.api.model.VKAttachments;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -95,12 +90,10 @@ public class ItemDataSetter {
     public final static ImageLoadingListener animationLoader = new ImageLoadingListener() {
         @Override
         public void onLoadingStarted(String imageUri, View view) {
-
         }
 
         @Override
         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
         }
 
         @Override
@@ -110,7 +103,6 @@ public class ItemDataSetter {
 
         @Override
         public void onLoadingCancelled(String imageUri, View view) {
-
         }
     };
 
@@ -872,60 +864,6 @@ public class ItemDataSetter {
         }
     }
 
-    public static void saveUserId(long uid) {
-
-        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
-        final SharedPreferences.Editor ed = sPref.edit();
-        final long user_id = uid;
-        final String long_key = "uid";
-        ed.putLong(long_key, user_id);
-        ed.commit();
-
-    }
-
-    public static void saveUserLanguage(int id, String lan) {
-
-        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
-        final SharedPreferences.Editor ed = sPref.edit();
-        final int key = id;
-        final String value = lan;
-        ed.putString(String.valueOf(key), value);
-        ed.commit();
-        Locale locale = new Locale(value);
-        Locale.setDefault(locale);
-        final Resources res = TIFApp.getAppContext().getResources();
-        final Configuration conf = res.getConfiguration();
-        conf.locale = locale;
-        res.updateConfiguration(conf, null);
-
-
-    }
-
-
-    public static Locale loadUserLanguage() {
-        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
-        final String key = "user_lan";
-        final String app_lan = sPref.getString(String.valueOf(0), "");
-        Constants.USER_LANGUAGE = app_lan;
-        Locale locale = new Locale(app_lan);
-        Locale.setDefault(locale);
-        Constants.LOCALE.setDefault(locale);
-        return locale;
-    }
-
-    public static String getUserLan() {
-        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
-        String lang = sPref.getString(String.valueOf(0), "");
-        return lang;
-    }
-
-
-    public static void loadUserId() {
-        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("uid", Activity.MODE_PRIVATE);
-        final String long_key = "uid";
-        final long user_id = sPref.getLong(long_key, 0);
-        Constants.USER_ID = user_id;
-    }
 
     public static class NonUnderlinedClickableSpan extends ClickableSpan {
         @Override

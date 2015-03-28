@@ -52,12 +52,12 @@ public class NotificationService extends Service {
 
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        if (OfflineMode.isFirstRun("OnStartCommandFirstRun")){
+        if (OfflineMode.getIsFirstRunStartCommand()){
+            OfflineMode.setNotFirstRunStartCommand();
             offsetDefault = 0;
             countOfPosts = 100;
             extended = 1;
-            makeRequestsForAllPosts(extended, offsetDefault,countOfPosts);
-
+            makeRequestsForAllPosts(extended, offsetDefault, countOfPosts);
         }
 //        Log.d("onStartCommand", "----------------------");
         try {

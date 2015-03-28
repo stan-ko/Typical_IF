@@ -299,10 +299,10 @@
     <string name="login_to_vote">Ввойдите в профиль</string>
     <string name="change_my_decision">Сменить выбор</string>
     <string name="hello_world">Hello world!</string>
-    <string name="pisitive_button_alert_of_main">ОК, спасибо разработчикам</string>
+    <string name="positive_button_alert_of_main">ОК, спасибо разработчикам</string>
     <string name="tif_title_header">Типичный Мобильный Франковськ</string>
     <string name="title_activity_web_view">WebViewActivity</string>
-    <string name="title_of_alert_main">Изменения внесенные новой версией:</string>
+    <string name="title_of_alert_main">Изменения в этой версии:</string>
     <string name="exception_during_run">Ошибка во время запуска</string>
     <string name="album_unnamed">Без имени</string>
     <string name="photos_equal_one">фотография</string>

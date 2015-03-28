@@ -2,7 +2,10 @@ package typical_if.android;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
 
@@ -11,6 +14,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+
+import java.util.Locale;
 
 /**
  * Created by LJ on 14.07.2014.
@@ -106,18 +111,58 @@ public class TIFApp extends Application {
 
         OfflineMode.init(this);
 
+        // default locale
+        final String userLng = OfflineMode.getDefaultUserLanguage();
+        if (TextUtils.isEmpty(userLng)) {
+            if (Locale.getDefault().getLanguage().equalsIgnoreCase("ru")) {
+                OfflineMode.saveDefaultUserLanguage("ru");
+            } else {
+                setUserLanguage("ua");
+                OfflineMode.saveDefaultUserLanguage("ua");
+            }
+        }
+        else {
+            setUserLanguage(userLng);
+        }
     }
 
+    /**
+     * Shows a toast with given String message
+     *
+     * @param msgToShow
+     */
     public static void showToast(final String msgToShow) {
         Toast.makeText(getAppContext(), msgToShow, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Shows a toast with given String Resources ID (R.string.) message
+     *
+     * @param stringResId
+     */
     public static void showToast(final int stringResId) {
         Toast.makeText(getAppContext(), stringResId, Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Shows a toast with a common error message
+     */
     public static void showCommonErrorToast() {
         //    Toast.makeText(TIFApp.getAppContext(), R.string.error, Toast.LENGTH_SHORT).show();
+    }
+
+    public static void setUserLanguage(final String lng) {
+        Locale locale = new Locale(lng);
+        setUserLanguage(locale);
+    }
+
+    public static void setUserLanguage(final Locale locale) {
+        Locale.setDefault(locale);
+        final Resources res = getAppContext().getResources();
+        final Configuration config = res.getConfiguration();
+        config.locale = locale;
+        //res.updateConfiguration(config, null);
+        res.updateConfiguration(config, res.getDisplayMetrics());
     }
 
 }

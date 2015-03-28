@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
@@ -29,11 +27,9 @@ import org.json.JSONObject;
 
 import java.net.InetAddress;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import typical_if.android.Constants;
-import typical_if.android.ItemDataSetter;
 import typical_if.android.NotificationService;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
@@ -46,12 +42,12 @@ public class SplashActivity extends Activity {
 
     ImageView imageView;
 
-    Locale locale;
+//    Locale locale;
     int counter = 5;
-    static public Configuration config;
-    SharedPreferences firstOpenPref = null;
+//    static public Configuration config;
+//    SharedPreferences firstOpenPref = null;
 
-    final int offsetDefault = 0;
+    static final int offsetDefault = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +57,7 @@ public class SplashActivity extends Activity {
         VKUIHelper.onCreate(this);
         VKSdk.initialize(sdkListener, Constants.APP_ID, VKAccessToken.tokenFromSharedPreferences(this, Constants.TIF_VK_API_KEY_TOKEN));
 
-        firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
+//        firstOpenPref = getSharedPreferences("firstRun", MODE_PRIVATE);
 
         imageView = (ImageView) findViewById(R.id.splash_logo);
 
@@ -71,20 +67,21 @@ public class SplashActivity extends Activity {
         Animation rotationBlue = AnimationUtils.loadAnimation(this, R.anim.rotate_splash_spinner_blue);
         findViewById(R.id.img_splash_spinner_blue).startAnimation(rotationBlue);
 
-        config = new Configuration();
-        if (ItemDataSetter.getUserLan() != "") {
-            config.locale = ItemDataSetter.loadUserLanguage();
-            getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
-
-        } else {
-            locale = new Locale("ua");
-            Locale.setDefault(locale);
-
-            config = new Configuration();
-            config.locale = locale;
-            getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
-
-        }
+//        config = new Configuration();
+//        if (OfflineMode.getUserLan() != "") {
+//            config.locale = OfflineMode.loadUserLanguage();
+//            getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
+//
+//        }
+//        else {
+//            locale = new Locale("ua");
+//            Locale.setDefault(locale);
+//
+//            config = new Configuration();
+//            config.locale = locale;
+//            getApplicationContext().getResources().updateConfiguration(config, getApplicationContext().getResources().getDisplayMetrics());
+//
+//        }
 
         final SuperCardToast superCardToast = new SuperCardToast(SplashActivity.this);
         superCardToast.setText(getString(R.string.main_creed_1));
@@ -108,23 +105,22 @@ public class SplashActivity extends Activity {
             }
         });
 
-        ItemDataSetter.loadUserId();
-        ItemDataSetter.loadUserLanguage();
-
+        OfflineMode.loadUserId();
         checkIfOnlineAndProceed();
     }
 
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        Locale myLocale = ItemDataSetter.loadUserLanguage();
-        if (myLocale != null) {
-            newConfig.locale = myLocale;
-            Locale.setDefault(myLocale);
-            getApplicationContext().getResources().updateConfiguration(newConfig, getApplicationContext().getResources().getDisplayMetrics());
-        }
-    }
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//        final Locale locale = OfflineMode.getUserLocale();
+//        if (locale != null) {
+//            TIFApp.setUserLanguage(locale);
+//            newConfig.locale = locale;
+////            Locale.setDefault(myLocale);
+//            getApplicationContext().getResources().updateConfiguration(newConfig, getApplicationContext().getResources().getDisplayMetrics());
+//        }
+//    }
 
     void showAlertNoInternet() {
         //Log.d("----------------Internet conection Error", "------------------------");
@@ -149,25 +145,30 @@ public class SplashActivity extends Activity {
                         builder.setCancelable(true);
                     }
                 });
-        if (!isFirstOpen() & OfflineMode.loadJSON(Constants.TF_ID) != null) {
-            builder.setNeutralButton(getString(R.string.offline), new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    builder.setCancelable(true);
-                    startNextActivity();
-                }
-            });
+
+        if (OfflineMode.getIsFirstRunApp()) {
+            OfflineMode.setNotFirstRunApp();
+            if (OfflineMode.loadJSON(Constants.TF_ID) != null) {
+                builder.setNeutralButton(getString(R.string.offline), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        builder.setCancelable(true);
+                        startNextActivity();
+                    }
+                });
+            }
         }
         builder.create().show();
     }
 
-    private boolean isFirstOpen() {
-        boolean temp = false;
-        if (firstOpenPref.getBoolean("firstRun", true)) {
-            temp = true;
-            firstOpenPref.edit().putBoolean("firstRun", false).commit();
-        }
-        return temp;
-    }
+//    private boolean isFirstOpen() {
+//
+//        boolean temp = false;
+//        if (firstOpenPref.getBoolean("firstRun", true)) {
+//            temp = true;
+//            firstOpenPref.edit().putBoolean("firstRun", false).commit();
+//        }
+//        return temp;
+//    }
 
     public boolean isInternetAvailable() {
         try {
@@ -315,7 +316,8 @@ public class SplashActivity extends Activity {
         startActivity(intent);
 
         try {
-            if (OfflineMode.isFirstRun("SplashFirstRun")) {
+            if (OfflineMode.getIsFirstRunSplashActivity()) {
+                OfflineMode.setNotFirstRunSplashActivity();
                 startService(new Intent(this, NotificationService.class).setAction(Constants.ACTION_FIRST_RUN));
             } else if (OfflineMode.loadInt(Constants.DATE_OF_NOTIF_SEND) != Calendar.getInstance().get(Calendar.DATE)) {
                 startService(new Intent(this, NotificationService.class).setAction(Constants.ACTION_START_FROM_SPLASH_ACTIVITY));
