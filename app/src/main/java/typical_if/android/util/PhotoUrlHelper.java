@@ -64,7 +64,7 @@ public class PhotoUrlHelper {
         return urlOfPreviewPhoto;
     }
 
-    public static boolean isImageCached(final String url){
+    public static boolean isImageCached(final String url) {
         MemoryCache memoryCache = ImageLoader.getInstance().getMemoryCache();
         for (String key : memoryCache.keys()) {
             if (key.startsWith(url)) {
@@ -72,36 +72,30 @@ public class PhotoUrlHelper {
             }
         }
         final File diskCachedFile = ImageLoader.getInstance().getDiskCache().get(url);
-        return diskCachedFile!=null && diskCachedFile.exists();
+        return diskCachedFile != null && diskCachedFile.exists();
     }
 
 
     public static String getBestQualityUrl(VKPhotoSizes srcs) {
         VKApiPhotoSize biggestSize = srcs.get(0);
-        VKApiPhotoSize prevSize = srcs.get(0);
-        //String url = biggestSize.src;
         for (VKApiPhotoSize size : srcs) {
-            Log.i(PhotoUrlHelper.class.getSimpleName(),"getBestQualityUrl(): "+size.type+" width: "+size.width);
+//            Log.i(PhotoUrlHelper.class.getSimpleName(), "getBestQualityUrl(): " + size.type + " width: " + size.width);
             if (size.compareTo(biggestSize) > 0) {
-                if (TIFApp.getDisplayWidth()*2 < size.width) {
+                biggestSize = size;
+                if (size.width==604) {
                     break;
                 }
-                prevSize = biggestSize;
-                biggestSize = size;
             }
         }
-        Log.i(PhotoUrlHelper.class.getSimpleName(),"getBestQualityUrl() chosen size: "+biggestSize.type+" width: "+biggestSize.width);
+//        Log.i(PhotoUrlHelper.class.getSimpleName(), "getBestQualityUrl() chosen size: " + biggestSize.type + " width: " + biggestSize.width);
         return biggestSize.src;
     }
 
     public static String getMaxQualityUrl(VKPhotoSizes srcs) {
         VKApiPhotoSize biggestSize = srcs.get(0);
-        //String url = biggestSize.src;
-        for (VKApiPhotoSize size : srcs) {
-            if (size.compareTo(biggestSize) > 0) {
+        for (VKApiPhotoSize size : srcs)
+            if (size.compareTo(biggestSize) > 0)
                 biggestSize = size;
-            }
-        }
         return biggestSize.src;
     }
 
