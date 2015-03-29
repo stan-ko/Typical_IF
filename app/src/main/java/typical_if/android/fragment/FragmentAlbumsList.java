@@ -131,7 +131,7 @@ public class FragmentAlbumsList extends Fragment {
                 VKHelper.getAlbumList(Constants.USER_ID, new VKRequestListener() {
                     @Override
                     public void onSuccess() {
-                        OfflineMode.saveJSON(vkJson,  OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums");
+                        OfflineMode.saveJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums", vkJson);
                         handleResponse(OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums"), view);
                     }
 //                    @Override
@@ -144,7 +144,7 @@ public class FragmentAlbumsList extends Fragment {
                 VKHelper.getAlbumList( OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
                     @Override
                     public void onSuccess() {
-                        OfflineMode.saveJSON(vkJson, OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums");
+                        OfflineMode.saveJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums", vkJson);
                         handleResponse(OfflineMode.loadJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID) + "albums"), view);
                     }
 //                    @Override

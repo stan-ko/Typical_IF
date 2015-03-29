@@ -244,7 +244,7 @@ try {
             VKHelper.getPhotoList(OfflineMode.loadLong(Constants.VK_GROUP_ID), Constants.ALBUM_ID, 1, _count, new VKRequestListener() {
                 @Override
                 public void onSuccess() {
-                    OfflineMode.saveJSON(vkJson, Constants.ALBUM_ID);
+                    OfflineMode.saveJSON(Constants.ALBUM_ID, vkJson);
                     handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
                     initPhotoList();
                 }
@@ -284,7 +284,7 @@ try {
                 VKHelper.getPhotoList(Constants.USER_ID, Constants.ALBUM_ID, 1, 100, new VKRequestListener() {
                     @Override
                     public void onSuccess() {
-                        OfflineMode.saveJSON(vkJson, Constants.ALBUM_ID);
+                        OfflineMode.saveJSON(Constants.ALBUM_ID, vkJson);
                         handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
                         attachHeaderView(view);
                         initPhotoList();
@@ -298,7 +298,7 @@ try {
                 VKHelper.getPhotoList(Constants.TEMP_OWNER_ID, Constants.ALBUM_ID, 1, 100, new VKRequestListener() {
                     @Override
                     public void onSuccess() {
-                        OfflineMode.saveJSON(vkJson, Constants.ALBUM_ID);
+                        OfflineMode.saveJSON(Constants.ALBUM_ID, vkJson);
                         handleResponse(OfflineMode.loadJSON(Constants.ALBUM_ID), columns, view);
                         attachHeaderView(view);
                         initPhotoList();

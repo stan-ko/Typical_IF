@@ -157,6 +157,11 @@ public class CommentsListAdapter extends BaseAdapter {
     public void holderInitialize(final ViewHolder viewHolder, final VKApiComment comment) {
         RelativeLayout.LayoutParams params =  new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT);
 
+//        Glide.with(TIFApp.getAppContext())
+//                .load(url)
+//                .placeholder(R.drawable.event_stub)
+//                .crossFade()
+//                .into(viewHolder.user_avatar);
         ImageLoader.getInstance().displayImage(url, viewHolder.user_avatar, TIFApp.additionalOptions);
         if (comment.likes == 0) {
             viewHolder.likes.setVisibility(View.GONE);

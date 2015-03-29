@@ -68,6 +68,11 @@ public class AlbumUploadAdapter extends BaseAdapter {
 
         File file = new File((String) covers.get(covers.size() - 1));
 
+//        Glide.with(TIFApp.getAppContext())
+//                .load(String.valueOf(Uri.fromFile(file)))
+//                .placeholder(R.drawable.event_stub)
+//                .crossFade()
+//                .into(viewHolder.album_cover);
         ImageLoader.getInstance().displayImage(String.valueOf(Uri.fromFile(file)), viewHolder.album_cover);
         viewHolder.photos_count.setText(count + " фото");
         viewHolder.album_name.setText(titles.get(position));

@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.stanko.tools.Log;
 import com.vk.sdk.api.model.VKApiPhoto;
 
 import java.util.ArrayList;
@@ -30,10 +31,11 @@ import typical_if.android.util.PhotoUrlHelper;
  */
 public class FullScreenImageAdapter extends PagerAdapter {
     final int displayHeight = TIFApp.getDisplayHeight();
+    private final VKApiPhoto fromPhoto;
     LayoutInflater inflater;
 
     public ArrayList<VKApiPhoto> photos;
-//    public int count ;
+    //    public int count ;
     public FragmentManager fragmentManager;
     public Bundle arguments;
     public View rootView;
@@ -44,13 +46,14 @@ public class FullScreenImageAdapter extends PagerAdapter {
             .bitmapConfig(Bitmap.Config.RGB_565)
             .imageScaleType(ImageScaleType.EXACTLY).build();
 
-    public FullScreenImageAdapter(ArrayList<VKApiPhoto> photos, LayoutInflater inflater, Bundle arguments, long groupID, long albumID, long userID, FragmentManager fragmentManager, View rootView) {
+    public FullScreenImageAdapter(VKApiPhoto fromPhoto, ArrayList<VKApiPhoto> photos, LayoutInflater inflater, Bundle arguments, long groupID, long albumID, long userID, FragmentManager fragmentManager, View rootView) {
+        this.fromPhoto = fromPhoto;
         this.rootView = rootView;
         this.photos = photos;
         this.inflater = inflater;
         this.arguments = arguments;
         this.fragmentManager = fragmentManager;
-       // count = photos.size();
+        // count = photos.size();
     }
 
 
@@ -66,13 +69,13 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, final int position) {
-        View viewPhotoFullSceen = inflater.inflate(R.layout.fragment_full_screen_item, null);
-        final ImageView imageView = (ImageView) viewPhotoFullSceen.findViewById(R.id.full_screen_photo);
-        final ProgressBar pbImageIsLoading = (ProgressBar) viewPhotoFullSceen.findViewById(R.id.pbImageIsLoading);
-        ((ViewPager) container).addView(viewPhotoFullSceen);
+        View viewPhotoFullScreen = inflater.inflate(R.layout.fragment_full_screen_item, null);
+        final ImageView imageView = (ImageView) viewPhotoFullScreen.findViewById(R.id.full_screen_photo);
+        final ProgressBar pbImageIsLoading = (ProgressBar) viewPhotoFullScreen.findViewById(R.id.pbImageIsLoading);
+        ((ViewPager) container).addView(viewPhotoFullScreen);
         //  Log.d("Current VIEW", position + "");
         loadPreview(/*position, */photos.get(position), imageView, pbImageIsLoading);///////////////////////////////////////////////////////////////////
-        return viewPhotoFullSceen;
+        return viewPhotoFullScreen;
     }
 
     @Override
@@ -83,10 +86,52 @@ public class FullScreenImageAdapter extends PagerAdapter {
     private void loadPreview(/*final int position, */final VKApiPhoto photo, final ImageView imageView, final ProgressBar pbImageIsLoading) {
 //        ImageLoader.getInstance().displayImage(photos.get(position).photo_75, imageView, options);
 //
-        final String urlOfPhotoPreview = PhotoUrlHelper.getPreviewUrl(photo);
+//        Log.i(this, "fromPhoto: "+fromPhoto.getId()+" photo: "+photo.getId());
+        final String urlOfPhotoPreview;
+        if (photo.getId()==fromPhoto.getId()){
+            Log.i(this, "photo is SAME as fromPhoto!");
+            if (PhotoUrlHelper.isImageCached(fromPhoto.photo_604))
+                Log.i(this, "fromPhoto is cached!!!");
+            urlOfPhotoPreview = fromPhoto.photo_604;
+        }
+        else {
+            urlOfPhotoPreview = PhotoUrlHelper.getPreviewUrl(photo);
+        }
 
         final String urlOfFullScreenPhoto = PhotoUrlHelper.getBestQualityUrl(photo.src);
+        Log.i(this, "urlOfFullScreenPhoto: "+urlOfFullScreenPhoto);
 
+
+//        Glide.with(TIFApp.getAppContext())
+//                .load(urlOfPhotoPreview)
+//                .placeholder(R.drawable.event_stub)
+////                .crossFade()
+//                .into(new GlideDrawableImageViewTarget(imageView){
+//                    @Override
+//                    public void onStart() {
+//                        pbImageIsLoading.setVisibility(View.VISIBLE);
+//                        super.onStart();
+//                    }
+//
+//                    @Override
+//                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+//                        pbImageIsLoading.setVisibility(View.GONE);
+//                        super.onLoadFailed(e, errorDrawable);
+//                    }
+//
+//                    @Override
+//                    public void onLoadCleared(Drawable placeholder) {
+//                        pbImageIsLoading.setVisibility(View.GONE);
+//                        super.onLoadCleared(placeholder);
+//                    }
+//
+//                    @Override
+//                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+//                        pbImageIsLoading.setVisibility(View.GONE);
+//                        super.onResourceReady(resource, animation);
+//                        loadFullScreenPhoto(urlOfFullScreenPhoto, imageView, pbImageIsLoading);
+//                    }
+//                });
         ImageLoader.getInstance().displayImage(urlOfPhotoPreview, imageView, options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
@@ -100,7 +145,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                loadFullSceenPhoto(urlOfFullScreenPhoto, imageView, pbImageIsLoading);
+                loadFullScreenPhoto(urlOfFullScreenPhoto, imageView, pbImageIsLoading);
             }
 
             @Override
@@ -110,7 +155,36 @@ public class FullScreenImageAdapter extends PagerAdapter {
         });
     }
 
-    void loadFullSceenPhoto(final String url, final ImageView imageView, final ProgressBar pbImageIsLoading) {
+    void loadFullScreenPhoto(final String url, final ImageView imageView, final ProgressBar pbImageIsLoading) {
+//        Glide.with(TIFApp.getAppContext())
+//                .load(url)
+////                .placeholder(R.drawable.event_stub)
+//                .crossFade()
+//                .into(new GlideDrawableImageViewTarget(imageView){
+//                    @Override
+//                    public void onStart() {
+//                        pbImageIsLoading.setVisibility(View.VISIBLE);
+//                        super.onStart();
+//                    }
+//
+//                    @Override
+//                    public void onLoadFailed(Exception e, Drawable errorDrawable) {
+//                        pbImageIsLoading.setVisibility(View.GONE);
+//                        super.onLoadFailed(e, errorDrawable);
+//                    }
+//
+//                    @Override
+//                    public void onLoadCleared(Drawable placeholder) {
+//                        pbImageIsLoading.setVisibility(View.GONE);
+//                        super.onLoadCleared(placeholder);
+//                    }
+//
+//                    @Override
+//                    public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+//                        pbImageIsLoading.setVisibility(View.GONE);
+//                        super.onResourceReady(resource, animation);
+//                    }
+//                });
         ImageLoader.getInstance().displayImage(url, imageView, options, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {

@@ -62,6 +62,11 @@ public class PhotoListAdapter extends BaseAdapter implements AsymmetricGridViewA
         // final ProgressBar pbPreviewImageIsLoading = viewHolder.pbPreviewImageIsLoading;
 
 
+//        Glide.with(TIFApp.getAppContext())
+//                .load(PhotoUrlHelper.getPreviewUrl(photo))
+//                .placeholder(R.drawable.event_stub)
+//                .crossFade()
+//                .into(viewHolder.photo);
         ImageLoader.getInstance().displayImage(PhotoUrlHelper.getPreviewUrl(photo), viewHolder.photo, new DisplayImageOptions.Builder()
                 .cacheOnDisc(true)
                 .cacheInMemory(true)

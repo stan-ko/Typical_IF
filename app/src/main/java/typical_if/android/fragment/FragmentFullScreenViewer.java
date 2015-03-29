@@ -48,7 +48,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 
     public static final String ARG_VK_USER_ID = "user_id";
     public static final String TYPE = "photo";
-    public static Bundle args;
+//    public static Bundle args;
     //public View rootView;
 
     long user_id;
@@ -64,6 +64,9 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
     Button btnLike;
     Button btnComment;
     public int originalSizeOfAlbum;
+
+    private VKApiPhoto fromPhoto;
+
 //    public static View panel;
 
 //    public FragmentFullScreenViewer(ArrayList<VKApiPhoto> photos, int currentposition, int sizeOfAlbum) {
@@ -83,10 +86,12 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
 //        args.putInt("sizeOfAlbum", 0);
         super.onCreate(savedInstanceState);
         Constants.isFragmentFullScreenLoaded = true;
-        if (getArguments() != null) {
-            this.photos = (ArrayList<VKApiPhoto>) getArguments().getSerializable("finalPhotos");
-            this.currentPosition = getArguments().getInt("position");
-            this.originalSizeOfAlbum = getArguments().getInt("sizeOfAlbum");
+        final Bundle args = getArguments();
+        if (args != null) {
+            this.fromPhoto = args.getParcelable("fromPhoto");
+            this.photos = (ArrayList<VKApiPhoto>) args.getSerializable("finalPhotos");
+            this.currentPosition = args.getInt("position");
+            this.originalSizeOfAlbum = args.getInt("sizeOfAlbum");
         }
     }
 
@@ -120,7 +125,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         imagePager.setOnPageChangeListener(this);
         onPageSelected(0);
 
-        adapter = new FullScreenImageAdapter(photos, getLayoutInflater(arguments), arguments, OfflineMode.loadLong(Constants.VK_GROUP_ID),
+        adapter = new FullScreenImageAdapter(fromPhoto, photos, getLayoutInflater(arguments), arguments, OfflineMode.loadLong(Constants.VK_GROUP_ID),
                 Constants.ALBUM_ID, arguments.getLong(ARG_VK_USER_ID), manager, rootView);
 
         adapter.notifyDataSetChanged();

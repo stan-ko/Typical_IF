@@ -210,6 +210,11 @@ public class FragmentComments extends FragmentWithAttach {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+//                Glide.with(TIFApp.getAppContext())
+//                        .load(postSender.photo_50)
+//                        .placeholder(R.drawable.event_stub)
+//                        .crossFade()
+//                        .into(postPhotoUserAvatar);
                 ImageLoader.getInstance().displayImage(postSender.photo_50, postPhotoUserAvatar);
                 postPhotoUserName.setText(postSender.last_name + " " + postSender.first_name);
                 postPhotoUserDateOfComment.setText(DateUtils.getFormattedDate(photo.date));
@@ -530,7 +535,7 @@ public class FragmentComments extends FragmentWithAttach {
         VKHelper.getComments(owner_id, item_id, new VKRequestListener() {
             @Override
             public void onSuccess() {
-                OfflineMode.saveJSON(vkJson, item_id);
+                OfflineMode.saveJSON(item_id, vkJson);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -954,6 +959,11 @@ public class FragmentComments extends FragmentWithAttach {
         } else {
             textView.setVisibility(View.GONE);
         }
+//        Glide.with(TIFApp.getAppContext())
+//                .load(PhotoUrlHelper.getFullScreenUrl(photo))
+//                .placeholder(R.drawable.event_stub)
+//                .crossFade()
+//                .into(imageView);
         ImageLoader.getInstance().displayImage(PhotoUrlHelper.getFullScreenUrl(photo), imageView);
         RelativeLayout.LayoutParams params;
         int height;

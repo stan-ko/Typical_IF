@@ -211,12 +211,18 @@ public class MediaPagerAdapter extends PagerAdapter {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
+//            Glide.with(TIFApp.getAppContext())
+//                    .load(photo.photo_604)
+//                    .placeholder(R.drawable.event_stub)
+//                    .crossFade()
+//                    .into(viewHolder.photo);
             ImageLoader.getInstance().displayImage(photo.photo_604, viewHolder.photo);
 
             if (isPost) {
                 viewHolder.photo.setTag(position);
                 viewHolder.photo.setOnClickListener(openPhotosListener);
-            } else {
+            }
+            else {
                 viewHolder.photo.setTag(photo);
                 viewHolder.photo.setOnClickListener(deletePhotoAttachListener);
             }
@@ -249,6 +255,11 @@ public class MediaPagerAdapter extends PagerAdapter {
                 viewHolder = (ViewHolder) convertView.getTag();
             }
 
+//            Glide.with(TIFApp.getAppContext())
+//                    .load(video.photo_320)
+//                    .placeholder(R.drawable.event_stub)
+//                    .crossFade()
+//                    .into(viewHolder.photo);
             ImageLoader.getInstance().displayImage(video.photo_320, viewHolder.photo);
 
             viewHolder.videoContainer.setVisibility(View.VISIBLE);

@@ -106,7 +106,7 @@ public class NotificationService extends Service {
         VKHelper.doGroupWallRequest(extended, offsetDefault, countOfPosts, Constants.ZF_ID, new VKRequestListener() {
             @Override
             public void onSuccess() {
-                OfflineMode.saveJSON(vkJson, Constants.ZF_ID);
+                OfflineMode.saveJSON(Constants.ZF_ID, vkJson);
             }
 //
 //            @Override

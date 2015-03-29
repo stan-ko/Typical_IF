@@ -46,7 +46,12 @@ public class FullScreenPhotoUploadAdapter extends PagerAdapter {
         ImageView imageView;
         View viewLayout = inflater.inflate(R.layout.fragment_full_screen_view_from_phone_photolist, null);
         imageView = (ImageView) viewLayout.findViewById(R.id.full_screen_photo_from_phone);
-        ((ViewPager) container).addView(viewLayout);
+        container.addView(viewLayout);
+//        Glide.with(TIFApp.getAppContext())
+//                .load(String.valueOf(Uri.fromFile(new File(photos.get(position).photoSrc))))
+//                .placeholder(R.drawable.event_stub)
+//                .crossFade()
+//                .into(imageView);
         ImageLoader.getInstance().displayImage(String.valueOf(Uri.fromFile(new File(photos.get(position).photoSrc))), imageView);
         return viewLayout;
     }

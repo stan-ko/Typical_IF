@@ -494,6 +494,11 @@ public class ItemDataSetter {
 
         final String[] coordinates = geo.coordinates.split(" ");
         String url = "http://maps.google.com/maps/api/staticmap?center=" + coordinates[0] + "," + coordinates[1] + "&zoom=15&size=600x400&sensor=false";
+//        Glide.with(TIFApp.getAppContext())
+//                .load(url)
+//                .placeholder(R.drawable.event_stub)
+//                .crossFade()
+//                .into(imgGeo);
         ImageLoader.getInstance().displayImage(url, imgGeo);
 
         txtGeo.setText(geo.title);
@@ -537,6 +542,11 @@ public class ItemDataSetter {
             tempAlbumContainer.setLayoutParams(params);
 
             ImageView image = (ImageView) tempAlbumContainer.findViewById(R.id.img_album_thumb);
+//            Glide.with(TIFApp.getAppContext())
+//                    .load(album.photo_604)
+//                    .placeholder(R.drawable.event_stub)
+//                    .crossFade()
+//                    .into(image);
             ImageLoader.getInstance().displayImage(album.photo_604, image);
             ((TextView) tempAlbumContainer.getChildAt(1)).setText(valueOf(album.size));
             ((TextView) tempAlbumContainer.getChildAt(2)).setText(album.title);
@@ -588,12 +598,22 @@ public class ItemDataSetter {
 
             if (doc.isImage()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                Glide.with(TIFApp.getAppContext())
+//                        .load(doc.photo_100)
+//                        .placeholder(R.drawable.event_stub)
+//                        .crossFade()
+//                        .into(image);
                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
                 size.setText(Constants.DOC_TYPE_IMAGE + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setTag(doc.url);
                 tempDocumentContainer.setOnClickListener(openActionViewChooserListener);
             } else if (doc.isGif()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                Glide.with(TIFApp.getAppContext())
+//                        .load(doc.photo_100)
+//                        .placeholder(R.drawable.event_stub)
+//                        .crossFade()
+//                        .into(image);
                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
                 size.setText(Constants.DOC_TYPE_ANIMATION + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
@@ -616,6 +636,11 @@ public class ItemDataSetter {
                                 spinner.setVisibility(View.GONE);
                                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 image.setLayoutParams(new RelativeLayout.LayoutParams(TIFApp.getScaledDp(60), TIFApp.getScaledDp(60)));
+//                                Glide.with(TIFApp.getAppContext())
+//                                        .load(doc.photo_100)
+//                                        .placeholder(R.drawable.event_stub)
+//                                        .crossFade()
+//                                        .into(image);
                                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
                                 title.setVisibility(View.VISIBLE);
                                 size.setVisibility(View.VISIBLE);
@@ -700,22 +725,24 @@ public class ItemDataSetter {
 
     public static void makeSaveTransaction(final FragmentManager fragmentManager, final ArrayList<VKApiPhoto> photos, final int position) {
 //        final ArrayList<VKApiPhoto> finalPhotos = new ArrayList<VKApiPhoto>();
+        final String photosKey = getPhotosKey(photos);
         if (OfflineMode.isOnline()) {
-            VKHelper.getPhotoByID(getPhotosKey(photos), new VKRequestListener() {
+            VKHelper.getPhotoByID(photosKey, new VKRequestListener() {
                 @Override
                 public void onSuccess() {
-                    OfflineMode.saveJSON(vkJson, getPhotosKey(photos));
-//                    finalPhotos.addAll(VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(getPhotosKey(photos))));
+                    OfflineMode.saveJSON(photosKey, vkJson);
+//                    finalPhotos.addAll(VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKey)));
 //                    Fragment fragment = new FragmentFullScreenViewer(finalPhotos, position, 0);
                     Fragment fragment = new FragmentFullScreenViewer();
                     final Bundle args = new Bundle();
 //                    args.clear();
-                    args.putSerializable("finalPhotos", VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(getPhotosKey(photos))));
+                    args.putParcelable("fromPhoto", photos.get(position));
+                    args.putSerializable("finalPhotos", photos); //VKHelper.getPhotosByIdFromJSON(vkJson));
                     args.putInt("position", position);
                     args.putInt("sizeOfAlbum", 0);
                     fragment.setArguments(args);
                     fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
-                    OfflineMode.saveJSON(vkJson, getPhotosKey(photos));
+//                    OfflineMode.saveJSON(vkJson, photosKey);
                 }
 
                 @Override
@@ -723,6 +750,7 @@ public class ItemDataSetter {
                     Fragment fragment = new FragmentFullScreenViewer();
                     final Bundle args = new Bundle();
 //                    args.clear();
+                    args.putParcelable("fromPhoto",photos.get(position));
                     args.putSerializable("finalPhotos", photos);
                     args.putInt("position", position);
                     args.putInt("sizeOfAlbum", 0);
@@ -731,26 +759,30 @@ public class ItemDataSetter {
                 }
             });
         }
-        else if (!OfflineMode.isJsonNull(getPhotosKey(photos))) {
-//            finalPhotos.addAll(VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(getPhotosKey(photos))));
+        else if (!OfflineMode.isJsonNull(photosKey)) {
+//            finalPhotos.addAll(VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKey)));
             Fragment fragment = new FragmentFullScreenViewer();
             final Bundle args = new Bundle();
 //            args.clear();
-            args.putSerializable("finalPhotos", photos);
+            args.putParcelable("fromPhoto",photos.get(position));
+            args.putSerializable("finalPhotos", photos); //VKHelper.getPhotosByIdFromJSON(OfflineMode.loadJSON(photosKey)));
             args.putInt("position", position);
             args.putInt("sizeOfAlbum", 0);
             fragment.setArguments(args);
             fragmentManager.beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
+        } else {
+            // No IC toast
+            //Toast.makeText().show();
         }
     }
 
     //static int g;
     private static String getPhotosKey(final ArrayList<VKApiPhoto> photos) {
-        String photosParam = "";
+        StringBuilder photosParam = new StringBuilder("");
         for (int g = 0; g < photos.size(); g++) {
-            photosParam = photosParam.concat(photos.get(g).owner_id + "_" + photos.get(g).id + ",");
+            photosParam.append(photos.get(g).owner_id + "_" + photos.get(g).id + ",");
         }
-        return photosParam;
+        return photosParam.toString();
     }
 
 

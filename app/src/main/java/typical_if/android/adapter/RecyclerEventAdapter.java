@@ -161,11 +161,21 @@ public class RecyclerEventAdapter extends RecyclerView.Adapter<RecyclerEventAdap
         ItemDataSetter.fragmentManager = fragmentManager;
 
         if (!item.urlPhoto.get(0).photo_604.equals("fake_photo")) {
+//            Glide.with(context)
+//                    .load(item.urlPhoto.get(0).photo_604)
+//                    .placeholder(R.drawable.event_stub)
+//                    .crossFade()
+//                    .into(viewHolder.imgPhoto);
             ImageLoader.getInstance().displayImage(item.urlPhoto.get(0).photo_604, viewHolder.imgPhoto, TIFApp.eventOptions);
 
             viewHolder.btImgPhoto.setTag(item.urlPhoto);
             viewHolder.btImgPhoto.setOnClickListener(imgClickListener);
         } else {
+//            Glide.with(context)
+//                    .load("drawable://" + R.drawable.stub_null_event)
+//                    .placeholder(R.drawable.event_stub)
+//                    .crossFade()
+//                    .into(viewHolder.imgPhoto);
             ImageLoader.getInstance().displayImage("drawable://" + R.drawable.stub_null_event, viewHolder.imgPhoto, TIFApp.eventOptions);
 
             viewHolder.btImgPhoto.setTag(null);

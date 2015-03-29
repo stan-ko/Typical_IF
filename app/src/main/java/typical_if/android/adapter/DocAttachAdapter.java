@@ -62,9 +62,19 @@ public class DocAttachAdapter extends BaseAdapter {
         VKApiDocument doc = docs.get(position);
 
         if (doc.isGif()) {
+//            Glide.with(TIFApp.getAppContext())
+//                    .load(doc.photo_100)
+//                    .placeholder(R.drawable.event_stub)
+//                    .crossFade()
+//                    .into(viewHolder.img_doc_attach);
             ImageLoader.getInstance().displayImage(doc.photo_100, viewHolder.img_doc_attach);
             viewHolder.txt_doc_attach_size.setText(Constants.DOC_TYPE_ANIMATION + " " + ItemDataSetter.readableFileSize(doc.size));
         } else if(doc.isImage()) {
+//            Glide.with(TIFApp.getAppContext())
+//                    .load(doc.photo_100)
+//                    .placeholder(R.drawable.event_stub)
+//                    .crossFade()
+//                    .into(viewHolder.img_doc_attach);
             ImageLoader.getInstance().displayImage(doc.photo_100, viewHolder.img_doc_attach);
             viewHolder.txt_doc_attach_size.setText(Constants.DOC_TYPE_IMAGE + " " + ItemDataSetter.readableFileSize(doc.size));
         } else {

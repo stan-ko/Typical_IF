@@ -58,6 +58,11 @@ public class VideoAttachAdapter extends BaseAdapter {
 
         VKApiVideo video = videos.get(position);
 
+//        Glide.with(TIFApp.getAppContext())
+//                .load(video.photo_320)
+//                .placeholder(R.drawable.event_stub)
+//                .crossFade()
+//                .into(viewHolder.img_video_attach);
         ImageLoader.getInstance().displayImage(video.photo_320, viewHolder.img_video_attach);
         viewHolder.txt_video_attach_duration.setText(ItemDataSetter.getMediaTime(video.duration));
         viewHolder.txt_video_attach_title.setText(video.title);

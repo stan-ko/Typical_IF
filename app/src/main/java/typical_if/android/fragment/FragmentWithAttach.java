@@ -36,7 +36,7 @@ import typical_if.android.view.TouchMakePostImageButton;
  */
 public abstract class FragmentWithAttach extends Fragment {
 
-    private static long gid;
+    private long gid;
     private long pid;
     private int type;
 
@@ -46,24 +46,23 @@ public abstract class FragmentWithAttach extends Fragment {
         Constants.isFragmentMakePostLoaded = true;
     }
 
+    EditText textField;
+    RobotoTextView txtPostAttachCounter;
 
-    static EditText textField;
-    static RobotoTextView txtPostAttachCounter;
+    AddFloatingActionButton btSendPost;
+    LinearLayout makePostAttachmentsContainer;
+    LinearLayout makePostAudioContainer;
+    LinearLayout makePostDocContainer;
+    RelativeLayout makePostMediaContainer;
 
-    static AddFloatingActionButton btSendPost;
-    static LinearLayout makePostAttachmentsContainer;
-    static LinearLayout makePostAudioContainer;
-    static LinearLayout makePostDocContainer;
-    static RelativeLayout makePostMediaContainer;
+    ViewPager makePostMediaPager;
+    ImageButton makePostMediaPagerVideoButton;
+    CirclePageIndicator makePostMediaPagerIndicator;
 
-    static ViewPager makePostMediaPager;
-    static ImageButton makePostMediaPagerVideoButton;
-    static CirclePageIndicator makePostMediaPagerIndicator;
-
-    static TouchMakePostImageButton imgPostAttachPhoto;
-    static TouchMakePostImageButton imgPostAttachVideo;
-    static TouchMakePostImageButton imgPostAttachAudio;
-    static TouchMakePostImageButton imgPostAttachDoc;
+    TouchMakePostImageButton imgPostAttachPhoto;
+    TouchMakePostImageButton imgPostAttachVideo;
+    TouchMakePostImageButton imgPostAttachAudio;
+    TouchMakePostImageButton imgPostAttachDoc;
 
     static final View.OnClickListener tooManyAttachments = new View.OnClickListener() {
         @Override
@@ -142,7 +141,6 @@ public abstract class FragmentWithAttach extends Fragment {
         return attachments.toString();
     }
 
-    ;
 
     public void setAttachmentsOnEdit() {
         if (Constants.tempPhotoPostAttach.size() != 0) {
@@ -273,10 +271,20 @@ public abstract class FragmentWithAttach extends Fragment {
 
             if (doc.isImage()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                Glide.with(TIFApp.getAppContext())
+//                        .load(doc.photo_100)
+//                        .placeholder(R.drawable.event_stub)
+//                        .crossFade()
+//                        .into(image);
                 ImageLoader.getInstance().displayImage(doc.photo_100, image, ItemDataSetter.animationLoader);
                 size.setText(Constants.DOC_TYPE_IMAGE + " " + ItemDataSetter.readableFileSize(doc.size));
             } else if (doc.isGif()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//                Glide.with(TIFApp.getAppContext())
+//                        .load(doc.photo_100)
+//                        .placeholder(R.drawable.event_stub)
+//                        .crossFade()
+//                        .into(image);
                 ImageLoader.getInstance().displayImage(doc.photo_100, image, ItemDataSetter.animationLoader);
                 size.setText(Constants.DOC_TYPE_ANIMATION + " " + ItemDataSetter.readableFileSize(doc.size));
             } else {

@@ -64,5 +64,8 @@ dependencies {
     compile 'in.srain.cube:grid-view-with-header-footer:1.0.9'
     compile 'com.github.manuelpeinado.fadingactionbar:fadingactionbar:3.1.2'
     compile 'com.github.nirhart:parallaxscroll:1.0'
+
+    // Images loading lib
+    compile 'com.github.bumptech.glide:glide:3.5.2'
 }
 

@@ -131,6 +131,11 @@ public class NavigationDrawerFragment extends Fragment {
         if (VKSdk.isLoggedIn()) {
             headerViewHolder.btLogin.setImageDrawable(activity.getResources().getDrawable(R.drawable.ic_logout_white_24dp));
 
+//            Glide.with(TIFApp.getAppContext())
+//                    .load(user.photo)
+//                    .placeholder(R.drawable.event_stub)
+//                    .crossFade()
+//                    .into(headerViewHolder.imgAvatar);
             ImageLoader.getInstance().displayImage(user.photo, headerViewHolder.imgAvatar, TIFApp.additionalOptions);
             headerViewHolder.txtTitle.setText(user.fullName);
 

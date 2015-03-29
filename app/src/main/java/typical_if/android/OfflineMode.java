@@ -20,7 +20,7 @@ public class OfflineMode extends SharedPrefsHelper {
 //    final static SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences("key", Activity.MODE_PRIVATE);
 //    final static SharedPreferences.Editor ed = sPref.edit();
 
-    public static boolean saveJSON(JSONObject jsonObject, long gid) {
+    public static boolean saveJSON(long gid, JSONObject jsonObject) {
         return save(String.valueOf(gid), jsonObject.toString());
 //        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(gid), Activity.MODE_PRIVATE);
 //        final SharedPreferences.Editor ed = sPref.edit();
@@ -31,7 +31,7 @@ public class OfflineMode extends SharedPrefsHelper {
 //        ed.commit();
     }
 
-    public static boolean saveJSON(JSONObject jsonObject, String id) {
+    public static boolean saveJSON(String id, JSONObject jsonObject) {
         return save(id, jsonObject.toString());
 //        final SharedPreferences sPref = TIFApp.getAppContext().getSharedPreferences(String.valueOf(id), Activity.MODE_PRIVATE);
 //        final SharedPreferences.Editor ed = sPref.edit();

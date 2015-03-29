@@ -288,7 +288,7 @@ public class SplashActivity extends Activity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                OfflineMode.saveJSON(json, id);
+                OfflineMode.saveJSON(id, json);
                 decrementThreadsCounter(threadsCounter);
             }
         }).start();

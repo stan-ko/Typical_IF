@@ -12,9 +12,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import com.nostra13.universalimageloader.cache.memory.MemoryCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPhotoSize;
 import com.vk.sdk.api.model.VKPhotoSizes;
+
+import java.io.File;
 
 import typical_if.android.TIFApp;
 
@@ -23,8 +27,8 @@ import typical_if.android.TIFApp;
  */
 public class PhotoUrlHelper {
 
-    public PhotoUrlHelper (){}
-
+    public PhotoUrlHelper() {
+    }
 
 
     private final static int displayHeight = TIFApp.getDisplayHeight();
@@ -47,7 +51,6 @@ public class PhotoUrlHelper {
             urlOfFullScreenPhoto = null;
 
 
-
         return urlOfFullScreenPhoto;
     }
 
@@ -57,20 +60,50 @@ public class PhotoUrlHelper {
             urlOfPreviewPhoto = photo.photo_75;
         else
             urlOfPreviewPhoto = photo.photo_130;
-     //  View.inflate(Constants.mainActivity, )
 
         return urlOfPreviewPhoto;
     }
 
-   public static String getBestQualityUrl(VKPhotoSizes srcs){
-       String url =srcs.get(0).src;
-       for (VKApiPhotoSize size: srcs){
-           url=size.src;
-       }
+    public static boolean isImageCached(final String url){
+        MemoryCache memoryCache = ImageLoader.getInstance().getMemoryCache();
+        for (String key : memoryCache.keys()) {
+            if (key.startsWith(url)) {
+                return true;
+            }
+        }
+        final File diskCachedFile = ImageLoader.getInstance().getDiskCache().get(url);
+        return diskCachedFile!=null && diskCachedFile.exists();
+    }
 
-       return url;
-   }
 
+    public static String getBestQualityUrl(VKPhotoSizes srcs) {
+        VKApiPhotoSize biggestSize = srcs.get(0);
+        VKApiPhotoSize prevSize = srcs.get(0);
+        //String url = biggestSize.src;
+        for (VKApiPhotoSize size : srcs) {
+            Log.i(PhotoUrlHelper.class.getSimpleName(),"getBestQualityUrl(): "+size.type+" width: "+size.width);
+            if (size.compareTo(biggestSize) > 0) {
+                if (TIFApp.getDisplayWidth()*2 < size.width) {
+                    break;
+                }
+                prevSize = biggestSize;
+                biggestSize = size;
+            }
+        }
+        Log.i(PhotoUrlHelper.class.getSimpleName(),"getBestQualityUrl() chosen size: "+biggestSize.type+" width: "+biggestSize.width);
+        return biggestSize.src;
+    }
+
+    public static String getMaxQualityUrl(VKPhotoSizes srcs) {
+        VKApiPhotoSize biggestSize = srcs.get(0);
+        //String url = biggestSize.src;
+        for (VKApiPhotoSize size : srcs) {
+            if (size.compareTo(biggestSize) > 0) {
+                biggestSize = size;
+            }
+        }
+        return biggestSize.src;
+    }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static void blur(Bitmap bkg, View view) {
@@ -336,10 +369,6 @@ public class PhotoUrlHelper {
 
         return (bitmap);
     }
-
-
-
-
 
 
 }

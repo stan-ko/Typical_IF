@@ -73,8 +73,8 @@ public class TIFApp extends Application {
         displayWidth = displayMetrics.widthPixels;
 
         DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
-//                .cacheOnDisc(true)
-//                .cacheInMemory(true)
+                .cacheOnDisc(true)
+                .cacheInMemory(true)
                 .showImageOnLoading(R.drawable.pre_load_image_background) // TODO resource or drawable
 //                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
 //                .showImageOnFail(R.drawable.pre_load_image_background) // TODO resource or drawable

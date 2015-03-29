@@ -74,6 +74,11 @@ public class PhotoUploadAdapter extends BaseAdapter {
         }
 
         File file = new File(uploadphotolist.get(position).photoSrc);
+//        Glide.with(TIFApp.getAppContext())
+//                .load(Uri.fromFile(file).toString())
+//                .placeholder(R.drawable.event_stub)
+//                .crossFade()
+//                .into(viewHolder.photo);
         ImageLoader.getInstance().displayImage(Uri.fromFile(file).toString(), viewHolder.photo);
 
         viewHolder.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

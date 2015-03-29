@@ -480,6 +480,7 @@ public class MainActivity extends DialogActivity implements
             AudioPlayerService.cancelNotification(this, Constants.notifID);
             AudioPlayer.stop();
         }
+
     }
 
 

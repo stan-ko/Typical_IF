@@ -468,6 +468,7 @@ public class VKHelper {
             countOfPhotos = json.getInt(TIF_VK_SDK_KEY_COUNT);
         } catch (JSONException e) {
             e.printStackTrace();
+//            Log.i(VKHelper.class.getSimpleName(),json.toString());
         }
         final ArrayList<VKApiPhoto> photos = new ArrayList<VKApiPhoto>();
         for (int i = 0; i < array.length(); i++) {

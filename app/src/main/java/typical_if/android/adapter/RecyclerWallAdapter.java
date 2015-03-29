@@ -168,6 +168,12 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
             viewHolder.copyHistoryHeader.setOnClickListener(ItemDataSetter.openActionViewChooserListener);
             viewHolder.txtCopyHistoryTitle.setText(postWrapper.copyHistoryTitle);
             viewHolder.txtCopyHistoryDate.setText(DateUtils.getFormattedDate(copyHistory.date));
+
+//            Glide.with(TIFApp.getAppContext())
+//                    .load(postWrapper.copyHistoryLogo)
+//                    .placeholder(R.drawable.event_stub)
+//                    .crossFade()
+//                    .into(viewHolder.imgCopyHistoryLogo);
             ImageLoader.getInstance().displayImage(postWrapper.copyHistoryLogo, viewHolder.imgCopyHistoryLogo, TIFApp.additionalOptions);
 
             viewHolder.copyHistoryTextLayout.setVisibility(postWrapper.copyHistoryTextContainerVisibility);

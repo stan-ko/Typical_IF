@@ -59,7 +59,7 @@ import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
 public class FragmentWall extends FragmentWithAttach {
 
-    static RecyclerView wallListView;
+    RecyclerView wallListView;
     RecyclerView.Adapter adapter;
     ActionBar actionBar;
 
@@ -73,18 +73,18 @@ public class FragmentWall extends FragmentWithAttach {
     JSONObject jsonObjectOld;
 
     int Offset = Constants.TIF_VK_PRELOAD_POSTS_COUNT;
-    static boolean isSuggested;
+    boolean isSuggested;
 
-    boolean temp = true;
-    boolean temp2 = true;
-    boolean enable = false;
 
-    Bundle arguments;
+    //    Bundle arguments;
     SwipeRefreshLayout swipeView;
     ToggleFloatingActionsMenu toggleFloatingActionsMenu;
 
     LinearLayoutManager linearLayoutManager;
 
+    boolean temp = true;
+    boolean temp2 = true;
+    boolean enable = false;
     RecyclerView.OnScrollListener onScrollListenerRecyclerObject = new RecyclerView.OnScrollListener() {
         int mLastFirstVisibleItem = 0;
 
@@ -115,7 +115,7 @@ public class FragmentWall extends FragmentWithAttach {
 
                 mLastFirstVisibleItem = currentFirstVisibleItem;
             }
-            if (OfflineMode.loadLong(Constants.VK_GROUP_ID)!= Constants.ZF_ID) {
+            if (OfflineMode.loadLong(Constants.VK_GROUP_ID) != Constants.ZF_ID) {
 
                 if (lastItem == totalItemCount - 5 && temp2) {
                     new Thread(new Runnable() {
@@ -142,10 +142,12 @@ public class FragmentWall extends FragmentWithAttach {
             swipeView.setEnabled(enable);
         }
     };
-   final static private Bundle args = new Bundle();
+
+    //   final static private Bundle args = new Bundle();
     public static FragmentWall newInstance(boolean isSuggestedParam) {
         FragmentWall fragment = new FragmentWall();
-        isSuggested = isSuggestedParam;
+        final Bundle args = new Bundle();
+        args.putBoolean("isSuggested", isSuggestedParam);
         fragment.setArguments(args);
         return fragment;
     }
@@ -156,9 +158,9 @@ public class FragmentWall extends FragmentWithAttach {
     @Override
     public void onResume() {
         super.onResume();
-        Constants.MtitlePoll="";
-        Constants.isFragmentCommentsLoaded=false;
-        Log.d("isFragmentCommentsLoaded: "+ Constants.isFragmentCommentsLoaded," was changed in OnResume in FragmentWall");
+        Constants.MtitlePoll = "";
+        Constants.isFragmentCommentsLoaded = false;
+        Log.d("isFragmentCommentsLoaded: " + Constants.isFragmentCommentsLoaded, " was changed in OnResume in FragmentWall");
     }
 
     @Override
@@ -168,7 +170,6 @@ public class FragmentWall extends FragmentWithAttach {
             ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
             setDisabledMenu();
         }
-
         super.onDetach();
     }
 
@@ -182,14 +183,17 @@ public class FragmentWall extends FragmentWithAttach {
     @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        isSuggested = getArguments().getBoolean("isSuggested");
+
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
 
         spinnerLayout = (RelativeLayout) rootView.findViewById(R.id.spinner_layout);
         inflaterGlobal = inflater;
-        arguments = getArguments();
+//        arguments = getArguments();
 
         fragmentManager = getActivity().getSupportFragmentManager();
-        tempGroupId =  OfflineMode.loadLong(Constants.VK_GROUP_ID);
+        tempGroupId = OfflineMode.loadLong(Constants.VK_GROUP_ID);
 
 
         floatingActionButtonBackToTop = (com.shamanland.fab.FloatingActionButton) rootView.findViewById(R.id.beckToTop);
@@ -211,7 +215,7 @@ public class FragmentWall extends FragmentWithAttach {
         fabPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               //  OfflineMode.loadLong(Constants.VK_GROUP_ID) = tempGroupId;
+                //  OfflineMode.loadLong(Constants.VK_GROUP_ID) = tempGroupId;
                 FragmentAlbumsList fragment = FragmentAlbumsList.newInstance(1);
                 ((MainActivity) getActivity()).addFragment(fragment);
                 ((MainActivity) getActivity()).restoreActionBar();
@@ -221,20 +225,20 @@ public class FragmentWall extends FragmentWithAttach {
         fabSuggest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance( OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
+                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
             }
         });
 
         actionBar = ((MainActivity) getActivity()).getSupportActionBar();
         actionBar.show();
 
-        playableLogoRes = ItemDataSetter.getPlayingLogo( OfflineMode.loadLong(Constants.VK_GROUP_ID));
+        playableLogoRes = ItemDataSetter.getPlayingLogo(OfflineMode.loadLong(Constants.VK_GROUP_ID));
         pauseOnScrollListener = new NewPauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerRecyclerObject);
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         swipeView.setColorSchemeResources(android.R.color.white, android.R.color.white, android.R.color.white);
         swipeView.setProgressBackgroundColor(R.color.music_progress);
         swipeView.setProgressViewOffset(true, 0, 150);
-        swipeView. setSize(SwipeRefreshLayout.DEFAULT);
+        swipeView.setSize(SwipeRefreshLayout.DEFAULT);
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -244,11 +248,11 @@ public class FragmentWall extends FragmentWithAttach {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        VKHelper.doGroupWallRequest(offsetO, Offset,  OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
+                        VKHelper.doGroupWallRequest(offsetO, Offset, OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
                             @Override
                             public void onSuccess() {
-                                OfflineMode.saveJSON(vkJson,  OfflineMode.loadLong(Constants.VK_GROUP_ID));
-                                initGroupWall(OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID)), inflaterGlobal);
+                                OfflineMode.saveJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID), vkJson);
+                                initGroupWall(OfflineMode.loadJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID)), inflaterGlobal);
                             }
                         });
 
@@ -273,13 +277,13 @@ public class FragmentWall extends FragmentWithAttach {
 //}
 
 
-            Log.d("GROUP_ID", ""+ OfflineMode.loadLong(Constants.VK_GROUP_ID));
-            jsonObjectOld = OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID));
+            Log.d("GROUP_ID", "" + OfflineMode.loadLong(Constants.VK_GROUP_ID));
+            jsonObjectOld = OfflineMode.loadJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID));
             initGroupWall(jsonObjectOld, inflater);
 
         } else {
             setDisabledMenu();
-            VKHelper.getSuggestedPosts( OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
+            VKHelper.getSuggestedPosts(OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
                 @Override
                 public void onSuccess() {
                     initGroupWall(vkJson, inflater);
@@ -303,7 +307,7 @@ public class FragmentWall extends FragmentWithAttach {
             fabSuggest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance( OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
+                    ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
                 }
             });
             fabSuggest.setVisibility(View.VISIBLE);
@@ -325,8 +329,7 @@ public class FragmentWall extends FragmentWithAttach {
             this(imageLoader, pauseOnScroll, pauseOnSettling, null);
         }
 
-        public NewPauseOnScrollListener(ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnSettling,
-                                        RecyclerView.OnScrollListener customListener) {
+        public NewPauseOnScrollListener(ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnSettling, RecyclerView.OnScrollListener customListener) {
             this.imageLoader = imageLoader;
             this.pauseOnScroll = pauseOnScroll;
             this.pauseOnSettling = pauseOnSettling;
@@ -377,7 +380,7 @@ public class FragmentWall extends FragmentWithAttach {
             Toast.makeText(getApplicationContext(), R.string.no_suggested_posts, Toast.LENGTH_SHORT).show();
         }
 
-        if ( OfflineMode.loadLong(Constants.VK_GROUP_ID) == Constants.ZF_ID) {
+        if (OfflineMode.loadLong(Constants.VK_GROUP_ID) == Constants.ZF_ID) {
             fabPhoto.setVisibility(View.GONE);
 
             if (adapter == null) {
@@ -513,7 +516,7 @@ public class FragmentWall extends FragmentWithAttach {
         if (savedInstanceState != null) {
             mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
             wallListView.scrollToPosition(0);
-            Constants.isFragmentCommentsLoaded=false;
+            Constants.isFragmentCommentsLoaded = false;
             Log.d("isFragmentCommentsLoaded: " + Constants.isFragmentCommentsLoaded, " was changed in onActivityCreated in FragmentWall");
         }
     }
@@ -536,10 +539,10 @@ public class FragmentWall extends FragmentWithAttach {
         }
 
         super.onPrepareOptionsMenu(menu);
-        VKHelper.isMember( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
+        VKHelper.isMember(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
             @Override
             public void onSuccess() {
-                if(hasJson) {
+                if (hasJson) {
                     Constants.isMember = vkJson.optInt(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
                     if (VKSdk.isLoggedIn()) {
                         if (Constants.isMember == 0) {
@@ -568,44 +571,44 @@ public class FragmentWall extends FragmentWithAttach {
 
     public static void setEnabledMenu() {
 
- if ( !Constants.isPollFragmentLoaded
-     &!Constants.isFragmentMakePostLoaded
-     &!Constants.isFragmentAlbumListLoaded
-     &!Constants.isFragmentCommentsLoaded
-     &!Constants.isFragmentFullScreenLoaded) {
+        if (!Constants.isPollFragmentLoaded
+                & !Constants.isFragmentMakePostLoaded
+                & !Constants.isFragmentAlbumListLoaded
+                & !Constants.isFragmentCommentsLoaded
+                & !Constants.isFragmentFullScreenLoaded) {
 
-     if (Constants.makePostMenu.size() == 3) {
-         StackTraceElement [] el = Thread.currentThread().getStackTrace();
-         LinkedList<StackTraceElement> l = new LinkedList<StackTraceElement>(Arrays.asList(el));
-         for (StackTraceElement e:l){
-             Log.d("StackTraceElement is: "," "+e.toString());
-         }
+            if (Constants.makePostMenu.size() == 3) {
+                StackTraceElement[] el = Thread.currentThread().getStackTrace();
+                LinkedList<StackTraceElement> l = new LinkedList<StackTraceElement>(Arrays.asList(el));
+                for (StackTraceElement e : l) {
+                    Log.d("StackTraceElement is: ", " " + e.toString());
+                }
 
-         Constants.makePostMenu.getItem(0).setVisible(true);
-         Constants.makePostMenu.getItem(1).setVisible(true);
-         Constants.makePostMenu.getItem(2).setVisible(true);
+                Constants.makePostMenu.getItem(0).setVisible(true);
+                Constants.makePostMenu.getItem(1).setVisible(true);
+                Constants.makePostMenu.getItem(2).setVisible(true);
 
 
-     }
-     Log.d("EnablingMenu...", "status: " + Constants.makePostMenu.hasVisibleItems());
- }
+            }
+            Log.d("EnablingMenu...", "status: " + Constants.makePostMenu.hasVisibleItems());
+        }
     }
 
     public static void setDisabledMenu() {
-try {
-    if (Constants.makePostMenu.size() == 3) {
-        Constants.makePostMenu.getItem(0).setVisible(false);
-        Constants.makePostMenu.getItem(1).setVisible(false);
-        Constants.makePostMenu.getItem(2).setVisible(false);
-        Constants.makePostMenu.close();
-    }
-    Constants.makePostMenu.close();
-    Log.d("DisablingMenu...", " status: " + Constants.makePostMenu.hasVisibleItems());
-}catch (NullPointerException ex){
-    Log.d ("Options Menu has not already initialized", " and equals: "+Constants.makePostMenu);
+        try {
+            if (Constants.makePostMenu.size() == 3) {
+                Constants.makePostMenu.getItem(0).setVisible(false);
+                Constants.makePostMenu.getItem(1).setVisible(false);
+                Constants.makePostMenu.getItem(2).setVisible(false);
+                Constants.makePostMenu.close();
+            }
+            Constants.makePostMenu.close();
+            Log.d("DisablingMenu...", " status: " + Constants.makePostMenu.hasVisibleItems());
+        } catch (NullPointerException ex) {
+            Log.d("Options Menu has not already initialized", " and equals: " + Constants.makePostMenu);
 
 
-}
+        }
     }
 
     @Override
@@ -619,21 +622,20 @@ try {
             } else {
                 setDisabledMenu();
             }
-
         }
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.make_post:
-                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance( OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
+                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
                 break;
             case R.id.suggested_posts:
                 ((MainActivity) getActivity()).addFragment(FragmentWall.newInstance(true));
                 break;
             case R.id.join_leave_group:
                 if (Constants.isMember == 0) {
-                    VKHelper.groupJoin( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
+                    VKHelper.groupJoin(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
                         @Override
                         public void onSuccess() {
                             Toast.makeText(getActivity(), R.string.group_joined, Toast.LENGTH_SHORT).show();
@@ -645,7 +647,7 @@ try {
 //                        }
                     });
                 } else {
-                    VKHelper.groupLeave( OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
+                    VKHelper.groupLeave(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
                         @Override
                         public void onSuccess() {
                             Toast.makeText(getActivity(), R.string.group_leaved, Toast.LENGTH_SHORT).show();
@@ -671,18 +673,17 @@ try {
     }
 
 
-
     private void endlessAdd(final int lastItem) {
-        jsonObjectOld = OfflineMode.loadJSON( OfflineMode.loadLong(Constants.VK_GROUP_ID));
+        jsonObjectOld = OfflineMode.loadJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID));
         initGroupWall(jsonObjectOld, inflaterGlobal);
         scrollCommentsToBottom(wallListView, lastItem);
     }
 
     private void endlessGet(final int Offset) {
-        VKHelper.doGroupWallRequest(Offset, countPostDefaultForOffset,  OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
+        VKHelper.doGroupWallRequest(Offset, countPostDefaultForOffset, OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
             @Override
             public void onSuccess() {
-                OfflineMode.saveJSON(OfflineMode.jsonPlus(jsonObjectOld, vkJson),  OfflineMode.loadLong(Constants.VK_GROUP_ID));
+                OfflineMode.saveJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID), OfflineMode.jsonPlus(jsonObjectOld, vkJson));
             }
 
             @Override
@@ -697,7 +698,7 @@ try {
         listView.post(new Runnable() {
             @Override
             public void run() {
-               listView.getLayoutManager().scrollToPosition(lastItem - 2);
+                listView.getLayoutManager().scrollToPosition(lastItem - 2);
             }
         });
 
