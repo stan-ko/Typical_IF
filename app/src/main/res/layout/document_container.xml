@@ -48,4 +48,12 @@
         android:textSize="13dp"
         android:layout_marginLeft="5dp" />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/img_gif"
+        android:visibility="gone"
+        android:scaleType="center"
+        android:adjustViewBounds="true" />
+
 </RelativeLayout>

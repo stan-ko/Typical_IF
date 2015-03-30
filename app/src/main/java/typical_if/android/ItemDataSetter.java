@@ -36,7 +36,10 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.koushikdutta.ion.Ion;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
@@ -593,61 +596,54 @@ public class ItemDataSetter {
             final ImageView image = (ImageView) tempDocumentContainer.getChildAt(1);
             final TextView title = (TextView) tempDocumentContainer.getChildAt(2);
             final TextView size = (TextView) tempDocumentContainer.getChildAt(3);
+            final View gif = tempDocumentContainer.getChildAt(4);
 
             title.setText(doc.title);
 
             if (doc.isImage()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//                Glide.with(TIFApp.getAppContext())
-//                        .load(doc.photo_100)
-//                        .placeholder(R.drawable.event_stub)
-//                        .crossFade()
-//                        .into(image);
                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
                 size.setText(Constants.DOC_TYPE_IMAGE + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setTag(doc.url);
                 tempDocumentContainer.setOnClickListener(openActionViewChooserListener);
             } else if (doc.isGif()) {
                 image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//                Glide.with(TIFApp.getAppContext())
-//                        .load(doc.photo_100)
-//                        .placeholder(R.drawable.event_stub)
-//                        .crossFade()
-//                        .into(image);
                 ImageLoader.getInstance().displayImage(doc.photo_100, image);
                 size.setText(Constants.DOC_TYPE_ANIMATION + " " + readableFileSize(doc.size));
                 tempDocumentContainer.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        image.setEnabled(true);
-                        image.setClickable(true);
-
+                        image.setVisibility(View.GONE);
 
                         title.setVisibility(View.GONE);
                         size.setVisibility(View.GONE);
                         spinner.setVisibility(View.VISIBLE);
-                        Ion.with(image).animateGif(true).load(doc.url);
-                        image.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT));
-                        image.setScaleType(ImageView.ScaleType.MATRIX);
-                        image.setAdjustViewBounds(true);
-                        image.setOnClickListener(new View.OnClickListener() {
+
+                        gif.setLayoutParams(new RelativeLayout.LayoutParams(TIFApp.getDisplayWidth(), TIFApp.getDisplayWidth()));
+                        gif.requestLayout();
+                        gif.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                spinner.setVisibility(View.GONE);
-                                image.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                                image.setLayoutParams(new RelativeLayout.LayoutParams(TIFApp.getScaledDp(60), TIFApp.getScaledDp(60)));
-//                                Glide.with(TIFApp.getAppContext())
-//                                        .load(doc.photo_100)
-//                                        .placeholder(R.drawable.event_stub)
-//                                        .crossFade()
-//                                        .into(image);
-                                ImageLoader.getInstance().displayImage(doc.photo_100, image);
+                                image.setVisibility(View.VISIBLE);
                                 title.setVisibility(View.VISIBLE);
                                 size.setVisibility(View.VISIBLE);
-                                image.setEnabled(false);
-                                image.setClickable(false);
+                                v.setVisibility(View.GONE);
                             }
                         });
+
+                        Glide.with(context).load(doc.url).asGif().listener(new RequestListener<String, GifDrawable>() {
+                            @Override
+                            public boolean onException(Exception e, String model, Target<GifDrawable> target, boolean isFirstResource) {
+                                return false;
+                            }
+
+                            @Override
+                            public boolean onResourceReady(GifDrawable resource, String model, Target<GifDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                spinner.setVisibility(View.GONE);
+                                gif.setVisibility(View.VISIBLE);
+                                return false;
+                            }
+                        }).into((ImageView) gif);
                     }
                 });
             } else {
