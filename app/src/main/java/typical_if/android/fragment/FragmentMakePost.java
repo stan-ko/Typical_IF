@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.devspark.robototextview.widget.RobotoTextView;
-import com.getbase.floatingactionbutton.AddFloatingActionButton;
+import com.melnykov.fab.FloatingActionButton;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.vk.sdk.VKSdk;
 
@@ -112,8 +112,8 @@ public class FragmentMakePost extends FragmentWithAttach {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         Constants.isFragmentMakePostLoaded =true;
         Log.d("Make post","  Fragment");
-        ((MainActivity) getActivity()).getSupportActionBar().hide();
-        FragmentWall.setDisabledMenu();
+//        ((MainActivity) getActivity()).getSupportActionBar().hide();
+
 
         View rootView = inflater.inflate(R.layout.fragment_make_post, container, false);
         setRetainInstance(true);
@@ -151,7 +151,7 @@ public class FragmentMakePost extends FragmentWithAttach {
         makePostAudioContainer = (LinearLayout) rootView.findViewById(R.id.make_post_audio_container);
         makePostDocContainer = (LinearLayout) rootView.findViewById(R.id.make_post_doc_container);
         makePostMediaContainer = (RelativeLayout) rootView.findViewById(R.id.make_post_media_container);
-        btSendPost = (AddFloatingActionButton) rootView.findViewById(R.id.bt_post_send);
+        btSendPost = (FloatingActionButton) rootView.findViewById(R.id.bt_post_send);
 
         makePostMediaPager = (ViewPager) rootView.findViewById(R.id.media_pager);
         makePostMediaPagerIndicator = (CirclePageIndicator) rootView.findViewById(R.id.media_circle_indicator);

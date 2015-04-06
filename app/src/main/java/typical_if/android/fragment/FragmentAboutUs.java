@@ -33,7 +33,7 @@ public class FragmentAboutUs extends Fragment{
 
         FragmentAboutUs fragment = new FragmentAboutUs();
         Bundle args = new Bundle();
-FragmentWall.setDisabledMenu();
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -46,13 +46,13 @@ FragmentWall.setDisabledMenu();
     @Override
     public void onResume() {
         super.onResume();
-        FragmentWall.setDisabledMenu();
+
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        getActivity().getActionBar().show();
+//        getActivity().getActionBar().show();
     }
 
 
@@ -69,11 +69,11 @@ FragmentWall.setDisabledMenu();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FragmentWall.setDisabledMenu();
+
         setHasOptionsMenu(false);
         View rootView = inflater.inflate(R.layout.fragment_about, container, false);
         setRetainInstance(true);
-        getActivity().getActionBar().hide();
+//        getActivity().getActionBar().hide();
 
         final ImageView devLight = (ImageView) rootView.findViewById(R.id.DevLightBtn);
         final ImageView stantsiya = (ImageView) rootView.findViewById(R.id.stantsiya);

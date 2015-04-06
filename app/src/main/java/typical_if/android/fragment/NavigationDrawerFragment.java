@@ -310,9 +310,9 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
 
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        ActionBar actionBar = ((MainActivity) getActivity()).getSupportActionBar();
+//       actionBar.setDisplayHomeAsUpEnabled(true);
+//        actionBar.setHomeButtonEnabled(true);
 
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
@@ -353,8 +353,6 @@ public class NavigationDrawerFragment extends Fragment {
                 } else {
 //                    showGlobalContextActionBar();
 //                    ((MainActivity) getActivity()).getSupportActionBar().show();
-                 if (Constants.makePostMenu!=null){
-                    FragmentWall.setDisabledMenu();}
                 }
 
                 if (!mUserLearnedDrawer) {
@@ -399,7 +397,7 @@ public class NavigationDrawerFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            ((MainActivity) getActivity()).getSupportActionBar().show();
+//            ((MainActivity) getActivity()).getSupportActionBar().show();
             mCallbacks = (NavigationDrawerCallbacks) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
@@ -449,16 +447,7 @@ public class NavigationDrawerFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        FragmentWall.setDisabledMenu();
-        super.onPrepareOptionsMenu(menu);
-//        if (mDrawerLayout != null && isDrawerOpen()) {
-//            showGlobalContextActionBar();
-//        } else {
-//
-//        }
-    }
+
 
     /**
      * Per the navigation drawer design guidelines, updates the action bar to show the global app

@@ -2,6 +2,7 @@
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,14 +13,15 @@
         android:layout_height="match_parent"
         android:id="@+id/adding_photo_upload" />
 
-    <com.shamanland.fab.FloatingActionButton
+    <com.melnykov.fab.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/upload_photo_from_sd"
         android:layout_gravity="bottom|right"
         android:src="@drawable/ic_upload_white_24dp"
-        app:floatingActionButtonColor="@color/music_progress"
-        app:floatingActionButtonSize="normal"
+        fab:fab_colorNormal="@color/music_progress"
+        fab:fab_colorPressed="@color/music_progress_pressed"
+        fab:fab_colorRipple="@color/music_progress_pressed"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"

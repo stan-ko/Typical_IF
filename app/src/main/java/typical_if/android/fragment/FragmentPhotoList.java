@@ -27,8 +27,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
-import com.shamanland.fab.FloatingActionButton;
-import com.shamanland.fab.ShowHideOnScroll;
+import com.melnykov.fab.FloatingActionButton;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.model.VKApiPhoto;
 
@@ -101,8 +100,8 @@ public class FragmentPhotoList extends FragmentWithAttach implements AbsListView
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        ((MainActivity) getActivity()).getSupportActionBar().hide();
-        FragmentWall.setDisabledMenu();
+//        ((MainActivity) getActivity()).getSupportActionBar().hide();
+
 
         final View rootView = inflater.inflate(R.layout.fragment_photo_list, container, false);
 
@@ -339,11 +338,12 @@ try {
 
         }
         gridOfPhotos.setNumColumns(columns);
-        if (VKSdk.isLoggedIn()) {
-            gridOfPhotos.setOnTouchListener(new ShowHideOnScroll(floatingActionButton));
-        } else {
-            gridOfPhotos.setOnTouchListener(null);
-        }
+//        if (VKSdk.isLoggedIn()) {
+//
+//            gridOfPhotos.setOnTouchListener(new ShowHideOnScroll(floatingActionButton));
+//        } else {
+//            gridOfPhotos.setOnTouchListener(null);
+//        }
 
 
     }

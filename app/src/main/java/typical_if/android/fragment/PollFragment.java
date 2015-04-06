@@ -69,7 +69,6 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
-        FragmentWall.setDisabledMenu();
         return fragment;
     }
 
@@ -109,7 +108,7 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
             }
             answers_anonymous_text.setText(getArguments().getString("answers_anonymous_text"));
             this.answers_anonymous_text_preview = answers_anonymous_text;
-            FragmentWall.setDisabledMenu();
+
 
         }
     }
@@ -117,20 +116,20 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ((MainActivity) getActivity()).getSupportActionBar().show();
+//        ((MainActivity) getActivity()).getSupportActionBar().show();
         isRunning = true;
 
         if (VKSdk.isLoggedIn()) {
 
 
-            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll));
-            Constants.MtitlePoll = getActivity().getActionBar().getTitle().toString();
-            FragmentWall.setDisabledMenu();
+//            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll));
+//            Constants.MtitlePoll = getActivity().getActionBar().getTitle().toString();
+
         } else {
-            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll) + " ("
-                                                    + getActivity().getResources().getString(R.string.login_to_vote) + ")");
-            Constants.MtitlePoll = getActivity().getActionBar().getTitle().toString();
-            FragmentWall.setDisabledMenu();
+//            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll) + " ("
+//                                                    + getActivity().getResources().getString(R.string.login_to_vote) + ")");
+//            Constants.MtitlePoll = getActivity().getActionBar().getTitle().toString();
+
         }
 
         View view = inflater.inflate(R.layout.poll_view_container_fragment, container, false);
@@ -171,7 +170,7 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
 //
 //            }
 //        });
-        FragmentWall.setDisabledMenu();
+
         return view;
     }
 
@@ -186,7 +185,7 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
         }
         Constants.isPollFragmentLoaded = true;
         Log.d("isPollFragmentLoaded: " + Constants.isPollFragmentLoaded, " was changed in OnAttach() in PollFragment");
-        FragmentWall.setDisabledMenu();
+
 
     }
 
@@ -194,13 +193,11 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
     public void onDetach() {
         Constants.isPollFragmentLoaded = false;
         Log.d("isPollFragmentLoaded: " + Constants.isPollFragmentLoaded, " was changed in OnDetach() in PollFragment");
-        getActivity().getActionBar().setTitle(Constants.Mtitle);
+//        getActivity().getActionBar().setTitle(Constants.Mtitle);
         isRunning = false;
 
-        FragmentWall.setEnabledMenu();
-
         if (Constants.isFragmentCommentsLoaded) {
-            getActivity().getActionBar().hide();
+//            getActivity().getActionBar().hide();
         }
 
         super.onDetach();
@@ -212,22 +209,22 @@ public class PollFragment extends Fragment implements AbsListView.OnItemClickLis
     public void onResume() {
         super.onResume();
         isRunning = true;
-        getActivity().getActionBar().show();
+//        getActivity().getActionBar().show();
 
         if (VKSdk.isLoggedIn()) {
-            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll));
-            Constants.MtitlePoll = getActivity().getActionBar().getTitle().toString();
+//            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll));
+//            Constants.MtitlePoll = getActivity().getActionBar().getTitle().toString();
         } else {
-            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll) + " ("
-          + getActivity().getResources().getString(R.string.login_to_vote) + ")");
-            Constants.MtitlePoll = getActivity().getActionBar().getTitle().toString();
+//            getActivity().getActionBar().setTitle(getActivity().getResources().getString(R.string.poll) + " ("
+//          + getActivity().getResources().getString(R.string.login_to_vote) + ")");
+//            Constants.MtitlePoll = getActivity().getActionBar().getTitle().toString();
         }
-        FragmentWall.setDisabledMenu();
+
 
         Constants.isPollFragmentLoaded = true;
 
         Log.d("isPollFragmentLoaded: " + Constants.isPollFragmentLoaded, " was changed in OnResume() in PollFragment");
-        FragmentWall.setDisabledMenu();
+
     }
 
     @Override

@@ -57,21 +57,21 @@ public class FragmentVideoView extends Fragment {
     public FragmentVideoView() {
     }
 
-    ActionBar actionBar;
+//    ActionBar actionBar;
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fragment_video_view, container, false);
         setRetainInstance(true);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        actionBar = getActivity().getActionBar();
-        actionBar.hide();
+//        actionBar = getActivity().getActionBar();
+//        actionBar.hide();
         playVideo(getArguments().getString("url"), rootView);
         getActivity().getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
                 getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                actionBar.show();
+//                actionBar.show();
 
             }
         });

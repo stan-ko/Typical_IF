@@ -102,8 +102,8 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
         Constants.isFragmentFullScreenLoaded = true;
         EventBus.getDefault().register(this);
 
-        ((MainActivity) getActivity()).getSupportActionBar().hide();
-        FragmentWall.setDisabledMenu();
+//        ((MainActivity) getActivity()).getSupportActionBar().hide();
+//        FragmentWall.setDisabledMenu();
 
         final View rootView = inflater.inflate(R.layout.fragment_fullscreen_list, container, false);
 //        addLike = rootView.findViewById(R.id.add_like);

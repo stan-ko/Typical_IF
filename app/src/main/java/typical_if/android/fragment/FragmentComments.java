@@ -344,7 +344,7 @@ public class FragmentComments extends FragmentWithAttach {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity) getActivity()).getSupportActionBar().hide();
+//        ((MainActivity) getActivity()).getSupportActionBar().hide();
         Constants.isFragmentCommentsLoaded = true;
         Log.d("isFragmentCommentsLoaded: " + Constants.isFragmentCommentsLoaded, " was changed in OnResume in FragmentComments");
 
@@ -359,8 +359,7 @@ public class FragmentComments extends FragmentWithAttach {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        ((MainActivity) getActivity()).getSupportActionBar().hide();
-        FragmentWall.setDisabledMenu();
+//        ((MainActivity) getActivity()).getSupportActionBar().hide();
 
         this.inflater = inflater;
         rootView = inflater.inflate(R.layout.fragment_photo_comment_and_info, container, false);
@@ -930,7 +929,7 @@ public class FragmentComments extends FragmentWithAttach {
         Constants.isFragmentCommentsLoaded = false;
         Log.d("isFragmentCommentsLoaded: " + Constants.isFragmentCommentsLoaded, " was changed in OnDetach in FragmentComments");
         if (loadFromWall) {
-            ((MainActivity) getActivity()).getSupportActionBar().show();
+//            ((MainActivity) getActivity()).getSupportActionBar().show();
         }
 
         getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {

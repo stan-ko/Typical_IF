@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.twotoasters.jazzylistview.JazzyHelper;
+
 
 import java.util.ArrayList;
 
@@ -26,7 +26,7 @@ public class FragmentUploadAlbumList extends Fragment {
     private int count;
     private String[] arrPath;
 
-    private int mCurrentTransitionEffect = JazzyHelper.TILT;
+
     int which;
     long gid;
 
@@ -47,8 +47,8 @@ public class FragmentUploadAlbumList extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
-        FragmentWall.setDisabledMenu();
+//        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        
 
         final View rootView = inflater.inflate(R.layout.fragment_album_upload_list, container, false);
         setRetainInstance(true);
@@ -92,7 +92,7 @@ public class FragmentUploadAlbumList extends Fragment {
 
     @Override
     public void onAttach(Activity activity) {
-        FragmentWall.setDisabledMenu();
+        
         super.onAttach(activity);
     }
 }

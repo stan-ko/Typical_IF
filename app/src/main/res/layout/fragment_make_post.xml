@@ -2,6 +2,7 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg"
@@ -175,18 +176,22 @@
 
             </android.support.v7.widget.CardView>
 
-            <com.getbase.floatingactionbutton.AddFloatingActionButton
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <com.melnykov.fab.FloatingActionButton
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:fab="http://schemas.android.com/apk/res-auto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/bt_post_send"
-                app:fab_size="normal"
-                app:fab_colorNormal="@color/music_progress"
-                app:fab_colorPressed="@color/music_progress_pressed"
+                android:src="@drawable/ic_upload_white_24dp"
+                fab:fab_colorNormal="@color/music_progress"
+                fab:fab_colorPressed="@color/music_progress_pressed"
+                fab:fab_colorRipple="@color/music_progress_pressed"
                 android:layout_alignParentRight="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/card_view_make_post" />
+                android:layout_below="@+id/card_view_make_post"
+                android:layout_margin="5dp" />
+
 
         </RelativeLayout>
     </RelativeLayout>

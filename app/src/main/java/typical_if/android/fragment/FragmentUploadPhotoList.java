@@ -13,7 +13,7 @@ import android.widget.CheckBox;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.shamanland.fab.FloatingActionButton;
+import com.melnykov.fab.FloatingActionButton;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.model.VKPhotoArray;
@@ -65,8 +65,8 @@ public class FragmentUploadPhotoList extends FragmentWithAttach {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        ((MainActivity) getActivity()).getSupportActionBar().hide();
-        FragmentWall.setDisabledMenu();
+//        ((MainActivity) getActivity()).getSupportActionBar().hide();
+
 
         float scalefactor = getResources().getDisplayMetrics().density * 100;
         int number = getActivity().getWindowManager().getDefaultDisplay().getWidth();
@@ -87,7 +87,7 @@ public class FragmentUploadPhotoList extends FragmentWithAttach {
 
     @Override
     public void onAttach(Activity activity) {
-        FragmentWall.setDisabledMenu();
+
         super.onAttach(activity);
     }
 
@@ -136,7 +136,7 @@ public class FragmentUploadPhotoList extends FragmentWithAttach {
     protected void handleResponse(View rootView, LayoutInflater inflater, final ArrayList<UploadPhotos> photolist, int columns) {
 
         uploadPhotoFromSd = (FloatingActionButton) rootView.findViewById(R.id.upload_photo_from_sd);
-        uploadPhotoFromSd.initBackground();
+        //uploadPhotoFromSd.initBackground();
 
         if (which == 0) {
             uploadPhotoFromSd.setOnClickListener(new View.OnClickListener() {

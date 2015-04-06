@@ -6,24 +6,24 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
-import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.melnykov.fab.FloatingActionButton;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.shamanland.fab.ShowHideOnScroll;
-import com.vk.sdk.VKSdk;
+
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKAttachments;
@@ -31,8 +31,6 @@ import com.vk.sdk.api.model.VKAttachments;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -41,13 +39,15 @@ import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
+import typical_if.android.TIFApp;
+import typical_if.android.ToolBarHelper;
 import typical_if.android.VKHelper;
 import typical_if.android.VKRequestListener;
 import typical_if.android.activity.MainActivity;
 import typical_if.android.adapter.RecyclerEventAdapter;
 import typical_if.android.adapter.RecyclerWallAdapter;
 import typical_if.android.model.Wall.Wall;
-import typical_if.android.view.ToggleFloatingActionsMenu;
+
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
 
@@ -61,8 +61,7 @@ public class FragmentWall extends FragmentWithAttach {
 
     RecyclerView wallListView;
     RecyclerView.Adapter adapter;
-    ActionBar actionBar;
-
+    View totalToolBar;
     RelativeLayout spinnerLayout;
     View rootView;
     NewPauseOnScrollListener pauseOnScrollListener;
@@ -71,20 +70,30 @@ public class FragmentWall extends FragmentWithAttach {
     final int countPostDefaultForOffset = 50;
     public static int playableLogoRes;
     JSONObject jsonObjectOld;
-
     int Offset = Constants.TIF_VK_PRELOAD_POSTS_COUNT;
     boolean isSuggested;
+    FragmentManager fragmentManager;
+    long tempGroupId;
 
+//    FloatingActionButton fabPhoto;
+//    FloatingActionButton fabSuggest;
+ FloatingActionButton floatingActionButtonBackToTop;
+    Toolbar toolbar;
+    TextView mTitleToolBar;
 
-    //    Bundle arguments;
+    // Bundle arguments;
     SwipeRefreshLayout swipeView;
-    ToggleFloatingActionsMenu toggleFloatingActionsMenu;
+    FloatingActionButton floatingActionsButtonCreate;
 
     LinearLayoutManager linearLayoutManager;
-
     boolean temp = true;
     boolean temp2 = true;
     boolean enable = false;
+    boolean stopShow = false;
+    boolean startShow = false;
+    public NavigationDrawerFragment mNavigationDrawerFragment;
+
+
     RecyclerView.OnScrollListener onScrollListenerRecyclerObject = new RecyclerView.OnScrollListener() {
         int mLastFirstVisibleItem = 0;
 
@@ -97,22 +106,23 @@ public class FragmentWall extends FragmentWithAttach {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-
             final int lastItem = linearLayoutManager.findFirstVisibleItemPosition() + linearLayoutManager.getChildCount();
             final int totalItemCount = linearLayoutManager.getItemCount();
-
             if (recyclerView.getId() == wallListView.getId()) {
-
                 final int currentFirstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
-
-                if (currentFirstVisibleItem > mLastFirstVisibleItem) {
-                    actionBar.hide();
-                    toggleFloatingActionsMenu.hide(true);
-                } else if (currentFirstVisibleItem < mLastFirstVisibleItem) {
-                    actionBar.show();
-                    toggleFloatingActionsMenu.show(true);
+                if (dy<0) stopShow = false;
+                else startShow = false;
+                if (currentFirstVisibleItem > mLastFirstVisibleItem && stopShow == false) {
+                   ToolBarHelper.totalToolbarShow(totalToolBar);
+                    floatingActionsButtonCreate.hide();
+                    floatingActionButtonBackToTop.animate().translationY(-floatingActionButtonBackToTop.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+                    stopShow = true;
+                } else if (currentFirstVisibleItem < mLastFirstVisibleItem && startShow == false) {
+                    ToolBarHelper.totalToolbarHide(totalToolBar);
+                   floatingActionsButtonCreate.show();
+                    floatingActionButtonBackToTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
+                    startShow = true;
                 }
-
                 mLastFirstVisibleItem = currentFirstVisibleItem;
             }
             if (OfflineMode.loadLong(Constants.VK_GROUP_ID) != Constants.ZF_ID) {
@@ -143,7 +153,6 @@ public class FragmentWall extends FragmentWithAttach {
         }
     };
 
-    //   final static private Bundle args = new Bundle();
     public static FragmentWall newInstance(boolean isSuggestedParam) {
         FragmentWall fragment = new FragmentWall();
         final Bundle args = new Bundle();
@@ -166,71 +175,130 @@ public class FragmentWall extends FragmentWithAttach {
     @Override
     public void onDetach() {
         if (isSuggested) {
-            ((MainActivity) getActivity()).getSupportActionBar().show();
+            //((MainActivity) getActivity()).getSupportActionBar().show();
             ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
-            setDisabledMenu();
+            //setDisabledMenu();
         }
         super.onDetach();
     }
 
-    FragmentManager fragmentManager;
-    long tempGroupId;
 
-    FloatingActionButton fabPhoto;
-    FloatingActionButton fabSuggest;
-    com.shamanland.fab.FloatingActionButton floatingActionButtonBackToTop;
+
 
     @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        isSuggested = getArguments().getBoolean("isSuggested");
-
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
 
+       //// -- -- - - - T00LbAR - - --- - - - -- -
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+
+        totalToolBar = rootView.findViewById(R.id.toolbar_fragment_wall);
+        toolbar = (Toolbar) rootView.findViewById(R.id.my_awesome_toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+        TextView toolbarTitle = (TextView) rootView.findViewById(R.id.tool_bar_title);
+        toolbarTitle.setText(Constants.Mtitle);
+        mTitleToolBar = (TextView) rootView.findViewById(R.id.tool_bar_title);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mNavigationDrawerFragment.toggle();
+            }
+        });
+        View photoFragment = rootView.findViewById(R.id.toolbar_go_to_photo_fragment);
+        photoFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentAlbumsList fragment = FragmentAlbumsList.newInstance(1);
+                ((MainActivity) getActivity()).addFragment(fragment);
+            }
+        });
+
+        toolbar.inflateMenu(R.menu.make_post);
+
+        ToolBarHelper.onPrepareToolBarOptionsMenu(toolbar.getMenu());
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+            case R.id.make_post:
+
+                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
+                break;
+            case R.id.suggested_posts:
+                ((MainActivity) getActivity()).addFragment(FragmentWall.newInstance(true));
+                break;
+            case R.id.join_leave_group:
+                if (Constants.isMember == 0) {
+                    VKHelper.groupJoin(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(getActivity(), R.string.group_joined, Toast.LENGTH_SHORT).show();
+                            ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
+                        }
+//                        @Override
+//                        public void onError() {
+//                            TIFApp.showCommonErrorToast();
+//                        }
+                    });
+                } else {
+                    VKHelper.groupLeave(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
+                        @Override
+                        public void onSuccess() {
+                            Toast.makeText(getActivity(), R.string.group_leaved, Toast.LENGTH_SHORT).show();
+                            ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
+                        }
+
+                    });
+                }
+                break;
+        }
+                return false;
+            }
+        });
+            //// -- -- -END - - T00LbAR - - --- - - - -- -
+
+
+        isSuggested = getArguments().getBoolean("isSuggested");
         spinnerLayout = (RelativeLayout) rootView.findViewById(R.id.spinner_layout);
         inflaterGlobal = inflater;
-//        arguments = getArguments();
 
         fragmentManager = getActivity().getSupportFragmentManager();
         tempGroupId = OfflineMode.loadLong(Constants.VK_GROUP_ID);
 
 
-        floatingActionButtonBackToTop = (com.shamanland.fab.FloatingActionButton) rootView.findViewById(R.id.beckToTop);
-        floatingActionButtonBackToTop.setBackgroundColor(0);
-
+        floatingActionButtonBackToTop = (FloatingActionButton) rootView.findViewById(R.id.beckToTop);
+       // floatingActionButtonBackToTop.setBackgroundColor(0);
         floatingActionButtonBackToTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 wallListView.scrollToPosition(0);
-                actionBar.show();
+
+
+
             }
         });
 
 
-        toggleFloatingActionsMenu = (ToggleFloatingActionsMenu) rootView.findViewById(R.id.fab_wall);
-        fabPhoto = (FloatingActionButton) rootView.findViewById(R.id.fab_wall_photo);
-        fabSuggest = (FloatingActionButton) rootView.findViewById(R.id.fab_wall_suggest);
+        floatingActionsButtonCreate = (FloatingActionButton) rootView.findViewById(R.id.fab_wall);
+//        fabPhoto = (FloatingActionButton) rootView.findViewById(R.id.fab_wall_photo);
+//        fabSuggest = (FloatingActionButton) rootView.findViewById(R.id.fab_wall_suggest);
+//        fabPhoto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //  OfflineMode.loadLong(Constants.VK_GROUP_ID) = tempGroupId;
+//                FragmentAlbumsList fragment = FragmentAlbumsList.newInstance(1);
+//                ((MainActivity) getActivity()).addFragment(fragment);
+//                //((MainActivity) getActivity()).restoreActionBar();
+//            }
+//        });
 
-        fabPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //  OfflineMode.loadLong(Constants.VK_GROUP_ID) = tempGroupId;
-                FragmentAlbumsList fragment = FragmentAlbumsList.newInstance(1);
-                ((MainActivity) getActivity()).addFragment(fragment);
-                ((MainActivity) getActivity()).restoreActionBar();
-            }
-        });
-
-        fabSuggest.setOnClickListener(new View.OnClickListener() {
+        floatingActionsButtonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
             }
         });
-
-        actionBar = ((MainActivity) getActivity()).getSupportActionBar();
-        actionBar.show();
 
         playableLogoRes = ItemDataSetter.getPlayingLogo(OfflineMode.loadLong(Constants.VK_GROUP_ID));
         pauseOnScrollListener = new NewPauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerRecyclerObject);
@@ -262,19 +330,17 @@ public class FragmentWall extends FragmentWithAttach {
             }
         });
         wallListView = (RecyclerView) rootView.findViewById(R.id.listViewWall);
-
         wallListView.setHasFixedSize(true);
-        wallListView.setOnTouchListener(new ShowHideOnScroll(floatingActionButtonBackToTop));
-//        wallListView.setOnTouchListener(new ShowHideOnScroll(toggleFloatingActionsMenu));
+       // wallListView.setOnTouchListener(new ShowHideOnScroll(floatingActionsButtonCreate) );
+        //floatingActionButtonBackToTop.attachToRecyclerView(wallListView);
+        floatingActionsButtonCreate.attachToRecyclerView(wallListView);
+
         wallListView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         linearLayoutManager = ((LinearLayoutManager) wallListView.getLayoutManager());
 
         if (!isSuggested) {
-//if (OfflineMode.loadLong(Constants.VK_GROUP_ID)!=0) {
-//     OfflineMode.loadLong(Constants.VK_GROUP_ID) = OfflineMode.loadLong(Constants.VK_GROUP_ID);
-//} else {
-//     OfflineMode.loadLong(Constants.VK_GROUP_ID) = Constants.TF_ID;
-//}
+
+
 
 
             Log.d("GROUP_ID", "" + OfflineMode.loadLong(Constants.VK_GROUP_ID));
@@ -282,7 +348,7 @@ public class FragmentWall extends FragmentWithAttach {
             initGroupWall(jsonObjectOld, inflater);
 
         } else {
-            setDisabledMenu();
+            //setDisabledMenu();
             VKHelper.getSuggestedPosts(OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
                 @Override
                 public void onSuccess() {
@@ -302,20 +368,20 @@ public class FragmentWall extends FragmentWithAttach {
         return rootView;
     }
 
-    public void checkFabSuggest() {
-        if (VKSdk.isLoggedIn()) {
-            fabSuggest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
-                }
-            });
-            fabSuggest.setVisibility(View.VISIBLE);
-        } else {
-            fabSuggest.setOnClickListener(null);
-            fabSuggest.setVisibility(View.GONE);
-        }
-    }
+//    public void checkFabSuggest() {
+//        if (VKSdk.isLoggedIn()) {
+//            fabSuggest.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
+//                }
+//            });
+//            fabSuggest.setVisibility(View.VISIBLE);
+//        } else {
+//            fabSuggest.setOnClickListener(null);
+//            fabSuggest.setVisibility(View.GONE);
+//        }
+//    }
 
     public class NewPauseOnScrollListener extends RecyclerView.OnScrollListener {
 
@@ -325,9 +391,6 @@ public class FragmentWall extends FragmentWithAttach {
         private final boolean pauseOnSettling;
         private final RecyclerView.OnScrollListener externalListener;
 
-        public NewPauseOnScrollListener(ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnSettling) {
-            this(imageLoader, pauseOnScroll, pauseOnSettling, null);
-        }
 
         public NewPauseOnScrollListener(ImageLoader imageLoader, boolean pauseOnScroll, boolean pauseOnSettling, RecyclerView.OnScrollListener customListener) {
             this.imageLoader = imageLoader;
@@ -381,7 +444,7 @@ public class FragmentWall extends FragmentWithAttach {
         }
 
         if (OfflineMode.loadLong(Constants.VK_GROUP_ID) == Constants.ZF_ID) {
-            fabPhoto.setVisibility(View.GONE);
+            //fabPhoto.setVisibility(View.GONE);
 
             if (adapter == null) {
                 ArrayList<RecyclerEventAdapter.EventObject> events = getEvents(wall);
@@ -392,7 +455,7 @@ public class FragmentWall extends FragmentWithAttach {
                 ((RecyclerEventAdapter) adapter).setEvent(getEvents(wall));
             }
         } else {
-            fabPhoto.setVisibility(View.VISIBLE);
+            //fabPhoto.setVisibility(View.VISIBLE);
 
             if (adapter == null) {
                 adapter = new RecyclerWallAdapter(this, wall, inflater, fragmentManager, isSuggested);
@@ -507,6 +570,8 @@ public class FragmentWall extends FragmentWithAttach {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
+
     }
 
 
@@ -522,149 +587,8 @@ public class FragmentWall extends FragmentWithAttach {
     }
 
     public void onCreate(Bundle savedInstanceState) {
-        setRetainInstance(true);
-        setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
     }
-
-    @Override
-    public void onPrepareOptionsMenu(final Menu menu) {
-        Constants.makePostMenu = menu;
-
-
-        if (OfflineMode.isOnline()) {
-            setEnabledMenu();
-        } else {
-            setDisabledMenu();
-        }
-
-        super.onPrepareOptionsMenu(menu);
-        VKHelper.isMember(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
-            @Override
-            public void onSuccess() {
-                if (hasJson) {
-                    Constants.isMember = vkJson.optInt(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
-                    if (VKSdk.isLoggedIn()) {
-                        if (Constants.isMember == 0) {
-                            try {
-                                menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_join));
-                            } catch (Exception e) {
-                            }
-                        } else {
-                            try {
-                                menu.findItem(R.id.join_leave_group).setTitle(getString(R.string.ab_title_group_leave));
-                            } catch (Exception e) {
-                            }
-                        }
-                    } else {
-                        menu.findItem(R.id.join_leave_group).setVisible(false);
-                    }
-                }
-            }
-
-//            @Override
-//            public void onError() {
-//                showErrorToast();
-//            }
-        });
-    }
-
-    public static void setEnabledMenu() {
-
-        if (!Constants.isPollFragmentLoaded
-                & !Constants.isFragmentMakePostLoaded
-                & !Constants.isFragmentAlbumListLoaded
-                & !Constants.isFragmentCommentsLoaded
-                & !Constants.isFragmentFullScreenLoaded) {
-
-            if (Constants.makePostMenu.size() == 3) {
-                StackTraceElement[] el = Thread.currentThread().getStackTrace();
-                LinkedList<StackTraceElement> l = new LinkedList<StackTraceElement>(Arrays.asList(el));
-                for (StackTraceElement e : l) {
-                    Log.d("StackTraceElement is: ", " " + e.toString());
-                }
-
-                Constants.makePostMenu.getItem(0).setVisible(true);
-                Constants.makePostMenu.getItem(1).setVisible(true);
-                Constants.makePostMenu.getItem(2).setVisible(true);
-
-
-            }
-            Log.d("EnablingMenu...", "status: " + Constants.makePostMenu.hasVisibleItems());
-        }
-    }
-
-    public static void setDisabledMenu() {
-        try {
-            if (Constants.makePostMenu.size() == 3) {
-                Constants.makePostMenu.getItem(0).setVisible(false);
-                Constants.makePostMenu.getItem(1).setVisible(false);
-                Constants.makePostMenu.getItem(2).setVisible(false);
-                Constants.makePostMenu.close();
-            }
-            Constants.makePostMenu.close();
-            Log.d("DisablingMenu...", " status: " + Constants.makePostMenu.hasVisibleItems());
-        } catch (NullPointerException ex) {
-            Log.d("Options Menu has not already initialized", " and equals: " + Constants.makePostMenu);
-
-
-        }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
-        if (VKSdk.isLoggedIn()) {
-            Constants.makePostMenu = menu;
-            inflater.inflate(R.menu.make_post, menu);
-
-            if (!isSuggested) {
-                setEnabledMenu();
-            } else {
-                setDisabledMenu();
-            }
-        }
-    }
-
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.make_post:
-                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
-                break;
-            case R.id.suggested_posts:
-                ((MainActivity) getActivity()).addFragment(FragmentWall.newInstance(true));
-                break;
-            case R.id.join_leave_group:
-                if (Constants.isMember == 0) {
-                    VKHelper.groupJoin(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(getActivity(), R.string.group_joined, Toast.LENGTH_SHORT).show();
-                            ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
-                        }
-//                        @Override
-//                        public void onError() {
-//                            TIFApp.showCommonErrorToast();
-//                        }
-                    });
-                } else {
-                    VKHelper.groupLeave(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(getActivity(), R.string.group_leaved, Toast.LENGTH_SHORT).show();
-                            ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
-                        }
-
-//                        @Override
-//                        public void onError() {
-//                            showErrorToast();
-//                        }
-                    });
-                }
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

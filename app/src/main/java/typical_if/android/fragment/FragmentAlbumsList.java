@@ -78,8 +78,8 @@ public class FragmentAlbumsList extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Constants.isFragmentAlbumListLoaded=true;
-        ((MainActivity)getActivity()).getSupportActionBar().hide();
-        FragmentWall.setDisabledMenu();
+//        ((MainActivity)getActivity()).getSupportActionBar().hide();
+        
 
         final View rootView = inflater.inflate(R.layout.fragment_albums_list, container, false);
         listOfAlbums = (ListView) rootView.findViewById(R.id.album_list);
@@ -117,9 +117,8 @@ public class FragmentAlbumsList extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         Constants.isFragmentAlbumListLoaded=true;
-        FragmentWall.setDisabledMenu();
+        
         super.onAttach(activity);
-        ((MainActivity) activity).onSectionAttached( OfflineMode.loadLong(Constants.VK_GROUP_ID));
     }
 
     private boolean doRequest(final View view) {

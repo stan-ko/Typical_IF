@@ -1,10 +1,11 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/partly_transparent"
-    tools:context=".fragment.FragmentPhotoList">
+    tools:context=".fragment.FragmentPhotoList"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto">
 
 
     <!--<com.nirhart.parallaxscroll.views.ParallaxScrollView xmlns:android="http://schemas.android.com/apk/res/android"-->
@@ -30,19 +31,22 @@
     <!--</com.nirhart.parallaxscroll.views.ParallaxScrollView>-->
 
 
-    <com.shamanland.fab.FloatingActionButton
+    <com.melnykov.fab.FloatingActionButton
         android:id="@+id/add_photo_from"
+        android:src="@drawable/ic_add_white_24dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:elevation="5dp"
+        fab:fab_colorNormal="@color/music_progress"
+        fab:fab_colorPressed="@color/music_progress_pressed"
+        fab:fab_colorRipple="@color/music_progress_pressed"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="24dp"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/ic_add_white_24dp"
-        app:floatingActionButtonColor="@color/music_progress"
-        app:floatingActionButtonSize="normal" />
+        android:layout_marginRight="16dp"/>
+        />
 
 
     <RelativeLayout

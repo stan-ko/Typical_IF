@@ -40,7 +40,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="15dp"
                 android:text="1714"
-                android:textColor="@color/white" />
+                android:textColor="@color/only_white" />
 
         </RelativeLayout>
 
@@ -62,7 +62,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="15dp"
                 android:text="171"
-                android:textColor="@color/white" />
+                android:textColor="@color/only_white" />
         </RelativeLayout>
 
     </LinearLayout>

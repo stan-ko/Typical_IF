@@ -9,18 +9,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -31,7 +27,6 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
-
 import typical_if.android.AudioPlayer;
 import typical_if.android.AudioPlayerService;
 import typical_if.android.Constants;
@@ -39,9 +34,9 @@ import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
+import typical_if.android.ToolBarHelper;
 import typical_if.android.VKHelper;
 import typical_if.android.VKRequestListener;
-import typical_if.android.adapter.ActionBarArrayAdapter;
 import typical_if.android.event.MainActivityAddFragmentEvent;
 import typical_if.android.fragment.FragmentComments;
 import typical_if.android.fragment.FragmentFullScreenViewer;
@@ -56,14 +51,10 @@ public class MainActivity extends DialogActivity implements
         FragmentFullScreenViewer.OnFragmentInteractionListener,
         FragmentComments.OnFragmentInteractionListener, PollFragment.OnFragmentInteractionListener {
 
-
-    private Drawable mIcon;
-    private CharSequence mTitle;
     private static final int PICK_FROM_CAMERA = 1;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     public NavigationDrawerFragment mNavigationDrawerFragment;
-    ActionBarArrayAdapter list;
-
+   public static Toolbar toolbar;
     void showAlertChanges() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.title_of_alert_main)
@@ -77,18 +68,11 @@ public class MainActivity extends DialogActivity implements
 
         builder.create().show();
     }
-
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-
+        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         super.onCreate(savedInstanceState);
 
-//        try {
-//            if (OfflineMode.loadInt("surprise") < 15) {
-//                OfflineMode.saveInt(0, "surprise");
-//            }
-//        } catch (Exception e) {
-//        }
 
         if (OfflineMode.getIsFirstRunMainActivity()) {
             OfflineMode.setNotFirstRunMainActivity();
@@ -96,9 +80,9 @@ public class MainActivity extends DialogActivity implements
         }
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
         setContentView(R.layout.activity_main);
 
+//
         // ensure that the view is available if we add the fragment
         final LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final DrawerLayout drawer = (DrawerLayout) inflater.inflate(R.layout.decor, null); // "null" is important.
@@ -109,31 +93,17 @@ public class MainActivity extends DialogActivity implements
         container.addView(child, 0);
         drawer.findViewById(R.id.navigation_drawer).setPadding(0, getStatusBarHeight(), 0, 0);
         decor.addView(drawer);
-
-        final ActionBar actionBar = getSupportActionBar();
-
-//        Constants.mainActivity = this;
         Constants.myIntent = new Intent(this, AudioPlayerService.class);
         Constants.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-
-        mTitle = getTitle();
-
         mNavigationDrawerFragment.setUp(R.id.navigation_drawer, (DrawerLayout) findViewById(R.id.drawer_layout));
 
-        if (mNavigationDrawerFragment.isDrawerOpen()) {
-            actionBar.setDisplayShowTitleEnabled(true);
-        } else {
-            actionBar.setDisplayShowTitleEnabled(false);
-        }
         try {
             if (getIntent().getExtras() != null) {
                 onNotificationClick(mNavigationDrawerFragment, getIntent());
             }
         } catch (NullPointerException npe) {
         }
-
 
         // VK init
         VKUIHelper.onCreate(this);
@@ -148,8 +118,6 @@ public class MainActivity extends DialogActivity implements
                     try {
                         if (!Constants.isPollFragmentLoaded) {
                             if (Constants.makePostMenu.size() == 3) {
-                                FragmentWall.setEnabledMenu();
-                                getSupportActionBar().show();
                             }
                         }
                     } catch (NullPointerException e) {
@@ -169,7 +137,6 @@ public class MainActivity extends DialogActivity implements
         }
         return result;
     }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -195,12 +162,6 @@ public class MainActivity extends DialogActivity implements
 
 
     }
-
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//     if (keyCode=)
-//        return super.onKeyDown(keyCode, event);
-//    }
 
     @Override
     protected void onNewIntent(Intent intent) {
@@ -233,55 +194,6 @@ public class MainActivity extends DialogActivity implements
 
     }
 
-    public void onSectionAttached(final long groupIndex) {
-        switch ((int) groupIndex) {
-            case 0:
-                mTitle = getString(R.string.menu_group_title_tf);
-                mIcon = getResources().getDrawable(R.drawable.ic_ab_tf);
-                Constants.Mtitle = mTitle.toString();
-                break;
-            case 1:
-                mTitle = getString(R.string.menu_group_title_tz);
-                mIcon = getResources().getDrawable(R.drawable.ic_ab_tz);
-                Constants.Mtitle = mTitle.toString();
-                break;
-            case 2:
-                mTitle = getString(R.string.menu_group_title_fb);
-                mIcon = getResources().getDrawable(R.drawable.ic_ab_fb);
-                Constants.Mtitle = mTitle.toString();
-
-                break;
-            case 3:
-                mTitle = getString(R.string.menu_group_title_fn);
-                mIcon = getResources().getDrawable(R.drawable.ic_ab_fn);
-                Constants.Mtitle = mTitle.toString();
-                break;
-            case 4:
-                mTitle = getString(R.string.menu_group_title_stantsiya);
-                mIcon = getResources().getDrawable(R.drawable.ic_ab_st);
-                Constants.Mtitle = mTitle.toString();
-                break;
-            case 5:
-                mTitle = getString(R.string.menu_group_title_events);
-                mIcon = getResources().getDrawable(R.drawable.ic_ab_a);
-                Constants.Mtitle = mTitle.toString();
-                break;
-        }
-    }
-
-
-    public void restoreActionBar() {
-
-
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setTitle(mTitle);
-//      actionBar.setBackgroundDrawable(getResources().getDrawable(R.drawable.action_bar_shape_background));
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setLogo(mIcon);
-
-    }
 
 
     @Override
@@ -293,35 +205,6 @@ public class MainActivity extends DialogActivity implements
         }
         super.onConfigurationChanged(newConfig);
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (mNavigationDrawerFragment.onOptionsItemSelected(item)) {
-            return true;
-        }
-//        switch (item.getItemId()) {
-//            case R.id.action_go_home:
-//
-//                return true;
-//
-//            default:
-        return super.onOptionsItemSelected(item);
-
-        //  }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (!Constants.isPollFragmentLoaded) {
-            if (!mNavigationDrawerFragment.isDrawerOpen()) {
-                getMenuInflater().inflate(R.menu.main, menu);
-                restoreActionBar();
-                return true;
-            }
-            return super.onCreateOptionsMenu(menu);
-        } else return false;
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -367,7 +250,7 @@ public class MainActivity extends DialogActivity implements
                     OfflineMode.saveUserId(Constants.USER_ID);
 
                     mNavigationDrawerFragment.refreshNavigationHeader(user);
-                    ((FragmentWall) getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
+//                    ((FragmentWall) getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
                 }
 
 //                @Override
@@ -394,7 +277,7 @@ public class MainActivity extends DialogActivity implements
 
                     mNavigationDrawerFragment.refreshNavigationHeader(user);
 
-                    ((FragmentWall) getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
+//                    ((FragmentWall) getSupportFragmentManager().getFragments().get(1)).checkFabSuggest();
                 }
 
 //                @Override
@@ -422,7 +305,7 @@ public class MainActivity extends DialogActivity implements
             case 5:
                 vkGroupId = setGroupId(groupPosition);
                 OfflineMode.saveLong(vkGroupId, Constants.VK_GROUP_ID);
-                onSectionAttached(groupPosition);
+                ToolBarHelper.setToolbarAttachments(groupPosition);
                 fragment = FragmentWall.newInstance(false);
 
 
@@ -434,20 +317,13 @@ public class MainActivity extends DialogActivity implements
         }
 
 
-        Log.d("OnNavigationItemSelected", " status: position = " + groupPosition);
+//        Log.d("OnNavigationItemSelected", " status: position = " + groupPosition);
         if (groupPosition != 6) {
             for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
                 fragmentManager.popBackStack();
             }
             replaceFragment(fragment);
         }
-        if (getSupportActionBar().getTitle().equals(getString(R.string.poll))) {
-            Constants.MtitlePoll = getString(R.string.poll);
-        }
-        if (getSupportActionBar().getTitle().equals(getString(R.string.poll) + " (" + getString(R.string.login_to_vote) + ")")) {
-            Constants.MtitlePoll = getString(R.string.poll) + " (" + getString(R.string.login_to_vote) + ")";
-        }
-        restoreActionBar();
     }
 
 
@@ -464,7 +340,7 @@ public class MainActivity extends DialogActivity implements
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            getSupportActionBar().show();
+            //getSupportActionBar().show();
             mNavigationDrawerFragment.toggle();
         } else {
             super.onBackPressed();

@@ -2,18 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
         <item android:id="@+id/make_post"
-            android:visible="false"
+            android:visible="true"
             android:title="@string/ab_title_make_post"
             android:icon="@android:drawable/ic_menu_edit"/>
         <item android:id="@+id/suggested_posts"
-            android:visible="false"
+            android:visible="true"
             android:title="@string/ab_title_suggested_posts"
             android:icon="@android:drawable/ic_menu_edit"/>
         <item android:id="@+id/join_leave_group"
-            android:visible="false"
+            android:visible="true"
             android:title=""
             android:icon="@android:drawable/ic_menu_edit"/>
-        <!--<item android:id="@+id/action_go_home"-->
+
+
+    <!--<item android:id="@+id/action_go_home"-->
              <!--android:icon="@drawable/home"-->
              <!--android:title="@string/go_to_start_page"-->
              <!--android:showAsAction="always" />-->

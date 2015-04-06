@@ -9,8 +9,8 @@
 
 
     <uses-sdk
-        android:minSdkVersion="11"
-        android:targetSdkVersion="19" />
+        android:minSdkVersion="14"
+        android:targetSdkVersion="21" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
@@ -27,8 +27,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
-    <!--<supports-screens-->
-        <!--android:anyDensity="true"-->
+    <supports-screens
+        android:anyDensity="true"/>
         <!--android:largeScreens="true"-->
         <!--android:normalScreens="true"-->
         <!--android:requiresSmallestWidthDp="600"-->
@@ -99,6 +99,7 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppTheme" >
+
         <service
             android:name=".UploadPhotoService"
             android:enabled="true" >

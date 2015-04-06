@@ -15,7 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devspark.robototextview.widget.RobotoTextView;
-import com.getbase.floatingactionbutton.AddFloatingActionButton;
+
+import com.melnykov.fab.FloatingActionButton;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.vk.sdk.api.model.VKApiAudio;
@@ -49,7 +50,7 @@ public abstract class FragmentWithAttach extends Fragment {
     EditText textField;
     RobotoTextView txtPostAttachCounter;
 
-    AddFloatingActionButton btSendPost;
+    FloatingActionButton btSendPost;
     LinearLayout makePostAttachmentsContainer;
     LinearLayout makePostAudioContainer;
     LinearLayout makePostDocContainer;
