@@ -6,13 +6,13 @@
             android:shape="oval">
 
             <solid
-                android:color="@color/transparent"/>
+                android:color="@color/TRANSPARENT"/>
 
             <stroke
                 android:dashGap="20dp"
                 android:dashWidth="200dp"
                 android:width="3dp"
-                android:color="@color/ab_background" />
+                android:color="@color/APP_BACKGROUND_DARKER" />
         </shape>
     </item>
 </layer-list>

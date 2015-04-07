@@ -6,13 +6,13 @@
             android:shape="oval">
 
             <solid
-                android:color="@color/transparent"/>
+                android:color="@color/TRANSPARENT"/>
 
             <stroke
                 android:dashGap="3dp"
                 android:dashWidth="3dp"
                 android:width="3dp"
-                android:color="@color/music_progress" />
+                android:color="@color/FAB_UNSELECTED" />
         </shape>
     </item>
 </layer-list>

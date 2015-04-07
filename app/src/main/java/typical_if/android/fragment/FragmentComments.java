@@ -380,7 +380,7 @@ public class FragmentComments extends FragmentWithAttach {
 
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refreshComments);
         swipeView.setColorSchemeResources(android.R.color.white, android.R.color.white, android.R.color.white);
-        swipeView.setProgressBackgroundColor(R.color.music_progress);
+        swipeView.setProgressBackgroundColor(R.color.FAB_UNSELECTED);
         //swipeView.setProgressViewOffset(true, 0, 100);
 
         swipeView.setSize(SwipeRefreshLayout.DEFAULT);

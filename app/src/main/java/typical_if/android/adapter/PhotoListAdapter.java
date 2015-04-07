@@ -70,7 +70,7 @@ public class PhotoListAdapter extends BaseAdapter implements AsymmetricGridViewA
         ImageLoader.getInstance().displayImage(PhotoUrlHelper.getPreviewUrl(photo), viewHolder.photo, new DisplayImageOptions.Builder()
                 .cacheOnDisc(true)
                 .cacheInMemory(true)
-                .showImageOnLoading(R.drawable.photo_item_background) // TODO resource or drawable
+                .showImageOnLoading(R.color.LOADING_IMAGE_COLOR_PHOTO_LIST) // TODO resource or drawable
 //                .showImageForEmptyUri(R.drawable.ic_empty_url) // TODO resource or drawable
 //                .showImageOnFail(R.drawable.ic_error) // TODO resource or drawable
                 .resetViewBeforeLoading(false)

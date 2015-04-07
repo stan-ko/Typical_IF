@@ -39,7 +39,6 @@ import typical_if.android.Constants;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
-import typical_if.android.TIFApp;
 import typical_if.android.ToolBarHelper;
 import typical_if.android.VKHelper;
 import typical_if.android.VKRequestListener;
@@ -250,6 +249,7 @@ public class FragmentWall extends FragmentWithAttach {
 //                        }
                     });
                 } else {
+
                     VKHelper.groupLeave(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
                         @Override
                         public void onSuccess() {
@@ -311,7 +311,7 @@ public class FragmentWall extends FragmentWithAttach {
         pauseOnScrollListener = new NewPauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerRecyclerObject);
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         swipeView.setColorSchemeResources(android.R.color.white, android.R.color.white, android.R.color.white);
-        swipeView.setProgressBackgroundColor(R.color.music_progress);
+        swipeView.setProgressBackgroundColor(R.color.FAB_UNSELECTED);
         swipeView.setProgressViewOffset(true, 0, 150);
         swipeView.setSize(SwipeRefreshLayout.DEFAULT);
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

@@ -6,9 +6,9 @@
     android:id="@+id/card_view_album_list_item"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@color/app_bg"
+    android:background="@color/APP_BACKGROUND"
     card_view:cardCornerRadius="0dp"
-    card_view:cardBackgroundColor="@color/app_bg"
+    card_view:cardBackgroundColor="@color/APP_BACKGROUND"
     card_view:cardElevation="8dp"
     card_view:contentPadding="0dp">
 
@@ -24,7 +24,7 @@
             android:layout_alignParentTop="true"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@color/only_white" />
+            android:src="@color/WHITE" />
 
         <TextView
             android:id="@+id/txt_album_name"
@@ -42,7 +42,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:textColor="@color/only_white" />
+            android:textColor="@color/HEADER_COLOR" />
 
         <TextView
             android:id="@+id/txt_photos_count"
@@ -51,7 +51,7 @@
             android:layout_gravity="right"
 
             android:text="New Text"
-            android:textColor="@color/only_white"
+            android:textColor="@color/TEXT_COLOR_BODY"
             android:textSize="12dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"

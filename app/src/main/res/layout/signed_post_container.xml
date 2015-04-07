@@ -14,7 +14,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginRight="12dp"
-        android:background="@color/transparent"
+        android:background="@color/TRANSPARENT"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
         android:paddingBottom="5dp" />

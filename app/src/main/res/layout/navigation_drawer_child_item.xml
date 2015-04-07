@@ -6,7 +6,7 @@
     android:id="@+id/childItem"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@color/transparent"
+    android:background="@color/TRANSPARENT"
     android:paddingBottom="8dp"
     android:paddingLeft="88dp"
     android:textColor="@android:color/darker_gray"

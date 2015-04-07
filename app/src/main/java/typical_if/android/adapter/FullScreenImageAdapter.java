@@ -74,6 +74,7 @@ public class FullScreenImageAdapter extends PagerAdapter {
         final ProgressBar pbImageIsLoading = (ProgressBar) viewPhotoFullScreen.findViewById(R.id.pbImageIsLoading);
         ((ViewPager) container).addView(viewPhotoFullScreen);
         //  Log.d("Current VIEW", position + "");
+        Log.d ("PHOTOS00"," = "+photos.get(position)+" = "+ imageView+ "  ="+ pbImageIsLoading);
         loadPreview(/*position, */photos.get(position), imageView, pbImageIsLoading);///////////////////////////////////////////////////////////////////
         return viewPhotoFullScreen;
     }
@@ -84,22 +85,22 @@ public class FullScreenImageAdapter extends PagerAdapter {
     }
 
     private void loadPreview(/*final int position, */final VKApiPhoto photo, final ImageView imageView, final ProgressBar pbImageIsLoading) {
-//        ImageLoader.getInstance().displayImage(photos.get(position).photo_75, imageView, options);
-//
-//        Log.i(this, "fromPhoto: "+fromPhoto.getId()+" photo: "+photo.getId());
-        final String urlOfPhotoPreview;
-        if (photo.getId()==fromPhoto.getId()){
-            Log.i(this, "photo is SAME as fromPhoto!");
-            if (PhotoUrlHelper.isImageCached(fromPhoto.photo_604))
-                Log.i(this, "fromPhoto is cached!!!");
-            urlOfPhotoPreview = fromPhoto.photo_604;
-        }
-        else {
-            urlOfPhotoPreview = PhotoUrlHelper.getPreviewUrl(photo);
-        }
+        ImageLoader.getInstance().displayImage(photo.photo_75, imageView, options);
 
-        final String urlOfFullScreenPhoto = PhotoUrlHelper.getBestQualityUrl(photo.src);
-        Log.i(this, "urlOfFullScreenPhoto: "+urlOfFullScreenPhoto);
+//        Log.d("fromPhoto:" , "" +fromPhoto.getId());
+//        final String urlOfPhotoPreview;
+//        if (photo.getId()==fromPhoto.getId()){
+//            Log.i(this, "photo is SAME as fromPhoto!");
+//            if (PhotoUrlHelper.isImageCached(fromPhoto.photo_604))
+//                Log.i(this, "fromPhoto is cached!!!");
+//            urlOfPhotoPreview = fromPhoto.photo_604;
+//        }
+//        else {
+//            urlOfPhotoPreview = PhotoUrlHelper.getPreviewUrl(photo);
+//        }
+//
+//        final String urlOfFullScreenPhoto = PhotoUrlHelper.getBestQualityUrl(photo.src);
+//        Log.i(this, "urlOfFullScreenPhoto: "+urlOfFullScreenPhoto);
 
 
 //        Glide.with(TIFApp.getAppContext())
@@ -132,27 +133,27 @@ public class FullScreenImageAdapter extends PagerAdapter {
 //                        loadFullScreenPhoto(urlOfFullScreenPhoto, imageView, pbImageIsLoading);
 //                    }
 //                });
-        ImageLoader.getInstance().displayImage(urlOfPhotoPreview, imageView, options, new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-                pbImageIsLoading.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-                pbImageIsLoading.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                loadFullScreenPhoto(urlOfFullScreenPhoto, imageView, pbImageIsLoading);
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-                pbImageIsLoading.setVisibility(View.GONE);
-            }
-        });
+//        ImageLoader.getInstance().displayImage(urlOfPhotoPreview, imageView, options, new ImageLoadingListener() {
+//            @Override
+//            public void onLoadingStarted(String imageUri, View view) {
+//                pbImageIsLoading.setVisibility(View.VISIBLE);
+//            }
+//
+//            @Override
+//            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+//                pbImageIsLoading.setVisibility(View.GONE);
+//            }
+//
+//            @Override
+//            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+//                loadFullScreenPhoto(urlOfFullScreenPhoto, imageView, pbImageIsLoading);
+//            }
+//
+//            @Override
+//            public void onLoadingCancelled(String imageUri, View view) {
+//                pbImageIsLoading.setVisibility(View.GONE);
+//            }
+//        });
     }
 
     void loadFullScreenPhoto(final String url, final ImageView imageView, final ProgressBar pbImageIsLoading) {

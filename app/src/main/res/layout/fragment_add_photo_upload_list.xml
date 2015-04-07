@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_bg">
+    android:background="@color/APP_BACKGROUND">
 
     <GridView
         android:layout_width="match_parent"

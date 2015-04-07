@@ -5,7 +5,7 @@
     xmlns:fab="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ff000000">
+    android:background="@color/APP_BACKGROUND">
 
 
 
@@ -13,7 +13,7 @@
         android:id="@+id/refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#ff000000"
+        android:background="@color/APP_BACKGROUND"
         android:focusableInTouchMode="true"
         android:layout_below="@+id/spinner_layout">
 
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:animationCache="false"
-            android:background="#ff000000"
+            android:background="@color/APP_BACKGROUND"
             android:divider="@null"
             android:footerDividersEnabled="false"
             android:scrollbarStyle="outsideOverlay"
@@ -44,9 +44,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:elevation="5dp"
-        fab:fab_colorNormal="@color/back_to_top_fab_color"
-        fab:fab_colorPressed="@color/back_to_top_fab_color_pressed"
-        fab:fab_colorRipple="@color/music_progress_pressed"
+        fab:fab_colorNormal="@color/BACK_TO_TOP_FAB_COLOR"
+        fab:fab_colorPressed="@color/BACK_TO_TOP_FAB_COLOR_PRESSED"
+        fab:fab_colorRipple="@color/FAB_PREESSED"
         fab:fab_type="mini"
         android:layout_alignParentRight="true"
         android:layout_gravity="top|right"
@@ -67,9 +67,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:elevation="5dp"
-        fab:fab_colorNormal="@color/music_progress"
-        fab:fab_colorPressed="@color/music_progress_pressed"
-        fab:fab_colorRipple="@color/music_progress_pressed"
+        fab:fab_colorNormal="@color/FAB_UNSELECTED"
+        fab:fab_colorPressed="@color/FAB_PREESSED"
+        fab:fab_colorRipple="@color/FAB_PREESSED"
 
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"

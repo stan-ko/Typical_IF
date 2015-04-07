@@ -121,7 +121,7 @@ public class NavigationDrawerFragment extends Fragment {
                 }
             });
         } catch (NullPointerException ex) {
-            Log.d("Navigation has caused NPE ", "activity = "+ getActivity());
+            Log.d("Nav has caused NPE ", "activity = "+ getActivity());
         }
 
             }
@@ -175,7 +175,7 @@ public class NavigationDrawerFragment extends Fragment {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             RoundedImageView img = (RoundedImageView) v;
-            img.setBorderColor(getResources().getColor(R.color.music_progress));
+            img.setBorderColor(getResources().getColor(R.color.FAB_UNSELECTED));
 
             Uri uri = Uri.parse((String) v.getTag());
 
@@ -286,6 +286,7 @@ public class NavigationDrawerFragment extends Fragment {
         listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_stantsiya), R.drawable.ic_st));
         listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_title_events),    R.drawable.ic_a));
         listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.menu_group_exit),            R.drawable.ic_close_circle_outline_white_24dp));
+        listDataHeader.add(new DrawerListViewAdapter.GroupObject(getString(R.string.main_settings),              R.drawable.ic_settings_white_24dp));
 
     }
 

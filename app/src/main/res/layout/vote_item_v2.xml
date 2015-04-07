@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/app_bg"
+    android:background="@color/APP_BACKGROUND"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="5dp">
 
@@ -35,7 +35,7 @@
             custom:progress_reached_bar_height="1.5dp"
 
             custom:progress_text_size="12sp"
-            custom:progress_text_color="@color/textFadeOutColor"
+            custom:progress_text_color="@color/TEXT_COLOR_BODY"
             custom:progress_text_offset="2dp"
             custom:progress_text_visibility="visible"
 
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:text="Чи погодились б ви на вічне життя ?"
             android:id="@+id/variant_text"
-            android:textColor="@color/textFadeOutColor"
+            android:textColor="@color/TEXT_COLOR_BODY"
             android:visibility="visible"
             android:textSize="13dp"
             android:layout_alignParentLeft="true"
@@ -94,7 +94,7 @@
         android:layout_height="wrap_content"
         android:text="324"
         android:id="@+id/dv"
-        android:textColor="@color/textFadeOutColor"
+        android:textColor="@color/TEXT_COLOR_BODY"
         android:visibility="gone"
         android:textSize="12dp"
         android:layout_alignRight="@+id/rate_bar"
@@ -109,7 +109,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/rate_amount_text"
-        android:textColor="@color/textFadeOutColor"
+        android:textColor="@color/TEXT_COLOR_BODY"
         android:visibility="visible"
         android:textSize="13dp"
         android:gravity="left|center_vertical"

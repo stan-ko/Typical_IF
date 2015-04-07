@@ -4,7 +4,7 @@
     android:id="@+id/commentParentLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/app_bg"
+    android:background="@color/APP_BACKGROUND"
     android:clickable="false"
     android:descendantFocusability="blocksDescendants"
     android:focusable="false"
@@ -66,7 +66,7 @@
         android:focusableInTouchMode="false"
         android:text="Michael G."
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#d1ffffff"
+        android:textColor="#aaffffff"
         android:textSize="15dp"
         android:textStyle="bold"
         android:layout_marginTop="-2dp" />

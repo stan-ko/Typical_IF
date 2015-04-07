@@ -314,6 +314,9 @@ public class MainActivity extends DialogActivity implements
                 finish();
                 //   Log.d("finish"," - ---- -- - - -- - --------------------------  -- - " );
                 break;
+            case 7:
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
         }
 
 

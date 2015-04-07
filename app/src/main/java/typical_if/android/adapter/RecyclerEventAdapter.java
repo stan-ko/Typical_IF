@@ -208,9 +208,9 @@ public class RecyclerEventAdapter extends RecyclerView.Adapter<RecyclerEventAdap
                 SwipeLayout eventSwipeLayout = (SwipeLayout) eventView.findViewById(R.id.event_swipe_layout);
 
                 if (i == 1) {
-                    eventSwipeLayout.getBottomView().setBackgroundColor(context.getResources().getColor(R.color.stantsiya_bg));
+                    eventSwipeLayout.getBottomView().setBackgroundColor(context.getResources().getColor(R.color.ST_BG_COLOR));
                 } else {
-                    eventSwipeLayout.getBottomView().setBackgroundColor(context.getResources().getColor(R.color.music_progress));
+                    eventSwipeLayout.getBottomView().setBackgroundColor(context.getResources().getColor(R.color.FAB_UNSELECTED));
                 }
 
                 if (DateUtils.isToday(item.date)) {

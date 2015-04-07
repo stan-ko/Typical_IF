@@ -36,7 +36,7 @@ public class TouchMakePostImageButton extends ImageButton {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
-                getBackground().setColorFilter(getResources().getColor(R.color.ab_background), PorterDuff.Mode.SRC_ATOP);
+                getBackground().setColorFilter(getResources().getColor(R.color.APP_SELECTOR_COLOR), PorterDuff.Mode.SRC_ATOP);
                 invalidate();
                 break;
             }

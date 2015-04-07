@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/app_bg"
+    android:background="@color/APP_BACKGROUND"
     android:fillViewport="false">
 
     <RelativeLayout
@@ -17,9 +17,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             card_view:cardCornerRadius="0dp"
-            card_view:cardElevation="8dp"
+            card_view:cardElevation="3dp"
             card_view:contentPadding="11dp"
-            card_view:cardBackgroundColor="@color/app_bg"
+            card_view:cardBackgroundColor="@color/APP_BACKGROUND"
             android:id="@+id/card_view_make_post_buttons">
 
             <LinearLayout
@@ -36,21 +36,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/img_post_attach_photo"
-                    android:src="@drawable/ic_file_image_white_24dp"
                     android:layout_weight="1"
-                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
                     android:baselineAlignBottom="false"
                     android:cropToPadding="true"
-                    android:padding="5dp" />
+                    android:padding="5dp"
+                    android:src="@drawable/ic_file_image_grey600_36dp" />
 
                 <typical_if.android.view.TouchMakePostImageButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/img_post_attach_video"
-                    android:src="@drawable/ic_file_video_white_24dp"
+                    android:src="@drawable/ic_file_video_grey600_36dp"
                     android:layout_weight="1"
-                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
                     android:cropToPadding="true"
                     android:padding="5dp" />
@@ -59,9 +57,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/img_post_attach_audio"
-                    android:src="@drawable/ic_file_music_white_24dp"
+                    android:src="@drawable/ic_file_music_grey600_36dp"
                     android:layout_weight="1"
-                    android:layout_margin="5dp"
                     android:adjustViewBounds="true"
                     android:cropToPadding="true"
                     android:padding="5dp" />
@@ -70,10 +67,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/img_post_attach_doc"
-                    android:src="@drawable/ic_file_document_white_24dp"
+                    android:src="@drawable/ic_file_document_grey600_36dp"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:layout_margin="5dp"
                     android:cropToPadding="true"
                     android:padding="5dp" />
 
@@ -87,11 +83,11 @@
             android:id="@+id/txt_post_attach_counter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/wall_background"
+            android:background="@color/APP_BACKGROUND_DARKER"
             android:gravity="center"
             android:padding="5dp"
             android:singleLine="true"
-            android:textColor="@color/ab_background"
+            android:textColor="@color/HEADER_COLOR"
             android:textSize="18dp"
             app:typeface="roboto_regular"
             android:layout_below="@+id/card_view_make_post_buttons"
@@ -111,9 +107,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 card_view:cardCornerRadius="0dp"
-                card_view:cardElevation="8dp"
+                card_view:cardElevation="3dp"
                 card_view:contentPadding="11dp"
-                card_view:cardBackgroundColor="@color/app_bg"
+                card_view:cardBackgroundColor="@color/APP_BACKGROUND"
                 android:id="@+id/card_view_make_post"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true">
@@ -127,7 +123,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/etxt_make_post_field"
-                    android:background="@color/transparent">
+                    android:background="@color/TRANSPARENT">
 
                     <EditText
                         android:textCursorDrawable="@drawable/cursor"
@@ -147,7 +143,7 @@
                         android:layout_height="wrap_content"
                         android:visibility="gone"
                         android:id="@+id/make_post_media_container"
-                        android:background="@color/transparent"
+                        android:background="@color/TRANSPARENT"
                         android:paddingTop="5dp" >
 
                         <include layout="@layout/media_pager_container"/>
@@ -160,7 +156,7 @@
                         android:visibility="gone"
                         android:id="@+id/make_post_audio_container"
                         android:orientation="vertical"
-                        android:background="@color/transparent"
+                        android:background="@color/TRANSPARENT"
                         android:paddingTop="5dp"/>
 
                     <LinearLayout
@@ -169,7 +165,7 @@
                         android:visibility="gone"
                         android:id="@+id/make_post_doc_container"
                         android:orientation="vertical"
-                        android:background="@color/transparent"
+                        android:background="@color/TRANSPARENT"
                         android:paddingTop="5dp"/>
 
                 </LinearLayout>
@@ -183,9 +179,9 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/bt_post_send"
                 android:src="@drawable/ic_upload_white_24dp"
-                fab:fab_colorNormal="@color/music_progress"
-                fab:fab_colorPressed="@color/music_progress_pressed"
-                fab:fab_colorRipple="@color/music_progress_pressed"
+                fab:fab_colorNormal="@color/FAB_UNSELECTED"
+                fab:fab_colorPressed="@color/FAB_PREESSED"
+                fab:fab_colorRipple="@color/FAB_PREESSED"
                 android:layout_alignParentRight="false"
                 android:layout_alignParentEnd="false"
                 android:layout_centerHorizontal="true"

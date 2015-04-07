@@ -7,8 +7,8 @@
         android:radius="2dp"/>
 
     <gradient
-        android:startColor="@color/app_bg"
-        android:endColor="@color/app_bg"
+        android:startColor="@color/APP_BACKGROUND"
+        android:endColor="@color/APP_BACKGROUND"
         android:angle="270"/>
 
     <size

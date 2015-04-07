@@ -9,7 +9,7 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/transparent" />
+        android:background="@color/TRANSPARENT" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fullscreen_action_panel"
@@ -18,7 +18,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@color/partly_transparent"
+        android:background="@color/HALF_TRANSPARENT"
         android:orientation="horizontal"
         android:weightSum="2">
 
@@ -40,7 +40,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="15dp"
                 android:text="1714"
-                android:textColor="@color/only_white" />
+                android:textColor="@color/WHITE" />
 
         </RelativeLayout>
 
@@ -62,7 +62,7 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="15dp"
                 android:text="171"
-                android:textColor="@color/only_white" />
+                android:textColor="@color/WHITE" />
         </RelativeLayout>
 
     </LinearLayout>

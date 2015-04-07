@@ -54,7 +54,7 @@ public class DrawerListViewAdapter extends BaseAdapter{
         }
 
         if (groupPosition == 4) {
-            groupViewHolder.groupTitle.setTextColor(convertView.getResources().getColor(R.color.stantsiya_bg));
+            groupViewHolder.groupTitle.setTextColor(convertView.getResources().getColor(R.color.ST_BG_COLOR));
         } else {
             groupViewHolder.groupTitle.setTextColor(Color.WHITE);
         }

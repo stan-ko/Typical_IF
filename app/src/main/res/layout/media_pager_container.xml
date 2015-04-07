@@ -7,7 +7,7 @@
         android:id="@+id/media_pager"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:background="@color/transparent"/>
+        android:background="@color/TRANSPARENT"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:layout_alignParentTop="true"
             android:scaleType="fitCenter"
             android:padding="3dp"
-            android:background="@color/transparent"
+            android:background="@color/TRANSPARENT"
             android:layout_alignParentRight="true"
             android:id="@+id/ib_goto_video_page" />
 

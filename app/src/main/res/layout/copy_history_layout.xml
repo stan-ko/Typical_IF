@@ -83,7 +83,7 @@
             android:id="@+id/copyHistoryTextLayout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="@color/transparent"
+            android:background="@color/TRANSPARENT"
             android:visibility="gone"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp">
@@ -105,7 +105,7 @@
                 android:id="@+id/copyHistoryMediaLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/transparent"
+                android:background="@color/TRANSPARENT"
                 android:visibility="gone">
 
                 <include layout="@layout/media_pager_container" />
@@ -116,7 +116,7 @@
                 android:id="@+id/copyHistoryAudioLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:background="@color/transparent"
+                android:background="@color/TRANSPARENT"
                 android:visibility="gone" >
 
                 <include layout="@layout/simple_listview_layout"/>
@@ -135,7 +135,7 @@
                 android:id="@+id/copyHistoryAlbumLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/transparent"
+                android:background="@color/TRANSPARENT"
                 android:divider="@drawable/copy_history_divider"
                 android:dividerPadding="5dp"
                 android:orientation="vertical"

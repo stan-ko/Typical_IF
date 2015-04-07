@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/app_bg"
+        android:background="@color/APP_BACKGROUND"
         android:visibility="visible">
 
         <Button
@@ -16,7 +16,7 @@
             android:text="@string/change_my_decision"
             android:id="@+id/change_vote_decision_button"
             android:visibility="visible"
-            android:textColor="@color/textFadeOutColor"
+            android:textColor="@color/TEXT_COLOR_BODY"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="15dp"
