@@ -110,17 +110,25 @@ public class FragmentWall extends FragmentWithAttach {
             final int totalItemCount = linearLayoutManager.getItemCount();
             if (recyclerView.getId() == wallListView.getId()) {
                 final int currentFirstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                if (currentFirstVisibleItem ==2 || currentFirstVisibleItem ==1 ||currentFirstVisibleItem ==0 )
+                    floatingActionButtonBackToTop.animate().translationY(-floatingActionButtonBackToTop.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+
                 if (dy<0) stopShow = false;
                 else startShow = false;
+                Log.d("currentFirstVisibleItem", ""+currentFirstVisibleItem);
+                Log.d("currentFirstVisibleItem", ""+currentFirstVisibleItem);
+
                 if (currentFirstVisibleItem > mLastFirstVisibleItem && stopShow == false) {
                    ToolBarHelper.totalToolbarShow(totalToolBar);
                     floatingActionsButtonCreate.hide();
                     floatingActionButtonBackToTop.animate().translationY(-floatingActionButtonBackToTop.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
                     stopShow = true;
+
                 } else if (currentFirstVisibleItem < mLastFirstVisibleItem && startShow == false) {
                     ToolBarHelper.totalToolbarHide(totalToolBar);
                    floatingActionsButtonCreate.show();
-                    floatingActionButtonBackToTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
+                    if (currentFirstVisibleItem >3 )
+                        floatingActionButtonBackToTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
                     startShow = true;
                 }
                 mLastFirstVisibleItem = currentFirstVisibleItem;
@@ -273,8 +281,7 @@ public class FragmentWall extends FragmentWithAttach {
             @Override
             public void onClick(View v) {
                 wallListView.scrollToPosition(0);
-
-
+                floatingActionButtonBackToTop.animate().translationY(-floatingActionButtonBackToTop.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
 
             }
         });
