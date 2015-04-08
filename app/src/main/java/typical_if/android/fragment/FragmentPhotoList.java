@@ -374,10 +374,9 @@ public class FragmentPhotoList extends FragmentWithAttach implements AbsListView
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     getActivity().getSupportFragmentManager().popBackStack();
                     getActivity().getSupportFragmentManager().popBackStack();
+
                     Constants.tempPostAttachCounter++;
-                    if (position >= 11) {
-                        position = position - 10;
-                    }
+
                     Constants.tempPhotoPostAttach.add(finalPhotos.get(position));
                     refreshMakePostFragment(0);
                 }
@@ -389,15 +388,12 @@ public class FragmentPhotoList extends FragmentWithAttach implements AbsListView
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                   //  int position = position1-10;
-                    Log.d("positionO"," = "+(position-4));
-                    // Fragment fragment = FragmentFullScreenViewer.newInstance(finalPhotos, position);
+                    Log.d("positionO"," = "+(position-columns));
                     final Fragment fragment = new FragmentFullScreenViewer();
                     args.clear();
+                    args.putParcelable("fromPhoto", finalPhotos.get(position));
                     args.putSerializable("finalPhotos", finalPhotos);
-                  //  if (position >= 11) {
-                     //   args.putInt("position", position-10);
-                  ////  }else {
-                    args.putInt("position", position-4);
+                    args.putInt("position", position-columns);
                  //   }
                     args.putInt("sizeOfAlbum", sizeOfAlbum);
                     fragment.setArguments(args);
