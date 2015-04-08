@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/comment_bar_layout"
                     android:layout_alignParentTop="true"
-                    android:background="@color/app_bg"
+                    android:background="@color/APP_BACKGROUND"
                     android:clickable="false"
                     android:divider="@drawable/list_divider"
                     android:dividerHeight="1px"
@@ -60,7 +60,7 @@
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="false"
                     android:layout_alignParentStart="false"
-                    android:background="#ff757575"
+                    android:background="@color/APP_BACKGROUND_DARKER"
                     android:visibility="visible">
 
                     <EditText
@@ -78,7 +78,7 @@
                         android:layout_toLeftOf="@+id/buttonSendComment"
                         android:layout_toStartOf="@+id/buttonSendComment"
                         android:autoText="false"
-                        android:background="#ff757575"
+                        android:background="@color/TRANSPARENT"
                         android:hint="@string/your_message"
                         android:inputType="textMultiLine"
                         android:maxHeight="105dp"
@@ -89,7 +89,7 @@
                         android:paddingRight="2dp"
                         android:phoneNumber="false"
                         android:selectAllOnFocus="false"
-                        android:textColor="#ffffffff"
+                        android:textColor="@color/TEXT_COLOR_BODY"
                         android:typeface="normal"
                         android:visibility="visible" />
 
@@ -144,7 +144,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_below="@+id/there_are_no_comments_here_tv"
-                    android:background="@color/app_bg"
+                    android:background="@color/APP_BACKGROUND"
                     android:visibility="visible">
 
                     <ProgressBar

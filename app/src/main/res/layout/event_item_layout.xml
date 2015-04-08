@@ -11,16 +11,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="false"
         android:layout_alignParentTop="true"
-        android:background="@color/app_bg"
+        android:background="@color/APP_BACKGROUND"
         card_view:cardCornerRadius="0dp"
         card_view:cardElevation="8dp"
-        card_view:cardBackgroundColor="@color/app_bg">
+        card_view:cardBackgroundColor="@color/APP_BACKGROUND">
 
         <LinearLayout
             android:id="@+id/relativeLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/app_bg"
+            android:background="@color/APP_BACKGROUND"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -41,19 +41,19 @@
                     android:layout_height="match_parent"
                     android:layout_alignBottom="@+id/img_event_item"
                     android:layout_alignParentTop="true"
-                    android:background="@color/transparent" />
+                    android:background="@color/TRANSPARENT" />
             </RelativeLayout>
 
             <com.devspark.robototextview.widget.RobotoTextView xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/wall_background"
+                android:background="@color/APP_BACKGROUND_DARKER"
                 android:gravity="center"
                 android:padding="5dp"
                 android:singleLine="true"
                 android:text="@string/today_events"
-                android:textColor="@color/ab_background"
+                android:textColor="@color/WHITE"
                 android:textSize="18dp"
                 app:typeface="roboto_regular" />
 
@@ -67,12 +67,12 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/wall_background"
+                android:background="@color/APP_BACKGROUND_DARKER"
                 android:gravity="center"
                 android:padding="5dp"
                 android:singleLine="true"
                 android:text="@string/station_events"
-                android:textColor="@color/stantsiya_bg"
+                android:textColor="@color/ST_BG_COLOR"
                 android:textSize="18dp"
                 app:typeface="roboto_regular" />
 
@@ -86,12 +86,12 @@
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/wall_background"
+                android:background="@color/APP_BACKGROUND_DARKER"
                 android:gravity="center"
                 android:padding="5dp"
                 android:singleLine="true"
                 android:text="@string/period_events"
-                android:textColor="@color/ab_background"
+                android:textColor="@color/WHITE"
                 android:textSize="18dp"
                 app:typeface="roboto_regular" />
 

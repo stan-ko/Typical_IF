@@ -308,6 +308,8 @@
     <string name="photos_equal_one">фотография</string>
     <string name="photos_less_five">фотографии</string>
     <string name="photos_more_five">фотографий</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="main_settings">Настройки</string>
 
 
 </resources>

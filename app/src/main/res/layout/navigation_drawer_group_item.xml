@@ -20,7 +20,7 @@
         android:id="@+id/groupItem"
         android:layout_width="fill_parent"
         android:layout_height="24dp"
-        android:background="@color/transparent"
+        android:background="@color/TRANSPARENT"
         android:textColor="#ffffff"
         android:textSize="14sp"
         android:alpha="0.87"

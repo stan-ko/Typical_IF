@@ -27,7 +27,7 @@
             android:text="Text text text text text text"
             android:id="@+id/photo_album_title"
 
-            android:textColor="@color/textFadeOutColor"
+            android:textColor="@color/TEXT_COLOR_BODY"
             android:textSize="20dp"
             android:visibility="visible"
             android:layout_below="@+id/cover_camera_iw"
@@ -47,7 +47,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="2567 фотографій"
             android:id="@+id/size_of_album"
-            android:textColor="@color/textFadeOutColor"
+            android:textColor="@color/TEXT_COLOR_BODY"
             android:layout_alignBottom="@+id/photos_icon_iw"
             android:layout_toRightOf="@+id/photos_icon_iw"
             android:layout_toEndOf="@+id/photos_icon_iw" />

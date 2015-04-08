@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/blur1">
+    android:background="@color/APP_BACKGROUND">
 
     <ListView
         android:layout_width="wrap_content"
@@ -10,7 +10,7 @@
         android:id="@+id/lv_post_attach"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/blur1" />
+        android:background="@color/APP_BACKGROUND" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:background="@color/transparent"
+        android:background="@color/TRANSPARENT"
         android:id="@+id/attach_list_spinner_layout">
 
         <ProgressBar

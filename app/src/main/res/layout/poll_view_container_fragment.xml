@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     tools:context="typical_if.android.fragment.PollFragment"
     android:paddingTop="?android:attr/actionBarSize"
-    android:background="@color/app_bg"
+    android:background="@color/APP_BACKGROUND"
     android:clickable="true">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:background="@color/app_bg"
+        android:background="@color/APP_BACKGROUND"
         android:paddingBottom="5dp"
         android:clickable="true">
 
@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/listOfVotes"
-                android:background="@color/app_bg"
+                android:background="@color/APP_BACKGROUND"
                 android:visibility="visible"
                 android:divider="@null"
                 android:dividerHeight="1px"

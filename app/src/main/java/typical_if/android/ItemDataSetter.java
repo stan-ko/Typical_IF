@@ -320,7 +320,7 @@ public class ItemDataSetter {
             startTag = stringB.indexOf(matTags.group());
             endTag = startTag + matTags.group().length();
 
-            spannable.setSpan(new ForegroundColorSpan(Color.BLUE), startTag, endTag, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(R.color.TAG_COLOR), startTag, endTag, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), startTag, endTag, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             final String temp = matTags.group();
@@ -341,13 +341,13 @@ public class ItemDataSetter {
             startLink = stringB.indexOf(matLinks.group());
             endLink = startLink + matLinks.group().length();
 
-            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), startLink, endLink, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            spannable.setSpan(new ForegroundColorSpan(R.color.LINK_COLOR), startLink, endLink, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), startLink, endLink, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-            TextPaint t = new TextPaint();
-            t.linkColor = Color.RED;
-            t.setColor(Color.RED);
-            spannable.setSpan(t, startLink, endLink, 0);
+            ///TextPaint t = new TextPaint();
+           // t.linkColor = Color.RED;
+         //   t.setColor(Color.RED);
+          //  spannable.setSpan(t, startLink, endLink, 0);
             final String temp = matLinks.group();
 
             spannable.setSpan(new NonUnderlinedClickableSpan() {
@@ -370,7 +370,7 @@ public class ItemDataSetter {
 
             endSite = startSite + replier.length();
             spannable.setSpan(null, startSite, endSite, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), startSite, endSite, 0);
+            spannable.setSpan(new ForegroundColorSpan(R.color.SITE_COLOR), startSite, endSite, 0);
             spannable.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), startSite, endSite, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             spannable.setSpan(new NonUnderlinedClickableSpan() {
                 @Override
@@ -392,7 +392,7 @@ public class ItemDataSetter {
 
             endReply = startReply + replier[1].length();
             spannable.setSpan(null, startReply, endReply, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannable.setSpan(new ForegroundColorSpan(Color.WHITE), startReply, endReply, 0);
+            spannable.setSpan(new ForegroundColorSpan(R.color.REPLY_COLOR), startReply, endReply, 0);
             spannable.setSpan(new android.text.style.StyleSpan(Typeface.BOLD), startReply, endReply, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             spannable.setSpan(new NonUnderlinedClickableSpan() {
@@ -689,7 +689,7 @@ public class ItemDataSetter {
         mediaPager.setAdapter(mediaPagerAdapter);
 
         if (videos.size() != 0) {
-            mediaPagerVideoButton.setColorFilter(context.getResources().getColor(R.color.music_progress));
+            mediaPagerVideoButton.setColorFilter(context.getResources().getColor(R.color.FAB_UNSELECTED));
             mediaPagerVideoButton.setVisibility(View.VISIBLE);
             mediaPager.setTag(photos.size());
             mediaPagerVideoButton.setTag(mediaPager);
@@ -704,8 +704,8 @@ public class ItemDataSetter {
         mediaPagerIndicator.setCentered(true);
         mediaPagerIndicator.setRadius(5 * density);
         mediaPagerIndicator.setGapWidth(6 * density);
-        mediaPagerIndicator.setFillColor(context.getResources().getColor(R.color.music_progress));
-        mediaPagerIndicator.setStrokeColor(context.getResources().getColor(R.color.music_progress_alt));
+        mediaPagerIndicator.setFillColor(context.getResources().getColor(R.color.FAB_UNSELECTED));
+        mediaPagerIndicator.setStrokeColor(context.getResources().getColor(R.color.AUDIO_PROGRESS_BACKGROUND));
         mediaPagerIndicator.setStrokeWidth(density);
 
         ((RelativeLayout) mediaPagerIndicator.getParent()).setVisibility(count == 1 ? View.GONE : View.VISIBLE);

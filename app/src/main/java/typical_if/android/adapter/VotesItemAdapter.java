@@ -48,7 +48,7 @@ public class VotesItemAdapter extends BaseAdapter implements ListAdapter {
                             Button changeDecision) {
         this.answers = poll.answers;
         this.appContext = activity.getApplicationContext();
-        this.textFadeOutColor = appContext.getResources().getColor(R.color.textFadeOutColor);
+        this.textFadeOutColor = appContext.getResources().getColor(R.color.DATE_COLOR);
         this.layoutInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.answers_anonymous_text = answers_anonymous_text;
         this.answers_anonymous_text_preview = answers_anonymous_text_preview;

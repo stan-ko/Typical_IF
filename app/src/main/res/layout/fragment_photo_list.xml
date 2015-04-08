@@ -1,7 +1,7 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/partly_transparent"
+    android:background="@color/HALF_TRANSPARENT"
     tools:context=".fragment.FragmentPhotoList"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -17,15 +17,22 @@
         <!--tools:context=".MainActivity">-->
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="false"
+        android:clickable="false"
+        android:background="@color/APP_BACKGROUND"></RelativeLayout>
 
-<in.srain.cube.views.GridViewWithHeaderAndFooter xmlns:android="http://schemas.android.com/apk/res/android"
+    <in.srain.cube.views.GridViewWithHeaderAndFooter xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/gridOfPhotos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:background="@color/photo_item_background_color"
-                android:columnWidth="180dp" />
+    android:columnWidth="180dp"
+    android:horizontalSpacing="1px"
+    android:verticalSpacing="1px" />
 
 
     <!--</com.nirhart.parallaxscroll.views.ParallaxScrollView>-->
@@ -38,9 +45,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:elevation="5dp"
-        fab:fab_colorNormal="@color/music_progress"
-        fab:fab_colorPressed="@color/music_progress_pressed"
-        fab:fab_colorRipple="@color/music_progress_pressed"
+        fab:fab_colorNormal="@color/FAB_UNSELECTED"
+        fab:fab_colorPressed="@color/FAB_PREESSED"
+        fab:fab_colorRipple="@color/FAB_PREESSED"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_gravity="bottom|right"
@@ -55,7 +62,7 @@
         android:layout_height="fill_parent"
         android:layout_alignTop="@+id/gridOfPhotos"
         android:layout_centerHorizontal="true"
-        android:background="@color/app_bg"
+        android:background="@color/APP_BACKGROUND"
         android:visibility="visible">
 
         <ProgressBar

@@ -1,39 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="vk_color">#ff717377</color>
-    <color name="vk_grey_color">#F0F2F5</color>
-    <color name="vk_white">#fff</color>
-    <color name="tf_red">#D22A23</color>
-    <color name="vk_smoke_white">#ddd</color>
-    <color name="vk_light_color">#ffc6dcdf</color>
-    <color name="greenStart">#ff33dd44</color>
-    <color name="greenMid">#ff0A8815</color>
-    <color name="greenEnd">#ff1da130</color>
-    <color name="startBlue">#ff6a6fff</color>
-    <color name="pressed_reaction">#49f0f4ff</color>
-    <color name="transparent">#00000000</color>
-    <color name="endBlue">#ffc6c6ff</color>
-    <color name="partly_transparent">#5a000000</color>
-    <color name="wall_background">#c8404040</color>
-    <color name="nav_draw_title_color">#f11c1c1c</color>
-    <color name="nav_draw_bg">#098FFF</color>
-    <color name="nav_draw_list_bg">#424242</color>
-    <color name="ab_background">#1DE8B6</color>
-    <color name="ab_text_color">#0E745C</color>
-    <color name="list_child_text_color">#B8B8B8</color>
-    <color name="menu_popup">#575757</color>
-    <color name="music_progress_pressed">#ffff883e</color>
-    <color name="back_to_top_fab_color">#2dff883e</color>
-    <color name="back_to_top_fab_color_pressed">#52ff883e</color>
-    <color name="music_progress">#FF6600</color>
-    <color name="music_progress_alt">#D0C65F00</color>
-    <color name="app_bg">#303030</color>
-    <color name="stantsiya_bg">#f44336</color>
-    <color name="tFIndigo">#3F51B5</color>
-    <color name="tZDeepPurple">#673AB7</color>
-    <color name="fbBlue">#2196F3</color>
-    <color name="textFadeOutColor">#beffffff</color>
-    <color name="only_white">#ffffff</color>
-    <color name="photo_item_background_color">#ff343434</color>
+//Common
+    <color name="APP_BACKGROUND">#ff3123ed</color>
+    <color name="APP_BACKGROUND_DARKER">#ff221c88</color>
+    <color name="TRANSPARENT">#00000000</color>
+    <color name="HALF_TRANSPARENT">#5a000000</color>
+    <color name="WHITE">#ffffffff</color>
+    <color name="ST_BG_COLOR">#f44336</color>
+
+
+// images
+    <color name="LOADING_IMAGE_COLOR_WALL">#ffffffff</color>
+    <color name="LOADING_IMAGE_COLOR_PHOTO_LIST">#ff3689ff</color>
+
+
+  //wall post and comments colors
+
+    <color name="DATE_COLOR">#8cffffff</color>
+    <color name="HEADER_COLOR">#aaffffff</color>
+    <color name="SRC_LINK_COLOR">#8cf0f0f0</color>
+    <color name="SENDER_COLOR">#b4ffffff</color>
+
+
+    <color name="TEXT_COLOR_BODY">#c8ffffff</color>
+
+    <color name="TYPE_TEXT_COLOR">#ffffff</color>
+
+
+
+   //parsed spannable colors in text of post...
+   <color name="LINK_COLOR">#ffffff</color>
+    <color name="TAG_COLOR">#ffffff</color>
+    <color name="SITE_COLOR">#ffffff</color>
+    <color name="REPLY_COLOR">#ffffff</color>
+
+
+
+//AUDIO
+    <color name="AUDIO_BG_COLOR">#ffaa9aff</color>
+    <color name="AUDIO_PROGRESS_COLOR">#ffffff</color>
+    <color name="AUDIO_PROGRESS_BACKGROUND">#D0C65F00</color>
+
+
+//Selector
+    <color name="APP_SELECTOR_COLOR">#ff6a6fff</color>
+
+
+//Navigation Drawer
+    <color name="DRAWER_BACKGROUND_COLOR">#424242</color>
+
+
+//ToolBar
+    <color name="TOOLBAR_BACKGROUND_COLOR">#ffff883e</color>
+
+
+//fab
+    <color name="FAB_PREESSED">#ffff883e</color>
+    <color name="FAB_UNSELECTED">#FF6600</color>
+//----------------------------------------------------------------
+    <color name="BACK_TO_TOP_FAB_COLOR">#2dff883e</color>
+    <color name="BACK_TO_TOP_FAB_COLOR_PRESSED">#52ff883e</color>
+
+
+
+
+    <!--<color name="vk_color">#ff717377</color>-->
+    <!--<color name="vk_grey_color">#F0F2F5</color>-->
+
+
+    <!--<color name="vk_white">#fff</color>-->
+    <!--<color name="tf_red">#D22A23</color>-->
+    <!--<color name="vk_smoke_white">#ddd</color>-->
+    <!--<color name="vk_light_color">#ffc6dcdf</color>-->
+    <!--<color name="greenStart">#ff33dd44</color>-->
+    <!--<color name="greenMid">#ff0A8815</color>-->
+    <!--<color name="greenEnd">#ff1da130</color>-->
+
+    <!--<color name="pressed_reaction">#49f0f4ff</color>-->
+  <!--<color name="endBlue">#ffc6c6ff</color>-->
+
+
+    <!--<color name="wall_background">#c8404040</color>-->
+    <!--<color name="nav_draw_title_color">#f11c1c1c</color>-->
+    <!--<color name="nav_draw_bg">#098FFF</color>-->
+
+    <!--<color name="ab_background">#1DE8B6</color>-->
+    <!--<color name="ab_text_color">#0E745C</color>-->
+    <!--<color name="list_child_text_color">#B8B8B8</color>-->
+    <!--<color name="menu_popup">#575757</color>-->
+
+
+
+
+
+
+
+    <!--<color name="tFIndigo">#3F51B5</color>-->
+    <!--<color name="tZDeepPurple">#673AB7</color>-->
+    <!--<color name="fbBlue">#2196F3</color>-->
+
+    <!--<color name="only_white">#ffffff</color>-->
+    <!--<color name="photo_item_background_color">#ff343434</color>-->
 
 </resources>

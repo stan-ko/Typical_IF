@@ -32,7 +32,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/txt_link_title"
-            android:textColor="@color/vk_smoke_white"
+            android:textColor="@color/HEADER_COLOR"
             android:maxLines="1"
             android:textStyle="normal"
             android:text="sd asdasd as d"

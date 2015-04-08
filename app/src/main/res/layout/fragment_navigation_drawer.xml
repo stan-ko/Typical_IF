@@ -5,9 +5,9 @@
     android:id="@+id/navigation_drawer_exp_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/nav_draw_list_bg"
+    android:background="@color/DRAWER_BACKGROUND_COLOR"
     android:choiceMode="singleChoice"
     android:scrollbars="none"
-    android:divider="@color/nav_draw_list_bg"
+    android:divider="@color/DRAWER_BACKGROUND_COLOR"
     tools:context=".NavigationDrawerFragment" />
 

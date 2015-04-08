@@ -137,11 +137,9 @@ public class FragmentPhotoList extends FragmentWithAttach implements AbsListView
     }
      View headerView;
     private void attachHeaderView(final View root) {
-try {
-      headerView  = ItemDataSetter.inflater.inflate(R.layout.photo_list__info_header, null);
-}catch (InflateException x ){
-      headerView  = ItemDataSetter.inflater.inflate(R.layout.photo_list__info_header, null);
-}
+
+        headerView  = LayoutInflater.from(TIFApp.getAppContext()).inflate(R.layout.photo_list__info_header, null);
+
         Typeface titleTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Light.ttf");
         Typeface sizeTypeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Roboto-Thin.ttf");
 

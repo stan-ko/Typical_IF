@@ -4,8 +4,8 @@
     android:shape="oval">
 
     <gradient
-        android:startColor="@color/nav_draw_list_bg"
-        android:endColor="@color/wall_background"
+        android:startColor="@color/APP_BACKGROUND_DARKER"
+        android:endColor="@color/APP_BACKGROUND"
         android:angle="270"/>
 
 </shape>
