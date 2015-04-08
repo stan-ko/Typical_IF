@@ -274,7 +274,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                         });
                     }
                 } else if (!VKSdk.isLoggedIn()) {
-                    Toast.makeText(TIFApp.getAppContext(), R.string.you_are_not_logged_in, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TIFApp.getAppContext(), R.string.auth_error, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -286,7 +286,7 @@ public class FragmentFullScreenViewer extends Fragment implements ExtendedViewPa
                     FragmentComments fragment = FragmentComments.newInstanceForPhoto(photos.get(position), Constants.USER_ID);
                     getFragmentManager().beginTransaction().add(R.id.container, fragment).addToBackStack(null).commit();
                 } else if (!VKSdk.isLoggedIn()) {
-                    Toast.makeText(TIFApp.getAppContext(), R.string.you_are_not_logged_in, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TIFApp.getAppContext(), R.string.auth_error, Toast.LENGTH_SHORT).show();
                 }
             }
         });

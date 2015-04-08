@@ -43,7 +43,8 @@
 
 
 //Selector
-    <color name="APP_SELECTOR_COLOR">#ff6a6fff</color>
+    <color name="APP_SELECTOR_COLOR">#786a6fff</color>
+
 
 
 //Navigation Drawer

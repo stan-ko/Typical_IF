@@ -29,7 +29,7 @@
     <string name="you_have_no_suggested_posts">У вас немає запропонованих новин</string>
     <string name="something_went_wrong">Щось пішло не так</string>
     <string name="error_playing_video">Помилка відтворення відеозапису</string>
-    <string name="error_playing_video_auth">Ця дія вимагає авторизації</string>
+    <string name="auth_error">Ця дія вимагає авторизації</string>
     <string name="title_login">Увійти в профіль</string>
     <string name="title_logout">Вийти з профілю</string>
     <string name="look_wall">Стіна</string>

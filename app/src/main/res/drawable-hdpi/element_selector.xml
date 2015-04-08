@@ -4,7 +4,7 @@
     <item android:state_pressed="true">
 
         <shape xmlns:android="http://schemas.android.com/apk/res/android">
-            <solid android:color="#7873ADFF" />
+            <solid android:color="@color/APP_SELECTOR_COLOR" />
         </shape>
     </item>
 

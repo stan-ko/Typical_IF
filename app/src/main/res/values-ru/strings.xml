@@ -36,7 +36,7 @@
     <string name="menu_group_exit">Выйти из программы</string>
 
     <string name="error_playing_video">Ошибка воспроизведения видеозаписи</string>
-    <string name="error_playing_video_auth">Это действие требует авторизации</string>
+    <string name="auth_error">Это действие требует авторизации</string>
 
         
     <string name="profile">Профиль</string>
