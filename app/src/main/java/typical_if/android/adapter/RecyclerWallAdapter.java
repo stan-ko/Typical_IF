@@ -151,8 +151,9 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
                 postWrapper.groupId = wall.group.id;
                 viewHolder.cb_post_repost.setTag(postWrapper);
                 viewHolder.button_repost.setTag(viewHolder);
-                viewHolder.button_repost.setOnClickListener(btRepostOnClickListener);
+
             }
+            viewHolder.button_repost.setOnClickListener(btRepostOnClickListener);
         }
 
         viewHolder.postTextLayout.setVisibility(postWrapper.postTextVisibility);
@@ -239,7 +240,12 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
 
         viewHolder.button_comment.setTag(new ParamsHolder(position, wall, postWrapper));
         if (!OfflineMode.isOnline() && !OfflineMode.isJsonNull(post.id)) {
-            viewHolder.button_comment.setOnClickListener(errorToastListener);
+            viewHolder.button_comment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TIFApp.showToast(R.string.auth_error);
+                }
+            });
         } else {
             viewHolder.button_comment.setOnClickListener(openCommentsFragmentListener);
         }
@@ -248,6 +254,9 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
     public final View.OnClickListener btLikeOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            if (!VKSdk.isLoggedIn()){
+                TIFApp.showToast(R.string.auth_error);
+            }
 //            try {
 //                if (!OfflineMode.isIntNul("surprise")) {
 //                    surpriseCounter = OfflineMode.loadInt("surprise");
@@ -300,36 +309,42 @@ public class RecyclerWallAdapter extends RecyclerView.Adapter<RecyclerWallAdapte
             //Context context = TIFApp.getAppContext();
             //LayoutInflater layoutInflater = LayoutInflater.from(context);
 
-            final ViewHolder viewHolder = (ViewHolder) v.getTag();
-            final VKWallPostWrapper postWrapper = (VKWallPostWrapper) viewHolder.cb_post_repost.getTag();
-            final VKApiPost post = postWrapper.post;
 
-            try {
-                final AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+            if (!VKSdk.isLoggedIn()) {
+                TIFApp.showToast(R.string.auth_error);
+            } else {
 
-                View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
-                dialog.setView(view);
-                dialog.setTitle(R.string.comment_background);
+                final ViewHolder viewHolder = (ViewHolder) v.getTag();
+                final VKWallPostWrapper postWrapper = (VKWallPostWrapper) viewHolder.cb_post_repost.getTag();
+                final VKApiPost post = postWrapper.post;
 
-                final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
+                try {
+                    final AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
 
-                dialog.setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        doRepost(viewHolder, postWrapper, post, text);
-                    }
-                });
+                    View view = layoutInflater.inflate(R.layout.txt_dialog_comment, null);
+                    dialog.setView(view);
+                    dialog.setTitle(R.string.comment_background);
 
-                dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialog.setCancelable(true);
-                    }
-                });
-                dialog.create().show();
+                    final EditText text = (EditText) view.findViewById(R.id.txt_dialog_comment);
 
-            } catch (NullPointerException npe) {
-                Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
+                    dialog.setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            doRepost(viewHolder, postWrapper, post, text);
+                        }
+                    });
+
+                    dialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialog.setCancelable(true);
+                        }
+                    });
+                    dialog.create().show();
+
+                } catch (NullPointerException npe) {
+                    Toast.makeText(getApplicationContext(), R.string.error, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     };

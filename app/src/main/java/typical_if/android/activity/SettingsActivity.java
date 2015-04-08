@@ -23,7 +23,7 @@ public class SettingsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-     View v =    findViewById(R.id.ripple);
+     View v = findViewById(R.id.ripple);
 
         MaterialRippleLayout.on(v)
                 .rippleColor(Color.BLACK)

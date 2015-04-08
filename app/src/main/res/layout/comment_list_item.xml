@@ -109,7 +109,7 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:id="@+id/comment_list_clickable_canvas"
-        android:background="@drawable/element_selector_v2"
+        android:background="@drawable/element_selector"
         android:clickable="true"
         android:layout_alignBottom="@+id/commentAttachmentsLayout"
         android:paddingBottom="5dp"

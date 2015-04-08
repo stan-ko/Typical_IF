@@ -87,7 +87,7 @@ public class MediaPagerAdapter extends PagerAdapter {
 
                     @Override
                     public void onError() {
-                        Toast.makeText(mContext, R.string.error_playing_video_auth, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.auth_error, Toast.LENGTH_SHORT).show();
                     }
                 }
             );
