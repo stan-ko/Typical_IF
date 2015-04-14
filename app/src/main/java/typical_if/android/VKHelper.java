@@ -61,6 +61,9 @@ public class VKHelper {
     public static final String TIF_VK_SDK_KEY_GROUPS = "groups";
     public static final String TIF_VK_SDK_KEY_TYPE = "type";
     public static final String TIF_VK_SDK_KEY_IS_BOARD = "is_board";
+    public static final String TIF_VK_SDK_KEY_OWNERS_ONLY = "owners_only";
+    public static final String TIF_VK_SDK_KEY_QWERY = "query";
+
 
 
     public static int offsetCounter;
@@ -154,6 +157,7 @@ public class VKHelper {
         params.put(TIF_VK_SDK_KEY_FILTER, TIF_VK_SDK_KEY_ALL);
         params.put(TIF_VK_SDK_KEY_EXTENDED, 1);
         final VKRequest request = VKApi.wall().get(params);
+
         request.executeWithListener(vkRequestListener);
     }
 
@@ -521,6 +525,19 @@ public class VKHelper {
         params.put(TIF_VK_SDK_KEY_EXTENDED, extended);
 
         final VKRequest request = VKApi.wall().get(params);
+        request.executeWithListener(vkRequestListener);
+    }
+
+    public static void searchWall(String query, int extended, int offset, int countPosts, long gid, VKRequestListener vkRequestListener) {
+        VKParameters params = new VKParameters();
+        params.put(TIF_VK_SDK_KEY_OWNER_ID, gid);
+        params.put(TIF_VK_SDK_KEY_DOMAIN, gid);
+        params.put(TIF_VK_SDK_KEY_OFFSET, offset);
+        params.put(TIF_VK_SDK_KEY_COUNT, countPosts);
+        params.put(TIF_VK_SDK_KEY_EXTENDED, extended);
+        params.put(TIF_VK_SDK_KEY_OWNERS_ONLY, 0);
+        params.put(TIF_VK_SDK_KEY_QWERY, query);
+        final VKRequest request = new VKRequest("wall.search", params);
         request.executeWithListener(vkRequestListener);
     }
 

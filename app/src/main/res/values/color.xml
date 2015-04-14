@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 //Common
-    <color name="APP_BACKGROUND">#ff3123ed</color>
-    <color name="APP_BACKGROUND_DARKER">#ff221c88</color>
+    <color name="APP_BACKGROUND">#424242</color>
+    <color name="APP_BACKGROUND_DARKER">#616161</color>
     <color name="TRANSPARENT">#00000000</color>
     <color name="HALF_TRANSPARENT">#5a000000</color>
     <color name="WHITE">#ffffffff</color>

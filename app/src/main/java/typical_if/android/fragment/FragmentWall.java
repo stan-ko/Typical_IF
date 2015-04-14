@@ -14,9 +14,10 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
@@ -24,6 +25,7 @@ import android.support.v7.widget.Toolbar;
 import com.melnykov.fab.FloatingActionButton;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.model.VKApiPhoto;
 import com.vk.sdk.api.model.VKApiPost;
 import com.vk.sdk.api.model.VKAttachments;
@@ -35,11 +37,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import android.support.v7.widget.SearchView;
+
 import typical_if.android.Constants;
+import typical_if.android.FloatingToolbar_ButtonHelper;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
-import typical_if.android.ToolBarHelper;
+import typical_if.android.TIFApp;
 import typical_if.android.VKHelper;
 import typical_if.android.VKRequestListener;
 import typical_if.android.activity.MainActivity;
@@ -63,8 +68,9 @@ public class FragmentWall extends FragmentWithAttach {
     View totalToolBar;
     RelativeLayout spinnerLayout;
     View rootView;
+    SearchView searchView;
     NewPauseOnScrollListener pauseOnScrollListener;
-    LayoutInflater inflaterGlobal;
+    public static LayoutInflater inflaterGlobal;
     final int offsetO = 0;
     final int countPostDefaultForOffset = 50;
     public static int playableLogoRes;
@@ -73,16 +79,17 @@ public class FragmentWall extends FragmentWithAttach {
     boolean isSuggested;
     FragmentManager fragmentManager;
     long tempGroupId;
+    boolean doEndless = true;
 
-//    FloatingActionButton fabPhoto;
+    //    FloatingActionButton fabPhoto;
 //    FloatingActionButton fabSuggest;
- FloatingActionButton floatingActionButtonBackToTop;
+    FloatingActionButton floatingActionButtonBackToTop;
     Toolbar toolbar;
     TextView mTitleToolBar;
 
     // Bundle arguments;
     SwipeRefreshLayout swipeView;
-    FloatingActionButton floatingActionsButtonCreate;
+    FloatingActionButton floatingActionButtonCreate;
 
     LinearLayoutManager linearLayoutManager;
     boolean temp = true;
@@ -109,26 +116,24 @@ public class FragmentWall extends FragmentWithAttach {
             final int totalItemCount = linearLayoutManager.getItemCount();
             if (recyclerView.getId() == wallListView.getId()) {
                 final int currentFirstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
-                if (currentFirstVisibleItem ==2 || currentFirstVisibleItem ==1 ||currentFirstVisibleItem ==0 )
-                    floatingActionButtonBackToTop.animate().translationY(-floatingActionButtonBackToTop.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
-
-                if (dy<0) stopShow = false;
+                if (currentFirstVisibleItem == 2 || currentFirstVisibleItem == 1 || currentFirstVisibleItem == 0) {
+                    FloatingToolbar_ButtonHelper.animationShow(floatingActionButtonBackToTop);
+                }
+                if (dy < 0) stopShow = false;
                 else startShow = false;
-                Log.d("currentFirstVisibleItem", ""+currentFirstVisibleItem);
-                Log.d("currentFirstVisibleItem", ""+currentFirstVisibleItem);
 
                 if (currentFirstVisibleItem > mLastFirstVisibleItem && stopShow == false) {
-                   ToolBarHelper.totalToolbarShow(totalToolBar);
-                    floatingActionsButtonCreate.hide();
-                    floatingActionButtonBackToTop.animate().translationY(-floatingActionButtonBackToTop.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+                    FloatingToolbar_ButtonHelper.totalToolbarShow(totalToolBar);
+                    FloatingToolbar_ButtonHelper.animationShow(floatingActionButtonBackToTop);
+                    floatingActionButtonCreate.hide();
                     stopShow = true;
 
                 } else if (currentFirstVisibleItem < mLastFirstVisibleItem && startShow == false) {
-                    ToolBarHelper.totalToolbarHide(totalToolBar);
-                   floatingActionsButtonCreate.show();
-                    if (currentFirstVisibleItem >3 )
-                        floatingActionButtonBackToTop.animate().translationY(0).setInterpolator(new DecelerateInterpolator()).start();
-                    startShow = true;
+                    FloatingToolbar_ButtonHelper.totalToolbarHide(totalToolBar);
+                    floatingActionButtonCreate.show();
+                    if (currentFirstVisibleItem > 3)
+                        floatingActionButtonBackToTop.setVisibility(View.VISIBLE);
+                    FloatingToolbar_ButtonHelper.animationHide(floatingActionButtonBackToTop);
                 }
                 mLastFirstVisibleItem = currentFirstVisibleItem;
             }
@@ -190,19 +195,29 @@ public class FragmentWall extends FragmentWithAttach {
     }
 
 
-
+    public void makeSearchRequest(String query, int extended, int offsetDefault, int countOfPosts) {
+        VKHelper.searchWall(query, extended, offsetDefault, countOfPosts, Constants.FB_ID, new VKRequestListener() {
+            @Override
+            public void onSuccess() {
+                Log.d("searchRequest", "" + vkJson);
+                initGroupWall(vkJson, inflaterGlobal);
+                doEndless = false;
+            }
+        });
+    }
 
     @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
 
-       //// -- -- - - - T00LbAR - - --- - - - -- -
+        //// -- -- - - - T00LbAR - - --- - - - -- -
         mNavigationDrawerFragment = (NavigationDrawerFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
         totalToolBar = rootView.findViewById(R.id.toolbar_fragment_wall);
         toolbar = (Toolbar) rootView.findViewById(R.id.my_awesome_toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
+
         TextView toolbarTitle = (TextView) rootView.findViewById(R.id.tool_bar_title);
         toolbarTitle.setText(Constants.Mtitle);
         mTitleToolBar = (TextView) rootView.findViewById(R.id.tool_bar_title);
@@ -223,84 +238,107 @@ public class FragmentWall extends FragmentWithAttach {
 
         toolbar.inflateMenu(R.menu.make_post);
 
-        ToolBarHelper.onPrepareToolBarOptionsMenu(toolbar.getMenu());
+        FloatingToolbar_ButtonHelper.onPrepareToolBarOptionsMenu(toolbar.getMenu());
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
-            public boolean onMenuItemClick(MenuItem menuItem) {
+            public boolean onMenuItemClick(final MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
-            case R.id.make_post:
+                    case R.id.make_post:
 
-                ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
-                break;
-            case R.id.suggested_posts:
-                ((MainActivity) getActivity()).addFragment(FragmentWall.newInstance(true));
-                break;
-            case R.id.join_leave_group:
-                if (Constants.isMember == 0) {
-                    VKHelper.groupJoin(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(getActivity(), R.string.group_joined, Toast.LENGTH_SHORT).show();
-                            ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
-                        }
+                        ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
+                        break;
+                    case R.id.suggested_posts:
+                        ((MainActivity) getActivity()).addFragment(FragmentWall.newInstance(true));
+                        break;
+                    case R.id.join_leave_group:
+                        if (Constants.isMember == 0) {
+                            VKHelper.groupJoin(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
+                                @Override
+                                public void onSuccess() {
+                                    Toast.makeText(getActivity(), R.string.group_joined, Toast.LENGTH_SHORT).show();
+                                    ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
+                                }
 //                        @Override
 //                        public void onError() {
 //                            TIFApp.showCommonErrorToast();
 //                        }
-                    });
-                } else {
+                            });
+                        } else {
 
-                    VKHelper.groupLeave(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
-                        @Override
-                        public void onSuccess() {
-                            Toast.makeText(getActivity(), R.string.group_leaved, Toast.LENGTH_SHORT).show();
-                            ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
+                            VKHelper.groupLeave(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
+                                @Override
+                                public void onSuccess() {
+                                    Toast.makeText(getActivity(), R.string.group_leaved, Toast.LENGTH_SHORT).show();
+                                    ((MainActivity) getActivity()).replaceFragment(FragmentWall.newInstance(false));
+                                }
+
+                            });
                         }
+                        break;
+                    case R.id.action_search_item:
+                        searchView = FloatingToolbar_ButtonHelper.CreateSearchView(toolbar.getMenu(), getActivity().getComponentName());
+                        ImageView closeButton = (ImageView) searchView.findViewById(R.id.search_close_btn);
+                        closeButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                EditText et = (EditText) searchView.findViewById(R.id.search_src_text);
+                                doEndless = true;
+                                manualRefresh(2000);
+                                Log.d("close", searchView.getQuery() + "");
+                                et.setText("");
+                                searchView.setQuery("", false);
+                                searchView.onActionViewCollapsed();
+                                menuItem.collapseActionView();
+                            }
+                        });
+                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                            @Override
+                            public boolean onQueryTextChange(String newText) {
+                                //Log.e("onQueryTextChange", "called");
+                                return false;
+                            }
 
-                    });
+                            @Override
+                            public boolean onQueryTextSubmit(String query) {
+                                Toast.makeText(TIFApp.getAppContext(), searchView.getQuery(), Toast.LENGTH_SHORT).show();
+                                Log.d("onQueryTextSubmit", searchView.getQuery() + "");
+                                makeSearchRequest(searchView.getQuery().toString(), 1, 0, 5);
+                                return false;
+                            }
+                        });
+
                 }
-                break;
-        }
                 return false;
             }
         });
-            //// -- -- -END - - T00LbAR - - --- - - - -- -
+        //// -- -- -END - - T00LbAR - - --- - - - -- -
 
 
         isSuggested = getArguments().getBoolean("isSuggested");
         spinnerLayout = (RelativeLayout) rootView.findViewById(R.id.spinner_layout);
         inflaterGlobal = inflater;
-
         fragmentManager = getActivity().getSupportFragmentManager();
         tempGroupId = OfflineMode.loadLong(Constants.VK_GROUP_ID);
 
 
         floatingActionButtonBackToTop = (FloatingActionButton) rootView.findViewById(R.id.beckToTop);
-       // floatingActionButtonBackToTop.setBackgroundColor(0);
+        floatingActionButtonCreate = (FloatingActionButton) rootView.findViewById(R.id.fab_wall);
+
+        if (!VKSdk.isLoggedIn()) {
+
+            floatingActionButtonCreate.setVisibility(View.GONE);
+        }
         floatingActionButtonBackToTop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 wallListView.scrollToPosition(0);
-                floatingActionButtonBackToTop.animate().translationY(-floatingActionButtonBackToTop.getBottom()).setInterpolator(new AccelerateInterpolator()).start();
+                FloatingToolbar_ButtonHelper.animationShow(floatingActionButtonBackToTop);
 
             }
         });
+        floatingActionButtonBackToTop.setVisibility(View.GONE);
 
-
-        floatingActionsButtonCreate = (FloatingActionButton) rootView.findViewById(R.id.fab_wall);
-//        fabPhoto = (FloatingActionButton) rootView.findViewById(R.id.fab_wall_photo);
-//        fabSuggest = (FloatingActionButton) rootView.findViewById(R.id.fab_wall_suggest);
-//        fabPhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //  OfflineMode.loadLong(Constants.VK_GROUP_ID) = tempGroupId;
-//                FragmentAlbumsList fragment = FragmentAlbumsList.newInstance(1);
-//                ((MainActivity) getActivity()).addFragment(fragment);
-//                //((MainActivity) getActivity()).restoreActionBar();
-//            }
-//        });
-
-        floatingActionsButtonCreate.setOnClickListener(new View.OnClickListener() {
+        floatingActionButtonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
@@ -317,37 +355,17 @@ public class FragmentWall extends FragmentWithAttach {
         swipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!OfflineMode.isOnline()) {
-                    Toast.makeText(getApplicationContext(), R.string.no_internet_message_toast_en, Toast.LENGTH_SHORT).show();
-                }
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        VKHelper.doGroupWallRequest(offsetO, Offset, OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
-                            @Override
-                            public void onSuccess() {
-                                OfflineMode.saveJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID), vkJson);
-                                initGroupWall(OfflineMode.loadJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID)), inflaterGlobal);
-                            }
-                        });
-
-                        swipeView.setRefreshing(false);
-                    }
-                }, 3000);
+                manualRefresh(3000);
             }
         });
         wallListView = (RecyclerView) rootView.findViewById(R.id.listViewWall);
         wallListView.setHasFixedSize(true);
-       // wallListView.setOnTouchListener(new ShowHideOnScroll(floatingActionsButtonCreate) );
-        //floatingActionButtonBackToTop.attachToRecyclerView(wallListView);
-        floatingActionsButtonCreate.attachToRecyclerView(wallListView);
+
 
         wallListView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         linearLayoutManager = ((LinearLayoutManager) wallListView.getLayoutManager());
 
         if (!isSuggested) {
-
-
 
 
             Log.d("GROUP_ID", "" + OfflineMode.loadLong(Constants.VK_GROUP_ID));
@@ -375,6 +393,28 @@ public class FragmentWall extends FragmentWithAttach {
         return rootView;
     }
 
+    public void manualRefresh(long milSecond) {
+
+        if (!OfflineMode.isOnline()) {
+            Toast.makeText(getApplicationContext(), R.string.no_internet_message_toast_en, Toast.LENGTH_SHORT).show();
+        }
+        swipeView.setRefreshing(true);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                VKHelper.doGroupWallRequest(offsetO, Offset, OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
+                    @Override
+                    public void onSuccess() {
+                        OfflineMode.saveJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID), vkJson);
+                        initGroupWall(OfflineMode.loadJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID)), inflaterGlobal);
+                    }
+                });
+
+                swipeView.setRefreshing(false);
+            }
+        }, milSecond);
+
+    }
 //    public void checkFabSuggest() {
 //        if (VKSdk.isLoggedIn()) {
 //            fabSuggest.setOnClickListener(new View.OnClickListener() {
@@ -581,7 +621,6 @@ public class FragmentWall extends FragmentWithAttach {
 
     }
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -605,24 +644,30 @@ public class FragmentWall extends FragmentWithAttach {
 
 
     private void endlessAdd(final int lastItem) {
-        jsonObjectOld = OfflineMode.loadJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID));
-        initGroupWall(jsonObjectOld, inflaterGlobal);
-        scrollCommentsToBottom(wallListView, lastItem);
+        if (doEndless == true) {
+            jsonObjectOld = OfflineMode.loadJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID));
+            initGroupWall(jsonObjectOld, inflaterGlobal);
+            scrollCommentsToBottom(wallListView, lastItem);
+        }
     }
 
     private void endlessGet(final int Offset) {
-        VKHelper.doGroupWallRequest(Offset, countPostDefaultForOffset, OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
-            @Override
-            public void onSuccess() {
-                OfflineMode.saveJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID), OfflineMode.jsonPlus(jsonObjectOld, vkJson));
-            }
 
-            @Override
-            public void onError() {
-                super.onError();
-                endlessGet(Offset);
-            }
-        });
+        if (doEndless == true) {
+
+            VKHelper.doGroupWallRequest(Offset, countPostDefaultForOffset, OfflineMode.loadLong(Constants.VK_GROUP_ID), new VKRequestListener() {
+                @Override
+                public void onSuccess() {
+                    OfflineMode.saveJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID), OfflineMode.jsonPlus(jsonObjectOld, vkJson));
+                }
+
+                @Override
+                public void onError() {
+                    super.onError();
+                    endlessGet(Offset);
+                }
+            });
+        }
     }
 
     private void scrollCommentsToBottom(final RecyclerView listView, final int lastItem) {

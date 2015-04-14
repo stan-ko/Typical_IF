@@ -109,6 +109,9 @@ public class FragmentPhotoList extends FragmentWithAttach implements AbsListView
         Constants.isPhotoListFragmentLoaded = true;
 
         floatingActionButton = (FloatingActionButton) rootView.findViewById(R.id.add_photo_from);
+        if (!VKSdk.isLoggedIn()) {
+        floatingActionButton.setVisibility(View.GONE);
+        }
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

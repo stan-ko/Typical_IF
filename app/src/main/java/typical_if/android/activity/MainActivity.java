@@ -30,11 +30,11 @@ import com.vk.sdk.api.VKError;
 import typical_if.android.AudioPlayer;
 import typical_if.android.AudioPlayerService;
 import typical_if.android.Constants;
+import typical_if.android.FloatingToolbar_ButtonHelper;
 import typical_if.android.ItemDataSetter;
 import typical_if.android.OfflineMode;
 import typical_if.android.R;
 import typical_if.android.TIFApp;
-import typical_if.android.ToolBarHelper;
 import typical_if.android.VKHelper;
 import typical_if.android.VKRequestListener;
 import typical_if.android.event.MainActivityAddFragmentEvent;
@@ -305,7 +305,7 @@ public class MainActivity extends DialogActivity implements
             case 5:
                 vkGroupId = setGroupId(groupPosition);
                 OfflineMode.saveLong(vkGroupId, Constants.VK_GROUP_ID);
-                ToolBarHelper.setToolbarAttachments(groupPosition);
+                FloatingToolbar_ButtonHelper.setToolbarAttachments(groupPosition);
                 fragment = FragmentWall.newInstance(false);
 
 

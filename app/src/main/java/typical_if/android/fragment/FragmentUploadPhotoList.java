@@ -14,6 +14,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.melnykov.fab.FloatingActionButton;
+import com.vk.sdk.VKSdk;
 import com.vk.sdk.api.VKApi;
 import com.vk.sdk.api.VKRequest;
 import com.vk.sdk.api.model.VKPhotoArray;
@@ -136,6 +137,9 @@ public class FragmentUploadPhotoList extends FragmentWithAttach {
     protected void handleResponse(View rootView, LayoutInflater inflater, final ArrayList<UploadPhotos> photolist, int columns) {
 
         uploadPhotoFromSd = (FloatingActionButton) rootView.findViewById(R.id.upload_photo_from_sd);
+        if (!VKSdk.isLoggedIn()) {
+            uploadPhotoFromSd.setVisibility(View.GONE);
+        }
         //uploadPhotoFromSd.initBackground();
 
         if (which == 0) {
