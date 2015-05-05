@@ -66,7 +66,7 @@
     <string name="post_copy_link">Копіювати посилання</string>
     <string name="change_lan">Змінити мову</string>
     <string name="in_progress">В розробці</string>
-    <string name="no_suggested_posts">У вас немає запропонованих новин</string>
+    <string name="no_suggested_posts">Нічого не знайдено, пробуйте щось інше</string>
     <string name="post_deleted">Новина видалена</string>
     <string name="post_added">Новина запропонована</string>
     <string name="post_reported">Ви поскаржились на запис</string>
@@ -130,6 +130,71 @@
         \n - підвищена стабільність роботи.
     </string>
 
+    <string-array
+        name="string_array_hesh_suggestion_FB">
+        <item>#phone_fb</item>
+        <item>#photo_fb</item>
+        <item>#audio_and_video_fb</item>
+        <item>#PC_fb</item>
+        <item>#game_fb</item>
+        <item>#appliances_fb</item>
+        <item>#musical_instruments_fb</item>
+        <item>#menswear_fb</item>
+        <item>#mens_shoes_fb</item>
+        <item>#ladieswear_fb</item>
+        <item>#womens_shoes_fb</item>
+        <item>#makeup_fb</item>
+        <item>#household_chemicals_fb</item>
+        <item>#medicine_fb</item>
+        <item>#plants_and_animals_fb</item>
+        <item>#sport_fb</item>
+        <item>#transport_fb</item>
+        <item>#home_fb</item>
+        <item>#books_fb</item>
+        <item>#construction_fb</item>
+        <item>#apartment_fb</item>
+        <item>#baby_fb</item>
+        <item>#services_fb</item>
+        <item>#trivia_fb</item>
+        <item>#exchange_fb</item>
+        <item>#work_fb</item>
+        <item>#search_work_fb</item>
+        <item>#buy_fb</item>
+    </string-array>
+
+    <string-array
+        name="string_array_name_suggestion_FB">
+        <item>Мобільні телефонони</item>
+        <item>Фототехніка</item>
+        <item>Аудіо та відео</item>
+        <item>Комп\'\ютери</item>
+        <item>Ігри</item>
+        <item>Побутова техніка</item>
+        <item>Музичні інструменти</item>
+        <item>Чоловічий одяг</item>
+        <item>Чоловіче взуття</item>
+        <item>Жіночий одяг</item>
+        <item>Жіноче взуття</item>
+        <item>Косметика і прикраси</item>
+        <item>Побутова хімія</item>
+        <item>Медицина і здоров\'\я</item>
+        <item>Рослини і тварини</item>
+        <item>Спортінвертар</item>
+        <item>транспорт</item>
+        <item>Все для дому</item>
+        <item>Книги та журнали</item>
+        <item>Будівництво</item>
+        <item>Квартири</item>
+        <item>Дитячі товари</item>
+        <item>Послуги</item>
+        <item>дрібниці</item>
+        <item>Обмін</item>
+        <item>Робота</item>
+        <item>Шукаю роботу</item>
+        <item>ШУКАЮ! КУПЛЮ!</item>
+    </string-array>
+
+
     <array name="post_report_types">
         <item>Спам</item>
         <item>Образа</item>
@@ -173,5 +238,7 @@
     <string name="title_activity_settings">SettingsActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="toast_to_back_pressed_from_search">"Щоб переглянути ВСІ зписи настисніть кнопку \"Назад\" "</string>
+    <string name="refresh_to_sww_all_posts">Потягніть ВНИЗ щоб переглянути ВСІ записи</string>
 
 </resources>

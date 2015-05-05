@@ -2,14 +2,20 @@ package typical_if.android.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.database.MatrixCursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.BaseColumns;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.CursorAdapter;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.melnykov.fab.FloatingActionButton;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -54,6 +61,7 @@ import typical_if.android.model.Wall.Wall;
 
 
 import static com.vk.sdk.VKUIHelper.getApplicationContext;
+import static com.vk.sdk.VKUIHelper.getTopActivity;
 
 
 /**
@@ -65,24 +73,26 @@ public class FragmentWall extends FragmentWithAttach {
 
     RecyclerView wallListView;
     RecyclerView.Adapter adapter;
-    View totalToolBar;
+    private View totalToolBar;
     RelativeLayout spinnerLayout;
-    View rootView;
-    SearchView searchView;
+
+    private View rootView;
+    private SearchView searchView;
     NewPauseOnScrollListener pauseOnScrollListener;
     public static LayoutInflater inflaterGlobal;
     final int offsetO = 0;
-    final int countPostDefaultForOffset = 50;
+    private EditText searchEditText;
+    private final int countPostDefaultForOffset = 50;
     public static int playableLogoRes;
-    JSONObject jsonObjectOld;
-    int Offset = Constants.TIF_VK_PRELOAD_POSTS_COUNT;
+    private ImageView SearchCloseButton;
+    private JSONObject jsonObjectOld;
+    private TextView toolbarTitle;
+    private int Offset = Constants.TIF_VK_PRELOAD_POSTS_COUNT;
     boolean isSuggested;
     FragmentManager fragmentManager;
     long tempGroupId;
     boolean doEndless = true;
 
-    //    FloatingActionButton fabPhoto;
-//    FloatingActionButton fabSuggest;
     FloatingActionButton floatingActionButtonBackToTop;
     Toolbar toolbar;
     TextView mTitleToolBar;
@@ -91,14 +101,24 @@ public class FragmentWall extends FragmentWithAttach {
     SwipeRefreshLayout swipeView;
     FloatingActionButton floatingActionButtonCreate;
 
+    private SimpleCursorAdapter mAdapter;
+
     LinearLayoutManager linearLayoutManager;
     boolean temp = true;
     boolean temp2 = true;
     boolean enable = false;
-    boolean stopShow = false;
-    boolean startShow = false;
+    boolean hide = true;
+    boolean show = false;
     public NavigationDrawerFragment mNavigationDrawerFragment;
 
+    private void populateAdapter(String query) {
+        final MatrixCursor c = new MatrixCursor(new String[]{BaseColumns._ID, "Tag"});
+        for (int i = 0; i < getActivity().getResources().getStringArray(R.array.string_array_hesh_suggestion_FB).length; i++) {
+            if (getActivity().getResources().getStringArray(R.array.string_array_hesh_suggestion_FB)[i].toLowerCase().startsWith(query.toLowerCase()))
+                c.addRow(new Object[]{i, getActivity().getResources().getStringArray(R.array.string_array_hesh_suggestion_FB)[i]});
+        }
+        mAdapter.changeCursor(c);
+    }
 
     RecyclerView.OnScrollListener onScrollListenerRecyclerObject = new RecyclerView.OnScrollListener() {
         int mLastFirstVisibleItem = 0;
@@ -119,21 +139,23 @@ public class FragmentWall extends FragmentWithAttach {
                 if (currentFirstVisibleItem == 2 || currentFirstVisibleItem == 1 || currentFirstVisibleItem == 0) {
                     FloatingToolbar_ButtonHelper.animationShow(floatingActionButtonBackToTop);
                 }
-                if (dy < 0) stopShow = false;
-                else startShow = false;
-
-                if (currentFirstVisibleItem > mLastFirstVisibleItem && stopShow == false) {
+                if (currentFirstVisibleItem > mLastFirstVisibleItem && hide) {
                     FloatingToolbar_ButtonHelper.totalToolbarShow(totalToolBar);
                     FloatingToolbar_ButtonHelper.animationShow(floatingActionButtonBackToTop);
                     floatingActionButtonCreate.hide();
-                    stopShow = true;
+                    Log.d("hide", " " + hide);
+                    show = true;
+                    hide = false;
 
-                } else if (currentFirstVisibleItem < mLastFirstVisibleItem && startShow == false) {
+                } else if (currentFirstVisibleItem < mLastFirstVisibleItem && show) {
                     FloatingToolbar_ButtonHelper.totalToolbarHide(totalToolBar);
                     floatingActionButtonCreate.show();
                     if (currentFirstVisibleItem > 3)
                         floatingActionButtonBackToTop.setVisibility(View.VISIBLE);
                     FloatingToolbar_ButtonHelper.animationHide(floatingActionButtonBackToTop);
+                    Log.d("show", " " + show);
+                    hide = true;
+                    show = false;
                 }
                 mLastFirstVisibleItem = currentFirstVisibleItem;
             }
@@ -210,6 +232,19 @@ public class FragmentWall extends FragmentWithAttach {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_wall, container, false);
+        rootView.setFocusableInTouchMode(true);
+        rootView.requestFocus();
+
+
+
+        final String[] from = new String[]{"Tag"};
+        final int[] to = new int[]{R.id.suggestionText};
+        mAdapter = new SimpleCursorAdapter(getActivity(),
+                R.layout.search_ist_item,
+                null,
+                from,
+                to,
+                CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
 
         //// -- -- - - - T00LbAR - - --- - - - -- -
         mNavigationDrawerFragment = (NavigationDrawerFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -218,7 +253,7 @@ public class FragmentWall extends FragmentWithAttach {
         toolbar = (Toolbar) rootView.findViewById(R.id.my_awesome_toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_menu_white_24dp);
 
-        TextView toolbarTitle = (TextView) rootView.findViewById(R.id.tool_bar_title);
+        toolbarTitle = (TextView) rootView.findViewById(R.id.tool_bar_title);
         toolbarTitle.setText(Constants.Mtitle);
         mTitleToolBar = (TextView) rootView.findViewById(R.id.tool_bar_title);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -237,7 +272,6 @@ public class FragmentWall extends FragmentWithAttach {
         });
 
         toolbar.inflateMenu(R.menu.make_post);
-
         FloatingToolbar_ButtonHelper.onPrepareToolBarOptionsMenu(toolbar.getMenu());
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -276,37 +310,72 @@ public class FragmentWall extends FragmentWithAttach {
                         }
                         break;
                     case R.id.action_search_item:
-                        searchView = FloatingToolbar_ButtonHelper.CreateSearchView(toolbar.getMenu(), getActivity().getComponentName());
-                        ImageView closeButton = (ImageView) searchView.findViewById(R.id.search_close_btn);
-                        closeButton.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                EditText et = (EditText) searchView.findViewById(R.id.search_src_text);
-                                doEndless = true;
-                                manualRefresh(2000);
-                                Log.d("close", searchView.getQuery() + "");
-                                et.setText("");
-                                searchView.setQuery("", false);
-                                searchView.onActionViewCollapsed();
-                                menuItem.collapseActionView();
-                            }
-                        });
-                        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-                            @Override
-                            public boolean onQueryTextChange(String newText) {
-                                //Log.e("onQueryTextChange", "called");
-                                return false;
-                            }
+                        if (OfflineMode.loadLong(Constants.VK_GROUP_ID) == Constants.FB_ID) {
+                            searchView = FloatingToolbar_ButtonHelper.CreateSearchView(toolbar.getMenu(), getActivity().getComponentName());
+                            searchEditText = (EditText) searchView.findViewById(R.id.search_src_text);
+                            searchView.setSuggestionsAdapter(mAdapter);
+                            SearchCloseButton = (ImageView) searchView.findViewById(R.id.search_close_btn);
 
-                            @Override
-                            public boolean onQueryTextSubmit(String query) {
-                                Toast.makeText(TIFApp.getAppContext(), searchView.getQuery(), Toast.LENGTH_SHORT).show();
-                                Log.d("onQueryTextSubmit", searchView.getQuery() + "");
-                                makeSearchRequest(searchView.getQuery().toString(), 1, 0, 5);
-                                return false;
-                            }
-                        });
 
+                            searchView.setOnSuggestionListener(new SearchView.OnSuggestionListener() {
+                                @Override
+                                public boolean onSuggestionSelect(int i) {
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onSuggestionClick(int i) {
+                                    final MatrixCursor mc = (MatrixCursor) mAdapter.getItem(i);
+                                    searchView.setQuery(mc.getString(1), false);
+                                    searchEditText.setText(mc.getString(1));
+                                    makeSearchRequest(searchView.getQuery().toString(), 1, 0, Constants.CONT_OF_SEARCH_POST);
+                                    return false;
+                                }
+                            });
+
+                            SearchCloseButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    doEndless = true;
+                                    Log.d("close", searchView.getQuery() + "");
+                                    searchEditText.setText("");
+                                    searchView.setQuery("", false);
+
+                                }
+                            });
+                            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                                @Override
+                                public boolean onQueryTextChange(String newText) {
+                                    populateAdapter(newText);
+                                    return false;
+                                }
+
+                                @Override
+                                public boolean onQueryTextSubmit(String query) {
+                                    Log.d("onQueryTextSubmit", searchView.getQuery() + "");
+                                    Toast.makeText(getApplicationContext(), getString(R.string.refresh_to_sww_all_posts), Toast.LENGTH_LONG).show();
+                                    makeSearchRequest(searchView.getQuery().toString(), 1, 0, Constants.CONT_OF_SEARCH_POST);
+                                    return false;
+                                }
+                            });
+
+
+                        }
+                        break;
+                    case (R.id.list_of_tags):
+                        new MaterialDialog.Builder(getActivity())
+                                .title("Category")
+                                .items(R.array.string_array_name_suggestion_FB)
+                                .itemsCallback(new MaterialDialog.ListCallback() {
+                                    @Override
+                                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                                        makeSearchRequest(getActivity().getResources().getStringArray(R.array.string_array_hesh_suggestion_FB)[which], 1, 0, Constants.CONT_OF_SEARCH_POST);
+                                        Toast.makeText(getApplicationContext(), getString(R.string.toast_to_back_pressed_from_search), Toast.LENGTH_LONG).show();
+                                        toolbarTitle.setText(text);
+                                        onBackPressedOverride();
+                                    }
+                                })
+                                .show();
                 }
                 return false;
             }
@@ -393,8 +462,7 @@ public class FragmentWall extends FragmentWithAttach {
         return rootView;
     }
 
-    public void manualRefresh(long milSecond) {
-
+    private void manualRefresh(long milSecond) {
         if (!OfflineMode.isOnline()) {
             Toast.makeText(getApplicationContext(), R.string.no_internet_message_toast_en, Toast.LENGTH_SHORT).show();
         }
@@ -407,6 +475,7 @@ public class FragmentWall extends FragmentWithAttach {
                     public void onSuccess() {
                         OfflineMode.saveJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID), vkJson);
                         initGroupWall(OfflineMode.loadJSON(OfflineMode.loadLong(Constants.VK_GROUP_ID)), inflaterGlobal);
+                        toolbarTitle.setText(Constants.Mtitle);
                     }
                 });
 
@@ -415,21 +484,21 @@ public class FragmentWall extends FragmentWithAttach {
         }, milSecond);
 
     }
-//    public void checkFabSuggest() {
-//        if (VKSdk.isLoggedIn()) {
-//            fabSuggest.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    ((MainActivity) getActivity()).addFragment(FragmentMakePost.newInstance(OfflineMode.loadLong(Constants.VK_GROUP_ID), 0, 0));
-//                }
-//            });
-//            fabSuggest.setVisibility(View.VISIBLE);
-//        } else {
-//            fabSuggest.setOnClickListener(null);
-//            fabSuggest.setVisibility(View.GONE);
-//        }
-//    }
 
+    private void onBackPressedOverride(){
+        rootView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (OfflineMode.loadLong(Constants.VK_GROUP_ID) == Constants.FB_ID) {
+                        manualRefresh(2000);
+                    } else getActivity().onBackPressed();
+                    return true;
+                }
+                return false;
+            }
+        });
+    }
     public class NewPauseOnScrollListener extends RecyclerView.OnScrollListener {
 
         private ImageLoader imageLoader;
@@ -476,6 +545,7 @@ public class FragmentWall extends FragmentWithAttach {
             }
         }
     }
+
 
     public void initGroupWall(JSONObject jsonObject, LayoutInflater inflater) {
         Wall wall = VKHelper.getGroupWallFromJSON(jsonObject);
@@ -634,6 +704,8 @@ public class FragmentWall extends FragmentWithAttach {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override

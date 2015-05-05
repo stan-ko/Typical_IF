@@ -343,7 +343,6 @@ public class MainActivity extends DialogActivity implements
     @Override
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-            //getSupportActionBar().show();
             mNavigationDrawerFragment.toggle();
         } else {
             super.onBackPressed();

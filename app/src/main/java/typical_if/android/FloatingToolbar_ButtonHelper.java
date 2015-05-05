@@ -51,18 +51,18 @@ public class FloatingToolbar_ButtonHelper {
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName));
         searchView.setQueryHint("Що ви шукаєте?");
+
         return searchView;
     }
 
     public static void onPrepareToolBarOptionsMenu(final Menu menu) {
+        if (OfflineMode.loadLong(Constants.VK_GROUP_ID)==Constants.FB_ID){
+            menu.findItem(R.id.action_search_item).setVisible(true);
+            menu.findItem(R.id.list_of_tags).setVisible(true);
+        }
         VKHelper.isMember(OfflineMode.loadLong(Constants.VK_GROUP_ID) * (-1), new VKRequestListener() {
             @Override
             public void onSuccess() {
-                if (OfflineMode.loadLong(Constants.VK_GROUP_ID)==Constants.FB_ID){
-                    menu.findItem(R.id.action_search_item).setVisible(true);
-
-                }
-
                 if (hasJson) {
                     Constants.isMember = vkJson.optInt(VKHelper.TIF_VK_SDK_KEY_RESPONSE);
                     if (VKSdk.isLoggedIn()) {
@@ -83,7 +83,6 @@ public class FloatingToolbar_ButtonHelper {
             @Override
             public void onError(){
                 menu.findItem(R.id.join_leave_group).setVisible(false);
-                menu.findItem(R.id.join_leave_group).setEnabled(false);
             }
 
         });
