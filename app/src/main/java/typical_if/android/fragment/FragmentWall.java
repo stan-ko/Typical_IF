@@ -120,70 +120,76 @@ public class FragmentWall extends FragmentWithAttach {
         mAdapter.changeCursor(c);
     }
 
-    RecyclerView.OnScrollListener onScrollListenerRecyclerObject = new RecyclerView.OnScrollListener() {
-        int mLastFirstVisibleItem = 0;
-
+    final ThreadLocal<RecyclerView.OnScrollListener> onScrollListenerRecyclerObject = new ThreadLocal<RecyclerView.OnScrollListener>() {
         @Override
-        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-            super.onScrollStateChanged(recyclerView, newState);
-            temp = true;
-        }
+        protected RecyclerView.OnScrollListener initialValue() {
+            return new RecyclerView.OnScrollListener() {
+                int mLastFirstVisibleItem = 0;
 
-        @Override
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-            super.onScrolled(recyclerView, dx, dy);
-            final int lastItem = linearLayoutManager.findFirstVisibleItemPosition() + linearLayoutManager.getChildCount();
-            final int totalItemCount = linearLayoutManager.getItemCount();
-            if (recyclerView.getId() == wallListView.getId()) {
-                final int currentFirstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
-                if (currentFirstVisibleItem == 2 || currentFirstVisibleItem == 1 || currentFirstVisibleItem == 0) {
-                    FloatingToolbar_ButtonHelper.animationShow(floatingActionButtonBackToTop);
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    temp = true;
                 }
-                if (currentFirstVisibleItem > mLastFirstVisibleItem && hide) {
-                    FloatingToolbar_ButtonHelper.totalToolbarShow(totalToolBar);
-                    FloatingToolbar_ButtonHelper.animationShow(floatingActionButtonBackToTop);
-                    floatingActionButtonCreate.hide();
-                    Log.d("hide", " " + hide);
-                    show = true;
-                    hide = false;
 
-                } else if (currentFirstVisibleItem < mLastFirstVisibleItem && show) {
-                    FloatingToolbar_ButtonHelper.totalToolbarHide(totalToolBar);
-                    floatingActionButtonCreate.show();
-                    if (currentFirstVisibleItem > 3)
-                        floatingActionButtonBackToTop.setVisibility(View.VISIBLE);
-                    FloatingToolbar_ButtonHelper.animationHide(floatingActionButtonBackToTop);
-                    Log.d("show", " " + show);
-                    hide = true;
-                    show = false;
-                }
-                mLastFirstVisibleItem = currentFirstVisibleItem;
-            }
-            if (OfflineMode.loadLong(Constants.VK_GROUP_ID) != Constants.ZF_ID) {
-
-                if (lastItem == totalItemCount - 5 && temp2) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Offset = Offset + countPostDefaultForOffset;
-                            endlessGet(Offset);
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    final int lastItem = linearLayoutManager.findFirstVisibleItemPosition() + linearLayoutManager.getChildCount();
+                    final int totalItemCount = linearLayoutManager.getItemCount();
+                    if (recyclerView.getId() == wallListView.getId()) {
+                        final int currentFirstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+                        if (currentFirstVisibleItem == 2 || currentFirstVisibleItem == 1 || currentFirstVisibleItem == 0) {
+                            FloatingToolbar_ButtonHelper.animationShow(floatingActionButtonBackToTop);
                         }
-                    }).start();
-                    temp2 = false;
-                }
+                        if (currentFirstVisibleItem > mLastFirstVisibleItem && hide) {
+                            FloatingToolbar_ButtonHelper.totalToolbarShow(totalToolBar);
+                            FloatingToolbar_ButtonHelper.animationShow(floatingActionButtonBackToTop);
+                            floatingActionButtonCreate.hide();
+                            Log.d("hide", " " + hide);
+                            show = true;
+                            hide = false;
 
-                if (lastItem == totalItemCount && temp) {
-                    endlessAdd(lastItem);
-                    temp = false;
-                    temp2 = true;
+                        } else if (currentFirstVisibleItem < mLastFirstVisibleItem && show) {
+                            FloatingToolbar_ButtonHelper.totalToolbarHide(totalToolBar);
+                            floatingActionButtonCreate.show();
+                            if (currentFirstVisibleItem > 3)
+                                floatingActionButtonBackToTop.setVisibility(View.VISIBLE);
+                            FloatingToolbar_ButtonHelper.animationHide(floatingActionButtonBackToTop);
+                            Log.d("show", " " + show);
+                            hide = true;
+                            show = false;
+                        }
+                        mLastFirstVisibleItem = currentFirstVisibleItem;
+                    }
+
+                    if (OfflineMode.loadLong(Constants.VK_GROUP_ID) != Constants.ZF_ID) {
+
+                        if (lastItem == totalItemCount - 5 && temp2) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Offset = Offset + countPostDefaultForOffset;
+                                    endlessGet(Offset);
+                                }
+                            }).start();
+                            temp2 = false;
+                        }
+
+                        if (lastItem == totalItemCount && temp) {
+                            endlessAdd(lastItem);
+                            temp = false;
+                            temp2 = true;
+                        }
+                    }
+                    if (recyclerView.getChildCount() > 0) {
+                        boolean firstItemVisible = linearLayoutManager.findFirstVisibleItemPosition() == 0;
+                        boolean topOfFirstItemVisible = recyclerView.getChildAt(0).getTop() == 0;
+                        enable = firstItemVisible && topOfFirstItemVisible;
+                    }
+                    swipeView.setEnabled(enable);
                 }
-            }
-            if (recyclerView.getChildCount() > 0) {
-                boolean firstItemVisible = linearLayoutManager.findFirstVisibleItemPosition() == 0;
-                boolean topOfFirstItemVisible = recyclerView.getChildAt(0).getTop() == 0;
-                enable = firstItemVisible && topOfFirstItemVisible;
-            }
-            swipeView.setEnabled(enable);
+            };
         }
     };
 
@@ -358,8 +364,6 @@ public class FragmentWall extends FragmentWithAttach {
                                     return false;
                                 }
                             });
-
-
                         }
                         break;
                     case (R.id.list_of_tags):
@@ -415,7 +419,7 @@ public class FragmentWall extends FragmentWithAttach {
         });
 
         playableLogoRes = ItemDataSetter.getPlayingLogo(OfflineMode.loadLong(Constants.VK_GROUP_ID));
-        pauseOnScrollListener = new NewPauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerRecyclerObject);
+        pauseOnScrollListener = new NewPauseOnScrollListener(ImageLoader.getInstance(), true, true, onScrollListenerRecyclerObject.get());
         swipeView = (SwipeRefreshLayout) rootView.findViewById(R.id.refresh);
         swipeView.setColorSchemeResources(android.R.color.white, android.R.color.white, android.R.color.white);
         swipeView.setProgressBackgroundColor(R.color.FAB_UNSELECTED);

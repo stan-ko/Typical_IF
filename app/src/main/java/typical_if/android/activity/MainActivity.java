@@ -27,6 +27,7 @@ import com.vk.sdk.VKSdk;
 import com.vk.sdk.VKSdkListener;
 import com.vk.sdk.VKUIHelper;
 import com.vk.sdk.api.VKError;
+
 import typical_if.android.AudioPlayer;
 import typical_if.android.AudioPlayerService;
 import typical_if.android.Constants;
@@ -54,7 +55,8 @@ public class MainActivity extends DialogActivity implements
     private static final int PICK_FROM_CAMERA = 1;
     private static String sTokenKey = "VK_ACCESS_TOKEN";
     public NavigationDrawerFragment mNavigationDrawerFragment;
-   public static Toolbar toolbar;
+    public static Toolbar toolbar;
+
     void showAlertChanges() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.title_of_alert_main)
@@ -68,6 +70,7 @@ public class MainActivity extends DialogActivity implements
 
         builder.create().show();
     }
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
@@ -137,6 +140,7 @@ public class MainActivity extends DialogActivity implements
         }
         return result;
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -193,7 +197,6 @@ public class MainActivity extends DialogActivity implements
         }
 
     }
-
 
 
     @Override
